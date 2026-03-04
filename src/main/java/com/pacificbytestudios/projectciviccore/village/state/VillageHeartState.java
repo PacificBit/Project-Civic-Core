@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villageheart.state;
+package com.pacificbytestudios.projectciviccore.village.state;
 
 import java.util.HashMap;
 import java.util.Map;

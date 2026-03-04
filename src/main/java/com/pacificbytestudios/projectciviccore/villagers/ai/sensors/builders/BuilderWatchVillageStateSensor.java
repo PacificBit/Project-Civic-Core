@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.npc.asset.builder.validators.StringNotEmptyVali
 import com.hypixel.hytale.server.npc.asset.builder.validators.StringValidator;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.instructions.Sensor;
-import com.pacificbytestudios.projectciviccore.villageheart.state.VillageHeartState;
+import com.pacificbytestudios.projectciviccore.village.state.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.WatchVillageStateSensor;
 
 public class BuilderWatchVillageStateSensor extends BuilderSensorBase {

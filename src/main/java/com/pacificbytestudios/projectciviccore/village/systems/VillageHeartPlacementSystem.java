@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villageheart.systems;
+package com.pacificbytestudios.projectciviccore.village.systems;
 
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -20,10 +20,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.villageheart.components.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.villageheart.components.VillageSpawnComponent;
-import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry.ChunkLocation;
+import com.pacificbytestudios.projectciviccore.village.components.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.VillageSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
 import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartLocation;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 

@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villageheart.components;
+package com.pacificbytestudios.projectciviccore.village.components;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.villageheart.state.VillageHeartState;
+import com.pacificbytestudios.projectciviccore.village.state.VillageHeartState;
 
 public class VillageHeartComponent implements Component<ChunkStore> {
 

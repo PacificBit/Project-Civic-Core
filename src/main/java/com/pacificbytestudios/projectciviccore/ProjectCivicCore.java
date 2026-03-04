@@ -9,11 +9,11 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import com.pacificbytestudios.projectciviccore.villageheart.commands.VillageCommands;
-import com.pacificbytestudios.projectciviccore.villageheart.components.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.villageheart.components.VillageSpawnComponent;
-import com.pacificbytestudios.projectciviccore.villageheart.systems.VillageHeartLoadUnloadSystem;
-import com.pacificbytestudios.projectciviccore.villageheart.systems.VillageHeartPlacementSystem;
+import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
+import com.pacificbytestudios.projectciviccore.village.components.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.VillageSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.systems.VillageHeartLoadUnloadSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderWatchVillageStateSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 

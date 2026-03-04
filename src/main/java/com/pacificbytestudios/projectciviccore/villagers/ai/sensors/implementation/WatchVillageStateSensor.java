@@ -9,8 +9,8 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.villageheart.components.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.villageheart.state.VillageHeartState;
+import com.pacificbytestudios.projectciviccore.village.components.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.state.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderWatchVillageStateSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 

@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villageheart.commands.subcommands;
+package com.pacificbytestudios.projectciviccore.village.commands.subcommands;
 
 import java.util.Set;
 
@@ -18,10 +18,10 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.villageheart.components.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry.ChunkLocation;
-import com.pacificbytestudios.projectciviccore.villageheart.state.VillageHeartState;
+import com.pacificbytestudios.projectciviccore.village.components.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
+import com.pacificbytestudios.projectciviccore.village.state.VillageHeartState;
 
 public class State extends CommandBase {
   private static final int COMMAND_CHUNK_RANGE = 2;

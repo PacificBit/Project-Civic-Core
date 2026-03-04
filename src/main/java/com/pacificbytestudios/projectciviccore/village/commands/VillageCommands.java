@@ -1,10 +1,8 @@
-
-package com.pacificbytestudios.projectciviccore.villageheart.commands;
+package com.pacificbytestudios.projectciviccore.village.commands;
 
 import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
-
-import com.pacificbytestudios.projectciviccore.villageheart.commands.subcommands.State;
+import com.pacificbytestudios.projectciviccore.village.commands.subcommands.State;
 
 public class VillageCommands extends AbstractCommandCollection {
 

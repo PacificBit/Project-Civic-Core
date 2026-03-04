@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villageheart.registry;
+package com.pacificbytestudios.projectciviccore.village.registry;
 
 import java.util.Collections;
 import java.util.Map;
