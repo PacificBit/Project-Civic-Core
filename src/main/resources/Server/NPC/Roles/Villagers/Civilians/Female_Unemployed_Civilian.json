@@ -1,0 +1,8 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Unemployed_Civilian",
+  "Modify": {
+    "Appearance": "Female_Civilian",
+    "MaxHealth": 100
+  }
+}

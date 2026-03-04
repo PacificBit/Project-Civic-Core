@@ -1,0 +1,13 @@
+{
+  "Group": "com.pacificbytestudios",
+  "Name": "ProjectCivicCore",
+  "Version": "0.0.1",
+  "Main": "com.pacificbytestudios.projectciviccore.ProjectCivicCore",
+  "Authors": [
+    {
+      "Name": "PacificByte"
+    }
+  ],
+  "ServerVersion": "2026.02.19-1a311a592",
+  "IncludesAssetPack": true
+}
