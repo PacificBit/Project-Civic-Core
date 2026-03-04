@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villageheart.systems;
 
-import java.util.UUID;
-
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -21,47 +19,49 @@ import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villageheart.components.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.villageheart.components.VillageSpawnComponent;
-import com.pacificbytestudios.projectciviccore.villageheart.storage.VillageHeartStorage;
-import com.pacificbytestudios.projectciviccore.villageheart.storage.VillageHeartStorage.ChunkLocation;
+import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry.ChunkLocation;
+import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartLocation;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 import it.unimi.dsi.fastutil.Pair;
 
 public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
-  private static VillageHeartStorage villageStore;
+  private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   private static final String[] SPAWNABLE_NPC = new String[] {
       "Female_Unemployed_Civilian",
       "Male_Unemployed_Civilian"
   };
 
-  public VillageHeartPlacementSystem() {
-    villageStore = VillageHeartStorage.get();
-  }
-
   private FastRandom random = new FastRandom();
 
   @Override
   public void onEntityAdded(
-      Ref<ChunkStore> ref,
+      Ref<ChunkStore> villageHeartRef,
       AddReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
     World world = store.getExternalData().getWorld();
-    Vector3i blockPos = Utils.getWorldBlockPosition(ref, commandBuffer);
+    Vector3i blockPos = Utils.getWorldBlockPosition(villageHeartRef, commandBuffer);
 
     assert blockPos != null;
 
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
-    // TODO: find a way to unregister them when destroyed
-    villageStore.registerVillage(new ChunkLocation(chunk.getX(), chunk.getZ()), ref);
+    villageStore.registerVillage(new ChunkLocation(chunk.getX(), chunk.getZ()), villageHeartRef);
 
-    VillageSpawnComponent spawnComponent = store.getComponent(ref, VillageSpawnComponent.getComponentType());
-    VillageHeartComponent villageCoreComponent = store.getComponent(ref, VillageHeartComponent.getComponentType());
+    VillageSpawnComponent spawnComponent = store.getComponent(villageHeartRef,
+        VillageSpawnComponent.getComponentType());
+    VillageHeartComponent villageCoreComponent = store.getComponent(villageHeartRef,
+        VillageHeartComponent.getComponentType());
     int radius = spawnComponent.getSpawnNpcRange();
+
+    VillageHeartLocation villageHeartLocation = new VillageHeartLocation();
+    villageHeartLocation.setPosition(blockPos);
+    villageHeartLocation.setWorldName(world.getName());
 
     world.execute(() -> {
       Store<EntityStore> entityStore = world.getEntityStore().getStore();
@@ -70,11 +70,20 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
       for (int npcCount = 0; npcCount < spawnComponent.getInitialNpcCount(); npcCount++) {
         Vector3d spawnPos = newSpawnPos(blockPos, radius);
-        UUID npcUUID = spawnNpc(entityStore, spawnPos, rotation, npcCount);
-        villageCoreComponent.registerNpc(npcUUID);
+        Ref<EntityStore> npcRef = spawnNpc(entityStore, spawnPos, rotation, npcCount);
+
+        assert npcRef != null;
+
+        UUIDComponent uuidComponent = entityStore.getComponent(npcRef, UUIDComponent.getComponentType());
+        villageCoreComponent.registerNpc(uuidComponent.getUuid());
+
+        VillagerComponent villagerComponent = new VillagerComponent();
+        villagerComponent.setVillageHeartLocation(villageHeartLocation.clone());
+        entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);
       }
 
-      store.removeComponent(ref, VillageSpawnComponent.getComponentType());
+      store.removeComponent(villageHeartRef,
+          VillageSpawnComponent.getComponentType());
     });
   }
 
@@ -98,7 +107,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     return spawnPos;
   }
 
-  private UUID spawnNpc(
+  private Ref<EntityStore> spawnNpc(
       Store<EntityStore> entityStore,
       Vector3d position,
       Vector3f rotation,
@@ -113,11 +122,8 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
     assert result != null;
 
-    UUIDComponent uuidComponent = entityStore.getComponent(result.key(), UUIDComponent.getComponentType());
-
-    assert uuidComponent != null;
-
-    return uuidComponent.getUuid();
+    Ref<EntityStore> npcRef = result.key();
+    return npcRef;
   }
 
   @Override

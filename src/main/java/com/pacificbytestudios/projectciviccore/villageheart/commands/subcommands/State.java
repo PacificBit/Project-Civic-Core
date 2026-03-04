@@ -1,8 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villageheart.commands.subcommands;
 
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
@@ -21,12 +19,13 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.villageheart.components.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.villageheart.registry.VillageHeartRegistry.ChunkLocation;
 import com.pacificbytestudios.projectciviccore.villageheart.state.VillageHeartState;
-import com.pacificbytestudios.projectciviccore.villageheart.storage.VillageHeartStorage;
-import com.pacificbytestudios.projectciviccore.villageheart.storage.VillageHeartStorage.ChunkLocation;
 
 public class State extends CommandBase {
-  private static VillageHeartStorage villageStore;
+  private static final int COMMAND_CHUNK_RANGE = 2;
+  private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   @Nonnull
   private final RequiredArg<String> stateType = this.withRequiredArg(
@@ -36,7 +35,6 @@ public class State extends CommandBase {
 
   public State() {
     super("state", "Set the state of the nearest village");
-    villageStore = VillageHeartStorage.get();
   }
 
   @Override
@@ -44,11 +42,9 @@ public class State extends CommandBase {
     VillageHeartState state = VillageHeartState.fromString(stateType.get(context));
 
     if (state == null) {
-      String validStates = Stream.of(VillageHeartState.values())
-          .map(VillageHeartState::getState)
-          .collect(Collectors.joining(", "));
-
-      context.sendMessage(Message.raw("Invalid state. Use only one of: " + validStates));
+      context.sendMessage(Message.raw(
+          "Invalid state. Use only one of: " + VillageHeartState.getAvailableStates()));
+      return;
     }
 
     Ref<EntityStore> playerRef = context.senderAsPlayerRef();
@@ -56,44 +52,86 @@ public class State extends CommandBase {
     World world = entityStore.getExternalData().getWorld();
 
     world.execute(() -> {
-      TransformComponent component = entityStore.getComponent(playerRef, TransformComponent.getComponentType());
+      TransformComponent transform = entityStore.getComponent(
+          playerRef,
+          TransformComponent.getComponentType());
 
-      assert component != null;
-
-      Vector3i playerPos = component.getPosition().toVector3i();
-      long chunkIndex = ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z);
-      WorldChunk chunk = world.getChunk(chunkIndex);
-
-      assert chunk != null;
-
-      ChunkLocation chunkLocation = new ChunkLocation(chunk.getX(), chunk.getZ());
-      Set<Ref<ChunkStore>> villagesHeart = villageStore
-          .getVillagesHeartIn(chunkLocation);
-
-      if (villagesHeart.size() == 0) {
-        String message = "No village found in the current chunk";
-        context.sendMessage(Message.raw(message));
+      if (transform == null) {
+        context.sendMessage(Message.raw("Could not read player position."));
         return;
       }
 
-      for (Ref<ChunkStore> heart : villagesHeart) {
-        if (!heart.isValid()) {
-          villageStore.unregisterVillage(chunkLocation, heart);
-          continue;
+      Vector3i playerPos = transform.getPosition().toVector3i();
+
+      long originChunkIndex = ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z);
+      WorldChunk originChunk = world.getChunk(originChunkIndex);
+
+      if (originChunk == null) {
+        context.sendMessage(Message.raw("Could not resolve player chunk."));
+        return;
+      }
+
+      int originChunkX = originChunk.getX();
+      int originChunkZ = originChunk.getZ();
+
+      boolean foundAnyVillage = false;
+
+      for (int chunkX = -COMMAND_CHUNK_RANGE; chunkX <= COMMAND_CHUNK_RANGE; chunkX++) {
+        for (int chunkZ = -COMMAND_CHUNK_RANGE; chunkZ <= COMMAND_CHUNK_RANGE; chunkZ++) {
+          WorldChunk targetChunk = world.getChunk(
+              ChunkUtil.indexChunk(originChunkX + chunkX, originChunkZ + chunkZ));
+
+          if (targetChunk == null) {
+            continue;
+          }
+
+          if (updateVillageState(context, state, targetChunk)) {
+            foundAnyVillage = true;
+          }
         }
+      }
 
-        VillageHeartComponent villageHeartComponent = heart.getStore()
-            .getComponent(
-                heart,
-                VillageHeartComponent.getComponentType());
-
-        String prevState = villageHeartComponent.getState().toString();
-        villageHeartComponent.setState(state);
-
-        String message = "Changed state from: " + prevState.toLowerCase() + " to: " + state.getState().toString();
-        context.sendMessage(Message.raw(message));
+      if (!foundAnyVillage) {
+        context.sendMessage(Message.raw("No village found in range."));
       }
     });
   }
 
+  private boolean updateVillageState(CommandContext context, VillageHeartState state, WorldChunk chunk) {
+    ChunkLocation chunkLocation = new ChunkLocation(chunk.getX(), chunk.getZ());
+
+    Set<Ref<ChunkStore>> villageHearts = villageStore.getVillagesHeartIn(chunkLocation);
+
+    if (villageHearts.isEmpty()) {
+      return false;
+    }
+
+    boolean updated = false;
+
+    for (Ref<ChunkStore> heart : villageHearts) {
+      if (!heart.isValid()) {
+        villageStore.unregisterVillage(chunkLocation, heart);
+        continue;
+      }
+
+      VillageHeartComponent villageHeartComponent = heart.getStore()
+          .getComponent(heart, VillageHeartComponent.getComponentType());
+
+      if (villageHeartComponent == null) {
+        villageStore.unregisterVillage(chunkLocation, heart);
+        continue;
+      }
+
+      String prevState = villageHeartComponent.getState().toString().toLowerCase();
+      villageHeartComponent.setState(state);
+
+      String message = "Changed state from: " + prevState + " to: "
+          + state.getState().toString().toLowerCase();
+      context.sendMessage(Message.raw(message));
+
+      updated = true;
+    }
+
+    return updated;
+  }
 }

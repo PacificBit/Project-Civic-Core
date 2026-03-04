@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villageheart.storage;
+package com.pacificbytestudios.projectciviccore.villageheart.registry;
 
 import java.util.Collections;
 import java.util.Map;
@@ -8,22 +8,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
-public final class VillageHeartStorage {
-  private static VillageHeartStorage INSTANCE;
+public final class VillageHeartRegistry {
+  private static VillageHeartRegistry INSTANCE;
 
   private final Map<ChunkLocation, Set<Ref<ChunkStore>>> villagesHeartMap = new ConcurrentHashMap<>();
 
   public record ChunkLocation(int x, int z) {
   }
 
-  public static VillageHeartStorage get() {
+  public static VillageHeartRegistry get() {
     if (INSTANCE == null) {
-      INSTANCE = new VillageHeartStorage();
+      INSTANCE = new VillageHeartRegistry();
     }
     return INSTANCE;
   }
 
-  private VillageHeartStorage() {
+  private VillageHeartRegistry() {
   }
 
   public void registerVillage(ChunkLocation location, Ref<ChunkStore> heartRef) {
@@ -42,7 +42,6 @@ public final class VillageHeartStorage {
   }
 
   public Set<Ref<ChunkStore>> getVillagesHeartIn(ChunkLocation location) {
-
     Set<Ref<ChunkStore>> set = villagesHeartMap.get(location);
 
     if (set == null) {

@@ -1,10 +1,13 @@
 {
   "Type": "Abstract",
-  "StartState": "Idle",
   "Parameters": {
     "Appearance": {
       "Value": "Female_Civilian",
       "Description": "Model to be used"
+    },
+    "DropList": {
+      "Value": "Empty",
+      "Description": "Drop Items"
     },
     "MaxHealth": {
       "Value": 100,
@@ -14,6 +17,9 @@
       "Value": "server.npcRoles.Template.name",
       "Description": "Translation key for NPC name display"
     }
+  },
+  "DropList": {
+    "Compute": "DropList"
   },
   "MotionControllerList": [
     {
@@ -25,6 +31,19 @@
     }
   ],
   "Instructions": [
+    {
+      "Sensor": {
+        "Type": "WatchVillageState",
+        "State": "panic"
+      },
+      "BodyMotion": {
+        "Type": "WanderInCircle",
+        "Radius": 9,
+        "RelativeSpeed": 1,
+        "MaxHeadingChange": 90
+      },
+      "Continue": true
+    },
     {
       "Instructions": [
         {
@@ -97,6 +116,7 @@
   "NameTranslationKey": {
     "Compute": "NameTranslationKey"
   },
+  "StartState": "Idle",
   "Appearance": {
     "Compute": "Appearance"
   },
