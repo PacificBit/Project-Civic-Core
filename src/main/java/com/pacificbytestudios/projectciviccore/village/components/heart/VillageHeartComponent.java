@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.components;
+package com.pacificbytestudios.projectciviccore.village.components.heart;
 
 import java.util.Collections;
 import java.util.HashSet;

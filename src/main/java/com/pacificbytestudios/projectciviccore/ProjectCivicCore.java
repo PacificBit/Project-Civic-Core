@@ -10,10 +10,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
-import com.pacificbytestudios.projectciviccore.village.components.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.VillageSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.systems.VillageHeartLoadUnloadSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.VillageHeartPlacementSystem;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderWatchVillageStateSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
@@ -23,6 +25,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private static ProjectCivicCore INSTANCE;
   private ComponentType<ChunkStore, VillageHeartComponent> villageCoreComponentType;
   private ComponentType<ChunkStore, VillageSpawnComponent> villageSpawnComponentType;
+  private ComponentType<ChunkStore, VillageBedComponent> villageBedComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
 
@@ -42,6 +45,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     ComponentRegistryProxy<ChunkStore> chunkRegistry = this.getChunkStoreRegistry();
     ComponentRegistryProxy<EntityStore> entityRegistry = this.getEntityStoreRegistry();
     CommandRegistry commandRegistry = this.getCommandRegistry();
+    NPCPlugin npcPlugin = NPCPlugin.get();
 
     this.villageSpawnComponentType = chunkRegistry.registerComponent(
         VillageSpawnComponent.class,
@@ -53,6 +57,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillageHeartComponent",
         VillageHeartComponent.CODEC);
 
+    this.villageBedComponentType = chunkRegistry.registerComponent(
+        VillageBedComponent.class,
+        "VillageBedComponent",
+        VillageBedComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
 
@@ -63,9 +72,13 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillagerComponent",
         VillagerComponent.CODEC);
 
-    NPCPlugin.get().registerCoreComponentType(
+    npcPlugin.registerCoreComponentType(
         "WatchVillageState",
         BuilderWatchVillageStateSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "BedSensor",
+        BuilderBedSensor::new);
   }
 
   public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
@@ -78,6 +91,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {
     return this.villagerComponentType;
+  }
+
+  public ComponentType<ChunkStore, VillageBedComponent> getVillageBedComponentType() {
+    return villageBedComponentType;
   }
 
 }

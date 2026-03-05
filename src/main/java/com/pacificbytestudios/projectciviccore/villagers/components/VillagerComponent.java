@@ -24,10 +24,24 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.villageHeartLocation)
       .add()
 
+      .append(new KeyedCodec<>("BedPosition", Vector3i.CODEC),
+          (obj, value) -> obj.bedPosition = value,
+          (obj) -> obj.bedPosition)
+      .add()
+
       .build();
 
   private VillageHeartLocation villageHeartLocation;
   private Ref<ChunkStore> villageHeartRef;
+  private Vector3i bedPosition;
+
+  public Vector3i getBedPosition() {
+    return bedPosition;
+  }
+
+  public void setBedPosition(Vector3i bedPosition) {
+    this.bedPosition = bedPosition;
+  }
 
   public void setVillageHeartLocation(VillageHeartLocation location) {
     this.villageHeartLocation = location;
@@ -52,6 +66,7 @@ public class VillagerComponent implements Component<EntityStore> {
     VillagerComponent newComponent = new VillagerComponent();
     newComponent.villageHeartRef = this.villageHeartRef;
     newComponent.villageHeartLocation = this.villageHeartLocation;
+    newComponent.bedPosition = this.bedPosition;
     return newComponent;
   }
 

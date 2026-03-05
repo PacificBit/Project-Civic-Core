@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.components;
+package com.pacificbytestudios.projectciviccore.village.components.heart;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
