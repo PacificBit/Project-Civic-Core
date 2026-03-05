@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.util.FastRandom;
+import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -20,7 +21,10 @@ import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
+import com.pacificbytestudios.projectciviccore.village.codec.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
@@ -43,23 +47,27 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
   @Override
   public void onEntityAdded(
-      Ref<ChunkStore> villageHeartRef,
+      Ref<ChunkStore> ref,
       AddReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    World world = store.getExternalData().getWorld();
-    Vector3i villageHeartPos = Utils.getWorldBlockPosition(villageHeartRef, commandBuffer);
+    BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
 
-    assert villageHeartPos != null;
+    assert context != null;
 
-    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(villageHeartPos.x, villageHeartPos.z));
-    villageStore.registerVillage(new ChunkLocation(chunk.getX(), chunk.getZ()), villageHeartRef);
+    WorldChunk chunk = context.chunk();
+    World world = chunk.getWorld();
+    Vector3i villageHeartPos = context.position();
 
-    VillageSpawnComponent spawnComponent = store.getComponent(villageHeartRef,
+    VillageSpawnComponent spawnComponent = store.getComponent(ref,
         VillageSpawnComponent.getComponentType());
-    VillageHeartComponent villageCoreComponent = store.getComponent(villageHeartRef,
+    VillageHeartComponent villageHeartComponent = store.getComponent(ref,
         VillageHeartComponent.getComponentType());
     int radius = spawnComponent.getSpawnNpcRange();
+
+    claimVillageArea(villageHeartComponent, villageHeartPos);
+    // TODO: Should check if there is another village colliding
+    villageStore.registerVillage(new ChunkLocation(chunk.getX(), chunk.getZ()), ref);
 
     VillageHeartRef villageHeartLocation = new VillageHeartRef(world.getName(), villageHeartPos);
 
@@ -77,7 +85,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         assert npcRef != null;
 
         UUIDComponent uuidComponent = entityStore.getComponent(npcRef, UUIDComponent.getComponentType());
-        villageCoreComponent.registerNpc(uuidComponent.getUuid());
+        villageHeartComponent.registerNpc(uuidComponent.getUuid());
 
         beds[npcCount].setOwner(uuidComponent.getUuid());
         beds[npcCount].setTaken(true);
@@ -88,9 +96,24 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);
       }
 
-      store.removeComponent(villageHeartRef,
-          VillageSpawnComponent.getComponentType());
+      try {
+        // INFO: villageHeartRef is invalid here
+        store.removeComponent(ref,
+            VillageSpawnComponent.getComponentType());
+      } catch (Exception e) {
+      }
     });
+  }
+
+  private void claimVillageArea(VillageHeartComponent heart, Vector3i origin) {
+    int level = heart.getLevel();
+    int radiusPerLevel = heart.getConfig().getClaimRadiusPerLevel();
+    int totalRadius = level * radiusPerLevel;
+    Vector2i topLeft = new Vector2i(origin.x - totalRadius, origin.z - totalRadius);
+    Vector2i botRight = new Vector2i(origin.x + totalRadius, origin.z + totalRadius);
+    ProjectCivicCore.LOGGER.atInfo()
+        .log("[claimVillageArea] Created new village with anchor points: " + topLeft + " and: " + botRight);
+    heart.setClaimedArea(new ClaimedAreaComponent(topLeft, botRight));
   }
 
   private VillageBedComponent[] spawnBeds(World world, Vector3i villageCenter, int villagerCount, int radius) {

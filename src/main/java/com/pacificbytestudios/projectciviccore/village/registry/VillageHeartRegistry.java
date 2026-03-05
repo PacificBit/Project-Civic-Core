@@ -1,17 +1,16 @@
 package com.pacificbytestudios.projectciviccore.village.registry;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
 public final class VillageHeartRegistry {
   private static VillageHeartRegistry INSTANCE;
 
-  private final Map<ChunkLocation, Set<Ref<ChunkStore>>> villagesHeartMap = new ConcurrentHashMap<>();
+  private final Map<ChunkLocation, Ref<ChunkStore>> villagesHeartMap = new ConcurrentHashMap<>();
 
   public record ChunkLocation(int x, int z) {
   }
@@ -26,28 +25,25 @@ public final class VillageHeartRegistry {
   private VillageHeartRegistry() {
   }
 
-  public void registerVillage(ChunkLocation location, Ref<ChunkStore> heartRef) {
-    villagesHeartMap
-        .computeIfAbsent(location, l -> ConcurrentHashMap.newKeySet())
-        .add(heartRef);
+  // ====================================
+
+  public boolean registerVillage(ChunkLocation location, Ref<ChunkStore> heartRef) {
+    if (villagesHeartMap.containsKey(location) && villagesHeartMap.get(location).isValid()) {
+      return false;
+    }
+    villagesHeartMap.put(location, heartRef);
+    return true;
   }
 
   public void unregisterVillage(ChunkLocation location, Ref<ChunkStore> heartRef) {
-
-    villagesHeartMap.computeIfPresent(location, (loc, set) -> {
-      set.remove(heartRef);
-      return set.isEmpty() ? null : set;
-    });
-
+    villagesHeartMap.remove(location, heartRef);
   }
 
-  public Set<Ref<ChunkStore>> getVillagesHeartIn(ChunkLocation location) {
-    Set<Ref<ChunkStore>> set = villagesHeartMap.get(location);
+  public Ref<ChunkStore> getVillageHeartIn(ChunkLocation location) {
+    return villagesHeartMap.get(location);
+  }
 
-    if (set == null) {
-      return Collections.emptySet();
-    }
-
-    return Collections.unmodifiableSet(set);
+  public Ref<ChunkStore> getVillageHeartIn(Vector2i position) {
+    return null;
   }
 }

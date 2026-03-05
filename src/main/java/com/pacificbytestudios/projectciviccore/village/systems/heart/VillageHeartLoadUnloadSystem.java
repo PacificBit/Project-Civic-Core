@@ -7,13 +7,11 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
-import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
@@ -29,12 +27,12 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
     ProjectCivicCore.LOGGER.atInfo().log("[VillageHeartLoadUnloadSystem] - Loading reason: " + reason);
-    World world = store.getExternalData().getWorld();
-    Vector3i blockPos = Utils.getWorldBlockPosition(villageHeartRef, commandBuffer);
 
-    assert blockPos != null;
+    BlockContext context = Utils.getWorldBlockContext(villageHeartRef, commandBuffer);
 
-    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
+    assert context != null;
+
+    WorldChunk chunk = context.chunk();
     villageStore.registerVillage(new ChunkLocation(chunk.getX(), chunk.getZ()), villageHeartRef);
   }
 

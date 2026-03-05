@@ -62,7 +62,12 @@
     ],
     "BlockEntity": {
       "Components": {
-        "VillageHeartComponent": {},
+        "VillageHeartComponent": {
+          "Level": 1,
+          "Config": {
+            "ClaimRadiusPerLevel": 20
+          }
+        },
         "VillageSpawnConfig": {
           "InitialNpcCount": 4,
           "NpcSpawnRange": 5

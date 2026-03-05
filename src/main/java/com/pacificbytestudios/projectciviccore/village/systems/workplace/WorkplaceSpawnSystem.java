@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.systems.workplace;
 
+import java.util.Set;
+
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -7,11 +9,19 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
+import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
 
 public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
+  private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   @Override
   public void onEntityAdded(
@@ -19,8 +29,15 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
       AddReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    // TODO: Auto-generated method stub
-    System.out.println("Added workplace");
+    BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
+
+    assert blockContext != null;
+
+    WorldChunk chunk = blockContext.chunk();
+    World world = chunk.getWorld();
+    Vector3i blockPos = blockContext.position();
+
+    Ref<ChunkStore> villages = villageStore.getVillageHeartIn(new ChunkLocation(chunk.getX(), chunk.getZ()));
   }
 
   @Override

@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.pacificbytestudios.projectciviccore.village.codec.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -31,6 +32,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageBedComponent> villageBedComponentType;
   private ComponentType<ChunkStore, WorkplaceComponent> workplacePlaceComponentType;
   private ComponentType<ChunkStore, WorkplaceSpawnComponent> workplacePlaceSpawnComponentType;
+  private ComponentType<ChunkStore, ClaimedAreaComponent> claimedAreaComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
 
@@ -77,6 +79,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         "WorkplaceSpawnComponent",
         WorkplaceSpawnComponent.CODEC);
 
+    this.claimedAreaComponentType = chunkRegistry.registerComponent(
+        ClaimedAreaComponent.class,
+        "ClaimedAreaComponent",
+        ClaimedAreaComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
@@ -115,6 +122,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, WorkplaceSpawnComponent> getWorkplacePlaceSpawnComponentType() {
     return this.workplacePlaceSpawnComponentType;
+  }
+
+  public ComponentType<ChunkStore, ClaimedAreaComponent> getClaimedAreaComponent() {
+    return this.claimedAreaComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

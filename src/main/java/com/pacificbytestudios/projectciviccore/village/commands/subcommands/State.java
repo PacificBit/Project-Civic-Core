@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.commands.subcommands;
 
-import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import com.hypixel.hytale.component.Ref;
@@ -22,6 +20,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
 public class State extends CommandBase {
   private static final int COMMAND_CHUNK_RANGE = 2;
@@ -100,37 +99,36 @@ public class State extends CommandBase {
   private boolean updateVillageState(CommandContext context, VillageHeartState state, WorldChunk chunk) {
     ChunkLocation chunkLocation = new ChunkLocation(chunk.getX(), chunk.getZ());
 
-    Set<Ref<ChunkStore>> villageHearts = villageStore.getVillagesHeartIn(chunkLocation);
+    Ref<ChunkStore> villageHeart = villageStore.getVillageHeartIn(chunkLocation);
 
-    if (villageHearts.isEmpty()) {
+    if (villageHeart == null) {
       return false;
     }
 
     boolean updated = false;
 
-    for (Ref<ChunkStore> heart : villageHearts) {
-      if (!heart.isValid()) {
-        villageStore.unregisterVillage(chunkLocation, heart);
-        continue;
-      }
-
-      VillageHeartComponent villageHeartComponent = heart.getStore()
-          .getComponent(heart, VillageHeartComponent.getComponentType());
-
-      if (villageHeartComponent == null) {
-        villageStore.unregisterVillage(chunkLocation, heart);
-        continue;
-      }
-
-      String prevState = villageHeartComponent.getState().toString().toLowerCase();
-      villageHeartComponent.setState(state);
-
-      String message = "Changed state from: " + prevState + " to: "
-          + state.getState().toString().toLowerCase();
-      context.sendMessage(Message.raw(message));
-
-      updated = true;
+    if (!villageHeart.isValid()) {
+      ProjectCivicCore.LOGGER.atInfo().log("[updateVillageState] - Invalid village ref");
+      villageStore.unregisterVillage(chunkLocation, villageHeart);
+      return false;
     }
+
+    VillageHeartComponent villageHeartComponent = villageHeart.getStore()
+        .getComponent(villageHeart, VillageHeartComponent.getComponentType());
+
+    if (villageHeartComponent == null) {
+      ProjectCivicCore.LOGGER.atInfo().log("[updateVillageState] - Could not fetch village heart component");
+      return false;
+    }
+
+    String prevState = villageHeartComponent.getState().toString().toLowerCase();
+    villageHeartComponent.setState(state);
+
+    String message = "Changed state from: " + prevState + " to "
+        + state.getState().toString().toLowerCase();
+    context.sendMessage(Message.raw(message));
+
+    updated = true;
 
     return updated;
   }

@@ -1,8 +1,13 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -37,12 +42,32 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.villageHeartLocation)
       .add()
 
+      .append(new KeyedCodec<Set<UUID>>(
+          "Workers",
+          new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
+          (obj, value) -> obj.workers = value,
+          obj -> obj.workers)
+      .add()
+
       .build();
 
   private WorkplacePlaceType workingPlaceType;
   private Vector3i benchPos;
   private Vector3i storagePos;
   private VillageHeartRef villageHeartLocation;
+  private Set<UUID> workers = new HashSet<>();
+
+  public Set<UUID> getWorkers() {
+    return workers;
+  }
+
+  public void registerWorker(UUID uuid) {
+    this.workers.add(uuid);
+  }
+
+  public void unregisterWorker(UUID uuid) {
+    this.workers.remove(uuid);
+  }
 
   public WorkplacePlaceType getWorkingPlaceType() {
     return workingPlaceType;
@@ -83,6 +108,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.benchPos = this.benchPos;
     component.storagePos = this.storagePos;
     component.villageHeartLocation = this.villageHeartLocation;
+    component.workers = new HashSet<>(this.workers);
     return component;
   }
 
