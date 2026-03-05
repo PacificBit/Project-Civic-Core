@@ -67,7 +67,10 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
     claimVillageArea(villageHeartComponent, villageHeartPos);
     // TODO: Should check if there is another village colliding
-    villageStore.registerVillage(new ChunkLocation(chunk.getX(), chunk.getZ()), ref);
+    villageStore.registerVillage(
+        new ChunkLocation(chunk.getX(), chunk.getZ()),
+        ref,
+        villageHeartComponent);
 
     VillageHeartRef villageHeartLocation = new VillageHeartRef(world.getName(), villageHeartPos);
 
@@ -113,7 +116,10 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     Vector2i botRight = new Vector2i(origin.x + totalRadius, origin.z + totalRadius);
     ProjectCivicCore.LOGGER.atInfo()
         .log("[claimVillageArea] Created new village with anchor points: " + topLeft + " and: " + botRight);
-    heart.setClaimedArea(new ClaimedAreaComponent(topLeft, botRight));
+    ClaimedAreaComponent area = new ClaimedAreaComponent();
+    area.setTopLeft(topLeft);
+    area.setBotRight(botRight);
+    heart.setClaimedArea(area);
   }
 
   private VillageBedComponent[] spawnBeds(World world, Vector3i villageCenter, int villagerCount, int radius) {

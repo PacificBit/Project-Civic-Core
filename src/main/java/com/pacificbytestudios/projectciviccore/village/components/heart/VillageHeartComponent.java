@@ -55,7 +55,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   private VillageHeartConfigComponent config;
   private Set<UUID> npcRegistry = new HashSet<>();
   private VillageHeartState state = VillageHeartState.NORMAL;
-  private ClaimedAreaComponent claimedArea = new ClaimedAreaComponent();
+  private ClaimedAreaComponent claimedArea;
   private int level;
 
   // INFO: Read only

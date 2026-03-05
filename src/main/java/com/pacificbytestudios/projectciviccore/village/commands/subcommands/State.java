@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -61,47 +62,16 @@ public class State extends CommandBase {
       }
 
       Vector3i playerPos = transform.getPosition().toVector3i();
+      Ref<ChunkStore> heart = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
 
-      long originChunkIndex = ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z);
-      WorldChunk originChunk = world.getChunk(originChunkIndex);
-
-      if (originChunk == null) {
-        context.sendMessage(Message.raw("Could not resolve player chunk."));
-        return;
-      }
-
-      int originChunkX = originChunk.getX();
-      int originChunkZ = originChunk.getZ();
-
-      boolean foundAnyVillage = false;
-
-      for (int chunkX = -COMMAND_CHUNK_RANGE; chunkX <= COMMAND_CHUNK_RANGE; chunkX++) {
-        for (int chunkZ = -COMMAND_CHUNK_RANGE; chunkZ <= COMMAND_CHUNK_RANGE; chunkZ++) {
-          WorldChunk targetChunk = world.getChunk(
-              ChunkUtil.indexChunk(originChunkX + chunkX, originChunkZ + chunkZ));
-
-          if (targetChunk == null) {
-            continue;
-          }
-
-          if (updateVillageState(context, state, targetChunk)) {
-            foundAnyVillage = true;
-          }
-        }
-      }
-
-      if (!foundAnyVillage) {
-        context.sendMessage(Message.raw("No village found in range."));
-      }
+      System.out.println("This is the heart: " + heart + " is valid? " + (heart == null ? "no" : heart.isValid()));
+      updateVillageState(context, state, heart);
     });
   }
 
-  private boolean updateVillageState(CommandContext context, VillageHeartState state, WorldChunk chunk) {
-    ChunkLocation chunkLocation = new ChunkLocation(chunk.getX(), chunk.getZ());
-
-    Ref<ChunkStore> villageHeart = villageStore.getVillageHeartIn(chunkLocation);
-
+  private boolean updateVillageState(CommandContext context, VillageHeartState state, Ref<ChunkStore> villageHeart) {
     if (villageHeart == null) {
+      context.sendMessage(Message.raw("No village found in range."));
       return false;
     }
 
@@ -109,7 +79,7 @@ public class State extends CommandBase {
 
     if (!villageHeart.isValid()) {
       ProjectCivicCore.LOGGER.atInfo().log("[updateVillageState] - Invalid village ref");
-      villageStore.unregisterVillage(chunkLocation, villageHeart);
+      villageStore.unregisterVillage(villageHeart);
       return false;
     }
 

@@ -22,17 +22,8 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
       .add()
       .build();
 
-  private Vector2i topLeft = new Vector2i();
-  private Vector2i botRight = new Vector2i();
-
-  public ClaimedAreaComponent() {
-    this(null, null);
-  }
-
-  public ClaimedAreaComponent(Vector2i topLeft, Vector2i botRight) {
-    this.topLeft = topLeft;
-    this.botRight = botRight;
-  }
+  private Vector2i topLeft;
+  private Vector2i botRight;
 
   @Override
   public ClaimedAreaComponent clone() {
@@ -60,5 +51,25 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
 
   public ComponentType<ChunkStore, ClaimedAreaComponent> getComponentType() {
     return ProjectCivicCore.get().getClaimedAreaComponent();
+  }
+
+  public boolean isInside(Vector2i coord2d) {
+    if (this.topLeft == null || this.botRight == null) {
+      return false;
+    }
+    int x = coord2d.x;
+    int z = coord2d.y;
+
+    System.out
+        .println("Checking coords, Input: " + coord2d + ", TopLeft: " + this.topLeft
+            + ", BotRight: " + this.botRight);
+
+    return x >= this.topLeft.x && x <= this.botRight.x && z >= this.topLeft.y &&
+        z <= this.botRight.y;
+  }
+
+  @Override
+  public String toString() {
+    return "ClaimedAreaComponent{topLeft=" + this.topLeft + ", botRight=" + this.botRight + "}";
   }
 }

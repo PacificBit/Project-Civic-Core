@@ -33,7 +33,14 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
     assert context != null;
 
     WorldChunk chunk = context.chunk();
-    villageStore.registerVillage(new ChunkLocation(chunk.getX(), chunk.getZ()), villageHeartRef);
+
+    chunk.getWorld().execute(() -> {
+      VillageHeartComponent heart = store.getComponent(villageHeartRef, VillageHeartComponent.getComponentType());
+      villageStore.registerVillage(
+          new ChunkLocation(chunk.getX(), chunk.getZ()),
+          villageHeartRef,
+          heart);
+    });
   }
 
   @Override

@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.systems.workplace;
 
-import java.util.Set;
-
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -37,7 +35,8 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     World world = chunk.getWorld();
     Vector3i blockPos = blockContext.position();
 
-    Ref<ChunkStore> villages = villageStore.getVillageHeartIn(new ChunkLocation(chunk.getX(), chunk.getZ()));
+    // Ref<ChunkStore> villages = villageStore.getVillageHeartInChunk(new
+    // ChunkLocation(chunk.getX(), chunk.getZ()));
   }
 
   @Override
