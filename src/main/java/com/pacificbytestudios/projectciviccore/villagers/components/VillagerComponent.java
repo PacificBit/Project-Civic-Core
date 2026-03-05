@@ -18,10 +18,12 @@ import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartLoca
 public class VillagerComponent implements Component<EntityStore> {
   public static final BuilderCodec<VillagerComponent> CODEC = BuilderCodec
       .builder(VillagerComponent.class, VillagerComponent::new)
+
       .append(new KeyedCodec<>("VillageHeartLocation", VillageHeartLocation.CODEC),
           (obj, value) -> obj.setVillageHeartLocation(value),
           (obj) -> obj.villageHeartLocation)
       .add()
+
       .build();
 
   private VillageHeartLocation villageHeartLocation;
