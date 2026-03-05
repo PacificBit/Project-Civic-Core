@@ -1,0 +1,96 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Bench_Farming.name",
+    "Description": "server.items.Bench_Farming.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Bench_Farming.png",
+  "Categories": [
+    "Furniture.Benches"
+  ],
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Benches/Farming.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Benches/Farming_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Bench_Farming",
+    "VariantRotation": "NESW",
+    "State": {
+      "Id": "crafting",
+      "Definitions": {
+        "CraftCompleted": {}
+      }
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Benches"
+      }
+    },
+    "BlockParticleSetId": "Wood",
+    "ParticleColor": "#815c39",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "BlockSoundSetId": "Wood",
+    "BlockEntity": {
+      "Components": {
+        "WorkplaceComponent": {
+          "Type": "farm"
+        },
+        "WorkplaceSpawnComponent": {}
+      }
+    }
+  },
+  "PlayerAnimationsId": "Block",
+  "IconProperties": {
+    "Scale": 0.35,
+    "Translation": [
+      11.4,
+      -19.8
+    ],
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Bench"
+    ]
+  },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_Trunk",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 20
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Id": "Workbench",
+        "Categories": [
+          "Workbench_Crafting"
+        ]
+      }
+    ]
+  },
+  "MaxStack": 1,
+  "ItemLevel": 4,
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.systems;
+package com.pacificbytestudios.projectciviccore.village.systems.heart;
 
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;

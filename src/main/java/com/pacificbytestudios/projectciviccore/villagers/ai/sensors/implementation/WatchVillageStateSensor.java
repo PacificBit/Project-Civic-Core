@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.state.VillageHeartState;
+import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderWatchVillageStateSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 

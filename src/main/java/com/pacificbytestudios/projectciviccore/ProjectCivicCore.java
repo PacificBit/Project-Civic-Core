@@ -13,8 +13,11 @@ import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
-import com.pacificbytestudios.projectciviccore.village.systems.VillageHeartLoadUnloadSystem;
-import com.pacificbytestudios.projectciviccore.village.systems.VillageHeartPlacementSystem;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderWatchVillageStateSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
@@ -26,6 +29,8 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageHeartComponent> villageCoreComponentType;
   private ComponentType<ChunkStore, VillageSpawnComponent> villageSpawnComponentType;
   private ComponentType<ChunkStore, VillageBedComponent> villageBedComponentType;
+  private ComponentType<ChunkStore, WorkplaceComponent> workplacePlaceComponentType;
+  private ComponentType<ChunkStore, WorkplaceSpawnComponent> workplacePlaceSpawnComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
 
@@ -62,8 +67,19 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillageBedComponent",
         VillageBedComponent.CODEC);
 
+    this.workplacePlaceComponentType = chunkRegistry.registerComponent(
+        WorkplaceComponent.class,
+        "WorkplaceComponent",
+        WorkplaceComponent.CODEC);
+
+    this.workplacePlaceSpawnComponentType = chunkRegistry.registerComponent(
+        WorkplaceSpawnComponent.class,
+        "WorkplaceSpawnComponent",
+        WorkplaceSpawnComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
+    chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
 
     commandRegistry.registerCommand(new VillageCommands());
 
@@ -89,12 +105,19 @@ public final class ProjectCivicCore extends JavaPlugin {
     return this.villageCoreComponentType;
   }
 
+  public ComponentType<ChunkStore, VillageBedComponent> getVillageBedComponentType() {
+    return this.villageBedComponentType;
+  }
+
+  public ComponentType<ChunkStore, WorkplaceComponent> getWorkplacePlaceComponentType() {
+    return this.workplacePlaceComponentType;
+  }
+
+  public ComponentType<ChunkStore, WorkplaceSpawnComponent> getWorkplacePlaceSpawnComponentType() {
+    return this.workplacePlaceSpawnComponentType;
+  }
+
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {
     return this.villagerComponentType;
   }
-
-  public ComponentType<ChunkStore, VillageBedComponent> getVillageBedComponentType() {
-    return villageBedComponentType;
-  }
-
 }

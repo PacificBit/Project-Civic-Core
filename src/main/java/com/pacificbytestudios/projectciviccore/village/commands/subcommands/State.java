@@ -19,9 +19,9 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
-import com.pacificbytestudios.projectciviccore.village.state.VillageHeartState;
 
 public class State extends CommandBase {
   private static final int COMMAND_CHUNK_RANGE = 2;
@@ -39,7 +39,7 @@ public class State extends CommandBase {
 
   @Override
   protected void executeSync(CommandContext context) {
-    VillageHeartState state = VillageHeartState.fromString(stateType.get(context));
+    VillageHeartState state = VillageHeartState.valueOf(stateType.get(context).toUpperCase());
 
     if (state == null) {
       context.sendMessage(Message.raw(

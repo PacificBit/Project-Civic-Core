@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.systems;
+package com.pacificbytestudios.projectciviccore.village.systems.heart;
 
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -26,7 +26,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
-import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartLocation;
+import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 import it.unimi.dsi.fastutil.Pair;
@@ -61,9 +61,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         VillageHeartComponent.getComponentType());
     int radius = spawnComponent.getSpawnNpcRange();
 
-    VillageHeartLocation villageHeartLocation = new VillageHeartLocation();
-    villageHeartLocation.setPosition(villageHeartPos);
-    villageHeartLocation.setWorldName(world.getName());
+    VillageHeartRef villageHeartLocation = new VillageHeartRef(world.getName(), villageHeartPos);
 
     world.execute(() -> {
       Store<EntityStore> entityStore = world.getEntityStore().getStore();
