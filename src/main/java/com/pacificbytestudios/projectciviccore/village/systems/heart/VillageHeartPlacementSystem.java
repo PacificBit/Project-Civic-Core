@@ -65,9 +65,11 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     int radius = spawnComponent.getSpawnNpcRange();
 
     VillageHeartRef villageHeartLocation = new VillageHeartRef(world.getName(), villageHeartPos);
+    villageHeart.setUuid(UUID.randomUUID());
 
     ClaimedAreaComponent area = Utils.claimVillageArea(villageHeart, villageHeartPos);
     villageStore.registerVillage(
+        villageHeart.getUuid(),
         world.getName(),
         villageHeartPos,
         area);

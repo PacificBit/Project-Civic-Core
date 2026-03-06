@@ -53,6 +53,7 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       }
 
       villageStore.registerVillage(
+          heart.getUuid(),
           chunk.getWorld().getName(),
           context.position(),
           heart.getClaimedArea());
@@ -61,11 +62,21 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
 
   @Override
   public void onEntityRemove(
-      Ref<ChunkStore> villageHeartRef,
+      Ref<ChunkStore> ref,
       RemoveReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    ProjectCivicCore.LOGGER.atInfo().log("[onEntityRemove] - Unloading reason: " + reason);
+    ProjectCivicCore.LOGGER.atInfo().log("[VillageHeartLoadUnloadSystem - onEntityRemove] Unloading reason: " + reason);
+
+    VillageHeartComponent heart = store.getComponent(ref, VillageHeartComponent.getComponentType());
+
+    if (heart == null) {
+      ProjectCivicCore.LOGGER.atInfo()
+          .log("[VillageHeartLoadUnloadSystem - onEntityRemove] - Could not find the heart component");
+      return;
+    }
+
+    villageStore.unregisterVillage(heart.getUuid());
   }
 
   @Override

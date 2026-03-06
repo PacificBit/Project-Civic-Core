@@ -26,6 +26,11 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageHeartComponent> CODEC = BuilderCodec
       .builder(VillageHeartComponent.class, VillageHeartComponent::new)
 
+      .append(new KeyedCodec<>("VillageId", Codec.UUID_BINARY),
+          (obj, value) -> obj.uuid = value,
+          (obj) -> obj.uuid)
+      .add()
+
       .append(new KeyedCodec<>("Config", VillageHeartConfigComponent.CODEC),
           (obj, value) -> obj.config = value,
           (obj) -> obj.config)
@@ -116,6 +121,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
       .build();
 
+  private UUID uuid;
   private VillageHeartConfigComponent config;
   private VillageHeartState state = VillageHeartState.NORMAL;
   private int level;
@@ -128,8 +134,16 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   private Map<UUID, WorkplaceComponent> workplaceIdToWorkplace = new HashMap<>();
   private Map<UUID, UUID> villagerToWorkplace = new HashMap<>();
 
-  // INFO: Read only
+  public UUID getUuid() {
+    return uuid;
+  }
+
+  public void setUuid(UUID uuid) {
+    this.uuid = uuid;
+  }
+
   public VillageHeartConfigComponent getConfig() {
+    // INFO: Read only
     return config.clone();
   }
 
@@ -223,6 +237,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   @Override
   public VillageHeartComponent clone() {
     VillageHeartComponent component = new VillageHeartComponent();
+    component.uuid = this.uuid;
     component.config = this.config;
     component.villagersRegistry = this.villagersRegistry;
     component.state = this.state;
