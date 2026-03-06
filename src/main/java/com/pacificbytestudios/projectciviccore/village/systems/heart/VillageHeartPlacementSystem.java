@@ -85,15 +85,15 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
         assert npcRef != null;
 
+        VillagerComponent villagerComponent = new VillagerComponent();
         UUIDComponent uuidComponent = entityStore.getComponent(npcRef, UUIDComponent.getComponentType());
         UUID uuid = uuidComponent.getUuid();
-        villageHeart.registerVillager(uuid);
+        villageHeart.registerVillager(uuid, villagerComponent);
         villageHeart.registerAsUnemployed(uuid);
 
         beds[npcCount].setOwner(uuid);
         beds[npcCount].setTaken(true);
 
-        VillagerComponent villagerComponent = new VillagerComponent();
         villagerComponent.setVillageHeartLocation(villageHeartLocation.clone());
         villagerComponent.setBedPosition(beds[npcCount].getPosition());
         entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);

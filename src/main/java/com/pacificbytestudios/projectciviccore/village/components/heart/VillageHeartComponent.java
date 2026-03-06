@@ -1,20 +1,25 @@
 package com.pacificbytestudios.projectciviccore.village.components.heart;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public class VillageHeartComponent implements Component<ChunkStore> {
 
@@ -24,22 +29,6 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       .append(new KeyedCodec<>("Config", VillageHeartConfigComponent.CODEC),
           (obj, value) -> obj.config = value,
           (obj) -> obj.config)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "VillagersRegistry",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.villagersRegistry = value,
-          obj -> obj.villagersRegistry)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "UnemployedRegistry",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.unemployedRegistry = value,
-          obj -> obj.unemployedRegistry)
       .add()
 
       .append(new KeyedCodec<>("State", Codec.STRING),
@@ -58,14 +47,86 @@ public class VillageHeartComponent implements Component<ChunkStore> {
           (obj) -> obj.claimedArea)
       .add()
 
+      .append(
+          new KeyedCodec<>(
+              "VillagersRegistry",
+              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
+          (obj, value) -> obj.villagersRegistry = value,
+          obj -> obj.villagersRegistry)
+      .add()
+
+      .append(
+          new KeyedCodec<>(
+              "UnemployedRegistry",
+              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
+          (obj, value) -> obj.unemployedRegistry = value,
+          obj -> obj.unemployedRegistry)
+      .add()
+
+      .append(
+          new KeyedCodec<>(
+              "VillagerIdToComponent",
+              new MapCodec<VillagerComponent, HashMap<String, VillagerComponent>>(
+                  VillagerComponent.CODEC,
+                  HashMap::new)),
+          (obj, value) -> {
+            obj.villagerIdToComponent = new HashMap<>();
+            value.forEach((k, v) -> obj.villagerIdToComponent.put(UUID.fromString(k), v));
+          },
+          obj -> {
+            HashMap<String, VillagerComponent> encoded = new HashMap<>();
+            obj.villagerIdToComponent.forEach((k, v) -> encoded.put(k.toString(), v));
+            return encoded;
+          })
+      .add()
+
+      .append(
+          new KeyedCodec<>(
+              "WorkplaceIdToWorkplace",
+              new MapCodec<WorkplaceComponent, HashMap<String, WorkplaceComponent>>(
+                  WorkplaceComponent.CODEC,
+                  HashMap::new)),
+          (obj, value) -> {
+            obj.workplaceIdToWorkplace = new HashMap<>();
+            value.forEach((k, v) -> obj.workplaceIdToWorkplace.put(UUID.fromString(k), v));
+          },
+          obj -> {
+            HashMap<String, WorkplaceComponent> encoded = new HashMap<>();
+            obj.workplaceIdToWorkplace.forEach((k, v) -> encoded.put(k.toString(), v));
+            return encoded;
+          })
+      .add()
+
+      .append(
+          new KeyedCodec<>(
+              "VillagerToWorkplaceMap",
+              new MapCodec<UUID, HashMap<String, UUID>>(
+                  Codec.UUID_BINARY,
+                  HashMap::new)),
+          (obj, value) -> {
+            obj.villagerToWorkplace = new HashMap<>();
+            value.forEach((k, v) -> obj.villagerToWorkplace.put(UUID.fromString(k), v));
+          },
+          obj -> {
+            HashMap<String, UUID> encoded = new HashMap<>();
+            obj.villagerToWorkplace.forEach((k, v) -> encoded.put(k.toString(), v));
+            return encoded;
+          })
+      .add()
+
       .build();
 
   private VillageHeartConfigComponent config;
-  private Set<UUID> villagersRegistry = new HashSet<>();
-  private Set<UUID> unemployedRegistry = new HashSet<>();
   private VillageHeartState state = VillageHeartState.NORMAL;
   private int level;
   private ClaimedAreaComponent claimedArea;
+
+  private Set<UUID> villagersRegistry = new HashSet<>();
+  private Set<UUID> unemployedRegistry = new HashSet<>();
+  private Map<UUID, VillagerComponent> villagerIdToComponent = new HashMap<>();
+
+  private Map<UUID, WorkplaceComponent> workplaceIdToWorkplace = new HashMap<>();
+  private Map<UUID, UUID> villagerToWorkplace = new HashMap<>();
 
   // INFO: Read only
   public VillageHeartConfigComponent getConfig() {
@@ -76,12 +137,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return Collections.unmodifiableSet(this.villagersRegistry);
   }
 
-  public void registerVillager(UUID uuid) {
+  public void registerVillager(UUID uuid, VillagerComponent villagerComponent) {
     this.villagersRegistry.add(uuid);
+    this.villagerIdToComponent.put(uuid, villagerComponent);
   }
 
   public void unregisterVillager(UUID uuid) {
     this.villagersRegistry.remove(uuid);
+    this.villagerIdToComponent.remove(uuid);
   }
 
   public Set<UUID> getUnemployedRegistry() {
@@ -94,6 +157,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public void unregisterAsUnemployed(UUID uuid) {
     this.unemployedRegistry.remove(uuid);
+  }
+
+  public VillagerComponent getVillager(UUID uuid) {
+    return this.villagerIdToComponent.get(uuid);
   }
 
   public VillageHeartState getState() {
@@ -120,6 +187,39 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.level = level;
   }
 
+  public void registerWorkplace(WorkplaceComponent workplace) {
+    this.workplaceIdToWorkplace.put(workplace.getUuid(), workplace);
+  }
+
+  public void unregisterWorkplace(UUID workplace) {
+    if (!this.workplaceIdToWorkplace.containsKey(workplace)) {
+      return;
+    }
+    this.workplaceIdToWorkplace.remove(workplace);
+
+    for (Map.Entry<UUID, UUID> workers : this.villagerToWorkplace.entrySet()) {
+      if (workers.getValue().equals(workplace)) {
+        this.markAsUnemployed(workers.getKey());
+      }
+    }
+  }
+
+  public void registerVillagerAsWorkerAt(UUID villager, UUID workplace) {
+    this.unemployedRegistry.remove(villager);
+    this.villagerToWorkplace.put(villager, workplace);
+  }
+
+  public void markAsUnemployed(UUID villager) {
+    UUID workplace = this.villagerToWorkplace.get(villager);
+
+    if (workplace == null) {
+      return;
+    }
+
+    this.villagerToWorkplace.remove(villager);
+    this.unemployedRegistry.add(villager);
+  }
+
   @Override
   public VillageHeartComponent clone() {
     VillageHeartComponent component = new VillageHeartComponent();
@@ -129,6 +229,9 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     component.claimedArea = this.claimedArea;
     component.level = this.level;
     component.unemployedRegistry = this.unemployedRegistry;
+    component.villagerIdToComponent = this.villagerIdToComponent;
+    component.workplaceIdToWorkplace = this.workplaceIdToWorkplace;
+    component.villagerToWorkplace = this.villagerToWorkplace;
     return component;
   }
 

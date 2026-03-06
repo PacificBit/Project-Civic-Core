@@ -21,6 +21,8 @@ import com.pacificbytestudios.projectciviccore.village.components.villagetask.Vi
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryJobAssignmentTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.UnregisterWorkplaceTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
 public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
@@ -32,6 +34,10 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
       AddReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
+    if (!reason.equals(AddReason.SPAWN)) {
+      return;
+    }
+
     BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
 
     assert blockContext != null;
@@ -43,19 +49,16 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     VillageHeartRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
 
+    WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
+
+    workplaceComponent.setUuid(UUID.randomUUID());
+    VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
+
+    taskComponent.registerTask(new RegisterWorkplaceTask(workplaceComponent));
+    taskComponent.registerTask(new TryJobAssignmentTask(workplaceComponent.getUuid()));
+
     world.execute(() -> {
-      // VillageHeartComponent heartComponent = store.getComponent(heartRef,
-      // VillageHeartComponent.getComponentType());
-      WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
-
-      workplaceComponent.setUuid(UUID.randomUUID());
-      // heartComponent.registerWorkplace(workplaceComponent);
-      VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
-
-      taskComponent.registerTask(new RegisterWorkplaceTask(workplaceComponent));
       store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(), taskComponent);
-
-      store.removeComponent(ref, WorkplaceSpawnComponent.getComponentType());
     });
   }
 
@@ -65,24 +68,34 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
       RemoveReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    // BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
-    //
-    // assert blockContext != null;
-    //
-    // WorldChunk chunk = blockContext.chunk();
-    // World world = chunk.getWorld();
-    // Vector3i blockPos = blockContext.position();
-    //
-    // VillageHeartRef villageHeartRef = villageStore.getVillageHeartIn(new
-    // Vector2i(blockPos.x, blockPos.z));
-    // Ref<ChunkStore> heartRef = villageHeartRef.getRef();
-    //
-    // world.execute(() -> {
-    // VillageHeartComponent heartComponent = store.getComponent(heartRef,
-    // VillageHeartComponent.getComponentType());
-    // WorkplaceComponent workplaceComponent = store.getComponent(ref,
-    // WorkplaceComponent.getComponentType());
-    // });
+    if (!reason.equals(RemoveReason.REMOVE)) {
+      return;
+    }
+
+    BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
+
+    assert blockContext != null;
+
+    WorldChunk chunk = blockContext.chunk();
+    World world = chunk.getWorld();
+    Vector3i blockPos = blockContext.position();
+
+    VillageHeartRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    Ref<ChunkStore> heartRef = villageHeartRef.getRef();
+
+    WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
+
+    VillageTaskQueueComponent existingTaskComponent = store.getComponent(heartRef,
+        VillageTaskQueueComponent.getComponentType());
+
+    VillageTaskQueueComponent taskComponent = existingTaskComponent != null ? existingTaskComponent
+        : new VillageTaskQueueComponent();
+
+    taskComponent.registerTask(new UnregisterWorkplaceTask(workplaceComponent.getUuid()));
+
+    world.execute(() -> {
+      store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(), taskComponent);
+    });
   }
 
   @Override

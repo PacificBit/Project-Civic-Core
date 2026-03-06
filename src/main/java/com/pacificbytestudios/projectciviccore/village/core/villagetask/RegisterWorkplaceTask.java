@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
@@ -43,6 +44,11 @@ public class RegisterWorkplaceTask implements IVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
+    ProjectCivicCore.LOGGER
+        .atInfo()
+        .log("[RegisterWorkplaceTask] Registering workplace '" + this.workplace.getWorkplaceType() + "' with id: "
+            + this.workplace.getUuid());
+    heart.registerWorkplace(this.workplace);
   }
 
 }

@@ -75,7 +75,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.uuid = uuid;
   }
 
-  public WorkplaceType getWorkingPlaceType() {
+  public WorkplaceType getWorkplaceType() {
     return workingPlaceType;
   }
 
