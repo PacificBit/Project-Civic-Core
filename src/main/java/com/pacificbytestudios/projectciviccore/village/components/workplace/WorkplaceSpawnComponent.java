@@ -18,7 +18,7 @@ public class WorkplaceSpawnComponent implements Component<ChunkStore> {
   }
 
   public static ComponentType<ChunkStore, WorkplaceSpawnComponent> getComponentType() {
-    return ProjectCivicCore.get().getWorkplacePlaceSpawnComponentType();
+    return ProjectCivicCore.get().getWorkplaceSpawnComponentType();
   }
 
 }

@@ -41,11 +41,6 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.benchPos)
       .add()
 
-      .append(new KeyedCodec<>("StoragePosition", Vector3i.CODEC),
-          (obj, value) -> obj.storagePos = value,
-          (obj) -> obj.storagePos)
-      .add()
-
       .append(new KeyedCodec<>("VillageHeartLocation", VillageHeartRef.CODEC),
           (obj, value) -> obj.setVillageHeartLocation(value),
           (obj) -> obj.villageHeartLocation)
@@ -58,14 +53,19 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           obj -> obj.workers)
       .add()
 
+      .append(new KeyedCodec<>("Storage", WorkplaceStorageComponent.CODEC),
+          (obj, value) -> obj.storage = value,
+          (obj) -> obj.storage)
+      .add()
+
       .build();
 
   private UUID uuid;
   private WorkplaceType workingPlaceType;
   private Vector3i benchPos;
-  private Vector3i storagePos;
   private VillageHeartRef villageHeartLocation;
   private Set<UUID> workers = new HashSet<>();
+  private WorkplaceStorageComponent storage;
 
   public UUID getUuid() {
     return uuid;
@@ -89,14 +89,6 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
   public void setBenchPos(Vector3i benchPos) {
     this.benchPos = benchPos;
-  }
-
-  public Vector3i getStoragePos() {
-    return storagePos;
-  }
-
-  public void setStoragePos(Vector3i storagePos) {
-    this.storagePos = storagePos;
   }
 
   public void setVillageHeartLocation(VillageHeartRef villageHeartLocation) {
@@ -125,14 +117,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.uuid = this.uuid;
     component.workingPlaceType = this.workingPlaceType;
     component.benchPos = this.benchPos;
-    component.storagePos = this.storagePos;
     component.villageHeartLocation = this.villageHeartLocation;
     component.workers = new HashSet<>(this.workers);
+    component.storage = this.storage;
     return component;
   }
 
   public static ComponentType<ChunkStore, WorkplaceComponent> getComponentType() {
-    return ProjectCivicCore.get().getWorkplacePlaceComponentType();
+    return ProjectCivicCore.get().getWorkplaceComponentType();
   }
 
 }
