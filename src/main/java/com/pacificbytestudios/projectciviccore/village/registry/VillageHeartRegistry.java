@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.pacificbytestudios.projectciviccore.village.codec.ClaimedAreaComponent;
-import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.village.codec.VillageHeartRef;
 
 public final class VillageHeartRegistry {
   private static VillageHeartRegistry INSTANCE;

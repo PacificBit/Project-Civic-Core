@@ -1,5 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.commands.subcommands;
 
+import java.util.Set;
+import java.util.UUID;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector2i;
@@ -12,9 +15,10 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.village.codec.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.village.codec.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
 
 public class Dump extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
@@ -59,8 +63,32 @@ public class Dump extends CommandBase {
               VillageHeartComponent.getComponentType());
 
       ClaimedAreaComponent area = heartComponent.getClaimedArea();
+      Set<UUID> villagers = heartComponent.getVillagersRegistry();
+      Set<UUID> unemployed = heartComponent.getUnemployedRegistry();
+      int level = heartComponent.getLevel();
+      VillageHeartState state = heartComponent.getState();
+
+      context.sendMessage(Message.raw("=== Village Dump ==="));
       context.sendMessage(Message.raw("ClaimedArea: [" + area.getTopLeft() + " - " + area.getBotRight() + "]"));
+      context.sendMessage(Message.raw("Level: " + level));
+      context.sendMessage(Message.raw("State: " + state));
+
+      printSet("Villagers", context, villagers);
+      printSet("Unemployed", context, unemployed);
     });
+  }
+
+  private <T> void printSet(String category, CommandContext context, Set<T> setToPrint) {
+    context.sendMessage(Message.raw(category + " count: " + setToPrint.size()));
+
+    if (setToPrint.isEmpty()) {
+      context.sendMessage(Message.raw(category + ": []"));
+    } else {
+      context.sendMessage(Message.raw(category + ":"));
+      for (T element : setToPrint) {
+        context.sendMessage(Message.raw(" - " + element));
+      }
+    }
   }
 
 }

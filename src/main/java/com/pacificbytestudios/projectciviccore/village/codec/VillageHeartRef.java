@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.codecs;
+package com.pacificbytestudios.projectciviccore.village.codec;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;

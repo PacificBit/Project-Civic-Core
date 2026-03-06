@@ -9,7 +9,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.village.codec.VillageHeartRef;
 
 public class VillagerComponent implements Component<EntityStore> {
   public static final BuilderCodec<VillagerComponent> CODEC = BuilderCodec

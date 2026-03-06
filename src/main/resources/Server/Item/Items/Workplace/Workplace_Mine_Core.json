@@ -100,7 +100,7 @@
     "BlockEntity": {
       "Components": {
         "WorkplaceComponent": {
-          "Type": "mine"
+          "Type": "Mine"
         },
         "WorkplaceSpawnComponent": {}
       }

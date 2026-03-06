@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import java.util.UUID;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -14,17 +16,24 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplacePlaceType;
-import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.village.codec.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 public class WorkplaceComponent implements Component<ChunkStore> {
 
   public static final BuilderCodec<WorkplaceComponent> CODEC = BuilderCodec
       .builder(WorkplaceComponent.class, WorkplaceComponent::new)
 
-      .append(new KeyedCodec<>("Type", Codec.STRING),
-          (obj, value) -> obj.workingPlaceType = WorkplacePlaceType.valueOf(value.toUpperCase()),
-          (obj) -> obj.workingPlaceType == null ? null : obj.workingPlaceType.toString())
+      .append(
+          new KeyedCodec<>("Uuid", Codec.UUID_BINARY),
+          (obj, value) -> obj.uuid = value,
+          (obj) -> obj.uuid)
+      .add()
+
+      .append(
+          new KeyedCodec<>("Type", new EnumCodec<WorkplaceType>(WorkplaceType.class)),
+          (obj, value) -> obj.workingPlaceType = value,
+          (obj) -> obj.workingPlaceType)
       .add()
 
       .append(new KeyedCodec<>("BenchPosition", Vector3i.CODEC),
@@ -51,29 +60,26 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
       .build();
 
-  private WorkplacePlaceType workingPlaceType;
+  private UUID uuid;
+  private WorkplaceType workingPlaceType;
   private Vector3i benchPos;
   private Vector3i storagePos;
   private VillageHeartRef villageHeartLocation;
   private Set<UUID> workers = new HashSet<>();
 
-  public Set<UUID> getWorkers() {
-    return workers;
+  public UUID getUuid() {
+    return uuid;
   }
 
-  public void registerWorker(UUID uuid) {
-    this.workers.add(uuid);
+  public void setUuid(UUID uuid) {
+    this.uuid = uuid;
   }
 
-  public void unregisterWorker(UUID uuid) {
-    this.workers.remove(uuid);
-  }
-
-  public WorkplacePlaceType getWorkingPlaceType() {
+  public WorkplaceType getWorkingPlaceType() {
     return workingPlaceType;
   }
 
-  public void setWorkingPlaceType(WorkplacePlaceType workingPlaceType) {
+  public void setWorkingPlaceType(WorkplaceType workingPlaceType) {
     this.workingPlaceType = workingPlaceType;
   }
 
@@ -101,9 +107,22 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     return this.villageHeartLocation.getRef();
   }
 
+  public Set<UUID> getWorkers() {
+    return Collections.unmodifiableSet(this.workers);
+  }
+
+  public void registerWorker(UUID uuid) {
+    this.workers.add(uuid);
+  }
+
+  public void unregisterWorker(UUID uuid) {
+    this.workers.remove(uuid);
+  }
+
   @Override
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();
+    component.uuid = this.uuid;
     component.workingPlaceType = this.workingPlaceType;
     component.benchPos = this.benchPos;
     component.storagePos = this.storagePos;

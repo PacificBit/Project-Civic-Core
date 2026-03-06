@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.systems.heart;
 
+import java.util.UUID;
+
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -23,11 +25,11 @@ import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.codec.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.village.codec.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 import it.unimi.dsi.fastutil.Pair;
@@ -58,13 +60,13 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
     VillageSpawnComponent spawnComponent = store.getComponent(ref,
         VillageSpawnComponent.getComponentType());
-    VillageHeartComponent villageHeartComponent = store.getComponent(ref,
+    VillageHeartComponent villageHeart = store.getComponent(ref,
         VillageHeartComponent.getComponentType());
     int radius = spawnComponent.getSpawnNpcRange();
 
     VillageHeartRef villageHeartLocation = new VillageHeartRef(world.getName(), villageHeartPos);
 
-    ClaimedAreaComponent area = Utils.claimVillageArea(villageHeartComponent, villageHeartPos);
+    ClaimedAreaComponent area = Utils.claimVillageArea(villageHeart, villageHeartPos);
     villageStore.registerVillage(
         world.getName(),
         villageHeartPos,
@@ -84,9 +86,11 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         assert npcRef != null;
 
         UUIDComponent uuidComponent = entityStore.getComponent(npcRef, UUIDComponent.getComponentType());
-        villageHeartComponent.registerNpc(uuidComponent.getUuid());
+        UUID uuid = uuidComponent.getUuid();
+        villageHeart.registerVillager(uuid);
+        villageHeart.registerAsUnemployed(uuid);
 
-        beds[npcCount].setOwner(uuidComponent.getUuid());
+        beds[npcCount].setOwner(uuid);
         beds[npcCount].setTaken(true);
 
         VillagerComponent villagerComponent = new VillagerComponent();

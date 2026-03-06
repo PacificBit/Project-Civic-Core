@@ -44,7 +44,7 @@
     "BlockEntity": {
       "Components": {
         "WorkplaceComponent": {
-          "Type": "farm"
+          "Type": "Farm"
         },
         "WorkplaceSpawnComponent": {}
       }

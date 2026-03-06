@@ -28,10 +28,18 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
       .append(
           new KeyedCodec<>(
-              "NpcRegistry",
+              "VillagersRegistry",
               new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.npcRegistry = value,
-          obj -> obj.npcRegistry)
+          (obj, value) -> obj.villagersRegistry = value,
+          obj -> obj.villagersRegistry)
+      .add()
+
+      .append(
+          new KeyedCodec<>(
+              "UnemployedRegistry",
+              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
+          (obj, value) -> obj.unemployedRegistry = value,
+          obj -> obj.unemployedRegistry)
       .add()
 
       .append(new KeyedCodec<>("State", Codec.STRING),
@@ -53,26 +61,39 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       .build();
 
   private VillageHeartConfigComponent config;
-  private Set<UUID> npcRegistry = new HashSet<>();
+  private Set<UUID> villagersRegistry = new HashSet<>();
+  private Set<UUID> unemployedRegistry = new HashSet<>();
   private VillageHeartState state = VillageHeartState.NORMAL;
-  private ClaimedAreaComponent claimedArea;
   private int level;
+  private ClaimedAreaComponent claimedArea;
 
   // INFO: Read only
   public VillageHeartConfigComponent getConfig() {
     return config.clone();
   }
 
-  public Set<UUID> getNpcRegistry() {
-    return Collections.unmodifiableSet(this.npcRegistry);
+  public Set<UUID> getVillagersRegistry() {
+    return Collections.unmodifiableSet(this.villagersRegistry);
   }
 
-  public void registerNpc(UUID uuid) {
-    this.npcRegistry.add(uuid);
+  public void registerVillager(UUID uuid) {
+    this.villagersRegistry.add(uuid);
   }
 
-  public void unregisterNpc(UUID uuid) {
-    this.npcRegistry.remove(uuid);
+  public void unregisterVillager(UUID uuid) {
+    this.villagersRegistry.remove(uuid);
+  }
+
+  public Set<UUID> getUnemployedRegistry() {
+    return Collections.unmodifiableSet(unemployedRegistry);
+  }
+
+  public void registerAsUnemployed(UUID uuid) {
+    this.unemployedRegistry.add(uuid);
+  }
+
+  public void unregisterAsUnemployed(UUID uuid) {
+    this.unemployedRegistry.remove(uuid);
   }
 
   public VillageHeartState getState() {
@@ -103,10 +124,11 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   public VillageHeartComponent clone() {
     VillageHeartComponent component = new VillageHeartComponent();
     component.config = this.config;
-    component.npcRegistry = this.npcRegistry;
+    component.villagersRegistry = this.villagersRegistry;
     component.state = this.state;
     component.claimedArea = this.claimedArea;
     component.level = this.level;
+    component.unemployedRegistry = this.unemployedRegistry;
     return component;
   }
 

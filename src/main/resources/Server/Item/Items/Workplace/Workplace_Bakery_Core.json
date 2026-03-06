@@ -76,7 +76,7 @@
     "BlockEntity": {
       "Components": {
         "WorkplaceComponent": {
-          "Type": "bakery"
+          "Type": "Bakery"
         },
         "WorkplaceSpawnComponent": {}
       }
