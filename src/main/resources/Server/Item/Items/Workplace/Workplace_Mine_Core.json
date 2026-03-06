@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Bench_Builders.name",
-    "Description": "server.items.Bench_Builders.description"
+    "Name": "server.workspace.mine.name",
+    "Description": "server.workspace.mine.description"
   },
   "ItemLevel": 2,
   "MaxStack": 1,
@@ -9,35 +9,6 @@
   "Categories": [
     "Furniture.Benches"
   ],
-  "Recipe": {
-    "TimeSeconds": 2,
-    "Input": [
-      {
-        "ResourceTypeId": "Wood_Trunk",
-        "Quantity": 6
-      },
-      {
-        "ResourceTypeId": "Rock",
-        "Quantity": 3
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Id": "Fieldcraft",
-        "Type": "Crafting",
-        "Categories": [
-          "Tools"
-        ]
-      },
-      {
-        "Id": "Workbench",
-        "Type": "Crafting",
-        "Categories": [
-          "Workbench_Crafting"
-        ]
-      }
-    ]
-  },
   "PlayerAnimationsId": "Block",
   "IconProperties": {
     "Scale": 0.365,

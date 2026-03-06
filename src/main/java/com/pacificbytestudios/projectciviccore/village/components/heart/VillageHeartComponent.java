@@ -218,6 +218,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       if (worker.getValue().equals(workplace)) {
         workers.remove();
         this.unemployedRegistry.add(worker.getKey());
+        this.villagerIdToComponent.get(worker.getKey()).setWorkplace(null);
       }
     }
   }
@@ -225,6 +226,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   public void registerVillagerAsWorkerAt(UUID villager, UUID workplace) {
     this.unemployedRegistry.remove(villager);
     this.villagerToWorkplace.put(villager, workplace);
+    WorkplaceComponent workplaceComponent = this.workplaceIdToWorkplace.get(workplace);
+    this.villagerIdToComponent.get(villager).setWorkplace(workplaceComponent);
   }
 
   public void markAsUnemployed(UUID villager) {
@@ -236,6 +239,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
     this.villagerToWorkplace.remove(villager);
     this.unemployedRegistry.add(villager);
+    this.villagerIdToComponent.get(villager).setWorkplace(null);
   }
 
   @Override

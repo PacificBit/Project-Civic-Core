@@ -1,38 +1,12 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Bench_Cooking.name",
-    "Description": "server.items.Bench_Cooking.description"
+    "Name": "server.workspace.bakery.name",
+    "Description": "server.workspace.bakery.description"
   },
   "Icon": "Icons/ItemsGenerated/Bench_Cooking.png",
   "Categories": [
     "Furniture.Benches"
   ],
-  "Recipe": {
-    "TimeSeconds": 3,
-    "Input": [
-      {
-        "ItemId": "Ingredient_Bar_Copper",
-        "Quantity": 2
-      },
-      {
-        "ResourceTypeId": "Wood_Trunk",
-        "Quantity": 10
-      },
-      {
-        "ResourceTypeId": "Rock",
-        "Quantity": 5
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Type": "Crafting",
-        "Id": "Workbench",
-        "Categories": [
-          "Workbench_Crafting"
-        ]
-      }
-    ]
-  },
   "BlockType": {
     "Material": "Solid",
     "DrawType": "Model",

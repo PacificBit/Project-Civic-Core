@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Bench_Farming.name",
-    "Description": "server.items.Bench_Farming.description"
+    "Name": "server.workspace.farm.name",
+    "Description": "server.workspace.farm.description"
   },
   "Icon": "Icons/ItemsGenerated/Bench_Farming.png",
   "Categories": [
@@ -66,28 +66,6 @@
   "Tags": {
     "Type": [
       "Bench"
-    ]
-  },
-  "Recipe": {
-    "TimeSeconds": 3,
-    "Input": [
-      {
-        "ResourceTypeId": "Wood_Trunk",
-        "Quantity": 6
-      },
-      {
-        "ItemId": "Ingredient_Fibre",
-        "Quantity": 20
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Type": "Crafting",
-        "Id": "Workbench",
-        "Categories": [
-          "Workbench_Crafting"
-        ]
-      }
     ]
   },
   "MaxStack": 1,

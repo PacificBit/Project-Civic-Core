@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 
 public class VillagerComponent implements Component<EntityStore> {
   public static final BuilderCodec<VillagerComponent> CODEC = BuilderCodec
@@ -25,10 +26,16 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.bedPosition)
       .add()
 
+      .append(new KeyedCodec<>("Workplace", WorkplaceComponent.CODEC),
+          (obj, value) -> obj.workplace = value,
+          (obj) -> obj.workplace)
+      .add()
+
       .build();
 
   private VillageHeartRef villageHeartLocation;
   private Vector3i bedPosition;
+  private WorkplaceComponent workplace;
 
   public Vector3i getBedPosition() {
     return bedPosition;
@@ -46,12 +53,21 @@ public class VillagerComponent implements Component<EntityStore> {
     return this.villageHeartLocation.getRef();
   }
 
+  public WorkplaceComponent getWorkplace() {
+    return workplace;
+  }
+
+  public void setWorkplace(WorkplaceComponent workplace) {
+    this.workplace = workplace;
+  }
+
   @Override
   public VillagerComponent clone() {
-    VillagerComponent newComponent = new VillagerComponent();
-    newComponent.villageHeartLocation = this.villageHeartLocation;
-    newComponent.bedPosition = this.bedPosition;
-    return newComponent;
+    VillagerComponent component = new VillagerComponent();
+    component.villageHeartLocation = this.villageHeartLocation;
+    component.bedPosition = this.bedPosition;
+    component.workplace = this.workplace;
+    return component;
   }
 
   public static ComponentType<EntityStore, VillagerComponent> getComponentType() {

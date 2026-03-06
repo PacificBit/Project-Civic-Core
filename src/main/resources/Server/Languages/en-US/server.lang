@@ -1,0 +1,11 @@
+workspace.sawmill.name=Sawmill Workspace
+workspace.sawmill.description=Sawmill workspace found in villages, cannot be crafted
+
+workspace.bakery.name=Bakery Workspace
+workspace.bakery.description=Bakery workspace found in villages, cannot be crafted
+
+workspace.mine.name=Mine Workspace
+workspace.mine.description=Mine workspace found in villages, cannot be crafted
+
+workspace.farm.name=Farm Workspace
+workspace.farm.description=Farm workspace found in villages, cannot be crafted
