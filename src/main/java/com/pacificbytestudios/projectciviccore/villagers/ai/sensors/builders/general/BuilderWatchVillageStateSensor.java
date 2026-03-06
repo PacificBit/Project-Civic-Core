@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders;
+package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general;
 
 import javax.annotation.Nonnull;
 
@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.npc.asset.builder.validators.StringValidator;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.instructions.Sensor;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
-import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.WatchVillageStateSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.general.WatchVillageStateSensor;
 
 public class BuilderWatchVillageStateSensor extends BuilderSensorBase {
   private VillageHeartState state;

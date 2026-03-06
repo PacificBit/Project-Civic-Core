@@ -1,9 +1,10 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation;
+package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.general;
 
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
@@ -29,13 +30,14 @@ public class BedSensor extends SensorBase {
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
 
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
-    double distanceFromBed = transform.getPosition().distanceSquaredTo(villager.getBedPosition().toVector3d());
+    Vector3d vector3d = villager.getBedPosition().toVector3d();
+    double distanceFromBed = transform.getPosition().distanceSquaredTo(vector3d);
     if (distanceFromBed == 0 || distanceFromBed < 0.5) {
       this.positionProvider.clear();
       return false;
     }
 
-    this.positionProvider.setTarget(villager.getBedPosition().toVector3d());
+    this.positionProvider.setTarget(vector3d);
 
     return true;
   }

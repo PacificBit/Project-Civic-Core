@@ -21,8 +21,10 @@ import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHear
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
-import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderBedSensor;
-import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderWatchVillageStateSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public final class ProjectCivicCore extends JavaPlugin {
@@ -109,8 +111,16 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuilderWatchVillageStateSensor::new);
 
     npcPlugin.registerCoreComponentType(
-        "BedSensor",
+        "WatchForJobAssignment",
+        BuilderWatchForJobAssignment::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ReachBed",
         BuilderBedSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ReachWorkplace",
+        BuilderReachWorkplaceSensor::new);
   }
 
   public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
