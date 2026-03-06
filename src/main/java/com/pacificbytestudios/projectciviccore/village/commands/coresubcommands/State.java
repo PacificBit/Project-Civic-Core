@@ -1,36 +1,49 @@
-package com.pacificbytestudios.projectciviccore.village.commands.subcommands;
+package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
-import java.util.UUID;
+import javax.annotation.Nonnull;
 
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
+import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.VillageSpawner;
+import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
-public class Respawn extends CommandBase {
+public class State extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
-  public Respawn() {
-    super("respawn", "Start village from anew");
+  @Nonnull
+  private final RequiredArg<String> stateType = this.withRequiredArg(
+      "type",
+      "Type of state to assign to the village",
+      ArgTypes.STRING);
+
+  public State() {
+    super("state", "Set the state of the nearest village");
   }
 
   @Override
   protected void executeSync(CommandContext context) {
+    VillageHeartState state = VillageHeartState.valueOf(stateType.get(context).toUpperCase());
+
+    if (state == null) {
+      context.sendMessage(Message.raw(
+          "Invalid state. Use only one of: " + VillageHeartState.getAvailableStates()));
+      return;
+    }
+
     Ref<EntityStore> playerRef = context.senderAsPlayerRef();
     Store<EntityStore> entityStore = playerRef.getStore();
     World world = entityStore.getExternalData().getWorld();
@@ -59,33 +72,30 @@ public class Respawn extends CommandBase {
         return;
       }
 
-      VillageHeartComponent villageHeartComponent = heart.getStore()
-          .getComponent(heart, VillageHeartComponent.getComponentType());
-
-      Vector3i heartPosition = heartRef.getPosition();
-      world.getChunk(ChunkUtil.indexChunkFromBlock(heartPosition.x, heartPosition.z))
-          .breakBlock(heartPosition.x,
-              heartPosition.y, heartPosition.z);
-
-      for (UUID villagerId : villageHeartComponent.getVillagersRegistry()) {
-        VillagerComponent villager = villageHeartComponent.getVillager(villagerId);
-        Vector3i bed = villager.getBedPosition();
-        world.getChunk(ChunkUtil.indexChunkFromBlock(bed.x, bed.z)).breakBlock(bed.x, bed.y, bed.z);
-        Ref<EntityStore> npc = world.getEntityStore().getRefFromUUID(villagerId);
-        entityStore.removeEntity(npc, RemoveReason.REMOVE);
-      }
-
-      villageStore.unregisterVillage(villageHeartComponent.getUuid());
-
-      WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(heartPosition.x, heartPosition.z));
-      boolean spawnResult = VillageSpawner.spawn(chunk, heartPosition.clone().add(Vector3i.DOWN));
-
-      if (!spawnResult) {
-        context.sendMessage(Message.raw("Could not spawn village"));
-        return;
-      }
-      context.sendMessage(Message.raw("Village successfully respawned"));
+      updateVillageState(context, state, heart);
     });
   }
 
+  private boolean updateVillageState(CommandContext context, VillageHeartState state, Ref<ChunkStore> villageHeart) {
+    boolean updated = false;
+
+    VillageHeartComponent villageHeartComponent = villageHeart.getStore()
+        .getComponent(villageHeart, VillageHeartComponent.getComponentType());
+
+    if (villageHeartComponent == null) {
+      ProjectCivicCore.LOGGER.atInfo().log("[updateVillageState] - Could not fetch village heart component");
+      return false;
+    }
+
+    String prevState = villageHeartComponent.getState().toString().toLowerCase();
+    villageHeartComponent.setState(state);
+
+    String message = "Changed state from: " + prevState + " to "
+        + state.getState().toString().toLowerCase();
+    context.sendMessage(Message.raw(message));
+
+    updated = true;
+
+    return updated;
+  }
 }

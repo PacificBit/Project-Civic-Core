@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.commands.subcommands;
+package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
 import javax.annotation.Nonnull;
 
@@ -15,34 +15,25 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
-public class State extends CommandBase {
+public class Level extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   @Nonnull
-  private final RequiredArg<String> stateType = this.withRequiredArg(
+  private final RequiredArg<Integer> level = this.withRequiredArg(
       "type",
       "Type of state to assign to the village",
-      ArgTypes.STRING);
+      ArgTypes.INTEGER);
 
-  public State() {
-    super("state", "Set the state of the nearest village");
+  public Level() {
+    super("level", "Set the village level");
   }
 
   @Override
   protected void executeSync(CommandContext context) {
-    VillageHeartState state = VillageHeartState.valueOf(stateType.get(context).toUpperCase());
-
-    if (state == null) {
-      context.sendMessage(Message.raw(
-          "Invalid state. Use only one of: " + VillageHeartState.getAvailableStates()));
-      return;
-    }
 
     Ref<EntityStore> playerRef = context.senderAsPlayerRef();
     Store<EntityStore> entityStore = playerRef.getStore();
@@ -72,30 +63,13 @@ public class State extends CommandBase {
         return;
       }
 
-      updateVillageState(context, state, heart);
+      VillageHeartComponent heartComponent = heart.getStore().getComponent(heart,
+          VillageHeartComponent.getComponentType());
+
+      Integer lvl = this.level.get(context);
+      context.sendMessage(Message.raw("Setting village level from: " + heartComponent.getLevel() + " to " + lvl));
+      heartComponent.setLevel(lvl);
     });
   }
 
-  private boolean updateVillageState(CommandContext context, VillageHeartState state, Ref<ChunkStore> villageHeart) {
-    boolean updated = false;
-
-    VillageHeartComponent villageHeartComponent = villageHeart.getStore()
-        .getComponent(villageHeart, VillageHeartComponent.getComponentType());
-
-    if (villageHeartComponent == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[updateVillageState] - Could not fetch village heart component");
-      return false;
-    }
-
-    String prevState = villageHeartComponent.getState().toString().toLowerCase();
-    villageHeartComponent.setState(state);
-
-    String message = "Changed state from: " + prevState + " to "
-        + state.getState().toString().toLowerCase();
-    context.sendMessage(Message.raw(message));
-
-    updated = true;
-
-    return updated;
-  }
 }

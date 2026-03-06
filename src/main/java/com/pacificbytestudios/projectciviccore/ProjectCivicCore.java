@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -39,6 +40,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageTaskQueueComponent> villageTaskQueueComponentType;
 
   private ComponentType<ChunkStore, ClaimedAreaComponent> claimedAreaComponentType;
+  private ComponentType<ChunkStore, TrackedPrefabPlacementComponent> trackedPrefabPlacementComponentType;
 
   private ComponentType<ChunkStore, WorkplaceComponent> workplaceComponentType;
   private ComponentType<ChunkStore, WorkplaceSpawnComponent> workplaceSpawnComponentType;
@@ -110,6 +112,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         "WorkplaceStorageContainerComponent",
         WorkplaceStorageContainerComponent.CODEC);
 
+    this.trackedPrefabPlacementComponentType = chunkRegistry.registerComponent(
+        TrackedPrefabPlacementComponent.class,
+        "TrackedPrefabPlacementComponent",
+        TrackedPrefabPlacementComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
@@ -161,6 +168,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, ClaimedAreaComponent> getClaimedAreaComponent() {
     return this.claimedAreaComponentType;
+  }
+
+  public ComponentType<ChunkStore, TrackedPrefabPlacementComponent> getTrackedPrefabPlacementComponentType() {
+    return this.trackedPrefabPlacementComponentType;
   }
 
   public ComponentType<ChunkStore, VillageTaskQueueComponent> getVillageTaskQueueComponentType() {

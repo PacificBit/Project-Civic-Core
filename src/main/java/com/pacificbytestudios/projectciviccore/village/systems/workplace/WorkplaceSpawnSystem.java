@@ -14,6 +14,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
@@ -47,6 +48,10 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     Vector3i blockPos = blockContext.position();
 
     VillageHeartRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    if (villageHeartRef == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] No village found");
+      return;
+    }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
 
     WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
@@ -82,6 +87,10 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     Vector3i blockPos = blockContext.position();
 
     VillageHeartRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    if (villageHeartRef == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] No village found");
+      return;
+    }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
 
     WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());

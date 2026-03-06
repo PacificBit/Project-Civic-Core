@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.commands.subcommands;
+package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
 import java.util.Set;
 import java.util.UUID;

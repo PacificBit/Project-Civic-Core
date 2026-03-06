@@ -4,9 +4,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -20,6 +22,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
+import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public class VillageHeartComponent implements Component<ChunkStore> {
@@ -240,6 +243,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.villagerToWorkplace.remove(villager);
     this.unemployedRegistry.add(villager);
     this.villagerIdToComponent.get(villager).setWorkplace(null);
+  }
+
+  public List<WorkplaceComponent> getWorkplaceFrom(WorkplaceType workplaceType) {
+    return this.workplaceIdToWorkplace
+        .values()
+        .stream()
+        .filter((workplace) -> workplace.getWorkplaceType().equals(workplaceType))
+        .collect(Collectors.toList());
   }
 
   @Override

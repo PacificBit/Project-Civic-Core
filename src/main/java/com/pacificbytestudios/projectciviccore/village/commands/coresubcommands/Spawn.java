@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.commands.subcommands;
+package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.VillageSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHallSpawner;
 
 public class Spawn extends CommandBase {
 
@@ -37,7 +37,7 @@ public class Spawn extends CommandBase {
         }
       }
 
-      boolean spawnResult = VillageSpawner.spawn(chunk, villageCorePosition);
+      boolean spawnResult = TownHallSpawner.spawn(chunk, villageCorePosition);
 
       if (!spawnResult) {
         context.sendMessage(Message.raw("Could not spawn village"));
