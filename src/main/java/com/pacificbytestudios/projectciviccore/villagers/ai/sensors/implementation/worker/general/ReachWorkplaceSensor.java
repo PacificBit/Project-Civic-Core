@@ -38,7 +38,7 @@ public class ReachWorkplaceSensor extends SensorBase {
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
     Vector3d workplacePos = workplace.getBenchPos().toVector3d();
     double distanceFromWorkplace = transform.getPosition().distanceSquaredTo(workplacePos);
-    if (distanceFromWorkplace == 0 || distanceFromWorkplace < 0.5) {
+    if (distanceFromWorkplace == 2) {
       this.positionProvider.clear();
       return false;
     }

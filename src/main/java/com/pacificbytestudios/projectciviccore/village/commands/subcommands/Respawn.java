@@ -75,6 +75,8 @@ public class Respawn extends CommandBase {
         entityStore.removeEntity(npc, RemoveReason.REMOVE);
       }
 
+      villageStore.unregisterVillage(villageHeartComponent.getUuid());
+
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(heartPosition.x, heartPosition.z));
       boolean spawnResult = VillageSpawner.spawn(chunk, heartPosition.clone().add(Vector3i.DOWN));
 
