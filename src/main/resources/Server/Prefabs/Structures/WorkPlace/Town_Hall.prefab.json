@@ -73,64 +73,6 @@
     },
     {
       "x": 0,
-      "y": 1,
-      "z": 0,
-      "name": "Village_Core",
-      "components": {
-        "Components": {
-          "PlacedByInteraction": {
-            "WhoPlacedUuid": {
-              "$binary": "ii1T0jSSSmi6twk/ROU2vg==",
-              "$type": "04"
-            }
-          },
-          "VillageHeartComponent": {
-            "Config": {
-              "ClaimRadiusPerLevel": 20
-            },
-            "NpcRegistry": [
-              {
-                "$binary": "hJeshWmGOs+ZUQS4Uefchg==",
-                "$type": "04"
-              },
-              {
-                "$binary": "QDnckyF1NDCtSHdbnZrrEg==",
-                "$type": "04"
-              },
-              {
-                "$binary": "cYVIIPA8NLm0AwwSpbsSIg==",
-                "$type": "04"
-              },
-              {
-                "$binary": "hS2VOQefNZmG5Pq+uFxzfA==",
-                "$type": "04"
-              },
-              {
-                "$binary": "/ihWAOFMMeWkySkTsiUJRg==",
-                "$type": "04"
-              },
-              {
-                "$binary": "N61N6LFdMCOZIEiyxjhjWA==",
-                "$type": "04"
-              },
-              {
-                "$binary": "fMxrKZHAPFaa/Bpo/g1b8w==",
-                "$type": "04"
-              },
-              {
-                "$binary": "ZG8RTfSrNduCJXuD1kds7w==",
-                "$type": "04"
-              }
-            ],
-            "State": "normal",
-            "Level": 1
-          }
-        }
-      },
-      "rotation": 1
-    },
-    {
-      "x": 0,
       "y": 0,
       "z": 1,
       "name": "Cloth_Block_Wool_Red"
