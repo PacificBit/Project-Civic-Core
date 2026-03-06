@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.core;
+package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;

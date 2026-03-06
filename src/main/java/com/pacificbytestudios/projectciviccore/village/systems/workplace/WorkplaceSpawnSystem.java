@@ -14,12 +14,13 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
-import com.pacificbytestudios.projectciviccore.village.codec.VillageHeartRef;
-import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterWorkplaceTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
 public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
@@ -43,11 +44,16 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
 
     world.execute(() -> {
-      VillageHeartComponent heartComponent = store.getComponent(heartRef, VillageHeartComponent.getComponentType());
+      // VillageHeartComponent heartComponent = store.getComponent(heartRef,
+      // VillageHeartComponent.getComponentType());
       WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
 
       workplaceComponent.setUuid(UUID.randomUUID());
       // heartComponent.registerWorkplace(workplaceComponent);
+      VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
+
+      taskComponent.registerTask(new RegisterWorkplaceTask(workplaceComponent));
+      store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(), taskComponent);
 
       store.removeComponent(ref, WorkplaceSpawnComponent.getComponentType());
     });

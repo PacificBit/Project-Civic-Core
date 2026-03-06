@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.village.core.VillageSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.VillageSpawner;
 
 public class Spawn extends CommandBase {
 

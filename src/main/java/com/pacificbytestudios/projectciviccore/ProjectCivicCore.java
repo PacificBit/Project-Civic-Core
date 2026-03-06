@@ -9,15 +9,17 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import com.pacificbytestudios.projectciviccore.village.codec.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.BuilderWatchVillageStateSensor;
@@ -33,6 +35,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, WorkplaceComponent> workplacePlaceComponentType;
   private ComponentType<ChunkStore, WorkplaceSpawnComponent> workplacePlaceSpawnComponentType;
   private ComponentType<ChunkStore, ClaimedAreaComponent> claimedAreaComponentType;
+  private ComponentType<ChunkStore, VillageTaskQueueComponent> villageTaskQueueComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
 
@@ -84,9 +87,15 @@ public final class ProjectCivicCore extends JavaPlugin {
         "ClaimedAreaComponent",
         ClaimedAreaComponent.CODEC);
 
+    this.villageTaskQueueComponentType = chunkRegistry.registerComponent(
+        VillageTaskQueueComponent.class,
+        "VillageTaskQueueComponent",
+        VillageTaskQueueComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
+    chunkRegistry.registerSystem(new VillageTaskQueueSystem());
 
     commandRegistry.registerCommand(new VillageCommands());
 
@@ -126,6 +135,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, ClaimedAreaComponent> getClaimedAreaComponent() {
     return this.claimedAreaComponentType;
+  }
+
+  public ComponentType<ChunkStore, VillageTaskQueueComponent> getVillageTaskQueueComponentType() {
+    return this.villageTaskQueueComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {
