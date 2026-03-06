@@ -13,6 +13,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.utils.PrefabSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.VillageSpawner;
 
 public class Spawn extends CommandBase {
 
@@ -38,17 +39,20 @@ public class Spawn extends CommandBase {
         }
       }
 
-      boolean spawned = PrefabSpawner.spawnAssetPrefab(
-          world,
-          entityStore,
-          "Structures/WorkPlace/Town_Hall.prefab.json",
-          spawnPos,
-          Rotation.None,
-          true);
+      VillageSpawner.spawn(chunk, spawnPos);
 
-      if (!spawned) {
-        context.sendMessage(Message.raw("Prefab not found: Structures/WorkPlace/Town_Hall.prefab.json"));
-      }
+      // boolean spawned = PrefabSpawner.spawnAssetPrefab(
+      // world,
+      // entityStore,
+      // "Structures/WorkPlace/Town_Hall.prefab.json",
+      // spawnPos,
+      // Rotation.None,
+      // true);
+      //
+      // if (!spawned) {
+      // context.sendMessage(Message.raw("Prefab not found:
+      // Structures/WorkPlace/Town_Hall.prefab.json"));
+      // }
     });
   }
 
