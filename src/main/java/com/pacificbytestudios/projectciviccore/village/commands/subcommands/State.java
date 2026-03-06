@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
@@ -14,17 +13,15 @@ import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
 
 public class State extends CommandBase {
-  private static final int COMMAND_CHUNK_RANGE = 2;
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   @Nonnull
@@ -62,26 +59,25 @@ public class State extends CommandBase {
       }
 
       Vector3i playerPos = transform.getPosition().toVector3i();
-      Ref<ChunkStore> heart = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
+      VillageHeartRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
 
-      System.out.println("This is the heart: " + heart + " is valid? " + (heart == null ? "no" : heart.isValid()));
+      if (heartRef == null) {
+        context.sendMessage(Message.raw("No village found in range."));
+        return;
+      }
+
+      Ref<ChunkStore> heart = heartRef.getRef();
+      if (!heart.isValid()) {
+        context.sendMessage(Message.raw("No valid village found in range."));
+        return;
+      }
+
       updateVillageState(context, state, heart);
     });
   }
 
   private boolean updateVillageState(CommandContext context, VillageHeartState state, Ref<ChunkStore> villageHeart) {
-    if (villageHeart == null) {
-      context.sendMessage(Message.raw("No village found in range."));
-      return false;
-    }
-
     boolean updated = false;
-
-    if (!villageHeart.isValid()) {
-      ProjectCivicCore.LOGGER.atInfo().log("[updateVillageState] - Invalid village ref");
-      villageStore.unregisterVillage(villageHeart);
-      return false;
-    }
 
     VillageHeartComponent villageHeartComponent = villageHeart.getStore()
         .getComponent(villageHeart, VillageHeartComponent.getComponentType());

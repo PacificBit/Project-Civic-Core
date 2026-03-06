@@ -6,154 +6,70 @@
   "anchorZ": 0,
   "blocks": [
     {
-      "x": -3,
-      "y": 0,
-      "z": -3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -3,
-      "y": 0,
-      "z": -2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -3,
-      "y": 0,
-      "z": -1,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -3,
-      "y": 0,
-      "z": 0,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -3,
-      "y": 0,
-      "z": 1,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -3,
-      "y": 0,
-      "z": 2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -3,
-      "y": 0,
-      "z": 3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -2,
-      "y": 0,
-      "z": -3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -2,
-      "y": 0,
-      "z": -2,
-      "name": "Rock_Shale"
-    },
-    {
       "x": -2,
       "y": 0,
       "z": -1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": -2,
       "y": 0,
       "z": 0,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": -2,
       "y": 0,
       "z": 1,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -2,
-      "y": 0,
-      "z": 2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -2,
-      "y": 0,
-      "z": 3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -1,
-      "y": 0,
-      "z": -3,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": -1,
       "y": 0,
       "z": -2,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": -1,
       "y": 0,
       "z": -1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": -1,
       "y": 0,
       "z": 0,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": -1,
       "y": 0,
       "z": 1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": -1,
       "y": 0,
       "z": 2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": -1,
-      "y": 0,
-      "z": 3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 0,
-      "y": 0,
-      "z": -3,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 0,
       "y": 0,
       "z": -2,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 0,
       "y": 0,
       "z": -1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 0,
       "y": 0,
       "z": 0,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 0,
@@ -169,25 +85,45 @@
             }
           },
           "VillageHeartComponent": {
+            "Config": {
+              "ClaimRadiusPerLevel": 20
+            },
             "NpcRegistry": [
               {
-                "$binary": "kGDuCCozMYOSAkk7E4worg==",
+                "$binary": "hJeshWmGOs+ZUQS4Uefchg==",
                 "$type": "04"
               },
               {
-                "$binary": "HzniokaZMWiWQ+SOsgJ/zA==",
+                "$binary": "QDnckyF1NDCtSHdbnZrrEg==",
                 "$type": "04"
               },
               {
-                "$binary": "UDmfcdpcNzSn2Nu4tRyo0A==",
+                "$binary": "cYVIIPA8NLm0AwwSpbsSIg==",
                 "$type": "04"
               },
               {
-                "$binary": "XrUbTHPAO+mokm0jaMJSvA==",
+                "$binary": "hS2VOQefNZmG5Pq+uFxzfA==",
+                "$type": "04"
+              },
+              {
+                "$binary": "/ihWAOFMMeWkySkTsiUJRg==",
+                "$type": "04"
+              },
+              {
+                "$binary": "N61N6LFdMCOZIEiyxjhjWA==",
+                "$type": "04"
+              },
+              {
+                "$binary": "fMxrKZHAPFaa/Bpo/g1b8w==",
+                "$type": "04"
+              },
+              {
+                "$binary": "ZG8RTfSrNduCJXuD1kds7w==",
                 "$type": "04"
               }
             ],
-            "State": "normal"
+            "State": "normal",
+            "Level": 1
           }
         }
       },
@@ -197,883 +133,61 @@
       "x": 0,
       "y": 0,
       "z": 1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 0,
       "y": 0,
       "z": 2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 0,
-      "y": 0,
-      "z": 3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 1,
-      "y": 0,
-      "z": -3,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 1,
       "y": 0,
       "z": -2,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 1,
       "y": 0,
       "z": -1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 1,
       "y": 0,
       "z": 0,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 1,
       "y": 0,
       "z": 1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 1,
       "y": 0,
       "z": 2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 1,
-      "y": 0,
-      "z": 3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 2,
-      "y": 0,
-      "z": -3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 2,
-      "y": 0,
-      "z": -2,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 2,
       "y": 0,
       "z": -1,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 2,
       "y": 0,
       "z": 0,
-      "name": "Rock_Shale"
+      "name": "Cloth_Block_Wool_Red"
     },
     {
       "x": 2,
       "y": 0,
       "z": 1,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 2,
-      "y": 0,
-      "z": 2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 2,
-      "y": 0,
-      "z": 3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "z": -3,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "z": -2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "z": -1,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "z": 0,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "z": 1,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "z": 2,
-      "name": "Rock_Shale"
-    },
-    {
-      "x": 3,
-      "y": 0,
-      "z": 3,
-      "name": "Rock_Shale"
-    }
-  ],
-  "entities": [
-    {
-      "Components": {
-        "EffectController": {},
-        "VillagerComponent": {
-          "VillageHeartLocation": {
-            "WorldName": "prefabEditor-PacificByte",
-            "Position": {
-              "X": 3,
-              "Y": 56,
-              "Z": 3
-            }
-          }
-        },
-        "DisplayName": {
-          "DisplayName": {
-            "MessageId": "server.npcRoles.Template.name",
-            "Bold": null,
-            "Italic": null,
-            "Monospace": null,
-            "Underline": null
-          }
-        },
-        "UIComponentList": {},
-        "Transform": {
-          "Position": {
-            "X": -2.011701285839081,
-            "Y": 1.1489410400390625,
-            "Z": 0.5292410850524902
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        },
-        "Velocity": {
-          "Velocity": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        },
-        "PrefabCopyable": {},
-        "Interactions": {
-          "Interactions": {
-            "Use": "*UseNPC"
-          }
-        },
-        "Model": {
-          "Model": {
-            "Id": "Female_Civilian",
-            "Scale": 1.0,
-            "Static": false
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "li2X1oDEPt28s1hoFdLgDQ==",
-            "$type": "04"
-          }
-        },
-        "EntityStats": {
-          "Version": 5,
-          "Stats": {
-            "Oxygen": {
-              "Id": "Oxygen",
-              "Value": 100.0
-            },
-            "Mana": {
-              "Id": "Mana",
-              "Value": 0.0
-            },
-            "Health": {
-              "Id": "Health",
-              "Value": 100.0,
-              "Modifiers": {
-                "NPC_Max": {
-                  "Id": "Static",
-                  "CalculationType": "Additive",
-                  "Amount": 0.0
-                }
-              }
-            },
-            "GlidingActive": {
-              "Id": "GlidingActive",
-              "Value": 0.0
-            },
-            "Immunity": {
-              "Id": "Immunity",
-              "Value": 0.0
-            },
-            "SignatureCharges": {
-              "Id": "SignatureCharges",
-              "Value": 0.0
-            },
-            "Stamina": {
-              "Id": "Stamina",
-              "Value": 10.0
-            },
-            "Ammo": {
-              "Id": "Ammo",
-              "Value": 0.0
-            },
-            "Unknown": {
-              "Id": "Unknown",
-              "Value": 0.0
-            },
-            "SignatureEnergy": {
-              "Id": "SignatureEnergy",
-              "Value": 0.0
-            },
-            "DeployablePreview": {
-              "Id": "DeployablePreview",
-              "Value": 0.0
-            },
-            "StaminaRegenDelay": {
-              "Id": "StaminaRegenDelay",
-              "Value": 0.0
-            },
-            "MagicCharges": {
-              "Id": "MagicCharges",
-              "Value": 0.0
-            }
-          }
-        },
-        "NPC": {
-          "Version": 5,
-          "UUID": {
-            "$binary": "GUdsk/cCP2Kj90xUxsg4bA==",
-            "$type": "04"
-          },
-          "Inventory": {
-            "Version": 4,
-            "Storage": {
-              "Id": "Empty"
-            },
-            "Armor": {
-              "Id": "Simple",
-              "Capacity": 4,
-              "Items": {}
-            },
-            "HotBar": {
-              "Id": "Simple",
-              "Capacity": 3,
-              "Items": {}
-            },
-            "Utility": {
-              "Id": "Empty"
-            },
-            "Backpack": {
-              "Id": "Empty"
-            },
-            "ActiveHotbarSlot": 0,
-            "Tool": {
-              "Id": "Empty"
-            },
-            "ActiveToolsSlot": -1,
-            "ActiveUtilitySlot": -1,
-            "SortType": "Name"
-          },
-          "HvrPhs": 0.0,
-          "HvrHght": 0.0,
-          "MdlScl": 1.0,
-          "SpawnInstant": "0001-01-01T12:00:00Z",
-          "WorldgenId": 0,
-          "PathManager": {},
-          "LeashPos": {
-            "X": 0.9882987141609192,
-            "Y": 56.14894104003906,
-            "Z": 3.5292410850524902
-          },
-          "LeashHdg": 0.0,
-          "LeashPtch": 0.0,
-          "RoleName": "Female_Unemployed_Civilian"
-        },
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        }
-      }
-    },
-    {
-      "Components": {
-        "EffectController": {},
-        "VillagerComponent": {
-          "VillageHeartLocation": {
-            "WorldName": "prefabEditor-PacificByte",
-            "Position": {
-              "X": 3,
-              "Y": 56,
-              "Z": 3
-            }
-          }
-        },
-        "DisplayName": {
-          "DisplayName": {
-            "MessageId": "server.npcRoles.Template.name",
-            "Bold": null,
-            "Italic": null,
-            "Monospace": null,
-            "Underline": null
-          }
-        },
-        "UIComponentList": {},
-        "Transform": {
-          "Position": {
-            "X": -0.05207490921020508,
-            "Y": 1.2103309631347656,
-            "Z": -1.9031158685684204
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        },
-        "Velocity": {
-          "Velocity": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        },
-        "PrefabCopyable": {},
-        "Interactions": {
-          "Interactions": {
-            "Use": "*UseNPC"
-          }
-        },
-        "Model": {
-          "Model": {
-            "Id": "Female_Civilian",
-            "Scale": 1.0,
-            "Static": false
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "9UpyEWcEMbyvIt10qeqWIg==",
-            "$type": "04"
-          }
-        },
-        "EntityStats": {
-          "Version": 5,
-          "Stats": {
-            "Oxygen": {
-              "Id": "Oxygen",
-              "Value": 100.0
-            },
-            "Mana": {
-              "Id": "Mana",
-              "Value": 0.0
-            },
-            "Health": {
-              "Id": "Health",
-              "Value": 100.0,
-              "Modifiers": {
-                "NPC_Max": {
-                  "Id": "Static",
-                  "CalculationType": "Additive",
-                  "Amount": 0.0
-                }
-              }
-            },
-            "GlidingActive": {
-              "Id": "GlidingActive",
-              "Value": 0.0
-            },
-            "Immunity": {
-              "Id": "Immunity",
-              "Value": 0.0
-            },
-            "SignatureCharges": {
-              "Id": "SignatureCharges",
-              "Value": 0.0
-            },
-            "Stamina": {
-              "Id": "Stamina",
-              "Value": 10.0
-            },
-            "Ammo": {
-              "Id": "Ammo",
-              "Value": 0.0
-            },
-            "Unknown": {
-              "Id": "Unknown",
-              "Value": 0.0
-            },
-            "SignatureEnergy": {
-              "Id": "SignatureEnergy",
-              "Value": 0.0
-            },
-            "DeployablePreview": {
-              "Id": "DeployablePreview",
-              "Value": 0.0
-            },
-            "StaminaRegenDelay": {
-              "Id": "StaminaRegenDelay",
-              "Value": 0.0
-            },
-            "MagicCharges": {
-              "Id": "MagicCharges",
-              "Value": 0.0
-            }
-          }
-        },
-        "NPC": {
-          "Version": 5,
-          "UUID": {
-            "$binary": "xsIcMlI2POO/3Z2xXlJ2+g==",
-            "$type": "04"
-          },
-          "Inventory": {
-            "Version": 4,
-            "Storage": {
-              "Id": "Empty"
-            },
-            "Armor": {
-              "Id": "Simple",
-              "Capacity": 4,
-              "Items": {}
-            },
-            "HotBar": {
-              "Id": "Simple",
-              "Capacity": 3,
-              "Items": {}
-            },
-            "Utility": {
-              "Id": "Empty"
-            },
-            "Backpack": {
-              "Id": "Empty"
-            },
-            "ActiveHotbarSlot": 0,
-            "Tool": {
-              "Id": "Empty"
-            },
-            "ActiveToolsSlot": -1,
-            "ActiveUtilitySlot": -1,
-            "SortType": "Name"
-          },
-          "HvrPhs": 0.0,
-          "HvrHght": 0.0,
-          "MdlScl": 1.0,
-          "SpawnInstant": "0001-01-01T12:00:00Z",
-          "WorldgenId": 0,
-          "PathManager": {},
-          "LeashPos": {
-            "X": 2.947925090789795,
-            "Y": 56.210330963134766,
-            "Z": 1.0968841314315796
-          },
-          "LeashHdg": 0.0,
-          "LeashPtch": 0.0,
-          "RoleName": "Female_Unemployed_Civilian"
-        },
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        }
-      }
-    },
-    {
-      "Components": {
-        "EffectController": {},
-        "VillagerComponent": {
-          "VillageHeartLocation": {
-            "WorldName": "prefabEditor-PacificByte",
-            "Position": {
-              "X": 3,
-              "Y": 56,
-              "Z": 3
-            }
-          }
-        },
-        "DisplayName": {
-          "DisplayName": {
-            "MessageId": "server.npcRoles.Template.name",
-            "Bold": null,
-            "Italic": null,
-            "Monospace": null,
-            "Underline": null
-          }
-        },
-        "UIComponentList": {},
-        "Transform": {
-          "Position": {
-            "X": 1.2986092567443848,
-            "Y": 1.2389450073242188,
-            "Z": 2.641782283782959
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        },
-        "Velocity": {
-          "Velocity": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        },
-        "PrefabCopyable": {},
-        "Interactions": {
-          "Interactions": {
-            "Use": "*UseNPC"
-          }
-        },
-        "Model": {
-          "Model": {
-            "Id": "Male_Civilian",
-            "Scale": 1.0,
-            "Static": false
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "4wZJrvKBOQ6WqC+ewENLWQ==",
-            "$type": "04"
-          }
-        },
-        "EntityStats": {
-          "Version": 5,
-          "Stats": {
-            "Oxygen": {
-              "Id": "Oxygen",
-              "Value": 100.0
-            },
-            "Mana": {
-              "Id": "Mana",
-              "Value": 0.0
-            },
-            "Health": {
-              "Id": "Health",
-              "Value": 100.0,
-              "Modifiers": {
-                "NPC_Max": {
-                  "Id": "Static",
-                  "CalculationType": "Additive",
-                  "Amount": 0.0
-                }
-              }
-            },
-            "GlidingActive": {
-              "Id": "GlidingActive",
-              "Value": 0.0
-            },
-            "Immunity": {
-              "Id": "Immunity",
-              "Value": 0.0
-            },
-            "SignatureCharges": {
-              "Id": "SignatureCharges",
-              "Value": 0.0
-            },
-            "Stamina": {
-              "Id": "Stamina",
-              "Value": 10.0
-            },
-            "Ammo": {
-              "Id": "Ammo",
-              "Value": 0.0
-            },
-            "Unknown": {
-              "Id": "Unknown",
-              "Value": 0.0
-            },
-            "SignatureEnergy": {
-              "Id": "SignatureEnergy",
-              "Value": 0.0
-            },
-            "DeployablePreview": {
-              "Id": "DeployablePreview",
-              "Value": 0.0
-            },
-            "StaminaRegenDelay": {
-              "Id": "StaminaRegenDelay",
-              "Value": 0.0
-            },
-            "MagicCharges": {
-              "Id": "MagicCharges",
-              "Value": 0.0
-            }
-          }
-        },
-        "NPC": {
-          "Version": 5,
-          "UUID": {
-            "$binary": "LK91LJgNNA6WiCgfErPXGA==",
-            "$type": "04"
-          },
-          "Inventory": {
-            "Version": 4,
-            "Storage": {
-              "Id": "Empty"
-            },
-            "Armor": {
-              "Id": "Simple",
-              "Capacity": 4,
-              "Items": {}
-            },
-            "HotBar": {
-              "Id": "Simple",
-              "Capacity": 3,
-              "Items": {}
-            },
-            "Utility": {
-              "Id": "Empty"
-            },
-            "Backpack": {
-              "Id": "Empty"
-            },
-            "ActiveHotbarSlot": 0,
-            "Tool": {
-              "Id": "Empty"
-            },
-            "ActiveToolsSlot": -1,
-            "ActiveUtilitySlot": -1,
-            "SortType": "Name"
-          },
-          "HvrPhs": 0.0,
-          "HvrHght": 0.0,
-          "MdlScl": 1.0,
-          "SpawnInstant": "0001-01-01T12:00:00Z",
-          "WorldgenId": 0,
-          "PathManager": {},
-          "LeashPos": {
-            "X": 4.298609256744385,
-            "Y": 56.23894500732422,
-            "Z": 5.641782283782959
-          },
-          "LeashHdg": 0.0,
-          "LeashPtch": 0.0,
-          "RoleName": "Male_Unemployed_Civilian"
-        },
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        }
-      }
-    },
-    {
-      "Components": {
-        "EffectController": {},
-        "VillagerComponent": {
-          "VillageHeartLocation": {
-            "WorldName": "prefabEditor-PacificByte",
-            "Position": {
-              "X": 3,
-              "Y": 56,
-              "Z": 3
-            }
-          }
-        },
-        "DisplayName": {
-          "DisplayName": {
-            "MessageId": "server.npcRoles.Template.name",
-            "Bold": null,
-            "Italic": null,
-            "Monospace": null,
-            "Underline": null
-          }
-        },
-        "UIComponentList": {},
-        "Transform": {
-          "Position": {
-            "X": 3.182739734649658,
-            "Y": 1.0752525329589844,
-            "Z": 0.4130685329437256
-          },
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        },
-        "Velocity": {
-          "Velocity": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        },
-        "PrefabCopyable": {},
-        "Interactions": {
-          "Interactions": {
-            "Use": "*UseNPC"
-          }
-        },
-        "Model": {
-          "Model": {
-            "Id": "Male_Civilian",
-            "Scale": 1.0,
-            "Static": false
-          }
-        },
-        "UUID": {
-          "UUID": {
-            "$binary": "o6tYW3ukMCqGZR6VpF9Bsg==",
-            "$type": "04"
-          }
-        },
-        "EntityStats": {
-          "Version": 5,
-          "Stats": {
-            "Oxygen": {
-              "Id": "Oxygen",
-              "Value": 100.0
-            },
-            "Mana": {
-              "Id": "Mana",
-              "Value": 0.0
-            },
-            "Health": {
-              "Id": "Health",
-              "Value": 100.0,
-              "Modifiers": {
-                "NPC_Max": {
-                  "Id": "Static",
-                  "CalculationType": "Additive",
-                  "Amount": 0.0
-                }
-              }
-            },
-            "GlidingActive": {
-              "Id": "GlidingActive",
-              "Value": 0.0
-            },
-            "Immunity": {
-              "Id": "Immunity",
-              "Value": 0.0
-            },
-            "SignatureCharges": {
-              "Id": "SignatureCharges",
-              "Value": 0.0
-            },
-            "Stamina": {
-              "Id": "Stamina",
-              "Value": 10.0
-            },
-            "Ammo": {
-              "Id": "Ammo",
-              "Value": 0.0
-            },
-            "Unknown": {
-              "Id": "Unknown",
-              "Value": 0.0
-            },
-            "SignatureEnergy": {
-              "Id": "SignatureEnergy",
-              "Value": 0.0
-            },
-            "DeployablePreview": {
-              "Id": "DeployablePreview",
-              "Value": 0.0
-            },
-            "StaminaRegenDelay": {
-              "Id": "StaminaRegenDelay",
-              "Value": 0.0
-            },
-            "MagicCharges": {
-              "Id": "MagicCharges",
-              "Value": 0.0
-            }
-          }
-        },
-        "NPC": {
-          "Version": 5,
-          "UUID": {
-            "$binary": "3L0PJ+dtNG2r6CqPOgHUFA==",
-            "$type": "04"
-          },
-          "Inventory": {
-            "Version": 4,
-            "Storage": {
-              "Id": "Empty"
-            },
-            "Armor": {
-              "Id": "Simple",
-              "Capacity": 4,
-              "Items": {}
-            },
-            "HotBar": {
-              "Id": "Simple",
-              "Capacity": 3,
-              "Items": {}
-            },
-            "Utility": {
-              "Id": "Empty"
-            },
-            "Backpack": {
-              "Id": "Empty"
-            },
-            "ActiveHotbarSlot": 0,
-            "Tool": {
-              "Id": "Empty"
-            },
-            "ActiveToolsSlot": -1,
-            "ActiveUtilitySlot": -1,
-            "SortType": "Name"
-          },
-          "HvrPhs": 0.0,
-          "HvrHght": 0.0,
-          "MdlScl": 1.0,
-          "SpawnInstant": "0001-01-01T12:00:00Z",
-          "WorldgenId": 0,
-          "PathManager": {},
-          "LeashPos": {
-            "X": 6.182739734649658,
-            "Y": 56.075252532958984,
-            "Z": 3.4130685329437256
-          },
-          "LeashHdg": 0.0,
-          "LeashPtch": 0.0,
-          "RoleName": "Male_Unemployed_Civilian"
-        },
-        "HeadRotation": {
-          "Rotation": {
-            "Pitch": 0.0,
-            "Yaw": 0.0,
-            "Roll": 0.0
-          }
-        }
-      }
+      "name": "Cloth_Block_Wool_Red"
     }
   ]
 }

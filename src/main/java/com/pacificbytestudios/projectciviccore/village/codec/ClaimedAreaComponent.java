@@ -9,8 +9,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
 public class ClaimedAreaComponent implements Component<ChunkStore> {
+
   public static final BuilderCodec<ClaimedAreaComponent> CODEC = BuilderCodec
       .builder(ClaimedAreaComponent.class, ClaimedAreaComponent::new)
+
       .append(new KeyedCodec<>("TopLeft", Vector2i.CODEC),
           (obj, value) -> obj.topLeft = value,
           (obj) -> obj.topLeft)
@@ -20,6 +22,7 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
           (obj, value) -> obj.botRight = value,
           (obj) -> obj.botRight)
       .add()
+
       .build();
 
   private Vector2i topLeft;
@@ -59,10 +62,6 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
     }
     int x = coord2d.x;
     int z = coord2d.y;
-
-    System.out
-        .println("Checking coords, Input: " + coord2d + ", TopLeft: " + this.topLeft
-            + ", BotRight: " + this.botRight);
 
     return x >= this.topLeft.x && x <= this.botRight.x && z >= this.topLeft.y &&
         z <= this.botRight.y;

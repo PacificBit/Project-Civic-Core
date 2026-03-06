@@ -16,7 +16,6 @@ import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
 
 public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();

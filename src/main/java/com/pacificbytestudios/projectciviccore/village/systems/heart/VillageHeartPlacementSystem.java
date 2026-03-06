@@ -9,7 +9,6 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.util.FastRandom;
-import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -21,7 +20,6 @@ import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.codec.ClaimedAreaComponent;
@@ -29,7 +27,6 @@ import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBe
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry.ChunkLocation;
 import com.pacificbytestudios.projectciviccore.villagers.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
@@ -65,14 +62,13 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         VillageHeartComponent.getComponentType());
     int radius = spawnComponent.getSpawnNpcRange();
 
-    claimVillageArea(villageHeartComponent, villageHeartPos);
-    // TODO: Should check if there is another village colliding
-    villageStore.registerVillage(
-        new ChunkLocation(chunk.getX(), chunk.getZ()),
-        ref,
-        villageHeartComponent);
-
     VillageHeartRef villageHeartLocation = new VillageHeartRef(world.getName(), villageHeartPos);
+
+    ClaimedAreaComponent area = Utils.claimVillageArea(villageHeartComponent, villageHeartPos);
+    villageStore.registerVillage(
+        world.getName(),
+        villageHeartPos,
+        area);
 
     world.execute(() -> {
       Store<EntityStore> entityStore = world.getEntityStore().getStore();
@@ -106,20 +102,6 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       } catch (Exception e) {
       }
     });
-  }
-
-  private void claimVillageArea(VillageHeartComponent heart, Vector3i origin) {
-    int level = heart.getLevel();
-    int radiusPerLevel = heart.getConfig().getClaimRadiusPerLevel();
-    int totalRadius = level * radiusPerLevel;
-    Vector2i topLeft = new Vector2i(origin.x - totalRadius, origin.z - totalRadius);
-    Vector2i botRight = new Vector2i(origin.x + totalRadius, origin.z + totalRadius);
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[claimVillageArea] Created new village with anchor points: " + topLeft + " and: " + botRight);
-    ClaimedAreaComponent area = new ClaimedAreaComponent();
-    area.setTopLeft(topLeft);
-    area.setBotRight(botRight);
-    heart.setClaimedArea(area);
   }
 
   private VillageBedComponent[] spawnBeds(World world, Vector3i villageCenter, int villagerCount, int radius) {
