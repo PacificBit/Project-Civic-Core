@@ -3,6 +3,7 @@ package com.pacificbytestudios.projectciviccore.village.components.heart;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -211,9 +212,12 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     }
     this.workplaceIdToWorkplace.remove(workplace);
 
-    for (Map.Entry<UUID, UUID> workers : this.villagerToWorkplace.entrySet()) {
-      if (workers.getValue().equals(workplace)) {
-        this.markAsUnemployed(workers.getKey());
+    Iterator<Map.Entry<UUID, UUID>> workers = this.villagerToWorkplace.entrySet().iterator();
+    while (workers.hasNext()) {
+      Map.Entry<UUID, UUID> worker = workers.next();
+      if (worker.getValue().equals(workplace)) {
+        workers.remove();
+        this.unemployedRegistry.add(worker.getKey());
       }
     }
   }
