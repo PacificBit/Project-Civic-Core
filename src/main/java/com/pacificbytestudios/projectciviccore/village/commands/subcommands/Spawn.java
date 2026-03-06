@@ -33,7 +33,7 @@ public class Spawn extends CommandBase {
 
       for (int y = villageCorePosition.y; y > 0; y--) {
         if (chunk.getBlockType(villageCorePosition).getId().equals("Empty")) {
-          villageCorePosition = new Vector3i(villageCorePosition.x, y + 1, villageCorePosition.z);
+          villageCorePosition = new Vector3i(villageCorePosition.x, y + 2, villageCorePosition.z);
         }
       }
 

@@ -121,8 +121,8 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       int sideIndex = (i / bedsPerSide) % sides;
       int indexOnSide = i % bedsPerSide;
 
-      Vector3i outward = Vector3i.CARDINAL_DIRECTIONS[sideIndex].scale(radius);
-      Vector3i tangent = Vector3i.CARDINAL_DIRECTIONS[(sideIndex + 1) % sides];
+      Vector3i outward = Vector3i.CARDINAL_DIRECTIONS[sideIndex].clone().scale(radius);
+      Vector3i tangent = Vector3i.CARDINAL_DIRECTIONS[(sideIndex + 1) % sides].clone();
 
       int halfSpan = sideSpan / 2;
       int tangentOffset = indexOnSide - halfSpan;
