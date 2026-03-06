@@ -54,6 +54,10 @@ public class VillageHeartRef {
     return this.villageHeartRef;
   }
 
+  public Vector3i getPosition() {
+    return this.position;
+  }
+
   public VillageHeartRef clone() {
     VillageHeartRef newLocation = new VillageHeartRef();
     newLocation.worldName = this.worldName;
