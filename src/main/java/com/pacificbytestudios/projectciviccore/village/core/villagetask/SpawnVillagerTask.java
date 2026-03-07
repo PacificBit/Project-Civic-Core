@@ -106,7 +106,7 @@ public class SpawnVillagerTask implements IVillageTask {
       villagerComponent.setBedPosition(this.bed.getPosition());
     }
 
-    entityStore.putComponent(npcRef, Interactions.getComponentType(), this.buildInteractions());
+    entityStore.putComponent(npcRef, Interactions.getComponentType(), buildInteractions());
     entityStore.ensureComponent(npcRef, Interactable.getComponentType());
     entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);
   }
@@ -149,7 +149,7 @@ public class SpawnVillagerTask implements IVillageTask {
     return npcRef;
   }
 
-  public Interactions buildInteractions() {
+  public static Interactions buildInteractions() {
     Map<InteractionType, String> interactions = new HashMap<>();
     interactions.put(InteractionType.Use, "Villager_Open_Inventory_Interaction");
     return new Interactions(interactions);
