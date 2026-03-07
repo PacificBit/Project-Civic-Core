@@ -5,6 +5,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.math.vector.Vector2i;
+import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
@@ -27,6 +28,24 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
 
   private Vector2i topLeft;
   private Vector2i botRight;
+
+  public ClaimedAreaComponent() {
+  }
+
+  public ClaimedAreaComponent(Vector2i topLeft, Vector2i botRight) {
+    this.topLeft = topLeft;
+    this.botRight = botRight;
+  }
+
+  public ClaimedAreaComponent(ClaimedAreaComponent offset, Vector3i center) {
+    int topX = center.getX() + offset.topLeft.x;
+    int topZ = center.getZ() + offset.topLeft.y;
+    this.topLeft = new Vector2i(topX, topZ);
+
+    int botX = center.getX() + offset.botRight.x;
+    int botZ = center.getZ() + offset.botRight.y;
+    this.botRight = new Vector2i(botX, botZ);
+  }
 
   @Override
   public ClaimedAreaComponent clone() {

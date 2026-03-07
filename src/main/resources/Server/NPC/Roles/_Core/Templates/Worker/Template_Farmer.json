@@ -1,0 +1,63 @@
+{
+  "Type": "Abstract",
+  "Parameters": {
+    "Appearance": {
+      "Value": "Bear_Grizzly",
+      "Description": "Model to be used"
+    },
+    "DropList": {
+      "Value": "Empty",
+      "Description": "Drop Items"
+    },
+    "MaxHealth": {
+      "Value": 100,
+      "Description": "Max health for the NPC"
+    },
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Template.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "DropList": {
+    "Compute": "DropList"
+  },
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 3,
+      "Gravity": 10,
+      "MaxFallSpeed": 8,
+      "Acceleration": 10
+    }
+  ],
+  "Instructions": [
+    {
+      "Sensor": {
+        "Type": "WatchVillageState",
+        "State": "panic"
+      }
+    },
+    {
+      "Instructions": [
+        {
+          "$Comment": "Sample Instruction",
+          "Sensor": {
+            "Type": "Any"
+          },
+          "BodyMotion": {
+            "Type": "Nothing"
+          }
+        }
+      ]
+    }
+  ],
+  "NameTranslationKey": {
+    "Compute": "NameTranslationKey"
+  },
+  "Appearance": {
+    "Compute": "Appearance"
+  },
+  "MaxHealth": {
+    "Compute": "MaxHealth"
+  }
+}

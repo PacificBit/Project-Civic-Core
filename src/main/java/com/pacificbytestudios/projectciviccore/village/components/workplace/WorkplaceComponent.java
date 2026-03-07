@@ -16,6 +16,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
@@ -63,6 +64,12 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.storage)
       .add()
 
+      .append(
+          new KeyedCodec<>("WorkingArea", ClaimedAreaComponent.CODEC),
+          (obj, value) -> obj.workingArea = value,
+          (obj) -> obj.workingArea)
+      .add()
+
       .build();
 
   private UUID uuid;
@@ -73,6 +80,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private VillageHeartRef villageHeartLocation;
   private Set<UUID> workers = new HashSet<>();
   private WorkplaceStorageComponent storage;
+  private ClaimedAreaComponent workingArea;
 
   public UUID getUuid() {
     return uuid;
@@ -134,6 +142,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     return this.storage;
   }
 
+  public ClaimedAreaComponent getWorkingArea() {
+    return workingArea;
+  }
+
+  public void setWorkingArea(ClaimedAreaComponent claimedArea) {
+    this.workingArea = claimedArea;
+  }
+
   @Override
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();
@@ -144,6 +160,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.workers = new HashSet<>(this.workers);
     component.storage = this.storage != null ? this.storage.clone() : null;
     component.prefabAnchor = this.prefabAnchor;
+    component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
     return component;
   }
 

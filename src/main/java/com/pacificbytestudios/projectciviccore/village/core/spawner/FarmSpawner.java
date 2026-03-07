@@ -6,6 +6,7 @@ import io.sentry.util.Pair;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -13,6 +14,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -24,6 +26,9 @@ public class FarmSpawner {
   private static final String PREFAB_JSON = "Structures/WorkPlace/Workspace_Farm.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
   private static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
+  private static final ClaimedAreaComponent WORKING_AREA_OFFSET = new ClaimedAreaComponent(
+      new Vector2i(-3, -3),
+      new Vector2i(3, 3));
   // private static final BlockType DOUBLE_STORAGE_BLOCK =
   // BlockType.getAssetMap().getAsset("Workplace_Chest_Large");
 
@@ -60,6 +65,8 @@ public class FarmSpawner {
       ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
+
+    workplaceComponent.setWorkingArea(new ClaimedAreaComponent(WORKING_AREA_OFFSET, position));
 
     workplaceStore.putComponent(
         workplace,

@@ -37,8 +37,8 @@ import it.unimi.dsi.fastutil.Pair;
 public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
   private static final String VILLAGER_BED_ID = "Furniture_Crude_Villager_Bed";
   private static final String[] SPAWNABLE_NPC = new String[] {
-      "Female_Unemployed_Civilian",
-      "Male_Unemployed_Civilian"
+      "Role_Female_Civilian",
+      "Role_Male_Civilian"
   };
 
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
