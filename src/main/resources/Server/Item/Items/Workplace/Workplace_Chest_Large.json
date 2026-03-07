@@ -1,6 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Furniture_Tavern_Chest_Large.name"
+    "Name": "server.workplace.chest.large.name",
+    "Description": "server.workplace.chest.large.description"
   },
   "PlayerAnimationsId": "Block",
   "Categories": [

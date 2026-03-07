@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.workspace.farm.name",
-    "Description": "server.workspace.farm.description"
+    "Name": "server.workplace.farm.name",
+    "Description": "server.workplace.farm.description"
   },
   "Icon": "Icons/ItemsGenerated/Bench_Farming.png",
   "Categories": [

@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import com.hypixel.hytale.codec.Codec;
@@ -11,7 +13,10 @@ import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.Interactable;
+import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
@@ -81,9 +86,9 @@ public class SpawnVillagerTask implements IVillageTask {
       VillageHeartComponent heart) {
     World world = chunk.getWorld();
     Store<EntityStore> entityStore = world.getEntityStore().getStore();
-    Vector3d spawnPos = newSpawnPos(heartPos, this.spawnRadius);
+    Vector3d spawnPos = this.newSpawnPos(heartPos, this.spawnRadius);
     Vector3f rotation = new Vector3f(0f, 0f, 0f);
-    Ref<EntityStore> npcRef = spawnNpc(entityStore, spawnPos, rotation);
+    Ref<EntityStore> npcRef = this.spawnNpc(entityStore, spawnPos, rotation);
 
     assert npcRef != null;
 
@@ -100,6 +105,9 @@ public class SpawnVillagerTask implements IVillageTask {
       this.bed.setTaken(true);
       villagerComponent.setBedPosition(this.bed.getPosition());
     }
+
+    entityStore.putComponent(npcRef, Interactions.getComponentType(), this.buildInteractions());
+    entityStore.ensureComponent(npcRef, Interactable.getComponentType());
     entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);
   }
 
@@ -139,5 +147,11 @@ public class SpawnVillagerTask implements IVillageTask {
 
     Ref<EntityStore> npcRef = result.key();
     return npcRef;
+  }
+
+  public Interactions buildInteractions() {
+    Map<InteractionType, String> interactions = new HashMap<>();
+    interactions.put(InteractionType.Use, "Villager_Open_Inventory_Interaction");
+    return new Interactions(interactions);
   }
 }

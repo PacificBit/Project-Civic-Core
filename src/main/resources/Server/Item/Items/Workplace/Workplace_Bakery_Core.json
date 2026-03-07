@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.workspace.bakery.name",
-    "Description": "server.workspace.bakery.description"
+    "Name": "server.workplace.bakery.name",
+    "Description": "server.workplace.bakery.description"
   },
   "Icon": "Icons/ItemsGenerated/Bench_Cooking.png",
   "Categories": [

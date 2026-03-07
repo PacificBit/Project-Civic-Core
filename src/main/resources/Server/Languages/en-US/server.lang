@@ -1,11 +1,17 @@
-workspace.sawmill.name=Sawmill Workspace
-workspace.sawmill.description=Sawmill workspace found in villages, cannot be crafted
+workplace.sawmill.name=Sawmill Workplace
+workplace.sawmill.description=Sawmill workplace found in villages, cannot be crafted
 
-workspace.bakery.name=Bakery Workspace
-workspace.bakery.description=Bakery workspace found in villages, cannot be crafted
+workplace.bakery.name=Bakery Workplace
+workplace.bakery.description=Bakery workplace found in villages, cannot be crafted
 
-workspace.mine.name=Mine Workspace
-workspace.mine.description=Mine workspace found in villages, cannot be crafted
+workplace.mine.name=Mine Workplace
+workplace.mine.description=Mine workplace found in villages, cannot be crafted
 
-workspace.farm.name=Farm Workspace
-workspace.farm.description=Farm workspace found in villages, cannot be crafted
+workplace.farm.name=Farm Workplace
+workplace.farm.description=Farm workplace found in villages, cannot be crafted
+
+workplace.chest.small.name=Small Workplace chest
+workplace.chest.small.description=Small workplace found in villages, cannot be crafted
+
+workplace.chest.large.name=Large Workplace chest
+workplace.chest.large.description=Large workplace found in villages, cannot be crafted

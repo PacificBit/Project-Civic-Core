@@ -8,10 +8,15 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.inventory.container.EmptyItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
 public class WorkplaceStorageContainerComponent implements Component<ChunkStore> {
+  public static final short CONTAINER_CAPACITY = 18;
+
   public static final BuilderCodec<WorkplaceStorageContainerComponent> CODEC = BuilderCodec
       .builder(WorkplaceStorageContainerComponent.class, WorkplaceStorageContainerComponent::new)
 
@@ -25,10 +30,16 @@ public class WorkplaceStorageContainerComponent implements Component<ChunkStore>
           (obj) -> obj.position)
       .add()
 
+      .append(new KeyedCodec<>("ItemContainer", ItemContainer.CODEC),
+          (obj, value) -> obj.storage = value,
+          (obj) -> obj.getItemContainer())
+      .add()
+
       .build();
 
   private UUID uuid;
   private Vector3i position;
+  private ItemContainer storage;
 
   public UUID getUuid() {
     return uuid;
@@ -51,10 +62,18 @@ public class WorkplaceStorageContainerComponent implements Component<ChunkStore>
     WorkplaceStorageContainerComponent container = new WorkplaceStorageContainerComponent();
     container.uuid = this.uuid;
     container.position = this.position;
+    container.storage = this.storage.clone();
     return container;
   }
 
   public static ComponentType<ChunkStore, WorkplaceStorageContainerComponent> getComponentType() {
     return ProjectCivicCore.get().getWorkplaceStorageContainerComponentType();
+  }
+
+  public ItemContainer getItemContainer() {
+    if (this.storage == null) {
+      return EmptyItemContainer.getNewContainer(CONTAINER_CAPACITY, SimpleItemContainer::new);
+    }
+    return this.storage;
   }
 }

@@ -1,11 +1,16 @@
 package com.pacificbytestudios.projectciviccore.villagers.components;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWindow;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
@@ -13,6 +18,9 @@ import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 
 public class VillagerComponent implements Component<EntityStore> {
+  public static final short STORAGE_CAPACITY = 18;
+  public static final short HOTBAR_CAPACITY = 3;
+
   public static final BuilderCodec<VillagerComponent> CODEC = BuilderCodec
       .builder(VillagerComponent.class, VillagerComponent::new)
 
@@ -36,6 +44,7 @@ public class VillagerComponent implements Component<EntityStore> {
   private VillageHeartRef villageHeartLocation;
   private Vector3i bedPosition;
   private WorkplaceComponent workplace;
+  private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
   public Vector3i getBedPosition() {
     return bedPosition;
@@ -59,6 +68,10 @@ public class VillagerComponent implements Component<EntityStore> {
 
   public void setWorkplace(WorkplaceComponent workplace) {
     this.workplace = workplace;
+  }
+
+  public Map<UUID, ContainerWindow> getWindows() {
+    return this.windows;
   }
 
   @Override
