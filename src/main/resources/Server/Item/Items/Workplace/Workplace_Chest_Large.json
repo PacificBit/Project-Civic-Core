@@ -89,7 +89,11 @@
     },
     "BlockEntity": {
       "Components": {
-        "WorkplaceStorageContainerComponent": {}
+        "WorkplaceStorageContainerComponent": {
+          "Storage": {
+            "Capacity": 32
+          }
+        }
       }
     }
   },

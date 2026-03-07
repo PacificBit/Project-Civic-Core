@@ -32,6 +32,7 @@ public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
           TrackedPrefabPlacementComponent::getYaw)
       .add()
 
+      // WARN: This probably won't work in update 4
       .append(new KeyedCodec<>("RestoreSnapshot", Codec.BSON_DOCUMENT),
           (obj, value) -> obj.restoreSnapshot = value,
           obj -> obj.restoreSnapshot)

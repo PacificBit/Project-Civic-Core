@@ -167,6 +167,7 @@ public class SpawnVillagerTask implements IVillageTask {
   }
 
   private static void ensureVillagerInventoryCapacity(NPCEntity targetNpc) {
+    // WARN: This won't work in update 4
     Inventory inventory = targetNpc.getInventory();
     if (inventory.getStorage().getCapacity() >= VillagerComponent.STORAGE_CAPACITY
         && inventory.getHotbar().getCapacity() >= VillagerComponent.HOTBAR_CAPACITY) {
@@ -179,6 +180,7 @@ public class SpawnVillagerTask implements IVillageTask {
     short newStorageCapacity = (short) Math.max(oldStorageCapacity, VillagerComponent.STORAGE_CAPACITY);
     short newHotbarCapacity = (short) Math.min(oldHotbarCapacity, VillagerComponent.HOTBAR_CAPACITY);
 
+    // WARN: This won't work in update 4
     Inventory expandedInventory = new Inventory(
         ItemContainer.ensureContainerCapacity(
             inventory.getStorage(),
