@@ -10,29 +10,20 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.util.FastRandom;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
-import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-
-import it.unimi.dsi.fastutil.Pair;
 
 public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
   private static final String VILLAGER_BED_ID = "Furniture_Crude_Villager_Bed";
@@ -42,7 +33,6 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
   };
 
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
-  private FastRandom random = new FastRandom();
 
   @Override
   public void onEntityAdded(
@@ -64,7 +54,6 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         VillageHeartComponent.getComponentType());
     int radius = spawnComponent.getSpawnNpcRange();
 
-    VillageHeartRef villageHeartLocation = new VillageHeartRef(world.getName(), villageHeartPos);
     villageHeart.setUuid(UUID.randomUUID());
 
     ClaimedAreaComponent area = Utils.claimVillageArea(villageHeart, villageHeartPos);
@@ -75,31 +64,15 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         area);
 
     world.execute(() -> {
-      Store<EntityStore> entityStore = world.getEntityStore().getStore();
-
-      Vector3f rotation = new Vector3f(0f, 0f, 0f);
-
       VillageBedComponent[] beds = spawnBeds(world, villageHeartPos, spawnComponent.getInitialNpcCount(), radius);
 
+      VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
       for (int npcCount = 0; npcCount < spawnComponent.getInitialNpcCount(); npcCount++) {
-        Vector3d spawnPos = newSpawnPos(villageHeartPos, radius);
-        Ref<EntityStore> npcRef = spawnNpc(entityStore, spawnPos, rotation, npcCount);
-
-        assert npcRef != null;
-
-        VillagerComponent villagerComponent = new VillagerComponent();
-        UUIDComponent uuidComponent = entityStore.getComponent(npcRef, UUIDComponent.getComponentType());
-        UUID uuid = uuidComponent.getUuid();
-        villageHeart.registerVillager(uuid, villagerComponent);
-        villageHeart.registerAsUnemployed(uuid);
-
-        beds[npcCount].setOwner(uuid);
-        beds[npcCount].setTaken(true);
-
-        villagerComponent.setVillageHeartLocation(villageHeartLocation.clone());
-        villagerComponent.setBedPosition(beds[npcCount].getPosition());
-        entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);
+        String npcRole = SPAWNABLE_NPC[npcCount % SPAWNABLE_NPC.length];
+        taskComponent.registerTask(new SpawnVillagerTask(npcRole, radius, beds[npcCount]));
       }
+
+      store.putComponent(ref, VillageTaskQueueComponent.getComponentType(), taskComponent);
 
       try {
         // INFO: villageHeartRef is invalid here
@@ -150,45 +123,6 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     }
 
     return beds;
-  }
-
-  private Vector3d newSpawnPos(Vector3i blockPos, int radius) {
-    double angle = random.nextDouble() * Math.PI * 2.0;
-
-    double distance = Math.sqrt(random.nextDouble()) * radius;
-
-    double offsetX = Math.cos(angle) * distance;
-    double offsetZ = Math.sin(angle) * distance;
-
-    Vector3d spawnPos = new Vector3d(
-        blockPos.getX() + offsetX,
-        blockPos.getY(),
-        blockPos.getZ() + offsetZ);
-
-    if (spawnPos.toVector3i().equals(blockPos)) {
-      spawnPos.add(Vector3i.LEFT);
-    }
-
-    return spawnPos;
-  }
-
-  private Ref<EntityStore> spawnNpc(
-      Store<EntityStore> entityStore,
-      Vector3d position,
-      Vector3f rotation,
-      int npcCount) {
-    Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get()
-        .spawnNPC(
-            entityStore,
-            SPAWNABLE_NPC[npcCount % SPAWNABLE_NPC.length],
-            null,
-            position,
-            rotation);
-
-    assert result != null;
-
-    Ref<EntityStore> npcRef = result.key();
-    return npcRef;
   }
 
   @Override
