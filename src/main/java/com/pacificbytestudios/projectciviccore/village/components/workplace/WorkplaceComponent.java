@@ -119,8 +119,20 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.benchPos = this.benchPos;
     component.villageHeartLocation = this.villageHeartLocation;
     component.workers = new HashSet<>(this.workers);
-    component.storage = this.storage;
+    component.storage = this.storage != null ? this.storage.clone() : null;
     return component;
+  }
+
+  @Override
+  public String toString() {
+    return "WorkplaceComponent{" +
+        "uuid=" + uuid +
+        ", workingPlaceType=" + workingPlaceType +
+        ", benchPos=" + benchPos +
+        ", villageHeartLocation=" + villageHeartLocation +
+        ", workers=" + workers +
+        ", storage=" + storage +
+        '}';
   }
 
   public static ComponentType<ChunkStore, WorkplaceComponent> getComponentType() {

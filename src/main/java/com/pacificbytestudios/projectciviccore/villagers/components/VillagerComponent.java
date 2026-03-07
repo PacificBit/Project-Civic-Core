@@ -64,9 +64,9 @@ public class VillagerComponent implements Component<EntityStore> {
   @Override
   public VillagerComponent clone() {
     VillagerComponent component = new VillagerComponent();
-    component.villageHeartLocation = this.villageHeartLocation;
+    component.villageHeartLocation = this.villageHeartLocation == null ? null : this.villageHeartLocation.clone();
     component.bedPosition = this.bedPosition;
-    component.workplace = this.workplace;
+    component.workplace = this.workplace == null ? null : this.workplace.clone();
     return component;
   }
 

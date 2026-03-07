@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.systems.heart;
 
+import java.util.UUID;
+
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -9,12 +11,14 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
@@ -40,12 +44,32 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
 
     WorldChunk chunk = context.chunk();
 
+    EntityStore entityStore = context.chunk().getWorld().getEntityStore();
+    Store<EntityStore> storeEntityStore = entityStore.getStore();
     chunk.getWorld().execute(() -> {
       VillageHeartComponent heart = store.getComponent(ref, VillageHeartComponent.getComponentType());
 
       if (heart == null) {
-        ProjectCivicCore.LOGGER.atInfo().log("[onEntityAdded] - Could not find the heart component");
+        ProjectCivicCore.LOGGER.atSevere()
+            .log("[VillageHeartLoadUnloadSystem - onEntityAdded] Could not find the heart component");
         return;
+      }
+
+      for (UUID uuid : heart.getVillagersRegistry()) {
+        Ref<EntityStore> npcRef = entityStore.getRefFromUUID(uuid);
+        if (npcRef == null || !npcRef.isValid()) {
+          ProjectCivicCore.LOGGER.atSevere()
+              .log("[VillageHeartLoadUnloadSystem - onEntityAdded] Reference to npc is invalid");
+          continue;
+        }
+
+        VillagerComponent npcComponent = storeEntityStore.getComponent(npcRef, VillagerComponent.getComponentType());
+        if (npcComponent == null) {
+          ProjectCivicCore.LOGGER.atSevere()
+              .log("[VillageHeartLoadUnloadSystem - onEntityAdded] Villager component not found");
+          continue;
+        }
+        heart.registerVillager(uuid, npcComponent);
       }
 
       if (heart.getClaimedArea() == null) {

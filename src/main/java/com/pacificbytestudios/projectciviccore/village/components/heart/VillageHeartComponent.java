@@ -230,6 +230,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.unemployedRegistry.remove(villager);
     this.villagerToWorkplace.put(villager, workplace);
     WorkplaceComponent workplaceComponent = this.workplaceIdToWorkplace.get(workplace);
+    workplaceComponent.registerWorker(villager);
     this.villagerIdToComponent.get(villager).setWorkplace(workplaceComponent);
   }
 
@@ -240,6 +241,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       return;
     }
 
+    this.workplaceIdToWorkplace.get(workplace).unregisterWorker(villager);
     this.villagerToWorkplace.remove(villager);
     this.unemployedRegistry.add(villager);
     this.villagerIdToComponent.get(villager).setWorkplace(null);
@@ -256,16 +258,49 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   @Override
   public VillageHeartComponent clone() {
     VillageHeartComponent component = new VillageHeartComponent();
+
     component.uuid = this.uuid;
-    component.config = this.config;
-    component.villagersRegistry = this.villagersRegistry;
     component.state = this.state;
-    component.claimedArea = this.claimedArea;
     component.level = this.level;
-    component.unemployedRegistry = this.unemployedRegistry;
-    component.villagerIdToComponent = this.villagerIdToComponent;
-    component.workplaceIdToWorkplace = this.workplaceIdToWorkplace;
-    component.villagerToWorkplace = this.villagerToWorkplace;
+
+    component.config = this.config != null ? this.config.clone() : null;
+    component.claimedArea = this.claimedArea != null ? this.claimedArea.clone() : null;
+
+    component.villagersRegistry = new HashSet<>(this.villagersRegistry);
+    component.unemployedRegistry = new HashSet<>(this.unemployedRegistry);
+    component.villagerToWorkplace = new HashMap<>(this.villagerToWorkplace);
+
+    component.workplaceIdToWorkplace = new HashMap<>();
+    for (Map.Entry<UUID, WorkplaceComponent> entry : this.workplaceIdToWorkplace.entrySet()) {
+      WorkplaceComponent clonedWorkplace = entry.getValue() != null ? entry.getValue().clone() : null;
+      component.workplaceIdToWorkplace.put(entry.getKey(), clonedWorkplace);
+    }
+
+    component.villagerIdToComponent = new HashMap<>();
+    for (Map.Entry<UUID, VillagerComponent> entry : this.villagerIdToComponent.entrySet()) {
+      VillagerComponent clonedVillager = entry.getValue() != null ? entry.getValue().clone() : null;
+      component.villagerIdToComponent.put(entry.getKey(), clonedVillager);
+    }
+
+    for (Map.Entry<UUID, UUID> entry : component.villagerToWorkplace.entrySet()) {
+      UUID villagerId = entry.getKey();
+      UUID workplaceId = entry.getValue();
+
+      VillagerComponent villager = component.villagerIdToComponent.get(villagerId);
+      WorkplaceComponent workplace = component.workplaceIdToWorkplace.get(workplaceId);
+
+      if (villager != null) {
+        villager.setWorkplace(workplace);
+      }
+    }
+
+    for (UUID unemployedVillagerId : component.unemployedRegistry) {
+      VillagerComponent villager = component.villagerIdToComponent.get(unemployedVillagerId);
+      if (villager != null) {
+        villager.setWorkplace(null);
+      }
+    }
+
     return component;
   }
 

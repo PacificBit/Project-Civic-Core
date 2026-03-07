@@ -57,7 +57,13 @@ public class WorkplaceStorageComponent implements Component<ChunkStore> {
   @Override
   public WorkplaceStorageComponent clone() {
     WorkplaceStorageComponent component = new WorkplaceStorageComponent();
-    component.containers = this.containers;
+    component.containers = new HashMap<>();
+
+    for (Map.Entry<UUID, WorkplaceStorageContainerComponent> entry : this.containers.entrySet()) {
+      WorkplaceStorageContainerComponent clonedContainer = entry.getValue() != null ? entry.getValue().clone() : null;
+      component.containers.put(entry.getKey(), clonedContainer);
+    }
+
     return component;
   }
 
