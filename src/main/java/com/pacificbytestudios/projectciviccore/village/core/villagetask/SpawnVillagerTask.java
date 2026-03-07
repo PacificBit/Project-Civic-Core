@@ -15,6 +15,9 @@ import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.Interactable;
 import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -23,6 +26,8 @@ import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -106,6 +111,12 @@ public class SpawnVillagerTask implements IVillageTask {
       villagerComponent.setBedPosition(this.bed.getPosition());
     }
 
+    NPCEntity npcEntity = entityStore.getComponent(npcRef, NPCEntity.getComponentType());
+
+    assert npcEntity != null;
+
+    // ensureVillagerInventoryCapacity(npcEntity);
+
     entityStore.putComponent(npcRef, Interactions.getComponentType(), buildInteractions());
     entityStore.ensureComponent(npcRef, Interactable.getComponentType());
     entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);
@@ -153,5 +164,42 @@ public class SpawnVillagerTask implements IVillageTask {
     Map<InteractionType, String> interactions = new HashMap<>();
     interactions.put(InteractionType.Use, "Villager_Open_Inventory_Interaction");
     return new Interactions(interactions);
+  }
+
+  private static void ensureVillagerInventoryCapacity(NPCEntity targetNpc) {
+    Inventory inventory = targetNpc.getInventory();
+    if (inventory.getStorage().getCapacity() >= VillagerComponent.STORAGE_CAPACITY
+        && inventory.getHotbar().getCapacity() >= VillagerComponent.HOTBAR_CAPACITY) {
+      return;
+    }
+
+    short oldStorageCapacity = inventory.getStorage().getCapacity();
+    short oldHotbarCapacity = inventory.getHotbar().getCapacity();
+
+    short newStorageCapacity = (short) Math.max(oldStorageCapacity, VillagerComponent.STORAGE_CAPACITY);
+    short newHotbarCapacity = (short) Math.min(oldHotbarCapacity, VillagerComponent.HOTBAR_CAPACITY);
+
+    Inventory expandedInventory = new Inventory(
+        ItemContainer.ensureContainerCapacity(
+            inventory.getStorage(),
+            newStorageCapacity,
+            SimpleItemContainer::new,
+            null),
+        inventory.getArmor(),
+        ItemContainer.ensureContainerCapacity(
+            inventory.getHotbar(),
+            newHotbarCapacity,
+            SimpleItemContainer::new,
+            null),
+        inventory.getUtility(),
+        inventory.getTools(),
+        inventory.getBackpack());
+
+    targetNpc.setInventory(expandedInventory);
+    expandedInventory.markChanged();
+
+    ProjectCivicCore.LOGGER.atInfo().log(
+        "[SpawnVillagerTask] Initialized/expanded villager inventory. storage: %s -> %s, hotbar: %s -> %s",
+        oldStorageCapacity, newStorageCapacity, oldHotbarCapacity, newHotbarCapacity);
   }
 }

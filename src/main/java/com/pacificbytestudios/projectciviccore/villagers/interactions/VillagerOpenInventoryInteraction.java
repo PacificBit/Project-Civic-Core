@@ -13,9 +13,7 @@ import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWindow;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
-import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -89,8 +87,6 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
       return;
     }
 
-    ensureVillagerInventoryCapacity(targetNpc);
-
     ItemContainer container = targetNpc.getInventory().getCombinedStorageFirst();
     if (container == null) {
       ProjectCivicCore.LOGGER.atSevere().log(
@@ -119,42 +115,5 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
     }
 
     window.registerCloseEvent(_ -> windows.remove(playerUuid, window));
-  }
-
-  private static void ensureVillagerInventoryCapacity(NPCEntity targetNpc) {
-    Inventory inventory = targetNpc.getInventory();
-    if (inventory.getStorage().getCapacity() >= VillagerComponent.STORAGE_CAPACITY
-        && inventory.getHotbar().getCapacity() >= VillagerComponent.HOTBAR_CAPACITY) {
-      return;
-    }
-
-    short oldStorageCapacity = inventory.getStorage().getCapacity();
-    short oldHotbarCapacity = inventory.getHotbar().getCapacity();
-
-    short newStorageCapacity = (short) Math.max(oldStorageCapacity, VillagerComponent.STORAGE_CAPACITY);
-    short newHotbarCapacity = (short) Math.min(oldHotbarCapacity, VillagerComponent.HOTBAR_CAPACITY);
-
-    Inventory expandedInventory = new Inventory(
-        ItemContainer.ensureContainerCapacity(
-            inventory.getStorage(),
-            newStorageCapacity,
-            SimpleItemContainer::new,
-            null),
-        inventory.getArmor(),
-        ItemContainer.ensureContainerCapacity(
-            inventory.getHotbar(),
-            newHotbarCapacity,
-            SimpleItemContainer::new,
-            null),
-        inventory.getUtility(),
-        inventory.getTools(),
-        inventory.getBackpack());
-
-    targetNpc.setInventory(expandedInventory);
-    expandedInventory.markChanged();
-
-    ProjectCivicCore.LOGGER.atInfo().log(
-        "[VillagerOpenInventoryInteraction] Initialized/expanded villager inventory. storage: %s -> %s, hotbar: %s -> %s",
-        oldStorageCapacity, newStorageCapacity, oldHotbarCapacity, newHotbarCapacity);
   }
 }
