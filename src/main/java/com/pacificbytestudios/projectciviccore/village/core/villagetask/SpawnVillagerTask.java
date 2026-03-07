@@ -115,7 +115,7 @@ public class SpawnVillagerTask implements IVillageTask {
 
     assert npcEntity != null;
 
-    // ensureVillagerInventoryCapacity(npcEntity);
+    ensureVillagerInventoryCapacity(npcEntity);
 
     entityStore.putComponent(npcRef, Interactions.getComponentType(), buildInteractions());
     entityStore.ensureComponent(npcRef, Interactable.getComponentType());
