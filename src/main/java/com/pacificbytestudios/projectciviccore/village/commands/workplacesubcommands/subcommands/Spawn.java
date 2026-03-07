@@ -15,10 +15,8 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.BakerySpawner;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
+import com.pacificbytestudios.projectciviccore.utils.SpawnFunction;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 public class Spawn extends CommandBase {
@@ -53,22 +51,10 @@ public class Spawn extends CommandBase {
 
       boolean spawnResult = false;
       String workplace = this.workplaceType.get(context).toUpperCase();
+      SpawnFunction spawnFunction = Utils.getSpawnFunction(WorkplaceType.valueOf(workplace));
 
-      switch (WorkplaceType.valueOf(workplace)) {
-        case BAKERY:
-          spawnResult = BakerySpawner.spawn(chunk, villageCorePosition);
-          break;
-        case MINE:
-          spawnResult = MineSpawner.spawn(chunk, villageCorePosition);
-          break;
-        case SAWMILL:
-          spawnResult = SawmillSpawner.spawn(chunk, villageCorePosition);
-          break;
-        case FARM:
-          spawnResult = FarmSpawner.spawn(chunk, villageCorePosition);
-          break;
-        default:
-          break;
+      if (spawnFunction != null) {
+        spawnResult = spawnFunction.apply(chunk, villageCorePosition);
       }
 
       if (!spawnResult) {

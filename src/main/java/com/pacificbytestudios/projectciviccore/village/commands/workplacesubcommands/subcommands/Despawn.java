@@ -20,14 +20,10 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
-import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
-import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.BakerySpawner;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
@@ -104,18 +100,8 @@ public class Despawn extends CommandBase {
 
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(benchPosition.x, benchPosition.z));
 
-      Ref<ChunkStore> benchRef = chunk.getBlockComponentEntity(benchPosition.x, benchPosition.y, benchPosition.z);
-
-      TrackedPrefabPlacementComponent trackedPlacement = heart.getStore()
-          .getComponent(benchRef, TrackedPrefabPlacementComponent.getComponentType());
-
-      chunk.breakBlock(benchPosition.x,
-          benchPosition.y, benchPosition.z);
-
-      boolean despawnResult = trackedPlacement != null &&
-          trackedPlacement.hasRestoreSnapshot()
-              ? PrefabManager.restoreTrackedPrefab(world, trackedPlacement)
-              : this.despawn(chunk, benchPosition.clone().add(Vector3i.DOWN), workplace);
+      DespawnFunction despawnFunction = Utils.getDespawnFunction(workplace);
+      boolean despawnResult = despawnFunction.apply(chunk, benchPosition);
 
       if (!despawnResult) {
         context.sendMessage(Message.raw("Could not despawn village"));
@@ -123,22 +109,6 @@ public class Despawn extends CommandBase {
       }
       context.sendMessage(Message.raw("Village successfully despawned"));
     });
-  }
-
-  private boolean despawn(WorldChunk chunk, Vector3i position, WorkplaceType workplaceType) {
-    switch (workplaceType) {
-      case BAKERY:
-        return BakerySpawner.despawn(chunk, position);
-      case MINE:
-        return MineSpawner.despawn(chunk, position);
-      case SAWMILL:
-        return SawmillSpawner.despawn(chunk, position);
-      case FARM:
-        return FarmSpawner.despawn(chunk, position);
-      default:
-        return false;
-    }
-
   }
 
 }

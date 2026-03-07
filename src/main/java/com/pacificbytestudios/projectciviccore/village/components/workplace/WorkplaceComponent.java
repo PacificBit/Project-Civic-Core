@@ -41,6 +41,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.benchPos)
       .add()
 
+      .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
+          (obj, value) -> obj.prefabAnchor = value,
+          (obj) -> obj.prefabAnchor)
+      .add()
+
       .append(new KeyedCodec<>("VillageHeartLocation", VillageHeartRef.CODEC),
           (obj, value) -> obj.setVillageHeartLocation(value),
           (obj) -> obj.villageHeartLocation)
@@ -63,6 +68,8 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private UUID uuid;
   private WorkplaceType workingPlaceType;
   private Vector3i benchPos;
+  private Vector3i prefabAnchor;
+
   private VillageHeartRef villageHeartLocation;
   private Set<UUID> workers = new HashSet<>();
   private WorkplaceStorageComponent storage;
@@ -91,6 +98,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.benchPos = benchPos;
   }
 
+  public Vector3i getPrefabAnchor() {
+    return prefabAnchor;
+  }
+
+  public void setPrefabAnchor(Vector3i prefabAnchor) {
+    this.prefabAnchor = prefabAnchor;
+  }
+
   public void setVillageHeartLocation(VillageHeartRef villageHeartLocation) {
     this.villageHeartLocation = villageHeartLocation;
   }
@@ -111,6 +126,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.workers.remove(uuid);
   }
 
+  public void setStorage(WorkplaceStorageComponent storage) {
+    this.storage = storage;
+  }
+
+  public WorkplaceStorageComponent getStorage() {
+    return this.storage;
+  }
+
   @Override
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();
@@ -120,18 +143,20 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.villageHeartLocation = this.villageHeartLocation;
     component.workers = new HashSet<>(this.workers);
     component.storage = this.storage != null ? this.storage.clone() : null;
+    component.prefabAnchor = this.prefabAnchor;
     return component;
   }
 
   @Override
   public String toString() {
     return "WorkplaceComponent{" +
-        "uuid=" + uuid +
-        ", workingPlaceType=" + workingPlaceType +
-        ", benchPos=" + benchPos +
-        ", villageHeartLocation=" + villageHeartLocation +
-        ", workers=" + workers +
-        ", storage=" + storage +
+        "\n uuid=" + uuid + "," +
+        "\n workingPlaceType=" + workingPlaceType + "," +
+        "\n benchPos=" + benchPos + "," +
+        "\n prefabAnchor=" + prefabAnchor + "," +
+        "\n villageHeartLocation=" + villageHeartLocation + "," +
+        "\n workers=" + workers + "," +
+        "\n storage=" + storage + "," +
         '}';
   }
 
