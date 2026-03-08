@@ -31,6 +31,7 @@ import com.pacificbytestudios.projectciviccore.village.systems.workplace.Workpla
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderRequestNewTaskAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
@@ -167,6 +168,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "RequestNewTask",
         BuilderRequestNewTaskAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "TimeInRange",
+        BuilderTimeRangeSensor::new);
 
     this.getCodecRegistry(Interaction.CODEC).register(
         "VillagerOpenInventoryInteraction",
