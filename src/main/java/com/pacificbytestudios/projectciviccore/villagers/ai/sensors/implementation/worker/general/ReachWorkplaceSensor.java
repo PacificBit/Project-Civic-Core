@@ -31,7 +31,7 @@ public class ReachWorkplaceSensor extends SensorBase {
   @Override
   public boolean matches(Ref<EntityStore> ref, Role role, double dt, Store<EntityStore> store) {
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    WorkplaceComponent workplace = villager.getWorkplace();
+    WorkplaceComponent workplace = villager.getWorkerData().getWorkplace();
 
     if (workplace == null) {
       return false;

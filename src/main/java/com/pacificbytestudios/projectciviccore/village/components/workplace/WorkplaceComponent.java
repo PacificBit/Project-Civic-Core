@@ -9,6 +9,7 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
+import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -19,6 +20,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 public class WorkplaceComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceComponent> CODEC = BuilderCodec
@@ -74,10 +76,19 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.workingArea)
       .add()
 
+      .append(
+          new KeyedCodec<>("WorkerTypes",
+              new ArrayCodec<WorkType>(new EnumCodec<WorkType>(WorkType.class),
+                  WorkType[]::new)),
+          (obj, value) -> obj.workerType = value,
+          (obj) -> obj.workerType)
+      .add()
+
       .build();
 
   private UUID uuid;
   private WorkplaceType workingPlaceType;
+  private WorkType[] workerType;
   private Vector3i benchPos;
   private Vector3i prefabAnchor;
 
@@ -164,6 +175,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.workingArea = claimedArea;
   }
 
+  public WorkType[] getWorkerType() {
+    return workerType;
+  }
+
+  public void setWorkerType(WorkType[] workerType) {
+    this.workerType = workerType;
+  }
+
   @Override
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();
@@ -176,6 +195,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.storage = this.storage != null ? this.storage.clone() : null;
     component.prefabAnchor = this.prefabAnchor;
     component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
+    component.workerType = this.workerType != null ? this.workerType.clone() : null;
     return component;
   }
 
@@ -189,6 +209,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         "\n villageHeartLocation=" + villageRef + "," +
         "\n workspaceLocation=" + workplaceRef + "," +
         "\n workers=" + workers + "," +
+        "\n typeWorkers=[" + workerType + "]," +
         "\n storage=" + storage + "," +
         '}';
   }

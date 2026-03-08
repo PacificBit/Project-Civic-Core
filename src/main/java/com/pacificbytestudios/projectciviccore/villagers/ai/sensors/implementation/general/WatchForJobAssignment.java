@@ -36,7 +36,7 @@ public class WatchForJobAssignment extends SensorBase {
       return false;
     }
 
-    return villagerComponent.getWorkplace() != null;
+    return villagerComponent.getWorkerData() != null;
   }
 
 }

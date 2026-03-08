@@ -14,6 +14,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
 
@@ -57,6 +58,7 @@ public class BakerySpawner {
     }
 
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
+    workplaceComponent.setWorkerType(new WorkType[] { WorkType.BAKER });
     workplaceStore.putComponent(
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType(),

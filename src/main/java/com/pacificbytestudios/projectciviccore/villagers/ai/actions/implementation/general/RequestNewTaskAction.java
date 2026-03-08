@@ -39,7 +39,7 @@ public class RequestNewTaskAction extends ActionBase {
       return false;
     }
 
-    WorkplaceComponent workplace = villager.getWorkplace();
+    WorkplaceComponent workplace = villager.getWorkerData().getWorkplace();
 
     if (workplace == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[RequestNewTaskAction] Could not fetch the workplaceComponent");
@@ -70,18 +70,18 @@ public class RequestNewTaskAction extends ActionBase {
         WorkplaceComponent.getComponentType());
 
     IWorkplaceTaskStrategy strategy = Utils.getWorkplaceTaskStrategy(workplaceComponent.getWorkplaceType());
-
-    UUID uuid = villagerUUID.getUuid();
-    if (request == null) {
-      request = new RequestNewTaskComponent(strategy);
-      request.addWorkerId(uuid);
-      chunkStore.putComponent(
-          workplaceRef,
-          RequestNewTaskComponent.getComponentType(),
-          request);
-    } else {
-      request.addWorkerId(uuid);
-    }
+    //
+    // UUID uuid = villagerUUID.getUuid();
+    // if (request == null) {
+    // request = new RequestNewTaskComponent(strategy);
+    // request.addWorkerId(uuid);
+    // chunkStore.putComponent(
+    // workplaceRef,
+    // RequestNewTaskComponent.getComponentType(),
+    // request);
+    // } else {
+    // request.addWorkerId(uuid);
+    // }
 
     return true;
   }

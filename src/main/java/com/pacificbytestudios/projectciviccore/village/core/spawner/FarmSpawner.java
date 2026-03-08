@@ -21,6 +21,7 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageContainerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
 
@@ -68,6 +69,7 @@ public class FarmSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
+    workplaceComponent.setWorkerType(new WorkType[] { WorkType.FARMER });
     workplaceComponent.setWorkingArea(new ClaimedAreaComponent(WORKING_AREA_OFFSET, position));
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 

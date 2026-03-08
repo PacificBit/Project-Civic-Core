@@ -15,7 +15,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 
 public class VillagerComponent implements Component<EntityStore> {
   public static final short STORAGE_CAPACITY = 18;
@@ -34,16 +33,18 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.bedPosition)
       .add()
 
-      .append(new KeyedCodec<>("Workplace", WorkplaceComponent.CODEC),
-          (obj, value) -> obj.workplace = value,
-          (obj) -> obj.workplace)
+      .append(new KeyedCodec<>("WorkerData",
+          VillagerWorkerComponent.CODEC),
+          (obj, value) -> obj.workerData = value,
+          (obj) -> obj.workerData)
       .add()
 
       .build();
 
   private EntityRef villageHeartLocation;
   private Vector3i bedPosition;
-  private WorkplaceComponent workplace;
+  private VillagerWorkerComponent workerData;
+
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
   public Vector3i getBedPosition() {
@@ -62,12 +63,12 @@ public class VillagerComponent implements Component<EntityStore> {
     return this.villageHeartLocation.getRef();
   }
 
-  public WorkplaceComponent getWorkplace() {
-    return workplace;
+  public VillagerWorkerComponent getWorkerData() {
+    return workerData;
   }
 
-  public void setWorkplace(WorkplaceComponent workplace) {
-    this.workplace = workplace;
+  public void setWorkerData(VillagerWorkerComponent workerData) {
+    this.workerData = workerData;
   }
 
   public Map<UUID, ContainerWindow> getWindows() {
@@ -79,7 +80,7 @@ public class VillagerComponent implements Component<EntityStore> {
     VillagerComponent component = new VillagerComponent();
     component.villageHeartLocation = this.villageHeartLocation == null ? null : this.villageHeartLocation.clone();
     component.bedPosition = this.bedPosition;
-    component.workplace = this.workplace == null ? null : this.workplace.clone();
+    component.workerData = this.workerData == null ? null : this.workerData.clone();
     return component;
   }
 

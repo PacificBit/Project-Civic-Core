@@ -24,6 +24,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.Work
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
 public class VillageHeartComponent implements Component<ChunkStore> {
 
@@ -221,7 +222,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       if (worker.getValue().equals(workplace)) {
         workers.remove();
         this.unemployedRegistry.add(worker.getKey());
-        this.villagerIdToComponent.get(worker.getKey()).setWorkplace(null);
+        this.villagerIdToComponent.get(worker.getKey()).setWorkerData(null);
       }
     }
   }
@@ -231,7 +232,12 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.villagerToWorkplace.put(villager, workplace);
     WorkplaceComponent workplaceComponent = this.workplaceIdToWorkplace.get(workplace);
     workplaceComponent.registerWorker(villager);
-    this.villagerIdToComponent.get(villager).setWorkplace(workplaceComponent);
+
+    VillagerWorkerComponent workerData = new VillagerWorkerComponent();
+    workerData.setWorkplace(workplaceComponent);
+    // TODO: this is not flexible enough for the future
+    workerData.setTypeOfWorker(workplaceComponent.getWorkerType()[0]);
+    this.villagerIdToComponent.get(villager).setWorkerData(workerData);
   }
 
   public void markAsUnemployed(UUID villager) {
@@ -244,7 +250,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.workplaceIdToWorkplace.get(workplace).unregisterWorker(villager);
     this.villagerToWorkplace.remove(villager);
     this.unemployedRegistry.add(villager);
-    this.villagerIdToComponent.get(villager).setWorkplace(null);
+    this.villagerIdToComponent.get(villager).setWorkerData(null);
   }
 
   public List<WorkplaceComponent> getWorkplaceFrom(WorkplaceType workplaceType) {
@@ -284,20 +290,21 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
     for (Map.Entry<UUID, UUID> entry : component.villagerToWorkplace.entrySet()) {
       UUID villagerId = entry.getKey();
-      UUID workplaceId = entry.getValue();
+      // UUID workplaceId = entry.getValue();
 
       VillagerComponent villager = component.villagerIdToComponent.get(villagerId);
-      WorkplaceComponent workplace = component.workplaceIdToWorkplace.get(workplaceId);
+      // WorkplaceComponent workplace =
+      // component.workplaceIdToWorkplace.get(workplaceId);
 
       if (villager != null) {
-        villager.setWorkplace(workplace);
+        villager.setWorkerData(villager.getWorkerData());
       }
     }
 
     for (UUID unemployedVillagerId : component.unemployedRegistry) {
       VillagerComponent villager = component.villagerIdToComponent.get(unemployedVillagerId);
       if (villager != null) {
-        villager.setWorkplace(null);
+        villager.setWorkerData(null);
       }
     }
 

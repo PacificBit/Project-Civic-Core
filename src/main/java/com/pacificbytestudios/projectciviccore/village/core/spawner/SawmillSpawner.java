@@ -14,6 +14,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
 
@@ -56,6 +57,7 @@ public class SawmillSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition);
     }
 
+    workplaceComponent.setWorkerType(new WorkType[] { WorkType.WOODCUTTER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
     workplaceStore.putComponent(
         workplace,
