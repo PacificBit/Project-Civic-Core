@@ -19,64 +19,64 @@
     },
     "SleepTimeRange": {
       "Value": [
-        22.01,
-        5.99
+        21,
+        4.59
       ],
       "Description": "When the villager will sleep"
     },
     "BreakfastTimeRange": {
       "Value": [
-        6.01,
-        6.99
+        5,
+        5.59
       ],
       "Description": "When the villager will do breakfast"
     },
     "LunchTimeRange": {
       "Value": [
-        13.01,
-        13.99
+        12,
+        12.59
       ],
       "Description": "When will the villager eat"
     },
     "FirstWorkSessionTimeRange": {
       "Value": [
-        7.01,
-        12.99
+        6,
+        11.59
       ],
       "Description": "When the villager will do his first work session"
     },
     "SecondWorkSessionTimeRange": {
       "Value": [
-        16.01,
-        18.99
+        14,
+        16.59
       ],
       "Description": "When will the villager do his second work session"
     },
     "PreDinnerSocialTimeRange": {
       "Value": [
-        19.01,
-        20.99
+        17,
+        18.59
       ],
       "Description": "When will the villager socialize before dinner"
     },
     "PostLunchSocialTimeRange": {
       "Value": [
-        14.01,
-        15.99
+        13,
+        13.59
       ],
       "Description": "When will the villager socialize"
     },
     "DinnerTimeRange": {
       "Value": [
-        20.01,
-        20.99
+        19,
+        19.59
       ],
       "Description": "When will the villager have dinner"
     },
     "PreSleepRelaxTimeRange": {
       "Value": [
-        21.01,
-        21.99
+        20,
+        20.59
       ],
       "Description": "Relax time at home before sleep time"
     }
@@ -124,13 +124,421 @@
         {
           "Sensor": {
             "Type": "State",
+            "State": ".Breakfast"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "BreakfastTimeRange"
+                }
+              },
+              "$Comment": "Breakfast Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Glide"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Breakfast (default: 5 -> 6)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".FirstWorkSession"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "FirstWorkSessionTimeRange"
+                }
+              },
+              "$Comment": "Work Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Hurt"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Work (default: 6 -> 12)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Lunch"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "LunchTimeRange"
+                }
+              },
+              "$Comment": "Lunch Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Sleep"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Lunch (default: 12 -> 13)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PostLunchSocial"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "PostLunchSocialTimeRange"
+                }
+              },
+              "$Comment": "Post Lunch Social Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Glide"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Social (default: 13 -> 14)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".SecondWorkSession"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "SecondWorkSessionTimeRange"
+                }
+              },
+              "$Comment": "Second Work Session Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Hurt"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Work (default: 14 -> 17)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PreDinnerSocial"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "PreDinnerSocialTimeRange"
+                }
+              },
+              "$Comment": "Pre Dinner Social Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Glide"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Social (default: 17 -> 19)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Dinner"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "DinnerTimeRange"
+                }
+              },
+              "$Comment": "Dinner Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Glide"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Dinner (default: 19 -> 20)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PreSleepRalaxAtHome"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "PreSleepRelaxTimeRange"
+                }
+              },
+              "$Comment": "Pre Sleep",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Glide"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Pre Sleep Relax at Home (default: 20 -> 21)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
             "State": ".Sleep"
           },
           "Instructions": [
             {
-              "$Comment": "Bed Time (default:  21 -> 5)",
+              "$Comment": "Bed Time",
               "Sensor": {
-                "Type": "Time",
+                "Type": "TimeInRange",
                 "Period": {
                   "Compute": "SleepTimeRange"
                 }
@@ -183,211 +591,7 @@
               ]
             }
           ],
-          "$Comment": "State: Sleep",
-          "Continue": false
-        },
-        {
-          "Sensor": {
-            "Type": "State",
-            "State": ".Breakfast"
-          },
-          "Instructions": [
-            {
-              "Sensor": {
-                "Type": "Time",
-                "Period": {
-                  "Compute": "BreakfastTimeRange"
-                }
-              },
-              "$Comment": "Breakfast Time",
-              "Instructions": [
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Glide"
-                    }
-                  ],
-                  "BodyMotion": {
-                    "Type": "WanderInCircle",
-                    "Radius": 10,
-                    "MaxHeadingChange": 90,
-                    "RelativeSpeed": 0.5
-                  }
-                }
-              ]
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "$Comment": "State Change -> Default",
-              "Actions": [
-                {
-                  "Type": "State",
-                  "State": ".Default"
-                }
-              ]
-            }
-          ],
-          "$Comment": "State: Breakfast",
-          "Continue": false
-        },
-        {
-          "Sensor": {
-            "Type": "State",
-            "State": ".FirstWorkSession"
-          },
-          "Instructions": [
-            {
-              "Sensor": {
-                "Type": "Time",
-                "Period": {
-                  "Compute": "FirstWorkSessionTimeRange"
-                }
-              },
-              "$Comment": "Work Time",
-              "Instructions": [
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Hurt"
-                    }
-                  ],
-                  "BodyMotion": {
-                    "Type": "WanderInCircle",
-                    "Radius": 10,
-                    "MaxHeadingChange": 90,
-                    "RelativeSpeed": 0.5
-                  }
-                }
-              ]
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "$Comment": "State Change -> Default",
-              "Actions": [
-                {
-                  "Type": "State",
-                  "State": ".Default"
-                }
-              ]
-            }
-          ],
-          "$Comment": "State: First Work Session",
-          "Continue": false
-        },
-        {
-          "Sensor": {
-            "Type": "State",
-            "State": ".Lunch"
-          },
-          "Instructions": [
-            {
-              "Sensor": {
-                "Type": "Time",
-                "Period": {
-                  "Compute": "LunchTimeRange"
-                }
-              },
-              "$Comment": "Lunch Time",
-              "Instructions": [
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Sleep"
-                    }
-                  ],
-                  "BodyMotion": {
-                    "Type": "WanderInCircle",
-                    "Radius": 10,
-                    "MaxHeadingChange": 90,
-                    "RelativeSpeed": 0.5
-                  }
-                }
-              ]
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "$Comment": "State Change -> Default",
-              "Actions": [
-                {
-                  "Type": "State",
-                  "State": ".Default"
-                }
-              ]
-            }
-          ],
-          "$Comment": "State: Lunch",
-          "Continue": false
-        },
-        {
-          "Sensor": {
-            "Type": "State",
-            "State": ".PostLunchSocial"
-          },
-          "Instructions": [
-            {
-              "Sensor": {
-                "Type": "Time",
-                "Period": {
-                  "Compute": "PostLunchSocialTimeRange"
-                }
-              },
-              "$Comment": "Post Lunch Social Time",
-              "Instructions": [
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Glide"
-                    }
-                  ],
-                  "BodyMotion": {
-                    "Type": "WanderInCircle",
-                    "Radius": 10,
-                    "MaxHeadingChange": 90,
-                    "RelativeSpeed": 0.5
-                  }
-                }
-              ]
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "$Comment": "State Change -> Default",
-              "Actions": [
-                {
-                  "Type": "State",
-                  "State": ".Default"
-                }
-              ]
-            }
-          ],
-          "$Comment": "State: Post Lunch Social",
+          "$Comment": "State: Sleep (default:  21 -> 5)",
           "Continue": false
         },
         {
@@ -399,7 +603,7 @@
             {
               "$Comment": "Is Time: Sleep",
               "Sensor": {
-                "Type": "Time",
+                "Type": "TimeInRange",
                 "Period": {
                   "Compute": "SleepTimeRange"
                 }
@@ -420,7 +624,7 @@
             },
             {
               "Sensor": {
-                "Type": "Time",
+                "Type": "TimeInRange",
                 "Period": {
                   "Compute": "BreakfastTimeRange"
                 }
@@ -442,7 +646,7 @@
             },
             {
               "Sensor": {
-                "Type": "Time",
+                "Type": "TimeInRange",
                 "Period": {
                   "Compute": "FirstWorkSessionTimeRange"
                 }
@@ -464,7 +668,7 @@
             },
             {
               "Sensor": {
-                "Type": "Time",
+                "Type": "TimeInRange",
                 "Period": {
                   "Compute": "LunchTimeRange"
                 }
@@ -486,7 +690,7 @@
             },
             {
               "Sensor": {
-                "Type": "Time",
+                "Type": "TimeInRange",
                 "Period": {
                   "Compute": "PostLunchSocialTimeRange"
                 }
@@ -501,6 +705,94 @@
                     {
                       "Type": "State",
                       "State": ".PostLunchSocial"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "SecondWorkSessionTimeRange"
+                }
+              },
+              "$Comment": "Is time: Second Work Session",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".SecondWorkSession"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "PreDinnerSocialTimeRange"
+                }
+              },
+              "$Comment": "Is time: Pre Dinner Social",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".PreDinnerSocial"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "DinnerTimeRange"
+                }
+              },
+              "$Comment": "Is time: Dinner",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".Dinner"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "TimeInRange",
+                "Period": {
+                  "Compute": "PreSleepRelaxTimeRange"
+                }
+              },
+              "$Comment": "Is time:  Pre Sleep",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".PreSleepRalaxAtHome"
                     }
                   ]
                 }
