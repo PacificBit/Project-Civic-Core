@@ -342,6 +342,57 @@
         {
           "Sensor": {
             "Type": "State",
+            "State": ".PostLunchSocial"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Time",
+                "Period": {
+                  "Compute": "PostLunchSocialTimeRange"
+                }
+              },
+              "$Comment": "Post Lunch Social Time",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Glide"
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
+                }
+              ]
+            }
+          ],
+          "$Comment": "State: Post Lunch Social",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
             "State": ".Default"
           },
           "Instructions": [
@@ -428,6 +479,28 @@
                     {
                       "Type": "State",
                       "State": ".Lunch"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Time",
+                "Period": {
+                  "Compute": "PostLunchSocialTimeRange"
+                }
+              },
+              "$Comment": "Is time: Post Lunch Social",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".PostLunchSocial"
                     }
                   ]
                 }
