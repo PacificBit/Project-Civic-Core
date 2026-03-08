@@ -96,7 +96,6 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
     }
 
     Map<UUID, ContainerWindow> windows = villager.getWindows();
-
     ContainerWindow window = new ContainerWindow(container);
 
     if (windows.putIfAbsent(playerUuid, window) != null) {

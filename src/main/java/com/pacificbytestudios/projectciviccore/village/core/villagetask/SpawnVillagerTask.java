@@ -1,6 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,10 +17,10 @@ import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.inventory.Inventory;
-import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
-import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.Interactable;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -107,7 +109,7 @@ public class SpawnVillagerTask implements IVillageTask {
 
     assert npcEntity != null;
 
-    ensureVillagerInventoryCapacity(npcEntity);
+    ensureVillagerInventoryCapacity(entityStore, npcRef);
 
     entityStore.putComponent(npcRef, Interactions.getComponentType(), buildInteractions());
     entityStore.ensureComponent(npcRef, Interactable.getComponentType());
@@ -158,42 +160,50 @@ public class SpawnVillagerTask implements IVillageTask {
     return new Interactions(interactions);
   }
 
-  private static void ensureVillagerInventoryCapacity(NPCEntity targetNpc) {
-    // WARN: This won't work in update 4
-    Inventory inventory = targetNpc.getInventory();
-    if (inventory.getStorage().getCapacity() >= VillagerComponent.STORAGE_CAPACITY
-        && inventory.getHotbar().getCapacity() >= VillagerComponent.HOTBAR_CAPACITY) {
+  private static void ensureVillagerInventoryCapacity(
+      Store<EntityStore> entityStore,
+      Ref<EntityStore> npcRef) {
+    InventoryComponent.Storage storage = entityStore.getComponent(npcRef,
+        InventoryComponent.Storage.getComponentType());
+    InventoryComponent.Hotbar hotbar = entityStore.getComponent(npcRef, InventoryComponent.Hotbar.getComponentType());
+    InventoryComponent.Utility utility = entityStore.getComponent(npcRef,
+        InventoryComponent.Utility.getComponentType());
+    TransformComponent transform = entityStore.getComponent(npcRef, TransformComponent.getComponentType());
+
+    if (storage == null || hotbar == null || utility == null || transform == null) {
+      ProjectCivicCore.LOGGER.atSevere().log(
+          "[SpawnVillagerTask] Missing inventory components for spawned villager. npcRef=" + npcRef);
       return;
     }
 
-    short oldStorageCapacity = inventory.getStorage().getCapacity();
-    short oldHotbarCapacity = inventory.getHotbar().getCapacity();
+    List<ItemStack> remainder = new ArrayList<>();
+    boolean changed = false;
 
-    short newStorageCapacity = (short) Math.max(oldStorageCapacity, VillagerComponent.STORAGE_CAPACITY);
-    short newHotbarCapacity = (short) Math.min(oldHotbarCapacity, VillagerComponent.HOTBAR_CAPACITY);
+    if (storage.getInventory().getCapacity() != VillagerComponent.STORAGE_CAPACITY) {
+      storage.ensureCapacity(VillagerComponent.STORAGE_CAPACITY, remainder);
+      changed = true;
+    }
 
-    // WARN: This won't work in update 4
-    Inventory expandedInventory = new Inventory(
-        ItemContainer.ensureContainerCapacity(
-            inventory.getStorage(),
-            newStorageCapacity,
-            SimpleItemContainer::new,
-            null),
-        inventory.getArmor(),
-        ItemContainer.ensureContainerCapacity(
-            inventory.getHotbar(),
-            newHotbarCapacity,
-            SimpleItemContainer::new,
-            null),
-        inventory.getUtility(),
-        inventory.getTools(),
-        inventory.getBackpack());
+    if (hotbar.getInventory().getCapacity() != VillagerComponent.HOTBAR_CAPACITY) {
+      hotbar.ensureCapacity(VillagerComponent.HOTBAR_CAPACITY, remainder);
+      changed = true;
+    }
 
-    targetNpc.setInventory(expandedInventory);
-    expandedInventory.markChanged();
+    if (utility.getInventory().getCapacity() != VillagerComponent.OFFHAND_CAPACITY) {
+      utility.ensureCapacity(VillagerComponent.OFFHAND_CAPACITY, remainder);
+      changed = true;
+    }
 
-    ProjectCivicCore.LOGGER.atInfo().log(
-        "[SpawnVillagerTask] Initialized/expanded villager inventory. storage: %s -> %s, hotbar: %s -> %s",
-        oldStorageCapacity, newStorageCapacity, oldHotbarCapacity, newHotbarCapacity);
+    if (!remainder.isEmpty()) {
+      ProjectCivicCore.LOGGER.atWarning().log(
+          "[SpawnVillagerTask] Villager inventory resize produced remainder items. npcRef=" +
+              npcRef +
+              ", remainder=" +
+              remainder);
+    }
+
+    if (changed) {
+      transform.markChunkDirty(entityStore);
+    }
   }
 }

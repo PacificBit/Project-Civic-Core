@@ -69,15 +69,13 @@
     },
     "VariantRotation": "NESW",
     "Interactions": {
-      "Primary": "Break_Container",
       "Use": "Open_Container"
     },
     "BlockEntity": {
       "Components": {
-        "WorkplaceStorageContainerComponent": {
-          "Storage": {
-            "Capacity": 18
-          }
+        "WorkplaceStorageContainerComponent": {},
+        "ItemContainerBlock": {
+          "Capacity": 18
         }
       }
     }

@@ -39,6 +39,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.interactions.VillagerOpenInventoryInteraction;
 import com.pacificbytestudios.projectciviccore.villagers.systems.EnsureVillagerComponents;
+import com.pacificbytestudios.projectciviccore.villagers.systems.VillagerInventoryPersistenceSystem;
 
 public final class ProjectCivicCore extends JavaPlugin {
   public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -149,6 +150,7 @@ public final class ProjectCivicCore extends JavaPlugin {
         VillagerComponent.CODEC);
 
     entityRegistry.registerSystem(new EnsureVillagerComponents());
+    entityRegistry.registerSystem(new VillagerInventoryPersistenceSystem());
 
     npcPlugin.registerCoreComponentType(
         "WatchVillageState",
