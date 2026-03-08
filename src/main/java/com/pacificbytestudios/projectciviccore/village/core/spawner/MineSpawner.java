@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
-import io.sentry.util.Pair;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -11,10 +9,13 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+
+import io.sentry.util.Pair;
 
 public class MineSpawner {
   private static final String PREFAB_JSON = "Structures/WorkPlace/Workspace_Mine.prefab.json";
@@ -55,6 +56,7 @@ public class MineSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition);
     }
 
+    workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
     workplaceStore.putComponent(
         workplace,
         TrackedPrefabPlacementComponent.getComponentType(),

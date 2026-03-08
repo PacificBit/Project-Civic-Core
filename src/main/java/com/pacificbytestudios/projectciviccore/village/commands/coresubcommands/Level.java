@@ -15,7 +15,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
@@ -50,7 +50,7 @@ public class Level extends CommandBase {
       }
 
       Vector3i playerPos = transform.getPosition().toVector3i();
-      VillageHeartRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
+      EntityRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
 
       if (heartRef == null) {
         context.sendMessage(Message.raw("No village found in range."));

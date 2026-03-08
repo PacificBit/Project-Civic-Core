@@ -8,7 +8,6 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 
 public class RegisterWorkplaceTask implements IVillageTask {
@@ -23,13 +22,6 @@ public class RegisterWorkplaceTask implements IVillageTask {
       .build();
 
   private WorkplaceComponent workplace;
-
-  static {
-    VillageTaskQueueComponent.registerTaskCodec(
-        "RegisterWorkplaceTask",
-        RegisterWorkplaceTask.class,
-        RegisterWorkplaceTask.CODEC);
-  }
 
   public RegisterWorkplaceTask() {
   }

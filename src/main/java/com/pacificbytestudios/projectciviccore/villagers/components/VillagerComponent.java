@@ -14,7 +14,7 @@ import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWi
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 
 public class VillagerComponent implements Component<EntityStore> {
@@ -24,7 +24,7 @@ public class VillagerComponent implements Component<EntityStore> {
   public static final BuilderCodec<VillagerComponent> CODEC = BuilderCodec
       .builder(VillagerComponent.class, VillagerComponent::new)
 
-      .append(new KeyedCodec<>("VillageHeartLocation", VillageHeartRef.CODEC),
+      .append(new KeyedCodec<>("VillageHeartLocation", EntityRef.CODEC),
           (obj, value) -> obj.setVillageHeartLocation(value),
           (obj) -> obj.villageHeartLocation)
       .add()
@@ -41,7 +41,7 @@ public class VillagerComponent implements Component<EntityStore> {
 
       .build();
 
-  private VillageHeartRef villageHeartLocation;
+  private EntityRef villageHeartLocation;
   private Vector3i bedPosition;
   private WorkplaceComponent workplace;
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
@@ -54,7 +54,7 @@ public class VillagerComponent implements Component<EntityStore> {
     this.bedPosition = bedPosition;
   }
 
-  public void setVillageHeartLocation(VillageHeartRef location) {
+  public void setVillageHeartLocation(EntityRef location) {
     this.villageHeartLocation = location;
   }
 

@@ -10,7 +10,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.utils.SpawnFunction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 public class SpawnWorkplaceTask implements IVillageTask {
@@ -33,13 +32,6 @@ public class SpawnWorkplaceTask implements IVillageTask {
 
   WorkplaceType workplaceType;
   Vector3i position;
-
-  static {
-    VillageTaskQueueComponent.registerTaskCodec(
-        "SpawnWorkplaceTask",
-        SpawnWorkplaceTask.class,
-        SpawnWorkplaceTask.CODEC);
-  }
 
   public SpawnWorkplaceTask() {
   }

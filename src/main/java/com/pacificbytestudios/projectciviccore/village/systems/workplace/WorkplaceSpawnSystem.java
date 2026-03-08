@@ -15,7 +15,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
@@ -47,7 +47,7 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     World world = chunk.getWorld();
     Vector3i blockPos = blockContext.position();
 
-    VillageHeartRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] No village found");
       return;
@@ -56,7 +56,7 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
 
     WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
     workplaceComponent.setBenchPos(blockPos);
-    workplaceComponent.setVillageHeartLocation(villageHeartRef);
+    workplaceComponent.setVillageRef(villageHeartRef);
     workplaceComponent.setUuid(UUID.randomUUID());
 
     VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
@@ -65,7 +65,7 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     taskComponent.registerTask(new TryJobAssignmentTask(workplaceComponent.getUuid()));
 
     world.execute(() -> {
-      store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(), taskComponent);
+      Utils.safeVillageTaskEnqueue(heartRef, taskComponent);
     });
   }
 
@@ -87,7 +87,7 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     World world = chunk.getWorld();
     Vector3i blockPos = blockContext.position();
 
-    VillageHeartRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] No village found");
       return;

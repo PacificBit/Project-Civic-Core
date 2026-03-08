@@ -2,6 +2,7 @@ package com.pacificbytestudios.projectciviccore.utils;
 
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -12,10 +13,16 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.BakerySpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.workplacetask.BakeryWorkplaceTaskStrategy;
+import com.pacificbytestudios.projectciviccore.village.core.workplacetask.FarmWorkplaceTaskStrategy;
+import com.pacificbytestudios.projectciviccore.village.core.workplacetask.IWorkplaceTaskStrategy;
+import com.pacificbytestudios.projectciviccore.village.core.workplacetask.MineWorkplaceTaskStrategy;
+import com.pacificbytestudios.projectciviccore.village.core.workplacetask.SawmillWorkplaceTaskStrategy;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 import io.sentry.util.Pair;
@@ -90,6 +97,16 @@ public class Utils {
     };
   }
 
+  public static IWorkplaceTaskStrategy getWorkplaceTaskStrategy(WorkplaceType type) {
+    return switch (type) {
+      case MINE -> new MineWorkplaceTaskStrategy();
+      case FARM -> new FarmWorkplaceTaskStrategy();
+      case BAKERY -> new BakeryWorkplaceTaskStrategy();
+      case SAWMILL -> new SawmillWorkplaceTaskStrategy();
+      default -> throw new IllegalArgumentException("Unsupported workplace type: " + type);
+    };
+  }
+
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType) {
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
       chunk.setBlock(position.x, position.y, position.z, blockType);
@@ -119,5 +136,21 @@ public class Utils {
 
     WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
     return new Pair<>(correctChunk, correctChunk.getBlockComponentEntity(position.x, position.y, position.z));
+  }
+
+  public static void safeVillageTaskEnqueue(Ref<ChunkStore> villageRef, VillageTaskQueueComponent task) {
+    Store<ChunkStore> chunkStore = villageRef.getStore();
+    VillageTaskQueueComponent taskQueue = chunkStore.getComponent(villageRef,
+        VillageTaskQueueComponent.getComponentType());
+
+    if (taskQueue == null) {
+      chunkStore.putComponent(
+          villageRef,
+          VillageTaskQueueComponent.getComponentType(),
+          task);
+      return;
+    }
+
+    taskQueue.merge(task);
   }
 }

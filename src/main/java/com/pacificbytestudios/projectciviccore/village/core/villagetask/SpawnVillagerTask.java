@@ -28,10 +28,9 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 import it.unimi.dsi.fastutil.Pair;
@@ -76,13 +75,6 @@ public class SpawnVillagerTask implements IVillageTask {
     this.bed = bed;
   }
 
-  static {
-    VillageTaskQueueComponent.registerTaskCodec(
-        "SpawnVillagerTask",
-        SpawnVillagerTask.class,
-        SpawnVillagerTask.CODEC);
-  }
-
   @Override
   public void execute(
       WorldChunk chunk,
@@ -103,7 +95,7 @@ public class SpawnVillagerTask implements IVillageTask {
     heart.registerVillager(uuid, villagerComponent);
     heart.registerAsUnemployed(uuid);
 
-    villagerComponent.setVillageHeartLocation(new VillageHeartRef(world.getName(), heartPos));
+    villagerComponent.setVillageHeartLocation(new EntityRef(world.getName(), heartPos));
 
     if (this.bed != null) {
       this.bed.setOwner(uuid);

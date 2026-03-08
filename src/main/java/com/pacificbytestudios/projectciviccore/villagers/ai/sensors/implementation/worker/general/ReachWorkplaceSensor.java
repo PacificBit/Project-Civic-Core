@@ -15,6 +15,8 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 
 public class ReachWorkplaceSensor extends SensorBase {
 
+  private static final double MINIMUM_DISTANCE = 4.5;
+
   public ReachWorkplaceSensor(BuilderSensorBase builderSensorBase) {
     super(builderSensorBase);
   }
@@ -38,7 +40,8 @@ public class ReachWorkplaceSensor extends SensorBase {
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
     Vector3d workplacePos = workplace.getBenchPos().toVector3d();
     double distanceFromWorkplace = transform.getPosition().distanceSquaredTo(workplacePos);
-    if (distanceFromWorkplace == 2) {
+
+    if (distanceFromWorkplace < MINIMUM_DISTANCE) {
       this.positionProvider.clear();
       return false;
     }

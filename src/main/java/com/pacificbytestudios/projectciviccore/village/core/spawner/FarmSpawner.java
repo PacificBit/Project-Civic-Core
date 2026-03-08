@@ -2,7 +2,6 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
-import io.sentry.util.Pair;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -15,12 +14,15 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageContainerComponent;
+
+import io.sentry.util.Pair;
 
 public class FarmSpawner {
   private static final String PREFAB_JSON = "Structures/WorkPlace/Workspace_Farm.prefab.json";
@@ -67,6 +69,7 @@ public class FarmSpawner {
     }
 
     workplaceComponent.setWorkingArea(new ClaimedAreaComponent(WORKING_AREA_OFFSET, position));
+    workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
     workplaceStore.putComponent(
         workplace,

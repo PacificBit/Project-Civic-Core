@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 
 public class TryJobAssignmentTask implements IVillageTask {
   public static final BuilderCodec<TryJobAssignmentTask> CODEC = BuilderCodec
@@ -24,13 +23,6 @@ public class TryJobAssignmentTask implements IVillageTask {
       .add()
 
       .build();
-
-  static {
-    VillageTaskQueueComponent.registerTaskCodec(
-        "TryJobAssignmentTask",
-        TryJobAssignmentTask.class,
-        TryJobAssignmentTask.CODEC);
-  }
 
   public TryJobAssignmentTask() {
   }

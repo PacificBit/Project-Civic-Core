@@ -72,7 +72,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         taskComponent.registerTask(new SpawnVillagerTask(npcRole, radius, beds[npcCount]));
       }
 
-      store.putComponent(ref, VillageTaskQueueComponent.getComponentType(), taskComponent);
+      Utils.safeVillageTaskEnqueue(ref, taskComponent);
 
       try {
         // INFO: villageHeartRef is invalid here

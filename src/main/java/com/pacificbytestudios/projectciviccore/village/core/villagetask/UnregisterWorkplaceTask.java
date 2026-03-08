@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 
 public class UnregisterWorkplaceTask implements IVillageTask {
   public static final BuilderCodec<UnregisterWorkplaceTask> CODEC = BuilderCodec
@@ -25,13 +24,6 @@ public class UnregisterWorkplaceTask implements IVillageTask {
       .build();
 
   private UUID workplace;
-
-  static {
-    VillageTaskQueueComponent.registerTaskCodec(
-        "UnregisterWorkplaceTask",
-        UnregisterWorkplaceTask.class,
-        UnregisterWorkplaceTask.CODEC);
-  }
 
   public UnregisterWorkplaceTask() {
   }

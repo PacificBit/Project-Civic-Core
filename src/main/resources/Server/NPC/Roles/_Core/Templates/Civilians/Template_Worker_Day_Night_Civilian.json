@@ -124,8 +124,8 @@
                       "BodyMotion": {
                         "Type": "Seek",
                         "SlowDownDistance": 2,
-                        "StopDistance": 1,
-                        "RelativeSpeed": 1
+                        "RelativeSpeed": 1,
+                        "StopDistance": 2
                       }
                     },
                     {
@@ -134,10 +134,7 @@
                       },
                       "Actions": [
                         {
-                          "Type": "PlayAnimation",
-                          "Slot": "Action",
-                          "Animation": "Idle",
-                          "Once": true
+                          "Type": "RequestNewTask"
                         }
                       ]
                     }

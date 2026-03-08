@@ -8,13 +8,13 @@ import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
-import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 
 public final class VillageHeartRegistry {
   private static VillageHeartRegistry INSTANCE;
 
   private final Map<UUID, ClaimedAreaComponent> villageIdToArea = new HashMap<>();
-  private final Map<ClaimedAreaComponent, VillageHeartRef> claimAreaToHeartRef = new HashMap<>();
+  private final Map<ClaimedAreaComponent, EntityRef> claimAreaToHeartRef = new HashMap<>();
 
   public record ChunkLocation(int x, int z) {
   }
@@ -32,7 +32,7 @@ public final class VillageHeartRegistry {
       Vector3i position,
       ClaimedAreaComponent claimedArea) {
     villageIdToArea.put(uuid, claimedArea);
-    claimAreaToHeartRef.put(claimedArea, new VillageHeartRef(worldName, position));
+    claimAreaToHeartRef.put(claimedArea, new EntityRef(worldName, position));
 
     ProjectCivicCore.LOGGER.atInfo()
         .log("[registerVillage] Successfully registered village with id: " + uuid.toString());
@@ -59,7 +59,7 @@ public final class VillageHeartRegistry {
   }
 
   public void updateClaimedArea(ClaimedAreaComponent oldArea, ClaimedAreaComponent newArea) {
-    VillageHeartRef heart = claimAreaToHeartRef.remove(oldArea);
+    EntityRef heart = claimAreaToHeartRef.remove(oldArea);
     if (heart == null) {
       return;
     }
@@ -74,8 +74,8 @@ public final class VillageHeartRegistry {
     }
   }
 
-  public VillageHeartRef getVillageHeartIn(Vector2i coord2d) {
-    for (Map.Entry<ClaimedAreaComponent, VillageHeartRef> entry : claimAreaToHeartRef.entrySet()) {
+  public EntityRef getVillageHeartIn(Vector2i coord2d) {
+    for (Map.Entry<ClaimedAreaComponent, EntityRef> entry : claimAreaToHeartRef.entrySet()) {
       if (entry.getKey().isInside(coord2d)) {
         return entry.getValue();
       }

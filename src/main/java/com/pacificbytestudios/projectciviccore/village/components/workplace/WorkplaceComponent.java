@@ -17,11 +17,10 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
-import com.pacificbytestudios.projectciviccore.codecs.VillageHeartRef;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 public class WorkplaceComponent implements Component<ChunkStore> {
-
   public static final BuilderCodec<WorkplaceComponent> CODEC = BuilderCodec
       .builder(WorkplaceComponent.class, WorkplaceComponent::new)
 
@@ -47,9 +46,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.prefabAnchor)
       .add()
 
-      .append(new KeyedCodec<>("VillageHeartLocation", VillageHeartRef.CODEC),
-          (obj, value) -> obj.setVillageHeartLocation(value),
-          (obj) -> obj.villageHeartLocation)
+      .append(new KeyedCodec<>("VillageRef", EntityRef.CODEC),
+          (obj, value) -> obj.villageRef = value,
+          (obj) -> obj.villageRef)
+      .add()
+
+      .append(new KeyedCodec<>("WorkplaceRef", EntityRef.CODEC),
+          (obj, value) -> obj.workplaceRef = value,
+          (obj) -> obj.workplaceRef)
       .add()
 
       .append(new KeyedCodec<Set<UUID>>(
@@ -77,7 +81,9 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private Vector3i benchPos;
   private Vector3i prefabAnchor;
 
-  private VillageHeartRef villageHeartLocation;
+  private EntityRef villageRef;
+  private EntityRef workplaceRef;
+
   private Set<UUID> workers = new HashSet<>();
   private WorkplaceStorageComponent storage;
   private ClaimedAreaComponent workingArea;
@@ -114,12 +120,20 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.prefabAnchor = prefabAnchor;
   }
 
-  public void setVillageHeartLocation(VillageHeartRef villageHeartLocation) {
-    this.villageHeartLocation = villageHeartLocation;
+  public void setVillageRef(EntityRef villageRef) {
+    this.villageRef = villageRef;
   }
 
   public Ref<ChunkStore> getVillageHeartRef() {
-    return this.villageHeartLocation.getRef();
+    return this.villageRef.getRef();
+  }
+
+  public EntityRef getWorkplaceRef() {
+    return workplaceRef;
+  }
+
+  public void setWorkplaceRef(EntityRef workplaceRef) {
+    this.workplaceRef = workplaceRef;
   }
 
   public Set<UUID> getWorkers() {
@@ -156,7 +170,8 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.uuid = this.uuid;
     component.workingPlaceType = this.workingPlaceType;
     component.benchPos = this.benchPos;
-    component.villageHeartLocation = this.villageHeartLocation;
+    component.villageRef = this.villageRef;
+    component.workplaceRef = this.workplaceRef;
     component.workers = new HashSet<>(this.workers);
     component.storage = this.storage != null ? this.storage.clone() : null;
     component.prefabAnchor = this.prefabAnchor;
@@ -171,7 +186,8 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         "\n workingPlaceType=" + workingPlaceType + "," +
         "\n benchPos=" + benchPos + "," +
         "\n prefabAnchor=" + prefabAnchor + "," +
-        "\n villageHeartLocation=" + villageHeartLocation + "," +
+        "\n villageHeartLocation=" + villageRef + "," +
+        "\n workspaceLocation=" + workplaceRef + "," +
         "\n workers=" + workers + "," +
         "\n storage=" + storage + "," +
         '}';

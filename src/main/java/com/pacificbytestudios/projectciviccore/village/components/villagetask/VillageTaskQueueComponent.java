@@ -51,6 +51,12 @@ public class VillageTaskQueueComponent implements Component<ChunkStore> {
     return this.tasks.size() > 0;
   }
 
+  public void merge(VillageTaskQueueComponent tasks) {
+    while (tasks.hasAny()) {
+      this.registerTask(tasks.pollTask());
+    }
+  }
+
   @Override
   public VillageTaskQueueComponent clone() {
     VillageTaskQueueComponent component = new VillageTaskQueueComponent();
