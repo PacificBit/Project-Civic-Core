@@ -28,8 +28,8 @@ import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegi
 public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
   private static final String VILLAGER_BED_ID = "Furniture_Crude_Villager_Bed";
   private static final String[] SPAWNABLE_NPC = new String[] {
-      "Role_Female_Civilian",
-      "Role_Male_Civilian"
+      "Female_Civilian",
+      "Male_Civilian"
   };
 
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
