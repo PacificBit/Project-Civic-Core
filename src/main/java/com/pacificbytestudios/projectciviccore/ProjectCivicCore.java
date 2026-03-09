@@ -27,6 +27,7 @@ import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHear
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
@@ -168,6 +169,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "ChangeIntoWorkRole",
         BuilderChangeIntoWorkRoleAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ScanWorkArea",
+        BuilderScanWorkAreaAction::new);
 
     this.getCodecRegistry(Interaction.CODEC).register(
         "VillagerOpenInventoryInteraction",

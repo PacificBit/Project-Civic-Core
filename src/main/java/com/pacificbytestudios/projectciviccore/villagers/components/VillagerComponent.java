@@ -14,6 +14,7 @@ import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWi
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 
 public class VillagerComponent implements Component<EntityStore> {
@@ -74,6 +75,10 @@ public class VillagerComponent implements Component<EntityStore> {
 
   public Map<UUID, ContainerWindow> getWindows() {
     return this.windows;
+  }
+
+  public ClaimedAreaComponent getWorkerArea(UUID uuid) {
+    return this.getWorkerData().getWorkplace().getWorkerDesignatedArea(uuid);
   }
 
   @Override

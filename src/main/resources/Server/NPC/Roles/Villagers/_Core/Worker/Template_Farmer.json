@@ -191,7 +191,7 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".WoorkLoop"
+                  "State": ".WorkLoop"
                 }
               ],
               "$Comment": "Workplace Reached -> .StartWork"
@@ -202,7 +202,7 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".WoorkLoop"
+            "State": ".WorkLoop"
           },
           "Instructions": [
             {
@@ -239,7 +239,13 @@
                   "Animation": "Sleep",
                   "Once": true
                 }
-              ]
+              ],
+              "BodyMotion": {
+                "Type": "WanderInCircle",
+                "Radius": 2,
+                "MaxHeadingChange": 90,
+                "RelativeSpeed": 0.3
+              }
             }
           ]
         },
@@ -249,20 +255,32 @@
             "State": ".NoWorkingAreaSnapshot"
           },
           "$Comment": "Needs to process the working enviroment",
-          "Actions": [
+          "Instructions": [
             {
-              "Type": "PlayAnimation",
-              "Slot": "Action",
-              "Animation": "Glide",
-              "Once": true
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Actions": [
+                {
+                  "Type": "ScanWorkArea"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
             }
-          ],
-          "BodyMotion": {
-            "Type": "WanderInCircle",
-            "Radius": 4,
-            "RelativeSpeed": 1.8,
-            "MaxHeadingChange": 90
-          }
+          ]
         }
       ],
       "Continue": true,

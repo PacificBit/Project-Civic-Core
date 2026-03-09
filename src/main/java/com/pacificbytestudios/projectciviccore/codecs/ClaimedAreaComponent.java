@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
+import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
@@ -24,10 +25,16 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
           (obj) -> obj.botRight)
       .add()
 
+      .append(new KeyedCodec<>("Y", Codec.INTEGER),
+          (obj, value) -> obj.y = value,
+          (obj) -> obj.y)
+      .add()
+
       .build();
 
   private Vector2i topLeft;
   private Vector2i botRight;
+  private int y;
 
   public ClaimedAreaComponent() {
   }
@@ -45,6 +52,8 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
     int botX = center.getX() + offset.botRight.x;
     int botZ = center.getZ() + offset.botRight.y;
     this.botRight = new Vector2i(botX, botZ);
+
+    this.y = center.y;
   }
 
   @Override
@@ -52,6 +61,7 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
     ClaimedAreaComponent claimArea = new ClaimedAreaComponent();
     claimArea.topLeft = this.topLeft;
     claimArea.botRight = this.botRight;
+    claimArea.y = this.y;
     return claimArea;
   }
 
@@ -69,6 +79,10 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
 
   public void setBotRight(Vector2i botRight) {
     this.botRight = botRight;
+  }
+
+  public int getY() {
+    return this.y;
   }
 
   public ComponentType<ChunkStore, ClaimedAreaComponent> getComponentType() {

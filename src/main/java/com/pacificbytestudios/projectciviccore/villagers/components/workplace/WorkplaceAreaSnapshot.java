@@ -1,6 +1,8 @@
 package com.pacificbytestudios.projectciviccore.villagers.components.workplace;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,74 +11,131 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
 
 public class WorkplaceAreaSnapshot {
+  public static final Duration EXPIRATION_AMOUNT = Duration.ofHours(1);
+
   public static final BuilderCodec<WorkplaceAreaSnapshot> CODEC = BuilderCodec
       .builder(WorkplaceAreaSnapshot.class, WorkplaceAreaSnapshot::new)
 
       .append(
           new KeyedCodec<>(
               "BlockTypePosition",
-              new MapCodec<Vector3i, HashMap<String, Vector3i>>(
-                  Vector3i.CODEC,
+              new MapCodec<ArrayDeque<Vector3i>, HashMap<String, ArrayDeque<Vector3i>>>(
+                  new ArrayDequeCodec<>(
+                      Vector3i.CODEC,
+                      "Vector3iDeque"),
                   HashMap::new)),
           (obj, value) -> {
             obj.blockTypePosition = new HashMap<>();
-            value.forEach((k, v) -> obj.blockTypePosition.put(k, v));
+            value.forEach((k, v) -> obj.blockTypePosition.put(
+                k,
+                v == null ? new ArrayDeque<>() : new ArrayDeque<>(v)));
           },
           obj -> {
-            HashMap<String, Vector3i> encoded = new HashMap<>();
-            obj.blockTypePosition.forEach((k, v) -> encoded.put(k, v));
+            HashMap<String, ArrayDeque<Vector3i>> encoded = new HashMap<>();
+            obj.blockTypePosition.forEach((k, v) -> encoded.put(
+                k,
+                v == null ? new ArrayDeque<>() : new ArrayDeque<>(v)));
             return encoded;
           })
       .add()
 
-      .append(new KeyedCodec<>("CapturedAt", Codec.INSTANT),
+      .append(
+          new KeyedCodec<>("CapturedAt", Codec.INSTANT),
           (obj, value) -> obj.capturedAt = value,
           obj -> obj.capturedAt)
       .add()
 
-      .append(new KeyedCodec<>("Completed", Codec.BOOLEAN),
+      .append(
+          new KeyedCodec<>("Completed", Codec.BOOLEAN),
           (obj, value) -> obj.completed = value,
           obj -> obj.completed)
       .add()
 
+      .append(
+          new KeyedCodec<>("LastVisited", Vector3i.CODEC),
+          (obj, value) -> obj.lastVisited = value,
+          obj -> obj.lastVisited)
+      .add()
+
       .build();
 
-  private Map<String, Vector3i> blockTypePosition = new HashMap<>();
+  private Map<String, ArrayDeque<Vector3i>> blockTypePosition = new HashMap<>();
   private Instant capturedAt;
-  private boolean completed;
+  private boolean completed = false;
+  private Vector3i lastVisited;
 
-  public WorkplaceAreaSnapshot clone() {
-    WorkplaceAreaSnapshot snapshot = new WorkplaceAreaSnapshot();
-    snapshot.blockTypePosition = new HashMap<>(this.blockTypePosition);
-    snapshot.capturedAt = this.capturedAt;
-    snapshot.completed = this.completed;
-    return snapshot;
+  public Map<String, ArrayDeque<Vector3i>> getBlockTypePosition() {
+    return this.blockTypePosition;
   }
 
-  public Map<String, Vector3i> getBlockTypePosition() {
-    return blockTypePosition;
-  }
-
-  public void setBlockTypePosition(Map<String, Vector3i> blockTypePosition) {
+  public void setBlockTypePosition(Map<String, ArrayDeque<Vector3i>> blockTypePosition) {
     this.blockTypePosition = blockTypePosition;
   }
 
   public Instant getCapturedAt() {
-    return capturedAt;
+    return this.capturedAt;
   }
 
-  public void setCapturedAt(Instant capturedAt) {
-    this.capturedAt = capturedAt;
+  public void captureNow(WorldTimeResource worldTimeResource) {
+    this.capturedAt = worldTimeResource.getGameTime();
+  }
+
+  public boolean isExpired(WorldTimeResource worldTimeResource) {
+    if (this.capturedAt == null) {
+      return true;
+    }
+
+    if (worldTimeResource == null || worldTimeResource.getGameTime() == null) {
+      return true;
+    }
+
+    Instant currentGameTime = worldTimeResource.getGameTime();
+    return this.capturedAt.plus(EXPIRATION_AMOUNT).isBefore(currentGameTime);
   }
 
   public boolean isCompleted() {
-    return completed;
+    return this.completed;
   }
 
   public void setCompleted(boolean completed) {
     this.completed = completed;
   }
 
+  public Vector3i getLastVisited() {
+    return this.lastVisited;
+  }
+
+  public void setLastVisited(Vector3i lastVisited) {
+    this.lastVisited = lastVisited;
+  }
+
+  @Override
+  public WorkplaceAreaSnapshot clone() {
+    WorkplaceAreaSnapshot snapshot = new WorkplaceAreaSnapshot();
+
+    Map<String, ArrayDeque<Vector3i>> clonedMap = new HashMap<>();
+    this.blockTypePosition.forEach((key, value) -> clonedMap.put(
+        key,
+        value == null ? new ArrayDeque<>() : new ArrayDeque<>(value)));
+
+    snapshot.blockTypePosition = clonedMap;
+    snapshot.capturedAt = this.capturedAt;
+    snapshot.completed = this.completed;
+    snapshot.lastVisited = this.lastVisited;
+    return snapshot;
+  }
+
+  @Override
+  public String toString() {
+    return "WorkplaceAreaSnapshot{"
+        + "blockTypePosition=" + this.blockTypePosition
+        + ", capturedAt=" + this.capturedAt
+        + ", completed=" + this.completed
+        + ", lastVisited=" + this.lastVisited
+        + '}';
+  }
 }
