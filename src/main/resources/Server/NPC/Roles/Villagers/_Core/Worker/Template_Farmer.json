@@ -312,55 +312,37 @@
                       "$Comment": "Reach Tillable Block",
                       "BodyMotion": {
                         "Type": "Seek",
-                        "StopDistance": 2,
-                        "SlowDownDistance": 2,
+                        "StopDistance": 1,
+                        "SlowDownDistance": 1,
                         "RelativeSpeed": 0.7
                       }
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "Attack",
+                          "Attack": "Trork_Warrior_Battleaxe_Swing_Down",
+                          "Once": true
+                        },
+                        {
+                          "Type": "Timeout",
+                          "Delay": [
+                            0.2,
+                            0.2
+                          ],
+                          "Action": {
+                            "Type": "TillSoilAction"
+                          }
+                        }
+                      ]
                     }
                   ],
                   "$Comment": "If has Hoe in Inventory"
-                },
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Walk",
-                      "Once": true
-                    }
-                  ],
-                  "BodyMotion": {
-                    "Type": "WanderInCircle",
-                    "Radius": 1,
-                    "MaxHeadingChange": 90,
-                    "RelativeSpeed": 0.3
-                  },
-                  "$Comment": "FALLBACK"
                 }
               ]
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "Actions": [
-                {
-                  "Type": "PlayAnimation",
-                  "Slot": "Action",
-                  "Animation": "Glide",
-                  "Once": true
-                }
-              ],
-              "BodyMotion": {
-                "Type": "WanderInCircle",
-                "Radius": 1,
-                "RelativeSpeed": 0.2,
-                "MaxHeadingChange": 90
-              },
-              "$Comment": "Nothing to do"
             }
           ]
         },

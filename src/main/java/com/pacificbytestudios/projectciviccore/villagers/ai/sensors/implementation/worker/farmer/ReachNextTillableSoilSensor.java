@@ -15,7 +15,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 
 public class ReachNextTillableSoilSensor extends SensorBase {
 
-  private static final double MINIMUM_DISTANCE = 4.5;
+  private static final double MINIMUM_DISTANCE = 2.5;
   private static final String TILLABLE_SOIL = "Soil_Grass";
 
   public ReachNextTillableSoilSensor(BuilderSensorBase builderSensorBase) {

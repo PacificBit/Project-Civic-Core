@@ -29,6 +29,7 @@ import com.pacificbytestudios.projectciviccore.village.systems.workplace.Workpla
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventory;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderTillSoilAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
@@ -196,6 +197,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "EquipItemFromInventory",
         BuilderEquipItemFromInventory::new);
+
+    npcPlugin.registerCoreComponentType(
+        "TillSoilAction",
+        BuilderTillSoilAction::new);
 
     this.getCodecRegistry(Interaction.CODEC).register(
         "VillagerOpenInventoryInteraction",
