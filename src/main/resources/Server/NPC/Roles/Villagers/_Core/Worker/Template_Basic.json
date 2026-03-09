@@ -191,7 +191,7 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".WoorkLoop"
+                  "State": ".WorkLoop"
                 }
               ],
               "$Comment": "Workplace Reached -> .StartWork"
@@ -202,14 +202,85 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".WoorkLoop"
+            "State": ".WorkLoop"
           },
-          "BodyMotion": {
-            "Type": "WanderInCircle",
-            "Radius": 3,
-            "RelativeSpeed": 0.3,
-            "MaxHeadingChange": 90
-          }
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ],
+                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Found Nothing to do",
+              "Actions": [
+                {
+                  "Type": "PlayAnimation",
+                  "Slot": "Action",
+                  "Animation": "Sleep",
+                  "Once": true
+                }
+              ],
+              "BodyMotion": {
+                "Type": "WanderInCircle",
+                "Radius": 2,
+                "MaxHeadingChange": 90,
+                "RelativeSpeed": 0.3
+              }
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".NoWorkingAreaSnapshot"
+          },
+          "$Comment": "Needs to process the working enviroment",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Actions": [
+                {
+                  "Type": "ScanWorkArea"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
+            }
+          ]
         }
       ],
       "Continue": true,

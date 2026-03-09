@@ -2,7 +2,7 @@
   "Type": "Abstract",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "DropList": {
@@ -225,27 +225,93 @@
                   ],
                   "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot"
                 }
+              ],
+              "$Comment": "No valid work area snapshot"
+            },
+            {
+              "Sensor": {
+                "Type": "HasTillableSoil"
+              },
+              "$Comment": "Search For Tillable",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "Self",
+                      "Filters": [
+                        {
+                          "Type": "Inventory",
+                          "Items": [
+                            "Tool_Hoe_*"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "PlayAnimation",
+                          "Slot": "Action",
+                          "Animation": "Sleep",
+                          "Once": true
+                        }
+                      ],
+                      "BodyMotion": {
+                        "Type": "WanderInCircle",
+                        "Radius": 1,
+                        "MaxHeadingChange": 90,
+                        "RelativeSpeed": 0.3
+                      }
+                    }
+                  ],
+                  "$Comment": "If does not have Hoe in inventory"
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Walk",
+                      "Once": true
+                    }
+                  ],
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 1,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.3
+                  }
+                }
               ]
             },
             {
               "Sensor": {
                 "Type": "Any"
               },
-              "$Comment": "Found Nothing to do",
               "Actions": [
                 {
                   "Type": "PlayAnimation",
                   "Slot": "Action",
-                  "Animation": "Sleep",
+                  "Animation": "Glide",
                   "Once": true
                 }
               ],
               "BodyMotion": {
                 "Type": "WanderInCircle",
-                "Radius": 2,
-                "MaxHeadingChange": 90,
-                "RelativeSpeed": 0.3
-              }
+                "Radius": 1,
+                "RelativeSpeed": 0.2,
+                "MaxHeadingChange": 90
+              },
+              "$Comment": "Nothing to do"
             }
           ]
         },
@@ -267,7 +333,8 @@
                 {
                   "Type": "ScanWorkArea"
                 }
-              ]
+              ],
+              "$Comment": "If not valid work area snapshot is present"
             },
             {
               "Sensor": {
@@ -278,7 +345,8 @@
                   "Type": "State",
                   "State": ".WorkLoop"
                 }
-              ]
+              ],
+              "$Comment": "Change Substate: -> .WorkLoop"
             }
           ]
         }

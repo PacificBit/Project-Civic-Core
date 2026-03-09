@@ -32,6 +32,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.gen
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.farmer.BuilderHasNextTillableSoil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasValidWorkAreaSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
@@ -142,6 +143,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     entityRegistry.registerSystem(new EnsureVillagerComponents());
     entityRegistry.registerSystem(new VillagerInventoryPersistenceSystem());
 
+    // ===========================
+    // Sensors
+    // ===========================
+
     npcPlugin.registerCoreComponentType(
         "WatchVillageState",
         BuilderWatchVillageStateSensor::new);
@@ -165,6 +170,14 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "HasValidWorkAraSnapshot",
         BuilderHasValidWorkAreaSnapshotSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "HasTillableSoil",
+        BuilderHasNextTillableSoil::new);
+
+    // ===========================
+    // Actions
+    // ===========================
 
     npcPlugin.registerCoreComponentType(
         "ChangeIntoWorkRole",
