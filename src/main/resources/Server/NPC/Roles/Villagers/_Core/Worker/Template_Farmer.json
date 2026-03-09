@@ -10,7 +10,7 @@
       "Description": "Drop Items"
     },
     "MaxHealth": {
-      "Value": 100,
+      "Value": 101,
       "Description": "Max health for the NPC"
     },
     "NameTranslationKey": {
@@ -271,6 +271,19 @@
                     }
                   ],
                   "$Comment": "If does not have Hoe in inventory"
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "EquipItemFromInventory",
+                      "ItemToEquip": "Tool_Hoe_"
+                    }
+                  ],
+                  "$Comment": "Equip Hoe",
+                  "Continue": true
                 },
                 {
                   "Sensor": {
