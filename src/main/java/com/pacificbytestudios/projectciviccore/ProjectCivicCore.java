@@ -33,7 +33,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.gen
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
-import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.farmer.BuilderHasNextTillableSoil;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.farmer.BuilderHasNextTillableSoilSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.farmer.BuilderReachNextTillableSoilSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasValidWorkAreaSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
@@ -174,7 +175,11 @@ public final class ProjectCivicCore extends JavaPlugin {
 
     npcPlugin.registerCoreComponentType(
         "HasTillableSoil",
-        BuilderHasNextTillableSoil::new);
+        BuilderHasNextTillableSoilSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ReachNextTillableSoil",
+        BuilderReachNextTillableSoilSensor::new);
 
     // ===========================
     // Actions

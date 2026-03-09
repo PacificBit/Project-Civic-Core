@@ -6,13 +6,13 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderDescriptorState;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.instructions.Sensor;
-import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.farmer.HasTillableSoil;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.farmer.HasTillableSoilSensor;
 
-public class BuilderHasNextTillableSoil extends BuilderSensorBase {
+public class BuilderHasNextTillableSoilSensor extends BuilderSensorBase {
 
   @Override
   public Sensor build(BuilderSupport support) {
-    return new HasTillableSoil(this);
+    return new HasTillableSoilSensor(this);
   }
 
   @Override

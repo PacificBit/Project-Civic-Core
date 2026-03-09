@@ -10,7 +10,7 @@
       "Description": "Drop Items"
     },
     "MaxHealth": {
-      "Value": 101,
+      "Value": 100,
       "Description": "Max health for the NPC"
     },
     "NameTranslationKey": {
@@ -270,20 +270,55 @@
                       }
                     }
                   ],
-                  "$Comment": "If does not have Hoe in inventory"
+                  "$Comment": "If has NO Hoe in inventory"
                 },
                 {
                   "Sensor": {
                     "Type": "Any"
                   },
+                  "$Comment": "Temporary",
+                  "Continue": true,
                   "Actions": [
                     {
-                      "Type": "EquipItemFromInventory",
-                      "ItemToEquip": "Tool_Hoe_"
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Walk",
+                      "Once": true
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "EquipItemFromInventory",
+                          "ItemToEquip": "Tool_Hoe_"
+                        }
+                      ],
+                      "$Comment": "Equip Hoe",
+                      "Continue": true
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "ReachNextTillableSoil"
+                      },
+                      "$Comment": "Reach Tillable Block",
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "StopDistance": 2,
+                        "SlowDownDistance": 2,
+                        "RelativeSpeed": 0.7
+                      }
                     }
                   ],
-                  "$Comment": "Equip Hoe",
-                  "Continue": true
+                  "$Comment": "If has Hoe in Inventory"
                 },
                 {
                   "Sensor": {
@@ -302,7 +337,8 @@
                     "Radius": 1,
                     "MaxHeadingChange": 90,
                     "RelativeSpeed": 0.3
-                  }
+                  },
+                  "$Comment": "FALLBACK"
                 }
               ]
             },

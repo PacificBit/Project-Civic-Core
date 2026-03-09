@@ -14,12 +14,12 @@ import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
-public class HasTillableSoil extends SensorBase {
+public class HasTillableSoilSensor extends SensorBase {
   private static final String TILLABLE_SOIL = "Soil_Grass";
 
   protected final PositionProvider positionProvider = new PositionProvider();
 
-  public HasTillableSoil(BuilderSensorBase builderSensorBase) {
+  public HasTillableSoilSensor(BuilderSensorBase builderSensorBase) {
     super(builderSensorBase);
   }
 
