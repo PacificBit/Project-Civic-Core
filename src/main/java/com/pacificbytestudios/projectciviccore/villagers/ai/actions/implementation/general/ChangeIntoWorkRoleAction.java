@@ -15,6 +15,9 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 public class ChangeIntoWorkRoleAction extends ActionBase {
 
+  private static final String DEFAULT_STATE = "Working";
+  private static final String DEFAULT_SUBSTATE = "Default";
+
   public ChangeIntoWorkRoleAction(BuilderActionBase builderActionBase) {
     super(builderActionBase);
   }
@@ -40,7 +43,7 @@ public class ChangeIntoWorkRoleAction extends ActionBase {
 
     int roleIndex = NPCPlugin.get().getIndex(workType.getRoleId());
 
-    RoleChangeSystem.requestRoleChange(ref, role, roleIndex, false, store);
+    RoleChangeSystem.requestRoleChange(ref, role, roleIndex, false, DEFAULT_STATE, DEFAULT_SUBSTATE, store);
     role.setReachedTerminalAction(true);
 
     return true;

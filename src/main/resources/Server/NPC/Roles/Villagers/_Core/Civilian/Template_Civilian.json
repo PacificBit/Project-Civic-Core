@@ -352,6 +352,9 @@
                       "Type": "PlayAnimation",
                       "Slot": "Action",
                       "Animation": "Hurt"
+                    },
+                    {
+                      "Type": "ChangeIntoWorkRole"
                     }
                   ],
                   "BodyMotion": {

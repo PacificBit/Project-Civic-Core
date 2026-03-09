@@ -1,0 +1,209 @@
+{
+  "Type": "Abstract",
+  "Parameters": {
+    "Appearance": {
+      "Value": "Bear_Grizzly",
+      "Description": "Model to be used"
+    },
+    "DropList": {
+      "Value": "Empty",
+      "Description": "Drop Items"
+    },
+    "MaxHealth": {
+      "Value": 100,
+      "Description": "Max health for the NPC"
+    },
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Template.name",
+      "Description": "Translation key for NPC name display"
+    },
+    "FirstWorkSessionTimeRange": {
+      "Value": [
+        6,
+        11.59
+      ],
+      "Description": "Time range of the first session"
+    },
+    "SecondWorkSessionTimeRange": {
+      "Value": [
+        14,
+        16.59
+      ],
+      "Description": "Time range of the second session"
+    }
+  },
+  "DropList": {
+    "Compute": "DropList"
+  },
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 6,
+      "Gravity": 10,
+      "MaxFallSpeed": 15,
+      "Acceleration": 10
+    }
+  ],
+  "Instructions": [
+    {
+      "Sensor": {
+        "Type": "WatchVillageState",
+        "State": "panic"
+      },
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Role",
+              "Role": "Base_Civilian",
+              "ChangeAppearance": false,
+              "State": "Panic"
+            }
+          ],
+          "$Comment": "Change State -> Base_Civilian.Panic"
+        }
+      ],
+      "Continue": true,
+      "$Comment": "If the village is in panic"
+    },
+    {
+      "Sensor": {
+        "Type": "And",
+        "Sensors": [
+          {
+            "Type": "Not",
+            "Sensor": {
+              "Type": "TimeInRange",
+              "Period": {
+                "Compute": "FirstWorkSessionTimeRange"
+              }
+            }
+          },
+          {
+            "Type": "Not",
+            "Sensor": {
+              "Type": "TimeInRange",
+              "Period": {
+                "Compute": "SecondWorkSessionTimeRange"
+              }
+            }
+          }
+        ]
+      },
+      "$Comment": "If is not work time",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Role",
+              "Role": "Base_Civilian",
+              "ChangeAppearance": false,
+              "State": "Normal"
+            }
+          ],
+          "$Comment": "Change State -> Base_Civilian.Normal"
+        }
+      ],
+      "Continue": true
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "Working"
+      },
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Default"
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": ".ReachWorkplace"
+            }
+          ],
+          "$Comment": "Entry point"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".ReachWorkplace"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "ReachWorkplace"
+              },
+              "Actions": [
+                {
+                  "Type": "PlayAnimation",
+                  "Slot": "Action",
+                  "Animation": "Walk",
+                  "Once": true
+                }
+              ],
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 2,
+                "StopDistance": 2,
+                "RelativeSpeed": 1
+              },
+              "Continue": false,
+              "$Comment": "Reaching workplace"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".StartWork"
+                }
+              ],
+              "$Comment": "Workplace Reached -> .StartWork"
+            }
+          ],
+          "$Comment": "Starting the workday"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".StartWork"
+          },
+          "BodyMotion": {
+            "Type": "WanderInCircle",
+            "Radius": 3,
+            "RelativeSpeed": 0.3,
+            "MaxHeadingChange": 90
+          }
+        }
+      ],
+      "Continue": true,
+      "$Comment": "Normal state"
+    }
+  ],
+  "NameTranslationKey": {
+    "Compute": "NameTranslationKey"
+  },
+  "StartState": "Working",
+  "FirstWorkSessionTimeRange": {
+    "Compute": "FirstWorkSessionTimeRange"
+  },
+  "SecondWorkSessionTimeRange": {
+    "Compute": "SecondWorkSessionTimeRange"
+  },
+  "Appearance": {
+    "Compute": "Appearance"
+  },
+  "MaxHealth": {
+    "Compute": "MaxHealth"
+  }
+}
