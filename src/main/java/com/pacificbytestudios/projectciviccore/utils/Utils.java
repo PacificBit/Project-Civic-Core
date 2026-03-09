@@ -18,11 +18,6 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.BakerySpawne
 import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
-import com.pacificbytestudios.projectciviccore.village.core.workplacetask.BakeryWorkplaceTaskStrategy;
-import com.pacificbytestudios.projectciviccore.village.core.workplacetask.FarmWorkplaceTaskStrategy;
-import com.pacificbytestudios.projectciviccore.village.core.workplacetask.IWorkplaceTaskStrategy;
-import com.pacificbytestudios.projectciviccore.village.core.workplacetask.MineWorkplaceTaskStrategy;
-import com.pacificbytestudios.projectciviccore.village.core.workplacetask.SawmillWorkplaceTaskStrategy;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 import io.sentry.util.Pair;
@@ -97,16 +92,6 @@ public class Utils {
     };
   }
 
-  public static IWorkplaceTaskStrategy getWorkplaceTaskStrategy(WorkplaceType type) {
-    return switch (type) {
-      case MINE -> new MineWorkplaceTaskStrategy();
-      case FARM -> new FarmWorkplaceTaskStrategy();
-      case BAKERY -> new BakeryWorkplaceTaskStrategy();
-      case SAWMILL -> new SawmillWorkplaceTaskStrategy();
-      default -> throw new IllegalArgumentException("Unsupported workplace type: " + type);
-    };
-  }
-
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType) {
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
       chunk.setBlock(position.x, position.y, position.z, blockType);
@@ -152,5 +137,53 @@ public class Utils {
     }
 
     taskQueue.merge(task);
+  }
+
+  public static ClaimedAreaComponent[] subdivideArea(ClaimedAreaComponent area, int parts) {
+    if (parts <= 0) {
+      throw new IllegalArgumentException("parts must be > 0");
+    }
+
+    if (parts == 1) {
+      return new ClaimedAreaComponent[] { area };
+    }
+
+    Vector2i topLeft = area.getTopLeft();
+    Vector2i botRight = area.getBotRight();
+
+    int minX = Math.min(topLeft.x, botRight.x);
+    int maxX = Math.max(topLeft.x, botRight.x);
+    int minY = Math.min(topLeft.y, botRight.y);
+    int maxY = Math.max(topLeft.y, botRight.y);
+
+    int width = maxX - minX + 1;
+    int height = maxY - minY + 1;
+
+    boolean splitHorizontally = width >= height;
+    int totalSize = splitHorizontally ? width : height;
+
+    int baseSize = totalSize / parts;
+    int remainder = totalSize % parts;
+    int current = splitHorizontally ? minX : minY;
+
+    ClaimedAreaComponent[] result = new ClaimedAreaComponent[parts];
+
+    for (int i = 0; i < parts; i++) {
+      int currentSize = baseSize + (i < remainder ? 1 : 0);
+      int start = current;
+      int end = start + currentSize - 1;
+
+      result[i] = splitHorizontally
+          ? new ClaimedAreaComponent(
+              new Vector2i(start, minY),
+              new Vector2i(end, maxY))
+          : new ClaimedAreaComponent(
+              new Vector2i(minX, start),
+              new Vector2i(maxX, end));
+
+      current = end + 1;
+    }
+
+    return result;
   }
 }

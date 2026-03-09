@@ -12,14 +12,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.VillageTaskQueueCodecs;
-import com.pacificbytestudios.projectciviccore.codecs.WorkplaceTaskStrategyCodecs;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.RequestNewTaskComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageComponent;
@@ -28,13 +26,12 @@ import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHear
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
-import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderRequestNewTaskAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasValidWorkAreaSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.interactions.VillagerOpenInventoryInteraction;
@@ -57,7 +54,6 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, WorkplaceSpawnComponent> workplaceSpawnComponentType;
   private ComponentType<ChunkStore, WorkplaceStorageComponent> workplaceStorageComponentType;
   private ComponentType<ChunkStore, WorkplaceStorageContainerComponent> workplaceStorageContainerComponentType;
-  private ComponentType<ChunkStore, RequestNewTaskComponent> requestNewTaskComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
 
@@ -65,7 +61,6 @@ public final class ProjectCivicCore extends JavaPlugin {
     super(init);
     INSTANCE = this;
     VillageTaskQueueCodecs.registerAll();
-    WorkplaceTaskStrategyCodecs.registerAll();
   }
 
   public static ProjectCivicCore get() {
@@ -131,16 +126,10 @@ public final class ProjectCivicCore extends JavaPlugin {
         "TrackedPrefabPlacementComponent",
         TrackedPrefabPlacementComponent.CODEC);
 
-    this.requestNewTaskComponentType = chunkRegistry.registerComponent(
-        RequestNewTaskComponent.class,
-        "RegisterNewTaskComponent",
-        RequestNewTaskComponent.CODEC);
-
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
     chunkRegistry.registerSystem(new VillageTaskQueueSystem());
-    chunkRegistry.registerSystem(new WorkplaceSystem());
 
     commandRegistry.registerCommand(new VillageCommands());
 
@@ -173,8 +162,8 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuilderTimeRangeSensor::new);
 
     npcPlugin.registerCoreComponentType(
-        "RequestNewTask",
-        BuilderRequestNewTaskAction::new);
+        "HasValidWorkAraSnapshot",
+        BuilderHasValidWorkAreaSnapshotSensor::new);
 
     npcPlugin.registerCoreComponentType(
         "ChangeIntoWorkRole",
@@ -224,10 +213,6 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, WorkplaceStorageContainerComponent> getWorkplaceStorageContainerComponentType() {
     return this.workplaceStorageContainerComponentType;
-  }
-
-  public ComponentType<ChunkStore, RequestNewTaskComponent> getRequestNewTaskComponentType() {
-    return this.requestNewTaskComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

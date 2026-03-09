@@ -47,6 +47,32 @@
   "Instructions": [
     {
       "Sensor": {
+        "Type": "Not",
+        "Sensor": {
+          "Type": "WatchForJobAssignment"
+        }
+      },
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Role",
+              "Role": "Base_Civilian",
+              "ChangeAppearance": false,
+              "State": "Normal"
+            }
+          ],
+          "$Comment": "Change State -> Base_Civilian.Panic"
+        }
+      ],
+      "Continue": true,
+      "$Comment": "Check if job was removed"
+    },
+    {
+      "Sensor": {
         "Type": "WatchVillageState",
         "State": "panic"
       },
@@ -165,7 +191,7 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".StartWork"
+                  "State": ".WoorkLoop"
                 }
               ],
               "$Comment": "Workplace Reached -> .StartWork"
@@ -176,12 +202,65 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".StartWork"
+            "State": ".WoorkLoop"
           },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ],
+                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Found Nothing to do",
+              "Actions": [
+                {
+                  "Type": "PlayAnimation",
+                  "Slot": "Action",
+                  "Animation": "Sleep",
+                  "Once": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".NoWorkingAreaSnapshot"
+          },
+          "$Comment": "Needs to process the working enviroment",
+          "Actions": [
+            {
+              "Type": "PlayAnimation",
+              "Slot": "Action",
+              "Animation": "Glide",
+              "Once": true
+            }
+          ],
           "BodyMotion": {
             "Type": "WanderInCircle",
-            "Radius": 3,
-            "RelativeSpeed": 0.3,
+            "Radius": 4,
+            "RelativeSpeed": 1.8,
             "MaxHeadingChange": 90
           }
         }

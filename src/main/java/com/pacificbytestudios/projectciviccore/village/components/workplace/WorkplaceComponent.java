@@ -1,7 +1,9 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -10,6 +12,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
+import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -19,6 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
@@ -84,6 +88,23 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.workerType)
       .add()
 
+      .append(
+          new KeyedCodec<>(
+              "WorkersDesignatedArea",
+              new MapCodec<ClaimedAreaComponent, HashMap<String, ClaimedAreaComponent>>(
+                  ClaimedAreaComponent.CODEC,
+                  HashMap::new)),
+          (obj, value) -> {
+            obj.workersDesignatedArea = new HashMap<>();
+            value.forEach((k, v) -> obj.workersDesignatedArea.put(UUID.fromString(k), v));
+          },
+          obj -> {
+            HashMap<String, ClaimedAreaComponent> encoded = new HashMap<>();
+            obj.workersDesignatedArea.forEach((k, v) -> encoded.put(k.toString(), v));
+            return encoded;
+          })
+      .add()
+
       .build();
 
   private UUID uuid;
@@ -95,9 +116,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private EntityRef villageRef;
   private EntityRef workplaceRef;
 
-  private Set<UUID> workers = new HashSet<>();
-  private WorkplaceStorageComponent storage;
   private ClaimedAreaComponent workingArea;
+
+  private Set<UUID> workers = new HashSet<>();
+  private Map<UUID, ClaimedAreaComponent> workersDesignatedArea = new HashMap<>();
+  private WorkplaceStorageComponent storage;
 
   public UUID getUuid() {
     return uuid;
@@ -153,10 +176,21 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
   public void registerWorker(UUID uuid) {
     this.workers.add(uuid);
+    this.recalculateWorkerDesignatedArea();
   }
 
   public void unregisterWorker(UUID uuid) {
     this.workers.remove(uuid);
+    this.workersDesignatedArea.remove(uuid);
+    this.recalculateWorkerDesignatedArea();
+  }
+
+  private void recalculateWorkerDesignatedArea() {
+    ClaimedAreaComponent[] areas = Utils.subdivideArea(this.workingArea, this.workers.size());
+    int index = 0;
+    for (UUID uuid : this.workers) {
+      this.workersDesignatedArea.put(uuid, areas[index++]);
+    }
   }
 
   public void setStorage(WorkplaceStorageComponent storage) {
@@ -183,6 +217,10 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.workerType = workerType;
   }
 
+  public ClaimedAreaComponent getWorkerDesignatedArea(UUID uuid) {
+    return this.workersDesignatedArea.get(uuid);
+  }
+
   @Override
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();
@@ -196,6 +234,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.prefabAnchor = this.prefabAnchor;
     component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
     component.workerType = this.workerType != null ? this.workerType.clone() : null;
+    component.workersDesignatedArea = new HashMap<>(this.workersDesignatedArea);
     return component;
   }
 
@@ -210,6 +249,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         "\n workspaceLocation=" + workplaceRef + "," +
         "\n workers=" + workers + "," +
         "\n typeWorkers=[" + workerType + "]," +
+        "\n workersDesignatedArea=" + workersDesignatedArea + "," +
         "\n storage=" + storage + "," +
         '}';
   }

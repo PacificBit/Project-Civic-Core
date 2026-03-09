@@ -47,6 +47,32 @@
   "Instructions": [
     {
       "Sensor": {
+        "Type": "Not",
+        "Sensor": {
+          "Type": "WatchForJobAssignment"
+        }
+      },
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Role",
+              "Role": "Base_Civilian",
+              "ChangeAppearance": false,
+              "State": "Normal"
+            }
+          ],
+          "$Comment": "Change State -> Base_Civilian.Panic"
+        }
+      ],
+      "Continue": true,
+      "$Comment": "Check if job was removed"
+    },
+    {
+      "Sensor": {
         "Type": "WatchVillageState",
         "State": "panic"
       },
@@ -165,7 +191,7 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".StartWork"
+                  "State": ".WoorkLoop"
                 }
               ],
               "$Comment": "Workplace Reached -> .StartWork"
@@ -176,7 +202,7 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".StartWork"
+            "State": ".WoorkLoop"
           },
           "BodyMotion": {
             "Type": "WanderInCircle",
