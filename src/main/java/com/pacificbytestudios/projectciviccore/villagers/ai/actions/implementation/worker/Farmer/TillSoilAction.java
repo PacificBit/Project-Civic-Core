@@ -7,13 +7,16 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
@@ -56,7 +59,21 @@ public class TillSoilAction extends ActionBase {
     World world = store.getExternalData().getWorld();
 
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
-    chunk.setBlock(blockPos.x, blockPos.y, blockPos.z, TILL_BLOCK_TYPE);
+    boolean soilTilled = chunk.setBlock(blockPos.x, blockPos.y, blockPos.z, TILL_BLOCK_TYPE);
+
+    if (soilTilled) {
+      NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
+      byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();
+      ItemStack holdingItem = npcEntity.getInventory().getActiveHotbarItem();
+      npcEntity.getInventory().getHotbar().setItemStackForSlot(
+          activeHotbarSlot,
+          holdingItem.withDurability(holdingItem.getDurability() - 1));
+
+      if (npcEntity.getInventory().getActiveHotbarItem().isBroken()) {
+        InventoryHelper.removeItemInHand(npcEntity.getInventory(), 1);
+      }
+      return true;
+    }
 
     return false;
   }

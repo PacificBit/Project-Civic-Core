@@ -18,7 +18,7 @@
         "Weight": 1
       }
     ],
-    "HitboxType": "Bench_Farming",
+    "HitboxType": "Workplace_Farm_Bounding_Boxes",
     "VariantRotation": "NESW",
     "State": {
       "Id": "crafting",

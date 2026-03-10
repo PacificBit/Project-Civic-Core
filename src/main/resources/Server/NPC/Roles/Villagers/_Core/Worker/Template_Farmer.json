@@ -460,6 +460,46 @@
                           "Type": "EquipItemFromInventory",
                           "ItemToEquip": "Plant_Seeds"
                         }
+                      ],
+                      "Continue": true
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "ReachNextTargetInSnapshot",
+                        "BlockIds": [
+                          "Plantable_Terrain"
+                        ]
+                      },
+                      "$Comment": "Reach Plantable Block",
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "StopDistance": 1,
+                        "SlowDownDistance": 1,
+                        "RelativeSpeed": 0.7
+                      },
+                      "HeadMotion": {
+                        "Type": "Observe",
+                        "AngleRange": [
+                          0,
+                          0
+                        ]
+                      }
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "Timeout",
+                          "Delay": [
+                            0.5,
+                            0.6
+                          ],
+                          "Action": {
+                            "Type": "PlantSeedAction"
+                          }
+                        }
                       ]
                     }
                   ]

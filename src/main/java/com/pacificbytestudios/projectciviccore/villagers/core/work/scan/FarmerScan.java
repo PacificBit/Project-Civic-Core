@@ -31,7 +31,7 @@ public class FarmerScan implements IWorkAreaScanner {
 
   public static final String TILLABLE_TERRAIN = "Tillable_Terrain";
   public static final String WATERABLE_TERRAIN = "Waterable_Terrain";
-  public static final String PLANTABLE_SEED = "Plantable_Terrain";
+  public static final String PLANTABLE_TERRAIN = "Plantable_Terrain";
   public static final String HARVESTABLE_CROP = "Harvestable_Crop";
 
   private static final long MAX_TIME_NS = 1_000_000;
@@ -109,7 +109,6 @@ public class FarmerScan implements IWorkAreaScanner {
 
     snapshotInProgress.captureNow(worldTimeResource);
     snapshotInProgress.setCompleted(true);
-    System.out.println(snapshotInProgress.getBlockTypePosition());
     return snapshotInProgress;
   }
 
@@ -144,7 +143,7 @@ public class FarmerScan implements IWorkAreaScanner {
     }
 
     if (EMPTY_BLOCK_ID.equals(aboveBlockId)) {
-      addTask(snapshotInProgress, PLANTABLE_SEED, abovePosition);
+      addTask(snapshotInProgress, PLANTABLE_TERRAIN, abovePosition);
     }
   }
 
