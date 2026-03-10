@@ -6,13 +6,13 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderDescriptorState;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.Farmer.PlantSeed;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.Farmer.PlantSeedAction;
 
-public class BuilderPlantSeed extends BuilderActionBase {
+public class BuilderPlantSeedAction extends BuilderActionBase {
 
   @Override
   public Action build(BuilderSupport support) {
-    return new PlantSeed(this);
+    return new PlantSeedAction(this);
   }
 
   @Override

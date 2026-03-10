@@ -10,12 +10,12 @@ import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventory;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 
-public class EquipItemFromInventory extends ActionBase {
+public class EquipItemFromInventoryAction extends ActionBase {
   private String itemIdToEquip;
 
-  public EquipItemFromInventory(BuilderEquipItemFromInventory builderActionBase, BuilderSupport support) {
+  public EquipItemFromInventoryAction(BuilderEquipItemFromInventoryAction builderActionBase, BuilderSupport support) {
     super(builderActionBase);
     this.itemIdToEquip = builderActionBase.getItemIdToEquip(support);
   }

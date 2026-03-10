@@ -28,11 +28,12 @@ import com.pacificbytestudios.projectciviccore.village.systems.villagetask.Villa
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderClearSnapshotGroupPositions;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventory;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderHarvestCrop;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderPlantSeed;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderHarvestCropAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderPlantSeedAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderTillSoilAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderWaterSoilAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
@@ -199,7 +200,7 @@ public final class ProjectCivicCore extends JavaPlugin {
 
     npcPlugin.registerCoreComponentType(
         "EquipItemFromInventory",
-        BuilderEquipItemFromInventory::new);
+        BuilderEquipItemFromInventoryAction::new);
 
     npcPlugin.registerCoreComponentType(
         "TillSoilAction",
@@ -207,7 +208,7 @@ public final class ProjectCivicCore extends JavaPlugin {
 
     npcPlugin.registerCoreComponentType(
         "PlantSeedAction",
-        BuilderPlantSeed::new);
+        BuilderPlantSeedAction::new);
 
     npcPlugin.registerCoreComponentType(
         "ClearSnapshotGroup",
@@ -215,7 +216,11 @@ public final class ProjectCivicCore extends JavaPlugin {
 
     npcPlugin.registerCoreComponentType(
         "HarvestCrop",
-        BuilderHarvestCrop::new);
+        BuilderHarvestCropAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "WaterSoil",
+        BuilderWaterSoilAction::new);
 
     this.getCodecRegistry(Interaction.CODEC).register(
         "VillagerOpenInventoryInteraction",

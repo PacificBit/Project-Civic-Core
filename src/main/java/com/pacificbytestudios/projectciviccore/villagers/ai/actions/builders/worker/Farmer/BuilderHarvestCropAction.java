@@ -6,13 +6,13 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderDescriptorState;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.Farmer.HarvestCrop;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.Farmer.HarvestCropAction;
 
-public class BuilderHarvestCrop extends BuilderActionBase {
+public class BuilderHarvestCropAction extends BuilderActionBase {
 
   @Override
   public Action build(BuilderSupport support) {
-    return new HarvestCrop(this);
+    return new HarvestCropAction(this);
   }
 
   @Override

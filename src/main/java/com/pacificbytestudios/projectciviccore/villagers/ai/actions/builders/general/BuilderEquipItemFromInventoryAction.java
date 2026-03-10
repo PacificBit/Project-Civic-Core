@@ -9,15 +9,15 @@ import com.hypixel.hytale.server.npc.asset.builder.validators.StringNotEmptyVali
 import com.hypixel.hytale.server.npc.asset.builder.validators.StringValidator;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.EquipItemFromInventory;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.EquipItemFromInventoryAction;
 
-public class BuilderEquipItemFromInventory extends BuilderActionBase {
+public class BuilderEquipItemFromInventoryAction extends BuilderActionBase {
 
   private StringHolder itemIdToEquip = new StringHolder();
 
   @Override
   public Action build(BuilderSupport support) {
-    return new EquipItemFromInventory(this, support);
+    return new EquipItemFromInventoryAction(this, support);
   }
 
   @Override

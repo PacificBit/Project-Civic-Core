@@ -21,9 +21,9 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 import com.pacificbytestudios.projectciviccore.villagers.enums.Crops;
 
-public class PlantSeed extends ActionBase {
+public class PlantSeedAction extends ActionBase {
 
-  public PlantSeed(BuilderActionBase builderActionBase) {
+  public PlantSeedAction(BuilderActionBase builderActionBase) {
     super(builderActionBase);
   }
 

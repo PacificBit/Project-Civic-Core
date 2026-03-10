@@ -285,21 +285,6 @@
                   "Sensor": {
                     "Type": "Any"
                   },
-                  "$Comment": "Temporary",
-                  "Continue": true,
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Walk",
-                      "Once": true
-                    }
-                  ]
-                },
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
                   "Instructions": [
                     {
                       "Sensor": {
@@ -319,7 +304,8 @@
                         "Type": "ReachNextTargetInSnapshot",
                         "BlockIds": [
                           "Tillable_Terrain"
-                        ]
+                        ],
+                        "StoppingRange": 2.5
                       },
                       "$Comment": "Reach Tillable Block",
                       "BodyMotion": {
@@ -329,11 +315,7 @@
                         "RelativeSpeed": 0.7
                       },
                       "HeadMotion": {
-                        "Type": "Observe",
-                        "AngleRange": [
-                          0,
-                          0
-                        ]
+                        "Type": "Aim"
                       }
                     },
                     {
@@ -420,21 +402,6 @@
                   "Sensor": {
                     "Type": "Any"
                   },
-                  "$Comment": "Temporary",
-                  "Continue": true,
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Walk",
-                      "Once": true
-                    }
-                  ]
-                },
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
                   "$Comment": "If has Seeds in Inventory",
                   "Instructions": [
                     {
@@ -454,7 +421,8 @@
                         "Type": "ReachNextTargetInSnapshot",
                         "BlockIds": [
                           "Plantable_Terrain"
-                        ]
+                        ],
+                        "StoppingRange": 2.5
                       },
                       "$Comment": "Reach Plantable Block",
                       "BodyMotion": {
@@ -507,7 +475,8 @@
                     "Type": "ReachNextTargetInSnapshot",
                     "BlockIds": [
                       "Harvestable_Crop"
-                    ]
+                    ],
+                    "StoppingRange": 2.5
                   },
                   "$Comment": "Reach Plantable Block",
                   "BodyMotion": {
@@ -517,11 +486,7 @@
                     "RelativeSpeed": 0.7
                   },
                   "HeadMotion": {
-                    "Type": "Observe",
-                    "AngleRange": [
-                      0,
-                      0
-                    ]
+                    "Type": "Aim"
                   }
                 },
                 {
@@ -538,6 +503,118 @@
                       "Action": {
                         "Type": "HarvestCrop"
                       }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Waterable_Terrain"
+                ]
+              },
+              "$Comment": "Step 4) Water Field",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "Self",
+                      "Filters": [
+                        {
+                          "Type": "Inventory",
+                          "Items": [
+                            "Tool_Watering_Can"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Log",
+                      "Actions": [
+                        {
+                          "Type": "Log",
+                          "Message": "Does not have watering can"
+                        }
+                      ],
+                      "Continue": true
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "ClearSnapshotGroup",
+                          "GroupName": "Waterable_Terrain"
+                        }
+                      ],
+                      "$Comment": "Clear Snapshot data of Waterable_Terrain"
+                    }
+                  ],
+                  "$Comment": "If has NO Watering Can in inventory"
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "If has Watering Can",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "EquipItemFromInventory",
+                          "ItemToEquip": "Tool_Watering_Can"
+                        }
+                      ],
+                      "$Comment": "Equip Hoe",
+                      "Continue": true
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "ReachNextTargetInSnapshot",
+                        "BlockIds": [
+                          "Waterable_Terrain"
+                        ],
+                        "StoppingRange": 2.5
+                      },
+                      "$Comment": "Reach Tillable Block",
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "StopDistance": 0.5,
+                        "SlowDownDistance": 0.5,
+                        "RelativeSpeed": 0.7
+                      },
+                      "HeadMotion": {
+                        "Type": "Aim"
+                      }
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "Timeout",
+                          "Delay": [
+                            1,
+                            1
+                          ],
+                          "Action": {
+                            "Type": "WaterSoil"
+                          }
+                        }
+                      ]
                     }
                   ]
                 }

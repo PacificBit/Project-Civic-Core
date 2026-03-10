@@ -17,7 +17,6 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
 public class HasTargetBlockInSnapshotSensor extends SensorBase {
-  // protected final PositionProvider positionProvider = new PositionProvider();
   private String[] targetBlockIds;
 
   public HasTargetBlockInSnapshotSensor(
@@ -39,21 +38,18 @@ public class HasTargetBlockInSnapshotSensor extends SensorBase {
       double dt,
       Store<EntityStore> store) {
     if (!super.matches(ref, role, dt, store)) {
-      // this.positionProvider.clear();
       return false;
     }
 
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
     if (villager == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[HasTargetBlockInSnapshotSensor] Could not fetch the villager component");
-      // this.positionProvider.clear();
       return false;
     }
 
     VillagerWorkerComponent workerData = villager.getWorkerData();
     if (workerData == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[HasTargetBlockInSnapshotSensor] Could not fetch workerData");
-      // this.positionProvider.clear();
       return false;
     }
 
@@ -68,7 +64,6 @@ public class HasTargetBlockInSnapshotSensor extends SensorBase {
       }
     }
 
-    // this.positionProvider.clear();
     return false;
   }
 

@@ -110,7 +110,6 @@ public class FarmerScan implements IWorkAreaScanner {
     }
 
     snapshotInProgress.captureNow(worldTimeResource);
-    System.out.println(snapshotInProgress.getBlockTypePosition());
     snapshotInProgress.setCompleted(true);
     return snapshotInProgress;
   }

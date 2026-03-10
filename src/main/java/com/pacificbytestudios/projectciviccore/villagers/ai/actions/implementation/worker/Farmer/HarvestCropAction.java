@@ -21,9 +21,9 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWork
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 
-public class HarvestCrop extends ActionBase {
+public class HarvestCropAction extends ActionBase {
 
-  public HarvestCrop(BuilderActionBase builderActionBase) {
+  public HarvestCropAction(BuilderActionBase builderActionBase) {
     super(builderActionBase);
   }
 
