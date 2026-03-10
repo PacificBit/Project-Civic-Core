@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.instructions.Sensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.farmer.ReachNextTillableSoilSensor;
 
+@Deprecated(forRemoval = true)
 public class BuilderReachNextTillableSoilSensor extends BuilderSensorBase {
 
   @Override

@@ -34,9 +34,12 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.gen
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.farmer.BuilderHasNextPlantableSoilSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.farmer.BuilderHasNextTillableSoilSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.farmer.BuilderReachNextTillableSoilSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasTargetBlockInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasValidWorkAreaSnapshotSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.interactions.VillagerOpenInventoryInteraction;
@@ -179,8 +182,20 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuilderHasNextTillableSoilSensor::new);
 
     npcPlugin.registerCoreComponentType(
+        "HasTargetBlockInSnapshot",
+        BuilderHasTargetBlockInSnapshotSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "HasPlantableSoil",
+        BuilderHasNextPlantableSoilSensor::new);
+
+    npcPlugin.registerCoreComponentType(
         "ReachNextTillableSoil",
         BuilderReachNextTillableSoilSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ReachNextTargetInSnapshot",
+        BuilderReachNextTargetInSnapshotSensor::new);
 
     // ===========================
     // Actions

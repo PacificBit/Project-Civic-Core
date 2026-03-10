@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
+@Deprecated(forRemoval = true)
 public class ReachNextTillableSoilSensor extends SensorBase {
 
   private static final double MINIMUM_DISTANCE = 4.5;

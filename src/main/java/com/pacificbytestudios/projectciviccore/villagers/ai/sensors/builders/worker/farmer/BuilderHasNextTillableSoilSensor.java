@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.instructions.Sensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.farmer.HasTillableSoilSensor;
 
+@Deprecated(forRemoval = true)
 public class BuilderHasNextTillableSoilSensor extends BuilderSensorBase {
 
   @Override

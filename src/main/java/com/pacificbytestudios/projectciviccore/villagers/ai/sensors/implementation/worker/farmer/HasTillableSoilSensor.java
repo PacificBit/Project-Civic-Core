@@ -16,6 +16,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
+@Deprecated(forRemoval = true)
 public class HasTillableSoilSensor extends SensorBase {
   private static final String[] TILLABLE_SOIL = new String[] { "Soil_Grass", "Soil_Mud_Dry" };
 

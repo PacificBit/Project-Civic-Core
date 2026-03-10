@@ -230,9 +230,12 @@
             },
             {
               "Sensor": {
-                "Type": "HasTillableSoil"
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Tillable_Terrain"
+                ]
               },
-              "$Comment": "Search For Tillable",
+              "$Comment": "Step 1) Till Soil",
               "Instructions": [
                 {
                   "Sensor": {
@@ -250,6 +253,19 @@
                     }
                   },
                   "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Log",
+                      "Actions": [
+                        {
+                          "Type": "Log",
+                          "Message": "Does not have hoe"
+                        }
+                      ],
+                      "Continue": true
+                    },
                     {
                       "Sensor": {
                         "Type": "Any"
@@ -307,7 +323,10 @@
                     },
                     {
                       "Sensor": {
-                        "Type": "ReachNextTillableSoil"
+                        "Type": "ReachNextTargetInSnapshot",
+                        "BlockIds": [
+                          "Tillable_Terrain"
+                        ]
                       },
                       "$Comment": "Reach Tillable Block",
                       "BodyMotion": {
@@ -348,6 +367,102 @@
                     }
                   ],
                   "$Comment": "If has Hoe in Inventory"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Plantable_Terrain"
+                ]
+              },
+              "$Comment": "Step 2) Can Plant",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "Self",
+                      "Filters": [
+                        {
+                          "Type": "Inventory",
+                          "Items": [
+                            "Plant_Seeds*"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Log",
+                      "Actions": [
+                        {
+                          "Type": "Log",
+                          "Message": "Does not have seeds in inventory"
+                        }
+                      ],
+                      "Continue": true
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "PlayAnimation",
+                          "Slot": "Action",
+                          "Animation": "Sleep",
+                          "Once": true
+                        }
+                      ],
+                      "BodyMotion": {
+                        "Type": "WanderInCircle",
+                        "Radius": 1,
+                        "MaxHeadingChange": 90,
+                        "RelativeSpeed": 0.3
+                      }
+                    }
+                  ],
+                  "$Comment": "If has NO Seeds in inventory"
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Temporary",
+                  "Continue": true,
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Walk",
+                      "Once": true
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "If has Seeds in Inventory",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "EquipItemFromInventory",
+                          "ItemToEquip": "Plant_Seeds"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
