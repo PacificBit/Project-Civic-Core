@@ -49,6 +49,7 @@ public class WorkplaceAreaSnapshot {
           obj -> obj.capturedAt)
       .add()
 
+      // WARN: With complete i mean the scan is complete
       .append(
           new KeyedCodec<>("Completed", Codec.BOOLEAN),
           (obj, value) -> obj.completed = value,
@@ -111,6 +112,22 @@ public class WorkplaceAreaSnapshot {
 
   public void setLastVisited(Vector3i lastVisited) {
     this.lastVisited = lastVisited;
+  }
+
+  public boolean isValid(WorldTimeResource worldTimeResource) {
+    boolean isExpired = isExpired(worldTimeResource);
+    boolean isSnapshotTook = this.completed;
+    boolean hasGroupNotDoneOperatingOver = this.hasGroupToFinish();
+    return !isExpired && isSnapshotTook && hasGroupNotDoneOperatingOver;
+  }
+
+  public boolean hasGroupToFinish() {
+    for (Map.Entry<String, ArrayDeque<Vector3i>> group : this.blockTypePosition.entrySet()) {
+      if (group.getValue().size() > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

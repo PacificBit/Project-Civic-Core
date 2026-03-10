@@ -226,7 +226,7 @@
                   "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot"
                 }
               ],
-              "$Comment": "No valid work area snapshot"
+              "$Comment": "Step 0) No valid work area snapshot"
             },
             {
               "Sensor": {
@@ -272,18 +272,11 @@
                       },
                       "Actions": [
                         {
-                          "Type": "PlayAnimation",
-                          "Slot": "Action",
-                          "Animation": "Sleep",
-                          "Once": true
+                          "Type": "ClearSnapshotGroup",
+                          "GroupName": "Tillable_Terrain"
                         }
                       ],
-                      "BodyMotion": {
-                        "Type": "WanderInCircle",
-                        "Radius": 1,
-                        "MaxHeadingChange": 90,
-                        "RelativeSpeed": 0.3
-                      }
+                      "$Comment": "Clear Snapshot data of Tillable_Terrain"
                     }
                   ],
                   "$Comment": "If has NO Hoe in inventory"
@@ -414,18 +407,11 @@
                       },
                       "Actions": [
                         {
-                          "Type": "PlayAnimation",
-                          "Slot": "Action",
-                          "Animation": "Sleep",
-                          "Once": true
+                          "Type": "ClearSnapshotGroup",
+                          "GroupName": "Plantable_Terrain"
                         }
                       ],
-                      "BodyMotion": {
-                        "Type": "WanderInCircle",
-                        "Radius": 1,
-                        "MaxHeadingChange": 90,
-                        "RelativeSpeed": 0.3
-                      }
+                      "$Comment": "Clear Snapshot data of Plantable_Terrain"
                     }
                   ],
                   "$Comment": "If has NO Seeds in inventory"
@@ -473,8 +459,8 @@
                       "$Comment": "Reach Plantable Block",
                       "BodyMotion": {
                         "Type": "Seek",
-                        "StopDistance": 1,
-                        "SlowDownDistance": 1,
+                        "StopDistance": 0.5,
+                        "SlowDownDistance": 0.5,
                         "RelativeSpeed": 0.7
                       },
                       "HeadMotion": {
@@ -504,6 +490,57 @@
                     }
                   ]
                 }
+              ],
+              "Continue": false
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Harvestable_Crop"
+                ]
+              },
+              "$Comment": "Step 3) Harvest Crops",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "ReachNextTargetInSnapshot",
+                    "BlockIds": [
+                      "Harvestable_Crop"
+                    ]
+                  },
+                  "$Comment": "Reach Plantable Block",
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "StopDistance": 0.5,
+                    "SlowDownDistance": 0.5,
+                    "RelativeSpeed": 0.7
+                  },
+                  "HeadMotion": {
+                    "Type": "Observe",
+                    "AngleRange": [
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "Timeout",
+                      "Delay": [
+                        1,
+                        1
+                      ],
+                      "Action": {
+                        "Type": "HarvestCrop"
+                      }
+                    }
+                  ]
+                }
               ]
             }
           ]
@@ -528,6 +565,19 @@
                 }
               ],
               "$Comment": "If not valid work area snapshot is present"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "Creating a new workarea snapshot..."
+                }
+              ],
+              "$Comment": "Log",
+              "Continue": true
             },
             {
               "Sensor": {

@@ -57,7 +57,7 @@ public class HasValidWorkAreaSnapshotSensor extends SensorBase {
       return false;
     }
 
-    return workareaSnapshot.isCompleted() && !workareaSnapshot.isExpired(worldTimeResource);
+    return workareaSnapshot.isValid(worldTimeResource);
   }
 
 }

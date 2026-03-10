@@ -11,7 +11,10 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.HarvestingDropType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.farming.FarmingData;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -52,9 +55,7 @@ public class FarmerScan implements IWorkAreaScanner {
     WorkplaceAreaSnapshot snapshotInProgress = villager.getWorkerData().getWorkareaSnapshot();
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
 
-    if (snapshotInProgress != null
-        && snapshotInProgress.isCompleted()
-        && !snapshotInProgress.isExpired(worldTimeResource)) {
+    if (snapshotInProgress != null && snapshotInProgress.isValid(worldTimeResource)) {
       return snapshotInProgress;
     }
 
@@ -92,6 +93,7 @@ public class FarmerScan implements IWorkAreaScanner {
     while (isInsideWorkArea(currentPoint, topLeftCorner, botRightCorner, soilLevel)) {
       if (System.nanoTime() - start >= MAX_TIME_NS) {
         snapshotInProgress.setLastVisited(currentPoint.clone());
+        ProjectCivicCore.LOGGER.atInfo().log("Farming scan took too long, dividing it into multiple scans");
         return snapshotInProgress;
       }
 
@@ -108,6 +110,7 @@ public class FarmerScan implements IWorkAreaScanner {
     }
 
     snapshotInProgress.captureNow(worldTimeResource);
+    System.out.println(snapshotInProgress.getBlockTypePosition());
     snapshotInProgress.setCompleted(true);
     return snapshotInProgress;
   }
@@ -133,7 +136,7 @@ public class FarmerScan implements IWorkAreaScanner {
     BlockType aboveType = aboveChunk.getBlockType(abovePosition);
     String aboveBlockId = aboveType.getId();
 
-    if (isHarvestableCropBlock(aboveBlockId)) {
+    if (isHarvestableCropBlock(aboveType)) {
       addTask(snapshotInProgress, HARVESTABLE_CROP, abovePosition);
       return;
     }
@@ -147,8 +150,23 @@ public class FarmerScan implements IWorkAreaScanner {
     }
   }
 
-  private boolean isHarvestableCropBlock(String blockId) {
-    return blockId.startsWith("Plant_Crop") && blockId.endsWith("StageFinal");
+  private boolean isHarvestableCropBlock(BlockType blockType) {
+    if (!this.contextWorld.getGameplayConfig().getWorldConfig().isBlockGatheringAllowed()) {
+      return false;
+    }
+
+    FarmingData farmingData = blockType.getFarming();
+    if (farmingData == null || farmingData.getStages() == null) {
+      return false;
+    }
+
+    BlockGathering gathering = blockType.getGathering();
+    if (gathering == null) {
+      return false;
+    }
+
+    HarvestingDropType harvest = gathering.getHarvest();
+    return harvest != null;
   }
 
   private void addTask(

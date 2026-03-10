@@ -37,7 +37,7 @@ public class PlantSeed extends ActionBase {
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
 
     if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[TillSoilAction] Could not fetch villager component");
+      ProjectCivicCore.LOGGER.atSevere().log("[PlantSeed] Could not fetch villager component");
       return false;
     }
 
@@ -51,7 +51,7 @@ public class PlantSeed extends ActionBase {
     if (blockPositions != null && !blockPositions.isEmpty()) {
       blockPos = blockPositions.pollFirst();
     } else {
-      throw new IllegalStateException("No Plantable soil block available");
+      throw new IllegalStateException("[PlantSeed] No Plantable soil block available");
     }
 
     NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
@@ -59,7 +59,7 @@ public class PlantSeed extends ActionBase {
 
     if (seeds == null || seeds.getItemId() == null) {
       ProjectCivicCore.LOGGER.atSevere()
-          .log("Could not find a seed at hand, this should be called when a seed is held");
+          .log("[PlantSeed] Could not find a seed at hand, this should be called when a seed is held");
       return false;
     }
 
@@ -67,7 +67,7 @@ public class PlantSeed extends ActionBase {
 
     if (plantBlockId == null) {
       ProjectCivicCore.LOGGER.atSevere()
-          .log("Invalid seed with id: " + seeds.getItemId());
+          .log("[PlantSeed] Invalid seed with id: " + seeds.getItemId());
       return false;
     }
 
