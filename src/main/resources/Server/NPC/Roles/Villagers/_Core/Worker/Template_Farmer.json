@@ -315,6 +315,13 @@
                         "StopDistance": 1,
                         "SlowDownDistance": 1,
                         "RelativeSpeed": 0.7
+                      },
+                      "HeadMotion": {
+                        "Type": "Observe",
+                        "AngleRange": [
+                          0,
+                          0
+                        ]
                       }
                     },
                     {
@@ -325,13 +332,13 @@
                         {
                           "Type": "Attack",
                           "Attack": "Trork_Warrior_Battleaxe_Swing_Down",
-                          "Once": true
+                          "Once": false
                         },
                         {
                           "Type": "Timeout",
                           "Delay": [
-                            0.2,
-                            0.2
+                            0.5,
+                            0.6
                           ],
                           "Action": {
                             "Type": "TillSoilAction"

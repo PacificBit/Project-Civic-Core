@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.farmer;
 
 import java.util.ArrayDeque;
+import java.util.Map;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -16,7 +17,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
 public class HasTillableSoilSensor extends SensorBase {
-  private static final String TILLABLE_SOIL = "Soil_Grass";
+  private static final String[] TILLABLE_SOIL = new String[] { "Soil_Grass", "Soil_Mud_Dry" };
 
   protected final PositionProvider positionProvider = new PositionProvider();
 
@@ -43,20 +44,32 @@ public class HasTillableSoilSensor extends SensorBase {
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
     if (villager == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[HasTillableSoilSensor] Could not fetch the villager component");
+      this.positionProvider.clear();
       return false;
     }
 
     VillagerWorkerComponent workerData = villager.getWorkerData();
     if (workerData == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[HasTillableSoilSensor] Could not fetch workerData");
+      this.positionProvider.clear();
       return false;
     }
 
-    ArrayDeque<Vector3i> tillable = workerData.getWorkareaSnapshot().getBlockTypePosition().get(TILLABLE_SOIL);
+    Map<String, ArrayDeque<Vector3i>> blockPositions = workerData
+        .getWorkareaSnapshot()
+        .getBlockTypePosition();
 
-    System.out.println("Has Tillable? " + (tillable != null && tillable.size() > 0));
+    ArrayDeque<Vector3i> grassQueue = blockPositions.get(TILLABLE_SOIL[0]);
+    ArrayDeque<Vector3i> mudQueue = blockPositions.get(TILLABLE_SOIL[1]);
 
-    return tillable != null && tillable.size() > 0;
+    boolean hasTillableSoil = (grassQueue != null && !grassQueue.isEmpty())
+        || (mudQueue != null && !mudQueue.isEmpty());
+
+    if (!hasTillableSoil) {
+      this.positionProvider.clear();
+    }
+
+    return hasTillableSoil;
   }
 
 }

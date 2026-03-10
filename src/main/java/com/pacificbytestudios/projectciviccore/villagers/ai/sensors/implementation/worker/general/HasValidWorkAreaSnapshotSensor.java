@@ -47,7 +47,7 @@ public class HasValidWorkAreaSnapshotSensor extends SensorBase {
 
     WorkplaceAreaSnapshot workareaSnapshot = workerData.getWorkareaSnapshot();
     if (workareaSnapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[HasValidWorkAreaSnapshotSensor] Could not fetch workareaSnapshot");
+      ProjectCivicCore.LOGGER.atWarning().log("[HasValidWorkAreaSnapshotSensor] Could not fetch workareaSnapshot");
       return false;
     }
 
@@ -57,10 +57,6 @@ public class HasValidWorkAreaSnapshotSensor extends SensorBase {
       return false;
     }
 
-    // ProjectCivicCore.LOGGER.atInfo()
-    // .log("[HasValidWorkAreaSnapshotSensor] Is snapshot valid? " +
-    // (workareaSnapshot.isCompleted()
-    // && !workareaSnapshot.isExpired(worldTimeResource)));
     return workareaSnapshot.isCompleted() && !workareaSnapshot.isExpired(worldTimeResource);
   }
 

@@ -34,6 +34,7 @@ public class ReachWorkplaceSensor extends SensorBase {
     WorkplaceComponent workplace = villager.getWorkerData().getWorkplace();
 
     if (workplace == null) {
+      this.positionProvider.clear();
       return false;
     }
 
