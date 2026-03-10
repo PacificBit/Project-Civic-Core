@@ -18,16 +18,17 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public class ReachNextTargetInSnapshotSensor extends SensorBase {
-
-  private static final double MINIMUM_DISTANCE = 4.5;
   private final PositionProvider positionProvider = new PositionProvider();
   private String[] blockIds;
+  private double stoppingRange;
 
   public ReachNextTargetInSnapshotSensor(
       BuilderReachNextTargetInSnapshotSensor builderSensorBase,
       BuilderSupport support) {
     super(builderSensorBase);
     this.blockIds = builderSensorBase.getBlockIds(support);
+    this.stoppingRange = builderSensorBase.getStoppingRange(support);
+    this.stoppingRange = this.stoppingRange * this.stoppingRange;
   }
 
   @Override
@@ -77,7 +78,7 @@ public class ReachNextTargetInSnapshotSensor extends SensorBase {
 
     double distanceFromBlock = transform.getPosition().distanceSquaredTo(tillable);
 
-    if (distanceFromBlock < MINIMUM_DISTANCE) {
+    if (distanceFromBlock <= this.stoppingRange) {
       this.positionProvider.clear();
       return false;
     }

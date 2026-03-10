@@ -177,8 +177,8 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 2,
-                "StopDistance": 2,
+                "SlowDownDistance": 1,
+                "StopDistance": 1,
                 "RelativeSpeed": 1
               },
               "Continue": false,
