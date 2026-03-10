@@ -55,7 +55,8 @@ public class FarmerScan implements IWorkAreaScanner {
     WorkplaceAreaSnapshot snapshotInProgress = villager.getWorkerData().getWorkareaSnapshot();
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
 
-    if (snapshotInProgress != null && snapshotInProgress.isValid(worldTimeResource)) {
+    if (snapshotInProgress != null &&
+        snapshotInProgress.isValid(worldTimeResource)) {
       return snapshotInProgress;
     }
 
@@ -85,12 +86,14 @@ public class FarmerScan implements IWorkAreaScanner {
 
     this.chunkStore = this.contextWorld.getChunkStore().getStore();
 
-    long initialChunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x, currentPoint.z);
+    long initialChunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x,
+        currentPoint.z);
     WorldChunk soilChunk = getOrLoadChunk(initialChunkIndex);
 
     long start = System.nanoTime();
 
-    while (isInsideWorkArea(currentPoint, topLeftCorner, botRightCorner, soilLevel)) {
+    while (isInsideWorkArea(currentPoint, topLeftCorner, botRightCorner,
+        soilLevel)) {
       if (System.nanoTime() - start >= MAX_TIME_NS) {
         snapshotInProgress.setLastVisited(currentPoint.clone());
         ProjectCivicCore.LOGGER.atInfo().log("Farming scan took too long, dividing it into multiple scans");
@@ -100,7 +103,8 @@ public class FarmerScan implements IWorkAreaScanner {
       soilChunk = getCorrectChunkForBlock(currentPoint, soilChunk);
       scanColumnTasks(snapshotInProgress, soilChunk, currentPoint);
 
-      Vector3i nextPoint = getNextPoint(currentPoint, topLeftCorner, botRightCorner, soilLevel);
+      Vector3i nextPoint = getNextPoint(currentPoint, topLeftCorner,
+          botRightCorner, soilLevel);
       if (nextPoint == null) {
         break;
       }
@@ -130,7 +134,10 @@ public class FarmerScan implements IWorkAreaScanner {
       return;
     }
 
-    Vector3i abovePosition = new Vector3i(soilPosition.x, soilPosition.y + 1, soilPosition.z);
+    Vector3i abovePosition = new Vector3i(
+        soilPosition.x,
+        soilPosition.y + 1,
+        soilPosition.z);
     WorldChunk aboveChunk = getCorrectChunkForBlock(abovePosition, soilChunk);
     BlockType aboveType = aboveChunk.getBlockType(abovePosition);
     String aboveBlockId = aboveType.getId();
@@ -150,10 +157,6 @@ public class FarmerScan implements IWorkAreaScanner {
   }
 
   private boolean isHarvestableCropBlock(BlockType blockType) {
-    if (!this.contextWorld.getGameplayConfig().getWorldConfig().isBlockGatheringAllowed()) {
-      return false;
-    }
-
     FarmingData farmingData = blockType.getFarming();
     if (farmingData == null || farmingData.getStages() == null) {
       return false;
@@ -207,8 +210,13 @@ public class FarmerScan implements IWorkAreaScanner {
   }
 
   private WorldChunk getCorrectChunkForBlock(Vector3i currentPoint, WorldChunk chunk) {
-    if (!ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), currentPoint.x, currentPoint.z)) {
-      long chunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x, currentPoint.z);
+    if (!ChunkUtil.isInsideChunk(
+        chunk.getX(),
+        chunk.getZ(),
+        currentPoint.x,
+        currentPoint.z)) {
+      long chunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x,
+          currentPoint.z);
       return getOrLoadChunk(chunkIndex);
     }
 
@@ -225,12 +233,14 @@ public class FarmerScan implements IWorkAreaScanner {
   }
 
   private boolean isTilledSoilWatered(WorldChunk chunk, Vector3i position) {
-    Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(position.x, position.y, position.z);
+    Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(
+        position.x, position.y, position.z);
     if (blockEntityRef == null) {
       return false;
     }
 
-    TilledSoilBlock tilledSoilBlock = this.chunkStore.getComponent(blockEntityRef, TilledSoilBlock.getComponentType());
+    TilledSoilBlock tilledSoilBlock = this.chunkStore.getComponent(blockEntityRef,
+        TilledSoilBlock.getComponentType());
     if (tilledSoilBlock == null) {
       return false;
     }
