@@ -105,6 +105,7 @@ public class FarmSpawner {
     storage.registerContainer(container.getUuid(), container);
     workplaceComponent.setStorage(storage);
 
+    chunk.markNeedsSaving();
     return true;
   }
 

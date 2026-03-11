@@ -12,11 +12,11 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
-import com.pacificbytestudios.projectciviccore.village.core.villagetask.IVillageTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.AVillageTask;
 
 public class VillageTaskQueueComponent implements Component<ChunkStore> {
-  private static final CodecMapCodec<IVillageTask> TASK_CODEC = new CodecMapCodec<>("Type");
-  private static final ArrayDequeCodec<IVillageTask> TASK_DEQUE_CODEC = new ArrayDequeCodec<>(
+  private static final CodecMapCodec<AVillageTask> TASK_CODEC = new CodecMapCodec<>("Type");
+  private static final ArrayDequeCodec<AVillageTask> TASK_DEQUE_CODEC = new ArrayDequeCodec<>(
       TASK_CODEC,
       "VillageTaskDeque");
 
@@ -32,18 +32,18 @@ public class VillageTaskQueueComponent implements Component<ChunkStore> {
 
   public static void registerTaskCodec(
       String id,
-      Class<? extends IVillageTask> taskClass,
-      Codec<? extends IVillageTask> codec) {
+      Class<? extends AVillageTask> taskClass,
+      Codec<? extends AVillageTask> codec) {
     TASK_CODEC.register(id, taskClass, codec);
   }
 
-  private ArrayDeque<IVillageTask> tasks = new ArrayDeque<>();
+  private ArrayDeque<AVillageTask> tasks = new ArrayDeque<>();
 
-  public void registerTask(IVillageTask task) {
+  public void registerTask(AVillageTask task) {
     this.tasks.addLast(Objects.requireNonNull(task, "task"));
   }
 
-  public IVillageTask pollTask() {
+  public AVillageTask pollTask() {
     return this.tasks.pollFirst();
   }
 

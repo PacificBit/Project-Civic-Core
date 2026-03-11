@@ -55,7 +55,8 @@
         "WorkplaceComponent": {
           "Type": "Storage"
         },
-        "WorkplaceSpawnComponent": {}
+        "WorkplaceSpawnComponent": {},
+        "WorkplaceVillageStorageComponent": {}
       }
     }
   },

@@ -14,8 +14,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
 
-public class WorkplaceVillageStorageRequestComponent implements
-    Component<ChunkStore> {
+public class WorkplaceVillageStorageRequestComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceVillageStorageRequestComponent> CODEC = BuilderCodec
       .builder(WorkplaceVillageStorageRequestComponent.class,
           WorkplaceVillageStorageRequestComponent::new)

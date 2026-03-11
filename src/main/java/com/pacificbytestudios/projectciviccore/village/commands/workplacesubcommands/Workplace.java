@@ -5,6 +5,7 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 import com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.subcommands.Despawn;
 import com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.subcommands.ItemFetchRequest;
 import com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.subcommands.Spawn;
+import com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.subcommands.StorageDump;
 
 public class Workplace extends AbstractCommandCollection {
 
@@ -14,6 +15,7 @@ public class Workplace extends AbstractCommandCollection {
     this.addSubCommand(new Spawn());
     this.addSubCommand(new Despawn());
     this.addSubCommand(new ItemFetchRequest());
+    this.addSubCommand(new StorageDump());
   }
 
 }

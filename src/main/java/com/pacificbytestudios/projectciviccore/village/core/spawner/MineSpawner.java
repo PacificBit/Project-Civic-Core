@@ -66,6 +66,7 @@ public class MineSpawner {
 
     workplaceComponent.setPrefabAnchor(position.clone());
 
+    chunk.markNeedsSaving();
     return true;
   }
 

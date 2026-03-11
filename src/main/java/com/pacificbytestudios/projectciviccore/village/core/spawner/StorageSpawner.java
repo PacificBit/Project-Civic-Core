@@ -1,4 +1,3 @@
-
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
@@ -19,7 +18,6 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -100,12 +98,6 @@ public class StorageSpawner {
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
     storage.registerContainer(container.getUuid(), container);
     workplaceComponent.setStorage(storage);
-
-    chunkStore.putComponent(
-        workplace,
-        WorkplaceVillageStorageRequestComponent.getComponentType(),
-        new WorkplaceVillageStorageRequestComponent());
-
     return true;
   }
 

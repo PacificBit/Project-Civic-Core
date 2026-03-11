@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import java.util.function.BiConsumer;
-
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
@@ -12,7 +10,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 
-public class RegisterWorkplaceTask implements IVillageTask {
+public class RegisterWorkplaceTask extends AVillageTask {
   public static final BuilderCodec<RegisterWorkplaceTask> CODEC = BuilderCodec
       .builder(RegisterWorkplaceTask.class, RegisterWorkplaceTask::new)
 
@@ -44,10 +42,4 @@ public class RegisterWorkplaceTask implements IVillageTask {
             + this.workplace.getUuid());
     heart.registerWorkplace(this.workplace);
   }
-
-  @Override
-  public void setOnError(BiConsumer<String, Object> callback) {
-    throw new UnsupportedOperationException("Unimplemented method 'setOnError'");
-  }
-
 }

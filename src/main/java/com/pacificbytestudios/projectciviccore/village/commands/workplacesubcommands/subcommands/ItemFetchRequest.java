@@ -125,7 +125,12 @@ public class ItemFetchRequest extends CommandBase {
           request);
 
       task.setOnError(
-          (reason, value) -> context.sendMessage(Message.raw("Could not proceed with the request. Reason: " + reason)));
+          (reason, msg) -> context.sendMessage(
+              Message.raw("Could not proceed with the request. Reason: \n" + reason + "\n\t" + msg)));
+
+      task.setOnSuccessCallback(
+          (status) -> context.sendMessage(
+              Message.raw("Request registered successfully")));
 
       VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
       taskComponent.registerTask(task);

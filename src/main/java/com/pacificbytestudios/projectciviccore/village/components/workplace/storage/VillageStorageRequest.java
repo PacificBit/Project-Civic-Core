@@ -98,6 +98,29 @@ public class VillageStorageRequest {
     return request;
   }
 
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("VillageStorageRequest\n");
+    sb.append("requestId=").append(this.requestId).append("\n");
+    sb.append("requesterWorkplaceId=").append(this.requesterWorkplaceId).append("\n");
+    sb.append("type=").append(this.type).append("\n");
+    sb.append("itemCriteria=");
+
+    if (this.itemCriteria == null || this.itemCriteria.isEmpty()) {
+      sb.append("[]");
+      return sb.toString();
+    }
+
+    sb.append("\n");
+    for (ItemRequestCriterion criterion : this.itemCriteria) {
+      sb.append("- ").append(criterion).append("\n");
+    }
+
+    return sb.toString().trim();
+  }
+
   public static class ItemRequestCriterion {
     public static final BuilderCodec<ItemRequestCriterion> CODEC = BuilderCodec
         .builder(ItemRequestCriterion.class, ItemRequestCriterion::new)
@@ -154,6 +177,14 @@ public class VillageStorageRequest {
       criterion.requiredAmount = this.requiredAmount;
       return criterion;
     }
+
+    @Override
+    public String toString() {
+      return "attributeKey=" + this.attributeKey
+          + ", exactMatch=" + this.exactMatch
+          + ", requiredAmount=" + this.requiredAmount;
+    }
+
   }
 
 }

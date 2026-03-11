@@ -12,7 +12,7 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
-import com.pacificbytestudios.projectciviccore.village.core.villagetask.IVillageTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.AVillageTask;
 
 public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
   private static final long MAX_TIME_NS = 1_000_000;
@@ -40,7 +40,7 @@ public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
       VillageHeartComponent villageHeart = store.getComponent(villageHeartRef,
           VillageHeartComponent.getComponentType());
 
-      IVillageTask task = tasksComponent.pollTask();
+      AVillageTask task = tasksComponent.pollTask();
 
       long start = System.nanoTime();
 

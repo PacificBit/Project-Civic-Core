@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import java.util.function.BiConsumer;
-
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
@@ -14,7 +12,7 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
-public class SpawnWorkplaceTask implements IVillageTask {
+public class SpawnWorkplaceTask extends AVillageTask {
 
   public static final BuilderCodec<SpawnWorkplaceTask> CODEC = BuilderCodec
       .builder(SpawnWorkplaceTask.class, SpawnWorkplaceTask::new)
@@ -52,10 +50,4 @@ public class SpawnWorkplaceTask implements IVillageTask {
     SpawnFunction spawnFunction = Utils.getSpawnFunction(this.workplaceType);
     spawnFunction.apply(chunk, this.position);
   }
-
-  @Override
-  public void setOnError(BiConsumer<String, Object> callback) {
-    throw new UnsupportedOperationException("Unimplemented method 'setOnError'");
-  }
-
 }

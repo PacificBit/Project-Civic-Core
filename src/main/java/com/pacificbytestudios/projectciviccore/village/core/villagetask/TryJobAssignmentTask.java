@@ -2,7 +2,6 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -14,7 +13,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 
-public class TryJobAssignmentTask implements IVillageTask {
+public class TryJobAssignmentTask extends AVillageTask {
   public static final BuilderCodec<TryJobAssignmentTask> CODEC = BuilderCodec
       .builder(TryJobAssignmentTask.class, TryJobAssignmentTask::new)
 
@@ -52,11 +51,6 @@ public class TryJobAssignmentTask implements IVillageTask {
     heart.registerVillagerAsWorkerAt(candidate, workplace);
 
     ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] Worker: " + candidate + " now is a worker");
-  }
-
-  @Override
-  public void setOnError(BiConsumer<String, Object> callback) {
-    throw new UnsupportedOperationException("Unimplemented method 'setOnError'");
   }
 
 }

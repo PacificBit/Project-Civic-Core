@@ -1,7 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -13,7 +12,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 
-public class UnregisterWorkplaceTask implements IVillageTask {
+public class UnregisterWorkplaceTask extends AVillageTask {
   public static final BuilderCodec<UnregisterWorkplaceTask> CODEC = BuilderCodec
       .builder(UnregisterWorkplaceTask.class, UnregisterWorkplaceTask::new)
 
@@ -43,10 +42,4 @@ public class UnregisterWorkplaceTask implements IVillageTask {
         .atInfo().log("[UnregisterWorkplaceTask] Unregistering workplace with id: " + this.workplace);
     heart.unregisterWorkplace(this.workplace);
   }
-
-  @Override
-  public void setOnError(BiConsumer<String, Object> callback) {
-    throw new UnsupportedOperationException("Unimplemented method 'setOnError'");
-  }
-
 }

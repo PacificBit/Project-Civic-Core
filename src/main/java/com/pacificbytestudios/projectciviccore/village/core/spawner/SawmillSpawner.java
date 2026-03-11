@@ -66,6 +66,7 @@ public class SawmillSpawner {
 
     workplaceComponent.setPrefabAnchor(position.clone());
 
+    chunk.markNeedsSaving();
     return true;
   }
 

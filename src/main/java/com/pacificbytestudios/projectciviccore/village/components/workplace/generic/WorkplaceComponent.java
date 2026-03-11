@@ -186,6 +186,10 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   }
 
   private void recalculateWorkerDesignatedArea() {
+    if (this.workingArea == null) {
+      return;
+    }
+
     ClaimedAreaComponent[] areas = Utils.subdivideArea(this.workingArea, this.workers.size());
     int index = 0;
     for (UUID uuid : this.workers) {
