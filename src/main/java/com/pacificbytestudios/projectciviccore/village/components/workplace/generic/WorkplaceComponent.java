@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.components.workplace;
+package com.pacificbytestudios.projectciviccore.village.components.workplace.generic;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           obj -> obj.workers)
       .add()
 
-      .append(new KeyedCodec<>("Storage", WorkplaceStorageComponent.CODEC),
+      .append(new KeyedCodec<>("Storage", WorkplaceContainerRegistryComponent.CODEC),
           (obj, value) -> obj.storage = value,
           (obj) -> obj.storage)
       .add()
@@ -120,7 +120,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
   private Set<UUID> workers = new HashSet<>();
   private Map<UUID, ClaimedAreaComponent> workersDesignatedArea = new HashMap<>();
-  private WorkplaceStorageComponent storage;
+  private WorkplaceContainerRegistryComponent storage;
 
   public UUID getUuid() {
     return uuid;
@@ -193,11 +193,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     }
   }
 
-  public void setStorage(WorkplaceStorageComponent storage) {
+  public void setStorage(WorkplaceContainerRegistryComponent storage) {
     this.storage = storage;
   }
 
-  public WorkplaceStorageComponent getStorage() {
+  public WorkplaceContainerRegistryComponent getStorage() {
     return this.storage;
   }
 

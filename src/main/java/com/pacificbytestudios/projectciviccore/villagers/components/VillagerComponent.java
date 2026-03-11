@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 
 public class VillagerComponent implements Component<EntityStore> {
   public static final short STORAGE_CAPACITY = 18;
@@ -88,6 +89,16 @@ public class VillagerComponent implements Component<EntityStore> {
     component.bedPosition = this.bedPosition;
     component.workerData = this.workerData == null ? null : this.workerData.clone();
     return component;
+  }
+
+  @Override
+  public String toString() {
+    return "VillagerComponent{" +
+        "villageHeartLocation=" + Utils.safeToString(villageHeartLocation) +
+        ", bedPosition=" + Utils.safeToString(bedPosition) +
+        ", workerData=" + Utils.safeToString(workerData) +
+        ", windowsCount=" + windows.size() +
+        '}';
   }
 
   public static ComponentType<EntityStore, VillagerComponent> getComponentType() {

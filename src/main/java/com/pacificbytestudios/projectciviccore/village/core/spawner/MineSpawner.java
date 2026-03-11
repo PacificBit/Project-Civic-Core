@@ -13,7 +13,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -47,8 +47,8 @@ public class MineSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition);
     }
 
-    Store<ChunkStore> workplaceStore = workplace.getStore();
-    WorkplaceComponent workplaceComponent = workplaceStore.getComponent(
+    Store<ChunkStore> chunkStore = workplace.getStore();
+    WorkplaceComponent workplaceComponent = chunkStore.getComponent(
         workplace,
         WorkplaceComponent.getComponentType());
 
@@ -59,7 +59,7 @@ public class MineSpawner {
 
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MINER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
-    workplaceStore.putComponent(
+    chunkStore.putComponent(
         workplace,
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);

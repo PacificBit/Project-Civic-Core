@@ -18,10 +18,11 @@ import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBe
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceSpawnComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageContainerComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
@@ -61,8 +62,9 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private ComponentType<ChunkStore, WorkplaceComponent> workplaceComponentType;
   private ComponentType<ChunkStore, WorkplaceSpawnComponent> workplaceSpawnComponentType;
-  private ComponentType<ChunkStore, WorkplaceStorageComponent> workplaceStorageComponentType;
-  private ComponentType<ChunkStore, WorkplaceStorageContainerComponent> workplaceStorageContainerComponentType;
+  private ComponentType<ChunkStore, WorkplaceContainerRegistryComponent> workplaceContainerRegistryComponentType;
+  private ComponentType<ChunkStore, WorkplaceContainerEntryComponent> workplaceContainerEntryComponentType;
+  private ComponentType<ChunkStore, WorkplaceVillageStorageRequestComponent> workplaceVillageStorageComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
 
@@ -120,20 +122,25 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillageTaskQueueComponent",
         VillageTaskQueueComponent.CODEC);
 
-    this.workplaceStorageComponentType = chunkRegistry.registerComponent(
-        WorkplaceStorageComponent.class,
-        "WorkplaceStorageComponent",
-        WorkplaceStorageComponent.CODEC);
+    this.workplaceContainerRegistryComponentType = chunkRegistry.registerComponent(
+        WorkplaceContainerRegistryComponent.class,
+        "WorkplaceContainerRegistryComponent",
+        WorkplaceContainerRegistryComponent.CODEC);
 
-    this.workplaceStorageContainerComponentType = chunkRegistry.registerComponent(
-        WorkplaceStorageContainerComponent.class,
-        "WorkplaceStorageContainerComponent",
-        WorkplaceStorageContainerComponent.CODEC);
+    this.workplaceContainerEntryComponentType = chunkRegistry.registerComponent(
+        WorkplaceContainerEntryComponent.class,
+        "WorkplaceContainerEntryComponent",
+        WorkplaceContainerEntryComponent.CODEC);
 
     this.trackedPrefabPlacementComponentType = chunkRegistry.registerComponent(
         TrackedPrefabPlacementComponent.class,
         "TrackedPrefabPlacementComponent",
         TrackedPrefabPlacementComponent.CODEC);
+
+    this.workplaceVillageStorageComponentType = chunkRegistry.registerComponent(
+        WorkplaceVillageStorageRequestComponent.class,
+        "WorkplaceVillageStorageComponent",
+        WorkplaceVillageStorageRequestComponent.CODEC);
 
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
@@ -260,12 +267,16 @@ public final class ProjectCivicCore extends JavaPlugin {
     return this.villageTaskQueueComponentType;
   }
 
-  public ComponentType<ChunkStore, WorkplaceStorageComponent> getWorkplaceStorageComponentType() {
-    return this.workplaceStorageComponentType;
+  public ComponentType<ChunkStore, WorkplaceContainerRegistryComponent> getWorkplaceStorageComponentType() {
+    return this.workplaceContainerRegistryComponentType;
   }
 
-  public ComponentType<ChunkStore, WorkplaceStorageContainerComponent> getWorkplaceStorageContainerComponentType() {
-    return this.workplaceStorageContainerComponentType;
+  public ComponentType<ChunkStore, WorkplaceContainerEntryComponent> getWorkplaceContainerEntryComponentType() {
+    return this.workplaceContainerEntryComponentType;
+  }
+
+  public ComponentType<ChunkStore, WorkplaceVillageStorageRequestComponent> getWorkplaceVillageStorageComponentType() {
+    return this.workplaceVillageStorageComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

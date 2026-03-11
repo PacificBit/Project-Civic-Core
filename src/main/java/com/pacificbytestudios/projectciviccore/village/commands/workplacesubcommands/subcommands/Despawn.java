@@ -23,7 +23,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 

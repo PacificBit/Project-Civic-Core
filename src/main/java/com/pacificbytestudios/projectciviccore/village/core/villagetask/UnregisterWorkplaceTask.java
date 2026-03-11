@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -41,6 +42,11 @@ public class UnregisterWorkplaceTask implements IVillageTask {
     ProjectCivicCore.LOGGER
         .atInfo().log("[UnregisterWorkplaceTask] Unregistering workplace with id: " + this.workplace);
     heart.unregisterWorkplace(this.workplace);
+  }
+
+  @Override
+  public void setOnError(BiConsumer<String, Object> callback) {
+    throw new UnsupportedOperationException("Unimplemented method 'setOnError'");
   }
 
 }

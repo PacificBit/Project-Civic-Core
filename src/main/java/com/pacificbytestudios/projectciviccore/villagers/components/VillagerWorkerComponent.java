@@ -5,7 +5,8 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
@@ -66,6 +67,15 @@ public class VillagerWorkerComponent implements Component<EntityStore> {
 
   public void setWorkareaSnapshot(WorkplaceAreaSnapshot workareaSnapshot) {
     this.workareaSnapshot = workareaSnapshot;
+  }
+
+  @Override
+  public String toString() {
+    return "VillagerWorkerComponent{" +
+        "workplace=" + Utils.safeToString(workplace) +
+        ", typeOfWorker=" + Utils.safeToString(typeOfWorker) +
+        ", workareaSnapshot=" + Utils.safeToString(workareaSnapshot) +
+        '}';
   }
 
 }

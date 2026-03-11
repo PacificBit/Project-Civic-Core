@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.components.workplace;
+package com.pacificbytestudios.projectciviccore.village.components.workplace.generic;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;

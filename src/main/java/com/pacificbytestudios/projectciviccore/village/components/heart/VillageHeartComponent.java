@@ -20,7 +20,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
@@ -124,6 +124,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
           })
       .add()
 
+      .append(
+          new KeyedCodec<>(
+              "VillageStorageWorkplaces",
+              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
+          (obj, value) -> obj.villageStorageWorkplaces = value,
+          obj -> obj.villageStorageWorkplaces)
+      .add()
+
       .build();
 
   private UUID uuid;
@@ -138,6 +146,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   private Map<UUID, WorkplaceComponent> workplaceIdToWorkplace = new HashMap<>();
   private Map<UUID, UUID> villagerToWorkplace = new HashMap<>();
+  private Set<UUID> villageStorageWorkplaces = new HashSet<>();
 
   public UUID getUuid() {
     return uuid;
@@ -208,6 +217,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public void registerWorkplace(WorkplaceComponent workplace) {
     this.workplaceIdToWorkplace.put(workplace.getUuid(), workplace);
+
+    if (workplace.getWorkplaceType().equals(WorkplaceType.STORAGE)) {
+      this.villageStorageWorkplaces.add(workplace.getUuid());
+    }
   }
 
   public void unregisterWorkplace(UUID workplace) {
@@ -215,6 +228,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       return;
     }
     this.workplaceIdToWorkplace.remove(workplace);
+
+    if (this.villageStorageWorkplaces.contains(workplace)) {
+      this.villageStorageWorkplaces.remove(workplace);
+    }
 
     Iterator<Map.Entry<UUID, UUID>> workers = this.villagerToWorkplace.entrySet().iterator();
     while (workers.hasNext()) {
@@ -261,6 +278,26 @@ public class VillageHeartComponent implements Component<ChunkStore> {
         .collect(Collectors.toList());
   }
 
+  public Map<UUID, VillagerComponent> getVillagerIdToComponent() {
+    return Collections.unmodifiableMap(this.villagerIdToComponent);
+  }
+
+  public Map<UUID, WorkplaceComponent> getWorkplaceIdToWorkplace() {
+    return Collections.unmodifiableMap(this.workplaceIdToWorkplace);
+  }
+
+  public WorkplaceComponent getWorkplaceFromId(UUID uuid) {
+    return this.workplaceIdToWorkplace.get(uuid);
+  }
+
+  public Map<UUID, UUID> getVillagerToWorkplace() {
+    return Collections.unmodifiableMap(this.villagerToWorkplace);
+  }
+
+  public Set<UUID> getVillageStorageWorkplaces() {
+    return Collections.unmodifiableSet(this.villageStorageWorkplaces);
+  }
+
   @Override
   public VillageHeartComponent clone() {
     VillageHeartComponent component = new VillageHeartComponent();
@@ -275,6 +312,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     component.villagersRegistry = new HashSet<>(this.villagersRegistry);
     component.unemployedRegistry = new HashSet<>(this.unemployedRegistry);
     component.villagerToWorkplace = new HashMap<>(this.villagerToWorkplace);
+    component.villageStorageWorkplaces = new HashSet<>(this.villageStorageWorkplaces);
 
     component.workplaceIdToWorkplace = new HashMap<>();
     for (Map.Entry<UUID, WorkplaceComponent> entry : this.workplaceIdToWorkplace.entrySet()) {
@@ -290,11 +328,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
     for (Map.Entry<UUID, UUID> entry : component.villagerToWorkplace.entrySet()) {
       UUID villagerId = entry.getKey();
-      // UUID workplaceId = entry.getValue();
-
       VillagerComponent villager = component.villagerIdToComponent.get(villagerId);
-      // WorkplaceComponent workplace =
-      // component.workplaceIdToWorkplace.get(workplaceId);
 
       if (villager != null) {
         villager.setWorkerData(villager.getWorkerData());

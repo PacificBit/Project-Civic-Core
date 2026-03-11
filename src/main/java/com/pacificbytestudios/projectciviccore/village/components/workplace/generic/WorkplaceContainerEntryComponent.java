@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.components.workplace;
+package com.pacificbytestudios.projectciviccore.village.components.workplace.generic;
 
 import java.util.UUID;
 
@@ -11,10 +11,10 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
-public class WorkplaceStorageContainerComponent implements Component<ChunkStore> {
-  public static final BuilderCodec<WorkplaceStorageContainerComponent> CODEC = BuilderCodec
-      .builder(WorkplaceStorageContainerComponent.class,
-          WorkplaceStorageContainerComponent::new)
+public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
+  public static final BuilderCodec<WorkplaceContainerEntryComponent> CODEC = BuilderCodec
+      .builder(WorkplaceContainerEntryComponent.class,
+          WorkplaceContainerEntryComponent::new)
 
       .append(new KeyedCodec<>("ContainerId", Codec.UUID_BINARY),
           (obj, value) -> obj.uuid = value,
@@ -48,15 +48,15 @@ public class WorkplaceStorageContainerComponent implements Component<ChunkStore>
   }
 
   @Override
-  public WorkplaceStorageContainerComponent clone() {
-    WorkplaceStorageContainerComponent container = new WorkplaceStorageContainerComponent();
+  public WorkplaceContainerEntryComponent clone() {
+    WorkplaceContainerEntryComponent container = new WorkplaceContainerEntryComponent();
     container.uuid = this.uuid;
     container.position = this.position;
     return container;
   }
 
-  public static ComponentType<ChunkStore, WorkplaceStorageContainerComponent> getComponentType() {
-    return ProjectCivicCore.get().getWorkplaceStorageContainerComponentType();
+  public static ComponentType<ChunkStore, WorkplaceContainerEntryComponent> getComponentType() {
+    return ProjectCivicCore.get().getWorkplaceContainerEntryComponentType();
   }
 
 }

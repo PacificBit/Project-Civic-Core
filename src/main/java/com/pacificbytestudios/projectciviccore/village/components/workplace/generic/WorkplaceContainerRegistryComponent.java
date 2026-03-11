@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.components.workplace;
+package com.pacificbytestudios.projectciviccore.village.components.workplace.generic;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,23 +13,23 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
-public class WorkplaceStorageComponent implements Component<ChunkStore> {
+public class WorkplaceContainerRegistryComponent implements Component<ChunkStore> {
 
-  public static final BuilderCodec<WorkplaceStorageComponent> CODEC = BuilderCodec
-      .builder(WorkplaceStorageComponent.class, WorkplaceStorageComponent::new)
+  public static final BuilderCodec<WorkplaceContainerRegistryComponent> CODEC = BuilderCodec
+      .builder(WorkplaceContainerRegistryComponent.class, WorkplaceContainerRegistryComponent::new)
 
       .append(
           new KeyedCodec<>(
               "Containers",
-              new MapCodec<WorkplaceStorageContainerComponent, HashMap<String, WorkplaceStorageContainerComponent>>(
-                  WorkplaceStorageContainerComponent.CODEC,
+              new MapCodec<WorkplaceContainerEntryComponent, HashMap<String, WorkplaceContainerEntryComponent>>(
+                  WorkplaceContainerEntryComponent.CODEC,
                   HashMap::new)),
           (obj, value) -> {
             obj.containers = new HashMap<>();
             value.forEach((k, v) -> obj.containers.put(UUID.fromString(k), v));
           },
           obj -> {
-            HashMap<String, WorkplaceStorageContainerComponent> encoded = new HashMap<>();
+            HashMap<String, WorkplaceContainerEntryComponent> encoded = new HashMap<>();
             obj.containers.forEach((k, v) -> encoded.put(k.toString(), v));
             return encoded;
           })
@@ -37,13 +37,13 @@ public class WorkplaceStorageComponent implements Component<ChunkStore> {
 
       .build();
 
-  private Map<UUID, WorkplaceStorageContainerComponent> containers = new HashMap<>();
+  private Map<UUID, WorkplaceContainerEntryComponent> containers = new HashMap<>();
 
-  public Map<UUID, WorkplaceStorageContainerComponent> getContainers() {
+  public Map<UUID, WorkplaceContainerEntryComponent> getContainers() {
     return Collections.unmodifiableMap(containers);
   }
 
-  public void registerContainer(UUID uuid, WorkplaceStorageContainerComponent container) {
+  public void registerContainer(UUID uuid, WorkplaceContainerEntryComponent container) {
     this.containers.put(uuid, container);
   }
 
@@ -55,19 +55,19 @@ public class WorkplaceStorageComponent implements Component<ChunkStore> {
   }
 
   @Override
-  public WorkplaceStorageComponent clone() {
-    WorkplaceStorageComponent component = new WorkplaceStorageComponent();
+  public WorkplaceContainerRegistryComponent clone() {
+    WorkplaceContainerRegistryComponent component = new WorkplaceContainerRegistryComponent();
     component.containers = new HashMap<>();
 
-    for (Map.Entry<UUID, WorkplaceStorageContainerComponent> entry : this.containers.entrySet()) {
-      WorkplaceStorageContainerComponent clonedContainer = entry.getValue() != null ? entry.getValue().clone() : null;
+    for (Map.Entry<UUID, WorkplaceContainerEntryComponent> entry : this.containers.entrySet()) {
+      WorkplaceContainerEntryComponent clonedContainer = entry.getValue() != null ? entry.getValue().clone() : null;
       component.containers.put(entry.getKey(), clonedContainer);
     }
 
     return component;
   }
 
-  public static ComponentType<ChunkStore, WorkplaceStorageComponent> getComponentType() {
+  public static ComponentType<ChunkStore, WorkplaceContainerRegistryComponent> getComponentType() {
     return ProjectCivicCore.get().getWorkplaceStorageComponentType();
   }
 

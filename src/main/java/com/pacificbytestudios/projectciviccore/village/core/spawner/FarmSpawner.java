@@ -18,9 +18,9 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.WorkplaceStorageContainerComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -58,8 +58,8 @@ public class FarmSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
-    Store<ChunkStore> workplaceStore = workplace.getStore();
-    WorkplaceComponent workplaceComponent = workplaceStore.getComponent(
+    Store<ChunkStore> chunkStore = workplace.getStore();
+    WorkplaceComponent workplaceComponent = chunkStore.getComponent(
         workplace,
         WorkplaceComponent.getComponentType());
 
@@ -72,7 +72,7 @@ public class FarmSpawner {
     workplaceComponent.setWorkingArea(new ClaimedAreaComponent(WORKING_AREA_OFFSET, position));
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
-    workplaceStore.putComponent(
+    chunkStore.putComponent(
         workplace,
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);
@@ -87,10 +87,9 @@ public class FarmSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, containerPosition);
     }
 
-    Store<ChunkStore> containerStore = containerRef.getStore();
-    WorkplaceStorageContainerComponent container = containerStore.getComponent(
+    WorkplaceContainerEntryComponent container = chunkStore.getComponent(
         containerRef,
-        WorkplaceStorageContainerComponent.getComponentType());
+        WorkplaceContainerEntryComponent.getComponentType());
 
     if (container == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Container component is missing");
@@ -102,7 +101,7 @@ public class FarmSpawner {
     container.setPosition(containerPosition);
     container.setUuid(UUID.randomUUID());
 
-    WorkplaceStorageComponent storage = new WorkplaceStorageComponent();
+    WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
     storage.registerContainer(container.getUuid(), container);
     workplaceComponent.setStorage(storage);
 

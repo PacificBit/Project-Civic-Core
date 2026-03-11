@@ -88,7 +88,7 @@
     },
     "BlockEntity": {
       "Components": {
-        "WorkplaceStorageContainerComponent": {},
+        "WorkplaceContainerEntryComponent": {},
         "ItemContainerBlock": {
           "Capacity": 36
         }

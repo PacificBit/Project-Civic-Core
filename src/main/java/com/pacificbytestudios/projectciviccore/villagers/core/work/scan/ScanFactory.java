@@ -6,12 +6,16 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 public class ScanFactory {
 
   public static IWorkAreaScanner newScanner(VillagerComponent villager) {
+    if (villager.getWorkerData() == null) {
+      return null;
+    }
     WorkType typeOfWorker = villager.getWorkerData().getTypeOfWorker();
     return switch (typeOfWorker) {
       case FARMER -> new FarmerScan();
       case MINER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
       case BAKER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
-      case WOODCUTTER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
+      case WOOD_CUTTER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
+      case STORAGE_KEEPER -> new StorageKeeperScan();
       default -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
     };
   }

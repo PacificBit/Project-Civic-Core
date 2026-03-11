@@ -18,6 +18,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.BakerySpawne
 import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.StorageSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 import io.sentry.util.Pair;
@@ -78,6 +79,7 @@ public class Utils {
       case FARM -> FarmSpawner::spawn;
       case BAKERY -> BakerySpawner::spawn;
       case SAWMILL -> SawmillSpawner::spawn;
+      case STORAGE -> StorageSpawner::spawn;
       default -> throw new IllegalArgumentException("Unsupported workplace type: " + workplaceType);
     };
   }
@@ -88,6 +90,7 @@ public class Utils {
       case FARM -> FarmSpawner::despawn;
       case BAKERY -> BakerySpawner::despawn;
       case SAWMILL -> SawmillSpawner::despawn;
+      case STORAGE -> StorageSpawner::despawn;
       default -> throw new IllegalArgumentException("Unsupported workplace type: " + workplaceType);
     };
   }
@@ -185,5 +188,9 @@ public class Utils {
     }
 
     return result;
+  }
+
+  public static String safeToString(Object value) {
+    return value == null ? "null" : value.toString();
   }
 }

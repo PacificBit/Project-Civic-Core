@@ -15,3 +15,6 @@ workplace.chest.small.description=Small workplace found in villages, cannot be c
 
 workplace.chest.large.name=Large Workplace chest
 workplace.chest.large.description=Large workplace found in villages, cannot be crafted
+
+workplace.storage.name=Storage Workplace
+workplace.storage.description=Storage workplace found in villages, cannot be crafted

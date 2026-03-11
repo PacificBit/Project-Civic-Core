@@ -3,7 +3,8 @@ package com.pacificbytestudios.projectciviccore.villagers.enums;
 public enum WorkType {
   MINER("Miner"),
   FARMER("Farmer"),
-  WOODCUTTER("Wood_Cutter"),
+  WOOD_CUTTER("Wood_Cutter"),
+  STORAGE_KEEPER("Storage_Keeper"),
   BAKER("Baker");
 
   private final String roleId;

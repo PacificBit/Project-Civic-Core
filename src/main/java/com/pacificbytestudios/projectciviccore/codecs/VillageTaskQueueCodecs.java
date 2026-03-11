@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterWorkplaceTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
@@ -43,5 +44,10 @@ public final class VillageTaskQueueCodecs {
         "UnregisterWorkplaceTask",
         UnregisterWorkplaceTask.class,
         UnregisterWorkplaceTask.CODEC);
+
+    VillageTaskQueueComponent.registerTaskCodec(
+        "RegisterNewVillageStorageRequest",
+        EnqueueVillageStorageRequestTask.class,
+        EnqueueVillageStorageRequestTask.CODEC);
   }
 }

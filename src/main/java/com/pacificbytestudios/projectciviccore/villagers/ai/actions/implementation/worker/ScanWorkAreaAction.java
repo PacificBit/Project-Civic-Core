@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.IWorkAreaScanner;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.ScanFactory;
 
 public class ScanWorkAreaAction extends ActionBase {
@@ -33,9 +34,17 @@ public class ScanWorkAreaAction extends ActionBase {
 
     assert uuidComponent != null : "Could not get the villager uuid";
 
-    WorkplaceAreaSnapshot snapshot = ScanFactory
-        .newScanner(villager)
-        .execute(store, ref, uuidComponent.getUuid(), villager);
+    IWorkAreaScanner scanner = ScanFactory.newScanner(villager);
+
+    if (scanner == null) {
+      return false;
+    }
+
+    WorkplaceAreaSnapshot snapshot = scanner.execute(
+        store,
+        ref,
+        uuidComponent.getUuid(),
+        villager);
 
     villager.getWorkerData().setWorkareaSnapshot(snapshot);
 

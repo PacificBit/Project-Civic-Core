@@ -1,0 +1,7 @@
+{
+  "Type": "Variant",
+  "Reference": "Template_Storage_Keeper",
+  "Modify": {
+    "MaxHealth": 100
+  }
+}

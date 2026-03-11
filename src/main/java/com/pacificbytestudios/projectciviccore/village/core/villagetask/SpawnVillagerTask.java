@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -205,5 +206,10 @@ public class SpawnVillagerTask implements IVillageTask {
     if (changed) {
       transform.markChunkDirty(entityStore);
     }
+  }
+
+  @Override
+  public void setOnError(BiConsumer<String, Object> callback) {
+    throw new UnsupportedOperationException("Unimplemented method 'setOnError'");
   }
 }

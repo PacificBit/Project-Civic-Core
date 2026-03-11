@@ -23,6 +23,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 
 public class FarmerScan implements IWorkAreaScanner {
@@ -57,7 +58,12 @@ public class FarmerScan implements IWorkAreaScanner {
         "[FarmerScan] Starting new farm scan at workplace: "
             + villager.getWorkerData().getWorkplace().getBenchPos());
 
-    WorkplaceAreaSnapshot snapshotInProgress = villager.getWorkerData().getWorkareaSnapshot();
+    VillagerWorkerComponent worker = villager.getWorkerData();
+    if (worker == null) {
+      return null;
+    }
+
+    WorkplaceAreaSnapshot snapshotInProgress = worker.getWorkareaSnapshot();
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
 
     if (snapshotInProgress != null && snapshotInProgress.isValid(worldTimeResource)) {
