@@ -186,6 +186,31 @@
             },
             {
               "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ],
+                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot",
+                  "Continue": true
+                }
+              ],
+              "$Comment": "No valid work area snapshot",
+              "Continue": true
+            },
+            {
+              "Sensor": {
                 "Type": "Any"
               },
               "Actions": [
@@ -205,29 +230,6 @@
             "State": ".WorkLoop"
           },
           "Instructions": [
-            {
-              "Sensor": {
-                "Type": "Not",
-                "Sensor": {
-                  "Type": "HasValidWorkAraSnapshot"
-                }
-              },
-              "Instructions": [
-                {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
-                  "Actions": [
-                    {
-                      "Type": "State",
-                      "State": ".NoWorkingAreaSnapshot"
-                    }
-                  ],
-                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot"
-                }
-              ],
-              "$Comment": "Step 0) No valid work area snapshot"
-            },
             {
               "Sensor": {
                 "Type": "HasTargetBlockInSnapshot",
@@ -305,17 +307,14 @@
                         "BlockIds": [
                           "Tillable_Terrain"
                         ],
-                        "StoppingRange": 2.5
+                        "StoppingRange": 1.3
                       },
                       "$Comment": "Reach Tillable Block",
                       "BodyMotion": {
                         "Type": "Seek",
-                        "StopDistance": 1,
-                        "SlowDownDistance": 1,
+                        "StopDistance": 0.5,
+                        "SlowDownDistance": 0.5,
                         "RelativeSpeed": 0.7
-                      },
-                      "HeadMotion": {
-                        "Type": "Aim"
                       }
                     },
                     {
@@ -422,7 +421,7 @@
                         "BlockIds": [
                           "Plantable_Terrain"
                         ],
-                        "StoppingRange": 2.5
+                        "StoppingRange": 1
                       },
                       "$Comment": "Reach Plantable Block",
                       "BodyMotion": {
@@ -476,7 +475,7 @@
                     "BlockIds": [
                       "Harvestable_Crop"
                     ],
-                    "StoppingRange": 2.5
+                    "StoppingRange": 1
                   },
                   "$Comment": "Reach Plantable Block",
                   "BodyMotion": {
@@ -484,9 +483,6 @@
                     "StopDistance": 0.5,
                     "SlowDownDistance": 0.5,
                     "RelativeSpeed": 0.7
-                  },
-                  "HeadMotion": {
-                    "Type": "Aim"
                   }
                 },
                 {
@@ -577,7 +573,7 @@
                           "ItemToEquip": "Tool_Watering_Can"
                         }
                       ],
-                      "$Comment": "Equip Hoe",
+                      "$Comment": "Equip Watering Can",
                       "Continue": true
                     },
                     {
@@ -586,7 +582,7 @@
                         "BlockIds": [
                           "Waterable_Terrain"
                         ],
-                        "StoppingRange": 2.5
+                        "StoppingRange": 1.5
                       },
                       "$Comment": "Reach Tillable Block",
                       "BodyMotion": {
@@ -594,9 +590,6 @@
                         "StopDistance": 0.5,
                         "SlowDownDistance": 0.5,
                         "RelativeSpeed": 0.7
-                      },
-                      "HeadMotion": {
-                        "Type": "Aim"
                       }
                     },
                     {
@@ -617,6 +610,29 @@
                       ]
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "Work is done"
+                }
+              ],
+              "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "WorkCooldown"
                 }
               ]
             }
@@ -672,7 +688,93 @@
         }
       ],
       "Continue": true,
-      "$Comment": "Normal state"
+      "$Comment": "Work Process"
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WorkCooldown"
+      },
+      "$Comment": "After all the steps are done",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "In cooldown"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Cooldown",
+          "ActionsBlocking": true,
+          "ActionsAtomic": true,
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                5,
+                5
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "PostWorkCooldown"
+      },
+      "$Comment": "Post Cooldown Creating Snapshot Area",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "ScanWorkArea"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.WorkLoop"
+            }
+          ]
+        }
+      ]
     }
   ],
   "NameTranslationKey": {

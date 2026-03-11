@@ -15,6 +15,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasTargetBlockInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 
 public class HasTargetBlockInSnapshotSensor extends SensorBase {
   private String[] targetBlockIds;
@@ -53,9 +54,13 @@ public class HasTargetBlockInSnapshotSensor extends SensorBase {
       return false;
     }
 
-    Map<String, ArrayDeque<Vector3i>> blockPositions = workerData
-        .getWorkareaSnapshot()
-        .getBlockTypePosition();
+    WorkplaceAreaSnapshot snapshot = workerData.getWorkareaSnapshot();
+    if (snapshot == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[HasTargetBlockInSnapshotSensor] Could not fetch snapshot");
+      return false;
+    }
+
+    Map<String, ArrayDeque<Vector3i>> blockPositions = snapshot.getBlockTypePosition();
 
     for (String targetBlockId : this.targetBlockIds) {
       ArrayDeque<Vector3i> queue = blockPositions.get(targetBlockId);

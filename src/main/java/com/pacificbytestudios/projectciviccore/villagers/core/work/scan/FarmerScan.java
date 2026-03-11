@@ -37,9 +37,13 @@ public class FarmerScan implements IWorkAreaScanner {
   public static final String PLANTABLE_TERRAIN = "Plantable_Terrain";
   public static final String HARVESTABLE_CROP = "Harvestable_Crop";
 
+  private static final String STATE_DEFINITIONS_MARKER = "_State_Definitions_";
+  private static final String FINAL_STAGE_MARKER = "StageFinal";
+
   private static final long MAX_TIME_NS = 1_000_000;
 
   private final Map<Long, WorldChunk> chunkCache = new HashMap<>();
+
   private World contextWorld;
   private Store<ChunkStore> chunkStore;
 
@@ -49,14 +53,14 @@ public class FarmerScan implements IWorkAreaScanner {
       Ref<EntityStore> villagerRef,
       UUID uuid,
       VillagerComponent villager) {
-    ProjectCivicCore.LOGGER.atInfo().log("[FarmerScan] Starting new farm scan at workplace: " +
-        villager.getWorkerData().getWorkplace().getBenchPos());
+    ProjectCivicCore.LOGGER.atInfo().log(
+        "[FarmerScan] Starting new farm scan at workplace: "
+            + villager.getWorkerData().getWorkplace().getBenchPos());
 
     WorkplaceAreaSnapshot snapshotInProgress = villager.getWorkerData().getWorkareaSnapshot();
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
 
-    if (snapshotInProgress != null &&
-        snapshotInProgress.isValid(worldTimeResource)) {
+    if (snapshotInProgress != null && snapshotInProgress.isValid(worldTimeResource)) {
       return snapshotInProgress;
     }
 
@@ -70,41 +74,56 @@ public class FarmerScan implements IWorkAreaScanner {
     Vector2i botRightCorner = workingArea.getBotRight();
     int soilLevel = workingArea.getY();
 
+    int startX = topLeftCorner.x;
+    int endX = botRightCorner.x;
+    int startZ = topLeftCorner.y;
+    int endZ = botRightCorner.y;
+
     Vector3i currentPoint = snapshotInProgress.getLastVisited();
-    if (currentPoint == null) {
-      currentPoint = new Vector3i(topLeftCorner.x, soilLevel, topLeftCorner.y);
+    if (currentPoint == null || !isInsideWorkArea(currentPoint, startX, endX, startZ, endZ, soilLevel)) {
+      currentPoint = new Vector3i(startX, soilLevel, startZ);
     } else {
-      currentPoint = new Vector3i(currentPoint.x, soilLevel, currentPoint.z);
+      currentPoint = new Vector3i(
+          clamp(currentPoint.x, startX, endX),
+          soilLevel,
+          clamp(currentPoint.z, startZ, endZ));
     }
 
-    this.contextWorld = villager.getWorkerData()
-        .getWorkplace()
-        .getVillageHeartRef()
-        .getStore()
-        .getExternalData()
-        .getWorld();
-
+    this.contextWorld = store.getExternalData().getWorld();
     this.chunkStore = this.contextWorld.getChunkStore().getStore();
 
-    long initialChunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x,
-        currentPoint.z);
+    long initialChunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x, currentPoint.z);
     WorldChunk soilChunk = getOrLoadChunk(initialChunkIndex);
 
-    long start = System.nanoTime();
+    if (soilChunk == null) {
+      ProjectCivicCore.LOGGER.atSevere().log(
+          "[FarmerScan] Initial chunk is null for point " + currentPoint);
+      return snapshotInProgress;
+    }
 
-    while (isInsideWorkArea(currentPoint, topLeftCorner, botRightCorner,
-        soilLevel)) {
+    long start = System.nanoTime();
+    int scannedColumns = 0;
+
+    while (isInsideWorkArea(currentPoint, startX, endX, startZ, endZ, soilLevel)) {
       if (System.nanoTime() - start >= MAX_TIME_NS) {
         snapshotInProgress.setLastVisited(currentPoint.clone());
-        ProjectCivicCore.LOGGER.atInfo().log("Farming scan took too long, dividing it into multiple scans");
+        ProjectCivicCore.LOGGER.atInfo().log(
+            "[FarmerScan] Scan budget exceeded after " + scannedColumns
+                + " columns, continuing next tick from " + currentPoint);
         return snapshotInProgress;
       }
 
       soilChunk = getCorrectChunkForBlock(currentPoint, soilChunk);
-      scanColumnTasks(snapshotInProgress, soilChunk, currentPoint);
+      if (soilChunk == null) {
+        ProjectCivicCore.LOGGER.atSevere().log(
+            "[FarmerScan] Chunk is null while scanning point " + currentPoint);
+        break;
+      }
 
-      Vector3i nextPoint = getNextPoint(currentPoint, topLeftCorner,
-          botRightCorner, soilLevel);
+      scanColumnTasks(snapshotInProgress, soilChunk, currentPoint);
+      scannedColumns++;
+
+      Vector3i nextPoint = getNextPoint(currentPoint, startX, endX, startZ, endZ, soilLevel);
       if (nextPoint == null) {
         break;
       }
@@ -115,6 +134,7 @@ public class FarmerScan implements IWorkAreaScanner {
 
     snapshotInProgress.captureNow(worldTimeResource);
     snapshotInProgress.setCompleted(true);
+
     return snapshotInProgress;
   }
 
@@ -122,25 +142,26 @@ public class FarmerScan implements IWorkAreaScanner {
       WorkplaceAreaSnapshot snapshotInProgress,
       WorldChunk soilChunk,
       Vector3i soilPosition) {
+
     BlockType soilType = soilChunk.getBlockType(soilPosition);
-    String soilBlockId = soilType.getId();
-
-    if (SOIL_GRASS_ID.equals(soilBlockId) || SOIL_MUD_DRY_ID.equals(soilBlockId)) {
-      addTask(snapshotInProgress, TILLABLE_TERRAIN, soilPosition);
-      return;
-    }
-
-    if (!TILLED_SOIL_ID.equals(soilBlockId)) {
-      return;
-    }
+    String soilBlockId = getBlockId(soilType);
 
     Vector3i abovePosition = new Vector3i(
         soilPosition.x,
         soilPosition.y + 1,
         soilPosition.z);
+
     WorldChunk aboveChunk = getCorrectChunkForBlock(abovePosition, soilChunk);
-    BlockType aboveType = aboveChunk.getBlockType(abovePosition);
-    String aboveBlockId = aboveType.getId();
+    BlockType aboveType = aboveChunk != null ? aboveChunk.getBlockType(abovePosition) : null;
+
+    if (matchesBaseId(soilBlockId, SOIL_GRASS_ID) || matchesBaseId(soilBlockId, SOIL_MUD_DRY_ID)) {
+      addTask(snapshotInProgress, TILLABLE_TERRAIN, soilPosition);
+      return;
+    }
+
+    if (!matchesBaseId(soilBlockId, TILLED_SOIL_ID)) {
+      return;
+    }
 
     if (isHarvestableCropBlock(aboveType)) {
       addTask(snapshotInProgress, HARVESTABLE_CROP, abovePosition);
@@ -151,12 +172,22 @@ public class FarmerScan implements IWorkAreaScanner {
       addTask(snapshotInProgress, WATERABLE_TERRAIN, soilPosition);
     }
 
-    if (EMPTY_BLOCK_ID.equals(aboveBlockId)) {
+    if (isEmptyBlock(aboveType)) {
       addTask(snapshotInProgress, PLANTABLE_TERRAIN, abovePosition);
     }
   }
 
   private boolean isHarvestableCropBlock(BlockType blockType) {
+    if (blockType == null) {
+      return false;
+    }
+
+    String blockId = getBlockId(blockType);
+
+    if (isFinalCropStageId(blockId)) {
+      return true;
+    }
+
     FarmingData farmingData = blockType.getFarming();
     if (farmingData == null || farmingData.getStages() == null) {
       return false;
@@ -183,40 +214,44 @@ public class FarmerScan implements IWorkAreaScanner {
 
   private boolean isInsideWorkArea(
       Vector3i point,
-      Vector2i topLeftCorner,
-      Vector2i botRightCorner,
+      int minX,
+      int maxX,
+      int minZ,
+      int maxZ,
       int soilLevel) {
-    return point.x >= topLeftCorner.x
-        && point.x <= botRightCorner.x
-        && point.z >= topLeftCorner.y
-        && point.z <= botRightCorner.y
+    return point.x >= minX
+        && point.x <= maxX
+        && point.z >= minZ
+        && point.z <= maxZ
         && point.y == soilLevel;
   }
 
   private Vector3i getNextPoint(
       Vector3i currentPoint,
-      Vector2i topLeftCorner,
-      Vector2i botRightCorner,
+      int minX,
+      int maxX,
+      int minZ,
+      int maxZ,
       int soilLevel) {
-    if (currentPoint.x < botRightCorner.x) {
+
+    if (currentPoint.x < maxX) {
       return new Vector3i(currentPoint.x + 1, soilLevel, currentPoint.z);
     }
 
-    if (currentPoint.z < botRightCorner.y) {
-      return new Vector3i(topLeftCorner.x, soilLevel, currentPoint.z + 1);
+    if (currentPoint.z < maxZ) {
+      return new Vector3i(minX, soilLevel, currentPoint.z + 1);
     }
 
     return null;
   }
 
   private WorldChunk getCorrectChunkForBlock(Vector3i currentPoint, WorldChunk chunk) {
-    if (!ChunkUtil.isInsideChunk(
+    if (chunk == null || !ChunkUtil.isInsideChunk(
         chunk.getX(),
         chunk.getZ(),
         currentPoint.x,
         currentPoint.z)) {
-      long chunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x,
-          currentPoint.z);
+      long chunkIndex = ChunkUtil.indexChunkFromBlock(currentPoint.x, currentPoint.z);
       return getOrLoadChunk(chunkIndex);
     }
 
@@ -227,24 +262,89 @@ public class FarmerScan implements IWorkAreaScanner {
     WorldChunk chunk = this.chunkCache.get(chunkIndex);
     if (chunk == null) {
       chunk = this.contextWorld.getChunk(chunkIndex);
-      this.chunkCache.put(chunkIndex, chunk);
+      if (chunk != null) {
+        this.chunkCache.put(chunkIndex, chunk);
+      }
     }
     return chunk;
   }
 
   private boolean isTilledSoilWatered(WorldChunk chunk, Vector3i position) {
+    if (chunk == null) {
+      return false;
+    }
+
     Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(
         position.x, position.y, position.z);
+
     if (blockEntityRef == null) {
       return false;
     }
 
-    TilledSoilBlock tilledSoilBlock = this.chunkStore.getComponent(blockEntityRef,
+    TilledSoilBlock tilledSoilBlock = this.chunkStore.getComponent(
+        blockEntityRef,
         TilledSoilBlock.getComponentType());
+
     if (tilledSoilBlock == null) {
       return false;
     }
 
     return tilledSoilBlock.getWateredUntil() != null;
+  }
+
+  private String getBlockId(BlockType blockType) {
+    if (blockType == null || blockType.getId() == null) {
+      return "<null>";
+    }
+    return blockType.getId();
+  }
+
+  private boolean isEmptyBlock(BlockType blockType) {
+    return matchesBaseId(getBlockId(blockType), EMPTY_BLOCK_ID);
+  }
+
+  private boolean matchesBaseId(String actualId, String expectedBaseId) {
+    String normalized = normalizeBlockId(actualId);
+    return normalized != null && normalized.equals(expectedBaseId);
+  }
+
+  private boolean isFinalCropStageId(String blockId) {
+    if (blockId == null) {
+      return false;
+    }
+    return blockId.contains(STATE_DEFINITIONS_MARKER) && blockId.contains(FINAL_STAGE_MARKER);
+  }
+
+  private String normalizeBlockId(String blockId) {
+    if (blockId == null || "<null>".equals(blockId)) {
+      return null;
+    }
+
+    String normalized = blockId;
+
+    while (normalized.startsWith("*")) {
+      normalized = normalized.substring(1);
+    }
+
+    while (normalized.endsWith("*")) {
+      normalized = normalized.substring(0, normalized.length() - 1);
+    }
+
+    int stateIndex = normalized.indexOf(STATE_DEFINITIONS_MARKER);
+    if (stateIndex >= 0) {
+      normalized = normalized.substring(0, stateIndex);
+    }
+
+    return normalized;
+  }
+
+  private int clamp(int value, int min, int max) {
+    if (value < min) {
+      return min;
+    }
+    if (value > max) {
+      return max;
+    }
+    return value;
   }
 }

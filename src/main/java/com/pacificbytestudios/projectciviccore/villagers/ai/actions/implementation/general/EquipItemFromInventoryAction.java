@@ -10,6 +10,8 @@ import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.hypixel.hytale.server.npc.util.InventoryHelper;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 
 public class EquipItemFromInventoryAction extends ActionBase {
@@ -39,23 +41,59 @@ public class EquipItemFromInventoryAction extends ActionBase {
         .getInventory()
         .getActiveHotbarSlot();
 
+    ItemContainer hotbar = npcEntity.getInventory().getHotbar();
+
+    ItemStack itemInHand = npcEntity.getInventory().getActiveHotbarItem();
+
+    if (this.itemIdToEquip.toLowerCase().equals("null")) {
+      return this.unequipItem(itemInHand, npcEntity, hotbar, activeHotbarSlot);
+    }
+
+    return swapToItemFromInventory(inventory, activeHotbarSlot, hotbar, itemInHand);
+  }
+
+  private boolean swapToItemFromInventory(ItemContainer inventory, byte activeHotbarSlot, ItemContainer hotbar,
+      ItemStack itemInHand) {
     for (short slot = 0; slot < inventory.getCapacity(); slot++) {
       ItemStack itemStack = inventory.getItemStack(slot);
       if (itemStack != null && itemStack.getItemId().startsWith(this.itemIdToEquip)) {
-        ItemContainer hotbar = npcEntity.getInventory().getHotbar();
-
-        ItemStack equippedStack = hotbar.getItemStack(
-            activeHotbarSlot);
 
         hotbar.setItemStackForSlot(
             activeHotbarSlot,
             itemStack);
 
-        inventory.setItemStackForSlot(slot, equippedStack);
+        inventory.setItemStackForSlot(slot, itemInHand);
         return true;
       }
     }
 
+    return false;
+  }
+
+  private boolean unequipItem(
+      ItemStack itemInHand,
+      NPCEntity npcEntity,
+      ItemContainer hotbar,
+      short activeHotbarSlot) {
+    if (itemInHand == null) {
+      return true;
+    }
+
+    ItemContainer storage = npcEntity.getInventory().getStorage();
+    if (InventoryHelper.countFreeSlots(storage) < 1) {
+      ProjectCivicCore.LOGGER.atInfo()
+          .log("[EquipItemFromInventoryAction] Storage is full, cannot free the hand slot");
+      return false;
+    }
+    for (short slot = (short) (storage.getCapacity() - 1); slot >= 0; slot--) {
+      if (storage.getItemStack(slot) == null) {
+        storage.setItemStackForSlot(slot, itemInHand);
+        hotbar.setItemStackForSlot(
+            activeHotbarSlot,
+            null);
+        return true;
+      }
+    }
     return false;
   }
 }
