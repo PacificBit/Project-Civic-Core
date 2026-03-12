@@ -396,8 +396,8 @@
                       "SnapshotKey": "Fetch_Item",
                       "ActionType": "WITHDRAW",
                       "ConsumeTargetOnFail": true,
-                      "ConsumeTargetOnSuccess": true,
-                      "UseSnapshotItemCriteria": true
+                      "UseSnapshotItemCriteria": true,
+                      "ConsumeTargetOnSuccess": true
                     }
                   ],
                   "Continue": false,
@@ -490,7 +490,9 @@
                       "Type": "InteractWithExternalInventory",
                       "SnapshotKey": "Dump_Item",
                       "ActionType": "DEPOSIT",
-                      "ConsumeTargetOnFail": true
+                      "ConsumeTargetOnFail": true,
+                      "ConsumeTargetOnSuccess": true,
+                      "UseSnapshotItemCriteria": true
                     },
                     {
                       "Type": "ClearSnapshotGroup",
@@ -503,7 +505,7 @@
                     }
                   ],
                   "Continue": false,
-                  "$Comment": "Drop All"
+                  "$Comment": "Drop Item"
                 }
               ]
             },

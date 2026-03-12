@@ -100,6 +100,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
         return snapshotInProgress;
     }
 
+    storageReqComp.assignRequest(uuid, request.getRequestId());
     return signSnapshotAsCompleted(snapshotInProgress, worldTimeResource);
   }
 
@@ -123,7 +124,8 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     snapshot.getBlockTypePosition().put(dumpKey, dumpTo);
   }
 
-  private WorkplaceAreaSnapshot signSnapshotAsCompleted(WorkplaceAreaSnapshot snapshot,
+  private WorkplaceAreaSnapshot signSnapshotAsCompleted(
+      WorkplaceAreaSnapshot snapshot,
       WorldTimeResource worldTimeResource) {
     snapshot.setCompleted(true);
     snapshot.captureNow(worldTimeResource);

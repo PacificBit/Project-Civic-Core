@@ -128,12 +128,12 @@ public class InteractWithExternalInventory extends ActionBase {
 
     if (done) {
       if (this.consumeSnapshotTargetOnSuccess) {
+        System.out.println("Clearing success target");
         coords.pollFirst();
       }
-    } else {
-      if (this.consumeSnapshotTargetOnFail) {
-        coords.pollFirst();
-      }
+    } else if (this.consumeSnapshotTargetOnFail) {
+      System.out.println("Clearing on fail");
+      coords.pollFirst();
     }
     return done;
   }
@@ -262,23 +262,28 @@ public class InteractWithExternalInventory extends ActionBase {
           item != null ? item.getQuantity() : 0);
     }
 
+    // 1. Creiamo le due "super-condizioni" (equivalente al tuo if concatenato)
     Predicate<String> isExcluded = name -> false;
     Predicate<String> isIncluded = name -> false;
     boolean hasInclusiveRules = false;
 
-    for (ItemCriteria criteria : this.itemCriteria) {
-      if (!criteria.isFilterIn()) {
-        isExcluded = isExcluded.or(criteria::matches);
+    for (ItemCriteria c : this.itemCriteria) {
+      if (!c.isFilterIn()) {
+        // Concatena con || (OR) per le esclusioni
+        isExcluded = isExcluded.or(c::matches);
       } else {
-        isIncluded = isIncluded.or(criteria::matches);
+        // Concatena con || (OR) per le inclusioni
+        isIncluded = isIncluded.or(c::matches);
         hasInclusiveRules = true;
       }
     }
 
+    // Salviamo variabili finali per la lambda
     final boolean requiresInclusion = hasInclusiveRules;
     final Predicate<String> fastRejectionCheck = isExcluded;
     final Predicate<String> fastAcceptanceCheck = isIncluded;
 
+    // 2. Ritorniamo la funzione che viene eseguita per ogni item
     return item -> {
       int requestedAmount = getTransferableAmount(
           item,
@@ -288,22 +293,34 @@ public class InteractWithExternalInventory extends ActionBase {
       }
 
       String itemName = item.getItemId();
+
+      // -- FASE 1: CONFERMA IMMEDIATA (Il "singolo if" che volevi) --
+
+      // Se l'item matcha anche solo un'esclusione, scartalo subito (short-circuit
+      // veloce)
       if (fastRejectionCheck.test(itemName)) {
         return 0;
       }
+
+      // Se ci sono regole di inclusione e NON matcha nessuna di queste, scartalo
       if (requiresInclusion && !fastAcceptanceCheck.test(itemName)) {
         return 0;
       }
+
+      // -- FASE 2: GESTIONE DELL'AMOUNT --
+
       if (!requiresInclusion) {
-        return requestedAmount;
+        return requestedAmount; // Tutto accettato senza limiti
       }
 
+      // Dato che sappiamo già che l'item E' ACCETTATO, cerchiamo solo quale regola
+      // ha i limiti di "count" da applicare.
       for (int i = 0; i < this.itemCriteria.size(); i++) {
         ItemCriteria criteria = this.itemCriteria.get(i);
 
         if (criteria.isFilterIn() && criteria.matches(itemName)) {
           if (criteria.getCount() <= 0) {
-            return requestedAmount;
+            return requestedAmount; // Nessun limite per questa regola
           }
 
           String counterKey = buildCriterionCounterKey(i);
@@ -366,10 +383,39 @@ public class InteractWithExternalInventory extends ActionBase {
         ? snapshot.getCapturedAt().toString()
         : "snapshot:" + System.identityHashCode(snapshot);
 
-    if (this.assignedRequestId != null) {
-      return snapshotIdentifier + "|" + this.assignedRequestId;
+    String requestIdentifier = this.assignedRequestId != null
+        ? this.assignedRequestId.toString()
+        : "request:none";
+
+    return this.workerId
+        + "|"
+        + this.snapshotKey
+        + "|"
+        + this.actionType.get()
+        + "|"
+        + snapshotIdentifier
+        + "|"
+        + requestIdentifier
+        + "|"
+        + buildItemCriteriaSignature();
+  }
+
+  private String buildItemCriteriaSignature() {
+    if (this.itemCriteria == null || this.itemCriteria.isEmpty()) {
+      return "criteria:none";
     }
-    return snapshotIdentifier;
+
+    StringBuilder signature = new StringBuilder();
+    for (ItemCriteria criteria : this.itemCriteria) {
+      signature.append(criteria.getItemId())
+          .append(':')
+          .append(criteria.isFilterIn())
+          .append(':')
+          .append(criteria.getCount())
+          .append(';');
+    }
+
+    return signature.toString();
   }
 
   private void resetTrackedItemCount() {
@@ -384,15 +430,20 @@ public class InteractWithExternalInventory extends ActionBase {
       return;
     }
 
+    // Cerchiamo a quale regola inclusiva appartiene per aggiornare il count
     for (int i = 0; i < this.itemCriteria.size(); i++) {
       ItemCriteria criteria = this.itemCriteria.get(i);
 
+      // Ignoriamo le esclusioni, ci interessano solo i contatori delle inclusioni
       if (criteria.isFilterIn() && criteria.matches(itemName)) {
+
         if (criteria.getCount() > 0) {
           String counterKey = buildCriterionCounterKey(i);
           int alreadyCommitted = this.itemCount.getOrDefault(counterKey, 0);
           this.itemCount.put(counterKey, alreadyCommitted + movedAmount);
         }
+
+        // Appena troviamo la regola e aggiorniamo, usciamo.
         return;
       }
     }

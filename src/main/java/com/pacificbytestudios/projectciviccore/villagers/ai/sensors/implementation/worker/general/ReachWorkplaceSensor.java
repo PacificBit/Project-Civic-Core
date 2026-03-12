@@ -10,8 +10,10 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
 public class ReachWorkplaceSensor extends SensorBase {
 
@@ -31,7 +33,14 @@ public class ReachWorkplaceSensor extends SensorBase {
   @Override
   public boolean matches(Ref<EntityStore> ref, Role role, double dt, Store<EntityStore> store) {
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    WorkplaceComponent workplace = villager.getWorkerData().getWorkplace();
+    VillagerWorkerComponent workerData = villager.getWorkerData();
+
+    if (workerData == null) {
+      ProjectCivicCore.LOGGER.atWarning().log("[ReachWorkplaceSensor] could not fetch worker data");
+      return false;
+    }
+
+    WorkplaceComponent workplace = workerData.getWorkplace();
 
     if (workplace == null) {
       this.positionProvider.clear();
