@@ -5,6 +5,7 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands.ClearQueueRequests;
 import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands.ClearStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands.ItemFetchRequest;
+import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands.StorageDump;
 
 public class Storage extends AbstractCommandCollection {
 
@@ -14,6 +15,7 @@ public class Storage extends AbstractCommandCollection {
     this.addSubCommand(new ItemFetchRequest());
     this.addSubCommand(new ClearStorageRequest());
     this.addSubCommand(new ClearQueueRequests());
+    this.addSubCommand(new StorageDump());
   }
 
 }

@@ -403,6 +403,10 @@
                     {
                       "Type": "ClearSnapshotGroup",
                       "GroupName": "Dump_All"
+                    },
+                    {
+                      "Type": "UpdateStorageRequestStatus",
+                      "Status": "COMPLETED"
                     }
                   ],
                   "Continue": false,

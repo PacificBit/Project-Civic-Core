@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.subcommands;
+package com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class StorageDump extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   public StorageDump() {
-    super("dump_storage", "Storage dump");
+    super("dump", "Storage dump");
   }
 
   @Override
@@ -65,8 +65,14 @@ public class StorageDump extends CommandBase {
       for (UUID uuid : villageHeartComponent.getVillageStorageWorkplaces()) {
         Ref<ChunkStore> refStorage = villageHeartComponent.getWorkplaceFromId(uuid).getWorkplaceRef().getRef();
         System.out.println("==========================================");
+        System.out.println("Pending:");
         System.out.println(world.getChunkStore().getStore().getComponent(refStorage,
             WorkplaceVillageStorageRequestComponent.getComponentType()).getRequests());
+
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("On going:");
+        System.out.println(world.getChunkStore().getStore().getComponent(refStorage,
+            WorkplaceVillageStorageRequestComponent.getComponentType()).getOnGoingRequest());
       }
     });
   }

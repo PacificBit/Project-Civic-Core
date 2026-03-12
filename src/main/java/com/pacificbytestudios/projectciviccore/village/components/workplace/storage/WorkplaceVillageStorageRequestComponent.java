@@ -58,6 +58,10 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
     return this.requestDeque;
   }
 
+  public Map<UUID, ArrayDeque<VillageStorageRequest>> getOnGoingRequest() {
+    return this.onGoingRequests;
+  }
+
   public boolean assignRequest(UUID workerId, UUID requestId) {
     VillageStorageRequest firstRequest = this.requestDeque.peek();
     ArrayDeque<VillageStorageRequest> workerRequests = this.onGoingRequests.computeIfAbsent(
@@ -86,6 +90,25 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
 
     this.requestDeque = remainingRequests;
     return assigned;
+  }
+
+  public boolean removeCompletedRequest(UUID workerId) {
+    if (this.onGoingRequests.containsKey(workerId)) {
+      this.onGoingRequests.remove(workerId);
+    }
+
+    return true;
+  }
+
+  public boolean unassignRequest(UUID workerId) {
+    ArrayDeque<VillageStorageRequest> requests = this.onGoingRequests.remove(workerId);
+
+    if (requests == null || requests.isEmpty()) {
+      return false;
+    }
+
+    this.requestDeque.addAll(requests);
+    return true;
   }
 
   public void clearAll() {

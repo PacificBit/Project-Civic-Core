@@ -38,6 +38,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderPlantSeedAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderTillSoilAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderWaterSoilAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryInventorySensor;
@@ -246,6 +247,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "SetWorkplaceStorageTargetInSnapshot",
         BuilderWorkplaceStorageTargetsSnapshotAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "UpdateStorageRequestStatus",
+        BuilderUpdateRequestStatusAction::new);
 
     // ===========================
     // Extra

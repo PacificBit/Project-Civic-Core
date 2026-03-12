@@ -2,8 +2,11 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.component.Ref;
@@ -83,45 +86,6 @@ public class StorageSpawner {
     }
 
     workplaceComponent.setStorage(registry);
-
-    // TODO: generate more containers
-    // Vector3i containerPosition = getContainerPosition(workplaceBlockPosition);
-    //
-    // WorldChunk containerChunk = Utils.setBlockChunkAware(
-    // workplaceChunk,
-    // containerPosition,
-    // DOUBLE_STORAGE_BLOCK);
-    // Ref<ChunkStore> containerRef =
-    // containerChunk.getBlockComponentEntity(containerPosition.x,
-    // containerPosition.y, containerPosition.z);
-    //
-    // if (containerRef == null || !containerRef.isValid()) {
-    // ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container ref is
-    // invalid");
-    // return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
-    // workplaceBlockPosition, containerPosition);
-    // }
-    //
-    // WorkplaceContainerEntryComponent container = chunkStore.getComponent(
-    // containerRef,
-    // WorkplaceContainerEntryComponent.getComponentType());
-    //
-    // if (container == null) {
-    // ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container component
-    // is missing");
-    // return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
-    // workplaceBlockPosition, containerPosition);
-    // }
-    //
-    // workplaceComponent.setPrefabAnchor(position.clone());
-    //
-    // container.setPosition(containerPosition);
-    // container.setUuid(UUID.randomUUID());
-    //
-    // WorkplaceContainerRegistryComponent storage = new
-    // WorkplaceContainerRegistryComponent();
-    // storage.registerContainer(container.getUuid(), container);
-    // workplaceComponent.setStorage(storage);
     return true;
   }
 
@@ -226,16 +190,17 @@ public class StorageSpawner {
     }
 
     despawnContainers(chunk, workplace);
-    // Vector3i containerPosition = getContainerPosition(workplaceBlockPosition);
     Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
-    // Utils.breakBlockChunkAware(workplaceChunk, containerPosition);
-
     return despawn;
   }
 
   private static void despawnContainers(WorldChunk chunk, WorkplaceComponent workplace) {
     Map<UUID, WorkplaceContainerEntryComponent> containers = workplace.getStorage().getContainers();
-    for (Map.Entry<UUID, WorkplaceContainerEntryComponent> container : containers.entrySet()) {
+
+    Set<Entry<UUID, WorkplaceContainerEntryComponent>> entrySet = new HashSet<Entry<UUID, WorkplaceContainerEntryComponent>>(
+        containers.entrySet());
+
+    for (Map.Entry<UUID, WorkplaceContainerEntryComponent> container : entrySet) {
       workplace.getStorage().unregisterContainer(container.getKey());
       Utils.breakBlockChunkAware(chunk, container.getValue().getPosition());
     }
@@ -244,11 +209,6 @@ public class StorageSpawner {
   private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
     return prefabAnchor.clone().add(Vector3i.NORTH.clone().scale(3)).add(Vector3i.UP);
   }
-
-  // private static Vector3i getContainerPosition(Vector3i workplaceBlockPosition)
-  // {
-  // return workplaceBlockPosition.clone().add(Vector3i.EAST.clone().scale(2));
-  // }
 
   private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
     return workplaceBlockPosition.clone().add(Vector3i.SOUTH.clone().scale(4)).add(Vector3i.DOWN);
