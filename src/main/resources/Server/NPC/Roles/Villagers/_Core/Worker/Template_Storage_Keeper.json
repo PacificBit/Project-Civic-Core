@@ -216,13 +216,102 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".WorkLoop"
+                  "State": ".PreWorkLoop"
                 }
               ],
-              "$Comment": "Workplace Reached -> .StartWork"
+              "$Comment": "Workplace Reached -> .PreWorkLoop"
             }
           ],
           "$Comment": "Starting the workday"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PreWorkLoop"
+          },
+          "$Comment": "Pre WorkLoop - clear inventory",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "QueryInventorySensor"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasTargetBlockInSnapshot",
+                      "TargetBlockIds": [
+                        "Worker_Workplace_Storage"
+                      ]
+                    },
+                    "Once": true
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "SetWorkplaceStorageTargetInSnapshot",
+                          "ActionType": "ADD"
+                        }
+                      ],
+                      "$Comment": "Add to snapshot"
+                    }
+                  ],
+                  "$Comment": "If the position of the workplace containers are not in snapshot"
+                },
+                {
+                  "Sensor": {
+                    "Type": "ReachNextTargetInSnapshot",
+                    "BlockIds": [
+                      "Worker_Workplace_Storage"
+                    ],
+                    "StoppingRange": 1.5
+                  },
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "StopDistance": 1.5,
+                    "SlowDownDistance": 1.5,
+                    "RelativeSpeed": 0.6
+                  },
+                  "$Comment": "Reach workplace storage container"
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "InteractWithExternalInventory",
+                      "ActionType": "DEPOSIT",
+                      "SnapshotKey": "Worker_Workplace_Storage",
+                      "ConsumeTargetOnFail": true
+                    }
+                  ],
+                  "$Comment": "Try to deposit all"
+                }
+              ],
+              "$Comment": "If the inventory is not empty"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ],
+              "$Comment": "Substate change: -> .WorkLoop"
+            }
+          ]
         },
         {
           "Sensor": {
@@ -240,39 +329,18 @@
               "Instructions": [
                 {
                   "Sensor": {
-                    "Type": "Not",
-                    "Sensor": {
-                      "Type": "QueryInventorySensor"
-                    }
-                  },
-                  "Instructions": [
-                    {
-                      "Sensor": {
-                        "Type": "Any"
-                      },
-                      "Actions": [
-                        {
-                          "Type": "Log",
-                          "Message": "Needs to free up inventory"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Sensor": {
                     "Type": "ReachNextTargetInSnapshot",
                     "BlockIds": [
                       "Fetch_All"
                     ],
-                    "StoppingRange": 1
+                    "StoppingRange": 1.5
                   },
                   "Continue": false,
                   "BodyMotion": {
                     "Type": "Seek",
-                    "StopDistance": 1,
+                    "StopDistance": 1.5,
                     "RelativeSpeed": 0.6,
-                    "SlowDownDistance": 1
+                    "SlowDownDistance": 1.5
                   }
                 },
                 {
@@ -284,9 +352,42 @@
                       "Type": "InteractWithExternalInventory",
                       "SnapshotKey": "Fetch_All",
                       "ActionType": "WITHDRAW"
+                    },
+                    {
+                      "Type": "Log",
+                      "Message": "FETCHED CORRECTLY"
                     }
                   ],
-                  "Continue": true
+                  "Continue": false,
+                  "$Comment": "Fetch All"
+                }
+              ],
+              "$Comment": "Step 1) Handle Fetch All request"
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Dump_All"
+                ]
+              },
+              "$Comment": "Step 3) Handle Drop All request",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "ReachNextTargetInSnapshot",
+                    "BlockIds": [
+                      "Dump_All"
+                    ],
+                    "StoppingRange": 1.5
+                  },
+                  "Continue": false,
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "StopDistance": 1.5,
+                    "RelativeSpeed": 0.6,
+                    "SlowDownDistance": 1.5
+                  }
                 },
                 {
                   "Sensor": {
@@ -294,11 +395,18 @@
                   },
                   "Actions": [
                     {
-                      "Type": "Log",
-                      "Message": "Inventory free, ready to rock"
+                      "Type": "InteractWithExternalInventory",
+                      "SnapshotKey": "Dump_All",
+                      "ActionType": "DEPOSIT",
+                      "ConsumeTargetOnFail": true
+                    },
+                    {
+                      "Type": "ClearSnapshotGroup",
+                      "GroupName": "Dump_All"
                     }
                   ],
-                  "Continue": true
+                  "Continue": false,
+                  "$Comment": "Drop All"
                 }
               ]
             },
@@ -325,7 +433,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "$Comment": "Working"
         },
         {
           "Sensor": {
@@ -434,7 +543,7 @@
           "Actions": [
             {
               "Type": "State",
-              "State": "Working.WorkLoop"
+              "State": "Working.PreWorkLoop"
             }
           ]
         }

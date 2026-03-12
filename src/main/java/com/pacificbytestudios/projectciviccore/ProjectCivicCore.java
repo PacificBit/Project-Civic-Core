@@ -33,10 +33,11 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.gen
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderHarvestCropAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderPlantSeedAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderTillSoilAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderWaterSoilAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderWorkplaceStorageTargetsSnapshotAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderHarvestCropAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderPlantSeedAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderTillSoilAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderWaterSoilAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryInventorySensor;
@@ -241,6 +242,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "InteractWithExternalInventory",
         BuilderInteractWithExternalInventory::new);
+
+    npcPlugin.registerCoreComponentType(
+        "SetWorkplaceStorageTargetInSnapshot",
+        BuilderWorkplaceStorageTargetsSnapshotAction::new);
 
     // ===========================
     // Extra

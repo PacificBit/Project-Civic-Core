@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer;
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer;
 
 import com.google.gson.JsonElement;
 import com.hypixel.hytale.server.npc.asset.builder.Builder;
@@ -6,13 +6,13 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderDescriptorState;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.Farmer.HarvestCropAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.farmer.WaterSoilAction;
 
-public class BuilderHarvestCropAction extends BuilderActionBase {
+public class BuilderWaterSoilAction extends BuilderActionBase {
 
   @Override
   public Action build(BuilderSupport support) {
-    return new HarvestCropAction(this);
+    return new WaterSoilAction(this);
   }
 
   @Override
@@ -22,16 +22,15 @@ public class BuilderHarvestCropAction extends BuilderActionBase {
 
   @Override
   public String getLongDescription() {
-    return "Harvest crops found in the internal snapshot";
+    return "Water soil blocks present in the workarea snapshot";
   }
 
   @Override
   public String getShortDescription() {
-    return "Harvest crops";
+    return "Water soil";
   }
 
   public Builder<Action> readConfig(JsonElement data) {
     return this;
   }
-
 }

@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.Farmer;
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.farmer;
 
 import com.hypixel.hytale.builtin.adventure.farming.FarmingUtil;
 import com.hypixel.hytale.component.Ref;

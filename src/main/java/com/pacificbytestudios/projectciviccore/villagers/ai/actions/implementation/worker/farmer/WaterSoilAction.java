@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.Farmer;
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.farmer;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

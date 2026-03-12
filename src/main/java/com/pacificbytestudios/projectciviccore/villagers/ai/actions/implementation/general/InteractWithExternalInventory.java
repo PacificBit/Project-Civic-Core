@@ -7,10 +7,8 @@ import java.util.function.Supplier;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
-import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
@@ -31,6 +29,8 @@ public class InteractWithExternalInventory extends ActionBase {
   private final String snapshotKey;
   private final ActionType actionType;
   private final List<ItemCriteria> itemCriteria;
+  private final boolean consumeSnapshotTargetOnSuccess;
+  private final boolean consumeSnapshotTargetOnFail;
 
   public InteractWithExternalInventory(
       BuilderInteractWithExternalInventory builderActionBase,
@@ -40,6 +40,8 @@ public class InteractWithExternalInventory extends ActionBase {
     this.actionType = builderActionBase.getActionType(support);
     // TODO: should use the criteria given by the workplace too
     this.itemCriteria = builderActionBase.getItemCriteria(support);
+    this.consumeSnapshotTargetOnSuccess = builderActionBase.getConsumeSnapshotTargetOnSuccessFlag();
+    this.consumeSnapshotTargetOnFail = builderActionBase.getConsumeSnapshotTargetOnFailFlag();
   }
 
   @Override
@@ -90,17 +92,29 @@ public class InteractWithExternalInventory extends ActionBase {
     SimpleItemContainer chestContainer = resolvedContainer.containerBlock().getItemContainer();
     ItemContainer npcStorage = npcEntity.getInventory().getStorage();
 
+    boolean done = false;
     // TODO: Don't forget about the workplace criteria
     if (this.itemCriteria == null) {
-      return this.transferAllItemStacks(
-          chestContainer,
-          npcStorage);
+      done = this.transferAllItemStacks(chestContainer, npcStorage);
+
+    } else {
+      if (this.actionType.equals(ActionType.WITHDRAW)) {
+        done = this.transferRequestedItems(chestContainer, npcStorage);
+      } else {
+        done = this.transferRequestedItems(npcStorage, chestContainer);
+      }
     }
 
-    if (this.actionType.equals(ActionType.WITHDRAW)) {
-      return this.transferRequestedItems(chestContainer, npcStorage);
+    if (done) {
+      if (this.consumeSnapshotTargetOnSuccess) {
+        coords.pollFirst();
+      }
+    } else {
+      if (this.consumeSnapshotTargetOnFail) {
+        coords.pollFirst();
+      }
     }
-    return this.transferRequestedItems(npcStorage, chestContainer);
+    return done;
   }
 
   // TODO: what should happen if not all the items where removed?

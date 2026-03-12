@@ -20,6 +20,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 public class BuilderInteractWithExternalInventory extends BuilderActionBase {
   private EnumHolder<ActionType> actionType = new EnumHolder<>();
   private String snapshotKey;
+  private Boolean consumeSnapshotTargetOnSuccess;
+  private Boolean consumeSnapshotTargetOnFail;
   private final BuilderObjectListHelper<ItemCriteria> itemCriteria = new BuilderObjectListHelper<>(
       ItemCriteria.class, this);
 
@@ -47,11 +49,19 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
 
     this.requireEnum(data, "ActionType", this.actionType, InteractWithExternalInventory.ActionType.class,
         BuilderDescriptorState.Experimental,
-        "Type of actio to perform to the external inventory", null);
+        "Type of action to perform to the external inventory", null);
 
     this.requireString(data, "SnapshotKey", this::setSnapshotKey, (StringValidator) StringNotEmptyValidator.get(),
         BuilderDescriptorState.Experimental,
         "Snapshot of the current work (used to get the storage coordinate)", null);
+
+    this.getBoolean(data, "ConsumeTargetOnSuccess", this::setConsumeSnapshotTargetOnSuccess, true,
+        BuilderDescriptorState.Experimental,
+        "Whether or not to remove a target from the snapshot after success", null);
+
+    this.getBoolean(data, "ConsumeTargetOnFail", this::setConsumeSnapshotTargetOnFail, true,
+        BuilderDescriptorState.Experimental,
+        "Whether or not to remove a target from the snapshot after fail", null);
 
     this.getArray(data, "ItemCriteria", this.itemCriteria, ArrayNotEmptyValidator.get(),
         BuilderDescriptorState.Experimental, "List of item criteria used to match inventory items",
@@ -62,6 +72,14 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
 
   private void setSnapshotKey(String key) {
     this.snapshotKey = key;
+  }
+
+  private void setConsumeSnapshotTargetOnSuccess(boolean flag) {
+    this.consumeSnapshotTargetOnSuccess = flag;
+  }
+
+  private void setConsumeSnapshotTargetOnFail(boolean flag) {
+    this.consumeSnapshotTargetOnFail = flag;
   }
 
   public InteractWithExternalInventory.ActionType getActionType(BuilderSupport support) {
@@ -76,4 +94,11 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
     return this.itemCriteria.build(support);
   }
 
+  public boolean getConsumeSnapshotTargetOnSuccessFlag() {
+    return this.consumeSnapshotTargetOnSuccess;
+  }
+
+  public boolean getConsumeSnapshotTargetOnFailFlag() {
+    return this.consumeSnapshotTargetOnFail;
+  }
 }

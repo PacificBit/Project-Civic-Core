@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -96,13 +97,25 @@ public class Utils {
   }
 
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType) {
-    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
-      chunk.setBlock(position.x, position.y, position.z, blockType);
-      return chunk;
-    }
-    WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
-    correctChunk.setBlock(position.x, position.y, position.z, blockType);
-    return correctChunk;
+    WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)
+        ? chunk
+        : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+
+    targetChunk.setBlock(position.x, position.y, position.z, blockType);
+    return targetChunk;
+  }
+
+  public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType, int rotation) {
+    int blockId = BlockType.getAssetMap().getIndex(blockType.getId());
+
+    WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)
+        ? chunk
+        : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+
+    targetChunk.setBlock(position.x, position.y, position.z, blockId, blockType,
+        rotation, FillerBlockUtil.NO_FILLER, 0);
+
+    return targetChunk;
   }
 
   public static WorldChunk breakBlockChunkAware(WorldChunk chunk, Vector3i position) {

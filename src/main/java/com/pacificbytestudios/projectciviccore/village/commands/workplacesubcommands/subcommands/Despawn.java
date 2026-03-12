@@ -104,10 +104,10 @@ public class Despawn extends CommandBase {
       boolean despawnResult = despawnFunction.apply(chunk, benchPosition);
 
       if (!despawnResult) {
-        context.sendMessage(Message.raw("Could not despawn village"));
+        context.sendMessage(Message.raw("Could not despawn workplace"));
         return;
       }
-      context.sendMessage(Message.raw("Village successfully despawned"));
+      context.sendMessage(Message.raw("Workplace successfully despawned"));
     });
   }
 
