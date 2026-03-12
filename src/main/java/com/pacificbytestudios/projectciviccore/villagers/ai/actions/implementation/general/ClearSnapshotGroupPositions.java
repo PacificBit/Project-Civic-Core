@@ -18,10 +18,12 @@ import com.pacificbytestudios.projectciviccore.villagers.components.workplace.Wo
 
 public class ClearSnapshotGroupPositions extends ActionBase {
   private String groupName;
+  private String conditionalGroup;
 
   public ClearSnapshotGroupPositions(BuilderClearSnapshotGroupPositions builderActionBase, BuilderSupport support) {
     super(builderActionBase);
     this.groupName = builderActionBase.getGroupName(support);
+    this.conditionalGroup = builderActionBase.getConditionalGroup(support);
   }
 
   @Override
@@ -49,6 +51,13 @@ public class ClearSnapshotGroupPositions extends ActionBase {
     if (snapshot == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[ClearSnapshotGroupPositions] Could not fetch the work area snapshot");
       return false;
+    }
+
+    if (this.conditionalGroup != null && !this.conditionalGroup.isEmpty()) {
+      ArrayDeque<Vector3i> conditionalGroup = snapshot.getBlockTypePosition().get(this.conditionalGroup);
+      if (conditionalGroup != null && conditionalGroup.size() != 0) {
+        return false;
+      }
     }
 
     ArrayDeque<Vector3i> coords = snapshot.getBlockTypePosition().get(this.groupName);

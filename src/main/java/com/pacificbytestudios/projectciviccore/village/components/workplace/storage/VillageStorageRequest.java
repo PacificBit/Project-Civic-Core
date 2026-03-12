@@ -14,6 +14,7 @@ import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
 
 public class VillageStorageRequest {
   public static final BuilderCodec<VillageStorageRequest> CODEC = BuilderCodec
@@ -156,11 +157,6 @@ public class VillageStorageRequest {
             obj -> obj.attributeKey)
         .add()
 
-        .append(new KeyedCodec<>("ExactMatch", Codec.BOOLEAN),
-            (obj, value) -> obj.exactMatch = value,
-            obj -> obj.exactMatch)
-        .add()
-
         .append(new KeyedCodec<>("RequiredAmount", Codec.INTEGER),
             (obj, value) -> obj.requiredAmount = value,
             obj -> obj.requiredAmount)
@@ -169,7 +165,6 @@ public class VillageStorageRequest {
         .build();
 
     private String attributeKey;
-    private boolean exactMatch = true;
     private int requiredAmount;
 
     public String getAttributeKey() {
@@ -178,14 +173,6 @@ public class VillageStorageRequest {
 
     public void setAttributeKey(String attributeKey) {
       this.attributeKey = attributeKey;
-    }
-
-    public boolean isExactMatch() {
-      return exactMatch;
-    }
-
-    public void setExactMatch(boolean exactMatch) {
-      this.exactMatch = exactMatch;
     }
 
     public int getRequiredAmount() {
@@ -199,15 +186,17 @@ public class VillageStorageRequest {
     public ItemRequestCriterion clone() {
       ItemRequestCriterion criterion = new ItemRequestCriterion();
       criterion.attributeKey = this.attributeKey;
-      criterion.exactMatch = this.exactMatch;
       criterion.requiredAmount = this.requiredAmount;
       return criterion;
+    }
+
+    public ItemCriteria toCriteria() {
+      return new ItemCriteria(this.attributeKey, true, this.requiredAmount);
     }
 
     @Override
     public String toString() {
       return "attributeKey=" + this.attributeKey
-          + ", exactMatch=" + this.exactMatch
           + ", requiredAmount=" + this.requiredAmount;
     }
 

@@ -14,7 +14,6 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -69,55 +68,63 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     }
 
     ArrayDeque<VillageStorageRequest> requests = storageReqComp.getRequests();
-    VillageStorageRequest request = requests.pollFirst();
+    VillageStorageRequest request = requests.peekFirst();
 
     if (request == null) {
       ProjectCivicCore.LOGGER.atInfo().log("[StorageKeeperScan] No request pending");
       return snapshotInProgress;
     }
 
-    // Ref<ChunkStore> villageHeartRef = villager.getVillageHeartRef();
-    // if (villageHeartRef == null || !villageHeartRef.isValid()) {
-    // ProjectCivicCore.LOGGER.atSevere().log("[StorageKeeperScan] Villager has
-    // invalid village heart ref");
-    // return snapshotInProgress;
-    // }
-    //
-    // VillageHeartComponent villageHeart = chunkStore.getComponent(villageHeartRef,
-    // VillageHeartComponent.getComponentType());
-    // if (villageHeart == null) {
-    // ProjectCivicCore.LOGGER.atInfo().log("[StorageKeeperScan] Could not fetch the
-    // village heart component");
-    // return snapshotInProgress;
-    // }
+    switch (request.getType()) {
+      case CLEAR_WORKPLACE_INVENTORY:
+        putSnapshotTargets(snapshotInProgress,
+            FETCH_ALL, request.getTargetsWorkplaceStorage(),
+            DUMP_ALL, workplaceComponent.getStorage().getAllContainerPositions());
+        break;
+
+      case DELIVER_TO_WORKPLACE:
+        putSnapshotTargets(snapshotInProgress,
+            FETCH_ITEM, workplaceComponent.getStorage().getAllContainerPositions(),
+            DUMP_ITEM, request.getTargetsWorkplaceStorage());
+        break;
+
+      case COLLECT_FROM_WORKPLACE:
+        putSnapshotTargets(snapshotInProgress,
+            FETCH_ITEM, request.getTargetsWorkplaceStorage(),
+            DUMP_ITEM, workplaceComponent.getStorage().getAllContainerPositions());
+        break;
+
+      default:
+        ProjectCivicCore.LOGGER.atSevere()
+            .log("[StorageKeeperScan] Invalid request type: " + request.getType());
+        return snapshotInProgress;
+    }
+
+    return signSnapshotAsCompleted(snapshotInProgress, worldTimeResource);
+  }
+
+  private void putSnapshotTargets(
+      WorkplaceAreaSnapshot snapshot,
+      String fetchKey, Iterable<Vector3i> fetchTargets,
+      String dumpKey, Iterable<Vector3i> dumpTargets) {
+
     ArrayDeque<Vector3i> fetchFrom = new ArrayDeque<>();
     ArrayDeque<Vector3i> dumpTo = new ArrayDeque<>();
 
-    if (request.getType().equals(VillageStorageRequestType.CLEAR_WORKPLACE_INVENTORY)) {
-      fetchFrom.addAll(request.getTargetsWorkplaceStorage());
-      dumpTo.addAll(workplaceComponent.getStorage().getAllContainerPositions());
-      snapshotInProgress.getBlockTypePosition().put(FETCH_ALL, fetchFrom);
-      snapshotInProgress.getBlockTypePosition().put(DUMP_ALL, dumpTo);
-      System.out.println("!!!!!!!!!!!!!! Completed snapshot");
-      System.out.println(snapshotInProgress);
-      storageReqComp.assignRequest(uuid, request.getRequestId());
-      return signAsComplete(snapshotInProgress, worldTimeResource);
+    for (Vector3i position : fetchTargets) {
+      fetchFrom.add(position);
     }
 
-    // NPCEntity npcEntity = store.getComponent(villagerRef,
-    // NPCEntity.getComponentType());
-    // int freeSlots =
-    // InventoryHelper.countFreeSlots(npcEntity.getInventory().getStorage());
+    for (Vector3i position : dumpTargets) {
+      dumpTo.add(position);
+    }
 
-    // boolean keepSearching = true;
-    // do {
-    // requests.peek().getItemCriteria().size();
-    // } while (keepSearching);
-
-    return snapshotInProgress;
+    snapshot.getBlockTypePosition().put(fetchKey, fetchFrom);
+    snapshot.getBlockTypePosition().put(dumpKey, dumpTo);
   }
 
-  private WorkplaceAreaSnapshot signAsComplete(WorkplaceAreaSnapshot snapshot, WorldTimeResource worldTimeResource) {
+  private WorkplaceAreaSnapshot signSnapshotAsCompleted(WorkplaceAreaSnapshot snapshot,
+      WorldTimeResource worldTimeResource) {
     snapshot.setCompleted(true);
     snapshot.captureNow(worldTimeResource);
     return snapshot;

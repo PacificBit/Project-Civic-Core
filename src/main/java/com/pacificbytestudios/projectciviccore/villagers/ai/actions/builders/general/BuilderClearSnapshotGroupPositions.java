@@ -14,6 +14,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 public class BuilderClearSnapshotGroupPositions extends BuilderActionBase {
 
   private StringHolder groupName = new StringHolder();
+  private StringHolder conditionalGroup = new StringHolder();
 
   @Override
   public Action build(BuilderSupport support) {
@@ -40,6 +41,11 @@ public class BuilderClearSnapshotGroupPositions extends BuilderActionBase {
         (StringValidator) StringNotEmptyValidator.get(),
         BuilderDescriptorState.Stable,
         "Snapshot group key", null);
+
+    this.getString(data, "IfGroupIsEmpty", this.conditionalGroup, null,
+        null,
+        BuilderDescriptorState.Stable,
+        "Group to check before clearing selected", null);
     return this;
   }
 
@@ -47,4 +53,7 @@ public class BuilderClearSnapshotGroupPositions extends BuilderActionBase {
     return this.groupName.get(support.getExecutionContext());
   }
 
+  public String getConditionalGroup(BuilderSupport support) {
+    return this.conditionalGroup.get(support.getExecutionContext());
+  }
 }

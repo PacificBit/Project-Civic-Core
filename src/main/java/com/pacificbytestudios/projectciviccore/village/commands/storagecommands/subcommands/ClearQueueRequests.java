@@ -74,60 +74,6 @@ public class ClearQueueRequests extends CommandBase {
 
         storageComponent.clearAll();
       }
-
-      // WorkplaceType workplace =
-      // WorkplaceType.valueOf(this.workplaceType.get(context).toUpperCase());
-      //
-      // List<WorkplaceComponent> workplaceComponents =
-      // villageHeartComponent.getWorkplaceFrom(workplace);
-      //
-      // if (workplaceComponents.size() == 0) {
-      // context.sendMessage(
-      // Message.raw("No workplace of type '" +
-      // this.workplaceType.get(context).toUpperCase() + "' found"));
-      // return;
-      // }
-      //
-      // WorkplaceComponent closestWorkplace = workplaceComponents.get(0);
-      // double shortestDistance =
-      // closestWorkplace.getBenchPos().distanceSquaredTo(playerPos);
-      //
-      // for (int i = 1; i < workplaceComponents.size(); i++) {
-      // double distance =
-      // workplaceComponents.get(i).getBenchPos().distanceSquaredTo(playerPos);
-      // if (distance < shortestDistance) {
-      // closestWorkplace = workplaceComponents.get(i);
-      // shortestDistance = distance;
-      // }
-      // }
-      //
-      // VillageStorageRequest.ItemRequestCriterion criteria = new
-      // VillageStorageRequest.ItemRequestCriterion();
-      // criteria.setAttributeKey(this.item.get(context));
-      // criteria.setExactMatch(true);
-      // criteria.setRequiredAmount(this.count.get(context));
-      //
-      // VillageStorageRequest request = new VillageStorageRequest();
-      // request.setType(VillageStorageRequestType.DELIVER_TO_WORKPLACE);
-      // request.setRequesterWorkplaceId(closestWorkplace.getUuid());
-      // request.addItemCriteria(criteria);
-      // request.setTargetsWorkplaceStorage(closestWorkplace.getStorage().getAllContainerPositions());
-      //
-      // EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(
-      // request);
-      //
-      // task.setOnError(
-      // (reason, msg) -> context.sendMessage(
-      // Message.raw("Could not proceed with the request. Reason: \n" + reason +
-      // "\n\t" + msg)));
-      //
-      // task.setOnSuccessCallback(
-      // (status) -> context.sendMessage(
-      // Message.raw("Request registered successfully")));
-      //
-      // VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
-      // taskComponent.registerTask(task);
-      // Utils.safeVillageTaskEnqueue(heart, taskComponent);
     });
   }
 

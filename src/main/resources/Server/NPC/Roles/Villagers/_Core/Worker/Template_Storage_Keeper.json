@@ -351,18 +351,59 @@
                     {
                       "Type": "InteractWithExternalInventory",
                       "SnapshotKey": "Fetch_All",
-                      "ActionType": "WITHDRAW"
-                    },
-                    {
-                      "Type": "Log",
-                      "Message": "FETCHED CORRECTLY"
+                      "ActionType": "WITHDRAW",
+                      "ConsumeTargetOnSuccess": true
                     }
                   ],
                   "Continue": false,
-                  "$Comment": "Fetch All"
+                  "$Comment": "Fetch Item"
                 }
               ],
               "$Comment": "Step 1) Handle Fetch All request"
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Fetch_Item"
+                ]
+              },
+              "$Comment": "Step 2) Fetch Item",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "ReachNextTargetInSnapshot",
+                    "BlockIds": [
+                      "Fetch_Item"
+                    ],
+                    "StoppingRange": 1.5
+                  },
+                  "Continue": false,
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "StopDistance": 1.5,
+                    "RelativeSpeed": 0.6,
+                    "SlowDownDistance": 1.5
+                  }
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "InteractWithExternalInventory",
+                      "SnapshotKey": "Fetch_Item",
+                      "ActionType": "WITHDRAW",
+                      "ConsumeTargetOnFail": true,
+                      "ConsumeTargetOnSuccess": true,
+                      "UseSnapshotItemCriteria": true
+                    }
+                  ],
+                  "Continue": false,
+                  "$Comment": "Fetch Item"
+                }
+              ]
             },
             {
               "Sensor": {
@@ -402,7 +443,59 @@
                     },
                     {
                       "Type": "ClearSnapshotGroup",
-                      "GroupName": "Dump_All"
+                      "GroupName": "Dump_All",
+                      "IfGroupIsEmpty": "Fetch_All"
+                    },
+                    {
+                      "Type": "UpdateStorageRequestStatus",
+                      "Status": "COMPLETED"
+                    }
+                  ],
+                  "Continue": false,
+                  "$Comment": "Drop All"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Dump_Item"
+                ]
+              },
+              "$Comment": "Step 4) Dump Item",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "ReachNextTargetInSnapshot",
+                    "BlockIds": [
+                      "Dump_Item"
+                    ],
+                    "StoppingRange": 1.5
+                  },
+                  "Continue": false,
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "StopDistance": 1.5,
+                    "RelativeSpeed": 0.6,
+                    "SlowDownDistance": 1.5
+                  }
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "InteractWithExternalInventory",
+                      "SnapshotKey": "Dump_Item",
+                      "ActionType": "DEPOSIT",
+                      "ConsumeTargetOnFail": true
+                    },
+                    {
+                      "Type": "ClearSnapshotGroup",
+                      "GroupName": "Dump_Item",
+                      "IfGroupIsEmpty": "Fetch_Item"
                     },
                     {
                       "Type": "UpdateStorageRequestStatus",
@@ -498,6 +591,27 @@
             }
           ],
           "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "ReachWorkplace"
+          },
+          "Actions": [
+            {
+              "Type": "PlayAnimation",
+              "Slot": "Action",
+              "Animation": "Walk",
+              "Once": true
+            }
+          ],
+          "BodyMotion": {
+            "Type": "Seek",
+            "SlowDownDistance": 1,
+            "StopDistance": 1,
+            "RelativeSpeed": 1
+          },
+          "Continue": false,
+          "$Comment": "Reaching workplace"
         },
         {
           "Sensor": {

@@ -63,8 +63,6 @@ public class WorkplaceStorageTargetsSnapshotAction extends ActionBase {
       return false;
     }
 
-    System.out.println("Executing workplace storage action: " + this.actionType);
-
     if (this.actionType.equals(ActionType.ADD)) {
       ArrayDeque<Vector3i> storagePosition = new ArrayDeque<>();
       storagePosition.addAll(workplace.getStorage().getAllContainerPositions());
@@ -72,9 +70,6 @@ public class WorkplaceStorageTargetsSnapshotAction extends ActionBase {
     } else if (snapshot.getBlockTypePosition().get(WORKPLACE_STORAGE_KEY) != null) {
       snapshot.getBlockTypePosition().remove(WORKPLACE_STORAGE_KEY);
     }
-
-    System.out.println("SNAPSHOT RESULT: ");
-    System.out.println(snapshot);
     return true;
   }
 

@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.hypixel.hytale.server.npc.asset.builder.Builder;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderDescriptorState;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-// import com.hypixel.hytale.server.npc.asset.builder.Feature;
 import com.hypixel.hytale.server.npc.asset.builder.holder.StringArrayHolder;
 import com.hypixel.hytale.server.npc.asset.builder.validators.StringArrayNotEmptyValidator;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
@@ -42,7 +41,6 @@ public class BuilderHasTargetBlockInSnapshotSensor extends BuilderSensorBase {
     this.requireStringArray(data, "TargetBlockIds", this.targetBlockIds, 0, Integer.MAX_VALUE,
         StringArrayNotEmptyValidator.get(),
         BuilderDescriptorState.Experimental, "Reach blocks of a specific type if present in snapshot", null);
-    // this.provideFeature(Feature.Position);
     return this;
   }
 

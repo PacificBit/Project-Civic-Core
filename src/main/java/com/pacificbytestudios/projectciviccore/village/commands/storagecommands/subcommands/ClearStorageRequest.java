@@ -119,15 +119,11 @@ public class ClearStorageRequest extends CommandBase {
       if (this.item.provided(context)) {
         VillageStorageRequest.ItemRequestCriterion criteria = new VillageStorageRequest.ItemRequestCriterion();
         criteria.setAttributeKey(this.item.get(context));
-        criteria.setExactMatch(true);
         if (this.count.provided(context)) {
           criteria.setRequiredAmount(this.count.get(context));
         }
         request.addItemCriteria(criteria);
       }
-
-      System.out.println("ALL CONTAINERS: ");
-      System.out.println(closestWorkplace.getStorage().getAllContainerPositions());
 
       request.setTargetsWorkplaceStorage(closestWorkplace.getStorage().getAllContainerPositions());
 

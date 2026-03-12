@@ -34,7 +34,7 @@ public class ItemFetchRequest extends CommandBase {
   @Nonnull
   private final RequiredArg<String> workplaceType = this.withRequiredArg(
       "type",
-      "Type of workplace to despawn",
+      "Workplace to bring items",
       ArgTypes.STRING);
 
   @Nonnull
@@ -113,7 +113,6 @@ public class ItemFetchRequest extends CommandBase {
 
       VillageStorageRequest.ItemRequestCriterion criteria = new VillageStorageRequest.ItemRequestCriterion();
       criteria.setAttributeKey(this.item.get(context));
-      criteria.setExactMatch(true);
       criteria.setRequiredAmount(this.count.get(context));
 
       VillageStorageRequest request = new VillageStorageRequest();
