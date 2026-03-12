@@ -1,4 +1,3 @@
-
 package com.pacificbytestudios.projectciviccore.villagers.core.work.scan;
 
 import java.util.ArrayDeque;
@@ -47,9 +46,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
       return snapshotInProgress;
     }
 
-    if (snapshotInProgress == null || snapshotInProgress.isCompleted()) {
-      snapshotInProgress = new WorkplaceAreaSnapshot();
-    }
+    snapshotInProgress = new WorkplaceAreaSnapshot();
 
     WorkplaceComponent workplaceComponent = worker.getWorkplace();
     Ref<ChunkStore> storageRef = workplaceComponent.getWorkplaceRef().getRef();
@@ -68,7 +65,20 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     }
 
     ArrayDeque<VillageStorageRequest> requests = storageReqComp.getRequests();
-    VillageStorageRequest request = requests.peekFirst();
+    ArrayDeque<VillageStorageRequest> assignedRequests = storageReqComp.getAssignedRequest(uuid);
+    VillageStorageRequest request = assignedRequests.peekFirst();
+
+    if (request == null) {
+      request = requests.peekFirst();
+      if (request != null && !storageReqComp.assignRequest(uuid, request.getRequestId())) {
+        ProjectCivicCore.LOGGER.atWarning()
+            .log("[StorageKeeperScan] Could not assign request " + request.getRequestId() + " to worker " + uuid);
+        return snapshotInProgress;
+      }
+
+      assignedRequests = storageReqComp.getAssignedRequest(uuid);
+      request = assignedRequests.peekFirst();
+    }
 
     if (request == null) {
       ProjectCivicCore.LOGGER.atInfo().log("[StorageKeeperScan] No request pending");
@@ -100,7 +110,6 @@ public class StorageKeeperScan implements IWorkAreaScanner {
         return snapshotInProgress;
     }
 
-    storageReqComp.assignRequest(uuid, request.getRequestId());
     return signSnapshotAsCompleted(snapshotInProgress, worldTimeResource);
   }
 

@@ -90,7 +90,7 @@ public class InteractWithExternalInventory extends ActionBase {
         UUIDComponent.getComponentType()).getUuid();
 
     ArrayDeque<Vector3i> coords = snapshot.getBlockTypePosition().get(this.snapshotKey);
-    if (coords.size() < 1) {
+    if (coords == null || coords.isEmpty()) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[InteractWithExternalInventory] Could not find coords in snapshot for key: " + this.snapshotKey);
       return false;
@@ -127,12 +127,12 @@ public class InteractWithExternalInventory extends ActionBase {
     }
 
     if (done) {
-      if (this.consumeSnapshotTargetOnSuccess) {
-        System.out.println("Clearing success target");
+      if (shouldClearRemainingTargetsOnSuccess()) {
+        coords.clear();
+      } else if (this.consumeSnapshotTargetOnSuccess) {
         coords.pollFirst();
       }
     } else if (this.consumeSnapshotTargetOnFail) {
-      System.out.println("Clearing on fail");
       coords.pollFirst();
     }
     return done;
@@ -160,6 +160,7 @@ public class InteractWithExternalInventory extends ActionBase {
       ItemContainer to) {
     ToIntFunction<ItemStack> validator = buildItemValidator();
     prepareTrackedItemCount(snapshot);
+    boolean movedAny = false;
 
     for (short slot = 0; slot < from.getCapacity(); slot++) {
       ItemStack item = from.getItemStack(slot);
@@ -175,11 +176,13 @@ public class InteractWithExternalInventory extends ActionBase {
       if (allowedAmount >= item.getQuantity()) {
         if (from.moveItemStackFromSlot(slot, to, true, true).succeeded()) {
           commitTransferredItemAmount(item.getItemId(), item.getQuantity());
+          movedAny = true;
           continue;
         }
       } else {
         if (from.moveItemStackFromSlot(slot, allowedAmount, to, true, true).succeeded()) {
           commitTransferredItemAmount(item.getItemId(), allowedAmount);
+          movedAny = true;
           continue;
         }
       }
@@ -187,7 +190,7 @@ public class InteractWithExternalInventory extends ActionBase {
       ProjectCivicCore.LOGGER.atWarning().log("[InteractWithExternalInventory] Could not move requested item stack");
       return false;
     }
-    return true;
+    return movedAny;
   }
 
   private ToIntFunction<ItemStack> buildItemValidator() {
@@ -422,6 +425,35 @@ public class InteractWithExternalInventory extends ActionBase {
     this.itemCount = null;
     this.itemCountContextKey = null;
     this.assignedRequestId = null;
+  }
+
+  private boolean shouldClearRemainingTargetsOnSuccess() {
+    return this.useSnapshotItemCriteria && hasSatisfiedAllLimitedItemCriteria();
+  }
+
+  private boolean hasSatisfiedAllLimitedItemCriteria() {
+    if (this.itemCount == null || this.itemCriteria == null || this.itemCriteria.isEmpty()) {
+      return false;
+    }
+
+    boolean hasLimitedCriteria = false;
+
+    for (int i = 0; i < this.itemCriteria.size(); i++) {
+      ItemCriteria criteria = this.itemCriteria.get(i);
+      if (!criteria.isFilterIn() || criteria.getCount() <= 0) {
+        continue;
+      }
+
+      hasLimitedCriteria = true;
+      String counterKey = buildCriterionCounterKey(i);
+      int committedAmount = this.itemCount.getOrDefault(counterKey, 0);
+
+      if (committedAmount < criteria.getCount()) {
+        return false;
+      }
+    }
+
+    return hasLimitedCriteria;
   }
 
   private void commitTransferredItemAmount(String itemName, int movedAmount) {
