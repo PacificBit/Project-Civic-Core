@@ -55,8 +55,7 @@ public class FarmerScan implements IWorkAreaScanner {
       UUID uuid,
       VillagerComponent villager) {
     ProjectCivicCore.LOGGER.atInfo().log(
-        "[FarmerScan] Starting new farm scan at workplace: "
-            + villager.getWorkerData().getWorkplace().getBenchPos());
+        "[FarmerScan] Starting new farmer scan");
 
     VillagerWorkerComponent worker = villager.getWorkerData();
     if (worker == null) {

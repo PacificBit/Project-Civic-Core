@@ -2,7 +2,7 @@
   "Type": "Abstract",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "DropList": {
@@ -177,12 +177,37 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 2,
-                "StopDistance": 2,
+                "SlowDownDistance": 1,
+                "StopDistance": 1,
                 "RelativeSpeed": 1
               },
               "Continue": false,
               "$Comment": "Reaching workplace"
+            },
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ],
+                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot",
+                  "Continue": true
+                }
+              ],
+              "$Comment": "No valid work area snapshot",
+              "Continue": true
             },
             {
               "Sensor": {
@@ -207,23 +232,22 @@
           "Instructions": [
             {
               "Sensor": {
-                "Type": "Not",
-                "Sensor": {
-                  "Type": "HasValidWorkAraSnapshot"
-                }
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Fetch_All"
+                ]
               },
-              "Instructions": [
+              "Continue": true,
+              "$Comment": "Step 1) Has request: Fetch All"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
                 {
-                  "Sensor": {
-                    "Type": "Any"
-                  },
-                  "Actions": [
-                    {
-                      "Type": "State",
-                      "State": ".NoWorkingAreaSnapshot"
-                    }
-                  ],
-                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot"
+                  "Type": "Log",
+                  "Message": "Work is done"
                 }
               ]
             },
@@ -231,21 +255,12 @@
               "Sensor": {
                 "Type": "Any"
               },
-              "$Comment": "Found Nothing to do",
               "Actions": [
                 {
-                  "Type": "PlayAnimation",
-                  "Slot": "Action",
-                  "Animation": "Sleep",
-                  "Once": true
+                  "Type": "State",
+                  "State": "WorkCooldown"
                 }
-              ],
-              "BodyMotion": {
-                "Type": "WanderInCircle",
-                "Radius": 2,
-                "MaxHeadingChange": 90,
-                "RelativeSpeed": 0.3
-              }
+              ]
             }
           ]
         },
@@ -267,7 +282,21 @@
                 {
                   "Type": "ScanWorkArea"
                 }
-              ]
+              ],
+              "$Comment": "If not valid work area snapshot is present"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "Creating a new workarea snapshot..."
+                }
+              ],
+              "$Comment": "Log",
+              "Continue": true
             },
             {
               "Sensor": {
@@ -278,13 +307,100 @@
                   "Type": "State",
                   "State": ".WorkLoop"
                 }
-              ]
+              ],
+              "$Comment": "Change Substate: -> .WorkLoop"
             }
           ]
         }
       ],
       "Continue": true,
-      "$Comment": "Normal state"
+      "$Comment": "Work Process"
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WorkCooldown"
+      },
+      "$Comment": "After all the steps are done",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "In cooldown"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Cooldown",
+          "ActionsBlocking": true,
+          "ActionsAtomic": true,
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                5,
+                5
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "PostWorkCooldown"
+      },
+      "$Comment": "Post Cooldown Creating Snapshot Area",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "ScanWorkArea"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.WorkLoop"
+            }
+          ]
+        }
+      ]
     }
   ],
   "NameTranslationKey": {

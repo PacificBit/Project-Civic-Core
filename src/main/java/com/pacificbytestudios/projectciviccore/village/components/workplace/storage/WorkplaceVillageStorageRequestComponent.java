@@ -88,6 +88,11 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
     return assigned;
   }
 
+  public void clearAll() {
+    this.requestDeque = new ArrayDeque<>();
+    this.onGoingRequests = new HashMap<>();
+  }
+
   @Override
   public WorkplaceVillageStorageRequestComponent clone() {
     WorkplaceVillageStorageRequestComponent storage = new WorkplaceVillageStorageRequestComponent();

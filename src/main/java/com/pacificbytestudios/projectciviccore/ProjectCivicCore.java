@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.hypixel.hytale.server.npc.asset.builder.BuilderFactory;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.VillageTaskQueueCodecs;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
@@ -30,12 +31,15 @@ import com.pacificbytestudios.projectciviccore.village.systems.workplace.Workpla
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderClearSnapshotGroupPositions;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderHarvestCropAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderPlantSeedAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderTillSoilAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.Farmer.BuilderWaterSoilAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryInventorySensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
@@ -44,6 +48,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.BuilderItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.interactions.VillagerOpenInventoryInteraction;
 import com.pacificbytestudios.projectciviccore.villagers.systems.EnsureVillagerComponents;
 import com.pacificbytestudios.projectciviccore.villagers.systems.VillagerInventoryPersistenceSystem;
@@ -193,6 +198,10 @@ public final class ProjectCivicCore extends JavaPlugin {
         "ReachNextTargetInSnapshot",
         BuilderReachNextTargetInSnapshotSensor::new);
 
+    npcPlugin.registerCoreComponentType(
+        "QueryInventorySensor",
+        BuilderQueryInventorySensor::new);
+
     // ===========================
     // Actions
     // ===========================
@@ -228,6 +237,20 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "WaterSoil",
         BuilderWaterSoilAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "InteractWithExternalInventory",
+        BuilderInteractWithExternalInventory::new);
+
+    // ===========================
+    // Extra
+    // ===========================
+
+    npcPlugin.getBuilderManager().registerFactory(
+        new BuilderFactory<>(
+            ItemCriteria.class,
+            "Type",
+            BuilderItemCriteria::new));
 
     this.getCodecRegistry(Interaction.CODEC).register(
         "VillagerOpenInventoryInteraction",

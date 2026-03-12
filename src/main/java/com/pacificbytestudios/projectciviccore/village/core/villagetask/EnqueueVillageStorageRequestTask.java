@@ -74,6 +74,7 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
     for (UUID storageWorkplaceId : heart.getVillageStorageWorkplaces()) {
       if (this.triedStorageIds == null || !this.triedStorageIds.contains(storageWorkplaceId)) {
         storageToNotify = storageWorkplaceId;
+        break;
       }
     }
 

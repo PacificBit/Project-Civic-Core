@@ -2,7 +2,7 @@
   "Type": "Abstract",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "DropList": {
@@ -177,12 +177,37 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 2,
-                "StopDistance": 2,
+                "SlowDownDistance": 1,
+                "StopDistance": 1,
                 "RelativeSpeed": 1
               },
               "Continue": false,
               "$Comment": "Reaching workplace"
+            },
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ],
+                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot",
+                  "Continue": true
+                }
+              ],
+              "$Comment": "No valid work area snapshot",
+              "Continue": true
             },
             {
               "Sensor": {
@@ -207,23 +232,73 @@
           "Instructions": [
             {
               "Sensor": {
-                "Type": "Not",
-                "Sensor": {
-                  "Type": "HasValidWorkAraSnapshot"
-                }
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Fetch_All"
+                ]
               },
               "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "QueryInventorySensor"
+                    }
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "Log",
+                          "Message": "Needs to free up inventory"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "ReachNextTargetInSnapshot",
+                    "BlockIds": [
+                      "Fetch_All"
+                    ],
+                    "StoppingRange": 1
+                  },
+                  "Continue": false,
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "StopDistance": 1,
+                    "RelativeSpeed": 0.6,
+                    "SlowDownDistance": 1
+                  }
+                },
                 {
                   "Sensor": {
                     "Type": "Any"
                   },
                   "Actions": [
                     {
-                      "Type": "State",
-                      "State": ".NoWorkingAreaSnapshot"
+                      "Type": "InteractWithExternalInventory",
+                      "SnapshotKey": "Fetch_All",
+                      "ActionType": "WITHDRAW"
                     }
                   ],
-                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot"
+                  "Continue": true
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "Log",
+                      "Message": "Inventory free, ready to rock"
+                    }
+                  ],
+                  "Continue": true
                 }
               ]
             },
@@ -231,21 +306,24 @@
               "Sensor": {
                 "Type": "Any"
               },
-              "$Comment": "Found Nothing to do",
               "Actions": [
                 {
-                  "Type": "PlayAnimation",
-                  "Slot": "Action",
-                  "Animation": "Sleep",
-                  "Once": true
+                  "Type": "Log",
+                  "Message": "Work is done"
                 }
               ],
-              "BodyMotion": {
-                "Type": "WanderInCircle",
-                "Radius": 2,
-                "MaxHeadingChange": 90,
-                "RelativeSpeed": 0.3
-              }
+              "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "WorkCooldown"
+                }
+              ]
             }
           ]
         },
@@ -267,7 +345,8 @@
                 {
                   "Type": "ScanWorkArea"
                 }
-              ]
+              ],
+              "$Comment": "If not valid work area snapshot is present"
             },
             {
               "Sensor": {
@@ -278,13 +357,88 @@
                   "Type": "State",
                   "State": ".WorkLoop"
                 }
-              ]
+              ],
+              "$Comment": "Change Substate: -> .WorkLoop"
             }
           ]
         }
       ],
       "Continue": true,
-      "$Comment": "Normal state"
+      "$Comment": "Work Process"
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WorkCooldown"
+      },
+      "$Comment": "After all the steps are done",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Cooldown",
+          "ActionsBlocking": true,
+          "ActionsAtomic": true,
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                5,
+                5
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "PostWorkCooldown"
+      },
+      "$Comment": "Post Cooldown Creating Snapshot Area",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "ScanWorkArea"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.WorkLoop"
+            }
+          ]
+        }
+      ]
     }
   ],
   "NameTranslationKey": {

@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.subcommands;
+package com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
+import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalArg;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
@@ -28,7 +29,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageReque
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
-public class ItemFetchRequest extends CommandBase {
+public class ClearStorageRequest extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   @Nonnull
@@ -38,19 +39,19 @@ public class ItemFetchRequest extends CommandBase {
       ArgTypes.STRING);
 
   @Nonnull
-  private final RequiredArg<String> item = this.withRequiredArg(
+  private final OptionalArg<String> item = this.withOptionalArg(
       "item",
       "Item name",
       ArgTypes.STRING);
 
   @Nonnull
-  private final RequiredArg<Integer> count = this.withRequiredArg(
+  private final OptionalArg<Integer> count = this.withOptionalArg(
       "quantity",
       "How many to item of that type to fetch",
       ArgTypes.INTEGER);
 
-  public ItemFetchRequest() {
-    super("fetch", "Item fetch request from village storage");
+  public ClearStorageRequest() {
+    super("clear", "Clears the closet workplace storage");
   }
 
   @Override
@@ -111,15 +112,24 @@ public class ItemFetchRequest extends CommandBase {
         }
       }
 
-      VillageStorageRequest.ItemRequestCriterion criteria = new VillageStorageRequest.ItemRequestCriterion();
-      criteria.setAttributeKey(this.item.get(context));
-      criteria.setExactMatch(true);
-      criteria.setRequiredAmount(this.count.get(context));
-
       VillageStorageRequest request = new VillageStorageRequest();
-      request.setType(VillageStorageRequestType.DELIVER_TO_WORKPLACE);
+      request.setType(VillageStorageRequestType.CLEAR_WORKPLACE_INVENTORY);
       request.setRequesterWorkplaceId(closestWorkplace.getUuid());
-      request.addItemCriteria(criteria);
+
+      if (this.item.provided(context)) {
+        VillageStorageRequest.ItemRequestCriterion criteria = new VillageStorageRequest.ItemRequestCriterion();
+        criteria.setAttributeKey(this.item.get(context));
+        criteria.setExactMatch(true);
+        if (this.count.provided(context)) {
+          criteria.setRequiredAmount(this.count.get(context));
+        }
+        request.addItemCriteria(criteria);
+      }
+
+      System.out.println("ALL CONTAINERS: ");
+      System.out.println(closestWorkplace.getStorage().getAllContainerPositions());
+
+      request.setTargetsWorkplaceStorage(closestWorkplace.getStorage().getAllContainerPositions());
 
       EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(
           request);

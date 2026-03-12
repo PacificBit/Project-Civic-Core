@@ -1,6 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace.storage;
 
+import java.util.ArrayDeque;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -9,6 +11,8 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
+import com.hypixel.hytale.math.vector.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 
 public class VillageStorageRequest {
@@ -30,6 +34,11 @@ public class VillageStorageRequest {
           obj -> obj.type)
       .add()
 
+      .append(new KeyedCodec<>("TargetsWorkplaceStorage", new ArrayDequeCodec<Vector3i>(Vector3i.CODEC, "Target")),
+          (obj, value) -> obj.targetsWorkplaceStorage = value,
+          obj -> obj.targetsWorkplaceStorage)
+      .add()
+
       .append(new KeyedCodec<Set<ItemRequestCriterion>>(
           "ItemCriteria",
           new SetCodec<ItemRequestCriterion, HashSet<ItemRequestCriterion>>(
@@ -45,6 +54,8 @@ public class VillageStorageRequest {
   private UUID requestId;
   private UUID requesterWorkplaceId;
   private VillageStorageRequestType type;
+  private ArrayDeque<Vector3i> targetsWorkplaceStorage = new ArrayDeque<>();
+
   private Set<ItemRequestCriterion> itemCriteria = new HashSet<>();
 
   public VillageStorageRequest() {
@@ -83,12 +94,26 @@ public class VillageStorageRequest {
     this.itemCriteria.add(itemCriteria);
   }
 
+  public ArrayDeque<Vector3i> getTargetsWorkplaceStorage() {
+    return targetsWorkplaceStorage;
+  }
+
+  public void setTargetsWorkplaceStorage(ArrayDeque<Vector3i> targetWorkplaceStorage) {
+    this.targetsWorkplaceStorage = targetWorkplaceStorage;
+  }
+
+  public void setTargetsWorkplaceStorage(List<Vector3i> targetWorkplaceStorage) {
+    this.targetsWorkplaceStorage.addAll(targetWorkplaceStorage);
+  }
+
   @Override
   public VillageStorageRequest clone() {
     VillageStorageRequest request = new VillageStorageRequest();
     request.requestId = this.requestId;
     request.requesterWorkplaceId = this.requesterWorkplaceId;
     request.type = this.type;
+    request.targetsWorkplaceStorage = this.targetsWorkplaceStorage != null ? this.targetsWorkplaceStorage.clone()
+        : null;
     request.itemCriteria = new HashSet<>();
 
     for (ItemRequestCriterion criterion : this.itemCriteria) {
@@ -106,6 +131,7 @@ public class VillageStorageRequest {
     sb.append("requestId=").append(this.requestId).append("\n");
     sb.append("requesterWorkplaceId=").append(this.requesterWorkplaceId).append("\n");
     sb.append("type=").append(this.type).append("\n");
+    sb.append("targetWorkplaceStorage=").append(this.targetsWorkplaceStorage).append("\n");
     sb.append("itemCriteria=");
 
     if (this.itemCriteria == null || this.itemCriteria.isEmpty()) {

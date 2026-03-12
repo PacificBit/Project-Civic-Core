@@ -8,6 +8,7 @@ import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Respawn;
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Spawn;
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.State;
+import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.Storage;
 import com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.Workplace;
 
 public class VillageCommands extends AbstractCommandCollection {
@@ -16,6 +17,7 @@ public class VillageCommands extends AbstractCommandCollection {
     super("village", "Village debug command tools");
     this.setPermissionGroup(GameMode.Creative);
     this.addSubCommand(new Workplace());
+    this.addSubCommand(new Storage());
     this.addSubCommand(new Dump());
     this.addSubCommand(new Spawn());
     this.addSubCommand(new Despawn());
