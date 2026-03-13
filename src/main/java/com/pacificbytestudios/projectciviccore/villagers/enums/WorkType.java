@@ -5,7 +5,7 @@ public enum WorkType {
   FARMER("Farmer"),
   WOOD_CUTTER("Wood_Cutter"),
   STORAGE_KEEPER("Storage_Keeper"),
-  BAKER("Baker");
+  INN_KEEPER("Inn_Keeper");
 
   private final String roleId;
 

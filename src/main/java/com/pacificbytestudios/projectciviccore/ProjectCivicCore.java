@@ -28,6 +28,7 @@ import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHear
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderAskForClearWorkplaceStorageAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderClearSnapshotGroupPositions;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
@@ -38,10 +39,10 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderPlantSeedAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderTillSoilAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderWaterSoilAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderNotifyWorkplaceRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
-import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryInventorySensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryDirtyInventorySensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderTimeRangeSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchForJobAssignment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
@@ -51,6 +52,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.BuilderItemCriteria;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.interactions.VillagerOpenInventoryInteraction;
 import com.pacificbytestudios.projectciviccore.villagers.systems.EnsureVillagerComponents;
 import com.pacificbytestudios.projectciviccore.villagers.systems.VillagerInventoryPersistenceSystem;
@@ -201,8 +203,8 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuilderReachNextTargetInSnapshotSensor::new);
 
     npcPlugin.registerCoreComponentType(
-        "QueryInventorySensor",
-        BuilderQueryInventorySensor::new);
+        "QueryDirtyInventorySensor",
+        BuilderQueryDirtyInventorySensor::new);
 
     // ===========================
     // Actions
@@ -252,13 +254,21 @@ public final class ProjectCivicCore extends JavaPlugin {
         "UpdateStorageRequestStatus",
         BuilderUpdateRequestStatusAction::new);
 
+    npcPlugin.registerCoreComponentType(
+        "AskClearWorkplaceStorage",
+        BuilderAskForClearWorkplaceStorageAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "NotifyWorkplaceRequestStatus",
+        BuilderNotifyWorkplaceRequestStatusAction::new);
+
     // ===========================
     // Extra
     // ===========================
 
     npcPlugin.getBuilderManager().registerFactory(
         new BuilderFactory<>(
-            ItemCriteria.class,
+            InventoryItemCriteria.class,
             "Type",
             BuilderItemCriteria::new));
 

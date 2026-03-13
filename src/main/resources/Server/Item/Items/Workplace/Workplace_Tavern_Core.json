@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.workplace.bakery.name",
-    "Description": "server.workplace.bakery.description"
+    "Name": "server.workplace.tavern.name",
+    "Description": "server.workplace.tavern.description"
   },
   "Icon": "Icons/ItemsGenerated/Bench_Cooking.png",
   "Categories": [
@@ -50,7 +50,7 @@
     "BlockEntity": {
       "Components": {
         "WorkplaceComponent": {
-          "Type": "Bakery"
+          "Type": "Tavern"
         },
         "WorkplaceSpawnComponent": {}
       }

@@ -712,15 +712,116 @@
         },
         {
           "Sensor": {
-            "Type": "Any"
+            "Type": "QueryDirtyInventorySensor",
+            "ExcludeItemTypes": [
+              "*Watering_Can*",
+              "Tool_Hoe*",
+              "*Seeds*"
+            ]
           },
-          "Actions": [
+          "$Comment": "If has a dirty inventory",
+          "Instructions": [
             {
-              "Type": "Log",
-              "Message": "In cooldown"
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Add to snapshot the containers",
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 1.5
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 1.5,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Try to deposit & Send clear storage request",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "DEPOSIT",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Tool_Hoe*",
+                      "FilterIn": false,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "*Watering_Can*",
+                      "FilterIn": false,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "*Seeds*",
+                      "FilterIn": false,
+                      "Count": -1
+                    }
+                  ]
+                },
+                {
+                  "Type": "AskClearWorkplaceStorage",
+                  "ExcludedItemTypes": [
+                    "Tool_Hoe*",
+                    "*Seeds*",
+                    "*Watering_Can"
+                  ],
+                  "Once": true
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "If it was not able to deposit: Send clear storage request",
+              "Actions": [
+                {
+                  "Type": "AskClearWorkplaceStorage",
+                  "ExcludedItemTypes": [
+                    "Tool_Hoe*",
+                    "*Seeds*",
+                    "*Watering_Can"
+                  ],
+                  "Once": true
+                }
+              ]
             }
-          ],
-          "Continue": true
+          ]
         },
         {
           "Sensor": {

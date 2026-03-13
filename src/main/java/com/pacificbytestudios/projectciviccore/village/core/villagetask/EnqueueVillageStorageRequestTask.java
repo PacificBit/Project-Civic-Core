@@ -104,13 +104,14 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
       return;
     }
 
-    storageWorkplace.addRequest(this.request);
+    UUID requestId = storageWorkplace.addRequest(this.request);
+
+    this.callOnSuccess(requestId.toString());
 
     BlockModule.BlockStateInfo blockStateInfo = chunkStore.getComponent(storageRef,
         BlockModule.BlockStateInfo.getComponentType());
     blockStateInfo.markNeedsSaving();
 
-    this.callOnSuccess(REQUEST_REGISTERED);
   }
 
 }

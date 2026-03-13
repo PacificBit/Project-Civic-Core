@@ -12,29 +12,28 @@ import com.hypixel.hytale.server.npc.asset.builder.validators.IntRangeValidator;
 import com.hypixel.hytale.server.npc.asset.builder.validators.StringNotEmptyValidator;
 import com.hypixel.hytale.server.npc.asset.builder.validators.StringValidator;
 import com.hypixel.hytale.server.npc.util.expression.ExecutionContext;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
 
-public class BuilderItemCriteria extends BuilderBase<ItemCriteria> {
+public class BuilderItemCriteria extends BuilderBase<InventoryItemCriteria> {
 
   private final StringHolder itemId = new StringHolder();
   private final BooleanHolder filterIn = new BooleanHolder();
   private final IntHolder count = new IntHolder();
 
   @Override
-  public ItemCriteria build(BuilderSupport support) {
-    return new ItemCriteria(
+  public InventoryItemCriteria build(BuilderSupport support) {
+    return new InventoryItemCriteria(
         this.itemId.get(support.getExecutionContext()),
         this.filterIn.get(support.getExecutionContext()),
         this.count.get(support.getExecutionContext()));
   }
 
   @Override
-  public Class<ItemCriteria> category() {
-    return ItemCriteria.class;
+  public Class<InventoryItemCriteria> category() {
+    return InventoryItemCriteria.class;
   }
 
   @Override
-  public Builder<ItemCriteria> readConfig(JsonElement data) {
+  public Builder<InventoryItemCriteria> readConfig(JsonElement data) {
     this.requireString(data, "ItemId", this.itemId, (StringValidator) StringNotEmptyValidator.get(),
         BuilderDescriptorState.Experimental, "Item id to match", null);
 

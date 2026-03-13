@@ -23,6 +23,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
@@ -105,6 +106,12 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           })
       .add()
 
+      .append(
+          new KeyedCodec<>("LastStorageRequest", VillageStorageRequest.CODEC),
+          (obj, value) -> obj.lastStorageRequest = value,
+          (obj) -> obj.lastStorageRequest)
+      .add()
+
       .build();
 
   private UUID uuid;
@@ -121,6 +128,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private Set<UUID> workers = new HashSet<>();
   private Map<UUID, ClaimedAreaComponent> workersDesignatedArea = new HashMap<>();
   private WorkplaceContainerRegistryComponent storage;
+  private VillageStorageRequest lastStorageRequest;
 
   public UUID getUuid() {
     return uuid;
@@ -225,6 +233,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     return this.workersDesignatedArea.get(uuid);
   }
 
+  public VillageStorageRequest getLastStorageRequest() {
+    return lastStorageRequest;
+  }
+
+  public void setLastStorageRequest(VillageStorageRequest lastStorageRequest) {
+    this.lastStorageRequest = lastStorageRequest;
+  }
+
   @Override
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();
@@ -239,6 +255,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
     component.workerType = this.workerType != null ? this.workerType.clone() : null;
     component.workersDesignatedArea = new HashMap<>(this.workersDesignatedArea);
+    component.lastStorageRequest = this.lastStorageRequest != null ? this.lastStorageRequest.clone() : null;
     return component;
   }
 
@@ -255,6 +272,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         "\n typeWorkers=[" + workerType + "]," +
         "\n workersDesignatedArea=" + workersDesignatedArea + "," +
         "\n storage=" + storage + "," +
+        "\n lastStorageRequest=" + lastStorageRequest + "," +
         '}';
   }
 

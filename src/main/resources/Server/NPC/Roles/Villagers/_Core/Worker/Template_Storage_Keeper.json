@@ -233,10 +233,7 @@
           "Instructions": [
             {
               "Sensor": {
-                "Type": "Not",
-                "Sensor": {
-                  "Type": "QueryInventorySensor"
-                }
+                "Type": "QueryDirtyInventorySensor"
               },
               "Instructions": [
                 {
@@ -353,6 +350,10 @@
                       "SnapshotKey": "Fetch_All",
                       "ActionType": "WITHDRAW",
                       "ConsumeTargetOnSuccess": true
+                    },
+                    {
+                      "Type": "NotifyWorkplaceRequestStatus",
+                      "Status": "Completed"
                     }
                   ],
                   "Continue": false,
@@ -398,6 +399,10 @@
                       "ConsumeTargetOnFail": true,
                       "UseSnapshotItemCriteria": true,
                       "ConsumeTargetOnSuccess": true
+                    },
+                    {
+                      "Type": "NotifyWorkplaceRequestStatus",
+                      "Status": "Completed"
                     }
                   ],
                   "Continue": false,

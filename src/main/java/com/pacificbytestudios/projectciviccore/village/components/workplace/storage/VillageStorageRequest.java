@@ -3,6 +3,7 @@ package com.pacificbytestudios.projectciviccore.village.components.workplace.sto
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
 public class VillageStorageRequest {
   public static final BuilderCodec<VillageStorageRequest> CODEC = BuilderCodec
@@ -63,6 +64,10 @@ public class VillageStorageRequest {
     this.requestId = UUID.randomUUID();
   }
 
+  public void overrideRequestId(UUID requestId) {
+    this.requestId = requestId;
+  }
+
   public UUID getRequestId() {
     return this.requestId;
   }
@@ -105,6 +110,21 @@ public class VillageStorageRequest {
 
   public void setTargetsWorkplaceStorage(List<Vector3i> targetWorkplaceStorage) {
     this.targetsWorkplaceStorage.addAll(targetWorkplaceStorage);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(requestId, requesterWorkplaceId);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!(obj instanceof VillageStorageRequest other))
+      return false;
+    return this.targetsWorkplaceStorage.equals(other.targetsWorkplaceStorage)
+        && Objects.equals(this.requestId, other.requestId);
   }
 
   @Override
@@ -157,6 +177,11 @@ public class VillageStorageRequest {
             obj -> obj.attributeKey)
         .add()
 
+        .append(new KeyedCodec<>("FilterIn", Codec.BOOLEAN, false),
+            (obj, value) -> obj.filterIn = value,
+            obj -> obj.filterIn)
+        .add()
+
         .append(new KeyedCodec<>("RequiredAmount", Codec.INTEGER),
             (obj, value) -> obj.requiredAmount = value,
             obj -> obj.requiredAmount)
@@ -165,6 +190,7 @@ public class VillageStorageRequest {
         .build();
 
     private String attributeKey;
+    private boolean filterIn = true;
     private int requiredAmount;
 
     public String getAttributeKey() {
@@ -173,6 +199,14 @@ public class VillageStorageRequest {
 
     public void setAttributeKey(String attributeKey) {
       this.attributeKey = attributeKey;
+    }
+
+    public boolean isFilterIn() {
+      return filterIn;
+    }
+
+    public void setFilterIn(boolean filterIn) {
+      this.filterIn = filterIn;
     }
 
     public int getRequiredAmount() {
@@ -186,18 +220,36 @@ public class VillageStorageRequest {
     public ItemRequestCriterion clone() {
       ItemRequestCriterion criterion = new ItemRequestCriterion();
       criterion.attributeKey = this.attributeKey;
+      criterion.filterIn = this.filterIn;
       criterion.requiredAmount = this.requiredAmount;
       return criterion;
     }
 
-    public ItemCriteria toCriteria() {
-      return new ItemCriteria(this.attributeKey, true, this.requiredAmount);
+    public InventoryItemCriteria toCriteria() {
+      return new InventoryItemCriteria(this.attributeKey, this.filterIn, this.requiredAmount);
     }
 
     @Override
     public String toString() {
       return "attributeKey=" + this.attributeKey
+          + ", filterIn=" + this.filterIn
           + ", requiredAmount=" + this.requiredAmount;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(attributeKey, filterIn, requiredAmount);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (!(obj instanceof ItemRequestCriterion other))
+        return false;
+      return Objects.equals(this.attributeKey, other.attributeKey)
+          && this.filterIn == other.filterIn
+          && this.requiredAmount == other.requiredAmount;
     }
 
   }

@@ -15,11 +15,11 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.BakerySpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StorageSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.TavernSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 
 import io.sentry.util.Pair;
@@ -78,7 +78,7 @@ public class Utils {
     return switch (workplaceType) {
       case MINE -> MineSpawner::spawn;
       case FARM -> FarmSpawner::spawn;
-      case BAKERY -> BakerySpawner::spawn;
+      case TAVERN -> TavernSpawner::spawn;
       case SAWMILL -> SawmillSpawner::spawn;
       case STORAGE -> StorageSpawner::spawn;
       default -> throw new IllegalArgumentException("Unsupported workplace type: " + workplaceType);
@@ -89,7 +89,7 @@ public class Utils {
     return switch (workplaceType) {
       case MINE -> MineSpawner::despawn;
       case FARM -> FarmSpawner::despawn;
-      case BAKERY -> BakerySpawner::despawn;
+      case TAVERN -> TavernSpawner::despawn;
       case SAWMILL -> SawmillSpawner::despawn;
       case STORAGE -> StorageSpawner::despawn;
       default -> throw new IllegalArgumentException("Unsupported workplace type: " + workplaceType);

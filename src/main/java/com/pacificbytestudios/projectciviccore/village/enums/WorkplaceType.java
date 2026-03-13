@@ -5,5 +5,5 @@ public enum WorkplaceType {
   SAWMILL,
   FARM,
   STORAGE,
-  BAKERY;
+  TAVERN;
 }

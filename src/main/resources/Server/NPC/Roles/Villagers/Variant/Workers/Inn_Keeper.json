@@ -1,6 +1,6 @@
 {
   "Type": "Variant",
-  "Reference": "Template_Baker",
+  "Reference": "Template_Inn_Keeper",
   "Modify": {
     "MaxHealth": 100
   }

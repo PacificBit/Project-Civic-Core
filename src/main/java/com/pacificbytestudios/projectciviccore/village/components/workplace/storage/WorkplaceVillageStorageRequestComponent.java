@@ -42,16 +42,16 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
   private ArrayDeque<VillageStorageRequest> requestDeque = new ArrayDeque<>();
   private Map<UUID, ArrayDeque<VillageStorageRequest>> onGoingRequests = new HashMap<>();
 
-  public void addRequest(VillageStorageRequest workplaceRequest) {
+  public UUID addRequest(VillageStorageRequest workplaceRequest) {
     for (VillageStorageRequest request : this.requestDeque) {
-      if (request.getRequesterWorkplaceId().equals(workplaceRequest.getRequesterWorkplaceId())
-          &&
+      if (request.getRequesterWorkplaceId().equals(workplaceRequest.getRequesterWorkplaceId()) &&
           request.getType().equals(workplaceRequest.getType())) {
         request.getItemCriteria().addAll(workplaceRequest.getItemCriteria());
-        return;
+        return request.getRequestId();
       }
     }
     this.requestDeque.add(workplaceRequest);
+    return workplaceRequest.getRequestId();
   }
 
   public ArrayDeque<VillageStorageRequest> getRequests() {

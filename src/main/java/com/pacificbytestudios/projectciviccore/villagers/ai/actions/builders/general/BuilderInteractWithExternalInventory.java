@@ -15,11 +15,12 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ActionType;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ItemCriteria;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
 public class BuilderInteractWithExternalInventory extends BuilderActionBase {
-  private final BuilderObjectListHelper<ItemCriteria> itemCriteria = new BuilderObjectListHelper<>(
-      ItemCriteria.class, this);
+  private final BuilderObjectListHelper<InventoryItemCriteria> itemCriteria = new BuilderObjectListHelper<>(
+      InventoryItemCriteria.class, this);
+
   private EnumHolder<ActionType> actionType = new EnumHolder<>();
   private Boolean consumeSnapshotTargetOnSuccess;
   private Boolean consumeSnapshotTargetOnFail;
@@ -46,31 +47,26 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
     return "Fetch items from external inventory";
   }
 
+  @Override
   public Builder<Action> readConfig(JsonElement data) {
-
     this.requireEnum(data, "ActionType", this.actionType, InteractWithExternalInventory.ActionType.class,
-        BuilderDescriptorState.Experimental,
-        "Type of action to perform to the external inventory", null);
+        BuilderDescriptorState.Experimental, "Type of action to perform to the external inventory", null);
 
     this.requireString(data, "SnapshotKey", this::setSnapshotKey, (StringValidator) StringNotEmptyValidator.get(),
-        BuilderDescriptorState.Experimental,
-        "Snapshot of the current work (used to get the storage coordinate)", null);
+        BuilderDescriptorState.Experimental, "Snapshot of the current work (used to get the storage coordinate)", null);
 
     this.getBoolean(data, "ConsumeTargetOnSuccess", this::setConsumeSnapshotTargetOnSuccess, true,
-        BuilderDescriptorState.Experimental,
-        "Whether or not to remove a target from the snapshot after success", null);
+        BuilderDescriptorState.Experimental, "Whether or not to remove a target from the snapshot after success", null);
 
     this.getBoolean(data, "ConsumeTargetOnFail", this::setConsumeSnapshotTargetOnFail, true,
-        BuilderDescriptorState.Experimental,
-        "Whether or not to remove a target from the snapshot after fail", null);
+        BuilderDescriptorState.Experimental, "Whether or not to remove a target from the snapshot after fail", null);
 
     this.getBoolean(data, "UseSnapshotItemCriteria", this::setUseSnapshotItemCriteria, false,
-        BuilderDescriptorState.Experimental,
-        "Wheterh or not to use the snapshot item filter criteria", null);
+        BuilderDescriptorState.Experimental, "Whether or not to use the snapshot item filter criteria", null);
 
     this.getArray(data, "ItemCriteria", this.itemCriteria, ArrayNotEmptyValidator.get(),
-        BuilderDescriptorState.Experimental, "List of item criteria used to match inventory items",
-        null, this.validationHelper);
+        BuilderDescriptorState.Experimental, "List of item criteria used to match inventory items", null,
+        this.validationHelper);
 
     return this;
   }
@@ -99,20 +95,19 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
     return this.snapshotKey;
   }
 
-  public List<ItemCriteria> getItemCriteria(BuilderSupport support) {
+  public List<InventoryItemCriteria> getItemCriteria(BuilderSupport support) {
     return this.itemCriteria.build(support);
   }
 
   public boolean getConsumeSnapshotTargetOnSuccessFlag() {
-    return this.consumeSnapshotTargetOnSuccess;
+    return Boolean.TRUE.equals(this.consumeSnapshotTargetOnSuccess);
   }
 
   public boolean getConsumeSnapshotTargetOnFailFlag() {
-    return this.consumeSnapshotTargetOnFail;
+    return Boolean.TRUE.equals(this.consumeSnapshotTargetOnFail);
   }
 
-  public Boolean getUseSnapshotItemCriteria() {
-    return useSnapshotItemCriteria;
+  public boolean getUseSnapshotItemCriteria() {
+    return Boolean.TRUE.equals(this.useSnapshotItemCriteria);
   }
-
 }
