@@ -186,26 +186,6 @@
             },
             {
               "Sensor": {
-                "Type": "Any"
-              },
-              "Actions": [
-                {
-                  "Type": "State",
-                  "State": ".PreWorkLoop"
-                }
-              ]
-            }
-          ],
-          "$Comment": "Starting the work routine"
-        },
-        {
-          "Sensor": {
-            "Type": "State",
-            "State": ".PreWorkLoop"
-          },
-          "Instructions": [
-            {
-              "Sensor": {
                 "Type": "Not",
                 "Sensor": {
                   "Type": "HasValidWorkAraSnapshot"
@@ -224,8 +204,7 @@
                     }
                   ]
                 }
-              ],
-              "Continue": false
+              ]
             },
             {
               "Sensor": {
@@ -233,12 +212,22 @@
               },
               "Actions": [
                 {
-                  "Type": "Log",
-                  "Message": "BBB"
+                  "Type": "State",
+                  "State": ".PreWorkLoop"
                 }
               ],
-              "Continue": true
-            },
+              "$Comment": "Workplace Reached -> .PreWorkLoop"
+            }
+          ],
+          "$Comment": "Starting the work routine"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PreWorkLoop"
+          },
+          "$Comment": "Pre WorkLoop - clear inventory",
+          "Instructions": [
             {
               "Sensor": {
                 "Type": "And",
@@ -255,34 +244,59 @@
                 ],
                 "Once": true
               },
-              "$Comment": "If is the boss and there is no meal plan",
-              "Instructions": [
+              "Actions": [
                 {
-                  "Sensor": {
-                    "Type": "Any",
-                    "Once": true
-                  },
-                  "Actions": [
-                    {
-                      "Type": "CreateNewMealPlanAction"
-                    }
-                  ],
-                  "Continue": true
-                },
-                {
-                  "Sensor": {
-                    "Type": "Any",
-                    "Once": true
-                  },
-                  "Actions": [
-                    {
-                      "Type": "Log",
-                      "Message": "Non basta il materiale"
-                    }
-                  ]
+                  "Type": "CreateNewMealPlanAction",
+                  "SuccessFlag": "InnKeeperMealPlanReady",
+                  "FailureFlag": "InnKeeperMealPlanFailed"
                 }
               ],
+              "$Comment": "If is the boss and there is no meal plan",
               "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "Flag",
+                "Name": "InnKeeperMealPlanReady",
+                "Set": true
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "READY TO WORK"
+                },
+                {
+                  "Type": "SetFlag",
+                  "Name": "InnKeeperMealPlanReady",
+                  "SetTo": false
+                }
+              ],
+              "Continue": true,
+              "$Comment": "Success branch after CreateNewMealPlanAction"
+            },
+            {
+              "Sensor": {
+                "Type": "Flag",
+                "Name": "InnKeeperMealPlanFailed",
+                "Set": true
+              },
+              "Continue": false,
+              "$Comment": "Failure branch after CreateNewMealPlanAction",
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "NOT COMPLETED: Not enough food in storage"
+                },
+                {
+                  "Type": "SetFlag",
+                  "Name": "InnKeeperMealPlanFailed",
+                  "SetTo": false
+                },
+                {
+                  "Type": "State",
+                  "State": "WaitingStorageResult"
+                }
+              ]
             },
             {
               "Sensor": {
@@ -293,10 +307,10 @@
                   "Type": "State",
                   "State": ".WorkLoop"
                 }
-              ]
+              ],
+              "$Comment": "Substate change: -> .WorkLoop"
             }
-          ],
-          "$Comment": "Pre work loop"
+          ]
         },
         {
           "Sensor": {
@@ -319,8 +333,7 @@
                       "Type": "State",
                       "State": ".GatherMaterials"
                     }
-                  ],
-                  "$Comment": "Change State: .GatherMaterials"
+                  ]
                 }
               ]
             },
@@ -352,8 +365,7 @@
                   "TargetBlockIds": [
                     "Worker_Workplace_Storage"
                   ]
-                },
-                "Once": true
+                }
               },
               "Instructions": [
                 {
@@ -365,7 +377,8 @@
                       "Type": "SetWorkplaceStorageTargetInSnapshot",
                       "ActionType": "ADD"
                     }
-                  ]
+                  ],
+                  "$Comment": "Set Workplace Storage Target in snapshot"
                 }
               ],
               "$Comment": "If he does not know where the storage containers are"
@@ -376,13 +389,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 1
               },
-              "$Comment": "Reach Container",
+              "$Comment": "Reach workplace storage",
               "BodyMotion": {
                 "Type": "Seek",
-                "StopDistance": 1.5,
-                "SlowDownDistance": 1.5,
+                "SlowDownDistance": 1,
+                "StopDistance": 1,
                 "RelativeSpeed": 0.5
               }
             },
@@ -392,21 +405,21 @@
               },
               "Actions": [
                 {
-                  "Type": "Timeout",
-                  "Delay": [
-                    5,
-                    10
-                  ],
-                  "Action": {
-                    "Type": "GatherNextMealMaterialFromContainer"
-                  }
+                  "Type": "GatherNextMealMaterialFromContainer"
                 }
-              ]
+              ],
+              "$Comment": "Gather material"
             },
             {
               "Sensor": {
                 "Type": "Any"
-              }
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Cooking"
+                }
+              ]
             }
           ],
           "$Comment": "Gather material to cook"
@@ -414,19 +427,20 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".GatherMaterials"
+            "State": ".Cooking"
           },
-          "$Comment": "Material gathered",
           "Instructions": [
             {
               "Sensor": {
                 "Type": "Any"
               },
+              "$Comment": "Reach workplace storage",
               "BodyMotion": {
                 "Type": "Nothing"
               }
             }
-          ]
+          ],
+          "$Comment": "Cooking"
         }
       ],
       "Continue": true,
@@ -491,6 +505,28 @@
                 "Type": "State",
                 "State": "PostWorkCooldown"
               }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WaitingStorageResult"
+      },
+      "$Comment": "Ask storage for supply",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "$Comment": "Call the storage",
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "STO ASPETTANDO LO STORAGE"
             }
           ]
         }
