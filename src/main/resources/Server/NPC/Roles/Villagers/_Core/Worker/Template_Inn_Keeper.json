@@ -519,14 +519,19 @@
       "Instructions": [
         {
           "Sensor": {
-            "Type": "Any"
+            "Type": "Any",
+            "Once": true
           },
           "Continue": true,
           "$Comment": "Call the storage",
           "Actions": [
             {
+              "Type": "AskStorageToDeliveResources",
+              "SourceType": "WORKPLACE"
+            },
+            {
               "Type": "Log",
-              "Message": "STO ASPETTANDO LO STORAGE"
+              "Message": "CHIAMATO LO STORAGE"
             }
           ]
         }
