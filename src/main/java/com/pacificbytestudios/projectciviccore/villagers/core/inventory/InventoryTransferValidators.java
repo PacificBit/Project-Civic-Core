@@ -74,6 +74,8 @@ public final class InventoryTransferValidators {
 
     VillageStorageRequest request = requestQueue.iterator().next();
 
+    // INFO: funly enough I did not have to do this, InventoryHelper already seems
+    // to have pattern matching... fml
     List<InventoryItemCriteria> criteria = request.getItemCriteria()
         .stream()
         .sorted((left, right) -> {

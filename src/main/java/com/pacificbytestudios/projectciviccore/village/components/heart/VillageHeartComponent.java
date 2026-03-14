@@ -165,6 +165,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return Collections.unmodifiableSet(this.villagersRegistry);
   }
 
+  public short getVillagerCount() {
+    return (short) this.villagersRegistry.size();
+  }
+
   public void registerVillager(UUID uuid, VillagerComponent villagerComponent) {
     this.villagersRegistry.add(uuid);
     this.villagerIdToComponent.put(uuid, villagerComponent);

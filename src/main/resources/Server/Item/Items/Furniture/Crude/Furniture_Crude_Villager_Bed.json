@@ -7,35 +7,6 @@
   "Categories": [
     "Furniture.Benches"
   ],
-  "Recipe": {
-    "TimeSeconds": 1,
-    "Input": [
-      {
-        "ItemId": "Ingredient_Fibre",
-        "Quantity": 3
-      },
-      {
-        "ItemId": "Ingredient_Hide_Light",
-        "Quantity": 2
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Id": "Fieldcraft",
-        "Type": "Crafting",
-        "Categories": [
-          "Tools"
-        ]
-      },
-      {
-        "Id": "Workbench",
-        "Type": "Crafting",
-        "Categories": [
-          "Workbench_Survival"
-        ]
-      }
-    ]
-  },
   "BlockType": {
     "Material": "Solid",
     "DrawType": "Model",
@@ -103,14 +74,6 @@
       22.5
     ]
   },
-  "ResourceTypes": [
-    {
-      "Id": "Fuel"
-    },
-    {
-      "Id": "Charcoal"
-    }
-  ],
   "Tags": {
     "Type": [
       "Furniture"

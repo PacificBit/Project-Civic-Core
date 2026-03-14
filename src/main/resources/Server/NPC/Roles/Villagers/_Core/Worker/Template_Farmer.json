@@ -259,19 +259,6 @@
                       "Sensor": {
                         "Type": "Any"
                       },
-                      "$Comment": "Log",
-                      "Actions": [
-                        {
-                          "Type": "Log",
-                          "Message": "Does not have hoe"
-                        }
-                      ],
-                      "Continue": true
-                    },
-                    {
-                      "Sensor": {
-                        "Type": "Any"
-                      },
                       "Actions": [
                         {
                           "Type": "ClearSnapshotGroup",
@@ -369,19 +356,6 @@
                     }
                   },
                   "Instructions": [
-                    {
-                      "Sensor": {
-                        "Type": "Any"
-                      },
-                      "$Comment": "Log",
-                      "Actions": [
-                        {
-                          "Type": "Log",
-                          "Message": "Does not have seeds in inventory"
-                        }
-                      ],
-                      "Continue": true
-                    },
                     {
                       "Sensor": {
                         "Type": "Any"
@@ -533,19 +507,6 @@
                       "Sensor": {
                         "Type": "Any"
                       },
-                      "$Comment": "Log",
-                      "Actions": [
-                        {
-                          "Type": "Log",
-                          "Message": "Does not have watering can"
-                        }
-                      ],
-                      "Continue": true
-                    },
-                    {
-                      "Sensor": {
-                        "Type": "Any"
-                      },
                       "Actions": [
                         {
                           "Type": "ClearSnapshotGroup",
@@ -619,18 +580,6 @@
               },
               "Actions": [
                 {
-                  "Type": "Log",
-                  "Message": "Work is done"
-                }
-              ],
-              "Continue": true
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "Actions": [
-                {
                   "Type": "State",
                   "State": "WorkCooldown"
                 }
@@ -658,19 +607,6 @@
                 }
               ],
               "$Comment": "If not valid work area snapshot is present"
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "Actions": [
-                {
-                  "Type": "Log",
-                  "Message": "Creating a new workarea snapshot..."
-                }
-              ],
-              "$Comment": "Log",
-              "Continue": true
             },
             {
               "Sensor": {
@@ -834,8 +770,8 @@
             {
               "Type": "Timeout",
               "Delay": [
-                5,
-                5
+                25,
+                25
               ],
               "Action": {
                 "Type": "State",

@@ -20,8 +20,8 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 
 public class VillagerComponent implements Component<EntityStore> {
   public static final short STORAGE_CAPACITY = 18;
-  public static final short HOTBAR_CAPACITY = 3;
-  public static final short OFFHAND_CAPACITY = 3;
+  public static final short HOTBAR_CAPACITY = 1;
+  public static final short OFFHAND_CAPACITY = 1;
 
   public static final BuilderCodec<VillagerComponent> CODEC = BuilderCodec
       .builder(VillagerComponent.class, VillagerComponent::new)

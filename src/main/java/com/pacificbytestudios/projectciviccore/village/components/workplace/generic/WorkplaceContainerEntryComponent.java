@@ -59,4 +59,11 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
     return ProjectCivicCore.get().getWorkplaceContainerEntryComponentType();
   }
 
+  @Override
+  public String toString() {
+    return "WorkplaceContainerEntryComponent{\n" +
+        "uuid=" + uuid +
+        "\n, position=" + position +
+        '}';
+  }
 }

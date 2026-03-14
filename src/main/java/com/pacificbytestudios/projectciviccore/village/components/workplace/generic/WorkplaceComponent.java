@@ -70,6 +70,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           obj -> obj.workers)
       .add()
 
+      .append(new KeyedCodec<>("BossId", Codec.UUID_BINARY),
+          (obj, value) -> obj.bossId = value,
+          (obj) -> obj.bossId)
+      .add()
+
       .append(new KeyedCodec<>("Storage", WorkplaceContainerRegistryComponent.CODEC),
           (obj, value) -> obj.storage = value,
           (obj) -> obj.storage)
@@ -126,6 +131,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private ClaimedAreaComponent workingArea;
 
   private Set<UUID> workers = new HashSet<>();
+  private UUID bossId;
   private Map<UUID, ClaimedAreaComponent> workersDesignatedArea = new HashMap<>();
   private WorkplaceContainerRegistryComponent storage;
   private VillageStorageRequest lastStorageRequest;
@@ -193,6 +199,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.recalculateWorkerDesignatedArea();
   }
 
+  public UUID getBossId() {
+    return bossId;
+  }
+
+  public void registerAsBoss(UUID bossId) {
+    this.bossId = bossId;
+  }
+
   private void recalculateWorkerDesignatedArea() {
     if (this.workingArea == null) {
       return;
@@ -250,6 +264,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.villageRef = this.villageRef;
     component.workplaceRef = this.workplaceRef;
     component.workers = new HashSet<>(this.workers);
+    component.bossId = this.bossId;
     component.storage = this.storage != null ? this.storage.clone() : null;
     component.prefabAnchor = this.prefabAnchor;
     component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
@@ -268,6 +283,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         "\n prefabAnchor=" + prefabAnchor + "," +
         "\n villageHeartLocation=" + villageRef + "," +
         "\n workspaceLocation=" + workplaceRef + "," +
+        "\n bossId=" + bossId + "," +
         "\n workers=" + workers + "," +
         "\n typeWorkers=[" + workerType + "]," +
         "\n workersDesignatedArea=" + workersDesignatedArea + "," +

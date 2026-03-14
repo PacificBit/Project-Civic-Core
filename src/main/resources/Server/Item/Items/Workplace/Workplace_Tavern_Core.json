@@ -52,7 +52,8 @@
         "WorkplaceComponent": {
           "Type": "Tavern"
         },
-        "WorkplaceSpawnComponent": {}
+        "WorkplaceSpawnComponent": {},
+        "TavernComponent": {}
       }
     }
   },

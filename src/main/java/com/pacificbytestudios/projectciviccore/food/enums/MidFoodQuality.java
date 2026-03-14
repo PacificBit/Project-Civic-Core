@@ -1,0 +1,23 @@
+package com.pacificbytestudios.projectciviccore.food.enums;
+
+import java.util.function.Supplier;
+
+public enum MidFoodQuality implements Supplier<String> {
+  PUMPKIN_PIE("Village_Food_Pie_Pumpkin"),
+  BERRY_SALAD("Village_Food_Salad_Berry");
+
+  private String id;
+
+  private MidFoodQuality(String id) {
+    this.id = id;
+  }
+
+  public String getId() {
+    return this.id;
+  }
+
+  @Override
+  public String get() {
+    return this.id;
+  }
+}

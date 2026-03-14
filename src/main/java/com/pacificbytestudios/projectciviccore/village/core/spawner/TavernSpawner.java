@@ -1,11 +1,17 @@
 
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -14,7 +20,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
@@ -30,8 +35,6 @@ public class TavernSpawner {
   private static final String PREFAB_JSON = "Structures/WorkPlace/Workplace_Tavern.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Tavern_Core");
   private static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
-  private static final ClaimedAreaComponent WORKING_AREA_OFFSET = new ClaimedAreaComponent(
-      new Vector2i(-4, -4), new Vector2i(4, 4));
 
   public static boolean spawn(WorldChunk chunk, Vector3i position) {
     World world = chunk.getWorld();
@@ -45,8 +48,12 @@ public class TavernSpawner {
       return false;
     }
 
+    int rotation = RotationTuple.of(
+        Rotation.Ninety,
+        Rotation.None,
+        Rotation.None).index();
+
     Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position);
-    int rotation = RotationTuple.of(Rotation.Ninety, Rotation.None, Rotation.None).index();
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk, workplaceBlockPosition, WORKPLACE_BLOCK, rotation);
     Ref<ChunkStore> workplace = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
@@ -54,7 +61,7 @@ public class TavernSpawner {
         workplaceBlockPosition.z);
 
     if (workplace == null || !workplace.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Workplace ref is invalid");
+      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Workplace ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
@@ -64,12 +71,11 @@ public class TavernSpawner {
         WorkplaceComponent.getComponentType());
 
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Workplace component is missing");
+      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
-    workplaceComponent.setWorkerType(new WorkType[] { WorkType.FARMER });
-    workplaceComponent.setWorkingArea(new ClaimedAreaComponent(WORKING_AREA_OFFSET, position));
+    workplaceComponent.setWorkerType(new WorkType[] { WorkType.INN_KEEPER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
     chunkStore.putComponent(
@@ -77,40 +83,62 @@ public class TavernSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);
 
-    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition);
-    WorldChunk containerChunk = Utils.setBlockChunkAware(
-        workplaceChunk,
-        containerPosition,
-        SINGLE_STORAGE_BLOCK,
-        rotation);
-    Ref<ChunkStore> containerRef = containerChunk.getBlockComponentEntity(containerPosition.x,
-        containerPosition.y, containerPosition.z);
+    WorkplaceContainerRegistryComponent registry = spawnContainers(
+        1, position, workplaceChunk, chunkStore, rotation);
 
-    if (containerRef == null || !containerRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Container ref is invalid");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, containerPosition);
+    if (registry == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Could not spawn correctly the containers");
+      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
-    WorkplaceContainerEntryComponent container = chunkStore.getComponent(
-        containerRef,
-        WorkplaceContainerEntryComponent.getComponentType());
-
-    if (container == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Container component is missing");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, containerPosition);
-    }
-
-    workplaceComponent.setPrefabAnchor(position.clone());
-
-    container.setPosition(containerPosition);
-    container.setUuid(UUID.randomUUID());
-
-    WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
-    storage.registerContainer(container.getUuid(), container);
-    workplaceComponent.setStorage(storage);
-
-    chunk.markNeedsSaving();
+    workplaceComponent.setStorage(registry);
     return true;
+  }
+
+  private static WorkplaceContainerRegistryComponent spawnContainers(
+      int level,
+      Vector3i center,
+      WorldChunk chunk,
+      Store<ChunkStore> chunkStore,
+      int rotation) {
+    WorkplaceContainerRegistryComponent registry = new WorkplaceContainerRegistryComponent();
+    List<Vector3i> offsets = Config.getStorageOffsetForLevel(level);
+    WorldChunk usedChunk = chunk;
+    Vector3i containerPosition;
+
+    for (Vector3i offset : offsets) {
+
+      containerPosition = center.clone().add(offset);
+
+      usedChunk = Utils.setBlockChunkAware(
+          usedChunk,
+          containerPosition,
+          SINGLE_STORAGE_BLOCK,
+          rotation);
+
+      Ref<ChunkStore> containerRef = usedChunk.getBlockComponentEntity(containerPosition.x,
+          containerPosition.y, containerPosition.z);
+
+      if (containerRef == null || !containerRef.isValid()) {
+        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container ref is invalid");
+        return null;
+      }
+
+      WorkplaceContainerEntryComponent container = chunkStore.getComponent(
+          containerRef,
+          WorkplaceContainerEntryComponent.getComponentType());
+
+      if (container == null) {
+        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container component is missing");
+        return null;
+      }
+
+      container.setPosition(containerPosition);
+      container.setUuid(UUID.randomUUID());
+      registry.registerContainer(container.getUuid(), container);
+    }
+
+    return registry;
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
@@ -123,19 +151,19 @@ public class TavernSpawner {
     Ref<ChunkStore> workplaceRef = result.getSecond();
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - despawn] Invalid workplaceRef");
+      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Invalid workplaceRef");
       return false;
     }
 
     Store<ChunkStore> store = workplaceRef.getStore();
 
-    WorkplaceComponent component = store.getComponent(workplaceRef,
+    WorkplaceComponent workplace = store.getComponent(workplaceRef,
         WorkplaceComponent.getComponentType());
     TrackedPrefabPlacementComponent trackedPlacement = store
         .getComponent(workplaceRef, TrackedPrefabPlacementComponent.getComponentType());
 
-    if (component == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - despawn] Missing workplace component");
+    if (workplace == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Missing workplace component");
       return false;
     }
 
@@ -143,7 +171,7 @@ public class TavernSpawner {
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(), trackedPlacement);
     } else {
-      Vector3i prefabAnchor = component.getPrefabAnchor();
+      Vector3i prefabAnchor = workplace.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -160,15 +188,25 @@ public class TavernSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - despawn] Could not despawn farm prefab");
+      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Could not despawn storage prefab");
       return false;
     }
 
-    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition);
+    despawnContainers(chunk, workplace);
     Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
-    Utils.breakBlockChunkAware(workplaceChunk, containerPosition);
-
     return despawn;
+  }
+
+  private static void despawnContainers(WorldChunk chunk, WorkplaceComponent workplace) {
+    Map<UUID, WorkplaceContainerEntryComponent> containers = workplace.getStorage().getContainers();
+
+    Set<Entry<UUID, WorkplaceContainerEntryComponent>> entrySet = new HashSet<Entry<UUID, WorkplaceContainerEntryComponent>>(
+        containers.entrySet());
+
+    for (Map.Entry<UUID, WorkplaceContainerEntryComponent> container : entrySet) {
+      workplace.getStorage().unregisterContainer(container.getKey());
+      Utils.breakBlockChunkAware(chunk, container.getValue().getPosition());
+    }
   }
 
   private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
@@ -176,11 +214,6 @@ public class TavernSpawner {
         .add(Vector3i.NORTH.clone().scale(4))
         .add(Vector3i.WEST.clone().scale(4))
         .add(Vector3i.UP);
-  }
-
-  private static Vector3i getContainerPosition(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone()
-        .add(Vector3i.SOUTH.clone().scale(2));
   }
 
   private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
@@ -199,5 +232,20 @@ public class TavernSpawner {
     }
     PrefabManager.restoreTrackedPrefab(world, trackedPlacement);
     return false;
+  }
+
+  private class Config {
+    private static final Map<Integer, List<Vector3i>> STORAGE_SPAWNING_OFFSETS;
+    static {
+      STORAGE_SPAWNING_OFFSETS = new HashMap<>();
+      List<Vector3i> level1 = new ArrayList<>();
+      level1.add(new Vector3i(-4, 1, -2));
+      level1.add(new Vector3i(0, 1, 0));
+      STORAGE_SPAWNING_OFFSETS.put(1, level1);
+    }
+
+    public static List<Vector3i> getStorageOffsetForLevel(int level) {
+      return STORAGE_SPAWNING_OFFSETS.get(level);
+    }
   }
 }

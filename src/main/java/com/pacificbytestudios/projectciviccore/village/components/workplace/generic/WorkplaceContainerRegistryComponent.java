@@ -80,4 +80,10 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
     return ProjectCivicCore.get().getWorkplaceStorageComponentType();
   }
 
+  @Override
+  public String toString() {
+    return "WorkplaceContainerRegistryComponent{\n" +
+        "containers=" + containers +
+        '}';
+  }
 }

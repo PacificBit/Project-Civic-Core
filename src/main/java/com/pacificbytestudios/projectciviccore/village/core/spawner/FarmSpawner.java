@@ -30,7 +30,7 @@ public class FarmSpawner {
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
   private static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
   private static final ClaimedAreaComponent WORKING_AREA_OFFSET = new ClaimedAreaComponent(
-      new Vector2i(-3, -3), new Vector2i(3, 3));
+      new Vector2i(0, 0), new Vector2i(3, 3));
 
   public static boolean spawn(WorldChunk chunk, Vector3i position) {
     World world = chunk.getWorld();

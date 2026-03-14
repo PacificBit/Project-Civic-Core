@@ -121,8 +121,7 @@ public class ItemFetchRequest extends CommandBase {
       request.addItemCriteria(criteria);
       request.setTargetsWorkplaceStorage(closestWorkplace.getStorage().getAllContainerPositions());
 
-      EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(
-          request);
+      EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
 
       task.setOnError(
           (reason, msg) -> context.sendMessage(

@@ -520,18 +520,6 @@
               },
               "Actions": [
                 {
-                  "Type": "Log",
-                  "Message": "Work is done"
-                }
-              ],
-              "Continue": true
-            },
-            {
-              "Sensor": {
-                "Type": "Any"
-              },
-              "Actions": [
-                {
                   "Type": "State",
                   "State": "WorkCooldown"
                 }
@@ -631,8 +619,8 @@
             {
               "Type": "Timeout",
               "Delay": [
-                5,
-                5
+                25,
+                25
               ],
               "Action": {
                 "Type": "State",

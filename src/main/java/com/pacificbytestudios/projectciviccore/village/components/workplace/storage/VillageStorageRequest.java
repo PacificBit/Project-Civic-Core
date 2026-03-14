@@ -193,6 +193,15 @@ public class VillageStorageRequest {
     private boolean filterIn = true;
     private int requiredAmount;
 
+    public ItemRequestCriterion() {
+    }
+
+    public ItemRequestCriterion(String attributeKey, boolean filterIn, int requiredAmount) {
+      this.attributeKey = attributeKey;
+      this.filterIn = filterIn;
+      this.requiredAmount = requiredAmount;
+    }
+
     public String getAttributeKey() {
       return attributeKey;
     }

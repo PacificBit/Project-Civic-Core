@@ -13,7 +13,7 @@ public class ScanFactory {
     return switch (typeOfWorker) {
       case FARMER -> new FarmerScan();
       case MINER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
-      case INN_KEEPER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
+      case INN_KEEPER -> new InnKeeperScan();
       case WOOD_CUTTER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
       case STORAGE_KEEPER -> new StorageKeeperScan();
       default -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);

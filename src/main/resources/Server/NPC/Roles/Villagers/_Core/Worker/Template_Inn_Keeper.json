@@ -294,7 +294,7 @@
                 },
                 {
                   "Type": "State",
-                  "State": "WaitingStorageResult"
+                  "State": "AskStorageForSupply"
                 }
               ]
             },
@@ -513,7 +513,7 @@
     {
       "Sensor": {
         "Type": "State",
-        "State": "WaitingStorageResult"
+        "State": "AskStorageForSupply"
       },
       "$Comment": "Ask storage for supply",
       "Instructions": [
@@ -523,7 +523,7 @@
             "Once": true
           },
           "Continue": true,
-          "$Comment": "Call the storage",
+          "$Comment": "Ask for supply",
           "Actions": [
             {
               "Type": "AskStorageToDeliveResources",
@@ -532,6 +532,69 @@
             {
               "Type": "Log",
               "Message": "CHIAMATO LO STORAGE"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Change state to waiting",
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "WaitingForStorageResponse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WaitingForStorageResponse"
+      },
+      "$Comment": "Ask storage for supply",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Not",
+            "Sensor": {
+              "Type": "HasStoragePendingRequest"
+            }
+          },
+          "Continue": true,
+          "$Comment": "Ask for supply",
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.PreWorkLoop"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "Waiting..."
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                4,
+                4
+              ]
             }
           ]
         }
