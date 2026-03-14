@@ -2,7 +2,7 @@
   "Type": "Abstract",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "DropList": {
@@ -177,8 +177,8 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 2,
-                "StopDistance": 2,
+                "SlowDownDistance": 1,
+                "StopDistance": 1,
                 "RelativeSpeed": 1
               },
               "Continue": false,
@@ -191,29 +191,341 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".WoorkLoop"
+                  "State": ".PreWorkLoop"
                 }
-              ],
-              "$Comment": "Workplace Reached -> .StartWork"
+              ]
             }
           ],
-          "$Comment": "Starting the workday"
+          "$Comment": "Starting the work routine"
         },
         {
           "Sensor": {
             "Type": "State",
-            "State": ".WoorkLoop"
+            "State": ".PreWorkLoop"
           },
-          "BodyMotion": {
-            "Type": "WanderInCircle",
-            "Radius": 3,
-            "RelativeSpeed": 0.3,
-            "MaxHeadingChange": 90
-          }
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                },
+                "Once": true
+              },
+              "$Comment": "If not valid work area snapshot is present",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "ScanWorkArea"
+                    }
+                  ]
+                }
+              ],
+              "Continue": false
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "BBB"
+                }
+              ],
+              "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "And",
+                "Sensors": [
+                  {
+                    "Type": "IsBossWorker"
+                  },
+                  {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasANewMealToPrepare"
+                    }
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If is the boss and there is no meal plan",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any",
+                    "Once": true
+                  },
+                  "Actions": [
+                    {
+                      "Type": "CreateNewMealPlanAction"
+                    }
+                  ],
+                  "Continue": true
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any",
+                    "Once": true
+                  },
+                  "Actions": [
+                    {
+                      "Type": "Log",
+                      "Message": "Non basta il materiale"
+                    }
+                  ]
+                }
+              ],
+              "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
+            }
+          ],
+          "$Comment": "Pre work loop"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WorkLoop"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "HasANewMealToPrepare",
+                "AssignMealToSelf": true
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".GatherMaterials"
+                    }
+                  ],
+                  "$Comment": "Change State: .GatherMaterials"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "WorkCooldown"
+                }
+              ]
+            }
+          ],
+          "$Comment": "Working"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".GatherMaterials"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ],
+              "$Comment": "If he does not know where the storage containers are"
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 1.5
+              },
+              "$Comment": "Reach Container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "StopDistance": 1.5,
+                "SlowDownDistance": 1.5,
+                "RelativeSpeed": 0.5
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Timeout",
+                  "Delay": [
+                    5,
+                    10
+                  ],
+                  "Action": {
+                    "Type": "GatherNextMealMaterialFromContainer"
+                  }
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              }
+            }
+          ],
+          "$Comment": "Gather material to cook"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".GatherMaterials"
+          },
+          "$Comment": "Material gathered",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "BodyMotion": {
+                "Type": "Nothing"
+              }
+            }
+          ]
         }
       ],
       "Continue": true,
-      "$Comment": "Normal state"
+      "$Comment": "Work Process"
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WorkCooldown"
+      },
+      "$Comment": "After all the steps are done",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "ReachWorkplace"
+          },
+          "Actions": [
+            {
+              "Type": "PlayAnimation",
+              "Slot": "Action",
+              "Animation": "Walk",
+              "Once": true
+            }
+          ],
+          "BodyMotion": {
+            "Type": "Seek",
+            "SlowDownDistance": 1,
+            "StopDistance": 1,
+            "RelativeSpeed": 1
+          },
+          "Continue": false,
+          "$Comment": "Reaching workplace"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Cooldown",
+          "ActionsBlocking": true,
+          "ActionsAtomic": true,
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                25,
+                25
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "PostWorkCooldown"
+      },
+      "$Comment": "Post Cooldown Creating Snapshot Area",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "ScanWorkArea"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.PreWorkLoop"
+            }
+          ]
+        }
+      ]
     }
   ],
   "NameTranslationKey": {
