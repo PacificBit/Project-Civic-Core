@@ -64,6 +64,10 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
     this.triedStorageIds = triedStorageIds;
   }
 
+  public VillageStorageRequest getRequest() {
+    return this.request;
+  }
+
   @Override
   public void execute(
       WorldChunk chunk,

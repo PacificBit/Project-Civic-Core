@@ -15,6 +15,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
@@ -117,7 +118,19 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
       chunk.setBlock(pos.x, pos.y, pos.z, villagerBed);
       Ref<ChunkStore> bedRef = chunk.getBlockComponentEntity(pos.x, pos.y, pos.z);
-      VillageBedComponent bedComponent = chunkStore.getComponent(bedRef, VillageBedComponent.getComponentType());
+      VillageBedComponent bedComponent = null;
+
+      if (bedRef != null && bedRef.isValid()) {
+        bedComponent = chunkStore.getComponent(bedRef, VillageBedComponent.getComponentType());
+      }
+
+      if (bedComponent == null) {
+        ProjectCivicCore.LOGGER.atWarning()
+            .log("[VillageHeartPlacementSystem] Missing bed block entity at " + pos
+                + ". Falling back to an in-memory bed component.");
+        bedComponent = new VillageBedComponent();
+      }
+
       bedComponent.setPosition(pos);
       beds[i] = bedComponent;
     }

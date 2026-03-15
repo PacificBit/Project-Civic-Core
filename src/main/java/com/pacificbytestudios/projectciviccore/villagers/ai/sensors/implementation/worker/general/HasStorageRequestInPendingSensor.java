@@ -6,7 +6,9 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestTracker;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
 public class HasStorageRequestInPendingSensor extends VillagerSensorBase {
@@ -31,11 +33,14 @@ public class HasStorageRequestInPendingSensor extends VillagerSensorBase {
     }
 
     WorkplaceComponent workplace = this.getWorkplaceComponent(ref, store);
+    VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
+    Ref<com.hypixel.hytale.server.core.universe.world.storage.ChunkStore> villageHeartRef = this.getVillageRef(ref,
+        store);
     if (workplace == null) {
       return false;
     }
 
-    return workplace.getLastStorageRequest() != null;
+    return VillageStorageRequestTracker.hasPendingRequest(villageHeartRef, villageHeart, workplace.getUuid(), null);
   }
 
 }

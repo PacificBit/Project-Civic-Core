@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
@@ -14,10 +15,12 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestTracker;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
@@ -50,14 +53,20 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
     WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);
-    Ref<ChunkStore> villageHeart = this.getVillageRef(ref, store);
-    if (workplaceComponent == null || villageHeart == null) {
+    Ref<ChunkStore> villageHeartRef = this.getVillageRef(ref, store);
+    Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
+    VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
+    if (workplaceComponent == null || villageHeartRef == null || workplaceRef == null || villageHeart == null) {
       return false;
     }
 
-    if (workplaceComponent.getLastStorageRequest() != null &&
-        workplaceComponent.getLastStorageRequest().getType()
-            .equals(VillageStorageRequestType.DELIVER_TO_WORKPLACE)) {
+    boolean hasPendingDeliverRequest = VillageStorageRequestTracker.hasPendingRequest(
+        villageHeartRef,
+        villageHeart,
+        workplaceComponent.getUuid(),
+        VillageStorageRequestType.DELIVER_TO_WORKPLACE);
+
+    if (hasPendingDeliverRequest) {
       ProjectCivicCore.LOGGER.atInfo()
           .log("[AskStorageForResourcesAction] Deliver request already present");
       return false;
@@ -74,15 +83,19 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     ProjectCivicCore.LOGGER.atInfo()
         .log("[AskStorageForResourcesAction] Built request: " + request);
 
+    syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
+
     EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
     task.setOnSuccessCallback(requestId -> {
       request.overrideRequestId(UUID.fromString(requestId));
-      workplaceComponent.setLastStorageRequest(request);
+      syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
     });
+    task.setOnError((status, message) -> syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef,
+        workplaceComponent, null));
 
     VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
     taskComponent.registerTask(task);
-    Utils.safeVillageTaskEnqueue(villageHeart, taskComponent);
+    Utils.safeVillageTaskEnqueue(villageHeartRef, taskComponent);
     return true;
   }
 
@@ -157,6 +170,59 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     @Override
     public String get() {
       return this.type;
+    }
+  }
+
+  private void syncLastStorageRequest(
+      Ref<ChunkStore> villageHeartRef,
+      VillageHeartComponent villageHeart,
+      Ref<ChunkStore> workplaceRef,
+      WorkplaceComponent sourceWorkplace,
+      VillageStorageRequest request) {
+    applyLastStorageRequest(sourceWorkplace, request);
+
+    if (villageHeart != null && sourceWorkplace != null) {
+      WorkplaceComponent registeredWorkplace = villageHeart.getWorkplaceFromId(sourceWorkplace.getUuid());
+      applyLastStorageRequest(registeredWorkplace, request);
+    }
+
+    if (workplaceRef != null && workplaceRef.isValid()) {
+      WorkplaceComponent persistedWorkplace = workplaceRef.getStore().getComponent(
+          workplaceRef,
+          WorkplaceComponent.getComponentType());
+      applyLastStorageRequest(persistedWorkplace, request);
+      persistWorkplaceComponent(workplaceRef, persistedWorkplace);
+    }
+
+    if (villageHeartRef != null && villageHeart != null) {
+      villageHeartRef.getStore().putComponent(
+          villageHeartRef,
+          VillageHeartComponent.getComponentType(),
+          villageHeart);
+    }
+  }
+
+  private void applyLastStorageRequest(WorkplaceComponent workplace, VillageStorageRequest request) {
+    if (workplace == null) {
+      return;
+    }
+
+    workplace.setLastStorageRequest(request != null ? request.clone() : null);
+  }
+
+  private void persistWorkplaceComponent(Ref<ChunkStore> workplaceRef, WorkplaceComponent workplace) {
+    if (workplaceRef == null || !workplaceRef.isValid() || workplace == null) {
+      return;
+    }
+
+    Store<ChunkStore> chunkStore = workplaceRef.getStore();
+    chunkStore.putComponent(workplaceRef, WorkplaceComponent.getComponentType(), workplace);
+
+    BlockModule.BlockStateInfo blockStateInfo = chunkStore.getComponent(
+        workplaceRef,
+        BlockModule.BlockStateInfo.getComponentType());
+    if (blockStateInfo != null) {
+      blockStateInfo.markNeedsSaving();
     }
   }
 }

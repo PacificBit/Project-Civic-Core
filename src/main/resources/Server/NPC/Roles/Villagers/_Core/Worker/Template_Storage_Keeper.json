@@ -350,10 +350,6 @@
                       "SnapshotKey": "Fetch_All",
                       "ActionType": "WITHDRAW",
                       "ConsumeTargetOnSuccess": true
-                    },
-                    {
-                      "Type": "NotifyWorkplaceRequestStatus",
-                      "Status": "Completed"
                     }
                   ],
                   "Continue": false,
@@ -399,10 +395,6 @@
                       "ConsumeTargetOnFail": true,
                       "UseSnapshotItemCriteria": true,
                       "ConsumeTargetOnSuccess": true
-                    },
-                    {
-                      "Type": "NotifyWorkplaceRequestStatus",
-                      "Status": "Completed"
                     }
                   ],
                   "Continue": false,
@@ -511,6 +503,68 @@
                   ],
                   "Continue": false,
                   "$Comment": "Drop Item"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "And",
+                "Sensors": [
+                  {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasTargetBlockInSnapshot",
+                      "TargetBlockIds": [
+                        "Fetch_All"
+                      ]
+                    }
+                  },
+                  {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasTargetBlockInSnapshot",
+                      "TargetBlockIds": [
+                        "Fetch_Item"
+                      ]
+                    }
+                  },
+                  {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasTargetBlockInSnapshot",
+                      "TargetBlockIds": [
+                        "Dump_All"
+                      ]
+                    }
+                  },
+                  {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasTargetBlockInSnapshot",
+                      "TargetBlockIds": [
+                        "Dump_Item"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "$Comment": "No valid transfer target remains for the assigned request",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "UpdateStorageRequestStatus",
+                      "Status": "REJECTED"
+                    },
+                    {
+                      "Type": "State",
+                      "State": "WorkCooldown"
+                    }
+                  ],
+                  "Continue": false
                 }
               ]
             },
