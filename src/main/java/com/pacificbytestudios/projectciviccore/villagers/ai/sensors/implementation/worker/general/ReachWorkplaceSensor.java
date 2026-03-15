@@ -5,17 +5,14 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
-public class ReachWorkplaceSensor extends SensorBase {
+public class ReachWorkplaceSensor extends VillagerSensorBase {
 
   private static final double MINIMUM_DISTANCE = 4.5;
 
@@ -31,19 +28,13 @@ public class ReachWorkplaceSensor extends SensorBase {
   }
 
   @Override
-  public boolean matches(Ref<EntityStore> ref, Role role, double dt, Store<EntityStore> store) {
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    VillagerWorkerComponent workerData = villager.getWorkerData();
-
-    if (workerData == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[ReachWorkplaceSensor] could not fetch worker data");
+  public boolean matches(Ref<EntityStore> ref, Role role, double deltaTime, Store<EntityStore> store) {
+    if (!super.matches(ref, role, deltaTime, store)) {
       return false;
     }
 
-    WorkplaceComponent workplace = workerData.getWorkplace();
-
+    WorkplaceComponent workplace = this.getWorkplaceComponent(ref, store);
     if (workplace == null) {
-      this.positionProvider.clear();
       return false;
     }
 

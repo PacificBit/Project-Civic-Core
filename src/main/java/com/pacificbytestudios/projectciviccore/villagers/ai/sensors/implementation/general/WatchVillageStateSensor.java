@@ -2,18 +2,16 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderWatchVillageStateSensor;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
-public class WatchVillageStateSensor extends SensorBase {
+public class WatchVillageStateSensor extends VillagerSensorBase {
   private final PositionProvider positionProvider = new PositionProvider();
   private VillageHeartState stateToListen;
 
@@ -30,21 +28,12 @@ public class WatchVillageStateSensor extends SensorBase {
     if (!ref.isValid()) {
       return false;
     }
-
-    VillagerComponent villagerComponent = store.getComponent(ref, VillagerComponent.getComponentType());
-    Ref<ChunkStore> villageHearth = villagerComponent.getVillageHeartRef();
-
-    if (villageHearth == null || !villageHearth.isValid()) {
+    VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
+    if (villageHeart == null) {
       return false;
     }
 
-    VillageHeartComponent component = villageHearth.getStore()
-        .getComponent(villageHearth,
-            VillageHeartComponent.getComponentType());
-
-    assert component != null;
-
-    return this.stateToListen.equals(component.getState());
+    return this.stateToListen.equals(villageHeart.getState());
   }
 
   @Override

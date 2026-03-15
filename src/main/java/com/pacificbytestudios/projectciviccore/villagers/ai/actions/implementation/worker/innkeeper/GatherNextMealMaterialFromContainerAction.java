@@ -19,23 +19,20 @@ import com.hypixel.hytale.server.core.inventory.transaction.MoveTransaction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.food.registry.RecipeRegistry;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.WorkplaceStorageTargetsSnapshotAction;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class GatherNextMealMaterialFromContainerAction extends ActionBase {
+public class GatherNextMealMaterialFromContainerAction extends VillagerActionBase {
 
   public GatherNextMealMaterialFromContainerAction(BuilderActionBase builderActionBase) {
     super(builderActionBase);
@@ -52,51 +49,14 @@ public class GatherNextMealMaterialFromContainerAction extends ActionBase {
       return false;
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
-
-    VillagerComponent villagerComponent = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villagerComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Could not fetch villager component");
-      return false;
-    }
-
-    VillagerWorkerComponent workerComponent = villagerComponent.getWorkerData();
-    if (workerComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Could not fetch worker data for worker.");
-      return false;
-    }
-
-    WorkplaceComponent workplaceComponent = workerComponent.getWorkplace();
-    if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Could not fetch workplace for worker.");
-      return false;
-    }
-
-    VillagerWorkerComponent workData = villagerComponent.getWorkerData();
-    if (workData == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Could not fetch worker data.");
-      return false;
-    }
-
-    WorkplaceAreaSnapshot snapshot = workData.getWorkareaSnapshot();
-    if (snapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Could not fetch worker area snapshot.");
+    Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
+    WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
+    if (workplaceRef == null || snapshot == null) {
       return false;
     }
 
     World world = store.getExternalData().getWorld();
     Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-
-    Ref<ChunkStore> workplaceRef = workplaceComponent.getWorkplaceRef().getRef();
-    if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Invalid workplace ref");
-      return false;
-    }
 
     TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef, TavernComponent.getComponentType());
     if (tavernComponent == null) {

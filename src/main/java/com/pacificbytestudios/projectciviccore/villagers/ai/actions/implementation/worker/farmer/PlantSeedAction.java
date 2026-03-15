@@ -35,7 +35,6 @@ public class PlantSeedAction extends ActionBase {
       double deltaTime,
       Store<EntityStore> store) {
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-
     if (villager == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[PlantSeed] Could not fetch villager component");
       return false;

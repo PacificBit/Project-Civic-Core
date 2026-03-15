@@ -10,7 +10,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
@@ -23,11 +22,10 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.tave
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderAskStorageForResourcesAction;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class AskStorageForResourcesAction extends ActionBase {
+public class AskStorageForResourcesAction extends VillagerActionBase {
   private List<InventoryItemCriteria> itemCriteria;
   private SourceType criteriaSourceType;
 
@@ -51,24 +49,9 @@ public class AskStorageForResourcesAction extends ActionBase {
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
-    VillagerComponent villagerComponent = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villagerComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[AskStorageForResourcesAction] Could not fetch the villager component");
-      return false;
-    }
-
-    VillagerWorkerComponent workerData = villagerComponent.getWorkerData();
-    if (workerData == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[AskStorageForResourcesAction] Could not fetch the villager worker data");
-      return false;
-    }
-
-    WorkplaceComponent workplaceComponent = workerData.getWorkplace();
-    if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[AskStorageForResourcesAction] Could not fetch the workplace component");
+    WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);
+    Ref<ChunkStore> villageHeart = this.getVillageRef(ref, store);
+    if (workplaceComponent == null || villageHeart == null) {
       return false;
     }
 
@@ -77,13 +60,6 @@ public class AskStorageForResourcesAction extends ActionBase {
             .equals(VillageStorageRequestType.DELIVER_TO_WORKPLACE)) {
       ProjectCivicCore.LOGGER.atInfo()
           .log("[AskStorageForResourcesAction] Deliver request already present");
-      return false;
-    }
-
-    Ref<ChunkStore> villageHeart = workplaceComponent.getVillageHeartRef();
-    if (villageHeart == null || !villageHeart.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[AskStorageForResourcesAction] Could not fetch the village heart reference");
       return false;
     }
 

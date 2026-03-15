@@ -18,7 +18,6 @@ import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
@@ -29,12 +28,11 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderCreateNewMealPlanAction;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class CreateNewMealPlanAction extends ActionBase {
+public class CreateNewMealPlanAction extends VillagerActionBase {
   private final int successFlagSlot;
   private final int failureFlagSlot;
 
@@ -56,51 +54,20 @@ public class CreateNewMealPlanAction extends ActionBase {
     }
     super.execute(ref, role, infoProvider, deltaTime, store);
 
-    VillagerComponent villagerComponent = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villagerComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CreateNewMealPlanAction] Could not fetch villager component");
-      return this.finish(role, false);
-    }
-
-    VillagerWorkerComponent workerComponent = villagerComponent.getWorkerData();
-    if (workerComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CreateNewMealPlanAction] Could not fetch worker data for worker.");
-      return this.finish(role, false);
-    }
-
-    WorkplaceComponent workplaceComponent = workerComponent.getWorkplace();
-    if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CreateNewMealPlanAction] Could not fetch workplace for worker.");
+    Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
+    VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
+    WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);
+    if (workplaceRef == null || villageHeart == null || workplaceComponent == null) {
       return this.finish(role, false);
     }
 
     World world = store.getExternalData().getWorld();
     Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
 
-    Ref<ChunkStore> workplaceRef = workplaceComponent.getWorkplaceRef().getRef();
-    if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CreateNewMealPlanAction] Invalid workplace ref");
-      return this.finish(role, false);
-    }
-
     TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef, TavernComponent.getComponentType());
     if (tavernComponent == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[CreateNewMealPlanAction] Could not fetch the tavern component");
-      return this.finish(role, false);
-    }
-
-    VillageHeartComponent villageHeart = chunkStore.getComponent(
-        villagerComponent.getVillageHeartRef(),
-        VillageHeartComponent.getComponentType());
-
-    if (villageHeart == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CreateNewMealPlanAction] Could not fetch village heart");
       return this.finish(role, false);
     }
 

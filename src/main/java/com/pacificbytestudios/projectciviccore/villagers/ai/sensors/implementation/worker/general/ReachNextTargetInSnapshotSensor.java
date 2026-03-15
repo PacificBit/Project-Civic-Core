@@ -9,15 +9,15 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
-public class ReachNextTargetInSnapshotSensor extends SensorBase {
+public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   private final PositionProvider positionProvider = new PositionProvider();
   private String[] blockIds;
   private double stoppingRange;
@@ -43,10 +43,8 @@ public class ReachNextTargetInSnapshotSensor extends SensorBase {
       return false;
     }
 
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
+    VillagerComponent villager = this.getVillagerComponent(ref, store);
     if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[ReachNextTillableSoilSensor] Could not find the villager component");
-      this.positionProvider.clear();
       return false;
     }
 

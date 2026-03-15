@@ -9,17 +9,14 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderHasNextMealInPlannedSensor;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
-public class HasNextMealInPlannedSensor extends SensorBase {
+public class HasNextMealInPlannedSensor extends VillagerSensorBase {
   private boolean assignMealToSelfIfPossible;
 
   public HasNextMealInPlannedSensor(
@@ -44,36 +41,13 @@ public class HasNextMealInPlannedSensor extends SensorBase {
       return false;
     }
 
-    VillagerComponent villagerComponent = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villagerComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[HasNextMealInPlannedSensor] Could not fetch villager component");
-      return false;
-    }
-
-    VillagerWorkerComponent workerComponent = villagerComponent.getWorkerData();
-    if (workerComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[HasNextMealInPlannedSensor] Could not fetch worker data for worker.");
-      return false;
-    }
-
-    WorkplaceComponent workplaceComponent = workerComponent.getWorkplace();
-    if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[HasNextMealInPlannedSensor] Could not fetch workplace for worker.");
+    Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
+    if (workplaceRef == null) {
       return false;
     }
 
     World world = store.getExternalData().getWorld();
     Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
-
-    Ref<ChunkStore> workplaceRef = workplaceComponent.getWorkplaceRef().getRef();
-    if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[HasNextMealInPlannedSensor] Invalid workplace ref");
-      return false;
-    }
 
     TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef, TavernComponent.getComponentType());
     if (tavernComponent == null) {

@@ -3,13 +3,12 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
-public class WatchForJobAssignment extends SensorBase {
+public class WatchForJobAssignment extends VillagerSensorBase {
 
   public WatchForJobAssignment(BuilderSensorBase builderSensorBase) {
     super(builderSensorBase);
@@ -28,15 +27,7 @@ public class WatchForJobAssignment extends SensorBase {
     if (!ref.isValid()) {
       return false;
     }
-
-    VillagerComponent villagerComponent = store.getComponent(ref,
-        VillagerComponent.getComponentType());
-
-    if (villagerComponent == null) {
-      return false;
-    }
-
-    return villagerComponent.getWorkerData() != null;
+    return this.getWorkerDataComponent(ref, store) != null;
   }
 
 }

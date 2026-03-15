@@ -9,17 +9,14 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class UpdateRequestStatusAction extends ActionBase {
+public class UpdateRequestStatusAction extends VillagerActionBase {
 
   private final StatusType status;
 
@@ -37,43 +34,12 @@ public class UpdateRequestStatusAction extends ActionBase {
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UpdateRequestStatusAction] Could not fetch villager component");
-      return false;
-    }
-
-    UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
-    if (uuidComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UpdateRequestStatusAction] Could not fetch UUID component");
-      return false;
-    }
-
-    UUID workerId = uuidComponent.getUuid();
-
-    VillagerWorkerComponent workerData = villager.getWorkerData();
-    if (workerData == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UpdateRequestStatusAction] Could not fetch worker data for worker " + workerId);
-      return false;
-    }
-
-    WorkplaceComponent workplace = workerData.getWorkplace();
-    if (workplace == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UpdateRequestStatusAction] Could not fetch workplace for worker " + workerId);
-      return false;
-    }
-
-    Ref<ChunkStore> workplaceRef = workplace.getWorkplaceRef().getRef();
+    Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
     if (workplaceRef == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UpdateRequestStatusAction] Workplace ref is null for worker " + workerId);
       return false;
     }
 
+    UUID workerId = store.getComponent(ref, UUIDComponent.getComponentType()).getUuid();
     Store<ChunkStore> chunkStore = workplaceRef.getStore();
     WorkplaceVillageStorageRequestComponent storage = chunkStore.getComponent(
         workplaceRef,

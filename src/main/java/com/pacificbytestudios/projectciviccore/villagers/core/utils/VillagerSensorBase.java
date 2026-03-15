@@ -2,15 +2,21 @@ package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 
 public abstract class VillagerSensorBase extends SensorBase {
+  protected boolean suppressWarnings = false;
 
   public VillagerSensorBase(BuilderSensorBase builderSensorBase) {
     super(builderSensorBase);
@@ -31,8 +37,60 @@ public abstract class VillagerSensorBase extends SensorBase {
     return workerData != null ? require(workerData.getWorkplace(), "workplace component") : null;
   }
 
+  protected WorkplaceAreaSnapshot getAreaSnapshot(Ref<EntityStore> ref, Store<EntityStore> store) {
+    VillagerWorkerComponent workerData = getWorkerDataComponent(ref, store);
+    return workerData != null ? require(workerData.getWorkareaSnapshot(), "worker data snapshot") : null;
+  }
+
+  protected NPCEntity getNPCEntity(Ref<EntityStore> ref, Store<EntityStore> store) {
+    NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
+    return require(npcEntity, "NPC entity");
+  }
+
+  protected ItemContainer getVillagerStorage(Ref<EntityStore> ref, Store<EntityStore> store) {
+    NPCEntity npcEntity = getNPCEntity(ref, store);
+    return npcEntity != null ? require(npcEntity.getInventory().getStorage(), "villager storage") : null;
+  }
+
+  protected Ref<ChunkStore> getVillageRef(Ref<EntityStore> ref, Store<EntityStore> store) {
+    VillagerComponent villager = getVillagerComponent(ref, store);
+    return villager != null ? require(villager.getVillageHeartRef(), "village heart ref") : null;
+  }
+
+  protected Ref<ChunkStore> getWorkplaceRef(Ref<EntityStore> ref, Store<EntityStore> store) {
+    WorkplaceComponent workplace = getWorkplaceComponent(ref, store);
+    return workplace != null
+        ? (require(workplace.getWorkplaceRef(), "workplace ref wrapper") != null
+            ? require(workplace.getWorkplaceRef().getRef(), "workplace ref")
+            : null)
+        : null;
+  }
+
+  protected VillageHeartComponent getVillageHeartComponent(Ref<EntityStore> ref, Store<EntityStore> store) {
+    Ref<ChunkStore> villageRef = getVillageRef(ref, store);
+    if (!isRefValid(villageRef)) {
+      return null;
+    }
+    VillageHeartComponent villageHeart = villageRef.getStore().getComponent(
+        villageRef,
+        VillageHeartComponent.getComponentType());
+    return require(villageHeart, "village heart component");
+  }
+
+  protected boolean isRefValid(Ref<ChunkStore> ref) {
+    return ref != null && ref.isValid();
+  }
+
+  protected Ref<ChunkStore> require(Ref<ChunkStore> value, String what) {
+    if (!isRefValid(value) && !this.suppressWarnings) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[" + getClass().getSimpleName() + "] Could not find " + what);
+    }
+    return value;
+  }
+
   protected <T> T require(T value, String what) {
-    if (value == null) {
+    if (value == null && !this.suppressWarnings) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[" + getClass().getSimpleName() + "] Could not find " + what);
     }

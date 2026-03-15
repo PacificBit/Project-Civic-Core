@@ -18,22 +18,21 @@ import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class InteractWithExternalInventory extends ActionBase {
+public class InteractWithExternalInventory extends VillagerActionBase {
   private final String snapshotKey;
   private final ActionType actionType;
   private final boolean consumeSnapshotTargetOnSuccess;
@@ -67,35 +66,14 @@ public class InteractWithExternalInventory extends ActionBase {
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InteractWithExternalInventory] Could not fetch villager component");
-      return false;
-    }
-
-    this.workerData = villager.getWorkerData();
-    if (this.workerData == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InteractWithExternalInventory] Could not fetch worker data");
-      return false;
-    }
-
-    WorkplaceAreaSnapshot snapshot = this.workerData.getWorkareaSnapshot();
-    if (snapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InteractWithExternalInventory] Could not fetch snapshot data");
+    this.workerData = this.getWorkerDataComponent(ref, store);
+    WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
+    NPCEntity npcEntity = this.getNPCEntity(ref, store);
+    if (this.workerData == null || snapshot == null || npcEntity == null) {
       return false;
     }
 
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
-    if (uuidComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InteractWithExternalInventory] Could not fetch UUID component");
-      return false;
-    }
-
     this.workerId = uuidComponent.getUuid();
 
     ArrayDeque<Vector3i> coords = snapshot.getBlockTypePosition().get(this.snapshotKey);
@@ -112,13 +90,6 @@ public class InteractWithExternalInventory extends ActionBase {
     if (resolvedContainer == null || resolvedContainer.containerBlock() == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[InteractWithExternalInventory] Could not resolve container at " + containerPosition);
-      return false;
-    }
-
-    NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
-    if (npcEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InteractWithExternalInventory] Could not fetch NPC entity");
       return false;
     }
 

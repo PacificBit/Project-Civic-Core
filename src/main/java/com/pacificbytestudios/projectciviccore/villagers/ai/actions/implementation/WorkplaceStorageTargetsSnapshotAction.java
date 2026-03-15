@@ -8,17 +8,14 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderWorkplaceStorageTargetsSnapshotAction;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class WorkplaceStorageTargetsSnapshotAction extends ActionBase {
+public class WorkplaceStorageTargetsSnapshotAction extends VillagerActionBase {
   public static final String WORKPLACE_STORAGE_KEY = "Worker_Workplace_Storage";
 
   private ActionType actionType;
@@ -41,25 +38,9 @@ public class WorkplaceStorageTargetsSnapshotAction extends ActionBase {
       return false;
     }
 
-    VillagerComponent villager = store.getComponent(ref,
-        VillagerComponent.getComponentType());
-
-    VillagerWorkerComponent workerData = villager.getWorkerData();
-    if (workerData == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceStorageTargetsSnapshotAction] Could not fetch worker data");
-      return false;
-    }
-
-    WorkplaceAreaSnapshot snapshot = workerData.getWorkareaSnapshot();
-    if (snapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceStorageTargetsSnapshotAction] Could not fetch snapshot data");
-      return false;
-    }
-
-    WorkplaceComponent workplace = workerData.getWorkplace();
-    if (workplace == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[WorkplaceStorageTargetsSnapshotAction] Could not fetch the workplace component");
+    WorkplaceComponent workplace = this.getWorkplaceComponent(ref, store);
+    WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
+    if (workplace == null || snapshot == null) {
       return false;
     }
 

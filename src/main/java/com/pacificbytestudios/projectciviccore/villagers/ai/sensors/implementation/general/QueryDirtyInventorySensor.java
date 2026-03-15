@@ -10,17 +10,15 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryDirtyInventorySensor;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
-public class QueryDirtyInventorySensor extends SensorBase {
+public class QueryDirtyInventorySensor extends VillagerSensorBase {
 
   private final String[] excludeItemTypes;
 
@@ -42,18 +40,8 @@ public class QueryDirtyInventorySensor extends SensorBase {
       Role role,
       double dt,
       Store<EntityStore> store) {
-
-    NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
-    if (npcEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[QueryDirtyInventorySensor] Could not fetch the npcEntity");
-      return false;
-    }
-
-    ItemContainer container = npcEntity.getInventory().getStorage();
+    ItemContainer container = this.getVillagerStorage(ref, store);
     if (container == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[QueryDirtyInventorySensor] Could not fetch the npc inventory container");
       return false;
     }
 

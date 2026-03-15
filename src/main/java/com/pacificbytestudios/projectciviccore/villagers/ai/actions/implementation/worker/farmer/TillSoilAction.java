@@ -37,7 +37,6 @@ public class TillSoilAction extends ActionBase {
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-
     if (villager == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[TillSoilAction] Could not fetch villager component");
       return false;

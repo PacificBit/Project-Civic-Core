@@ -4,22 +4,22 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.systems.RoleChangeSystem;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
-public class ChangeIntoWorkRoleAction extends ActionBase {
+public class ChangeIntoWorkRoleAction extends VillagerActionBase {
 
   private static final String DEFAULT_STATE = "Working";
   private static final String DEFAULT_SUBSTATE = "Default";
 
   public ChangeIntoWorkRoleAction(BuilderActionBase builderActionBase) {
     super(builderActionBase);
+    this.suppressWarnings = true;
   }
 
   @Override
@@ -31,10 +31,7 @@ public class ChangeIntoWorkRoleAction extends ActionBase {
       Store<EntityStore> store) {
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
-    VillagerWorkerComponent workerData = store.getComponent(ref,
-        VillagerComponent.getComponentType())
-        .getWorkerData();
-
+    VillagerWorkerComponent workerData = this.getWorkerDataComponent(ref, store);
     if (workerData == null) {
       return false;
     }

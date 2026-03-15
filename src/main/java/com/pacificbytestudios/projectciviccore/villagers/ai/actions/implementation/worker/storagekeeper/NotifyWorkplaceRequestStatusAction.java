@@ -10,7 +10,6 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
@@ -19,10 +18,9 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderNotifyWorkplaceRequestStatusAction;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class NotifyWorkplaceRequestStatusAction extends ActionBase {
+public class NotifyWorkplaceRequestStatusAction extends VillagerActionBase {
   // private StatusType status;
 
   public NotifyWorkplaceRequestStatusAction(
@@ -46,42 +44,13 @@ public class NotifyWorkplaceRequestStatusAction extends ActionBase {
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[NotifyWorkplaceRequestStatusAction] Could not fetch villager component");
+    Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
+    VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
+    if (workplaceRef == null || villageHeart == null) {
       return false;
     }
 
-    UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
-    if (uuidComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[NotifyWorkplaceRequestStatusAction] Could not fetch UUID component");
-      return false;
-    }
-
-    UUID workerId = uuidComponent.getUuid();
-
-    VillagerWorkerComponent workerData = villager.getWorkerData();
-    if (workerData == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[NotifyWorkplaceRequestStatusAction] Could not fetch worker data for worker " + workerId);
-      return false;
-    }
-
-    WorkplaceComponent workplace = workerData.getWorkplace();
-    if (workplace == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[NotifyWorkplaceRequestStatusAction] Could not fetch workplace for worker " + workerId);
-      return false;
-    }
-
-    Ref<ChunkStore> workplaceRef = workplace.getWorkplaceRef().getRef();
-    if (workplaceRef == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[NotifyWorkplaceRequestStatusAction] Workplace ref is null for worker " + workerId);
-      return false;
-    }
+    UUID workerId = store.getComponent(ref, UUIDComponent.getComponentType()).getUuid();
 
     Store<ChunkStore> chunkStore = workplaceRef.getStore();
     WorkplaceVillageStorageRequestComponent storage = chunkStore.getComponent(
@@ -95,17 +64,6 @@ public class NotifyWorkplaceRequestStatusAction extends ActionBase {
                   + workplaceRef);
       return false;
     }
-
-    Ref<ChunkStore> villageHeartRef = workplace.getVillageHeartRef();
-    if (villageHeartRef == null || !villageHeartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log(
-              "[NotifyWorkplaceRequestStatusAction] Could not fetch village heart");
-      return false;
-    }
-
-    VillageHeartComponent villageHeart = chunkStore.getComponent(villageHeartRef,
-        VillageHeartComponent.getComponentType());
 
     ArrayDeque<VillageStorageRequest> storageRequests = storage.getAssignedRequest(workerId);
 

@@ -2,17 +2,17 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 
-public class BedSensor extends SensorBase {
+public class BedSensor extends VillagerSensorBase {
 
   public BedSensor(BuilderSensorBase builderSensorBase) {
     super(builderSensorBase);
@@ -27,7 +27,10 @@ public class BedSensor extends SensorBase {
 
   @Override
   public boolean matches(Ref<EntityStore> ref, Role role, double dt, Store<EntityStore> store) {
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
+    VillagerComponent villager = this.getVillagerComponent(ref, store);
+    if (villager == null) {
+      return false;
+    }
 
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
     Vector3d vector3d = villager.getBedPosition().toVector3d();

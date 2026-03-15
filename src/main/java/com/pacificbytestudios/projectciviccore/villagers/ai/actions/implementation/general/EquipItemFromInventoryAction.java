@@ -37,12 +37,8 @@ public class EquipItemFromInventoryAction extends ActionBase {
     }
 
     ItemContainer inventory = npcEntity.getInventory().getCombinedEverything();
-    byte activeHotbarSlot = npcEntity
-        .getInventory()
-        .getActiveHotbarSlot();
-
+    byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();
     ItemContainer hotbar = npcEntity.getInventory().getHotbar();
-
     ItemStack itemInHand = npcEntity.getInventory().getActiveHotbarItem();
 
     if (this.itemIdToEquip.toLowerCase().equals("null")) {
