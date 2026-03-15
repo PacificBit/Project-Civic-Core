@@ -33,7 +33,8 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       ProjectCivicCore.LOGGER.atInfo().log("[onEntityAdded] - Skippin: " + reason);
       return;
     }
-    ProjectCivicCore.LOGGER.atInfo().log("[onEntityAdded] - Loading reason: " + reason);
+    ProjectCivicCore.LOGGER.atInfo().log("[onEntityAdded] - Loading reason: " +
+        reason);
 
     BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
 
@@ -47,7 +48,8 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
     EntityStore entityStore = context.chunk().getWorld().getEntityStore();
     Store<EntityStore> storeEntityStore = entityStore.getStore();
     chunk.getWorld().execute(() -> {
-      VillageHeartComponent heart = store.getComponent(ref, VillageHeartComponent.getComponentType());
+      VillageHeartComponent heart = store.getComponent(ref,
+          VillageHeartComponent.getComponentType());
 
       if (heart == null) {
         ProjectCivicCore.LOGGER.atSevere()
@@ -63,7 +65,8 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
           continue;
         }
 
-        VillagerComponent npcComponent = storeEntityStore.getComponent(npcRef, VillagerComponent.getComponentType());
+        VillagerComponent npcComponent = storeEntityStore.getComponent(npcRef,
+            VillagerComponent.getComponentType());
         if (npcComponent == null) {
           ProjectCivicCore.LOGGER.atSevere()
               .log("[VillageHeartLoadUnloadSystem - onEntityAdded] Villager component not found");
@@ -92,7 +95,8 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       CommandBuffer<ChunkStore> commandBuffer) {
     ProjectCivicCore.LOGGER.atInfo().log("[VillageHeartLoadUnloadSystem - onEntityRemove] Unloading reason: " + reason);
 
-    VillageHeartComponent heart = store.getComponent(ref, VillageHeartComponent.getComponentType());
+    VillageHeartComponent heart = store.getComponent(ref,
+        VillageHeartComponent.getComponentType());
 
     if (heart == null) {
       ProjectCivicCore.LOGGER.atInfo()

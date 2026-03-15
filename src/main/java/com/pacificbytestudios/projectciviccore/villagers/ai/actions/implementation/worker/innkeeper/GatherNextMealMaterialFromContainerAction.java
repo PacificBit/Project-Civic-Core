@@ -19,13 +19,14 @@ import com.hypixel.hytale.server.core.inventory.transaction.MoveTransaction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
+import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.food.registry.RecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderGatherNextMealMaterialFromContainerAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.WorkplaceStorageTargetsSnapshotAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
@@ -33,9 +34,15 @@ import com.pacificbytestudios.projectciviccore.villagers.core.inventory.Containe
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
 public class GatherNextMealMaterialFromContainerAction extends VillagerActionBase {
+  private final int successFlagSlot;
+  private final int failureFlagSlot;
 
-  public GatherNextMealMaterialFromContainerAction(BuilderActionBase builderActionBase) {
+  public GatherNextMealMaterialFromContainerAction(
+      BuilderGatherNextMealMaterialFromContainerAction builderActionBase,
+      BuilderSupport support) {
     super(builderActionBase);
+    this.successFlagSlot = builderActionBase.getSuccessFlagSlot(support);
+    this.failureFlagSlot = builderActionBase.getFailureFlagSlot(support);
   }
 
   @Override
@@ -52,7 +59,7 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
     WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
     if (workplaceRef == null || snapshot == null) {
-      return false;
+      return this.finish(role, false);
     }
 
     World world = store.getExternalData().getWorld();
@@ -62,7 +69,7 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     if (tavernComponent == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[GatherNextMealMaterialFromContainerAction] Could not fetch the tavern component");
-      return false;
+      return this.finish(role, false);
     }
 
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -71,7 +78,7 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     if (mealToPrepare == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[GatherNextMealMaterialFromContainerAction] Got cook request but got no meal to prepare assigned");
-      return false;
+      return this.finish(role, false);
     }
 
     System.out.println("=========================================================");
@@ -87,7 +94,7 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     if (containerCoords == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[GatherNextMealMaterialFromContainerAction] No container coords found");
-      return false;
+      return this.finish(role, false);
     }
 
     CraftingRecipe recipe = RecipeRegistry.getRecipe(mealToPrepare);
@@ -97,7 +104,7 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     if (container == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[GatherNextMealMaterialFromContainerAction] No workplace container found in designated coords");
-      return false;
+      return this.finish(role, false);
     }
 
     SimpleItemContainer workplaceStorage = container.containerBlock().getItemContainer();
@@ -168,11 +175,20 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     if (!missingMaterials.isEmpty()) {
       ProjectCivicCore.LOGGER.atFine()
           .log("[GatherNextMealMaterialFromContainerAction] Missing materials: " + missingMaterials);
-      return false;
+      return this.finish(role, false);
     }
 
-    tavernComponent.markWorkerAsFree(uuidComponent.getUuid());
     System.out.println("Gather successfull");
-    return true;
+    return this.finish(role, true);
+  }
+
+  private boolean finish(Role role, boolean success) {
+    if (this.successFlagSlot >= 0) {
+      role.setFlag(this.successFlagSlot, success);
+    }
+    if (this.failureFlagSlot >= 0) {
+      role.setFlag(this.failureFlagSlot, !success);
+    }
+    return success;
   }
 }

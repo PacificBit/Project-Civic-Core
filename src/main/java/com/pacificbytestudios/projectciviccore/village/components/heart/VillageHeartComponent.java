@@ -132,6 +132,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
           obj -> obj.villageStorageWorkplaces)
       .add()
 
+      .append(
+          new KeyedCodec<>(
+              "VillageTavernWorkplaces",
+              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
+          (obj, value) -> obj.villageTavernWorkplaces = value,
+          obj -> obj.villageTavernWorkplaces)
+      .add()
+
       .build();
 
   private UUID uuid;
@@ -147,6 +155,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   private Map<UUID, WorkplaceComponent> workplaceIdToWorkplace = new HashMap<>();
   private Map<UUID, UUID> villagerToWorkplace = new HashMap<>();
   private Set<UUID> villageStorageWorkplaces = new HashSet<>();
+  private Set<UUID> villageTavernWorkplaces = new HashSet<>();
 
   public UUID getUuid() {
     return uuid;
@@ -222,8 +231,11 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   public void registerWorkplace(WorkplaceComponent workplace) {
     this.workplaceIdToWorkplace.put(workplace.getUuid(), workplace);
 
-    if (workplace.getWorkplaceType().equals(WorkplaceType.STORAGE)) {
+    WorkplaceType workplaceType = workplace.getWorkplaceType();
+    if (workplaceType.equals(WorkplaceType.STORAGE)) {
       this.villageStorageWorkplaces.add(workplace.getUuid());
+    } else if (workplaceType.equals(WorkplaceType.TAVERN)) {
+      this.villageTavernWorkplaces.add(workplace.getUuid());
     }
   }
 
@@ -235,6 +247,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
     if (this.villageStorageWorkplaces.contains(workplace)) {
       this.villageStorageWorkplaces.remove(workplace);
+    } else if (this.villageTavernWorkplaces.contains(workplace)) {
+      this.villageTavernWorkplaces.remove(workplace);
     }
 
     Iterator<Map.Entry<UUID, UUID>> workers = this.villagerToWorkplace.entrySet().iterator();
@@ -302,6 +316,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return Collections.unmodifiableSet(this.villageStorageWorkplaces);
   }
 
+  public Set<UUID> getVillageTavernWorkplaces() {
+    return Collections.unmodifiableSet(this.villageTavernWorkplaces);
+  }
+
   @Override
   public VillageHeartComponent clone() {
     VillageHeartComponent component = new VillageHeartComponent();
@@ -317,6 +335,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     component.unemployedRegistry = new HashSet<>(this.unemployedRegistry);
     component.villagerToWorkplace = new HashMap<>(this.villagerToWorkplace);
     component.villageStorageWorkplaces = new HashSet<>(this.villageStorageWorkplaces);
+    component.villageTavernWorkplaces = new HashSet<>(this.villageTavernWorkplaces);
 
     component.workplaceIdToWorkplace = new HashMap<>();
     for (Map.Entry<UUID, WorkplaceComponent> entry : this.workplaceIdToWorkplace.entrySet()) {

@@ -9,10 +9,12 @@ import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.innkeeper.GatherNextMealMaterialFromContainerAction;
 
 public class BuilderGatherNextMealMaterialFromContainerAction extends BuilderActionBase {
+  private String successFlag;
+  private String failureFlag;
 
   @Override
   public Action build(BuilderSupport support) {
-    return new GatherNextMealMaterialFromContainerAction(this);
+    return new GatherNextMealMaterialFromContainerAction(this, support);
   }
 
   @Override
@@ -22,15 +24,44 @@ public class BuilderGatherNextMealMaterialFromContainerAction extends BuilderAct
 
   @Override
   public String getLongDescription() {
-    return "Cook next meal";
+    return "Gather material for the next meal";
   }
 
   @Override
   public String getShortDescription() {
-    return "Cook next meal";
+    return "Gather material for the next meal";
   }
 
   public Builder<Action> readConfig(JsonElement data) {
+    this.getString(data, "SuccessFlag", this::setSuccessFlag, "", null,
+        BuilderDescriptorState.Experimental,
+        "Optional flag set to true when the meal plan is available", null);
+
+    this.getString(data, "FailureFlag", this::setFailureFlag, "", null,
+        BuilderDescriptorState.Experimental,
+        "Optional flag set to true when the meal plan could not be created", null);
     return this;
+  }
+
+  private void setSuccessFlag(String flag) {
+    this.successFlag = flag;
+  }
+
+  private void setFailureFlag(String flag) {
+    this.failureFlag = flag;
+  }
+
+  public int getSuccessFlagSlot(BuilderSupport support) {
+    if (this.successFlag == null || this.successFlag.trim().isEmpty()) {
+      return -1;
+    }
+    return support.getFlagSlot(this.successFlag);
+  }
+
+  public int getFailureFlagSlot(BuilderSupport support) {
+    if (this.failureFlag == null || this.failureFlag.trim().isEmpty()) {
+      return -1;
+    }
+    return support.getFlagSlot(this.failureFlag);
   }
 }

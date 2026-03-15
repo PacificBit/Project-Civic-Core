@@ -1,10 +1,13 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
+import javax.annotation.Nonnull;
+
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector2i;
+import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
@@ -205,5 +208,13 @@ public class Utils {
 
   public static String safeToString(Object value) {
     return value == null ? "null" : value.toString();
+  }
+
+  @Nonnull
+  public static Vector3f centerOf(@Nonnull Vector3i blockPos) {
+    return new Vector3f(
+        blockPos.x + 0.5f,
+        blockPos.y + 0.5f,
+        blockPos.z + 0.5f);
   }
 }

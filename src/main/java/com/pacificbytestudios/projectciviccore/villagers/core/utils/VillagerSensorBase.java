@@ -1,5 +1,8 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 
+import java.util.Set;
+import java.util.UUID;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -11,6 +14,7 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -35,6 +39,32 @@ public abstract class VillagerSensorBase extends SensorBase {
   protected WorkplaceComponent getWorkplaceComponent(Ref<EntityStore> ref, Store<EntityStore> store) {
     VillagerWorkerComponent workerData = getWorkerDataComponent(ref, store);
     return workerData != null ? require(workerData.getWorkplace(), "workplace component") : null;
+  }
+
+  protected WorkplaceInteractablesMapComponent getWorkplaceInteractibleComponent(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    VillageHeartComponent heart = getVillageHeartComponent(ref, store);
+    if (heart == null) {
+      return null;
+    }
+
+    Set<UUID> tavernWorkplaces = heart.getVillageTavernWorkplaces();
+    if (tavernWorkplaces == null || tavernWorkplaces.isEmpty()) {
+      return null;
+    }
+
+    UUID tavernId = tavernWorkplaces.iterator().next();
+    WorkplaceComponent workplace = heart.getWorkplaceFromId(tavernId);
+    Ref<ChunkStore> workplaceRef = workplace.getWorkplaceRef().getRef();
+    if (!isRefValid(workplaceRef)) {
+      return null;
+    }
+
+    return require(workplaceRef.getStore().getComponent(
+        workplaceRef,
+        WorkplaceInteractablesMapComponent.getComponentType()),
+        "workplace interactable component");
   }
 
   protected WorkplaceAreaSnapshot getAreaSnapshot(Ref<EntityStore> ref, Store<EntityStore> store) {

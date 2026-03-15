@@ -1,4 +1,3 @@
-
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.ArrayList;
@@ -27,6 +26,8 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -54,7 +55,8 @@ public class TavernSpawner {
         Rotation.None).index();
 
     Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position);
-    WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk, workplaceBlockPosition, WORKPLACE_BLOCK, rotation);
+    WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk,
+        workplaceBlockPosition, WORKPLACE_BLOCK, rotation);
     Ref<ChunkStore> workplace = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
@@ -62,21 +64,34 @@ public class TavernSpawner {
 
     if (workplace == null || !workplace.isValid()) {
       ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Workplace ref is invalid");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
+      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
+          workplaceBlockPosition, null);
     }
 
     Store<ChunkStore> chunkStore = workplace.getStore();
     WorkplaceComponent workplaceComponent = chunkStore.getComponent(
         workplace,
         WorkplaceComponent.getComponentType());
-
     if (workplaceComponent == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Workplace component is missing");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
+      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
+          workplaceBlockPosition, null);
     }
 
+    WorkplaceInteractablesMapComponent interactables = chunkStore.getComponent(
+        workplace,
+        WorkplaceInteractablesMapComponent.getComponentType());
+    if (interactables == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Interactables component is missing");
+      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
+          workplaceBlockPosition, null);
+    }
+
+    registerInteractables(position, workplaceComponent, interactables, 1);
+
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.INN_KEEPER });
-    workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
+    workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
+        workplaceBlockPosition));
 
     chunkStore.putComponent(
         workplace,
@@ -88,10 +103,12 @@ public class TavernSpawner {
 
     if (registry == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Could not spawn correctly the containers");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
+      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
+          workplaceBlockPosition, null);
     }
 
     workplaceComponent.setStorage(registry);
+    workplaceChunk.markNeedsSaving();
     return true;
   }
 
@@ -141,6 +158,25 @@ public class TavernSpawner {
     return registry;
   }
 
+  private static void registerInteractables(
+      Vector3i center,
+      WorkplaceComponent workplace,
+      WorkplaceInteractablesMapComponent interactables,
+      int level) {
+
+    interactables.setNewInteractable(
+        WorkplaceInteractibles.CHAIR,
+        toAbsolutePositions(center, Config.getChairOffsetForLevel(1)));
+
+    interactables.setNewInteractable(
+        WorkplaceInteractibles.EATING_SPOT,
+        toAbsolutePositions(center, Config.getEatingPositions(1)));
+  }
+
+  private static List<Vector3i> toAbsolutePositions(Vector3i prefabAnchor, List<Vector3i> offsets) {
+    return offsets.stream().map(position -> prefabAnchor.clone().add(position)).toList();
+  }
+
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
     Vector3i workplaceBlockPosition = position.clone();
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
@@ -160,7 +196,8 @@ public class TavernSpawner {
     WorkplaceComponent workplace = store.getComponent(workplaceRef,
         WorkplaceComponent.getComponentType());
     TrackedPrefabPlacementComponent trackedPlacement = store
-        .getComponent(workplaceRef, TrackedPrefabPlacementComponent.getComponentType());
+        .getComponent(workplaceRef,
+            TrackedPrefabPlacementComponent.getComponentType());
 
     if (workplace == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Missing workplace component");
@@ -169,7 +206,8 @@ public class TavernSpawner {
 
     boolean despawn = false;
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
-      despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(), trackedPlacement);
+      despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(),
+          trackedPlacement);
     } else {
       Vector3i prefabAnchor = workplace.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
@@ -236,16 +274,63 @@ public class TavernSpawner {
 
   private class Config {
     private static final Map<Integer, List<Vector3i>> STORAGE_SPAWNING_OFFSETS;
+    private static final Map<Integer, List<Vector3i>> EATING_CHAIR_OFFSET;
+    private static final Map<Integer, List<Vector3i>> EATING_PLATE_OFFSET;
+
     static {
       STORAGE_SPAWNING_OFFSETS = new HashMap<>();
-      List<Vector3i> level1 = new ArrayList<>();
-      level1.add(new Vector3i(-4, 1, -2));
-      level1.add(new Vector3i(0, 1, 0));
-      STORAGE_SPAWNING_OFFSETS.put(1, level1);
+      EATING_CHAIR_OFFSET = new HashMap<>();
+      EATING_PLATE_OFFSET = new HashMap<>();
+
+      List<Vector3i> levelContainers1 = new ArrayList<>();
+      levelContainers1.add(new Vector3i(-4, 1, -2));
+      STORAGE_SPAWNING_OFFSETS.put(1, levelContainers1);
+
+      List<Vector3i> levelChairPosition1 = new ArrayList<>();
+      levelChairPosition1.add(new Vector3i(-2, 1, 1));
+      levelChairPosition1.add(new Vector3i(-3, 1, 1));
+      levelChairPosition1.add(new Vector3i(-2, 1, 4));
+      levelChairPosition1.add(new Vector3i(-3, 1, 4));
+
+      levelChairPosition1.add(new Vector3i(2, 1, 1));
+      levelChairPosition1.add(new Vector3i(3, 1, 1));
+      levelChairPosition1.add(new Vector3i(2, 1, 4));
+      levelChairPosition1.add(new Vector3i(3, 1, 4));
+
+      levelChairPosition1.add(new Vector3i(2, 1, -1));
+      levelChairPosition1.add(new Vector3i(3, 1, -1));
+      levelChairPosition1.add(new Vector3i(2, 1, -4));
+      levelChairPosition1.add(new Vector3i(3, 1, -4));
+      EATING_CHAIR_OFFSET.put(1, levelChairPosition1);
+
+      List<Vector3i> levelEatingPosition1 = new ArrayList<>();
+      levelEatingPosition1.add(new Vector3i(-2, 1, 2));
+      levelEatingPosition1.add(new Vector3i(-3, 1, 2));
+      levelEatingPosition1.add(new Vector3i(-2, 1, 3));
+      levelEatingPosition1.add(new Vector3i(-3, 1, 3));
+
+      levelEatingPosition1.add(new Vector3i(2, 1, 2));
+      levelEatingPosition1.add(new Vector3i(3, 1, 2));
+      levelEatingPosition1.add(new Vector3i(2, 1, 3));
+      levelEatingPosition1.add(new Vector3i(3, 1, 3));
+
+      levelEatingPosition1.add(new Vector3i(2, 1, -2));
+      levelEatingPosition1.add(new Vector3i(3, 1, -2));
+      levelEatingPosition1.add(new Vector3i(2, 1, -3));
+      levelEatingPosition1.add(new Vector3i(3, 1, -3));
+      EATING_PLATE_OFFSET.put(1, levelEatingPosition1);
     }
 
     public static List<Vector3i> getStorageOffsetForLevel(int level) {
       return STORAGE_SPAWNING_OFFSETS.get(level);
+    }
+
+    public static List<Vector3i> getChairOffsetForLevel(int level) {
+      return EATING_CHAIR_OFFSET.get(level);
+    }
+
+    public static List<Vector3i> getEatingPositions(int level) {
+      return EATING_PLATE_OFFSET.get(level);
     }
   }
 }

@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -40,6 +41,21 @@ public abstract class VillagerActionBase extends ActionBase {
   protected WorkplaceAreaSnapshot getAreaSnapshot(Ref<EntityStore> ref, Store<EntityStore> store) {
     VillagerWorkerComponent workerData = getWorkerDataComponent(ref, store);
     return workerData != null ? require(workerData.getWorkareaSnapshot(), "worker data snapshot") : null;
+  }
+
+  protected WorkplaceInteractablesMapComponent getWorkplaceInteractibleComponent(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    Ref<ChunkStore> workplaceRef = getWorkplaceRef(ref, store);
+    if (workplaceRef == null) {
+      return null;
+    }
+    Store<ChunkStore> chunkStore = workplaceRef.getStore();
+    return require(
+        chunkStore.getComponent(
+            workplaceRef,
+            WorkplaceInteractablesMapComponent.getComponentType()),
+        "workplace component");
   }
 
   protected NPCEntity getNPCEntity(Ref<EntityStore> ref, Store<EntityStore> store) {

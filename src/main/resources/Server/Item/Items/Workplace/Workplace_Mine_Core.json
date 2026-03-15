@@ -73,7 +73,8 @@
         "WorkplaceComponent": {
           "Type": "Mine"
         },
-        "WorkplaceSpawnComponent": {}
+        "WorkplaceSpawnComponent": {},
+        "WorkplaceInteractables": {}
       }
     }
   }

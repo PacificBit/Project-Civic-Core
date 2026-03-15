@@ -1,10 +1,11 @@
-
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper;
 
 import com.google.gson.JsonElement;
 import com.hypixel.hytale.server.npc.asset.builder.Builder;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderDescriptorState;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
+import com.hypixel.hytale.server.npc.asset.builder.holder.IntHolder;
+import com.hypixel.hytale.server.npc.asset.builder.validators.IntRangeValidator;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.innkeeper.CreateNewMealPlanAction;
@@ -12,6 +13,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 public class BuilderCreateNewMealPlanAction extends BuilderActionBase {
   private String successFlag;
   private String failureFlag;
+  private final IntHolder mealBuffer = new IntHolder();
 
   @Override
   public Action build(BuilderSupport support) {
@@ -43,6 +45,11 @@ public class BuilderCreateNewMealPlanAction extends BuilderActionBase {
         BuilderDescriptorState.Experimental,
         "Optional flag set to true when the meal plan could not be created", null);
 
+    this.getInt(data, "MealBuffer", this.mealBuffer, 0,
+        IntRangeValidator.between(0, Integer.MAX_VALUE),
+        BuilderDescriptorState.Experimental,
+        "Extra meals to keep ready in workplace storage in addition to villager count", null);
+
     return this;
   }
 
@@ -66,5 +73,9 @@ public class BuilderCreateNewMealPlanAction extends BuilderActionBase {
       return -1;
     }
     return support.getFlagSlot(this.failureFlag);
+  }
+
+  public int getMealBuffer(BuilderSupport support) {
+    return this.mealBuffer.get(support.getExecutionContext());
   }
 }

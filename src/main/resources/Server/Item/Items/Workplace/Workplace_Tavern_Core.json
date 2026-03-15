@@ -53,7 +53,8 @@
           "Type": "Tavern"
         },
         "WorkplaceSpawnComponent": {},
-        "TavernComponent": {}
+        "TavernComponent": {},
+        "WorkplaceInteractables": {}
       }
     }
   },

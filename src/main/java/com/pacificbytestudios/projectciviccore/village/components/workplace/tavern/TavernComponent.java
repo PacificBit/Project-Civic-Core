@@ -128,6 +128,10 @@ public class TavernComponent implements Component<ChunkStore> {
     return this.assignedRecipesToWorker.get(workerId);
   }
 
+  public int getAssignedRecipeCount() {
+    return this.assignedRecipesToWorker.size();
+  }
+
   public void markWorkerAsFree(UUID workerId) {
     this.assignedRecipesToWorker.remove(workerId);
   }
