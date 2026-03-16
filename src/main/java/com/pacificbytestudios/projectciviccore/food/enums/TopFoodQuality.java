@@ -11,10 +11,6 @@ public enum TopFoodQuality implements Supplier<String> {
     this.id = id;
   }
 
-  public String getId() {
-    return this.id;
-  }
-
   @Override
   public String get() {
     return this.id;

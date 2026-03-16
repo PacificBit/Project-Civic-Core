@@ -44,6 +44,20 @@ public abstract class VillagerSensorBase extends SensorBase {
   protected WorkplaceInteractablesMapComponent getWorkplaceInteractibleComponent(
       Ref<EntityStore> ref,
       Store<EntityStore> store) {
+    Ref<ChunkStore> workplaceRef = getWorkplaceRef(ref, store);
+    if (!isRefValid(workplaceRef)) {
+      return null;
+    }
+
+    return require(workplaceRef.getStore().getComponent(
+        workplaceRef,
+        WorkplaceInteractablesMapComponent.getComponentType()),
+        "workplace interactable component");
+  }
+
+  protected WorkplaceInteractablesMapComponent getVillageTavernInteractibleComponent(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
     VillageHeartComponent heart = getVillageHeartComponent(ref, store);
     if (heart == null) {
       return null;
@@ -55,8 +69,14 @@ public abstract class VillagerSensorBase extends SensorBase {
     }
 
     UUID tavernId = tavernWorkplaces.iterator().next();
-    WorkplaceComponent workplace = heart.getWorkplaceFromId(tavernId);
-    Ref<ChunkStore> workplaceRef = workplace.getWorkplaceRef().getRef();
+    WorkplaceComponent workplace = require(heart.getWorkplaceFromId(tavernId), "tavern workplace");
+    if (workplace == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> workplaceRef = require(workplace.getWorkplaceRef(), "workplace ref wrapper") != null
+        ? require(workplace.getWorkplaceRef().getRef(), "workplace ref")
+        : null;
     if (!isRefValid(workplaceRef)) {
       return null;
     }

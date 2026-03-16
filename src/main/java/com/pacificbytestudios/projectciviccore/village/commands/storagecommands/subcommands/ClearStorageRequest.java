@@ -26,7 +26,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
 public class ClearStorageRequest extends CommandBase {
@@ -91,7 +91,7 @@ public class ClearStorageRequest extends CommandBase {
         return;
       }
 
-      WorkplaceType workplace = WorkplaceType.valueOf(this.workplaceType.get(context).toUpperCase());
+      StructureType workplace = StructureType.valueOf(this.workplaceType.get(context).toUpperCase());
 
       List<WorkplaceComponent> workplaceComponents = villageHeartComponent.getWorkplaceFrom(workplace);
 

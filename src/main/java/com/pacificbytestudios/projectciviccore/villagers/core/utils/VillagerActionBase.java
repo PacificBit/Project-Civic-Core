@@ -1,5 +1,8 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 
+import java.util.Set;
+import java.util.UUID;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -56,6 +59,39 @@ public abstract class VillagerActionBase extends ActionBase {
             workplaceRef,
             WorkplaceInteractablesMapComponent.getComponentType()),
         "workplace component");
+  }
+
+  protected WorkplaceInteractablesMapComponent getVillageTavernInteractibleComponent(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    VillageHeartComponent heart = getVillageHeartComponent(ref, store);
+    if (heart == null) {
+      return null;
+    }
+
+    Set<UUID> tavernWorkplaces = heart.getVillageTavernWorkplaces();
+    if (tavernWorkplaces == null || tavernWorkplaces.isEmpty()) {
+      return null;
+    }
+
+    UUID tavernId = tavernWorkplaces.iterator().next();
+    WorkplaceComponent tavern = require(heart.getWorkplaceFromId(tavernId), "tavern workplace");
+    if (tavern == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> tavernRef = require(tavern.getWorkplaceRef(), "workplace ref wrapper") != null
+        ? require(tavern.getWorkplaceRef().getRef(), "workplace ref")
+        : null;
+    if (!isRefValid(tavernRef)) {
+      return null;
+    }
+
+    return require(
+        tavernRef.getStore().getComponent(
+            tavernRef,
+            WorkplaceInteractablesMapComponent.getComponentType()),
+        "workplace interactable component");
   }
 
   protected NPCEntity getNPCEntity(Ref<EntityStore> ref, Store<EntityStore> store) {

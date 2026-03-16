@@ -53,16 +53,16 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
         .getWorkareaSnapshot()
         .getBlockTypePosition();
 
-    Vector3i tillable = null;
+    Vector3i target = null;
     for (String blockId : blockIds) {
       ArrayDeque<Vector3i> queue = blockPositions.get(blockId);
       if (queue != null && !queue.isEmpty()) {
-        tillable = queue.peekFirst();
+        target = queue.peekFirst();
         break;
       }
     }
 
-    if (tillable == null) {
+    if (target == null) {
       this.positionProvider.clear();
       return false;
     }
@@ -74,14 +74,14 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
       return false;
     }
 
-    double distanceFromBlock = transform.getPosition().distanceSquaredTo(tillable);
+    double distanceFromBlock = transform.getPosition().distanceSquaredTo(target);
 
     if (distanceFromBlock <= this.stoppingRange) {
       this.positionProvider.clear();
       return false;
     }
 
-    this.positionProvider.setTarget(tillable.toVector3d());
+    this.positionProvider.setTarget(target.toVector3d());
     return true;
   }
 }

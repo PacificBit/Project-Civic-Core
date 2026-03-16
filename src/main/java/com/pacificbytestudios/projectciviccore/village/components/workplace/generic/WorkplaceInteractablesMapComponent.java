@@ -88,6 +88,33 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return null;
   }
 
+  public boolean releaseInteractablesOccupiedBy(UUID occupantUuid) {
+    if (occupantUuid == null) {
+      return false;
+    }
+
+    boolean released = false;
+    for (Interactable[] interactableGroup : this.interactable.values()) {
+      if (interactableGroup == null) {
+        continue;
+      }
+
+      for (Interactable interactable : interactableGroup) {
+        if (interactable == null || !occupantUuid.equals(interactable.getOccupiedBy())) {
+          continue;
+        }
+
+        if (interactable.isInvalidateOnUse()) {
+          interactable.setReady(false);
+        }
+        interactable.setOccupiedBy(null);
+        released = true;
+      }
+    }
+
+    return released;
+  }
+
   @Override
   public WorkplaceInteractablesMapComponent clone() {
     WorkplaceInteractablesMapComponent component = new WorkplaceInteractablesMapComponent();

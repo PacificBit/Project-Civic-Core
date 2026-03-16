@@ -22,7 +22,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
@@ -231,10 +231,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   public void registerWorkplace(WorkplaceComponent workplace) {
     this.workplaceIdToWorkplace.put(workplace.getUuid(), workplace);
 
-    WorkplaceType workplaceType = workplace.getWorkplaceType();
-    if (workplaceType.equals(WorkplaceType.STORAGE)) {
+    StructureType workplaceType = workplace.getWorkplaceType();
+    if (workplaceType.equals(StructureType.STORAGE)) {
       this.villageStorageWorkplaces.add(workplace.getUuid());
-    } else if (workplaceType.equals(WorkplaceType.TAVERN)) {
+    } else if (workplaceType.equals(StructureType.TAVERN)) {
       this.villageTavernWorkplaces.add(workplace.getUuid());
     }
   }
@@ -288,7 +288,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.villagerIdToComponent.get(villager).setWorkerData(null);
   }
 
-  public List<WorkplaceComponent> getWorkplaceFrom(WorkplaceType workplaceType) {
+  public List<WorkplaceComponent> getWorkplaceFrom(StructureType workplaceType) {
     return this.workplaceIdToWorkplace
         .values()
         .stream()

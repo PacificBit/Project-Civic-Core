@@ -24,7 +24,7 @@ import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 public class WorkplaceComponent implements Component<ChunkStore> {
@@ -38,7 +38,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
       .add()
 
       .append(
-          new KeyedCodec<>("Type", new EnumCodec<WorkplaceType>(WorkplaceType.class)),
+          new KeyedCodec<>("Type", new EnumCodec<StructureType>(StructureType.class)),
           (obj, value) -> obj.workingPlaceType = value,
           (obj) -> obj.workingPlaceType)
       .add()
@@ -120,7 +120,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
       .build();
 
   private UUID uuid;
-  private WorkplaceType workingPlaceType;
+  private StructureType workingPlaceType;
   private WorkType[] workerType;
   private Vector3i benchPos;
   private Vector3i prefabAnchor;
@@ -144,11 +144,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.uuid = uuid;
   }
 
-  public WorkplaceType getWorkplaceType() {
+  public StructureType getWorkplaceType() {
     return workingPlaceType;
   }
 
-  public void setWorkingPlaceType(WorkplaceType workingPlaceType) {
+  public void setWorkingPlaceType(StructureType workingPlaceType) {
     this.workingPlaceType = workingPlaceType;
   }
 

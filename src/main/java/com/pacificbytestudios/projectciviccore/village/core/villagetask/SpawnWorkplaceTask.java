@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.utils.SpawnFunction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
 public class SpawnWorkplaceTask extends AVillageTask {
 
@@ -18,7 +18,7 @@ public class SpawnWorkplaceTask extends AVillageTask {
       .builder(SpawnWorkplaceTask.class, SpawnWorkplaceTask::new)
 
       .append(
-          new KeyedCodec<>("WorkplaceType", new EnumCodec<WorkplaceType>(WorkplaceType.class)),
+          new KeyedCodec<>("WorkplaceType", new EnumCodec<StructureType>(StructureType.class)),
           (obj, value) -> obj.workplaceType = value,
           (obj) -> obj.workplaceType)
       .add()
@@ -30,13 +30,13 @@ public class SpawnWorkplaceTask extends AVillageTask {
 
       .build();
 
-  WorkplaceType workplaceType;
+  StructureType workplaceType;
   Vector3i position;
 
   public SpawnWorkplaceTask() {
   }
 
-  public SpawnWorkplaceTask(WorkplaceType workplaceType, Vector3i position) {
+  public SpawnWorkplaceTask(StructureType workplaceType, Vector3i position) {
     this.workplaceType = workplaceType;
     this.position = position;
   }

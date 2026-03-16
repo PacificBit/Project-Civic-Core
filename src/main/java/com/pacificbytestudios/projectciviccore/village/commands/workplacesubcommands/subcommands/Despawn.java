@@ -24,7 +24,7 @@ import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
 public class Despawn extends CommandBase {
@@ -77,7 +77,7 @@ public class Despawn extends CommandBase {
         return;
       }
 
-      WorkplaceType workplace = WorkplaceType.valueOf(this.workplaceType.get(context).toUpperCase());
+      StructureType workplace = StructureType.valueOf(this.workplaceType.get(context).toUpperCase());
 
       List<WorkplaceComponent> workplaceComponents = villageHeartComponent.getWorkplaceFrom(workplace);
 

@@ -47,7 +47,7 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
       return false;
     }
 
-    WorkplaceInteractablesMapComponent interactables = this.getWorkplaceInteractibleComponent(ref, store);
+    WorkplaceInteractablesMapComponent interactables = this.getVillageTavernInteractibleComponent(ref, store);
     if (interactables == null) {
       this.positionProvider.clear();
       return false;

@@ -22,7 +22,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
 public class Spawn extends CommandBase {
@@ -68,7 +68,7 @@ public class Spawn extends CommandBase {
       }
 
       VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
-      WorkplaceType workplaceType = WorkplaceType.valueOf(workplace);
+      StructureType workplaceType = StructureType.valueOf(workplace);
       taskQueue.registerTask(new SpawnWorkplaceTask(workplaceType, playerPos));
 
       Utils.safeVillageTaskEnqueue(heartRef, taskQueue);

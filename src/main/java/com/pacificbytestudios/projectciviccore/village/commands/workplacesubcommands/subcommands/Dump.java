@@ -22,7 +22,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
 public class Dump extends CommandBase {
@@ -75,7 +75,7 @@ public class Dump extends CommandBase {
         return;
       }
 
-      WorkplaceType workplace = WorkplaceType.valueOf(this.workplaceType.get(context).toUpperCase());
+      StructureType workplace = StructureType.valueOf(this.workplaceType.get(context).toUpperCase());
 
       List<WorkplaceComponent> workplaceComponents = villageHeartComponent.getWorkplaceFrom(workplace);
 
@@ -98,7 +98,7 @@ public class Dump extends CommandBase {
           .println("==================Dump: " + this.workplaceType.get(context).toUpperCase() + "====================");
       System.out.println(closestWorkplace);
 
-      if (closestWorkplace.getWorkplaceType().equals(WorkplaceType.TAVERN)) {
+      if (closestWorkplace.getWorkplaceType().equals(StructureType.TAVERN)) {
         System.out
             .println("==================Dump: TAVERN COMPONENT====================");
         TavernComponent tavern = heart.getStore().getComponent(closestWorkplace.getWorkplaceRef().getRef(),

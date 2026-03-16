@@ -1,6 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.enums;
 
-public enum WorkplaceInteractibles {
+import java.util.function.Supplier;
+
+public enum WorkplaceInteractibles implements Supplier<String> {
   RELAX_SPOT("Relax_Spot"),
   EATING_SPOT("Eating_Spot");
 
@@ -10,7 +12,8 @@ public enum WorkplaceInteractibles {
     this.key = key;
   }
 
-  public String getKey() {
+  @Override
+  public String get() {
     return this.key;
   }
 }

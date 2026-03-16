@@ -1,9 +1,11 @@
 package com.pacificbytestudios.projectciviccore.villagers.components;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
@@ -17,6 +19,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerMealType;
 
 public class VillagerComponent implements Component<EntityStore> {
   public static final short STORAGE_CAPACITY = 18;
@@ -42,11 +45,23 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.workerData)
       .add()
 
+      .append(new KeyedCodec<Long>("LastLunchMealDay", Codec.LONG),
+          (obj, value) -> obj.lastLunchMealDay = value,
+          (obj) -> obj.lastLunchMealDay)
+      .add()
+
+      .append(new KeyedCodec<Long>("LastDinnerMealDay", Codec.LONG),
+          (obj, value) -> obj.lastDinnerMealDay = value,
+          (obj) -> obj.lastDinnerMealDay)
+      .add()
+
       .build();
 
   private EntityRef villageHeartLocation;
   private Vector3i bedPosition;
   private VillagerWorkerComponent workerData;
+  private long lastLunchMealDay = -1L;
+  private long lastDinnerMealDay = -1L;
 
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
@@ -76,6 +91,36 @@ public class VillagerComponent implements Component<EntityStore> {
 
   public Map<UUID, ContainerWindow> getWindows() {
     return this.windows;
+  }
+
+  public long getLastMealDay(VillagerMealType mealType) {
+    return switch (mealType) {
+      case LUNCH -> this.lastLunchMealDay;
+      case DINNER -> this.lastDinnerMealDay;
+    };
+  }
+
+  public void setLastMealDay(VillagerMealType mealType, long mealDay) {
+    switch (mealType) {
+      case LUNCH -> this.lastLunchMealDay = mealDay;
+      case DINNER -> this.lastDinnerMealDay = mealDay;
+    }
+  }
+
+  public void markMealAsConsumed(VillagerMealType mealType, long mealDay) {
+    this.setLastMealDay(mealType, mealDay);
+  }
+
+  public boolean hasConsumedMealOnDay(VillagerMealType mealType, long mealDay) {
+    return mealDay >= 0L && this.getLastMealDay(mealType) == mealDay;
+  }
+
+  public static long buildMealDayKey(LocalDateTime gameDateTime) {
+    if (gameDateTime == null) {
+      return -1L;
+    }
+
+    return (long) gameDateTime.getYear() * 1000L + gameDateTime.getDayOfYear();
   }
 
   public ClaimedAreaComponent getWorkerArea(UUID uuid) {

@@ -12,7 +12,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
 public class TryJobAssignmentTask extends AVillageTask {
   public static final BuilderCodec<TryJobAssignmentTask> CODEC = BuilderCodec
@@ -48,7 +48,7 @@ public class TryJobAssignmentTask extends AVillageTask {
     }
 
     // TODO: reset this:
-    if (!heart.getWorkplaceFromId(this.workplace).getWorkplaceType().equals(WorkplaceType.TAVERN)) {
+    if (!heart.getWorkplaceFromId(this.workplace).getWorkplaceType().equals(StructureType.TAVERN)) {
       UUID candidate = unemployed.iterator().next();
       heart.registerVillagerAsWorkerAt(candidate, this.workplace);
       ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] Worker: " + candidate + " now is a worker");

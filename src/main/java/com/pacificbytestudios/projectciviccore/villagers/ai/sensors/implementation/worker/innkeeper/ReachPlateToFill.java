@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
-import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReachPlateToFill;
@@ -60,7 +59,7 @@ public class ReachPlateToFill extends VillagerSensorBase {
         this.positionProvider.clear();
         return false;
       }
-      this.target = Utils.centerOf(interactable.getInteractablePosition()).toVector3d();
+      this.target = interactable.getInteractablePosition().toVector3d();
       this.positionProvider.setTarget(this.target);
       return true;
     }

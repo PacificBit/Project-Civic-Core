@@ -35,8 +35,11 @@ import com.pacificbytestudios.projectciviccore.village.systems.workplace.Workpla
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderAskForClearWorkplaceStorageAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderClearSnapshotGroupPositions;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEatTavernFoodAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderMountMountableAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderUnmountMountableAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderAskStorageForResourcesAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderWorkplaceStorageTargetsSnapshotAction;
@@ -50,6 +53,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderPlaceFoodOnPlateAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasEatenMealTodaySensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasStorageRequestInPendingSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryDirtyInventorySensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderReachEmptyTavernSeatSensor;
@@ -258,6 +262,10 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuilderReachEmptyTavernSeatSensor::new);
 
     npcPlugin.registerCoreComponentType(
+        "HasEatenMealToday",
+        BuilderHasEatenMealTodaySensor::new);
+
+    npcPlugin.registerCoreComponentType(
         "ReserveNextPlateToFill",
         BuilderReserveNextPlateToFillSensor::new);
 
@@ -336,6 +344,18 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "PlaceFoodOnPlate",
         BuilderPlaceFoodOnPlateAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "MountMountable",
+        BuilderMountMountableAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "EatTavernFood",
+        BuilderEatTavernFoodAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "Unmount",
+        BuilderUnmountMountableAction::new);
 
     // ===========================
     // Extra
