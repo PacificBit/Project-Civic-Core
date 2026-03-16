@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.components;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWindow;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
@@ -45,14 +48,14 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.workerData)
       .add()
 
-      .append(new KeyedCodec<Long>("LastLunchMealDay", Codec.LONG),
-          (obj, value) -> obj.lastLunchMealDay = value,
-          (obj) -> obj.lastLunchMealDay)
+      .append(new KeyedCodec<Instant>("LastLunchMealTime", Codec.INSTANT),
+          (obj, value) -> obj.lastLunchMealTime = value,
+          (obj) -> obj.lastLunchMealTime)
       .add()
 
-      .append(new KeyedCodec<Long>("LastDinnerMealDay", Codec.LONG),
-          (obj, value) -> obj.lastDinnerMealDay = value,
-          (obj) -> obj.lastDinnerMealDay)
+      .append(new KeyedCodec<Instant>("LastDinnerMealTime", Codec.INSTANT),
+          (obj, value) -> obj.lastDinnerMealTime = value,
+          (obj) -> obj.lastDinnerMealTime)
       .add()
 
       .build();
@@ -60,8 +63,8 @@ public class VillagerComponent implements Component<EntityStore> {
   private EntityRef villageHeartLocation;
   private Vector3i bedPosition;
   private VillagerWorkerComponent workerData;
-  private long lastLunchMealDay = -1L;
-  private long lastDinnerMealDay = -1L;
+  private Instant lastLunchMealTime;
+  private Instant lastDinnerMealTime;
 
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
@@ -93,34 +96,36 @@ public class VillagerComponent implements Component<EntityStore> {
     return this.windows;
   }
 
-  public long getLastMealDay(VillagerMealType mealType) {
+  public Instant getLastMealTime(VillagerMealType mealType) {
     return switch (mealType) {
-      case LUNCH -> this.lastLunchMealDay;
-      case DINNER -> this.lastDinnerMealDay;
+      case LUNCH -> this.lastLunchMealTime;
+      case DINNER -> this.lastDinnerMealTime;
     };
   }
 
-  public void setLastMealDay(VillagerMealType mealType, long mealDay) {
+  public void setLastMealTime(VillagerMealType mealType, Instant mealTime) {
     switch (mealType) {
-      case LUNCH -> this.lastLunchMealDay = mealDay;
-      case DINNER -> this.lastDinnerMealDay = mealDay;
+      case LUNCH -> this.lastLunchMealTime = mealTime;
+      case DINNER -> this.lastDinnerMealTime = mealTime;
     }
   }
 
-  public void markMealAsConsumed(VillagerMealType mealType, long mealDay) {
-    this.setLastMealDay(mealType, mealDay);
+  public void markMealAsConsumed(VillagerMealType mealType, Instant mealTime) {
+    this.setLastMealTime(mealType, mealTime);
   }
 
-  public boolean hasConsumedMealOnDay(VillagerMealType mealType, long mealDay) {
-    return mealDay >= 0L && this.getLastMealDay(mealType) == mealDay;
-  }
-
-  public static long buildMealDayKey(LocalDateTime gameDateTime) {
-    if (gameDateTime == null) {
-      return -1L;
+  public boolean hasConsumedMealOnDate(VillagerMealType mealType, LocalDate currentDate) {
+    if (currentDate == null) {
+      return false;
     }
 
-    return (long) gameDateTime.getYear() * 1000L + gameDateTime.getDayOfYear();
+    Instant lastMealTime = this.getLastMealTime(mealType);
+    if (lastMealTime == null) {
+      return false;
+    }
+
+    LocalDateTime lastMealDateTime = LocalDateTime.ofInstant(lastMealTime, WorldTimeResource.ZONE_OFFSET);
+    return currentDate.equals(lastMealDateTime.toLocalDate());
   }
 
   public ClaimedAreaComponent getWorkerArea(UUID uuid) {
@@ -133,6 +138,8 @@ public class VillagerComponent implements Component<EntityStore> {
     component.villageHeartLocation = this.villageHeartLocation == null ? null : this.villageHeartLocation.clone();
     component.bedPosition = this.bedPosition;
     component.workerData = this.workerData == null ? null : this.workerData.clone();
+    component.lastLunchMealTime = this.lastLunchMealTime;
+    component.lastDinnerMealTime = this.lastDinnerMealTime;
     return component;
   }
 
@@ -142,6 +149,8 @@ public class VillagerComponent implements Component<EntityStore> {
         "villageHeartLocation=" + Utils.safeToString(villageHeartLocation) +
         ", bedPosition=" + Utils.safeToString(bedPosition) +
         ", workerData=" + Utils.safeToString(workerData) +
+        ", lastLunchMealTime=" + this.lastLunchMealTime +
+        ", lastDinnerMealTime=" + this.lastDinnerMealTime +
         ", windowsCount=" + windows.size() +
         '}';
   }

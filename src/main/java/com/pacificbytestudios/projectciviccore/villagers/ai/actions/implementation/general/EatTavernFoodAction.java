@@ -113,8 +113,7 @@ public class EatTavernFoodAction extends VillagerActionBase {
       return;
     }
 
-    long currentMealDay = VillagerComponent.buildMealDayKey(worldTimeResource.getGameDateTime());
-    villagerComponent.markMealAsConsumed(this.mealType, currentMealDay);
+    villagerComponent.markMealAsConsumed(this.mealType, worldTimeResource.getGameTime());
     store.putComponent(ref, VillagerComponent.getComponentType(), villagerComponent);
   }
 

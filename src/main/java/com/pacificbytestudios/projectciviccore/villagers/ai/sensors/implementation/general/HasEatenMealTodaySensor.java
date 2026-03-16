@@ -47,7 +47,8 @@ public class HasEatenMealTodaySensor extends VillagerSensorBase {
       return false;
     }
 
-    long currentMealDay = VillagerComponent.buildMealDayKey(worldTimeResource.getGameDateTime());
-    return villagerComponent.hasConsumedMealOnDay(this.mealType, currentMealDay);
+    return villagerComponent.hasConsumedMealOnDate(
+        this.mealType,
+        worldTimeResource.getGameDateTime().toLocalDate());
   }
 }

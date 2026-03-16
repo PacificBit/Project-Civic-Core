@@ -294,9 +294,21 @@
                     },
                     {
                       "Type": "State",
-                      "State": ".Eating"
+                      "State": ".LunchEating"
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "State Change -> Default",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Default"
                 }
               ]
             }
@@ -307,7 +319,7 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".Eating"
+            "State": ".LunchEating"
           },
           "Instructions": [
             {
@@ -384,9 +396,47 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".PostEating"
+            "State": ".EatingDinner"
           },
           "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Block",
+                "Range": 1,
+                "Blocks": "VillageFood"
+              },
+              "BodyMotion": {
+                "Type": "MatchLook"
+              },
+              "HeadMotion": {
+                "Type": "Aim"
+              },
+              "Actions": [
+                {
+                  "Type": "Timeout",
+                  "Delay": [
+                    10,
+                    15
+                  ],
+                  "Action": {
+                    "Type": "Sequence",
+                    "Actions": [
+                      {
+                        "Type": "EatTavernFood",
+                        "MealType": "LUNCH"
+                      },
+                      {
+                        "Type": "State",
+                        "State": ".PostEating"
+                      }
+                    ]
+                  },
+                  "Once": true
+                }
+              ],
+              "$Comment": "Move head toward food",
+              "Continue": true
+            },
             {
               "Sensor": {
                 "Type": "Any"
@@ -402,25 +452,66 @@
                     "Type": "Sequence",
                     "Actions": [
                       {
+                        "Type": "EatTavernFood",
+                        "MealType": "DINNER"
+                      },
+                      {
+                        "Type": "State",
+                        "State": ".PostEating"
+                      }
+                    ]
+                  },
+                  "Once": true
+                }
+              ],
+              "$Comment": "Eat after a while"
+            }
+          ],
+          "$Comment": "State: Dinner (Eating)",
+          "Continue": false
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PostEating"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Timeout",
+                  "Delay": [
+                    3,
+                    5
+                  ],
+                  "Action": {
+                    "Type": "Sequence",
+                    "Actions": [
+                      {
+                        "Type": "Unmount"
+                      },
+                      {
                         "Type": "PlayAnimation",
                         "Slot": "Action",
                         "Animation": "Walk",
                         "Once": true
                       },
                       {
-                        "Type": "Unmount"
-                      },
-                      {
                         "Type": "State",
                         "State": ".Default"
                       }
                     ]
-                  }
+                  },
+                  "Once": true
                 }
-              ]
+              ],
+              "$Comment": "Eat after a while"
             }
           ],
-          "$Comment": "State: Lunch (Post Eating)",
+          "$Comment": "State: Post Eating",
           "Continue": false
         },
         {
@@ -596,21 +687,60 @@
               "Instructions": [
                 {
                   "Sensor": {
-                    "Type": "Any"
+                    "Type": "Any",
+                    "Once": true
                   },
                   "Actions": [
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Glide"
+                      "Animation": "Walk",
+                      "Once": true
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "ReachNextEmptyTavernSeat",
+                    "StoppingRange": 1.5
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Walk",
+                      "Once": true
                     }
                   ],
                   "BodyMotion": {
-                    "Type": "WanderInCircle",
-                    "Radius": 10,
-                    "MaxHeadingChange": 90,
-                    "RelativeSpeed": 0.5
+                    "Type": "Seek",
+                    "SlowDownDistance": 2,
+                    "StopDistance": 1,
+                    "RelativeSpeed": 0.6
                   }
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Sit on chair",
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Sit",
+                      "Once": true
+                    },
+                    {
+                      "Type": "MountMountable",
+                      "StructureType": "TAVERN",
+                      "InteractableType": "EATING_SPOT"
+                    },
+                    {
+                      "Type": "State",
+                      "State": ".EatingDinner"
+                    }
+                  ]
                 }
               ]
             },
@@ -963,12 +1093,58 @@
               "Instructions": [
                 {
                   "Sensor": {
-                    "Type": "Any"
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasEatenMealToday",
+                      "MealType": "DINNER"
+                    }
                   },
                   "Actions": [
                     {
                       "Type": "State",
                       "State": ".Dinner"
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any",
+                    "Once": true
+                  },
+                  "Actions": [
+                    {
+                      "Type": "Timeout",
+                      "Delay": [
+                        10,
+                        15
+                      ],
+                      "Action": {
+                        "Type": "Sequence",
+                        "Actions": [
+                          {
+                            "Type": "Unmount"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "BodyMotion": {
+                    "Type": "WanderInCircle",
+                    "Radius": 5,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.7
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Walk",
+                      "Once": true
                     }
                   ]
                 }
