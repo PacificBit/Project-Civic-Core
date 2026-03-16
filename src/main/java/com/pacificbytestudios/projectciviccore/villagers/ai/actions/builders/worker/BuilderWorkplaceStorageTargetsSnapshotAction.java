@@ -7,8 +7,8 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.asset.builder.holder.EnumHolder;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.WorkplaceStorageTargetsSnapshotAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.WorkplaceStorageTargetsSnapshotAction.ActionType;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.WorkplaceStorageTargetsSnapshotAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.WorkplaceStorageTargetsSnapshotAction.ActionType;
 
 public class BuilderWorkplaceStorageTargetsSnapshotAction extends BuilderActionBase {
   private EnumHolder<ActionType> actionType = new EnumHolder<>();

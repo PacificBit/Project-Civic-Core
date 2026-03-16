@@ -1,152 +1,91 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace.generic;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
-import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
+import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
+import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
+import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 
-public class WorkplaceInteractablesMapComponent implements
-    Component<ChunkStore> {
-  private static final SetCodec<UUID, HashSet<UUID>> OCCUPANT_SET_CODEC = new SetCodec<>(
-      Codec.UUID_STRING,
-      HashSet::new,
-      false);
-
-  private static final Vector3iMapCodec<Set<UUID>, HashMap<Vector3i, Set<UUID>>> POSITION_OCCUPIED_CODEC = new Vector3iMapCodec<>(
-      OCCUPANT_SET_CODEC,
-      HashMap::new,
-      false);
-
+public class WorkplaceInteractablesMapComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceInteractablesMapComponent> CODEC = BuilderCodec
-      .builder(WorkplaceInteractablesMapComponent.class,
-          WorkplaceInteractablesMapComponent::new)
+      .builder(WorkplaceInteractablesMapComponent.class, WorkplaceInteractablesMapComponent::new)
 
-      .append(new KeyedCodec<>(
-          "Interactable",
-          new MapCodec<>(POSITION_OCCUPIED_CODEC, HashMap::new, false)),
-          (obj, value) -> obj.interactable = deepCopy(value),
-          obj -> deepCopy(obj.interactable))
+      .append(
+          new KeyedCodec<>("Interactables", new EnumMapCodec<>(
+              WorkplaceInteractibles.class,
+              new ArrayCodec<>(
+                  Interactable.CODEC,
+                  Interactable[]::new))),
+          (obj, value) -> obj.interactable = value,
+          obj -> obj.interactable)
       .add()
 
       .build();
 
-  private Map<String, Map<Vector3i, Set<UUID>>> interactable = new HashMap<>();
+  private Map<WorkplaceInteractibles, Interactable[]> interactable = new HashMap<>();
 
-  public void setNewInteractable(String group, Vector3i position) {
-    this.interactable.putIfAbsent(group, new HashMap<>());
-    this.interactable.get(group).putIfAbsent(new Vector3i(position), new HashSet<>());
+  public void setNewInteractables(WorkplaceInteractibles group, List<Interactable> interactables) {
+    this.interactable.putIfAbsent(group, new Interactable[0]);
+    this.interactable.put(group, interactables.toArray(new Interactable[0]));
   }
 
-  public void setNewInteractable(WorkplaceInteractibles group, List<Vector3i> positions) {
-    setNewInteractable(group.getKey(), positions);
-  }
-
-  public void setNewInteractable(String group, List<Vector3i> positions) {
-    positions.forEach(pos -> setNewInteractable(group, pos));
-  }
-
-  public boolean isOccupied(String group, Vector3i position) {
-    return !this.getOccupants(group, position).isEmpty();
-  }
-
-  public boolean isOccupiedBy(String group, Vector3i position, UUID occupierId) {
-    return this.getOccupants(group, position).contains(occupierId);
-  }
-
-  public Vector3i getOccupiedPosition(String group, UUID occupierId) {
-    Map<Vector3i, Set<UUID>> interactableGroup = this.interactable.get(group);
+  public Interactable getFirstAvailableInteractable(WorkplaceInteractibles group) {
+    Interactable[] interactableGroup = this.interactable.get(group);
     if (interactableGroup == null) {
       throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
     }
 
-    for (Entry<Vector3i, Set<UUID>> entries : interactableGroup.entrySet()) {
-      if (entries.getValue().contains(occupierId)) {
-        return entries.getKey();
+    for (Interactable interactable : interactableGroup) {
+      if (interactable.isAvailable()) {
+        return interactable;
       }
     }
     return null;
   }
 
-  public int getOccupantCount(String group, Vector3i position) {
-    return this.getOccupants(group, position).size();
-  }
-
-  public Set<UUID> getOccupants(String group, Vector3i position) {
-    Map<Vector3i, Set<UUID>> interactableGroup = this.interactable.get(group);
+  public Interactable getFirstNotReadyInteractable(WorkplaceInteractibles group, UUID villager) {
+    Interactable[] interactableGroup = this.interactable.get(group);
     if (interactableGroup == null) {
       throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
     }
 
-    Set<UUID> occupants = interactableGroup.get(position);
-    if (occupants == null) {
-      throw new IllegalArgumentException("Interactable position '" + position + "' is not defined");
+    for (Interactable interactable : interactableGroup) {
+      if (!interactable.isReady() && (!interactable.isOccupied() || interactable.getOccupiedBy().equals(villager))) {
+        return interactable;
+      }
     }
-
-    return occupants;
+    return null;
   }
 
-  public void registerAsOccupied(WorkplaceInteractibles group, Vector3i position, UUID occupierId) {
-    registerAsOccupied(group.getKey(), position, occupierId);
-  }
-
-  public void registerAsOccupied(String group, Vector3i position, UUID occupierId) {
-    this.getOccupants(group, position).add(occupierId);
-  }
-
-  public void registerAsUnoccupied(String group, Vector3i position, UUID occupierId) {
-    this.getOccupants(group, position).remove(occupierId);
-  }
-
-  @Nullable
-  public Vector3i getFirstInteractablePositionUnoccupied(WorkplaceInteractibles interactibles) {
-    return getFirstInteractablePositionUnoccupied(interactibles.getKey());
-  }
-
-  @Nullable
-  public Vector3i getFirstInteractablePositionUnoccupied(String group) {
-    Map<Vector3i, Set<UUID>> interactableGroup = this.interactable.get(group);
+  public Interactable getInteractableOccupiedBy(WorkplaceInteractibles group, UUID occupantUuid) {
+    Interactable[] interactableGroup = this.interactable.get(group);
     if (interactableGroup == null) {
       throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
     }
 
-    for (Entry<Vector3i, Set<UUID>> entries : interactableGroup.entrySet()) {
-      if (entries.getValue().isEmpty()) {
-        return entries.getKey();
+    if (occupantUuid == null) {
+      return null;
+    }
+
+    for (Interactable interactable : interactableGroup) {
+      if (interactable != null
+          && interactable.isOccupied()
+          && occupantUuid.equals(interactable.getOccupiedBy())) {
+        return interactable;
       }
     }
 
     return null;
-  }
-
-  public void resetInteractableGroup(String group) {
-    Map<Vector3i, Set<UUID>> interactableGroup = this.interactable.get(group);
-    if (interactableGroup == null) {
-      throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
-    }
-
-    interactableGroup.values().forEach(Set::clear);
-  }
-
-  public void resetAll() {
-    this.interactable.keySet().forEach(this::resetInteractableGroup);
   }
 
   @Override
@@ -156,29 +95,56 @@ public class WorkplaceInteractablesMapComponent implements
     return component;
   }
 
-  public static ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> getComponentType() {
-    return ProjectCivicCore.get().getWorkplaceInteractablesMapComponentType();
-  }
-
-  private static Map<String, Map<Vector3i, Set<UUID>>> deepCopy(Map<String, Map<Vector3i, Set<UUID>>> source) {
-    Map<String, Map<Vector3i, Set<UUID>>> copy = new HashMap<>();
+  private static Map<WorkplaceInteractibles, Interactable[]> deepCopy(
+      Map<WorkplaceInteractibles, Interactable[]> source) {
+    Map<WorkplaceInteractibles, Interactable[]> copy = new HashMap<>();
 
     if (source == null) {
       return copy;
     }
 
-    source.forEach((group, positions) -> {
-      Map<Vector3i, Set<UUID>> positionCopy = new HashMap<>();
+    for (Map.Entry<WorkplaceInteractibles, Interactable[]> entry : source.entrySet()) {
+      WorkplaceInteractibles key = entry.getKey();
+      Interactable[] value = entry.getValue();
 
-      if (positions != null) {
-        positions.forEach((pos, occupants) -> positionCopy.put(
-            pos == null ? null : new Vector3i(pos),
-            occupants == null ? new HashSet<>() : new HashSet<>(occupants)));
+      if (value == null) {
+        copy.put(key, null);
+        continue;
       }
 
-      copy.put(group, positionCopy);
-    });
+      Interactable[] clonedArray = new Interactable[value.length];
+      for (int i = 0; i < value.length; i++) {
+        Interactable interactable = value[i];
+        clonedArray[i] = interactable != null ? interactable.clone() : null;
+      }
+
+      copy.put(key, clonedArray);
+    }
 
     return copy;
+  }
+
+  public static ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> getComponentType() {
+    return ProjectCivicCore.get().getWorkplaceInteractablesMapComponentType();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("WorkplaceInteractablesMapComponent{\n");
+
+    for (Map.Entry<WorkplaceInteractibles, Interactable[]> entry : interactable.entrySet()) {
+      sb.append("  ").append(entry.getKey()).append("={\n");
+
+      Interactable[] values = entry.getValue();
+      if (values != null) {
+        for (Interactable value : values) {
+          sb.append("    - ").append(value).append("\n");
+        }
+      }
+      sb.append("  }\n");
+    }
+    sb.append("}");
+    return sb.toString();
   }
 }

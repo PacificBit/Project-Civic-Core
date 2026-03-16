@@ -20,6 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
@@ -104,6 +105,14 @@ public class Dump extends CommandBase {
             TavernComponent.getComponentType());
         System.out.println(tavern);
       }
+
+      System.out
+          .println("==================Dump: INTERACTABLES====================");
+
+      WorkplaceInteractablesMapComponent interactables = heart.getStore().getComponent(
+          closestWorkplace.getWorkplaceRef().getRef(),
+          WorkplaceInteractablesMapComponent.getComponentType());
+      System.out.println(interactables);
     });
   }
 

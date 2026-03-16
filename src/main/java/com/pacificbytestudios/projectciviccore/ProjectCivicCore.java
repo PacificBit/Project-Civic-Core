@@ -47,6 +47,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderCookMealAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderCreateNewMealPlanAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderGatherNextMealMaterialFromContainerAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderPlaceFoodOnPlateAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasStorageRequestInPendingSensor;
@@ -61,6 +62,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderHasNextMealInPlannedSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReachPlateToFill;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReserveNextPlateToFillSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.BuilderItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
@@ -254,6 +257,14 @@ public final class ProjectCivicCore extends JavaPlugin {
         "ReachNextEmptyTavernSeat",
         BuilderReachEmptyTavernSeatSensor::new);
 
+    npcPlugin.registerCoreComponentType(
+        "ReserveNextPlateToFill",
+        BuilderReserveNextPlateToFillSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ReachPlateToFill",
+        BuilderReachPlateToFill::new);
+
     // ===========================
     // Actions
     // ===========================
@@ -321,6 +332,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "CookMeal",
         BuilderCookMealAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "PlaceFoodOnPlate",
+        BuilderPlaceFoodOnPlateAction::new);
 
     // ===========================
     // Extra

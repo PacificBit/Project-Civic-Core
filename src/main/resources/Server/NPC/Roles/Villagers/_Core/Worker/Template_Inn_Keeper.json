@@ -247,6 +247,7 @@
               "Actions": [
                 {
                   "Type": "CreateNewMealPlanAction",
+                  "MealBuffer": 2,
                   "SuccessFlag": "InnKeeperMealPlanReady",
                   "FailureFlag": "InnKeeperMealPlanFailed"
                 }
@@ -405,10 +406,57 @@
               },
               "Actions": [
                 {
-                  "Type": "GatherNextMealMaterialFromContainer"
+                  "Type": "GatherNextMealMaterialFromContainer",
+                  "SuccessFlag": "GatherSuccessful",
+                  "FailureFlag": "GatherIncomplete"
                 }
               ],
-              "$Comment": "Gather material"
+              "$Comment": "Gather material",
+              "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "Flag",
+                "Name": "GatherSuccessful",
+                "Set": true
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "READY TO WORK"
+                },
+                {
+                  "Type": "SetFlag",
+                  "Name": "GatherSuccessful",
+                  "SetTo": false
+                },
+                {
+                  "Type": "State",
+                  "State": ".Cooking"
+                }
+              ],
+              "Continue": true,
+              "$Comment": "Success gather"
+            },
+            {
+              "Sensor": {
+                "Type": "Flag",
+                "Name": "GatherIncomplete",
+                "Set": true
+              },
+              "Continue": false,
+              "$Comment": "Failure Gather",
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "NOT COMPLETED: Not enough food in storage"
+                },
+                {
+                  "Type": "SetFlag",
+                  "Name": "GatherIncomplete",
+                  "SetTo": false
+                }
+              ]
             },
             {
               "Sensor": {
@@ -432,12 +480,213 @@
           "Instructions": [
             {
               "Sensor": {
+                "Type": "ReachWorkplace"
+              },
+              "Actions": [
+                {
+                  "Type": "PlayAnimation",
+                  "Slot": "Action",
+                  "Animation": "Walk",
+                  "Once": true
+                }
+              ],
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1,
+                "StopDistance": 1,
+                "RelativeSpeed": 1
+              },
+              "Continue": false,
+              "$Comment": "Reaching workplace"
+            },
+            {
+              "Sensor": {
                 "Type": "Any"
               },
-              "$Comment": "Reach workplace storage",
+              "Actions": [
+                {
+                  "Type": "Timeout",
+                  "Delay": [
+                    5,
+                    5
+                  ],
+                  "Action": {
+                    "Type": "Sequence",
+                    "Actions": [
+                      {
+                        "Type": "CookMeal"
+                      },
+                      {
+                        "Type": "State",
+                        "State": ".PlaceCookedFoodOnPlate"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "$Comment": "Cook meal"
+            }
+          ],
+          "$Comment": "Cooking"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PlaceCookedFoodOnPlate"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Hold Cooked item",
+              "Actions": [
+                {
+                  "Type": "EquipItemFromInventory",
+                  "ItemToEquip": "Village_Food"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "ReserveNextPlateToFill"
+                }
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "NO PLATE TO FILL"
+                },
+                {
+                  "Type": "State",
+                  "State": ".NoFreePlateAvailable"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachPlateToFill",
+                "StoppingRange": 1.5
+              },
+              "$Comment": "Reach plate to fill",
               "BodyMotion": {
-                "Type": "Nothing"
+                "Type": "Seek",
+                "StopDistance": 1.5,
+                "SlowDownDistance": 1.5,
+                "RelativeSpeed": 0.5
               }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "Actions": [
+                {
+                  "Type": "PlaceFoodOnPlate"
+                }
+              ],
+              "$Comment": "Try to place item and change state"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "If could not place block move forward",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
+            }
+          ],
+          "$Comment": "Cooking"
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".NoFreePlateAvailable"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "QueryDirtyInventorySensor"
+              },
+              "$Comment": "Deposit cooked meals and leftover materials into workplace storage",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasTargetBlockInSnapshot",
+                      "TargetBlockIds": [
+                        "Worker_Workplace_Storage"
+                      ]
+                    },
+                    "Once": true
+                  },
+                  "$Comment": "If the positions of the workplace containers are not in snapshot",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Add workplace containers to snapshot",
+                      "Actions": [
+                        {
+                          "Type": "SetWorkplaceStorageTargetInSnapshot",
+                          "ActionType": "ADD"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "ReachNextTargetInSnapshot",
+                    "BlockIds": [
+                      "Worker_Workplace_Storage"
+                    ],
+                    "StoppingRange": 1.5
+                  },
+                  "$Comment": "Reach workplace storage container",
+                  "BodyMotion": {
+                    "Type": "Seek",
+                    "SlowDownDistance": 1.5,
+                    "StopDistance": 1.5,
+                    "RelativeSpeed": 0.6
+                  }
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Deposit everything carried into workplace storage",
+                  "Actions": [
+                    {
+                      "Type": "InteractWithExternalInventory",
+                      "ActionType": "DEPOSIT",
+                      "SnapshotKey": "Worker_Workplace_Storage",
+                      "ConsumeTargetOnFail": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
             }
           ],
           "$Comment": "Cooking"
@@ -465,6 +714,71 @@
             }
           ],
           "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "QueryDirtyInventorySensor"
+          },
+          "$Comment": "Deposit cooked meals and leftover materials into workplace storage",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Add workplace containers to snapshot",
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 1.5
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 1.5,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Deposit everything carried into workplace storage",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "DEPOSIT",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true
+                }
+              ]
+            }
+          ]
         },
         {
           "Sensor": {

@@ -3,7 +3,6 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -11,6 +10,7 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
+import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
@@ -55,14 +55,14 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
 
     if (!this.isTriggered()) {
       this.triggered = true;
-      Vector3i position = interactables.getFirstInteractablePositionUnoccupied(WorkplaceInteractibles.CHAIR);
-      if (position == null) {
+      Interactable interactable = interactables.getFirstAvailableInteractable(WorkplaceInteractibles.EATING_SPOT);
+      if (interactable == null) {
         this.positionProvider.clear();
         return false;
       }
       UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
-      interactables.registerAsOccupied(WorkplaceInteractibles.CHAIR, position, uuidComponent.getUuid());
-      this.target = Utils.centerOf(position).toVector3d();
+      interactable.setOccupiedBy(uuidComponent.getUuid());
+      this.target = Utils.centerOf(interactable.getInteractablePosition()).toVector3d();
       this.positionProvider.setTarget(this.target);
       return true;
     }

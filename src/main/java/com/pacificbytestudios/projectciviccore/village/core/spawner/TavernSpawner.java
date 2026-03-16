@@ -20,6 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -164,17 +165,9 @@ public class TavernSpawner {
       WorkplaceInteractablesMapComponent interactables,
       int level) {
 
-    interactables.setNewInteractable(
-        WorkplaceInteractibles.CHAIR,
-        toAbsolutePositions(center, Config.getChairOffsetForLevel(1)));
-
-    interactables.setNewInteractable(
+    interactables.setNewInteractables(
         WorkplaceInteractibles.EATING_SPOT,
-        toAbsolutePositions(center, Config.getEatingPositions(1)));
-  }
-
-  private static List<Vector3i> toAbsolutePositions(Vector3i prefabAnchor, List<Vector3i> offsets) {
-    return offsets.stream().map(position -> prefabAnchor.clone().add(position)).toList();
+        Config.getInteractables(center, level));
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
@@ -274,63 +267,65 @@ public class TavernSpawner {
 
   private class Config {
     private static final Map<Integer, List<Vector3i>> STORAGE_SPAWNING_OFFSETS;
-    private static final Map<Integer, List<Vector3i>> EATING_CHAIR_OFFSET;
-    private static final Map<Integer, List<Vector3i>> EATING_PLATE_OFFSET;
+    private static final Map<Integer, List<Interactable>> INTERACTABLES;
 
     static {
       STORAGE_SPAWNING_OFFSETS = new HashMap<>();
-      EATING_CHAIR_OFFSET = new HashMap<>();
-      EATING_PLATE_OFFSET = new HashMap<>();
+      INTERACTABLES = new HashMap<>();
 
-      List<Vector3i> levelContainers1 = new ArrayList<>();
-      levelContainers1.add(new Vector3i(-4, 1, -2));
-      STORAGE_SPAWNING_OFFSETS.put(1, levelContainers1);
+      List<Vector3i> level1Containers = new ArrayList<>();
+      level1Containers.add(new Vector3i(-4, 1, -2));
+      STORAGE_SPAWNING_OFFSETS.put(1, level1Containers);
 
-      List<Vector3i> levelChairPosition1 = new ArrayList<>();
-      levelChairPosition1.add(new Vector3i(-2, 1, 1));
-      levelChairPosition1.add(new Vector3i(-3, 1, 1));
-      levelChairPosition1.add(new Vector3i(-2, 1, 4));
-      levelChairPosition1.add(new Vector3i(-3, 1, 4));
+      List<Interactable> level1Interactables = new ArrayList<>();
+      level1Interactables.add(new Interactable(new Vector3i(-2, 1, 1), new Vector3i(-2, 2, 2), true));
+      level1Interactables.add(new Interactable(new Vector3i(-3, 1, 1), new Vector3i(-3, 2, 2), true));
+      level1Interactables.add(new Interactable(new Vector3i(-2, 1, 4), new Vector3i(-2, 2, 3), true));
+      level1Interactables.add(new Interactable(new Vector3i(-3, 1, 4), new Vector3i(-3, 2, 3), true));
 
-      levelChairPosition1.add(new Vector3i(2, 1, 1));
-      levelChairPosition1.add(new Vector3i(3, 1, 1));
-      levelChairPosition1.add(new Vector3i(2, 1, 4));
-      levelChairPosition1.add(new Vector3i(3, 1, 4));
+      level1Interactables.add(new Interactable(new Vector3i(2, 1, 1), new Vector3i(2, 2, 2), true));
+      level1Interactables.add(new Interactable(new Vector3i(3, 1, 1), new Vector3i(3, 2, 2), true));
+      level1Interactables.add(new Interactable(new Vector3i(2, 1, 4), new Vector3i(2, 2, 3), true));
+      level1Interactables.add(new Interactable(new Vector3i(3, 1, 4), new Vector3i(3, 2, 3), true));
 
-      levelChairPosition1.add(new Vector3i(2, 1, -1));
-      levelChairPosition1.add(new Vector3i(3, 1, -1));
-      levelChairPosition1.add(new Vector3i(2, 1, -4));
-      levelChairPosition1.add(new Vector3i(3, 1, -4));
-      EATING_CHAIR_OFFSET.put(1, levelChairPosition1);
-
-      List<Vector3i> levelEatingPosition1 = new ArrayList<>();
-      levelEatingPosition1.add(new Vector3i(-2, 1, 2));
-      levelEatingPosition1.add(new Vector3i(-3, 1, 2));
-      levelEatingPosition1.add(new Vector3i(-2, 1, 3));
-      levelEatingPosition1.add(new Vector3i(-3, 1, 3));
-
-      levelEatingPosition1.add(new Vector3i(2, 1, 2));
-      levelEatingPosition1.add(new Vector3i(3, 1, 2));
-      levelEatingPosition1.add(new Vector3i(2, 1, 3));
-      levelEatingPosition1.add(new Vector3i(3, 1, 3));
-
-      levelEatingPosition1.add(new Vector3i(2, 1, -2));
-      levelEatingPosition1.add(new Vector3i(3, 1, -2));
-      levelEatingPosition1.add(new Vector3i(2, 1, -3));
-      levelEatingPosition1.add(new Vector3i(3, 1, -3));
-      EATING_PLATE_OFFSET.put(1, levelEatingPosition1);
+      level1Interactables.add(new Interactable(new Vector3i(2, 1, -1), new Vector3i(2, 2, -2), true));
+      level1Interactables.add(new Interactable(new Vector3i(3, 1, -1), new Vector3i(3, 2, -2), true));
+      level1Interactables.add(new Interactable(new Vector3i(2, 1, -4), new Vector3i(2, 2, -3), true));
+      level1Interactables.add(new Interactable(new Vector3i(3, 1, -4), new Vector3i(3, 2, -3), true));
+      INTERACTABLES.put(1, level1Interactables);
     }
 
     public static List<Vector3i> getStorageOffsetForLevel(int level) {
       return STORAGE_SPAWNING_OFFSETS.get(level);
     }
 
-    public static List<Vector3i> getChairOffsetForLevel(int level) {
-      return EATING_CHAIR_OFFSET.get(level);
+    public static List<Interactable> getInteractables(Vector3i center, int level) {
+      List<Interactable> template = INTERACTABLES.getOrDefault(level, new ArrayList<>());
+      List<Interactable> result = new ArrayList<>(template.size());
+
+      for (Interactable interactable : template) {
+        if (interactable == null) {
+          continue;
+        }
+
+        Interactable copy = interactable.clone();
+
+        copy.setInteractablePosition(
+            toAbsolutePositions(center, interactable.getInteractablePosition()));
+
+        if (interactable.getDependsOn() != null) {
+          copy.setDependsOn(
+              toAbsolutePositions(center, interactable.getDependsOn()));
+        }
+
+        result.add(copy);
+      }
+
+      return result;
     }
 
-    public static List<Vector3i> getEatingPositions(int level) {
-      return EATING_PLATE_OFFSET.get(level);
+    private static Vector3i toAbsolutePositions(Vector3i prefabAnchor, Vector3i offset) {
+      return prefabAnchor.clone().add(offset);
     }
   }
 }

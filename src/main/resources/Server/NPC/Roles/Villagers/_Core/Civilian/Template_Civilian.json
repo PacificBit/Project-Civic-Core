@@ -243,20 +243,36 @@
               "Instructions": [
                 {
                   "Sensor": {
-                    "Type": "Any"
+                    "Type": "Any",
+                    "Once": true
                   },
                   "Actions": [
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Sleep"
+                      "Animation": "Walk",
+                      "Once": true
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "ReachNextEmptyTavernSeat",
+                    "StoppingRange": 1
+                  },
+                  "Actions": [
+                    {
+                      "Type": "PlayAnimation",
+                      "Slot": "Action",
+                      "Animation": "Walk",
+                      "Once": true
                     }
                   ],
                   "BodyMotion": {
-                    "Type": "WanderInCircle",
-                    "Radius": 10,
-                    "MaxHeadingChange": 90,
-                    "RelativeSpeed": 0.5
+                    "Type": "Seek",
+                    "SlowDownDistance": 2,
+                    "StopDistance": 1,
+                    "RelativeSpeed": 0.6
                   }
                 }
               ]

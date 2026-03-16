@@ -2,7 +2,6 @@ package com.pacificbytestudios.projectciviccore.village.enums;
 
 public enum WorkplaceInteractibles {
   RELAX_SPOT("Relax_Spot"),
-  CHAIR("Chair"),
   EATING_SPOT("Eating_Spot");
 
   private String key;

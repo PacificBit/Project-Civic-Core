@@ -26,7 +26,8 @@
           "Saturation": 3
         }
       }
-    }
+    },
+    "CustomModelScale": 0.5
   },
   "InteractionVars": {
     "Consume_Charge": {

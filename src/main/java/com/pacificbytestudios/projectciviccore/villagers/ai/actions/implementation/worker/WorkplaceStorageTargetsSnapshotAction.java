@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation;
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker;
 
 import java.util.ArrayDeque;
 import java.util.function.Supplier;
