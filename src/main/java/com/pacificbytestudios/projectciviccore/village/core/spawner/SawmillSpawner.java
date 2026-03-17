@@ -19,7 +19,7 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class SawmillSpawner {
-  private static final String PREFAB_JSON = "Structures/WorkPlace/Workspace_Sawmill.prefab.json";
+  private static final String PREFAB_JSON = "Structures/Workplace/Workspace_Sawmill.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Sawmill_Core");
 
   public static boolean spawn(WorldChunk chunk, Vector3i position) {

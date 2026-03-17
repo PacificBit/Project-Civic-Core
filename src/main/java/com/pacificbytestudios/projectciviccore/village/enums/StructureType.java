@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 public enum StructureType implements Supplier<String> {
   HOUSE("House"),
+  TOWN_HALL("Town_Hall"),
   MINE("Mine"),
   SAWMILL("Sawmill"),
   FARM("Farm"),

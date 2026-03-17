@@ -25,7 +25,7 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class FarmSpawner {
-  private static final String PREFAB_JSON = "Structures/WorkPlace/Workplace_Farm.prefab.json";
+  private static final String PREFAB_JSON = "Structures/Workplace/Workplace_Farm.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
   private static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
   private static final ClaimedAreaComponent WORKING_AREA_OFFSET = new ClaimedAreaComponent(

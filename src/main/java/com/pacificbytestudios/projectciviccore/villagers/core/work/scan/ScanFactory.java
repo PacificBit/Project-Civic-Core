@@ -11,6 +11,7 @@ public class ScanFactory {
     }
     WorkType typeOfWorker = villager.getWorkerData().getTypeOfWorker();
     return switch (typeOfWorker) {
+      case MAYOR -> new MayorScan();
       case FARMER -> new FarmerScan();
       case MINER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
       case INN_KEEPER -> new InnKeeperScan();

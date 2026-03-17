@@ -20,7 +20,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHallSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHeartSpawner;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
@@ -95,7 +95,7 @@ public class Despawn extends CommandBase {
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(heartPosition.x, heartPosition.z));
       boolean despawnResult = trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()
           ? PrefabManager.restoreTrackedPrefab(world, trackedPlacement)
-          : TownHallSpawner.despawn(chunk, heartPosition.clone().add(Vector3i.DOWN));
+          : TownHeartSpawner.despawn(chunk, heartPosition.clone().add(Vector3i.DOWN));
 
       if (!despawnResult) {
         context.sendMessage(Message.raw("Could not despawn village"));

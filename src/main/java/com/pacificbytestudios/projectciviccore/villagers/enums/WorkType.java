@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.enums;
 
 public enum WorkType {
+  MAYOR("Mayor"),
   MINER("Miner"),
   FARMER("Farmer"),
   WOOD_CUTTER("Wood_Cutter"),

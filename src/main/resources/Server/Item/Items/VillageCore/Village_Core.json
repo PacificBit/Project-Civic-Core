@@ -71,6 +71,9 @@
         "VillageSpawnConfig": {
           "InitialNpcCount": 4,
           "NpcSpawnRange": 5
+        },
+        "ItemContainerBlock": {
+          "Capacity": 9
         }
       }
     }

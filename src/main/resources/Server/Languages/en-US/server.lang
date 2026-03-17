@@ -10,6 +10,9 @@ workplace.mine.description=Mine workplace found in villages, cannot be crafted
 workplace.farm.name=Farm Workplace
 workplace.farm.description=Farm workplace found in villages, cannot be crafted
 
+workplace.townhall.name=Town Hall Workplace
+workplace.townhall.description=Town Hall workplace found in villages, cannot be crafted
+
 workplace.chest.small.name=Small Workplace chest
 workplace.chest.small.description=Small workplace found in villages, cannot be crafted
 

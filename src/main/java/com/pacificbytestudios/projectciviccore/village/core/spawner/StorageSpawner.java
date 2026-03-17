@@ -31,7 +31,7 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class StorageSpawner {
-  private static final String PREFAB_JSON = "Structures/WorkPlace/Workplace_Storage.prefab.json";
+  private static final String PREFAB_JSON = "Structures/Workplace/Workplace_Storage.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Storage_Core");
   private static final BlockType DOUBLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Large");
 

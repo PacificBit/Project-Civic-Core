@@ -24,6 +24,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StorageSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TavernSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHallSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
 import io.sentry.util.Pair;
@@ -80,6 +81,7 @@ public class Utils {
 
   public static SpawnFunction getSpawnFunction(StructureType workplaceType) {
     return switch (workplaceType) {
+      case TOWN_HALL -> TownHallSpawner::spawn;
       case MINE -> MineSpawner::spawn;
       case FARM -> FarmSpawner::spawn;
       case TAVERN -> TavernSpawner::spawn;
@@ -91,6 +93,7 @@ public class Utils {
 
   public static DespawnFunction getDespawnFunction(StructureType workplaceType) {
     return switch (workplaceType) {
+      case TOWN_HALL -> TownHallSpawner::despawn;
       case MINE -> MineSpawner::despawn;
       case FARM -> FarmSpawner::despawn;
       case TAVERN -> TavernSpawner::despawn;
