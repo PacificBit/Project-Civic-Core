@@ -17,7 +17,7 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.food.registry.RecipeRegistry;
+import com.pacificbytestudios.projectciviccore.recipe.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
@@ -59,7 +59,7 @@ public class CookMealAction extends VillagerActionBase {
       return false;
     }
 
-    CraftingRecipe craftingRecipe = RecipeRegistry.getRecipe(meal);
+    CraftingRecipe craftingRecipe = FoodRecipeRegistry.getRecipe(meal);
     List<MaterialQuantity> materialToRemove = CraftingManager.getInputMaterials(craftingRecipe);
 
     if (!villagerStorage.canRemoveMaterials(materialToRemove)) {
@@ -69,13 +69,9 @@ public class CookMealAction extends VillagerActionBase {
 
     if (villagerStorage.removeMaterials(materialToRemove).succeeded()) {
       villagerStorage.addItemStack(new ItemStack(meal, 1));
-      System.out.println("Removed items ");
       tavern.markWorkerAsFree(workerId);
       return true;
     }
-
-    System.out.println("Could not remove item");
-
     return false;
   }
 

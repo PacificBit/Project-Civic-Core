@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
@@ -49,6 +50,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     snapshotInProgress = new WorkplaceAreaSnapshot();
 
     WorkplaceComponent workplaceComponent = worker.getWorkplace();
+    VillageHeartComponent villageHeart = this.getVillageHeart(villager);
     Ref<ChunkStore> storageRef = workplaceComponent.getWorkplaceRef().getRef();
     if (storageRef == null || !storageRef.isValid()) {
       ProjectCivicCore.LOGGER.atSevere().log("[StorageKeeperScan] Could not fetch storage reference");
@@ -88,20 +90,20 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     switch (request.getType()) {
       case CLEAR_WORKPLACE_INVENTORY:
         putSnapshotTargets(snapshotInProgress,
-            FETCH_ALL, request.getTargetsWorkplaceStorage(),
-            DUMP_ALL, workplaceComponent.getStorage().getAllContainerPositions());
+            FETCH_ALL, this.resolveRequestStorageTargets(request, villageHeart),
+            DUMP_ALL, workplaceComponent.getStorage().getAllContainerAccessPositions());
         break;
 
       case DELIVER_TO_WORKPLACE:
         putSnapshotTargets(snapshotInProgress,
-            FETCH_ITEM, workplaceComponent.getStorage().getAllContainerPositions(),
-            DUMP_ITEM, request.getTargetsWorkplaceStorage());
+            FETCH_ITEM, workplaceComponent.getStorage().getAllContainerAccessPositions(),
+            DUMP_ITEM, this.resolveRequestStorageTargets(request, villageHeart));
         break;
 
       case COLLECT_FROM_WORKPLACE:
         putSnapshotTargets(snapshotInProgress,
-            FETCH_ITEM, request.getTargetsWorkplaceStorage(),
-            DUMP_ITEM, workplaceComponent.getStorage().getAllContainerPositions());
+            FETCH_ITEM, this.resolveRequestStorageTargets(request, villageHeart),
+            DUMP_ITEM, workplaceComponent.getStorage().getAllContainerAccessPositions());
         break;
 
       default:
@@ -139,6 +141,40 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     snapshot.setCompleted(true);
     snapshot.captureNow(worldTimeResource);
     return snapshot;
+  }
+
+  private VillageHeartComponent getVillageHeart(VillagerComponent villager) {
+    if (villager == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> villageHeartRef = villager.getVillageHeartRef();
+    if (villageHeartRef == null || !villageHeartRef.isValid()) {
+      return null;
+    }
+
+    return villageHeartRef.getStore().getComponent(
+        villageHeartRef,
+        VillageHeartComponent.getComponentType());
+  }
+
+  private Iterable<Vector3i> resolveRequestStorageTargets(
+      VillageStorageRequest request,
+      VillageHeartComponent villageHeart) {
+    if (request == null) {
+      return new ArrayDeque<>();
+    }
+
+    if (villageHeart == null || request.getRequesterWorkplaceId() == null) {
+      return request.getTargetsWorkplaceStorage();
+    }
+
+    WorkplaceComponent requesterWorkplace = villageHeart.getWorkplaceFromId(request.getRequesterWorkplaceId());
+    if (requesterWorkplace == null || requesterWorkplace.getStorage() == null) {
+      return request.getTargetsWorkplaceStorage();
+    }
+
+    return requesterWorkplace.getStorage().getAllContainerAccessPositions();
   }
 
 }

@@ -90,6 +90,8 @@ public class TavernSpawner {
 
     registerInteractables(position, workplaceComponent, interactables, 1);
 
+    workplaceComponent.setBenchPos(workplaceBlockPosition);
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.INN_KEEPER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
         workplaceBlockPosition));
@@ -152,6 +154,7 @@ public class TavernSpawner {
       }
 
       container.setPosition(containerPosition);
+      container.setAccessPosition(getContainerAccessPosition(containerPosition));
       container.setUuid(UUID.randomUUID());
       registry.registerContainer(container.getUuid(), container);
     }
@@ -245,6 +248,14 @@ public class TavernSpawner {
         .add(Vector3i.NORTH.clone().scale(4))
         .add(Vector3i.WEST.clone().scale(4))
         .add(Vector3i.UP);
+  }
+
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition) {
+    return workplaceBlockPosition.clone().add(Vector3i.EAST);
+  }
+
+  private static Vector3i getContainerAccessPosition(Vector3i containerPosition) {
+    return containerPosition.clone().add(Vector3i.EAST);
   }
 
   private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {

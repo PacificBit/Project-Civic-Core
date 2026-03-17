@@ -69,6 +69,8 @@ public class StorageSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
+    workplaceComponent.setBenchPos(workplaceBlockPosition);
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.STORAGE_KEEPER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
@@ -131,6 +133,7 @@ public class StorageSpawner {
       }
 
       container.setPosition(containerPosition);
+      container.setAccessPosition(getContainerAccessPosition(containerPosition, offset));
       container.setUuid(UUID.randomUUID());
       registry.registerContainer(container.getUuid(), container);
     }
@@ -208,6 +211,16 @@ public class StorageSpawner {
 
   private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
     return prefabAnchor.clone().add(Vector3i.NORTH.clone().scale(3)).add(Vector3i.UP);
+  }
+
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition) {
+    return workplaceBlockPosition.clone().add(Vector3i.SOUTH);
+  }
+
+  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, Vector3i containerOffset) {
+    return containerOffset.x < 0
+        ? containerPosition.clone().add(Vector3i.EAST)
+        : containerPosition.clone().add(Vector3i.WEST);
   }
 
   private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {

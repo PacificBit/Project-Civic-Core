@@ -11,6 +11,7 @@ import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
@@ -156,6 +157,11 @@ public class Utils {
     }
 
     taskQueue.merge(task);
+  }
+
+  public static void markNeedSaving(World world, Vector3i position) {
+    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+    chunk.markNeedsSaving();
   }
 
   public static ClaimedAreaComponent[] subdivideArea(ClaimedAreaComponent area, int parts) {

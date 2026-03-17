@@ -20,6 +20,7 @@ public class BuilderReachNextTargetInSnapshotSensor extends BuilderSensorBase {
 
   private StringArrayHolder blockIds = new StringArrayHolder();
   private DoubleHolder stoppingRange = new DoubleHolder();
+  private Boolean useCenterOfBlock;
 
   @Override
   public Sensor build(BuilderSupport support) {
@@ -49,6 +50,10 @@ public class BuilderReachNextTargetInSnapshotSensor extends BuilderSensorBase {
     this.requireDouble(data, "StoppingRange", this.stoppingRange,
         (DoubleValidator) DoubleSingleValidator.greater(-0.01),
         BuilderDescriptorState.Stable, "Stopping range from stored position", null);
+
+    this.getBoolean(data, "UseCenterOfBlock", this::setUseCenterOfBlock, false,
+        BuilderDescriptorState.Experimental, "Whether to seek the center of the stored block position", null);
+
     this.provideFeature(Feature.Position);
     return this;
   }
@@ -59,6 +64,14 @@ public class BuilderReachNextTargetInSnapshotSensor extends BuilderSensorBase {
 
   public double getStoppingRange(BuilderSupport support) {
     return this.stoppingRange.get(support.getExecutionContext());
+  }
+
+  private void setUseCenterOfBlock(boolean useCenterOfBlock) {
+    this.useCenterOfBlock = useCenterOfBlock;
+  }
+
+  public boolean getUseCenterOfBlock(BuilderSupport support) {
+    return Boolean.TRUE.equals(this.useCenterOfBlock);
   }
 
 }

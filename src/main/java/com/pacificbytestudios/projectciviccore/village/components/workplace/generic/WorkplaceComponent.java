@@ -48,6 +48,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.benchPos)
       .add()
 
+      .append(new KeyedCodec<>("BenchAccessPosition", Vector3i.CODEC),
+          (obj, value) -> obj.benchAccessPos = value,
+          (obj) -> obj.benchAccessPos)
+      .add()
+
       .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           (obj) -> obj.prefabAnchor)
@@ -123,6 +128,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private StructureType workingPlaceType;
   private WorkType[] workerType;
   private Vector3i benchPos;
+  private Vector3i benchAccessPos;
   private Vector3i prefabAnchor;
 
   private EntityRef villageRef;
@@ -158,6 +164,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
   public void setBenchPos(Vector3i benchPos) {
     this.benchPos = benchPos;
+  }
+
+  public Vector3i getBenchAccessPos() {
+    return this.benchAccessPos != null ? this.benchAccessPos : this.benchPos;
+  }
+
+  public void setBenchAccessPos(Vector3i benchAccessPos) {
+    this.benchAccessPos = benchAccessPos;
   }
 
   public Vector3i getPrefabAnchor() {
@@ -261,6 +275,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.uuid = this.uuid;
     component.workingPlaceType = this.workingPlaceType;
     component.benchPos = this.benchPos;
+    component.benchAccessPos = this.benchAccessPos;
     component.villageRef = this.villageRef;
     component.workplaceRef = this.workplaceRef;
     component.workers = new HashSet<>(this.workers);
@@ -280,6 +295,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         "\n uuid=" + uuid + "," +
         "\n workingPlaceType=" + workingPlaceType + "," +
         "\n benchPos=" + benchPos + "," +
+        "\n benchAccessPos=" + benchAccessPos + "," +
         "\n prefabAnchor=" + prefabAnchor + "," +
         "\n villageHeartLocation=" + villageRef + "," +
         "\n workspaceLocation=" + workplaceRef + "," +

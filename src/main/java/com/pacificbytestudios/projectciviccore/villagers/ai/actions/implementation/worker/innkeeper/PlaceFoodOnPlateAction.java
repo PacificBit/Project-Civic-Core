@@ -79,6 +79,7 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
 
     interactable.setReady(true);
     interactable.release();
+    chunk.markNeedsSaving();
     return true;
   }
 

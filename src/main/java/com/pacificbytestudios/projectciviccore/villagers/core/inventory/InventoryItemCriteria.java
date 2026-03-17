@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.inventory;
 
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
+
 public final class InventoryItemCriteria {
   private enum MatchMode {
     EXACT,
@@ -43,6 +45,10 @@ public final class InventoryItemCriteria {
       this.matchMode = MatchMode.EXACT;
       this.normalizedPattern = itemId;
     }
+  }
+
+  public ItemRequestCriterion toVillageRequestCriterion() {
+    return new ItemRequestCriterion(this.itemId, this.filterIn, this.count);
   }
 
   public String getItemId() {

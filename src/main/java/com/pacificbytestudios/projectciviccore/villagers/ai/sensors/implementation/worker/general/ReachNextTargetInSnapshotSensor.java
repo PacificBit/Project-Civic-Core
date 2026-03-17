@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -13,6 +14,7 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -21,6 +23,7 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   private final PositionProvider positionProvider = new PositionProvider();
   private String[] blockIds;
   private double stoppingRange;
+  private boolean useCenterOfBlock;
 
   public ReachNextTargetInSnapshotSensor(
       BuilderReachNextTargetInSnapshotSensor builderSensorBase,
@@ -29,6 +32,7 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
     this.blockIds = builderSensorBase.getBlockIds(support);
     this.stoppingRange = builderSensorBase.getStoppingRange(support);
     this.stoppingRange = this.stoppingRange * this.stoppingRange;
+    this.useCenterOfBlock = builderSensorBase.getUseCenterOfBlock(support);
   }
 
   @Override
@@ -74,14 +78,18 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
       return false;
     }
 
-    double distanceFromBlock = transform.getPosition().distanceSquaredTo(target);
+    Vector3d targetPosition = this.useCenterOfBlock
+        ? Utils.centerOf(target).toVector3d()
+        : target.toVector3d();
+
+    double distanceFromBlock = transform.getPosition().distanceSquaredTo(targetPosition);
 
     if (distanceFromBlock <= this.stoppingRange) {
       this.positionProvider.clear();
       return false;
     }
 
-    this.positionProvider.setTarget(target.toVector3d());
+    this.positionProvider.setTarget(targetPosition);
     return true;
   }
 }

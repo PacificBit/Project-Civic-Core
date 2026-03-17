@@ -12,7 +12,7 @@ public enum Crops {
   WHEAT(
       "Plant_Seeds_Wheat", "Plant_Crop_Wheat_Block",
       "Plant_Seeds_Wheat_Eternal", "Plant_Crop_Wheat_Block_Eternal"),
-  LATTUCE(
+  LETTUCE(
       "Plant_Seeds_Lettuce", "Plant_Crop_Lettuce_Block",
       "Plant_Seeds_Lettuce_Eternal", "Plant_Crop_Lettuce_Block_Eternal"),
   CARROT(
@@ -83,5 +83,9 @@ public enum Crops {
 
   public static String getBlockFromSeed(String seedId) {
     return SEED_TO_BLOCK.get(seedId);
+  }
+
+  public String getSeedId() {
+    return this.seedId;
   }
 }

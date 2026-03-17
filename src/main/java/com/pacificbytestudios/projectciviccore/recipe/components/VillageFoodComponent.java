@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.food.components;
+package com.pacificbytestudios.projectciviccore.recipe.components;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;

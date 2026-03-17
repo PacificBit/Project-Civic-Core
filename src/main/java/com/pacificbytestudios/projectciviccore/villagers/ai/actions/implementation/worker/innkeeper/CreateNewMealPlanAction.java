@@ -1,8 +1,8 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.innkeeper;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,9 +10,9 @@ import java.util.Set;
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.InternalContainerUtilMaterial;
@@ -25,7 +25,7 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.food.registry.RecipeRegistry;
+import com.pacificbytestudios.projectciviccore.recipe.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
@@ -235,7 +235,7 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
   }
 
   private List<Map.Entry<String, CraftingRecipe>> getOrderedRecipes(int recipeLevel) {
-    return RecipeRegistry.getLevelDependantCraftingRecipe(recipeLevel)
+    return FoodRecipeRegistry.getLevelDependantCraftingRecipe(recipeLevel)
         .entrySet()
         .stream()
         .sorted(Map.Entry.comparingByKey())
@@ -244,9 +244,9 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
 
   private int countReadyMealsInStorage(List<ItemContainer> storageSnapshots) {
     Set<String> mealItemIds = new HashSet<>();
-    mealItemIds.addAll(RecipeRegistry.getLowFoodQualityRecipe().keySet());
-    mealItemIds.addAll(RecipeRegistry.getMidFoodQualityRecipe().keySet());
-    mealItemIds.addAll(RecipeRegistry.getTopFoodQualityRecipe().keySet());
+    mealItemIds.addAll(FoodRecipeRegistry.getLowFoodQualityRecipe().keySet());
+    mealItemIds.addAll(FoodRecipeRegistry.getMidFoodQualityRecipe().keySet());
+    mealItemIds.addAll(FoodRecipeRegistry.getTopFoodQualityRecipe().keySet());
 
     int readyMeals = 0;
     for (ItemContainer storageSnapshot : storageSnapshots) {

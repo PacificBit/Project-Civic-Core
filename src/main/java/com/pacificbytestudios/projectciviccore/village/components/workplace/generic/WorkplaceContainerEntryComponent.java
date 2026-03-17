@@ -26,10 +26,16 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
           (obj) -> obj.position)
       .add()
 
+      .append(new KeyedCodec<>("AccessPosition", Vector3i.CODEC),
+          (obj, value) -> obj.accessPosition = value,
+          (obj) -> obj.accessPosition)
+      .add()
+
       .build();
 
   private UUID uuid;
   private Vector3i position;
+  private Vector3i accessPosition;
 
   public UUID getUuid() {
     return uuid;
@@ -47,11 +53,20 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
     this.position = position;
   }
 
+  public Vector3i getAccessPosition() {
+    return this.accessPosition != null ? this.accessPosition : this.position;
+  }
+
+  public void setAccessPosition(Vector3i accessPosition) {
+    this.accessPosition = accessPosition;
+  }
+
   @Override
   public WorkplaceContainerEntryComponent clone() {
     WorkplaceContainerEntryComponent container = new WorkplaceContainerEntryComponent();
     container.uuid = this.uuid;
     container.position = this.position;
+    container.accessPosition = this.accessPosition;
     return container;
   }
 
@@ -64,6 +79,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
     return "WorkplaceContainerEntryComponent{\n" +
         "uuid=" + uuid +
         "\n, position=" + position +
+        "\n, accessPosition=" + accessPosition +
         '}';
   }
 }

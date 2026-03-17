@@ -1,4 +1,3 @@
-
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
@@ -66,6 +65,8 @@ public class FarmSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
+    workplaceComponent.setBenchPos(workplaceBlockPosition);
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.FARMER });
     workplaceComponent.setWorkingArea(new ClaimedAreaComponent(WORKING_AREA_OFFSET, position));
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
@@ -97,6 +98,7 @@ public class FarmSpawner {
     workplaceComponent.setPrefabAnchor(position.clone());
 
     container.setPosition(containerPosition);
+    container.setAccessPosition(getContainerAccessPosition(containerPosition));
     container.setUuid(UUID.randomUUID());
 
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
@@ -171,6 +173,14 @@ public class FarmSpawner {
 
   private static Vector3i getContainerPosition(Vector3i workplaceBlockPosition) {
     return workplaceBlockPosition.clone().add(Vector3i.EAST.clone().scale(2));
+  }
+
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition) {
+    return workplaceBlockPosition.clone().add(Vector3i.SOUTH);
+  }
+
+  private static Vector3i getContainerAccessPosition(Vector3i containerPosition) {
+    return containerPosition.clone().add(Vector3i.SOUTH);
   }
 
   private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {

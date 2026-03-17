@@ -17,12 +17,15 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.farm.FarmComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestTracker;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
+import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderAskStorageForResourcesAction;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
@@ -48,7 +51,7 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
       double deltaTime,
       Store<EntityStore> store) {
     if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
-      return true;
+      return false;
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
@@ -107,10 +110,11 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     if (this.criteriaSourceType.equals(SourceType.MANUAL)) {
       buildManualCriteria(request);
     } else {
-      buildWorkplaceCriteria(request, workplace);
+      buildWorkplaceItemCriteria(request, workplace);
+      // buildWorkplaceCriteria(request, workplace);
     }
 
-    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainerPositions());
+    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainerAccessPositions());
     return request;
   }
 
@@ -124,28 +128,22 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     }
   }
 
-  private void buildWorkplaceCriteria(
+  private void buildWorkplaceItemCriteria(
       VillageStorageRequest request,
       WorkplaceComponent workplace) {
+
     Ref<ChunkStore> workplaceRef = workplace.getWorkplaceRef().getRef();
     Store<ChunkStore> chunkStore = workplaceRef.getStore();
 
-    switch (workplace.getWorkplaceType()) {
-      case TAVERN -> this.buildTavernItemCriteria(request, workplaceRef, chunkStore);
-      default -> throw new IllegalArgumentException("Workplace not supported yet: " + workplace.getWorkplaceType());
-    }
-  }
-
-  private void buildTavernItemCriteria(VillageStorageRequest request, Ref<ChunkStore> ref,
-      Store<ChunkStore> chunkStore) {
-    TavernComponent tavern = chunkStore.getComponent(ref, TavernComponent.getComponentType());
-    if (tavern == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[AskStorageForResourcesAction] Could not fetch tavern component for workplace request");
+    IWorkplaceMissingResource missingResourceComponent = require(getProperComponent(
+        chunkStore,
+        workplaceRef,
+        workplace.getWorkplaceType()), "missing workplace resource component");
+    if (missingResourceComponent == null) {
       return;
     }
 
-    Set<ItemRequestCriterion> criterions = tavern.getMissingResources();
+    Set<ItemRequestCriterion> criterions = missingResourceComponent.getMissingResources();
     if (criterions == null || criterions.isEmpty()) {
       ProjectCivicCore.LOGGER.atWarning()
           .log("[AskStorageForResourcesAction] Asked for tavern resources but no missing criteria are present");
@@ -208,6 +206,17 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     }
 
     workplace.setLastStorageRequest(request != null ? request.clone() : null);
+  }
+
+  private IWorkplaceMissingResource getProperComponent(
+      Store<ChunkStore> chunkStore,
+      Ref<ChunkStore> ref,
+      StructureType workplaceType) {
+    return switch (workplaceType) {
+      case TAVERN -> chunkStore.getComponent(ref, TavernComponent.getComponentType());
+      case FARM -> chunkStore.getComponent(ref, FarmComponent.getComponentType());
+      default -> throw new IllegalArgumentException("Workplace type '" + workplaceType + "' not supported!");
+    };
   }
 
   private void persistWorkplaceComponent(Ref<ChunkStore> workplaceRef, WorkplaceComponent workplace) {

@@ -13,14 +13,17 @@ import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderFactory;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.VillageTaskQueueCodecs;
-import com.pacificbytestudios.projectciviccore.food.components.VillageFoodComponent;
-import com.pacificbytestudios.projectciviccore.food.registry.RecipeRegistry;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.recipe.components.VillageFoodComponent;
+import com.pacificbytestudios.projectciviccore.recipe.registry.CropRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.recipe.registry.FoodRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.recipe.registry.ToolRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.farm.FarmComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
@@ -39,10 +42,13 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.gen
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderMountMountableAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderSetMissingResources;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderUnmountMountableAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderAskStorageForResourcesAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderCraftToolAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderWorkplaceStorageTargetsSnapshotAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderCraftSeedsAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderHarvestCropAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderPlantSeedAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderTillSoilAction;
@@ -97,6 +103,7 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private ComponentType<ChunkStore, VillageFoodComponent> villageFoodComponentType;
   private ComponentType<ChunkStore, TavernComponent> tavernComponentType;
+  private ComponentType<ChunkStore, FarmComponent> farmComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
 
@@ -183,6 +190,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         TavernComponent.class,
         "TavernComponent",
         TavernComponent.CODEC);
+
+    this.farmComponentType = chunkRegistry.registerComponent(
+        FarmComponent.class,
+        "FarmComponent",
+        FarmComponent.CODEC);
 
     this.workplaceInteractablesMapComponentType = chunkRegistry.registerComponent(
         WorkplaceInteractablesMapComponent.class,
@@ -357,6 +369,18 @@ public final class ProjectCivicCore extends JavaPlugin {
         "Unmount",
         BuilderUnmountMountableAction::new);
 
+    npcPlugin.registerCoreComponentType(
+        "SetMissingResources",
+        BuilderSetMissingResources::new);
+
+    npcPlugin.registerCoreComponentType(
+        "CraftSeeds",
+        BuilderCraftSeedsAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "CraftTool",
+        BuilderCraftToolAction::new);
+
     // ===========================
     // Extra
     // ===========================
@@ -376,7 +400,9 @@ public final class ProjectCivicCore extends JavaPlugin {
   @Override
   protected void start0() {
     super.start0();
-    RecipeRegistry.initizalize();
+    FoodRecipeRegistry.initizalize();
+    CropRecipeRegistry.initizalize();
+    ToolRecipeRegistry.initizalize();
   }
 
   public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
@@ -429,6 +455,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, TavernComponent> getTavernComponentType() {
     return this.tavernComponentType;
+  }
+
+  public ComponentType<ChunkStore, FarmComponent> getFarmComponentType() {
+    return this.farmComponentType;
   }
 
   public ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> getWorkplaceInteractablesMapComponentType() {

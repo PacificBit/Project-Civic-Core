@@ -248,7 +248,7 @@
                         {
                           "Type": "Inventory",
                           "Items": [
-                            "Tool_Hoe_*"
+                            "Village_Tool_Hoe_*"
                           ]
                         }
                       ]
@@ -261,11 +261,11 @@
                       },
                       "Actions": [
                         {
-                          "Type": "ClearSnapshotGroup",
-                          "GroupName": "Tillable_Terrain"
+                          "Type": "State",
+                          "State": "RequestStorage.Hoe"
                         }
                       ],
-                      "$Comment": "Clear Snapshot data of Tillable_Terrain"
+                      "$Comment": "Clear Snapshot data of Plantable_Terrain"
                     }
                   ],
                   "$Comment": "If has NO Hoe in inventory"
@@ -282,7 +282,7 @@
                       "Actions": [
                         {
                           "Type": "EquipItemFromInventory",
-                          "ItemToEquip": "Tool_Hoe_"
+                          "ItemToEquip": "Village_Tool_Hoe_"
                         }
                       ],
                       "$Comment": "Equip Hoe",
@@ -294,7 +294,8 @@
                         "BlockIds": [
                           "Tillable_Terrain"
                         ],
-                        "StoppingRange": 1.3
+                        "StoppingRange": 1.3,
+                        "UseCenterOfBlock": true
                       },
                       "$Comment": "Reach Tillable Block",
                       "BodyMotion": {
@@ -362,8 +363,8 @@
                       },
                       "Actions": [
                         {
-                          "Type": "ClearSnapshotGroup",
-                          "GroupName": "Plantable_Terrain"
+                          "Type": "State",
+                          "State": "RequestStorage.Seeds"
                         }
                       ],
                       "$Comment": "Clear Snapshot data of Plantable_Terrain"
@@ -395,7 +396,8 @@
                         "BlockIds": [
                           "Plantable_Terrain"
                         ],
-                        "StoppingRange": 1
+                        "StoppingRange": 1,
+                        "UseCenterOfBlock": true
                       },
                       "$Comment": "Reach Plantable Block",
                       "BodyMotion": {
@@ -449,7 +451,8 @@
                     "BlockIds": [
                       "Harvestable_Crop"
                     ],
-                    "StoppingRange": 1
+                    "StoppingRange": 1,
+                    "UseCenterOfBlock": true
                   },
                   "$Comment": "Reach Plantable Block",
                   "BodyMotion": {
@@ -496,7 +499,7 @@
                         {
                           "Type": "Inventory",
                           "Items": [
-                            "Tool_Watering_Can"
+                            "Village_Tool_Watering_Can"
                           ]
                         }
                       ]
@@ -509,11 +512,11 @@
                       },
                       "Actions": [
                         {
-                          "Type": "ClearSnapshotGroup",
-                          "GroupName": "Waterable_Terrain"
+                          "Type": "State",
+                          "State": "RequestStorage.WateringCan"
                         }
                       ],
-                      "$Comment": "Clear Snapshot data of Waterable_Terrain"
+                      "$Comment": "Clear Snapshot data of Plantable_Terrain"
                     }
                   ],
                   "$Comment": "If has NO Watering Can in inventory"
@@ -531,7 +534,7 @@
                       "Actions": [
                         {
                           "Type": "EquipItemFromInventory",
-                          "ItemToEquip": "Tool_Watering_Can"
+                          "ItemToEquip": "Village_Tool_Watering_Can"
                         }
                       ],
                       "$Comment": "Equip Watering Can",
@@ -543,7 +546,8 @@
                         "BlockIds": [
                           "Waterable_Terrain"
                         ],
-                        "StoppingRange": 1.5
+                        "StoppingRange": 1.5,
+                        "UseCenterOfBlock": true
                       },
                       "$Comment": "Reach Tillable Block",
                       "BodyMotion": {
@@ -629,6 +633,631 @@
     {
       "Sensor": {
         "Type": "State",
+        "State": "RequestStorage"
+      },
+      "$Comment": "Storage request",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Seeds"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Add to snapshot the containers",
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 1.5
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 1.5,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch materials",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Seeds*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Plant_Seeds*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Seeds in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Working.WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Ingredient_Life_Essence*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Ingredient_Life_Essence in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Seeds"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "SetMissingResources",
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Seeds*",
+                      "FilterIn": true,
+                      "Count": 100
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": 100
+                    }
+                  ],
+                  "ResetMissingResources": true
+                },
+                {
+                  "Type": "AskStorageToDeliveResources",
+                  "SourceType": "WORKPLACE"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WaitForSeedsResource"
+                }
+              ],
+              "$Comment": "Set missing resources"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WaitForSeedsResource"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasStoragePendingRequest"
+                }
+              },
+              "$Comment": "If no pending request",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Seeds"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Hoe"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Add to snapshot the containers",
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 1.5
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 1.5,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch materials",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Hoe*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "*Hoe*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Hoe in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Working.WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Ingredient_Life_Essence*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Ingredient_Life_Essence in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Hoe"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "SetMissingResources",
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Hoe*",
+                      "FilterIn": true,
+                      "Count": 1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": 20
+                    }
+                  ],
+                  "ResetMissingResources": true
+                },
+                {
+                  "Type": "AskStorageToDeliveResources",
+                  "SourceType": "WORKPLACE"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WaitForHoeResource"
+                }
+              ],
+              "$Comment": "Set missing resources"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WaitForHoeResource"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasStoragePendingRequest"
+                }
+              },
+              "$Comment": "If no pending request",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".Hoe"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WateringCan"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Add to snapshot the containers",
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 1.5
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 1.5,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch materials",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Tool_Watering_Can*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Tool_Watering_Can*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Watering Can in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Working.WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Ingredient_Life_Essence*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Ingredient_Life_Essence in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.WateringCan"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "SetMissingResources",
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Tool_Watering_Can*",
+                      "FilterIn": true,
+                      "Count": 1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": 20
+                    }
+                  ],
+                  "ResetMissingResources": true
+                },
+                {
+                  "Type": "AskStorageToDeliveResources",
+                  "SourceType": "WORKPLACE"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WaitForWateringCanResource"
+                }
+              ],
+              "$Comment": "Set missing resources"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WaitForWateringCanResource"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasStoragePendingRequest"
+                }
+              },
+              "$Comment": "If no pending request",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WateringCan"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "Craft"
+      },
+      "$Comment": "Storage request",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Seeds"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "CRAFTING SEEDS"
+            },
+            {
+              "Type": "CraftSeeds"
+            },
+            {
+              "Type": "Timeout",
+              "Delay": [
+                4,
+                6
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "WorkCooldown"
+              }
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Hoe"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "CRAFTING HOE"
+            },
+            {
+              "Type": "CraftTool",
+              "ToolType": "HOE",
+              "Once": true
+            },
+            {
+              "Type": "Timeout",
+              "Delay": [
+                4,
+                6
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "WorkCooldown"
+              }
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WateringCan"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "CRAFTING HOE"
+            },
+            {
+              "Type": "CraftTool",
+              "ToolType": "WATERING_CAN",
+              "Once": true
+            },
+            {
+              "Type": "Timeout",
+              "Delay": [
+                4,
+                6
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "WorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
         "State": "WorkCooldown"
       },
       "$Comment": "After all the steps are done",
@@ -650,8 +1279,8 @@
           "Sensor": {
             "Type": "QueryDirtyInventorySensor",
             "ExcludeItemTypes": [
-              "*Watering_Can*",
-              "Tool_Hoe*",
+              "*Watering_Can",
+              "Village_Tool_Hoe*",
               "*Seeds*"
             ]
           },
@@ -713,12 +1342,12 @@
                   "ConsumeTargetOnFail": true,
                   "ItemCriteria": [
                     {
-                      "ItemId": "Tool_Hoe*",
+                      "ItemId": "Village_Tool_Hoe*",
                       "FilterIn": false,
                       "Count": -1
                     },
                     {
-                      "ItemId": "*Watering_Can*",
+                      "ItemId": "Village_Tool_Watering_Can*",
                       "FilterIn": false,
                       "Count": -1
                     },
@@ -732,9 +1361,9 @@
                 {
                   "Type": "AskClearWorkplaceStorage",
                   "ExcludedItemTypes": [
-                    "Tool_Hoe*",
+                    "Village_Tool_Hoe*",
                     "*Seeds*",
-                    "*Watering_Can"
+                    "Village_Tool_Watering_Can"
                   ],
                   "Once": true
                 }
@@ -749,9 +1378,9 @@
                 {
                   "Type": "AskClearWorkplaceStorage",
                   "ExcludedItemTypes": [
-                    "Tool_Hoe*",
+                    "Village_Tool_Hoe*",
                     "*Seeds*",
-                    "*Watering_Can"
+                    "Village_Tool_Watering_Can"
                   ],
                   "Once": true
                 }
@@ -798,7 +1427,8 @@
               "Type": "ScanWorkArea"
             }
           ],
-          "Continue": true
+          "Continue": true,
+          "$Comment": "Scan Work Area"
         },
         {
           "Sensor": {
@@ -809,7 +1439,8 @@
               "Type": "State",
               "State": "Working.WorkLoop"
             }
-          ]
+          ],
+          "$Comment": "Start work loop"
         }
       ]
     }

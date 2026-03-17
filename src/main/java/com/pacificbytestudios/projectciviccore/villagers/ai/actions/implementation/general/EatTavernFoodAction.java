@@ -15,7 +15,7 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
-import com.pacificbytestudios.projectciviccore.food.components.VillageFoodComponent;
+import com.pacificbytestudios.projectciviccore.recipe.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;

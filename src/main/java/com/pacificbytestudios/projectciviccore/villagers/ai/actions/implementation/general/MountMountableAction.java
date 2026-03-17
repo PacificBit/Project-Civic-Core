@@ -40,7 +40,7 @@ public class MountMountableAction extends VillagerActionBase {
       double deltaTime,
       Store<EntityStore> store) {
     if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
-      return true;
+      return false;
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 

@@ -52,7 +52,7 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
       double deltaTime,
       Store<EntityStore> store) {
     if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
-      return true;
+      return false;
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
@@ -171,7 +171,7 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
       request.addItemCriteria(criteria);
     }
 
-    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainerPositions());
+    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainerAccessPositions());
 
     return request;
   }

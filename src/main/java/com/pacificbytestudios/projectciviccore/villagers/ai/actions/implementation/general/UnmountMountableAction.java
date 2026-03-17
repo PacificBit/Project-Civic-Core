@@ -25,11 +25,10 @@ public class UnmountMountableAction extends VillagerActionBase {
       double deltaTime,
       Store<EntityStore> store) {
     if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
-      return true;
+      return false;
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
-    System.out.println("Dismantlying");
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
     WorkplaceInteractablesMapComponent tavernInteractables = this.getVillageTavernInteractibleComponent(ref, store);
     if (uuidComponent != null && tavernInteractables != null) {

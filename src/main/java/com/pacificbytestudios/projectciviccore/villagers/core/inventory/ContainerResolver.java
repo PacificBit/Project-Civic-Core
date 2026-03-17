@@ -50,7 +50,11 @@ public class ContainerResolver {
         pos.z - FillerBlockUtil.unpackZ(filler));
   }
 
-  public static ResolvedContainer resolveContainerAt(World world, Vector3i pos) {
+  private static ResolvedContainer resolveContainerAtExact(World world, Vector3i pos) {
+    if (world == null || pos == null) {
+      return null;
+    }
+
     Vector3i basePos = resolveBaseBlockPosition(world, pos);
     if (basePos == null) {
       return null;
@@ -75,6 +79,33 @@ public class ContainerResolver {
     }
 
     return new ResolvedContainer(basePos, blockRef, containerBlock);
+  }
+
+  public static ResolvedContainer resolveContainerAt(World world, Vector3i pos) {
+    ResolvedContainer resolved = resolveContainerAtExact(world, pos);
+    if (resolved != null) {
+      return resolved;
+    }
+
+    if (pos == null) {
+      return null;
+    }
+
+    Vector3i[] adjacentPositions = new Vector3i[] {
+        pos.clone().add(Vector3i.NORTH),
+        pos.clone().add(Vector3i.SOUTH),
+        pos.clone().add(Vector3i.EAST),
+        pos.clone().add(Vector3i.WEST)
+    };
+
+    for (Vector3i adjacentPosition : adjacentPositions) {
+      resolved = resolveContainerAtExact(world, adjacentPosition);
+      if (resolved != null) {
+        return resolved;
+      }
+    }
+
+    return null;
   }
 
 }

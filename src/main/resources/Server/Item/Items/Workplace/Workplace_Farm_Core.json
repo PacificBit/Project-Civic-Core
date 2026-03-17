@@ -47,7 +47,8 @@
           "Type": "Farm"
         },
         "WorkplaceSpawnComponent": {},
-        "WorkplaceInteractables": {}
+        "WorkplaceInteractables": {},
+        "FarmComponent": {}
       }
     }
   },

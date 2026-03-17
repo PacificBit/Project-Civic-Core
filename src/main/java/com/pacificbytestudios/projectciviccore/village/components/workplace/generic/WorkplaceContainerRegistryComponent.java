@@ -52,6 +52,13 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
         .toList();
   }
 
+  public List<Vector3i> getAllContainerAccessPositions() {
+    return containers.entrySet()
+        .stream()
+        .map(entry -> entry.getValue().getAccessPosition())
+        .toList();
+  }
+
   public void registerContainer(UUID uuid, WorkplaceContainerEntryComponent container) {
     this.containers.put(uuid, container);
   }

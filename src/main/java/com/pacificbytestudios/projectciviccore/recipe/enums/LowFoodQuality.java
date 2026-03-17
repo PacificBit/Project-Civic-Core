@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.food.enums;
+package com.pacificbytestudios.projectciviccore.recipe.enums;
 
 import java.util.function.Supplier;
 

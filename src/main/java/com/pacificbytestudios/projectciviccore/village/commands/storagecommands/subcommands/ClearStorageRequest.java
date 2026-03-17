@@ -125,7 +125,7 @@ public class ClearStorageRequest extends CommandBase {
         request.addItemCriteria(criteria);
       }
 
-      request.setTargetsWorkplaceStorage(closestWorkplace.getStorage().getAllContainerPositions());
+      request.setTargetsWorkplaceStorage(closestWorkplace.getStorage().getAllContainerAccessPositions());
 
       EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(
           request);

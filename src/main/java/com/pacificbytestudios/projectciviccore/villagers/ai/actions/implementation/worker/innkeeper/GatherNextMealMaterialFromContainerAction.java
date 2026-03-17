@@ -24,7 +24,7 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.food.registry.RecipeRegistry;
+import com.pacificbytestudios.projectciviccore.recipe.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderGatherNextMealMaterialFromContainerAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.WorkplaceStorageTargetsSnapshotAction;
@@ -97,7 +97,7 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
       return this.finish(role, false);
     }
 
-    CraftingRecipe recipe = RecipeRegistry.getRecipe(mealToPrepare);
+    CraftingRecipe recipe = FoodRecipeRegistry.getRecipe(mealToPrepare);
     List<MaterialQuantity> neededMaterials = CraftingManager.getInputMaterials(recipe, 1);
 
     ResolvedContainer container = ContainerResolver.resolveContainerAt(world, containerCoords);

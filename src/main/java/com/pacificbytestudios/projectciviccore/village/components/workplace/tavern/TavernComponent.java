@@ -2,6 +2,7 @@ package com.pacificbytestudios.projectciviccore.village.components.workplace.tav
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -17,8 +18,9 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
+import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
 
-public class TavernComponent implements Component<ChunkStore> {
+public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissingResource {
   public static final BuilderCodec<TavernComponent> CODEC = BuilderCodec
       .builder(TavernComponent.class, TavernComponent::new)
 
@@ -108,18 +110,27 @@ public class TavernComponent implements Component<ChunkStore> {
     this.assignedRecipesToWorker.put(workerId, recipe);
   }
 
+  @Override
   public Set<ItemRequestCriterion> getMissingResources() {
     return missingResources;
   }
 
+  @Override
+  public void setMissingResource(List<ItemRequestCriterion> criterion) {
+    this.missingResources.addAll(criterion);
+  }
+
+  @Override
   public void newMissingResouceBuffer() {
     this.missingResources = new HashSet<>();
   }
 
+  @Override
   public void addMissingResource(ItemRequestCriterion criterion) {
     this.missingResources.add(criterion);
   }
 
+  @Override
   public void resetMissingResources() {
     this.newMissingResouceBuffer();
   }
