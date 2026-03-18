@@ -1,16 +1,19 @@
-package com.pacificbytestudios.projectciviccore.recipe.enums;
+package com.pacificbytestudios.projectciviccore.registry.enums;
 
 import java.util.function.Supplier;
 
 import com.pacificbytestudios.projectciviccore.villagers.enums.Crops;
 
-public enum LowCropQuality implements Supplier<String> {
+public enum TopCropQuality implements Supplier<String> {
+  PUMPKIN(Crops.PUMPKIN),
   WHEAT(Crops.WHEAT),
-  CORN(Crops.CORN);
+  CORN(Crops.CORN),
+  LETTUCE(Crops.LETTUCE),
+  TOMATO(Crops.TOMATO);
 
   private Crops crop;
 
-  private LowCropQuality(Crops crop) {
+  private TopCropQuality(Crops crop) {
     this.crop = crop;
   }
 

@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.recipe.components;
+package com.pacificbytestudios.projectciviccore.registry.components;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;

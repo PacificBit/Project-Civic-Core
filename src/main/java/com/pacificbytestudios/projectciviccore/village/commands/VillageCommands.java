@@ -8,6 +8,7 @@ import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Respawn;
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Spawn;
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.State;
+import com.pacificbytestudios.projectciviccore.village.commands.housingcommands.Housing;
 import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.Storage;
 import com.pacificbytestudios.projectciviccore.village.commands.villagersubcommands.Villager;
 import com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.Workplace;
@@ -20,6 +21,7 @@ public class VillageCommands extends AbstractCommandCollection {
     this.addSubCommand(new Workplace());
     this.addSubCommand(new Storage());
     this.addSubCommand(new Villager());
+    this.addSubCommand(new Housing());
     this.addSubCommand(new Dump());
     this.addSubCommand(new Spawn());
     this.addSubCommand(new Despawn());

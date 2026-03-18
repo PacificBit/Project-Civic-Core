@@ -22,6 +22,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerMealType;
 
 public class VillagerComponent implements Component<EntityStore> {
@@ -38,8 +39,14 @@ public class VillagerComponent implements Component<EntityStore> {
       .add()
 
       .append(new KeyedCodec<>("BedPosition", Vector3i.CODEC),
-          (obj, value) -> obj.bedPosition = value,
-          (obj) -> obj.bedPosition)
+          (obj, value) -> obj.setBedPosition(value),
+          (obj) -> obj.getBedPosition())
+      .add()
+
+      .append(new KeyedCodec<>("HousingData",
+          VillagerHousingComponent.CODEC),
+          (obj, value) -> obj.housingData = value,
+          (obj) -> obj.housingData)
       .add()
 
       .append(new KeyedCodec<>("WorkerData",
@@ -61,7 +68,7 @@ public class VillagerComponent implements Component<EntityStore> {
       .build();
 
   private EntityRef villageHeartLocation;
-  private Vector3i bedPosition;
+  private VillagerHousingComponent housingData;
   private VillagerWorkerComponent workerData;
   private Instant lastLunchMealTime;
   private Instant lastDinnerMealTime;
@@ -69,11 +76,15 @@ public class VillagerComponent implements Component<EntityStore> {
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
   public Vector3i getBedPosition() {
-    return bedPosition;
+    return this.housingData != null ? this.housingData.getBedPosition() : null;
   }
 
   public void setBedPosition(Vector3i bedPosition) {
-    this.bedPosition = bedPosition;
+    if (this.housingData == null && bedPosition == null) {
+      return;
+    }
+
+    this.ensureHousingData().setBedPosition(bedPosition);
   }
 
   public void setVillageHeartLocation(EntityRef location) {
@@ -86,6 +97,22 @@ public class VillagerComponent implements Component<EntityStore> {
 
   public VillagerWorkerComponent getWorkerData() {
     return workerData;
+  }
+
+  public VillagerHousingComponent getHousingData() {
+    return this.housingData;
+  }
+
+  public void setHousingData(VillagerHousingComponent housingData) {
+    this.housingData = housingData;
+  }
+
+  public HouseComponent getHouse() {
+    return this.housingData != null ? this.housingData.getHouse() : null;
+  }
+
+  public void setHouse(HouseComponent house) {
+    this.ensureHousingData().setHouse(house);
   }
 
   public void setWorkerData(VillagerWorkerComponent workerData) {
@@ -136,7 +163,7 @@ public class VillagerComponent implements Component<EntityStore> {
   public VillagerComponent clone() {
     VillagerComponent component = new VillagerComponent();
     component.villageHeartLocation = this.villageHeartLocation == null ? null : this.villageHeartLocation.clone();
-    component.bedPosition = this.bedPosition;
+    component.housingData = this.housingData == null ? null : this.housingData.clone();
     component.workerData = this.workerData == null ? null : this.workerData.clone();
     component.lastLunchMealTime = this.lastLunchMealTime;
     component.lastDinnerMealTime = this.lastDinnerMealTime;
@@ -147,12 +174,20 @@ public class VillagerComponent implements Component<EntityStore> {
   public String toString() {
     return "VillagerComponent{" +
         "villageHeartLocation=" + Utils.safeToString(villageHeartLocation) +
-        ", bedPosition=" + Utils.safeToString(bedPosition) +
+        ", housingData=" + Utils.safeToString(housingData) +
         ", workerData=" + Utils.safeToString(workerData) +
         ", lastLunchMealTime=" + this.lastLunchMealTime +
         ", lastDinnerMealTime=" + this.lastDinnerMealTime +
         ", windowsCount=" + windows.size() +
         '}';
+  }
+
+  private VillagerHousingComponent ensureHousingData() {
+    if (this.housingData == null) {
+      this.housingData = new VillagerHousingComponent();
+    }
+
+    return this.housingData;
   }
 
   public static ComponentType<EntityStore, VillagerComponent> getComponentType() {

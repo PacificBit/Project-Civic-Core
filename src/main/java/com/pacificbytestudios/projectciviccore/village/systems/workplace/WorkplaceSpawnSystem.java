@@ -54,7 +54,8 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
 
-    WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
+    WorkplaceComponent workplaceComponent = store.getComponent(ref,
+        WorkplaceComponent.getComponentType());
     workplaceComponent.setBenchPos(blockPos);
     workplaceComponent.setVillageRef(villageHeartRef);
     workplaceComponent.setUuid(UUID.randomUUID());
@@ -94,7 +95,8 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
 
-    WorkplaceComponent workplaceComponent = store.getComponent(ref, WorkplaceComponent.getComponentType());
+    WorkplaceComponent workplaceComponent = store.getComponent(ref,
+        WorkplaceComponent.getComponentType());
 
     VillageTaskQueueComponent existingTaskComponent = store.getComponent(heartRef,
         VillageTaskQueueComponent.getComponentType());
@@ -105,12 +107,14 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     taskComponent.registerTask(new UnregisterWorkplaceTask(workplaceComponent.getUuid()));
 
     world.execute(() -> {
-      store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(), taskComponent);
+      store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(),
+          taskComponent);
     });
   }
 
   @Override
   public Query<ChunkStore> getQuery() {
-    return Query.and(WorkplaceComponent.getComponentType(), WorkplaceSpawnComponent.getComponentType());
+    return Query.and(WorkplaceComponent.getComponentType(),
+        WorkplaceSpawnComponent.getComponentType());
   }
 }

@@ -17,9 +17,12 @@ import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -75,6 +78,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
       .append(
           new KeyedCodec<>(
+              "HomelessRegistry",
+              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
+          (obj, value) -> obj.homelessRegistry = value,
+          obj -> obj.homelessRegistry)
+      .add()
+
+      .append(
+          new KeyedCodec<>(
               "VillagerIdToComponent",
               new MapCodec<VillagerComponent, HashMap<String, VillagerComponent>>(
                   VillagerComponent.CODEC,
@@ -126,6 +137,40 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
       .append(
           new KeyedCodec<>(
+              "HouseIdToHouse",
+              new MapCodec<HouseComponent, HashMap<String, HouseComponent>>(
+                  HouseComponent.CODEC,
+                  HashMap::new)),
+          (obj, value) -> {
+            obj.houseIdToHouse = new HashMap<>();
+            value.forEach((k, v) -> obj.houseIdToHouse.put(UUID.fromString(k), v));
+          },
+          obj -> {
+            HashMap<String, HouseComponent> encoded = new HashMap<>();
+            obj.houseIdToHouse.forEach((k, v) -> encoded.put(k.toString(), v));
+            return encoded;
+          })
+      .add()
+
+      .append(
+          new KeyedCodec<>(
+              "VillagerToHouseMap",
+              new MapCodec<UUID, HashMap<String, UUID>>(
+                  Codec.UUID_BINARY,
+                  HashMap::new)),
+          (obj, value) -> {
+            obj.villagerToHouse = new HashMap<>();
+            value.forEach((k, v) -> obj.villagerToHouse.put(UUID.fromString(k), v));
+          },
+          obj -> {
+            HashMap<String, UUID> encoded = new HashMap<>();
+            obj.villagerToHouse.forEach((k, v) -> encoded.put(k.toString(), v));
+            return encoded;
+          })
+      .add()
+
+      .append(
+          new KeyedCodec<>(
               "VillageStorageWorkplaces",
               new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
           (obj, value) -> obj.villageStorageWorkplaces = value,
@@ -150,10 +195,16 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   private Set<UUID> villagersRegistry = new HashSet<>();
   private Set<UUID> unemployedRegistry = new HashSet<>();
+  private Set<UUID> homelessRegistry = new HashSet<>();
+
   private Map<UUID, VillagerComponent> villagerIdToComponent = new HashMap<>();
 
   private Map<UUID, WorkplaceComponent> workplaceIdToWorkplace = new HashMap<>();
   private Map<UUID, UUID> villagerToWorkplace = new HashMap<>();
+
+  private Map<UUID, HouseComponent> houseIdToHouse = new HashMap<>();
+  private Map<UUID, UUID> villagerToHouse = new HashMap<>();
+
   private Set<UUID> villageStorageWorkplaces = new HashSet<>();
   private Set<UUID> villageTavernWorkplaces = new HashSet<>();
 
@@ -172,6 +223,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public Set<UUID> getVillagersRegistry() {
     return Collections.unmodifiableSet(this.villagersRegistry);
+  }
+
+  public Set<UUID> getHomelessRegistry() {
+    return Collections.unmodifiableSet(this.homelessRegistry);
+  }
+
+  public Map<UUID, HouseComponent> getHouseIdToHouse() {
+    return Collections.unmodifiableMap(this.houseIdToHouse);
   }
 
   public short getVillagerCount() {
@@ -198,6 +257,68 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public void unregisterAsUnemployed(UUID uuid) {
     this.unemployedRegistry.remove(uuid);
+  }
+
+  public void registerAsHomeless(UUID uuid) {
+    this.homelessRegistry.add(uuid);
+    this.villagerToHouse.remove(uuid);
+    VillagerComponent villagerComponent = this.villagerIdToComponent.get(uuid);
+    if (villagerComponent != null) {
+      villagerComponent.setHousingData(null);
+    }
+  }
+
+  public boolean assignHouse(UUID villager, UUID house) {
+    this.homelessRegistry.remove(villager);
+    HouseComponent houseComponent = this.houseIdToHouse.get(house);
+    assert houseComponent != null : "Assigned a house before registering the house";
+
+    UUID bed = houseComponent.assignAppartment(villager);
+    if (bed == null) {
+      return false;
+    }
+
+    Vector3i bedPosition = houseComponent.getBedPosition(bed);
+    VillagerComponent villagerComponent = this.villagerIdToComponent.get(villager);
+
+    this.villagerToHouse.put(villager, house);
+    villagerComponent.setHouse(houseComponent);
+    villagerComponent.getHousingData().setBedPosition(bedPosition);
+
+    return true;
+  }
+
+  public HouseComponent findHouseWithVacancy() {
+    for (Map.Entry<UUID, HouseComponent> house : this.houseIdToHouse.entrySet()) {
+      if (house.getValue().hasVacancy()) {
+        return house.getValue();
+      }
+    }
+    return null;
+  }
+
+  public void registerHouse(HouseComponent house) {
+    this.houseIdToHouse.put(house.getUuid(), house);
+  }
+
+  public void unregisterHouse(UUID house) {
+    HouseComponent houseComponent = this.houseIdToHouse.remove(house);
+    if (houseComponent == null || houseComponent.getAppartmentRegistry() == null) {
+      return;
+    }
+
+    houseComponent.getAppartmentRegistry().getAppartments().values().forEach(appartment -> {
+      appartment.getBeds().values().forEach(bed -> {
+        UUID owner = bed.getOwner();
+        if (owner != null) {
+          this.registerAsHomeless(owner);
+        }
+      });
+    });
+  }
+
+  public HouseComponent getHouseFromId(UUID house) {
+    return this.houseIdToHouse.get(house);
   }
 
   public VillagerComponent getVillager(UUID uuid) {
@@ -333,7 +454,9 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
     component.villagersRegistry = new HashSet<>(this.villagersRegistry);
     component.unemployedRegistry = new HashSet<>(this.unemployedRegistry);
+    component.homelessRegistry = new HashSet<>(this.homelessRegistry);
     component.villagerToWorkplace = new HashMap<>(this.villagerToWorkplace);
+    component.villagerToHouse = new HashMap<>(this.villagerToHouse);
     component.villageStorageWorkplaces = new HashSet<>(this.villageStorageWorkplaces);
     component.villageTavernWorkplaces = new HashSet<>(this.villageTavernWorkplaces);
 
@@ -341,6 +464,12 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     for (Map.Entry<UUID, WorkplaceComponent> entry : this.workplaceIdToWorkplace.entrySet()) {
       WorkplaceComponent clonedWorkplace = entry.getValue() != null ? entry.getValue().clone() : null;
       component.workplaceIdToWorkplace.put(entry.getKey(), clonedWorkplace);
+    }
+
+    component.houseIdToHouse = new HashMap<>();
+    for (Map.Entry<UUID, HouseComponent> entry : this.houseIdToHouse.entrySet()) {
+      HouseComponent clonedHouse = entry.getValue() != null ? entry.getValue().clone() : null;
+      component.houseIdToHouse.put(entry.getKey(), clonedHouse);
     }
 
     component.villagerIdToComponent = new HashMap<>();
@@ -352,9 +481,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     for (Map.Entry<UUID, UUID> entry : component.villagerToWorkplace.entrySet()) {
       UUID villagerId = entry.getKey();
       VillagerComponent villager = component.villagerIdToComponent.get(villagerId);
+      WorkplaceComponent workplace = component.workplaceIdToWorkplace.get(entry.getValue());
 
-      if (villager != null) {
-        villager.setWorkerData(villager.getWorkerData());
+      if (villager != null && villager.getWorkerData() != null) {
+        villager.getWorkerData().setWorkplace(workplace);
       }
     }
 
@@ -365,7 +495,45 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       }
     }
 
+    for (Map.Entry<UUID, UUID> entry : component.villagerToHouse.entrySet()) {
+      UUID villagerId = entry.getKey();
+      VillagerComponent villager = component.villagerIdToComponent.get(villagerId);
+      HouseComponent house = component.houseIdToHouse.get(entry.getValue());
+
+      if (villager != null && villager.getHousingData() != null) {
+        villager.getHousingData().setHouse(house);
+      }
+    }
+
+    for (UUID homelessVillagerId : component.homelessRegistry) {
+      VillagerComponent villager = component.villagerIdToComponent.get(homelessVillagerId);
+      if (villager != null) {
+        villager.setHousingData(null);
+      }
+    }
+
     return component;
+  }
+
+  @Override
+  public String toString() {
+    return "VillageHeartComponent{" +
+        "\n uuid=" + Utils.safeToString(this.uuid) + "," +
+        "\n config=" + Utils.safeToString(this.config) + "," +
+        "\n state=" + Utils.safeToString(this.state) + "," +
+        "\n level=" + this.level + "," +
+        "\n claimedArea=" + Utils.safeToString(this.claimedArea) + "," +
+        "\n villagersRegistry=" + Utils.safeToString(this.villagersRegistry) + "," +
+        "\n unemployedRegistry=" + Utils.safeToString(this.unemployedRegistry) + "," +
+        "\n homelessRegistry=" + Utils.safeToString(this.homelessRegistry) + "," +
+        "\n villagerIdToComponent=" + Utils.safeToString(this.villagerIdToComponent) + "," +
+        "\n workplaceIdToWorkplace=" + Utils.safeToString(this.workplaceIdToWorkplace) + "," +
+        "\n villagerToWorkplace=" + Utils.safeToString(this.villagerToWorkplace) + "," +
+        "\n houseIdToHouse=" + Utils.safeToString(this.houseIdToHouse) + "," +
+        "\n villagerToHouse=" + Utils.safeToString(this.villagerToHouse) + "," +
+        "\n villageStorageWorkplaces=" + Utils.safeToString(this.villageStorageWorkplaces) + "," +
+        "\n villageTavernWorkplaces=" + Utils.safeToString(this.villageTavernWorkplaces) + "," +
+        '}';
   }
 
   public static ComponentType<ChunkStore, VillageHeartComponent> getComponentType() {

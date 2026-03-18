@@ -31,7 +31,8 @@ public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
       return;
     }
 
-    BlockContext context = Utils.getWorldBlockContext(villageHeartRef, commandBuffer);
+    BlockContext context = Utils.getWorldBlockContext(villageHeartRef,
+        commandBuffer);
 
     context.chunk().getWorld().execute(() -> {
       VillageTaskQueueComponent tasksComponent = store.getComponent(villageHeartRef,
@@ -67,6 +68,7 @@ public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
 
   @Override
   public Query<ChunkStore> getQuery() {
-    return Query.and(VillageHeartComponent.getComponentType(), VillageTaskQueueComponent.getComponentType());
+    return Query.and(VillageHeartComponent.getComponentType(),
+        VillageTaskQueueComponent.getComponentType());
   }
 }

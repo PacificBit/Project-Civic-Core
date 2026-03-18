@@ -31,8 +31,8 @@ import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
-import com.pacificbytestudios.projectciviccore.village.components.beds.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 import it.unimi.dsi.fastutil.Pair;
@@ -51,18 +51,12 @@ public class SpawnVillagerTask extends AVillageTask {
           obj -> obj.spawnRadius)
       .add()
 
-      .append(new KeyedCodec<>("Bed", VillageBedComponent.CODEC),
-          (obj, value) -> obj.bed = value,
-          (obj) -> obj.bed)
-      .add()
-
       .build();
 
   private static final FastRandom random = new FastRandom();
 
   private String npcRole;
   private int spawnRadius;
-  private VillageBedComponent bed;
 
   public SpawnVillagerTask() {
   }
@@ -74,7 +68,6 @@ public class SpawnVillagerTask extends AVillageTask {
   public SpawnVillagerTask(String npcRole, int spawnRadius, VillageBedComponent bed) {
     this.npcRole = npcRole;
     this.spawnRadius = spawnRadius;
-    this.bed = bed;
   }
 
   @Override
@@ -96,14 +89,9 @@ public class SpawnVillagerTask extends AVillageTask {
     UUID uuid = uuidComponent.getUuid();
     heart.registerVillager(uuid, villagerComponent);
     heart.registerAsUnemployed(uuid);
+    heart.registerAsHomeless(uuid);
 
     villagerComponent.setVillageHeartLocation(new EntityRef(world.getName(), heartPos));
-
-    if (this.bed != null) {
-      this.bed.setOwner(uuid);
-      this.bed.setTaken(true);
-      villagerComponent.setBedPosition(this.bed.getPosition());
-    }
 
     NPCEntity npcEntity = entityStore.getComponent(npcRef, NPCEntity.getComponentType());
 

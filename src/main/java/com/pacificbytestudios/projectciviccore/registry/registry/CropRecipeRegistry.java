@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.recipe.registry;
+package com.pacificbytestudios.projectciviccore.registry.registry;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,14 +7,14 @@ import java.util.function.Supplier;
 import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.recipe.enums.LowFoodQuality;
-import com.pacificbytestudios.projectciviccore.recipe.enums.MidFoodQuality;
-import com.pacificbytestudios.projectciviccore.recipe.enums.TopFoodQuality;
+import com.pacificbytestudios.projectciviccore.registry.enums.LowCropQuality;
+import com.pacificbytestudios.projectciviccore.registry.enums.MidCropQuality;
+import com.pacificbytestudios.projectciviccore.registry.enums.TopCropQuality;
 
-public class FoodRecipeRegistry {
-  private static final Map<String, CraftingRecipe> topFoodQualityRecipe = new ConcurrentHashMap<>();
-  private static final Map<String, CraftingRecipe> midFoodQualityRecipe = new ConcurrentHashMap<>();
-  private static final Map<String, CraftingRecipe> lowFoodQualityRecipe = new ConcurrentHashMap<>();
+public class CropRecipeRegistry {
+  private static final Map<String, CraftingRecipe> topCropQualityRecipe = new ConcurrentHashMap<>();
+  private static final Map<String, CraftingRecipe> midCropQualityRecipe = new ConcurrentHashMap<>();
+  private static final Map<String, CraftingRecipe> lowCropQualityRecipe = new ConcurrentHashMap<>();
 
   private static boolean alreadyInizialized = false;
 
@@ -24,16 +24,16 @@ public class FoodRecipeRegistry {
     }
     alreadyInizialized = true;
 
-    initizalizeFoodQuality(topFoodQualityRecipe, TopFoodQuality.values());
-    initizalizeFoodQuality(midFoodQualityRecipe, MidFoodQuality.values());
-    initizalizeFoodQuality(lowFoodQualityRecipe, LowFoodQuality.values());
+    initizalizeCropQuality(topCropQualityRecipe, TopCropQuality.values());
+    initizalizeCropQuality(midCropQualityRecipe, MidCropQuality.values());
+    initizalizeCropQuality(lowCropQualityRecipe, LowCropQuality.values());
   }
 
-  private static void initizalizeFoodQuality(Map<String, CraftingRecipe> tierMap, Supplier<String>[] foods) {
+  private static void initizalizeCropQuality(Map<String, CraftingRecipe> tierMap, Supplier<String>[] foods) {
     for (Supplier<String> food : foods) {
       Item item = Item.getAssetMap().getAsset(food.get());
       if (item == null) {
-        ProjectCivicCore.LOGGER.atSevere().log("[FoodRecipeRegistry] Could not fetch item for item id: " + food.get());
+        ProjectCivicCore.LOGGER.atSevere().log("[CropRecipeRegistry] Could not fetch item for item id: " + food.get());
       }
 
       CraftingRecipe recipe = CraftingRecipe
@@ -42,7 +42,7 @@ public class FoodRecipeRegistry {
 
       if (recipe == null) {
         ProjectCivicCore.LOGGER.atSevere()
-            .log("[FoodRecipeRegistry] Could not fetch recipe for item id: " + food.get());
+            .log("[CropRecipeRegistry] Could not fetch recipe for item id: " + food.get());
         return;
       }
 
@@ -51,23 +51,23 @@ public class FoodRecipeRegistry {
   }
 
   public static CraftingRecipe getRecipe(String recipeName) {
-    return lowFoodQualityRecipe.getOrDefault(
+    return lowCropQualityRecipe.getOrDefault(
         recipeName,
-        midFoodQualityRecipe.getOrDefault(
+        midCropQualityRecipe.getOrDefault(
             recipeName,
-            topFoodQualityRecipe.get(recipeName)));
+            topCropQualityRecipe.get(recipeName)));
   }
 
   public static Map<String, CraftingRecipe> getTopFoodQualityRecipe() {
-    return topFoodQualityRecipe;
+    return topCropQualityRecipe;
   }
 
   public static Map<String, CraftingRecipe> getMidFoodQualityRecipe() {
-    return midFoodQualityRecipe;
+    return midCropQualityRecipe;
   }
 
   public static Map<String, CraftingRecipe> getLowFoodQualityRecipe() {
-    return lowFoodQualityRecipe;
+    return lowCropQualityRecipe;
   }
 
   public static Map<String, CraftingRecipe> getLevelDependantCraftingRecipe(int level) {

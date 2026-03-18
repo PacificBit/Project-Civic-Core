@@ -75,6 +75,8 @@ public class Dump extends CommandBase {
 
       printSet("Villagers", context, villagers);
       printSet("Unemployed", context, unemployed);
+
+      System.out.println(heartComponent);
     });
   }
 

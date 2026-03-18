@@ -68,10 +68,13 @@ public class Utils {
     int level = heart.getLevel();
     int radiusPerLevel = heart.getConfig().getClaimRadiusPerLevel();
     int totalRadius = level * radiusPerLevel;
-    Vector2i topLeft = new Vector2i(origin.x - totalRadius, origin.z - totalRadius);
-    Vector2i botRight = new Vector2i(origin.x + totalRadius, origin.z + totalRadius);
+    Vector2i topLeft = new Vector2i(origin.x - totalRadius, origin.z -
+        totalRadius);
+    Vector2i botRight = new Vector2i(origin.x + totalRadius, origin.z +
+        totalRadius);
     ProjectCivicCore.LOGGER.atInfo()
-        .log("[claimVillageArea] Created new village with anchor points: " + topLeft + " and: " + botRight);
+        .log("[claimVillageArea] Created new village with anchor points: " + topLeft
+            + " and: " + botRight);
     ClaimedAreaComponent area = new ClaimedAreaComponent();
     area.setTopLeft(topLeft);
     area.setBotRight(botRight);
@@ -87,7 +90,8 @@ public class Utils {
       case TAVERN -> TavernSpawner::spawn;
       case SAWMILL -> SawmillSpawner::spawn;
       case STORAGE -> StorageSpawner::spawn;
-      default -> throw new IllegalArgumentException("Unsupported workplace type: " + workplaceType);
+      default -> throw new IllegalArgumentException("Unsupported workplace type: "
+          + workplaceType);
     };
   }
 
@@ -99,14 +103,17 @@ public class Utils {
       case TAVERN -> TavernSpawner::despawn;
       case SAWMILL -> SawmillSpawner::despawn;
       case STORAGE -> StorageSpawner::despawn;
-      default -> throw new IllegalArgumentException("Unsupported workplace type: " + workplaceType);
+      default -> throw new IllegalArgumentException("Unsupported workplace type: "
+          + workplaceType);
     };
   }
 
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType) {
-    WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)
-        ? chunk
-        : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+    WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(),
+        position.x, position.z)
+            ? chunk
+            : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+                position.z));
 
     targetChunk.setBlock(position.x, position.y, position.z, blockType);
     return targetChunk;
@@ -115,9 +122,11 @@ public class Utils {
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType, int rotation) {
     int blockId = BlockType.getAssetMap().getIndex(blockType.getId());
 
-    WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)
-        ? chunk
-        : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+    WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(),
+        position.x, position.z)
+            ? chunk
+            : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+                position.z));
 
     targetChunk.setBlock(position.x, position.y, position.z, blockId, blockType,
         rotation, FillerBlockUtil.NO_FILLER, 0);
@@ -126,27 +135,34 @@ public class Utils {
   }
 
   public static WorldChunk breakBlockChunkAware(WorldChunk chunk, Vector3i position) {
-    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
+    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x,
+        position.z)) {
       chunk.breakBlock(position.x, position.y, position.z);
       return chunk;
     }
 
-    WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+    WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+        position.z));
     correctChunk.breakBlock(position.x, position.y, position.z);
     return correctChunk;
   }
 
   public static Pair<WorldChunk, Ref<ChunkStore>> getBlockComponentEntityChunkAware(WorldChunk chunk,
       Vector3i position) {
-    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
-      return new Pair<>(chunk, chunk.getBlockComponentEntity(position.x, position.y, position.z));
+    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x,
+        position.z)) {
+      return new Pair<>(chunk, chunk.getBlockComponentEntity(position.x,
+          position.y, position.z));
     }
 
-    WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
-    return new Pair<>(correctChunk, correctChunk.getBlockComponentEntity(position.x, position.y, position.z));
+    WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+        position.z));
+    return new Pair<>(correctChunk,
+        correctChunk.getBlockComponentEntity(position.x, position.y, position.z));
   }
 
-  public static void safeVillageTaskEnqueue(Ref<ChunkStore> villageRef, VillageTaskQueueComponent task) {
+  public static void safeVillageTaskEnqueue(Ref<ChunkStore> villageRef,
+      VillageTaskQueueComponent task) {
     Store<ChunkStore> chunkStore = villageRef.getStore();
     VillageTaskQueueComponent taskQueue = chunkStore.getComponent(villageRef,
         VillageTaskQueueComponent.getComponentType());
@@ -163,11 +179,13 @@ public class Utils {
   }
 
   public static void markNeedSaving(World world, Vector3i position) {
-    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+        position.z));
     chunk.markNeedsSaving();
   }
 
-  public static ClaimedAreaComponent[] subdivideArea(ClaimedAreaComponent area, int parts) {
+  public static ClaimedAreaComponent[] subdivideArea(ClaimedAreaComponent area,
+      int parts) {
     if (parts <= 0) {
       throw new IllegalArgumentException("parts must be > 0");
     }

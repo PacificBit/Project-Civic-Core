@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.recipe.registry;
+package com.pacificbytestudios.projectciviccore.registry.registry;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.recipe.enums.LowToolQuality;
+import com.pacificbytestudios.projectciviccore.registry.enums.LowToolQuality;
 
 public class ToolRecipeRegistry {
   private static final Map<String, CraftingRecipe> lowToolQualityRecipe = new ConcurrentHashMap<>();

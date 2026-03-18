@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.village.components.beds;
+package com.pacificbytestudios.projectciviccore.village.components.house;
 
 import java.util.UUID;
 
@@ -6,10 +6,8 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
-import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
 public class VillageBedComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageBedComponent> CODEC = BuilderCodec
@@ -41,12 +39,8 @@ public class VillageBedComponent implements Component<ChunkStore> {
     VillageBedComponent component = new VillageBedComponent();
     component.isTaken = this.isTaken;
     component.owner = this.owner;
-    component.position = this.position;
+    component.position = this.position == null ? null : this.position.clone();
     return component;
-  }
-
-  public static ComponentType<ChunkStore, VillageBedComponent> getComponentType() {
-    return ProjectCivicCore.get().getVillageBedComponentType();
   }
 
   public boolean isTaken() {

@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.recipe.enums;
+package com.pacificbytestudios.projectciviccore.registry.enums;
 
 import java.util.function.Supplier;
 

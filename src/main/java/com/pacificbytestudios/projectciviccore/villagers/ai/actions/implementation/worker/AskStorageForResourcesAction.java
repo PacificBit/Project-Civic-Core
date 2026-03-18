@@ -111,7 +111,6 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
       buildManualCriteria(request);
     } else {
       buildWorkplaceItemCriteria(request, workplace);
-      // buildWorkplaceCriteria(request, workplace);
     }
 
     request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainerAccessPositions());
