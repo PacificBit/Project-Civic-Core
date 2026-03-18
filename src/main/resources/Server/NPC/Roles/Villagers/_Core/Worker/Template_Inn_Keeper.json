@@ -165,7 +165,8 @@
           "Instructions": [
             {
               "Sensor": {
-                "Type": "ReachWorkplace"
+                "Type": "ReachWorkplace",
+                "StoppingRange": 1
               },
               "Actions": [
                 {
@@ -178,7 +179,7 @@
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1,
-                "StopDistance": 1,
+                "StopDistance": 0.8,
                 "RelativeSpeed": 1
               },
               "Continue": false,
@@ -396,7 +397,7 @@
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1,
-                "StopDistance": 1,
+                "StopDistance": 0.9,
                 "RelativeSpeed": 0.5
               }
             },
@@ -480,7 +481,8 @@
           "Instructions": [
             {
               "Sensor": {
-                "Type": "ReachWorkplace"
+                "Type": "ReachWorkplace",
+                "StoppingRange": 1
               },
               "Actions": [
                 {
@@ -493,7 +495,7 @@
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1,
-                "StopDistance": 1,
+                "StopDistance": 0.8,
                 "RelativeSpeed": 1
               },
               "Continue": false,
@@ -569,13 +571,13 @@
             {
               "Sensor": {
                 "Type": "ReachPlateToFill",
-                "StoppingRange": 1.5
+                "StoppingRange": 1.8
               },
               "$Comment": "Reach plate to fill",
               "BodyMotion": {
                 "Type": "Seek",
-                "StopDistance": 1.5,
-                "SlowDownDistance": 1.5,
+                "StopDistance": 0.8,
+                "SlowDownDistance": 1,
                 "RelativeSpeed": 0.5
               }
             },
@@ -782,7 +784,8 @@
         },
         {
           "Sensor": {
-            "Type": "ReachWorkplace"
+            "Type": "ReachWorkplace",
+            "StoppingRange": 1
           },
           "Actions": [
             {
@@ -795,7 +798,7 @@
           "BodyMotion": {
             "Type": "Seek",
             "SlowDownDistance": 1,
-            "StopDistance": 1,
+            "StopDistance": 0.8,
             "RelativeSpeed": 1
           },
           "Continue": false,

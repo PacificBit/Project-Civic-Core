@@ -165,7 +165,8 @@
           "Instructions": [
             {
               "Sensor": {
-                "Type": "ReachWorkplace"
+                "Type": "ReachWorkplace",
+                "StoppingRange": 1
               },
               "Actions": [
                 {

@@ -165,7 +165,8 @@
           "Instructions": [
             {
               "Sensor": {
-                "Type": "ReachWorkplace"
+                "Type": "ReachWorkplace",
+                "StoppingRange": 1
               },
               "Actions": [
                 {
@@ -178,7 +179,7 @@
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1,
-                "StopDistance": 1,
+                "StopDistance": 0.8,
                 "RelativeSpeed": 1
               },
               "Continue": false,
