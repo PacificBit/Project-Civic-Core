@@ -90,6 +90,7 @@ public class TavernSpawner {
 
     registerInteractables(position, workplaceComponent, interactables, 1);
 
+    workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.INN_KEEPER });

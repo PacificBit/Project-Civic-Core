@@ -71,7 +71,8 @@
           "Type": "TownHall"
         },
         "WorkplaceSpawnComponent": {},
-        "WorkplaceInteractables": {}
+        "WorkplaceInteractables": {},
+        "TownHallComponent": {}
       }
     }
   },

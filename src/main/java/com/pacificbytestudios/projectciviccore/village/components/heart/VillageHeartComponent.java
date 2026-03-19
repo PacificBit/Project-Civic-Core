@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.components.heart;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,8 +25,8 @@ import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 
@@ -425,6 +426,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return Collections.unmodifiableMap(this.workplaceIdToWorkplace);
   }
 
+  public List<WorkplaceComponent> getWorkplaces() {
+    return Collections.unmodifiableList(new ArrayList<>(this.workplaceIdToWorkplace.values()));
+  }
+
+  public List<HouseComponent> getHouses() {
+    return Collections.unmodifiableList(new ArrayList<>(this.houseIdToHouse.values()));
+  }
+
   public WorkplaceComponent getWorkplaceFromId(UUID uuid) {
     return this.workplaceIdToWorkplace.get(uuid);
   }
@@ -439,6 +448,50 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public Set<UUID> getVillageTavernWorkplaces() {
     return Collections.unmodifiableSet(this.villageTavernWorkplaces);
+  }
+
+  public short getStorageWorkplaceCount() {
+    return (short) this.villageStorageWorkplaces.size();
+  }
+
+  public short getTavernWorkplaceCount() {
+    return (short) this.villageTavernWorkplaces.size();
+  }
+
+  public short getHomelessCount() {
+    return (short) this.homelessRegistry.size();
+  }
+
+  public short getUnemployedCount() {
+    return (short) this.unemployedRegistry.size();
+  }
+
+  public short getHouseCount() {
+    return (short) this.houseIdToHouse.size();
+  }
+
+  public short getAvailableBedsCount() {
+    return (short) this.houseIdToHouse.values().stream()
+        .mapToInt(HouseComponent::getFreeBedCount)
+        .sum();
+  }
+
+  public Map<StructureType, Short> getStructureTypeCount() {
+    Map<StructureType, Short> structureCount = new HashMap<>();
+    for (WorkplaceComponent workplace : this.workplaceIdToWorkplace.values()) {
+      short count = structureCount.getOrDefault(workplace.getWorkplaceType(), (short) 0);
+      structureCount.put(workplace.getWorkplaceType(), (short) (count + 1));
+    }
+
+    structureCount.put(StructureType.HOUSE, this.getHouseCount());
+    return structureCount;
+  }
+
+  public List<WorkplaceComponent> getWorkplaceOfType(StructureType structureType) {
+    return this.workplaceIdToWorkplace.values()
+        .stream()
+        .filter(entry -> entry.getWorkplaceType().equals(structureType))
+        .toList();
   }
 
   @Override

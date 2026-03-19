@@ -63,6 +63,7 @@ public class HouseSpawner {
       return rollbackFailedSpawn(world, houseChunk, trackedPlacement, houseCoreBlockPosition, null);
     }
 
+    house.setLevel((short) 1);
     house.setUuid(UUID.randomUUID());
     house.setCoreBlockPosition(houseCoreBlockPosition);
     house.setPrefabAnchor(position.clone());

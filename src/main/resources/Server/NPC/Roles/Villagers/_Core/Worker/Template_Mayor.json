@@ -233,6 +233,25 @@
           "Instructions": [
             {
               "Sensor": {
+                "Type": "HasNotDoneVillageAssessment"
+              },
+              "$Comment": "Step 1) Do village assessment if not done today",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "Log",
+                      "Message": "Doing assessment"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
                 "Type": "Any"
               },
               "Actions": [

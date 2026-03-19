@@ -1,14 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -24,8 +15,6 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -33,7 +22,6 @@ import io.sentry.util.Pair;
 public class TownHallSpawner {
   private static final String PREFAB_JSON = "Structures/Workplace/Workplace_Town_Hall.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Town_Hall_Core");
-  private static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
 
   public static boolean spawn(WorldChunk chunk, Vector3i position) {
     World world = chunk.getWorld();
@@ -76,6 +64,7 @@ public class TownHallSpawner {
           workplaceBlockPosition, null);
     }
 
+    workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
@@ -87,65 +76,8 @@ public class TownHallSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);
 
-    WorkplaceContainerRegistryComponent registry = spawnContainers(
-        1, position, workplaceChunk, chunkStore, rotation);
-
-    if (registry == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Could not spawn correctly the containers");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
-          workplaceBlockPosition, null);
-    }
-
-    workplaceComponent.setStorage(registry);
     workplaceChunk.markNeedsSaving();
     return true;
-  }
-
-  private static WorkplaceContainerRegistryComponent spawnContainers(
-      int level,
-      Vector3i center,
-      WorldChunk chunk,
-      Store<ChunkStore> chunkStore,
-      int rotation) {
-    WorkplaceContainerRegistryComponent registry = new WorkplaceContainerRegistryComponent();
-    List<Vector3i> offsets = Config.getStorageOffsetForLevel(level);
-    WorldChunk usedChunk = chunk;
-    Vector3i containerPosition;
-
-    for (Vector3i offset : offsets) {
-
-      containerPosition = center.clone().add(offset);
-
-      usedChunk = Utils.setBlockChunkAware(
-          usedChunk,
-          containerPosition,
-          SINGLE_STORAGE_BLOCK,
-          rotation);
-
-      Ref<ChunkStore> containerRef = usedChunk.getBlockComponentEntity(containerPosition.x,
-          containerPosition.y, containerPosition.z);
-
-      if (containerRef == null || !containerRef.isValid()) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container ref is invalid");
-        return null;
-      }
-
-      WorkplaceContainerEntryComponent container = chunkStore.getComponent(
-          containerRef,
-          WorkplaceContainerEntryComponent.getComponentType());
-
-      if (container == null) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container component is missing");
-        return null;
-      }
-
-      container.setPosition(containerPosition);
-      container.setAccessPosition(getContainerAccessPosition(containerPosition));
-      container.setUuid(UUID.randomUUID());
-      registry.registerContainer(container.getUuid(), container);
-    }
-
-    return registry;
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
@@ -201,21 +133,8 @@ public class TownHallSpawner {
       return false;
     }
 
-    despawnContainers(chunk, workplace);
     Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
     return despawn;
-  }
-
-  private static void despawnContainers(WorldChunk chunk, WorkplaceComponent workplace) {
-    Map<UUID, WorkplaceContainerEntryComponent> containers = workplace.getStorage().getContainers();
-
-    Set<Entry<UUID, WorkplaceContainerEntryComponent>> entrySet = new HashSet<Entry<UUID, WorkplaceContainerEntryComponent>>(
-        containers.entrySet());
-
-    for (Map.Entry<UUID, WorkplaceContainerEntryComponent> container : entrySet) {
-      workplace.getStorage().unregisterContainer(container.getKey());
-      Utils.breakBlockChunkAware(chunk, container.getValue().getPosition());
-    }
   }
 
   private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
@@ -227,10 +146,6 @@ public class TownHallSpawner {
 
   private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition) {
     return workplaceBlockPosition.clone().add(Vector3i.NORTH);
-  }
-
-  private static Vector3i getContainerAccessPosition(Vector3i containerPosition) {
-    return containerPosition.clone().add(Vector3i.EAST);
   }
 
   private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
@@ -249,22 +164,5 @@ public class TownHallSpawner {
     }
     PrefabManager.restoreTrackedPrefab(world, trackedPlacement);
     return false;
-  }
-
-  private class Config {
-    private static final Map<Integer, List<Vector3i>> STORAGE_SPAWNING_OFFSETS;
-
-    static {
-      STORAGE_SPAWNING_OFFSETS = new HashMap<>();
-
-      List<Vector3i> level1Containers = new ArrayList<>();
-      level1Containers.add(new Vector3i(-2, 1, 4));
-      STORAGE_SPAWNING_OFFSETS.put(1, level1Containers);
-    }
-
-    public static List<Vector3i> getStorageOffsetForLevel(int level) {
-      return STORAGE_SPAWNING_OFFSETS.get(level);
-    }
-
   }
 }

@@ -65,7 +65,75 @@
         "VillageHeartComponent": {
           "Level": 1,
           "Config": {
-            "ClaimRadiusPerLevel": 20
+            "MaxVillageLevel": 3,
+            "ClaimRadiusPerLevel": {
+              "1": 20,
+              "2": 40,
+              "3": 60
+            },
+            "VillagerCapPerLevel": {
+              "1": 6,
+              "2": 12,
+              "3": 16
+            },
+            "StructureLimitsPerLevel": {
+              "1": {
+                "TownHall": 1,
+                "Farm": 1,
+                "Storage": 1,
+                "Tavern": 1,
+                "Sawmill": 1,
+                "Mine": 0,
+                "House": 4
+              },
+              "2": {
+                "TownHall": 1,
+                "Sawmill": 2,
+                "Mine": 1,
+                "Storage": 2,
+                "Tavern": 2,
+                "Farm": 2,
+                "House": 8
+              },
+              "3": {
+                "TownHall": 1,
+                "Sawmill": 3,
+                "Mine": 2,
+                "Storage": 3,
+                "Tavern": 3,
+                "Farm": 3,
+                "House": 12
+              }
+            },
+            "StructureMaxLevelPerVillageLevel": {
+              "1": {
+                "House": 1,
+                "TownHall": 1,
+                "Mine": 0,
+                "Sawmill": 1,
+                "Farm": 1,
+                "Storage": 1,
+                "Tavern": 1
+              },
+              "2": {
+                "House": 2,
+                "TownHall": 2,
+                "Mine": 1,
+                "Sawmill": 2,
+                "Farm": 2,
+                "Storage": 2,
+                "Tavern": 2
+              },
+              "3": {
+                "House": 3,
+                "TownHall": 3,
+                "Mine": 2,
+                "Sawmill": 2,
+                "Farm": 2,
+                "Storage": 3,
+                "Tavern": 3
+              }
+            }
           }
         },
         "VillageSpawnConfig": {

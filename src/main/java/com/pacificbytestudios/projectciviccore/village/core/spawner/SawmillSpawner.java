@@ -57,6 +57,7 @@ public class SawmillSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition);
     }
 
+    workplaceComponent.setLevel((short) 1);
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.WOOD_CUTTER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
     chunkStore.putComponent(

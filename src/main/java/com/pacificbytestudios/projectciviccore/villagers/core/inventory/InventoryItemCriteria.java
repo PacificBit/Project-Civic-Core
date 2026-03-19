@@ -8,6 +8,7 @@ public final class InventoryItemCriteria {
     PREFIX,
     SUFFIX,
     CONTAINS,
+    PREFIX_AND_SUFFIX,
     ANY
   }
 
@@ -17,6 +18,8 @@ public final class InventoryItemCriteria {
 
   private final MatchMode matchMode;
   private final String normalizedPattern;
+  private String leftNormalizedPattern;
+  private String rightNormalizedPattern;
 
   public InventoryItemCriteria(String itemId, boolean filterIn, int count) {
     this.itemId = itemId;
@@ -31,8 +34,15 @@ public final class InventoryItemCriteria {
 
     boolean wildcardStart = itemId.startsWith("*");
     boolean wildcardEnd = itemId.endsWith("*");
+    boolean containsWildcard = itemId.contains("*");
 
-    if (wildcardStart && wildcardEnd && itemId.length() > 2) {
+    if (!wildcardStart && !wildcardEnd && containsWildcard) {
+      this.matchMode = MatchMode.PREFIX_AND_SUFFIX;
+      int wildcard = itemId.indexOf('*');
+      leftNormalizedPattern = itemId.substring(0, wildcard);
+      rightNormalizedPattern = itemId.substring(wildcard + 1);
+      this.normalizedPattern = "";
+    } else if (wildcardStart && wildcardEnd && itemId.length() > 2) {
       this.matchMode = MatchMode.CONTAINS;
       this.normalizedPattern = itemId.substring(1, itemId.length() - 1);
     } else if (wildcardStart) {
@@ -70,6 +80,8 @@ public final class InventoryItemCriteria {
 
     return switch (this.matchMode) {
       case ANY -> true;
+      case PREFIX_AND_SUFFIX ->
+        itemName.startsWith(this.leftNormalizedPattern) && itemName.endsWith(this.rightNormalizedPattern);
       case EXACT -> itemName.equals(this.normalizedPattern);
       case PREFIX -> itemName.startsWith(this.normalizedPattern);
       case SUFFIX -> itemName.endsWith(this.normalizedPattern);

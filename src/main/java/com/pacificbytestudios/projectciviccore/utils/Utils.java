@@ -45,17 +45,41 @@ public class Utils {
       return null;
     }
 
-    int localX = ChunkUtil.xFromBlockInColumn(info.getIndex());
-    int localY = ChunkUtil.yFromBlockInColumn(info.getIndex());
-    int localZ = ChunkUtil.zFromBlockInColumn(info.getIndex());
-
     WorldChunk worldChunk = commandBuffer.getComponent(
         info.getChunkRef(),
         WorldChunk.getComponentType());
 
+    return buildWorldBlockContext(info, worldChunk);
+  }
+
+  public static BlockContext getWorldBlockContext(
+      Ref<ChunkStore> ref,
+      Store<ChunkStore> chunkStore) {
+    BlockModule.BlockStateInfo info = chunkStore.getComponent(
+        ref,
+        BlockModule.BlockStateInfo.getComponentType());
+
+    if (info == null) {
+      return null;
+    }
+
+    WorldChunk worldChunk = chunkStore.getComponent(
+        info.getChunkRef(),
+        WorldChunk.getComponentType());
+
+    return buildWorldBlockContext(info, worldChunk);
+  }
+
+  private static BlockContext buildWorldBlockContext(
+      BlockModule.BlockStateInfo info,
+      WorldChunk worldChunk) {
     if (worldChunk == null) {
       return null;
     }
+
+    int localX = ChunkUtil.xFromBlockInColumn(info.getIndex());
+    int localY = ChunkUtil.yFromBlockInColumn(info.getIndex());
+    int localZ = ChunkUtil.zFromBlockInColumn(info.getIndex());
 
     int worldX = ChunkUtil.worldCoordFromLocalCoord(worldChunk.getX(), localX);
     int worldY = localY;
@@ -65,13 +89,12 @@ public class Utils {
   }
 
   public static ClaimedAreaComponent claimVillageArea(VillageHeartComponent heart, Vector3i origin) {
-    int level = heart.getLevel();
-    int radiusPerLevel = heart.getConfig().getClaimRadiusPerLevel();
-    int totalRadius = level * radiusPerLevel;
-    Vector2i topLeft = new Vector2i(origin.x - totalRadius, origin.z -
-        totalRadius);
-    Vector2i botRight = new Vector2i(origin.x + totalRadius, origin.z +
-        totalRadius);
+    short level = (short) heart.getLevel();
+    int radius = heart.getConfig().getClaimRadiusPerLevel(level);
+    Vector2i topLeft = new Vector2i(origin.x - radius, origin.z -
+        radius);
+    Vector2i botRight = new Vector2i(origin.x + radius, origin.z +
+        radius);
     ProjectCivicCore.LOGGER.atInfo()
         .log("[claimVillageArea] Created new village with anchor points: " + topLeft
             + " and: " + botRight);

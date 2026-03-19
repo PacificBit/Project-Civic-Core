@@ -84,6 +84,10 @@ public class HouseAppartmentRegistry implements Component<ChunkStore> {
 
   }
 
+  public short getFreeBedsCount() {
+    return (short) this.appartments.values().stream().mapToInt(AppartmentComponent::getFreeBedsCount).sum();
+  }
+
   @Override
   public HouseAppartmentRegistry clone() {
     HouseAppartmentRegistry component = new HouseAppartmentRegistry();

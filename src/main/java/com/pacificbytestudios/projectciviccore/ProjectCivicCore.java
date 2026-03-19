@@ -18,6 +18,9 @@ import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodCo
 import com.pacificbytestudios.projectciviccore.registry.registry.CropRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.ToolRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingCostRegistry;
+import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingUpgradeCostRegistry;
+import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
@@ -33,6 +36,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.house.HouseSpawnSystem;
@@ -60,6 +64,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderCreateNewMealPlanAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderGatherNextMealMaterialFromContainerAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderPlaceFoodOnPlateAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.mayor.BuilderMakeVillageAssessment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasEatenMealTodaySensor;
@@ -77,6 +82,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderHasNextMealInPlannedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReachPlateToFill;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReserveNextPlateToFillSensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.mayor.BuilderHasNotDoneVillageAssessment;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.BuilderItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
@@ -110,6 +116,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageFoodComponent> villageFoodComponentType;
   private ComponentType<ChunkStore, TavernComponent> tavernComponentType;
   private ComponentType<ChunkStore, FarmComponent> farmComponentType;
+  private ComponentType<ChunkStore, TownHallComponent> townHallComponentType;
 
   private ComponentType<ChunkStore, HouseComponent> houseComponentType;
   private ComponentType<ChunkStore, HouseSpawnComponent> houseSpawnComponentType;
@@ -204,6 +211,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         FarmComponent.class,
         "FarmComponent",
         FarmComponent.CODEC);
+
+    this.townHallComponentType = chunkRegistry.registerComponent(
+        TownHallComponent.class,
+        "TownHallComponent",
+        TownHallComponent.CODEC);
 
     this.workplaceInteractablesMapComponentType = chunkRegistry.registerComponent(
         WorkplaceInteractablesMapComponent.class,
@@ -305,6 +317,10 @@ public final class ProjectCivicCore extends JavaPlugin {
         "ReachPlateToFill",
         BuilderReachPlateToFill::new);
 
+    npcPlugin.registerCoreComponentType(
+        "HasNotDoneVillageAssessment",
+        BuilderHasNotDoneVillageAssessment::new);
+
     // ===========================
     // Actions
     // ===========================
@@ -401,6 +417,10 @@ public final class ProjectCivicCore extends JavaPlugin {
         "CraftTool",
         BuilderCraftToolAction::new);
 
+    npcPlugin.registerCoreComponentType(
+        "MakeVillageAssessment",
+        BuilderMakeVillageAssessment::new);
+
     // ===========================
     // Extra
     // ===========================
@@ -423,6 +443,9 @@ public final class ProjectCivicCore extends JavaPlugin {
     FoodRecipeRegistry.initizalize();
     CropRecipeRegistry.initizalize();
     ToolRecipeRegistry.initizalize();
+    VillageLevelUpCostRegistry.initialize();
+    VillageBuildingCostRegistry.initialize();
+    VillageBuildingUpgradeCostRegistry.initialize();
   }
 
   public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
@@ -480,6 +503,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, FarmComponent> getFarmComponentType() {
     return this.farmComponentType;
+  }
+
+  public ComponentType<ChunkStore, TownHallComponent> getTownHallComponentType() {
+    return this.townHallComponentType;
   }
 
   public ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> getWorkplaceInteractablesMapComponentType() {

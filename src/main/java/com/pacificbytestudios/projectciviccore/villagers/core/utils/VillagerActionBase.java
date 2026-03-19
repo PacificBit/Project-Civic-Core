@@ -3,6 +3,8 @@ package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 import java.util.Set;
 import java.util.UUID;
 
+import com.hypixel.hytale.component.Component;
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -127,6 +129,25 @@ public abstract class VillagerActionBase extends ActionBase {
         villageRef,
         VillageHeartComponent.getComponentType());
     return require(villageHeart, "village heart component");
+  }
+
+  protected Store<ChunkStore> getChunkStore(Store<EntityStore> store) {
+    return store.getExternalData().getWorld().getChunkStore().getStore();
+  }
+
+  protected <T extends Component<ChunkStore>> T getComponent(
+      Store<EntityStore> store,
+      Ref<ChunkStore> ref,
+      ComponentType<ChunkStore, T> componentType) {
+    return require(getChunkStore(store).getComponent(ref, componentType), componentType.toString());
+  }
+
+  protected <T extends Component<ChunkStore>> T getComponentFromWorkplace(
+      Store<EntityStore> store,
+      Ref<EntityStore> ref,
+      ComponentType<ChunkStore, T> componentType) {
+    Ref<ChunkStore> workplace = getWorkplaceRef(ref, store);
+    return workplace != null ? getComponent(store, workplace, componentType) : null;
   }
 
   protected boolean isRefValid(Ref<ChunkStore> ref) {

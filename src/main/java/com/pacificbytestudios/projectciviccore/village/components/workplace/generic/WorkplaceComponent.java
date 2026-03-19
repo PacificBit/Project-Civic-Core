@@ -38,6 +38,12 @@ public class WorkplaceComponent implements Component<ChunkStore> {
       .add()
 
       .append(
+          new KeyedCodec<>("Level", Codec.SHORT),
+          (obj, value) -> obj.level = value,
+          (obj) -> obj.level)
+      .add()
+
+      .append(
           new KeyedCodec<>("Type", new EnumCodec<StructureType>(StructureType.class)),
           (obj, value) -> obj.workingPlaceType = value,
           (obj) -> obj.workingPlaceType)
@@ -125,6 +131,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
       .build();
 
   private UUID uuid;
+  private Short level = 1;
   private StructureType workingPlaceType;
   private WorkType[] workerType;
   private Vector3i benchPos;
@@ -148,6 +155,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
+  }
+
+  public Short getLevel() {
+    return level;
+  }
+
+  public void setLevel(Short level) {
+    this.level = level;
   }
 
   public StructureType getWorkplaceType() {
@@ -273,6 +288,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();
     component.uuid = this.uuid;
+    component.level = this.level;
     component.workingPlaceType = this.workingPlaceType;
     component.benchPos = this.benchPos;
     component.benchAccessPos = this.benchAccessPos;
@@ -293,6 +309,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   public String toString() {
     return "WorkplaceComponent{" +
         "\n uuid=" + uuid + "," +
+        "\n level=" + level + "," +
         "\n workingPlaceType=" + workingPlaceType + "," +
         "\n benchPos=" + benchPos + "," +
         "\n benchAccessPos=" + benchAccessPos + "," +

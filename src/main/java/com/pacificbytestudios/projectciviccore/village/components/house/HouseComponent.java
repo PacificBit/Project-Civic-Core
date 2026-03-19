@@ -21,6 +21,12 @@ public class HouseComponent implements Component<ChunkStore> {
           (obj) -> obj.uuid)
       .add()
 
+      .append(
+          new KeyedCodec<>("Level", Codec.SHORT),
+          (obj, value) -> obj.level = value,
+          (obj) -> obj.level)
+      .add()
+
       .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           (obj) -> obj.prefabAnchor)
@@ -48,6 +54,7 @@ public class HouseComponent implements Component<ChunkStore> {
       .build();
 
   private UUID uuid;
+  private Short level = 1;
   private EntityRef villageRef;
   private Vector3i coreBlockPosition;
   private Vector3i prefabAnchor;
@@ -60,6 +67,14 @@ public class HouseComponent implements Component<ChunkStore> {
 
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
+  }
+
+  public Short getLevel() {
+    return level;
+  }
+
+  public void setLevel(Short level) {
+    this.level = level;
   }
 
   public EntityRef getVillageRef() {
@@ -112,6 +127,10 @@ public class HouseComponent implements Component<ChunkStore> {
 
   public boolean hasVacancy() {
     return this.appartmentRegistry.hasVacancy();
+  }
+
+  public short getFreeBedCount() {
+    return this.appartmentRegistry.getFreeBedsCount();
   }
 
   @Override

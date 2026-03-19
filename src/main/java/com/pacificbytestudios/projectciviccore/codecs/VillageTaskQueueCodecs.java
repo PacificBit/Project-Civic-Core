@@ -4,6 +4,7 @@ import com.pacificbytestudios.projectciviccore.village.components.villagetask.Vi
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryHouseAssignmentTask;
@@ -42,6 +43,11 @@ public final class VillageTaskQueueCodecs {
         "SpawnWorkplaceTask",
         SpawnWorkplaceTask.class,
         SpawnWorkplaceTask.CODEC);
+
+    VillageTaskQueueComponent.registerTaskCodec(
+        "SpawnHouseTask",
+        SpawnHouseTask.class,
+        SpawnHouseTask.CODEC);
 
     VillageTaskQueueComponent.registerTaskCodec(
         "TryHouseAssignmentTask",
