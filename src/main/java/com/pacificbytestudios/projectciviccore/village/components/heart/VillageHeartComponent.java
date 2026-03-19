@@ -21,6 +21,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
@@ -59,6 +60,12 @@ public class VillageHeartComponent implements Component<ChunkStore> {
           new KeyedCodec<>("ClaimedArea", ClaimedAreaComponent.CODEC),
           (obj, value) -> obj.claimedArea = value,
           (obj) -> obj.claimedArea)
+      .add()
+
+      .append(
+          new KeyedCodec<>("VillageHeartBlockContext", BlockContext.CODEC),
+          (obj, value) -> obj.blockContext = value,
+          (obj) -> obj.blockContext)
       .add()
 
       .append(
@@ -193,6 +200,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   private VillageHeartState state = VillageHeartState.NORMAL;
   private int level;
   private ClaimedAreaComponent claimedArea;
+  private BlockContext blockContext;
 
   private Set<UUID> villagersRegistry = new HashSet<>();
   private Set<UUID> unemployedRegistry = new HashSet<>();
@@ -476,6 +484,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
         .sum();
   }
 
+  public BlockContext getBlockContext() {
+    return blockContext;
+  }
+
+  public void setBlockContext(BlockContext blockContext) {
+    this.blockContext = blockContext;
+  }
+
   public Map<StructureType, Short> getStructureTypeCount() {
     Map<StructureType, Short> structureCount = new HashMap<>();
     for (WorkplaceComponent workplace : this.workplaceIdToWorkplace.values()) {
@@ -504,6 +520,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
     component.config = this.config != null ? this.config.clone() : null;
     component.claimedArea = this.claimedArea != null ? this.claimedArea.clone() : null;
+    component.blockContext = this.blockContext != null ? this.blockContext.clone() : null;
 
     component.villagersRegistry = new HashSet<>(this.villagersRegistry);
     component.unemployedRegistry = new HashSet<>(this.unemployedRegistry);

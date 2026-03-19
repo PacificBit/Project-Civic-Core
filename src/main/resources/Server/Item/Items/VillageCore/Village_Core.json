@@ -140,6 +140,7 @@
           "InitialNpcCount": 4,
           "NpcSpawnRange": 5
         },
+        "WorkplaceContainerEntryComponent": {},
         "ItemContainerBlock": {
           "Capacity": 9
         }

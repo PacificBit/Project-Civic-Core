@@ -48,6 +48,6 @@ public class SpawnWorkplaceTask extends AVillageTask {
       Vector3i heartPos,
       VillageHeartComponent heart) {
     SpawnFunction spawnFunction = Utils.getSpawnFunction(this.workplaceType);
-    spawnFunction.apply(chunk, this.position);
+    spawnFunction.apply(chunk, this.position, heart);
   }
 }

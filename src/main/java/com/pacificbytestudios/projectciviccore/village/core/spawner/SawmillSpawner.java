@@ -13,6 +13,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
@@ -22,7 +23,7 @@ public class SawmillSpawner {
   private static final String PREFAB_JSON = "Structures/Workplace/Workspace_Sawmill.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Sawmill_Core");
 
-  public static boolean spawn(WorldChunk chunk, Vector3i position) {
+  public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent heart) {
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,

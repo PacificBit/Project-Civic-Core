@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
+import java.util.UUID;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -14,7 +16,10 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -23,7 +28,7 @@ public class TownHallSpawner {
   private static final String PREFAB_JSON = "Structures/Workplace/Workplace_Town_Hall.prefab.json";
   private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Town_Hall_Core");
 
-  public static boolean spawn(WorldChunk chunk, Vector3i position) {
+  public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent village) {
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
@@ -64,6 +69,14 @@ public class TownHallSpawner {
           workplaceBlockPosition, null);
     }
 
+    WorkplaceContainerRegistryComponent storage = buildWorkplaceStorageRegistry(world, chunk, chunkStore, village);
+    if (storage == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Could not build workplace storage registry");
+      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
+          workplaceBlockPosition, null);
+    }
+
+    workplaceComponent.setStorage(storage);
     workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
@@ -78,6 +91,34 @@ public class TownHallSpawner {
 
     workplaceChunk.markNeedsSaving();
     return true;
+  }
+
+  private static WorkplaceContainerRegistryComponent buildWorkplaceStorageRegistry(
+      World world,
+      WorldChunk chunk,
+      Store<ChunkStore> chunkStore,
+      VillageHeartComponent village) {
+    Vector3i containerPosition = getContainerPosition(village);
+    Ref<ChunkStore> containerRef = Utils.getBlockComponentEntityChunkAware(chunk, containerPosition).getSecond();
+    if (containerRef == null || !containerRef.isValid()) {
+      return null;
+    }
+
+    WorkplaceContainerEntryComponent container = chunkStore.getComponent(
+        containerRef,
+        WorkplaceContainerEntryComponent.getComponentType());
+
+    if (container == null) {
+      return null;
+    }
+
+    container.setPosition(containerPosition);
+    container.setAccessPosition(containerPosition.clone().add(Vector3i.NORTH).add(Vector3i.DOWN));
+    container.setUuid(UUID.randomUUID());
+
+    WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
+    storage.registerContainer(container.getUuid(), container);
+    return storage;
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
@@ -150,6 +191,10 @@ public class TownHallSpawner {
 
   private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
     return workplaceBlockPosition.clone().add(Vector3i.SOUTH.clone().scale(4)).add(Vector3i.DOWN);
+  }
+
+  private static Vector3i getContainerPosition(VillageHeartComponent village) {
+    return village.getBlockContext().getPosition().clone();
   }
 
   private static boolean rollbackFailedSpawn(
