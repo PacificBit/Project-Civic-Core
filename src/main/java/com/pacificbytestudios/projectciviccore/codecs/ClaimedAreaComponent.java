@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
@@ -40,20 +41,64 @@ public class ClaimedAreaComponent implements Component<ChunkStore> {
   }
 
   public ClaimedAreaComponent(Vector2i topLeft, Vector2i botRight) {
-    this.topLeft = topLeft;
-    this.botRight = botRight;
+    assignBounds(topLeft, botRight);
   }
 
   public ClaimedAreaComponent(ClaimedAreaComponent offset, Vector3i center) {
-    int topX = center.getX() + offset.topLeft.x;
-    int topZ = center.getZ() + offset.topLeft.y;
-    this.topLeft = new Vector2i(topX, topZ);
+    this(offset, center, Rotation.None);
+  }
 
-    int botX = center.getX() + offset.botRight.x;
-    int botZ = center.getZ() + offset.botRight.y;
-    this.botRight = new Vector2i(botX, botZ);
+  public ClaimedAreaComponent(ClaimedAreaComponent offset, Vector3i center, Rotation rotation) {
+    if (offset == null || offset.topLeft == null || offset.botRight == null || center == null) {
+      return;
+    }
 
+    Rotation normalizedRotation = rotation == null ? Rotation.None : rotation;
+    Vector2i[] corners = getCorners(offset.topLeft, offset.botRight);
+    int minX = Integer.MAX_VALUE;
+    int minZ = Integer.MAX_VALUE;
+    int maxX = Integer.MIN_VALUE;
+    int maxZ = Integer.MIN_VALUE;
+
+    for (Vector2i corner : corners) {
+      Vector3i rotatedCorner = normalizedRotation.rotateY(new Vector3i(corner.x, 0, corner.y), new Vector3i());
+      minX = Math.min(minX, center.getX() + rotatedCorner.x);
+      minZ = Math.min(minZ, center.getZ() + rotatedCorner.z);
+      maxX = Math.max(maxX, center.getX() + rotatedCorner.x);
+      maxZ = Math.max(maxZ, center.getZ() + rotatedCorner.z);
+    }
+
+    this.topLeft = new Vector2i(minX, minZ);
+    this.botRight = new Vector2i(maxX, maxZ);
     this.y = center.y;
+  }
+
+  private static Vector2i[] getCorners(Vector2i topLeft, Vector2i botRight) {
+    int minX = Math.min(topLeft.x, botRight.x);
+    int minZ = Math.min(topLeft.y, botRight.y);
+    int maxX = Math.max(topLeft.x, botRight.x);
+    int maxZ = Math.max(topLeft.y, botRight.y);
+    return new Vector2i[] {
+        new Vector2i(minX, minZ),
+        new Vector2i(minX, maxZ),
+        new Vector2i(maxX, minZ),
+        new Vector2i(maxX, maxZ)
+    };
+  }
+
+  private void assignBounds(Vector2i topLeft, Vector2i botRight) {
+    if (topLeft == null || botRight == null) {
+      this.topLeft = topLeft;
+      this.botRight = botRight;
+      return;
+    }
+
+    this.topLeft = new Vector2i(
+        Math.min(topLeft.x, botRight.x),
+        Math.min(topLeft.y, botRight.y));
+    this.botRight = new Vector2i(
+        Math.max(topLeft.x, botRight.x),
+        Math.max(topLeft.y, botRight.y));
   }
 
   @Override

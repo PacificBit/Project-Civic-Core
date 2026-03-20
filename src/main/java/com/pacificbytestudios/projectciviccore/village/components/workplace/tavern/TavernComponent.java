@@ -2,6 +2,7 @@ package com.pacificbytestudios.projectciviccore.village.components.workplace.tav
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -71,7 +72,7 @@ public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissing
   }
 
   public String getNextMealToPrepare() {
-    var iterator = this.mealToPrepare.keySet().iterator();
+    Iterator<String> iterator = this.mealToPrepare.keySet().iterator();
     return iterator.hasNext() ? iterator.next() : null;
   }
 

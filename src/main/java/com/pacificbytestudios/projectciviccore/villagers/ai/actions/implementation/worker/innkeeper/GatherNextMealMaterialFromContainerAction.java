@@ -178,7 +178,6 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
       return this.finish(role, false);
     }
 
-    System.out.println("Gather successfull");
     return this.finish(role, true);
   }
 

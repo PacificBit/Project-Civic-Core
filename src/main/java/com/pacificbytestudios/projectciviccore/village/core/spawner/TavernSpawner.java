@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +10,6 @@ import java.util.UUID;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -20,9 +17,9 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
-import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -35,30 +32,39 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class TavernSpawner {
-  private static final String PREFAB_JSON = "Structures/Workplace/Workplace_Tavern.prefab.json";
-  private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Tavern_Core");
-  private static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
-
   public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent heart) {
+    return spawn(chunk, position, Rotation.None, heart);
+  }
+
+  public static boolean spawn(
+      WorldChunk chunk,
+      Vector3i position,
+      Rotation rotation,
+      VillageHeartComponent heart) {
+    Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
-        PREFAB_JSON,
+        StructureConfig.Tavern.PREFAB_JSON,
         position.clone(),
-        Rotation.None,
+        structureRotation,
         true);
     if (trackedPlacement == null) {
       return false;
     }
 
-    int rotation = RotationTuple.of(
-        Rotation.Ninety,
+    int blockRotation = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.Tavern.WORKPLACE_BLOCK_YAW_OFFSET,
+            structureRotation),
         Rotation.None,
         Rotation.None).index();
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position, structureRotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk,
-        workplaceBlockPosition, WORKPLACE_BLOCK, rotation);
+        workplaceBlockPosition,
+        StructureConfig.Tavern.WORKPLACE_BLOCK,
+        blockRotation);
     Ref<ChunkStore> workplace = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
@@ -89,11 +95,12 @@ public class TavernSpawner {
           workplaceBlockPosition, null);
     }
 
-    registerInteractables(position, workplaceComponent, interactables, 1);
+    registerInteractables(position, interactables, structureRotation, 1);
 
     workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, structureRotation));
+    workplaceComponent.setPrefabAnchor(position.clone());
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.INN_KEEPER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
         workplaceBlockPosition));
@@ -104,7 +111,7 @@ public class TavernSpawner {
         trackedPlacement);
 
     WorkplaceContainerRegistryComponent registry = spawnContainers(
-        1, position, workplaceChunk, chunkStore, rotation);
+        1, position, workplaceChunk, chunkStore, structureRotation);
 
     if (registry == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Could not spawn correctly the containers");
@@ -119,23 +126,28 @@ public class TavernSpawner {
 
   private static WorkplaceContainerRegistryComponent spawnContainers(
       int level,
-      Vector3i center,
+      Vector3i prefabAnchor,
       WorldChunk chunk,
       Store<ChunkStore> chunkStore,
-      int rotation) {
+      Rotation structureRotation) {
     WorkplaceContainerRegistryComponent registry = new WorkplaceContainerRegistryComponent();
-    List<Vector3i> offsets = Config.getStorageOffsetForLevel(level);
+    List<Vector3i> offsets = StructureConfig.Tavern.getStorageOffsetForLevel(level);
     WorldChunk usedChunk = chunk;
     Vector3i containerPosition;
+    int rotation = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.Tavern.CONTAINER_BLOCK_YAW_OFFSET,
+            structureRotation),
+        Rotation.None,
+        Rotation.None).index();
 
     for (Vector3i offset : offsets) {
-
-      containerPosition = center.clone().add(offset);
+      containerPosition = StructurePlacementUtils.withOffset(prefabAnchor, offset, structureRotation);
 
       usedChunk = Utils.setBlockChunkAware(
           usedChunk,
           containerPosition,
-          SINGLE_STORAGE_BLOCK,
+          StructureConfig.Tavern.SINGLE_STORAGE_BLOCK,
           rotation);
 
       Ref<ChunkStore> containerRef = usedChunk.getBlockComponentEntity(containerPosition.x,
@@ -156,7 +168,7 @@ public class TavernSpawner {
       }
 
       container.setPosition(containerPosition);
-      container.setAccessPosition(getContainerAccessPosition(containerPosition));
+      container.setAccessPosition(getContainerAccessPosition(containerPosition, structureRotation));
       container.setUuid(UUID.randomUUID());
       registry.registerContainer(container.getUuid(), container);
     }
@@ -166,13 +178,13 @@ public class TavernSpawner {
 
   private static void registerInteractables(
       Vector3i center,
-      WorkplaceComponent workplace,
       WorkplaceInteractablesMapComponent interactables,
+      Rotation rotation,
       int level) {
 
     interactables.setNewInteractables(
         WorkplaceInteractibles.EATING_SPOT,
-        Config.getInteractables(center, level));
+        StructureConfig.Tavern.getInteractables(center, rotation, level));
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
@@ -202,6 +214,7 @@ public class TavernSpawner {
       return false;
     }
 
+    Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawn = false;
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(),
@@ -212,14 +225,14 @@ public class TavernSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          PREFAB_JSON,
+          StructureConfig.Tavern.PREFAB_JSON,
           prefabAnchor,
-          Rotation.None,
+          prefabRotation,
           true);
     }
 
@@ -245,23 +258,32 @@ public class TavernSpawner {
     }
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
-    return prefabAnchor.clone()
-        .add(Vector3i.NORTH.clone().scale(4))
-        .add(Vector3i.WEST.clone().scale(4))
-        .add(Vector3i.UP);
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Tavern.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.EAST);
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        workplaceBlockPosition,
+        StructureConfig.Tavern.BENCH_ACCESS_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getContainerAccessPosition(Vector3i containerPosition) {
-    return containerPosition.clone().add(Vector3i.EAST);
+  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        containerPosition,
+        StructureConfig.Tavern.CONTAINER_ACCESS_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.SOUTH.clone().scale(4)).add(Vector3i.DOWN);
+  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.removeOffset(
+        workplaceBlockPosition,
+        StructureConfig.Tavern.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
   private static boolean rollbackFailedSpawn(
@@ -276,69 +298,5 @@ public class TavernSpawner {
     }
     PrefabManager.restoreTrackedPrefab(world, trackedPlacement);
     return false;
-  }
-
-  private class Config {
-    private static final Map<Integer, List<Vector3i>> STORAGE_SPAWNING_OFFSETS;
-    private static final Map<Integer, List<Interactable>> INTERACTABLES;
-
-    static {
-      STORAGE_SPAWNING_OFFSETS = new HashMap<>();
-      INTERACTABLES = new HashMap<>();
-
-      List<Vector3i> level1Containers = new ArrayList<>();
-      level1Containers.add(new Vector3i(-4, 1, -2));
-      STORAGE_SPAWNING_OFFSETS.put(1, level1Containers);
-
-      List<Interactable> level1Interactables = new ArrayList<>();
-      level1Interactables.add(new Interactable(new Vector3i(-2, 1, 1), new Vector3i(-2, 2, 2), true));
-      level1Interactables.add(new Interactable(new Vector3i(-3, 1, 1), new Vector3i(-3, 2, 2), true));
-      level1Interactables.add(new Interactable(new Vector3i(-2, 1, 4), new Vector3i(-2, 2, 3), true));
-      level1Interactables.add(new Interactable(new Vector3i(-3, 1, 4), new Vector3i(-3, 2, 3), true));
-
-      level1Interactables.add(new Interactable(new Vector3i(2, 1, 1), new Vector3i(2, 2, 2), true));
-      level1Interactables.add(new Interactable(new Vector3i(3, 1, 1), new Vector3i(3, 2, 2), true));
-      level1Interactables.add(new Interactable(new Vector3i(2, 1, 4), new Vector3i(2, 2, 3), true));
-      level1Interactables.add(new Interactable(new Vector3i(3, 1, 4), new Vector3i(3, 2, 3), true));
-
-      level1Interactables.add(new Interactable(new Vector3i(2, 1, -1), new Vector3i(2, 2, -2), true));
-      level1Interactables.add(new Interactable(new Vector3i(3, 1, -1), new Vector3i(3, 2, -2), true));
-      level1Interactables.add(new Interactable(new Vector3i(2, 1, -4), new Vector3i(2, 2, -3), true));
-      level1Interactables.add(new Interactable(new Vector3i(3, 1, -4), new Vector3i(3, 2, -3), true));
-      INTERACTABLES.put(1, level1Interactables);
-    }
-
-    public static List<Vector3i> getStorageOffsetForLevel(int level) {
-      return STORAGE_SPAWNING_OFFSETS.get(level);
-    }
-
-    public static List<Interactable> getInteractables(Vector3i center, int level) {
-      List<Interactable> template = INTERACTABLES.getOrDefault(level, new ArrayList<>());
-      List<Interactable> result = new ArrayList<>(template.size());
-
-      for (Interactable interactable : template) {
-        if (interactable == null) {
-          continue;
-        }
-
-        Interactable copy = interactable.clone();
-
-        copy.setInteractablePosition(
-            toAbsolutePositions(center, interactable.getInteractablePosition()));
-
-        if (interactable.getDependsOn() != null) {
-          copy.setDependsOn(
-              toAbsolutePositions(center, interactable.getDependsOn()));
-        }
-
-        result.add(copy);
-      }
-
-      return result;
-    }
-
-    private static Vector3i toAbsolutePositions(Vector3i prefabAnchor, Vector3i offset) {
-      return prefabAnchor.clone().add(offset);
-    }
   }
 }

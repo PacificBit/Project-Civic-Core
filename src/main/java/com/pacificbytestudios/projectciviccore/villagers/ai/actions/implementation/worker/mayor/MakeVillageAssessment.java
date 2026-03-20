@@ -14,6 +14,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingUpgradeCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
@@ -113,8 +114,8 @@ public class MakeVillageAssessment extends VillagerActionBase {
     // Step 3: check for possible upgrades
     populateLowPriorityProjects(projectPlan, villageLimits, village);
 
-    System.out.println("CreatedPlan:");
-    System.out.println(projectPlan);
+    ProjectCivicCore.LOGGER.atInfo().log("CreatedPlan:");
+    ProjectCivicCore.LOGGER.atInfo().log(projectPlan.toString());
 
     mayorComponent.setExecutingVillagePlan(projectPlan);
     return true;

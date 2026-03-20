@@ -6,6 +6,7 @@ import org.bson.BsonDocument;
 
 import com.hypixel.hytale.math.Axis;
 import com.hypixel.hytale.math.util.FastRandom;
+import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.console.ConsoleSender;
@@ -56,6 +57,31 @@ public class PrefabManager {
     return new TrackedPrefabPlacementComponent(prefabRelativePath, target, yaw, restoreSnapshot);
   }
 
+  public static Vector2i getPrefabWidthDepth(String prefabRelativePath) {
+    Vector3i dimensions = getPrefabWidthHeightDepth(prefabRelativePath);
+    if (dimensions == null) {
+      return null;
+    }
+
+    return new Vector2i(dimensions.x, dimensions.z);
+  }
+
+  public static Vector3i getPrefabWidthHeightDepth(String prefabRelativePath) {
+    IPrefabBuffer prefabBuffer = loadPrefabBuffer(prefabRelativePath);
+    if (prefabBuffer == null) {
+      return null;
+    }
+
+    try {
+      int width = prefabBuffer.getMaxX() - prefabBuffer.getMinX() + 1;
+      int height = prefabBuffer.getMaxY() - prefabBuffer.getMinY() + 1;
+      int depth = prefabBuffer.getMaxZ() - prefabBuffer.getMinZ() + 1;
+      return new Vector3i(width, height, depth);
+    } finally {
+      prefabBuffer.release();
+    }
+  }
+
   public static boolean restoreTrackedPrefab(
       World world,
       TrackedPrefabPlacementComponent trackedPlacement) {
@@ -101,5 +127,14 @@ public class PrefabManager {
     } catch (PrefabLoadException e) {
       return null;
     }
+  }
+
+  private static IPrefabBuffer loadPrefabBuffer(String prefabRelativePath) {
+    Path prefabPath = PrefabStore.get().findAssetPrefabPath(prefabRelativePath);
+    if (prefabPath == null) {
+      return null;
+    }
+
+    return PrefabBufferUtil.getCached(prefabPath);
   }
 }

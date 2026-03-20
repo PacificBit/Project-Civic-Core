@@ -3,7 +3,6 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -12,6 +11,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -20,24 +20,34 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class MineSpawner {
-  private static final String PREFAB_JSON = "Structures/Workplace/Workspace_Mine.prefab.json";
-  private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Mine_Core");
-
   public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent heart) {
+    return spawn(chunk, position, Rotation.None, heart);
+  }
+
+  public static boolean spawn(
+      WorldChunk chunk,
+      Vector3i position,
+      Rotation rotation,
+      VillageHeartComponent heart) {
+    Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
-        PREFAB_JSON,
+        StructureConfig.Mine.PREFAB_JSON,
         position.clone(),
-        Rotation.None,
+        structureRotation,
         true);
 
     if (trackedPlacement == null) {
       return false;
     }
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position);
-    WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk, workplaceBlockPosition, WORKPLACE_BLOCK);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position, structureRotation);
+    WorldChunk workplaceChunk = Utils.setBlockChunkAware(
+        chunk,
+        workplaceBlockPosition,
+        StructureConfig.Mine.WORKPLACE_BLOCK,
+        StructurePlacementUtils.toBlockRotationIndex(structureRotation));
     Ref<ChunkStore> workplace = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
@@ -82,7 +92,7 @@ public class MineSpawner {
     Ref<ChunkStore> workplaceRef = result.getSecond();
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      workplaceBlockPosition = getWorkplaceBlockPosition(position);
+      workplaceBlockPosition = getWorkplaceBlockPosition(position, Rotation.None);
       result = Utils.getBlockComponentEntityChunkAware(chunk, workplaceBlockPosition);
       workplaceChunk = result.getFirst();
       workplaceRef = result.getSecond();
@@ -107,6 +117,7 @@ public class MineSpawner {
       return false;
     }
 
+    Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawn = false;
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(), trackedPlacement);
@@ -116,14 +127,14 @@ public class MineSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          PREFAB_JSON,
+          StructureConfig.Mine.PREFAB_JSON,
           prefabAnchor,
-          Rotation.None,
+          prefabRotation,
           true);
     }
 
@@ -137,12 +148,18 @@ public class MineSpawner {
     return true;
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
-    return prefabAnchor.clone().add(Vector3i.UP);
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Mine.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.DOWN);
+  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.removeOffset(
+        workplaceBlockPosition,
+        StructureConfig.Mine.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
   private static boolean rollbackFailedSpawn(

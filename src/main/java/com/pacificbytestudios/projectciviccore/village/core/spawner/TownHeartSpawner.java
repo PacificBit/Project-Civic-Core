@@ -2,7 +2,6 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -11,25 +10,28 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 
 public class TownHeartSpawner {
-  private static final String TOWN_HALL_PREFAB_JSON = "Structures/Workplace/Town_Hall.prefab.json";
-  private static final BlockType TOWN_CORE = BlockType.getAssetMap().getAsset("Village_Core");
 
   public static boolean spawn(WorldChunk chunk, Vector3i position) {
+    return spawn(chunk, position, Rotation.None);
+  }
+
+  public static boolean spawn(WorldChunk chunk, Vector3i position, Rotation rotation) {
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
-        TOWN_HALL_PREFAB_JSON,
+        StructureConfig.TownHeart.PREFAB_JSON,
         position.clone(),
-        Rotation.None,
+        StructurePlacementUtils.normalize(rotation),
         true);
     if (trackedPlacement == null) {
       return false;
     }
 
-    chunk.setBlock(position.x, position.y + 1, position.z, TOWN_CORE);
+    chunk.setBlock(position.x, position.y + 1, position.z, StructureConfig.TownHeart.WORKPLACE_BLOCK);
     Ref<ChunkStore> heartRef = chunk.getBlockComponentEntity(position.x, position.y + 1, position.z);
     if (heartRef == null || !heartRef.isValid()) {
       chunk.breakBlock(position.x, position.y + 1, position.z);
@@ -58,11 +60,15 @@ public class TownHeartSpawner {
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
+    return despawn(chunk, position, Rotation.None);
+  }
+
+  public static boolean despawn(WorldChunk chunk, Vector3i position, Rotation rotation) {
     return PrefabManager.removePrefab(
         chunk.getWorld(),
-        TOWN_HALL_PREFAB_JSON,
+        StructureConfig.TownHeart.PREFAB_JSON,
         position.clone(),
-        Rotation.None,
+        StructurePlacementUtils.normalize(rotation),
         true);
   }
 }

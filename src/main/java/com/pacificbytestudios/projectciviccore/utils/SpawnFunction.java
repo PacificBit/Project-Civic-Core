@@ -1,10 +1,11 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 
 @FunctionalInterface
 public interface SpawnFunction {
-  boolean apply(WorldChunk chunk, Vector3i position, VillageHeartComponent village);
+  boolean apply(WorldChunk chunk, Vector3i position, Rotation rotation, VillageHeartComponent village);
 }

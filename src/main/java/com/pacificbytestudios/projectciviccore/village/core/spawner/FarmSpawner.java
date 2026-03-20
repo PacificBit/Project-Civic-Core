@@ -4,9 +4,7 @@ import java.util.UUID;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -16,6 +14,7 @@ import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -26,26 +25,33 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class FarmSpawner {
-  private static final String PREFAB_JSON = "Structures/Workplace/Workplace_Farm.prefab.json";
-  private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
-  private static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
-  private static final ClaimedAreaComponent WORKING_AREA_OFFSET = new ClaimedAreaComponent(
-      new Vector2i(-3, -3), new Vector2i(3, 3));
-
   public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent heart) {
+    return spawn(chunk, position, Rotation.None, heart);
+  }
+
+  public static boolean spawn(
+      WorldChunk chunk,
+      Vector3i position,
+      Rotation rotation,
+      VillageHeartComponent heart) {
+    Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
-        PREFAB_JSON,
+        StructureConfig.Farm.PREFAB_JSON,
         position.clone(),
-        Rotation.None,
+        structureRotation,
         true);
     if (trackedPlacement == null) {
       return false;
     }
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position);
-    WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk, workplaceBlockPosition, WORKPLACE_BLOCK);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position, structureRotation);
+    WorldChunk workplaceChunk = Utils.setBlockChunkAware(
+        chunk,
+        workplaceBlockPosition,
+        StructureConfig.Farm.WORKPLACE_BLOCK,
+        StructurePlacementUtils.toBlockRotationIndex(structureRotation));
     Ref<ChunkStore> workplace = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
@@ -68,9 +74,12 @@ public class FarmSpawner {
 
     workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, structureRotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.FARMER });
-    workplaceComponent.setWorkingArea(new ClaimedAreaComponent(WORKING_AREA_OFFSET, position));
+    workplaceComponent.setWorkingArea(new ClaimedAreaComponent(
+        StructureConfig.Farm.WORKING_AREA_OFFSET,
+        position,
+        structureRotation));
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
     chunkStore.putComponent(
@@ -78,8 +87,12 @@ public class FarmSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);
 
-    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition);
-    WorldChunk containerChunk = Utils.setBlockChunkAware(workplaceChunk, containerPosition, SINGLE_STORAGE_BLOCK);
+    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition, structureRotation);
+    WorldChunk containerChunk = Utils.setBlockChunkAware(
+        workplaceChunk,
+        containerPosition,
+        StructureConfig.Farm.SINGLE_STORAGE_BLOCK,
+        StructurePlacementUtils.toBlockRotationIndex(structureRotation));
     Ref<ChunkStore> containerRef = containerChunk.getBlockComponentEntity(containerPosition.x,
         containerPosition.y, containerPosition.z);
 
@@ -100,7 +113,7 @@ public class FarmSpawner {
     workplaceComponent.setPrefabAnchor(position.clone());
 
     container.setPosition(containerPosition);
-    container.setAccessPosition(getContainerAccessPosition(containerPosition));
+    container.setAccessPosition(getContainerAccessPosition(containerPosition, structureRotation));
     container.setUuid(UUID.randomUUID());
 
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
@@ -137,6 +150,7 @@ public class FarmSpawner {
       return false;
     }
 
+    Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawn = false;
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(), trackedPlacement);
@@ -146,14 +160,14 @@ public class FarmSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          PREFAB_JSON,
+          StructureConfig.Farm.PREFAB_JSON,
           prefabAnchor,
-          Rotation.None,
+          prefabRotation,
           true);
     }
 
@@ -162,31 +176,46 @@ public class FarmSpawner {
       return false;
     }
 
-    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition);
+    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition, prefabRotation);
     Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
     Utils.breakBlockChunkAware(workplaceChunk, containerPosition);
 
     return despawn;
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
-    return prefabAnchor.clone().add(Vector3i.NORTH.clone().scale(4)).add(Vector3i.UP);
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Farm.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getContainerPosition(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.EAST.clone().scale(2));
+  private static Vector3i getContainerPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        workplaceBlockPosition,
+        StructureConfig.Farm.CONTAINER_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.SOUTH);
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        workplaceBlockPosition,
+        StructureConfig.Farm.BENCH_ACCESS_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getContainerAccessPosition(Vector3i containerPosition) {
-    return containerPosition.clone().add(Vector3i.SOUTH);
+  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        containerPosition,
+        StructureConfig.Farm.CONTAINER_ACCESS_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.SOUTH.clone().scale(4)).add(Vector3i.DOWN);
+  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.removeOffset(
+        workplaceBlockPosition,
+        StructureConfig.Farm.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
   private static boolean rollbackFailedSpawn(

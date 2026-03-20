@@ -67,8 +67,8 @@
           "Config": {
             "MaxVillageLevel": 3,
             "ClaimRadiusPerLevel": {
-              "1": 20,
-              "2": 40,
+              "1": 30,
+              "2": 50,
               "3": 60
             },
             "VillagerCapPerLevel": {
@@ -84,7 +84,7 @@
                 "Tavern": 1,
                 "Sawmill": 1,
                 "Mine": 0,
-                "House": 4
+                "House": 3
               },
               "2": {
                 "TownHall": 1,
@@ -93,7 +93,7 @@
                 "Storage": 2,
                 "Tavern": 2,
                 "Farm": 2,
-                "House": 8
+                "House": 6
               },
               "3": {
                 "TownHall": 1,
@@ -102,7 +102,7 @@
                 "Storage": 3,
                 "Tavern": 3,
                 "Farm": 3,
-                "House": 12
+                "House": 8
               }
             },
             "StructureMaxLevelPerVillageLevel": {

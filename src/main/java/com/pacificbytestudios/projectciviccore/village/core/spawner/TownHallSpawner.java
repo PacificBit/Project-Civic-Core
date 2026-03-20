@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -15,6 +14,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -25,29 +25,39 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class TownHallSpawner {
-  private static final String PREFAB_JSON = "Structures/Workplace/Workplace_Town_Hall.prefab.json";
-  private static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Town_Hall_Core");
-
   public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent village) {
+    return spawn(chunk, position, Rotation.None, village);
+  }
+
+  public static boolean spawn(
+      WorldChunk chunk,
+      Vector3i position,
+      Rotation rotation,
+      VillageHeartComponent village) {
+    Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
-        PREFAB_JSON,
+        StructureConfig.TownHall.PREFAB_JSON,
         position.clone(),
-        Rotation.None,
+        structureRotation,
         true);
     if (trackedPlacement == null) {
       return false;
     }
 
-    int rotation = RotationTuple.of(
-        Rotation.OneEighty,
+    int blockRotation = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.TownHall.WORKPLACE_BLOCK_YAW_OFFSET,
+            structureRotation),
         Rotation.None,
         Rotation.None).index();
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position, structureRotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk,
-        workplaceBlockPosition, WORKPLACE_BLOCK, rotation);
+        workplaceBlockPosition,
+        StructureConfig.TownHall.WORKPLACE_BLOCK,
+        blockRotation);
     Ref<ChunkStore> workplace = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
@@ -69,7 +79,11 @@ public class TownHallSpawner {
           workplaceBlockPosition, null);
     }
 
-    WorkplaceContainerRegistryComponent storage = buildWorkplaceStorageRegistry(world, chunk, chunkStore, village);
+    WorkplaceContainerRegistryComponent storage = buildWorkplaceStorageRegistry(
+        chunk,
+        chunkStore,
+        village,
+        structureRotation);
     if (storage == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Could not build workplace storage registry");
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement,
@@ -79,7 +93,8 @@ public class TownHallSpawner {
     workplaceComponent.setStorage(storage);
     workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, structureRotation));
+    workplaceComponent.setPrefabAnchor(position.clone());
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
         workplaceBlockPosition));
@@ -94,10 +109,10 @@ public class TownHallSpawner {
   }
 
   private static WorkplaceContainerRegistryComponent buildWorkplaceStorageRegistry(
-      World world,
       WorldChunk chunk,
       Store<ChunkStore> chunkStore,
-      VillageHeartComponent village) {
+      VillageHeartComponent village,
+      Rotation rotation) {
     Vector3i containerPosition = getContainerPosition(village);
     Ref<ChunkStore> containerRef = Utils.getBlockComponentEntityChunkAware(chunk, containerPosition).getSecond();
     if (containerRef == null || !containerRef.isValid()) {
@@ -113,7 +128,10 @@ public class TownHallSpawner {
     }
 
     container.setPosition(containerPosition);
-    container.setAccessPosition(containerPosition.clone().add(Vector3i.SOUTH));
+    container.setAccessPosition(StructurePlacementUtils.withOffset(
+        containerPosition,
+        StructureConfig.TownHall.CONTAINER_ACCESS_OFFSET,
+        rotation));
     container.setUuid(UUID.randomUUID());
 
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
@@ -148,6 +166,7 @@ public class TownHallSpawner {
       return false;
     }
 
+    Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawn = false;
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(),
@@ -158,14 +177,14 @@ public class TownHallSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          PREFAB_JSON,
+          StructureConfig.TownHall.PREFAB_JSON,
           prefabAnchor,
-          Rotation.None,
+          prefabRotation,
           true);
     }
 
@@ -178,19 +197,25 @@ public class TownHallSpawner {
     return despawn;
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor) {
-    return prefabAnchor.clone()
-        .add(Vector3i.SOUTH.clone().scale(4))
-        .add(Vector3i.WEST.clone().scale(4))
-        .add(Vector3i.UP);
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.TownHall.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.NORTH);
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        workplaceBlockPosition,
+        StructureConfig.TownHall.BENCH_ACCESS_OFFSET,
+        rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition) {
-    return workplaceBlockPosition.clone().add(Vector3i.SOUTH.clone().scale(4)).add(Vector3i.DOWN);
+  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.removeOffset(
+        workplaceBlockPosition,
+        StructureConfig.TownHall.WORKPLACE_BLOCK_OFFSET,
+        rotation);
   }
 
   private static Vector3i getContainerPosition(VillageHeartComponent village) {

@@ -74,7 +74,8 @@
         "WorkplaceInteractables": {},
         "TownHallComponent": {}
       }
-    }
+    },
+    "InteractionHint": "Town Hall (Coming Soon)"
   },
   "PlayerAnimationsId": "Block",
   "IconProperties": {
