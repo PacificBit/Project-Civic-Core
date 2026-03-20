@@ -21,12 +21,12 @@ import com.pacificbytestudios.projectciviccore.registry.registry.ToolRecipeRegis
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingUpgradeCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
+import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseSpawnComponent;
-import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.farm.FarmComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -64,6 +64,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderCreateNewMealPlanAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderGatherNextMealMaterialFromContainerAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderPlaceFoodOnPlateAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.mayor.BuilderExecuteNextProjectStageAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.mayor.BuilderMakeVillageAssessment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
@@ -83,6 +84,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReachPlateToFill;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReserveNextPlateToFillSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.mayor.BuilderHasNotDoneVillageAssessment;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.mayor.BuilderHasPlanToExecuteToday;
+import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.BuilderItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
@@ -97,9 +100,6 @@ public final class ProjectCivicCore extends JavaPlugin {
   private static ProjectCivicCore INSTANCE;
   private ComponentType<ChunkStore, VillageHeartComponent> villageCoreComponentType;
   private ComponentType<ChunkStore, VillageSpawnComponent> villageSpawnComponentType;
-
-  @Deprecated(forRemoval = true)
-  private ComponentType<ChunkStore, VillageBedComponent> villageBedComponentType;
 
   private ComponentType<ChunkStore, VillageTaskQueueComponent> villageTaskQueueComponentType;
 
@@ -122,6 +122,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, HouseSpawnComponent> houseSpawnComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
+  private ComponentType<EntityStore, MayorComponent> mayorComponentType;
 
   public ProjectCivicCore(JavaPluginInit init) {
     super(init);
@@ -151,11 +152,6 @@ public final class ProjectCivicCore extends JavaPlugin {
         VillageHeartComponent.class,
         "VillageHeartComponent",
         VillageHeartComponent.CODEC);
-
-    this.villageBedComponentType = chunkRegistry.registerComponent(
-        VillageBedComponent.class,
-        "VillageBedComponent",
-        VillageBedComponent.CODEC);
 
     this.workplaceComponentType = chunkRegistry.registerComponent(
         WorkplaceComponent.class,
@@ -245,6 +241,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillagerComponent",
         VillagerComponent.CODEC);
 
+    this.mayorComponentType = entityRegistry.registerComponent(
+        MayorComponent.class,
+        "MayorComponent",
+        MayorComponent.CODEC);
+
     entityRegistry.registerSystem(new EnsureVillagerComponents());
     entityRegistry.registerSystem(new VillagerInventoryPersistenceSystem());
     entityRegistry.registerSystem(new SitOnChairSystem());
@@ -320,6 +321,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "HasNotDoneVillageAssessment",
         BuilderHasNotDoneVillageAssessment::new);
+
+    npcPlugin.registerCoreComponentType(
+        "HasPlanToExecuteToday",
+        BuilderHasPlanToExecuteToday::new);
 
     // ===========================
     // Actions
@@ -421,6 +426,10 @@ public final class ProjectCivicCore extends JavaPlugin {
         "MakeVillageAssessment",
         BuilderMakeVillageAssessment::new);
 
+    npcPlugin.registerCoreComponentType(
+        "ExecuteNextProjectState",
+        BuilderExecuteNextProjectStageAction::new);
+
     // ===========================
     // Extra
     // ===========================
@@ -446,6 +455,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     VillageLevelUpCostRegistry.initialize();
     VillageBuildingCostRegistry.initialize();
     VillageBuildingUpgradeCostRegistry.initialize();
+    VillageNewVillagerCostRegistry.initialize();
   }
 
   public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
@@ -454,11 +464,6 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, VillageHeartComponent> getVillageCoreComponentType() {
     return this.villageCoreComponentType;
-  }
-
-  @Deprecated(forRemoval = true)
-  public ComponentType<ChunkStore, VillageBedComponent> getVillageBedComponentType() {
-    return this.villageBedComponentType;
   }
 
   public ComponentType<ChunkStore, WorkplaceComponent> getWorkplaceComponentType() {
@@ -525,4 +530,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     return this.villagerComponentType;
   }
 
+  public ComponentType<EntityStore, MayorComponent> getMayorComponentType() {
+    return this.mayorComponentType;
+  }
 }

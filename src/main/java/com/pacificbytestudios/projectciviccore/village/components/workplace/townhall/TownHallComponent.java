@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 
 public class TownHallComponent implements Component<ChunkStore> {
 
@@ -44,6 +45,17 @@ public class TownHallComponent implements Component<ChunkStore> {
 
   public void setVillageProjectPlan(VillageProjectPlan villageProjectPlan) {
     this.villageProjectPlan = villageProjectPlan;
+  }
+
+  public void updateProjectPlan(VillageProject project) {
+    this.villageProjectPlan.updateProjectPlan(project);
+  }
+
+  public void removeProject(VillageProject project) {
+    if (this.villageProjectPlan == null) {
+      return;
+    }
+    this.villageProjectPlan.removeProject(project);
   }
 
   public TownHallComponent clone() {

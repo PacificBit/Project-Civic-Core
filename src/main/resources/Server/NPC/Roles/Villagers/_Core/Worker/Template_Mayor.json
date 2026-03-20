@@ -239,12 +239,38 @@
               "Instructions": [
                 {
                   "Sensor": {
-                    "Type": "Any"
+                    "Type": "Any",
+                    "Once": true
                   },
                   "Actions": [
                     {
                       "Type": "Log",
                       "Message": "Doing assessment"
+                    },
+                    {
+                      "Type": "MakeVillageAssessment"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "HasPlanToExecuteToday"
+              },
+              "$Comment": "Step 2) Execute village assessment",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "Log",
+                      "Message": "HAS PLAN!"
+                    },
+                    {
+                      "Type": "ExecuteNextProjectState"
                     }
                   ]
                 }

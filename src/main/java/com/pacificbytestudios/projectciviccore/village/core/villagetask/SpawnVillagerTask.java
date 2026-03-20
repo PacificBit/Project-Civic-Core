@@ -34,6 +34,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
 import it.unimi.dsi.fastutil.Pair;
 
@@ -85,6 +86,8 @@ public class SpawnVillagerTask extends AVillageTask {
     assert npcRef != null;
 
     VillagerComponent villagerComponent = new VillagerComponent();
+    villagerComponent.setRole(VillagerRole.fromNpcRole(this.npcRole));
+
     UUIDComponent uuidComponent = entityStore.getComponent(npcRef, UUIDComponent.getComponentType());
     UUID uuid = uuidComponent.getUuid();
     heart.registerVillager(uuid, villagerComponent);

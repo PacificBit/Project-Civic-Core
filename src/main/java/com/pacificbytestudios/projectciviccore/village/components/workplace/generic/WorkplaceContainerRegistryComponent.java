@@ -70,6 +70,13 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
     this.containers.remove(uuid);
   }
 
+  public WorkplaceContainerEntryComponent getFirstContainer() {
+    if (this.containers.size() == 0) {
+      return null;
+    }
+    return this.containers.values().iterator().next();
+  }
+
   @Override
   public WorkplaceContainerRegistryComponent clone() {
     WorkplaceContainerRegistryComponent component = new WorkplaceContainerRegistryComponent();

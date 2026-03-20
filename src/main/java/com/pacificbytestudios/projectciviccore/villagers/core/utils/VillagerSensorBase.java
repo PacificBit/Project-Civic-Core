@@ -17,6 +17,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -146,6 +147,16 @@ public abstract class VillagerSensorBase extends SensorBase {
       ComponentType<ChunkStore, T> componentType) {
     Ref<ChunkStore> workplace = getWorkplaceRef(ref, store);
     return workplace != null ? getComponent(store, workplace, componentType) : null;
+  }
+
+  protected MayorComponent getMayorComponent(
+      Store<EntityStore> store,
+      Ref<EntityStore> ref) {
+    MayorComponent mayor = store.getComponent(ref, MayorComponent.getComponentType());
+    if (mayor == null) {
+      throw new IllegalStateException("Mayor does not have the mayor component");
+    }
+    return mayor;
   }
 
   protected boolean isRefValid(Ref<ChunkStore> ref) {

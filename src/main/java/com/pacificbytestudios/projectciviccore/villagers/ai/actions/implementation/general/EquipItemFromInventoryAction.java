@@ -36,7 +36,7 @@ public class EquipItemFromInventoryAction extends ActionBase {
       return false;
     }
 
-    ItemContainer inventory = npcEntity.getInventory().getCombinedEverything();
+    ItemContainer inventory = npcEntity.getInventory().getCombinedStorageFirst();
     byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();
     ItemContainer hotbar = npcEntity.getInventory().getHotbar();
     ItemStack itemInHand = npcEntity.getInventory().getActiveHotbarItem();

@@ -83,6 +83,20 @@ public class VillageProjectPlan {
     return false;
   }
 
+  public boolean contains(VillageObjectiveStatus status) {
+    if (this.projectList.isEmpty()) {
+      return false;
+    }
+
+    for (VillageProject project : this.projectList) {
+      if (project != null && status.equals(project.getObjectiveStatus())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public boolean contains(StructureType structureType) {
     if (this.projectList.isEmpty()) {
       return false;
@@ -109,6 +123,19 @@ public class VillageProjectPlan {
     }
 
     return false;
+  }
+
+  public void updateProjectPlan(VillageProject updatedProject) {
+    for (VillageProject project : this.projectList) {
+      if (project.getProjectId().equals(updatedProject.getProjectId())) {
+        project.update(updatedProject);
+      }
+    }
+  }
+
+  public void removeProject(VillageProject projectToRemove) {
+    this.projectList.removeIf(project -> project != null
+        && projectToRemove.getProjectId().equals(project.getProjectId()));
   }
 
   public short getObjectiveTypeCount(VillageObjectiveType objectiveType) {
@@ -180,6 +207,11 @@ public class VillageProjectPlan {
     return encoded;
   }
 
+  @Override
+  public String toString() {
+    return "VillageProjectPlan{projectList=" + projectList + "}";
+  }
+
   public static class VillageProject implements Comparable<VillageProject> {
     public static final BuilderCodec<VillageProject> CODEC = BuilderCodec
         .builder(VillageProject.class, VillageProject::new)
@@ -232,8 +264,8 @@ public class VillageProjectPlan {
         .append(new KeyedCodec<>("RequiredMaterials", new ArrayCodec<>(
             MaterialQuantity.CODEC,
             MaterialQuantity[]::new), false),
-            (obj, value) -> obj.requiredMaterials = value,
-            obj -> obj.requiredMaterials)
+            (obj, value) -> obj.requiredMaterialPerStage = value,
+            obj -> obj.requiredMaterialPerStage)
         .add()
 
         .build();
@@ -244,9 +276,9 @@ public class VillageProjectPlan {
     private Weight weight = Weight.LOW;
     private StructureType structureType;
     private UUID structureId;
-    private short stage;
+    private short stage = 0;
     private short totalStages = 1;
-    private MaterialQuantity[] requiredMaterials = new MaterialQuantity[0];
+    private MaterialQuantity[] requiredMaterialPerStage = new MaterialQuantity[0];
 
     public UUID getProjectId() {
       return projectId;
@@ -304,12 +336,12 @@ public class VillageProjectPlan {
       this.totalStages = totalStages;
     }
 
-    public MaterialQuantity[] getRequiredMaterials() {
-      return this.requiredMaterials;
+    public MaterialQuantity[] getRequiredMaterialPerStage() {
+      return this.requiredMaterialPerStage;
     }
 
-    public void setRequiredMaterials(MaterialQuantity[] requiredMaterials) {
-      this.requiredMaterials = requiredMaterials != null ? requiredMaterials : new MaterialQuantity[0];
+    public void setRequiredMaterialPerStage(MaterialQuantity[] requiredMaterials) {
+      this.requiredMaterialPerStage = requiredMaterials != null ? requiredMaterials : new MaterialQuantity[0];
     }
 
     public StructureType getStructureType() {
@@ -328,6 +360,11 @@ public class VillageProjectPlan {
       this.structureId = structureId;
     }
 
+    public void update(VillageProject updated) {
+      this.objectiveStatus = updated.objectiveStatus;
+      this.stage = updated.stage;
+    }
+
     public VillageProject clone() {
       VillageProject component = new VillageProject();
       component.projectId = this.projectId;
@@ -338,10 +375,11 @@ public class VillageProjectPlan {
       component.weight = this.weight;
       component.stage = this.stage;
       component.totalStages = this.totalStages;
-      component.requiredMaterials = new MaterialQuantity[this.requiredMaterials.length];
-      for (int i = 0; i < this.requiredMaterials.length; i++) {
-        MaterialQuantity material = this.requiredMaterials[i];
-        component.requiredMaterials[i] = material != null
+
+      component.requiredMaterialPerStage = new MaterialQuantity[this.requiredMaterialPerStage.length];
+      for (int i = 0; i < this.requiredMaterialPerStage.length; i++) {
+        MaterialQuantity material = this.requiredMaterialPerStage[i];
+        component.requiredMaterialPerStage[i] = material != null
             ? material.clone(material.getQuantity())
             : null;
       }
@@ -354,6 +392,20 @@ public class VillageProjectPlan {
         return -1;
       }
       return Integer.compare(other.getWeight(), this.getWeight());
+    }
+
+    @Override
+    public String toString() {
+      return "VillageProject{" +
+          "\n projectId=" + projectId +
+          ",\n objectiveType=" + objectiveType +
+          ",\n objectiveStatus=" + objectiveStatus +
+          ",\n weight=" + weight +
+          ",\n structureType=" + structureType +
+          ",\n structureId=" + structureId +
+          ",\n stage=" + stage +
+          ",\n totalStages=" + totalStages +
+          '}';
     }
 
     public enum Weight {
@@ -380,5 +432,6 @@ public class VillageProjectPlan {
         return LOW;
       }
     }
+
   }
 }

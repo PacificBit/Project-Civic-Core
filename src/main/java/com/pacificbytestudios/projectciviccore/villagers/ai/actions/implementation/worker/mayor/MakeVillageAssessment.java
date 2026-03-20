@@ -1,7 +1,9 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.mayor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.component.Ref;
@@ -27,6 +29,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.town
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveStatus;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
+import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
 public class MakeVillageAssessment extends VillagerActionBase {
@@ -61,6 +64,8 @@ public class MakeVillageAssessment extends VillagerActionBase {
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
+    MayorComponent mayorComponent = this.getMayorComponent(store, ref);
+
     TownHallComponent townHall = this.getComponentFromWorkplace(store, ref, TownHallComponent.getComponentType());
     VillageHeartComponent village = this.getVillageHeartComponent(ref, store);
     if (townHall == null) {
@@ -93,6 +98,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
         areStructuresMaxedOut(villageLimits, village.getWorkplaces(), village.getHouses())) {
       VillageProject project = buildUpdateVillageProject((short) (villageLevel + 1));
       projectPlan.addProject(project);
+      mayorComponent.setExecutingVillagePlan(projectPlan);
       return true;
     }
 
@@ -107,6 +113,10 @@ public class MakeVillageAssessment extends VillagerActionBase {
     // Step 3: check for possible upgrades
     populateLowPriorityProjects(projectPlan, villageLimits, village);
 
+    System.out.println("CreatedPlan:");
+    System.out.println(projectPlan);
+
+    mayorComponent.setExecutingVillagePlan(projectPlan);
     return true;
   }
 
@@ -244,10 +254,10 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setObjectiveStatus(VillageObjectiveStatus.NEW);
     project.setWeight(Weight.HIGH);
     project.setTotalStages(VillageObjectiveType.SPAWN_VILLAGER.getStages());
-    project.setRequiredMaterials(
-        VillageNewVillagerCostRegistry
-            .getRequirementsForLevel(currentLevel)
-            .toArray(MaterialQuantity[]::new));
+    project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
+        VillageNewVillagerCostRegistry.getRequirementsForLevel(currentLevel),
+        project.getTotalStages()));
+
     return project;
   }
 
@@ -260,10 +270,10 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setTotalStages(VillageObjectiveType.getStages(structureType));
     project.setStructureType(structureType);
     project.setStructureId(structureId);
-    project.setRequiredMaterials(
-        VillageBuildingUpgradeCostRegistry
-            .getRequirementsForNextLevel(structureType, level)
-            .toArray(MaterialQuantity[]::new));
+    project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
+        VillageBuildingUpgradeCostRegistry.getRequirementsForNextLevel(structureType, level),
+        project.getTotalStages()));
+
     return project;
   }
 
@@ -275,10 +285,10 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setWeight(Weight.MID);
     project.setTotalStages(VillageObjectiveType.BUILD_WORKPLACE.getStages());
     project.setStructureType(structureType);
-    project.setRequiredMaterials(
-        VillageBuildingCostRegistry
-            .getRequirementsForBuilding(structureType)
-            .toArray(MaterialQuantity[]::new));
+    project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
+        VillageBuildingCostRegistry.getRequirementsForBuilding(structureType),
+        project.getTotalStages()));
+
     return project;
   }
 
@@ -290,10 +300,9 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setWeight(Weight.HIGH);
     project.setTotalStages(VillageObjectiveType.BUILD_HOUSE.getStages());
     project.setStructureType(StructureType.HOUSE);
-    project.setRequiredMaterials(
-        VillageBuildingCostRegistry
-            .getRequirementsForBuilding(StructureType.HOUSE)
-            .toArray(MaterialQuantity[]::new));
+    project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
+        VillageBuildingCostRegistry.getRequirementsForBuilding(StructureType.HOUSE),
+        project.getTotalStages()));
     return project;
   }
 
@@ -304,10 +313,23 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setObjectiveStatus(VillageObjectiveStatus.NEW);
     project.setWeight(Weight.HIGH);
     project.setTotalStages(VillageObjectiveType.VILLAGE_LEVEL_UP.getStages());
-    project.setRequiredMaterials(
-        VillageLevelUpCostRegistry
-            .getRequirementsForNextLevel(level)
-            .toArray(MaterialQuantity[]::new));
+    project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
+        VillageLevelUpCostRegistry.getRequirementsForNextLevel(level),
+        project.getTotalStages()));
     return project;
+  }
+
+  private MaterialQuantity[] getMaterialQuantitiesPerStage(
+      Set<MaterialQuantity> totalQuantities,
+      short stages) {
+    List<MaterialQuantity> singleStageMaterial = new ArrayList<>();
+
+    for (MaterialQuantity material : totalQuantities) {
+      singleStageMaterial
+          .add(new MaterialQuantity(
+              material.getItemId(), null, null, (int) material.getQuantity() / stages, null));
+    }
+
+    return singleStageMaterial.toArray(MaterialQuantity[]::new);
   }
 }

@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.inventory;
 
+import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 
 public final class InventoryItemCriteria {
@@ -55,6 +56,17 @@ public final class InventoryItemCriteria {
       this.matchMode = MatchMode.EXACT;
       this.normalizedPattern = itemId;
     }
+  }
+
+  public static InventoryItemCriteria fromMaterialQuantity(MaterialQuantity materialQuantity) {
+    if (materialQuantity == null) {
+      throw new IllegalArgumentException("materialQuantity cannot be null");
+    }
+
+    return new InventoryItemCriteria(
+        materialQuantity.getItemId(),
+        true,
+        materialQuantity.getQuantity());
   }
 
   public ItemRequestCriterion toVillageRequestCriterion() {

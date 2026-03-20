@@ -21,13 +21,10 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageS
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
 public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
-  private static final String[] SPAWNABLE_NPC = new String[] {
-      "Female_Civilian",
-      "Male_Civilian"
-  };
-
+  private static final VillagerRole[] SPAWNABLE_NPC = VillagerRole.values();
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   @Override
@@ -62,7 +59,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     world.execute(() -> {
       VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
       for (int npcCount = 0; npcCount < spawnComponent.getInitialNpcCount(); npcCount++) {
-        String npcRole = SPAWNABLE_NPC[npcCount % SPAWNABLE_NPC.length];
+        String npcRole = SPAWNABLE_NPC[npcCount % SPAWNABLE_NPC.length].getRole();
         taskComponent.registerTask(new SpawnVillagerTask(npcRole, radius));
       }
 

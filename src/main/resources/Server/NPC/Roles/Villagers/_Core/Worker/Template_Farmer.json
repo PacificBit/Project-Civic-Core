@@ -1193,7 +1193,7 @@
               ],
               "Action": {
                 "Type": "State",
-                "State": "WorkCooldown"
+                "State": "PostWorkCooldown"
               }
             }
           ]
@@ -1221,7 +1221,7 @@
               ],
               "Action": {
                 "Type": "State",
-                "State": "WorkCooldown"
+                "State": "PostWorkCooldown"
               }
             }
           ]
@@ -1249,7 +1249,7 @@
               ],
               "Action": {
                 "Type": "State",
-                "State": "WorkCooldown"
+                "State": "PostWorkCooldown"
               }
             }
           ]

@@ -7,11 +7,16 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 
 public class TryJobAssignmentTask extends AVillageTask {
   public static final BuilderCodec<TryJobAssignmentTask> CODEC = BuilderCodec
@@ -50,6 +55,17 @@ public class TryJobAssignmentTask extends AVillageTask {
     heart.registerVillagerAsWorkerAt(candidate, this.workplace);
     heart.getWorkplaceFromId(this.workplace).registerAsBoss(candidate);
     ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] Worker: " + candidate + " now is a worker");
+
+    if (heart.getWorkplaceFromId(this.workplace).getWorkplaceType().equals(StructureType.TOWN_HALL)) {
+      World world = chunk.getWorld();
+      Ref<EntityStore> villager = world.getEntityRef(candidate);
+      Store<EntityStore> entityStore = world.getEntityStore().getStore();
+      world.execute(() -> {
+        entityStore.putComponent(villager, MayorComponent.getComponentType(), new MayorComponent());
+      });
+      ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] Worker: " + candidate + " now is a Mayor");
+    }
+
   }
 
 }

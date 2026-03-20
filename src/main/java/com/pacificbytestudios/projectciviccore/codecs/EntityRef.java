@@ -58,6 +58,10 @@ public class EntityRef {
     return this.position;
   }
 
+  public String getWorldName() {
+    return this.worldName;
+  }
+
   public EntityRef clone() {
     EntityRef newLocation = new EntityRef();
     newLocation.worldName = this.worldName;

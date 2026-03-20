@@ -113,7 +113,7 @@ public class TownHallSpawner {
     }
 
     container.setPosition(containerPosition);
-    container.setAccessPosition(containerPosition.clone().add(Vector3i.NORTH).add(Vector3i.DOWN));
+    container.setAccessPosition(containerPosition.clone().add(Vector3i.SOUTH));
     container.setUuid(UUID.randomUUID());
 
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();

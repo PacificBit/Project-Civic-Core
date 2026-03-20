@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -24,6 +25,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerMealType;
+import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
 public class VillagerComponent implements Component<EntityStore> {
   public static final short STORAGE_CAPACITY = 18;
@@ -65,6 +67,11 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.lastDinnerMealTime)
       .add()
 
+      .append(new KeyedCodec<>("Role", new EnumCodec<>(VillagerRole.class)),
+          (obj, value) -> obj.role = value,
+          (obj) -> obj.role)
+      .add()
+
       .build();
 
   private EntityRef villageHeartLocation;
@@ -72,7 +79,7 @@ public class VillagerComponent implements Component<EntityStore> {
   private VillagerWorkerComponent workerData;
   private Instant lastLunchMealTime;
   private Instant lastDinnerMealTime;
-
+  private VillagerRole role;
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
   public Vector3i getBedPosition() {
@@ -159,6 +166,14 @@ public class VillagerComponent implements Component<EntityStore> {
     return this.getWorkerData().getWorkplace().getWorkerDesignatedArea(uuid);
   }
 
+  public VillagerRole getRole() {
+    return role;
+  }
+
+  public void setRole(VillagerRole role) {
+    this.role = role;
+  }
+
   @Override
   public VillagerComponent clone() {
     VillagerComponent component = new VillagerComponent();
@@ -167,18 +182,20 @@ public class VillagerComponent implements Component<EntityStore> {
     component.workerData = this.workerData == null ? null : this.workerData.clone();
     component.lastLunchMealTime = this.lastLunchMealTime;
     component.lastDinnerMealTime = this.lastDinnerMealTime;
+    component.role = this.role;
     return component;
   }
 
   @Override
   public String toString() {
     return "VillagerComponent{" +
-        "villageHeartLocation=" + Utils.safeToString(villageHeartLocation) +
-        ", housingData=" + Utils.safeToString(housingData) +
-        ", workerData=" + Utils.safeToString(workerData) +
-        ", lastLunchMealTime=" + this.lastLunchMealTime +
-        ", lastDinnerMealTime=" + this.lastDinnerMealTime +
-        ", windowsCount=" + windows.size() +
+        "\n villageHeartLocation=" + Utils.safeToString(villageHeartLocation) +
+        ",\n housingData=" + Utils.safeToString(housingData) +
+        ",\n workerData=" + Utils.safeToString(workerData) +
+        ",\n lastLunchMealTime=" + this.lastLunchMealTime +
+        ",\n lastDinnerMealTime=" + this.lastDinnerMealTime +
+        ",\n windowsCount=" + this.windows.size() +
+        ",\n role=" + this.role +
         '}';
   }
 

@@ -2,6 +2,7 @@ package com.pacificbytestudios.projectciviccore.village.components.heart;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
@@ -30,6 +32,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
 public class VillageHeartComponent implements Component<ChunkStore> {
 
@@ -193,12 +196,18 @@ public class VillageHeartComponent implements Component<ChunkStore> {
           obj -> obj.villageTavernWorkplaces)
       .add()
 
+      .append(
+          new KeyedCodec<>("TownHallId", Codec.UUID_BINARY),
+          (obj, value) -> obj.townHallId = value,
+          (obj) -> obj.townHallId)
+      .add()
+
       .build();
 
   private UUID uuid;
   private VillageHeartConfigComponent config;
   private VillageHeartState state = VillageHeartState.NORMAL;
-  private int level;
+  private int level = 1;
   private ClaimedAreaComponent claimedArea;
   private BlockContext blockContext;
 
@@ -216,6 +225,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   private Set<UUID> villageStorageWorkplaces = new HashSet<>();
   private Set<UUID> villageTavernWorkplaces = new HashSet<>();
+  private UUID townHallId;
 
   public UUID getUuid() {
     return uuid;
@@ -225,8 +235,23 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.uuid = uuid;
   }
 
+  public WorkplaceComponent getTownHall() {
+    if (this.townHallId == null) {
+      return null;
+    }
+    WorkplaceComponent workplace = this.getWorkplaceFromId(this.townHallId);
+    if (workplace == null) {
+      throw new IllegalArgumentException("[getTownHallRef] TownHallId points to dead workplace component");
+    }
+
+    return workplace;
+  }
+
+  public Ref<ChunkStore> getTownHallRef() {
+    return this.getTownHall().getWorkplaceRef().getRef();
+  }
+
   public VillageHeartConfigComponent getConfig() {
-    // INFO: Read only
     return config.clone();
   }
 
@@ -358,6 +383,23 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.level = level;
   }
 
+  public VillagerRole getNextRequiredRole() {
+    if (this.villagerIdToComponent.size() == 0) {
+      return VillagerRole.values()[0];
+    }
+
+    Map<VillagerRole, Integer> roleCounts = new EnumMap<>(VillagerRole.class);
+    for (VillagerComponent villager : this.villagerIdToComponent.values()) {
+      int count = roleCounts.getOrDefault(villager.getRole(), 0);
+      roleCounts.put(villager.getRole(), count + 1);
+    }
+
+    if (roleCounts.get(VillagerRole.FEMALE) < roleCounts.get(VillagerRole.MALE)) {
+      return VillagerRole.FEMALE;
+    }
+    return VillagerRole.MALE;
+  }
+
   public void registerWorkplace(WorkplaceComponent workplace) {
     this.workplaceIdToWorkplace.put(workplace.getUuid(), workplace);
 
@@ -366,6 +408,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       this.villageStorageWorkplaces.add(workplace.getUuid());
     } else if (workplaceType.equals(StructureType.TAVERN)) {
       this.villageTavernWorkplaces.add(workplace.getUuid());
+    } else if (workplaceType.equals(StructureType.TOWN_HALL)) {
+      this.townHallId = workplace.getUuid();
     }
   }
 
@@ -379,6 +423,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       this.villageStorageWorkplaces.remove(workplace);
     } else if (this.villageTavernWorkplaces.contains(workplace)) {
       this.villageTavernWorkplaces.remove(workplace);
+    } else if (workplace.equals(this.townHallId)) {
+      this.townHallId = null;
     }
 
     Iterator<Map.Entry<UUID, UUID>> workers = this.villagerToWorkplace.entrySet().iterator();
@@ -521,6 +567,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     component.config = this.config != null ? this.config.clone() : null;
     component.claimedArea = this.claimedArea != null ? this.claimedArea.clone() : null;
     component.blockContext = this.blockContext != null ? this.blockContext.clone() : null;
+    component.townHallId = this.townHallId;
 
     component.villagersRegistry = new HashSet<>(this.villagersRegistry);
     component.unemployedRegistry = new HashSet<>(this.unemployedRegistry);
