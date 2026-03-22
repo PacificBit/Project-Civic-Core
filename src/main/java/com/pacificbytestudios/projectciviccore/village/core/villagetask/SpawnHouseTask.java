@@ -48,6 +48,6 @@ public class SpawnHouseTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
-    HouseSpawner.spawn(chunk, this.position, this.rotation);
+    HouseSpawner.spawn(chunk, this.position, this.rotation, heart);
   }
 }

@@ -24,7 +24,8 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -44,6 +45,11 @@ public class VillageHeartComponent implements Component<ChunkStore> {
           (obj) -> obj.uuid)
       .add()
 
+      .append(new KeyedCodec<>("VillageRef", EntityRef.CODEC),
+          (obj, value) -> obj.villageRef = value,
+          (obj) -> obj.villageRef)
+      .add()
+
       .append(new KeyedCodec<>("Config", VillageHeartConfigComponent.CODEC),
           (obj, value) -> obj.config = value,
           (obj) -> obj.config)
@@ -60,7 +66,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       .add()
 
       .append(
-          new KeyedCodec<>("ClaimedArea", ClaimedAreaComponent.CODEC),
+          new KeyedCodec<>("ClaimedArea", AreaFootprint.CODEC),
           (obj, value) -> obj.claimedArea = value,
           (obj) -> obj.claimedArea)
       .add()
@@ -205,10 +211,11 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       .build();
 
   private UUID uuid;
+  private EntityRef villageRef;
   private VillageHeartConfigComponent config;
   private VillageHeartState state = VillageHeartState.NORMAL;
   private int level = 1;
-  private ClaimedAreaComponent claimedArea;
+  private AreaFootprint claimedArea;
   private BlockContext blockContext;
 
   private Set<UUID> villagersRegistry = new HashSet<>();
@@ -233,6 +240,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
+  }
+
+  public Ref<ChunkStore> getVillageRef() {
+    return villageRef.getRef();
+  }
+
+  public void setVillageRef(EntityRef ref) {
+    this.villageRef = ref;
   }
 
   public WorkplaceComponent getTownHall() {
@@ -367,11 +382,11 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.state = state;
   }
 
-  public ClaimedAreaComponent getClaimedArea() {
+  public AreaFootprint getClaimedArea() {
     return claimedArea;
   }
 
-  public void setClaimedArea(ClaimedAreaComponent claimedChunks) {
+  public void setClaimedArea(AreaFootprint claimedChunks) {
     this.claimedArea = claimedChunks;
   }
 
@@ -561,6 +576,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     VillageHeartComponent component = new VillageHeartComponent();
 
     component.uuid = this.uuid;
+    component.villageRef = this.villageRef == null ? null : this.villageRef.clone();
+
     component.state = this.state;
     component.level = this.level;
 
@@ -636,6 +653,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   public String toString() {
     return "VillageHeartComponent{" +
         "\n uuid=" + Utils.safeToString(this.uuid) + "," +
+        "\n villageRef=" + Utils.safeToString(this.villageRef) + "," +
         "\n config=" + Utils.safeToString(this.config) + "," +
         "\n state=" + Utils.safeToString(this.state) + "," +
         "\n level=" + this.level + "," +

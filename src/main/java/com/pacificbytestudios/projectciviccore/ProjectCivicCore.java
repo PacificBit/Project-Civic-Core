@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderFactory;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.VillageTaskQueueCodecs;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
@@ -23,6 +23,8 @@ import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuilding
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
+import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
+import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
@@ -37,6 +39,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
+import com.pacificbytestudios.projectciviccore.village.systems.builder.VillageBuilderSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.house.HouseSpawnSystem;
@@ -103,7 +106,7 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private ComponentType<ChunkStore, VillageTaskQueueComponent> villageTaskQueueComponentType;
 
-  private ComponentType<ChunkStore, ClaimedAreaComponent> claimedAreaComponentType;
+  private ComponentType<ChunkStore, AreaFootprint> claimedAreaComponentType;
   private ComponentType<ChunkStore, TrackedPrefabPlacementComponent> trackedPrefabPlacementComponentType;
 
   private ComponentType<ChunkStore, WorkplaceComponent> workplaceComponentType;
@@ -120,6 +123,9 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private ComponentType<ChunkStore, HouseComponent> houseComponentType;
   private ComponentType<ChunkStore, HouseSpawnComponent> houseSpawnComponentType;
+
+  private ComponentType<ChunkStore, VillageBuilderComponent> villageBuilderComponentType;
+  private ComponentType<ChunkStore, VillageTopologyComponent> villageTopologyComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
   private ComponentType<EntityStore, MayorComponent> mayorComponentType;
@@ -164,9 +170,9 @@ public final class ProjectCivicCore extends JavaPlugin {
         WorkplaceSpawnComponent.CODEC);
 
     this.claimedAreaComponentType = chunkRegistry.registerComponent(
-        ClaimedAreaComponent.class,
+        AreaFootprint.class,
         "ClaimedAreaComponent",
-        ClaimedAreaComponent.CODEC);
+        AreaFootprint.CODEC);
 
     this.villageTaskQueueComponentType = chunkRegistry.registerComponent(
         VillageTaskQueueComponent.class,
@@ -228,11 +234,22 @@ public final class ProjectCivicCore extends JavaPlugin {
         "HouseSpawnComponent",
         HouseSpawnComponent.CODEC);
 
+    this.villageBuilderComponentType = chunkRegistry.registerComponent(
+        VillageBuilderComponent.class,
+        "VillageBuilderComponent",
+        VillageBuilderComponent.CODEC);
+
+    this.villageTopologyComponentType = chunkRegistry.registerComponent(
+        VillageTopologyComponent.class,
+        "VillageTopologyComponent",
+        VillageTopologyComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
     chunkRegistry.registerSystem(new VillageTaskQueueSystem());
     chunkRegistry.registerSystem(new HouseSpawnSystem());
+    chunkRegistry.registerSystem(new VillageBuilderSystem());
 
     commandRegistry.registerCommand(new VillageCommands());
 
@@ -474,7 +491,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     return this.workplaceSpawnComponentType;
   }
 
-  public ComponentType<ChunkStore, ClaimedAreaComponent> getClaimedAreaComponent() {
+  public ComponentType<ChunkStore, AreaFootprint> getClaimedAreaComponent() {
     return this.claimedAreaComponentType;
   }
 
@@ -524,6 +541,14 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, HouseSpawnComponent> getHouseSpawnComponentType() {
     return this.houseSpawnComponentType;
+  }
+
+  public ComponentType<ChunkStore, VillageBuilderComponent> getVillageBuilderComponentType() {
+    return this.villageBuilderComponentType;
+  }
+
+  public ComponentType<ChunkStore, VillageTopologyComponent> getVillageTopologyComponentType() {
+    return this.villageTopologyComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

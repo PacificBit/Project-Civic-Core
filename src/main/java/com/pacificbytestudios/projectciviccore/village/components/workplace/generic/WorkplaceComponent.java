@@ -20,7 +20,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
@@ -92,7 +92,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
       .add()
 
       .append(
-          new KeyedCodec<>("WorkingArea", ClaimedAreaComponent.CODEC),
+          new KeyedCodec<>("WorkingArea", AreaFootprint.CODEC),
           (obj, value) -> obj.workingArea = value,
           (obj) -> obj.workingArea)
       .add()
@@ -108,15 +108,15 @@ public class WorkplaceComponent implements Component<ChunkStore> {
       .append(
           new KeyedCodec<>(
               "WorkersDesignatedArea",
-              new MapCodec<ClaimedAreaComponent, HashMap<String, ClaimedAreaComponent>>(
-                  ClaimedAreaComponent.CODEC,
+              new MapCodec<AreaFootprint, HashMap<String, AreaFootprint>>(
+                  AreaFootprint.CODEC,
                   HashMap::new)),
           (obj, value) -> {
             obj.workersDesignatedArea = new HashMap<>();
             value.forEach((k, v) -> obj.workersDesignatedArea.put(UUID.fromString(k), v));
           },
           obj -> {
-            HashMap<String, ClaimedAreaComponent> encoded = new HashMap<>();
+            HashMap<String, AreaFootprint> encoded = new HashMap<>();
             obj.workersDesignatedArea.forEach((k, v) -> encoded.put(k.toString(), v));
             return encoded;
           })
@@ -141,11 +141,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private EntityRef villageRef;
   private EntityRef workplaceRef;
 
-  private ClaimedAreaComponent workingArea;
+  private AreaFootprint workingArea;
 
   private Set<UUID> workers = new HashSet<>();
   private UUID bossId;
-  private Map<UUID, ClaimedAreaComponent> workersDesignatedArea = new HashMap<>();
+  private Map<UUID, AreaFootprint> workersDesignatedArea = new HashMap<>();
   private WorkplaceContainerRegistryComponent storage;
   private VillageStorageRequest lastStorageRequest;
 
@@ -241,7 +241,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
       return;
     }
 
-    ClaimedAreaComponent[] areas = Utils.subdivideArea(this.workingArea, this.workers.size());
+    AreaFootprint[] areas = Utils.subdivideArea(this.workingArea, this.workers.size());
     int index = 0;
     for (UUID uuid : this.workers) {
       this.workersDesignatedArea.put(uuid, areas[index++]);
@@ -256,11 +256,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     return this.storage;
   }
 
-  public ClaimedAreaComponent getWorkingArea() {
+  public AreaFootprint getWorkingArea() {
     return workingArea;
   }
 
-  public void setWorkingArea(ClaimedAreaComponent claimedArea) {
+  public void setWorkingArea(AreaFootprint claimedArea) {
     this.workingArea = claimedArea;
   }
 
@@ -272,7 +272,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.workerType = workerType;
   }
 
-  public ClaimedAreaComponent getWorkerDesignatedArea(UUID uuid) {
+  public AreaFootprint getWorkerDesignatedArea(UUID uuid) {
     return this.workersDesignatedArea.get(uuid);
   }
 

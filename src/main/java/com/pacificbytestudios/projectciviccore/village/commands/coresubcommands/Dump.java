@@ -14,7 +14,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
@@ -62,7 +62,7 @@ public class Dump extends CommandBase {
           .getComponent(heart,
               VillageHeartComponent.getComponentType());
 
-      ClaimedAreaComponent area = heartComponent.getClaimedArea();
+      AreaFootprint area = heartComponent.getClaimedArea();
       Set<UUID> villagers = heartComponent.getVillagersRegistry();
       Set<UUID> unemployed = heartComponent.getUnemployedRegistry();
       int level = heartComponent.getLevel();

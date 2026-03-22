@@ -10,19 +10,22 @@ import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.HouseSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.MineSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.SawmillSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StorageSpawner;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TavernSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHallSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -88,19 +91,15 @@ public class Utils {
     return new BlockContext(worldChunk, new Vector3i(worldX, worldY, worldZ));
   }
 
-  public static ClaimedAreaComponent claimVillageArea(VillageHeartComponent heart, Vector3i origin) {
+  public static AreaFootprint claimVillageArea(VillageHeartComponent heart, Vector3i origin) {
     short level = (short) heart.getLevel();
     int radius = heart.getConfig().getClaimRadiusPerLevel(level);
-    Vector2i topLeft = new Vector2i(origin.x - radius, origin.z -
-        radius);
-    Vector2i botRight = new Vector2i(origin.x + radius, origin.z +
-        radius);
+    Vector2i topLeft = new Vector2i(origin.x - radius, origin.z - radius);
+    Vector2i botRight = new Vector2i(origin.x + radius, origin.z + radius);
     ProjectCivicCore.LOGGER.atInfo()
         .log("[claimVillageArea] Created new village with anchor points: " + topLeft
             + " and: " + botRight);
-    ClaimedAreaComponent area = new ClaimedAreaComponent();
-    area.setTopLeft(topLeft);
-    area.setBotRight(botRight);
+    AreaFootprint area = new AreaFootprint(topLeft, botRight);
     heart.setClaimedArea(area);
     return area;
   }
@@ -113,6 +112,7 @@ public class Utils {
       case TAVERN -> TavernSpawner::spawn;
       case SAWMILL -> SawmillSpawner::spawn;
       case STORAGE -> StorageSpawner::spawn;
+      case HOUSE -> HouseSpawner::spawn;
       default -> throw new IllegalArgumentException("Unsupported workplace type: "
           + workplaceType);
     };
@@ -126,9 +126,46 @@ public class Utils {
       case TAVERN -> TavernSpawner::despawn;
       case SAWMILL -> SawmillSpawner::despawn;
       case STORAGE -> StorageSpawner::despawn;
+      case HOUSE -> HouseSpawner::despawn;
       default -> throw new IllegalArgumentException("Unsupported workplace type: "
           + workplaceType);
     };
+  }
+
+  public static Vector2i getSize2i(StructureType structureType) {
+    return switch (structureType) {
+      case TOWN_HALL -> StructureConfig.TownHall.SIZE_2I;
+      case MINE -> StructureConfig.Mine.SIZE_2I;
+      case FARM -> StructureConfig.Farm.SIZE_2I;
+      case TAVERN -> StructureConfig.Tavern.SIZE_2I;
+      case SAWMILL -> StructureConfig.Sawmill.SIZE_2I;
+      case STORAGE -> StructureConfig.Storage.SIZE_2I;
+      case HOUSE -> StructureConfig.House.SIZE_2I;
+      default -> throw new IllegalArgumentException(
+          "Unsupported structure type: " + structureType);
+    };
+  }
+
+  public static Vector2i getVillageHeartSize2i() {
+    return StructureConfig.TownHeart.SIZE_2I;
+  }
+
+  public static Vector3i getSize3i(StructureType structureType) {
+    return switch (structureType) {
+      case TOWN_HALL -> StructureConfig.TownHall.SIZE_3I;
+      case MINE -> StructureConfig.Mine.SIZE_3I;
+      case FARM -> StructureConfig.Farm.SIZE_3I;
+      case TAVERN -> StructureConfig.Tavern.SIZE_3I;
+      case SAWMILL -> StructureConfig.Sawmill.SIZE_3I;
+      case STORAGE -> StructureConfig.Storage.SIZE_3I;
+      case HOUSE -> StructureConfig.House.SIZE_3I;
+      default -> throw new IllegalArgumentException(
+          "Unsupported structure type: " + structureType);
+    };
+  }
+
+  public static Vector3i getVillageHeartSize3i() {
+    return StructureConfig.TownHeart.SIZE_3I;
   }
 
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType) {
@@ -207,23 +244,20 @@ public class Utils {
     chunk.markNeedsSaving();
   }
 
-  public static ClaimedAreaComponent[] subdivideArea(ClaimedAreaComponent area,
+  public static AreaFootprint[] subdivideArea(AreaFootprint area,
       int parts) {
     if (parts <= 0) {
       throw new IllegalArgumentException("parts must be > 0");
     }
 
     if (parts == 1) {
-      return new ClaimedAreaComponent[] { area };
+      return new AreaFootprint[] { area };
     }
 
-    Vector2i topLeft = area.getTopLeft();
-    Vector2i botRight = area.getBotRight();
-
-    int minX = Math.min(topLeft.x, botRight.x);
-    int maxX = Math.max(topLeft.x, botRight.x);
-    int minY = Math.min(topLeft.y, botRight.y);
-    int maxY = Math.max(topLeft.y, botRight.y);
+    int minX = area.getMinX();
+    int maxX = area.getMaxX();
+    int minY = area.getMinZ();
+    int maxY = area.getMaxZ();
 
     int width = maxX - minX + 1;
     int height = maxY - minY + 1;
@@ -235,7 +269,7 @@ public class Utils {
     int remainder = totalSize % parts;
     int current = splitHorizontally ? minX : minY;
 
-    ClaimedAreaComponent[] result = new ClaimedAreaComponent[parts];
+    AreaFootprint[] result = new AreaFootprint[parts];
 
     for (int i = 0; i < parts; i++) {
       int currentSize = baseSize + (i < remainder ? 1 : 0);
@@ -243,10 +277,10 @@ public class Utils {
       int end = start + currentSize - 1;
 
       result[i] = splitHorizontally
-          ? new ClaimedAreaComponent(
+          ? new AreaFootprint(
               new Vector2i(start, minY),
               new Vector2i(end, maxY))
-          : new ClaimedAreaComponent(
+          : new AreaFootprint(
               new Vector2i(minX, start),
               new Vector2i(maxX, end));
 
@@ -260,7 +294,6 @@ public class Utils {
     return value == null ? "null" : value.toString();
   }
 
-  @Nonnull
   public static Vector3f centerOf(@Nonnull Vector3i blockPos) {
     return new Vector3f(
         blockPos.x + 0.5f,
@@ -268,4 +301,11 @@ public class Utils {
         blockPos.z + 0.5f);
   }
 
+  public static Vector3i getRotationVector(Rotation rotation) {
+    return rotation.getAxisDirection();
+  }
+
+  public static WorldChunk getWorldChunk(World world, Vector3i position) {
+    return world.getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+  }
 }

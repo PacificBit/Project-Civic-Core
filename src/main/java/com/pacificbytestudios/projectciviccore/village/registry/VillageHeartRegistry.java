@@ -7,14 +7,14 @@ import java.util.UUID;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 
 public final class VillageHeartRegistry {
   private static VillageHeartRegistry INSTANCE;
 
-  private final Map<UUID, ClaimedAreaComponent> villageIdToArea = new HashMap<>();
-  private final Map<ClaimedAreaComponent, EntityRef> claimAreaToHeartRef = new HashMap<>();
+  private final Map<UUID, AreaFootprint> villageIdToArea = new HashMap<>();
+  private final Map<AreaFootprint, EntityRef> claimAreaToHeartRef = new HashMap<>();
 
   public record ChunkLocation(int x, int z) {
   }
@@ -30,7 +30,7 @@ public final class VillageHeartRegistry {
       UUID uuid,
       String worldName,
       Vector3i position,
-      ClaimedAreaComponent claimedArea) {
+      AreaFootprint claimedArea) {
     villageIdToArea.put(uuid, claimedArea);
     claimAreaToHeartRef.put(claimedArea, new EntityRef(worldName, position));
 
@@ -44,7 +44,7 @@ public final class VillageHeartRegistry {
           .log("[unregisterVillage] No village registered with id: " + villageUUID.toString());
       return;
     }
-    ClaimedAreaComponent area = villageIdToArea.get(villageUUID);
+    AreaFootprint area = villageIdToArea.get(villageUUID);
 
     villageIdToArea.remove(villageUUID);
     if (area == null) {
@@ -58,7 +58,7 @@ public final class VillageHeartRegistry {
         .log("[unregisterVillage] Village removed correctly");
   }
 
-  public void updateClaimedArea(ClaimedAreaComponent oldArea, ClaimedAreaComponent newArea) {
+  public void updateClaimedArea(AreaFootprint oldArea, AreaFootprint newArea) {
     EntityRef heart = claimAreaToHeartRef.remove(oldArea);
     if (heart == null) {
       return;
@@ -66,7 +66,7 @@ public final class VillageHeartRegistry {
 
     claimAreaToHeartRef.put(newArea, heart);
 
-    for (Map.Entry<UUID, ClaimedAreaComponent> entry : villageIdToArea.entrySet()) {
+    for (Map.Entry<UUID, AreaFootprint> entry : villageIdToArea.entrySet()) {
       if (entry.getValue().equals(oldArea)) {
         entry.setValue(newArea);
         break;
@@ -75,7 +75,7 @@ public final class VillageHeartRegistry {
   }
 
   public EntityRef getVillageHeartIn(Vector2i coord2d) {
-    for (Map.Entry<ClaimedAreaComponent, EntityRef> entry : claimAreaToHeartRef.entrySet()) {
+    for (Map.Entry<AreaFootprint, EntityRef> entry : claimAreaToHeartRef.entrySet()) {
       if (entry.getKey().isInside(coord2d)) {
         return entry.getValue();
       }

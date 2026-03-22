@@ -26,7 +26,7 @@ public class VillagerWorkerComponent implements Component<EntityStore> {
       .add()
 
       .append(new KeyedCodec<>("WorkplaceAreaSnapshot", WorkplaceAreaSnapshot.CODEC),
-          (obj, value) -> obj.workareaSnapshot = value,
+          VillagerWorkerComponent::setWorkareaSnapshot,
           (obj) -> obj.workareaSnapshot)
       .add()
 
@@ -34,14 +34,14 @@ public class VillagerWorkerComponent implements Component<EntityStore> {
 
   private WorkplaceComponent workplace;
   private WorkType typeOfWorker;
-  private WorkplaceAreaSnapshot workareaSnapshot;
+  private WorkplaceAreaSnapshot workareaSnapshot = new WorkplaceAreaSnapshot();
 
   @Override
   public VillagerWorkerComponent clone() {
     VillagerWorkerComponent component = new VillagerWorkerComponent();
     component.workplace = this.workplace.clone();
     component.typeOfWorker = this.typeOfWorker;
-    component.workareaSnapshot = this.workareaSnapshot != null ? this.workareaSnapshot.clone() : null;
+    component.workareaSnapshot = this.getWorkareaSnapshot().clone();
     return component;
   }
 
@@ -62,11 +62,14 @@ public class VillagerWorkerComponent implements Component<EntityStore> {
   }
 
   public WorkplaceAreaSnapshot getWorkareaSnapshot() {
+    if (this.workareaSnapshot == null) {
+      this.workareaSnapshot = new WorkplaceAreaSnapshot();
+    }
     return this.workareaSnapshot;
   }
 
   public void setWorkareaSnapshot(WorkplaceAreaSnapshot workareaSnapshot) {
-    this.workareaSnapshot = workareaSnapshot;
+    this.workareaSnapshot = workareaSnapshot == null ? new WorkplaceAreaSnapshot() : workareaSnapshot;
   }
 
   @Override

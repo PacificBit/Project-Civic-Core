@@ -8,6 +8,7 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
@@ -19,6 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
@@ -46,8 +48,13 @@ public class Spawn extends CommandBase {
 
     world.execute(() -> {
       TransformComponent transform = entityStore.getComponent(playerRef, TransformComponent.getComponentType());
+      if (transform == null) {
+        context.sendMessage(Message.raw("Could not read player position."));
+        return;
+      }
 
       Vector3i playerPos = transform.getPosition().toVector3i();
+      Rotation placementRotation = StructurePlacementUtils.getPlayerPlacementRotation(entityStore, playerRef);
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z));
 
       for (int y = playerPos.y; y > 0; y--) {
@@ -69,7 +76,7 @@ public class Spawn extends CommandBase {
 
       VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
       StructureType workplaceType = StructureType.valueOf(workplace);
-      taskQueue.registerTask(new SpawnWorkplaceTask(workplaceType, playerPos));
+      taskQueue.registerTask(new SpawnWorkplaceTask(workplaceType, playerPos, placementRotation));
 
       Utils.safeVillageTaskEnqueue(heartRef, taskQueue);
 

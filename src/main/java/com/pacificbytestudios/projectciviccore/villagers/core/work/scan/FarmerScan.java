@@ -9,7 +9,6 @@ import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -21,7 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -73,16 +72,14 @@ public class FarmerScan implements IWorkAreaScanner {
       snapshotInProgress = new WorkplaceAreaSnapshot();
     }
 
-    ClaimedAreaComponent workingArea = villager.getWorkerArea(uuid);
+    AreaFootprint workingArea = villager.getWorkerArea(uuid);
 
-    Vector2i topLeftCorner = workingArea.getTopLeft();
-    Vector2i botRightCorner = workingArea.getBotRight();
     int soilLevel = workingArea.getY();
 
-    int startX = topLeftCorner.x;
-    int endX = botRightCorner.x;
-    int startZ = topLeftCorner.y;
-    int endZ = botRightCorner.y;
+    int startX = workingArea.getMinX();
+    int endX = workingArea.getMaxX();
+    int startZ = workingArea.getMinZ();
+    int endZ = workingArea.getMaxZ();
 
     Vector3i currentPoint = snapshotInProgress.getLastVisited();
     if (currentPoint == null || !isInsideWorkArea(currentPoint, startX, endX, startZ, endZ, soilLevel)) {

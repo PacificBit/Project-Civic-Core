@@ -13,7 +13,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -49,7 +49,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
     villageHeart.setUuid(UUID.randomUUID());
 
-    ClaimedAreaComponent area = Utils.claimVillageArea(villageHeart, villageHeartPos);
+    AreaFootprint area = Utils.claimVillageArea(villageHeart, villageHeartPos);
     villageStore.registerVillage(
         villageHeart.getUuid(),
         world.getName(),

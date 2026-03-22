@@ -20,7 +20,7 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
@@ -162,7 +162,7 @@ public class VillagerComponent implements Component<EntityStore> {
     return currentDate.equals(lastMealDateTime.toLocalDate());
   }
 
-  public ClaimedAreaComponent getWorkerArea(UUID uuid) {
+  public AreaFootprint getWorkerArea(UUID uuid) {
     return this.getWorkerData().getWorkplace().getWorkerDesignatedArea(uuid);
   }
 

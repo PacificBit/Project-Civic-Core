@@ -10,7 +10,7 @@ import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.pacificbytestudios.projectciviccore.codecs.ClaimedAreaComponent;
+import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
@@ -34,9 +34,11 @@ public final class StructureConfig {
 
   public static final class Farm {
     public static final String PREFAB_JSON = "Structures/Temporary/Farm.prefab.json";
+    // public static final String PREFAB_JSON =
+    // "Structures/Workplace/Workplace_Farm.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
-    public static final ClaimedAreaComponent WORKING_AREA_OFFSET = new ClaimedAreaComponent(
+    public static final AreaFootprint WORKING_AREA_OFFSET = new AreaFootprint(
         new Vector2i(-3, -3),
         new Vector2i(3, 3));
     public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(0, 1, -4);
@@ -52,6 +54,8 @@ public final class StructureConfig {
 
   public static final class Storage {
     public static final String PREFAB_JSON = "Structures/Temporary/Storage.prefab.json";
+    // public static final String PREFAB_JSON =
+    // "Structures/Workplace/Workplace_Storage.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Storage_Core");
     public static final BlockType DOUBLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Large");
     public static final Rotation LEFT_CONTAINER_YAW_OFFSET = Rotation.Ninety;
@@ -80,6 +84,9 @@ public final class StructureConfig {
   }
 
   public static final class Road {
+    private static final int MAIN_ROAD_SIZE = 5;
+    private static final int SIDE_ROAD_SIZE = 4;
+
     private static final Map<Short, Map<RoadLength, String>> VILLAGE_LVL_MAIN_ROADS = Map.of(
         (short) 1,
         Map.of(
@@ -90,16 +97,33 @@ public final class StructureConfig {
     private static final Map<Short, Map<RoadLength, String>> VILLAGE_LVL_SIDE_ROADS = Map.of(
         (short) 1,
         Map.of(
-            RoadLength.SMALL, "Structures/Temporary/Side_Road_4x1.prefab.json",
-            RoadLength.MEDIUM, "Structures/Temporary/Side_Road_4x2.prefab.json",
-            RoadLength.LARGE, "Structures/Temporary/Side_Road_4x4.prefab.json"));
+            RoadLength.SMALL, "Structures/Temporary/Side_Road_2x1.prefab.json",
+            RoadLength.MEDIUM, "Structures/Temporary/Side_Road_2x2.prefab.json",
+            RoadLength.LARGE, "Structures/Temporary/Side_Road_2x4.prefab.json"));
+
+    private static final RoadLength[] ORDERED_ROAD_LENGTH = new RoadLength[] { RoadLength.LARGE, RoadLength.MEDIUM,
+        RoadLength.SMALL };
 
     public enum RoadType {
       MAIN_ROAD, SIDE_ROAD;
     }
 
     public enum RoadLength {
-      SMALL, MEDIUM, LARGE;
+      SMALL((short) 1), MEDIUM((short) 2), LARGE((short) 4);
+
+      private short length;
+
+      private RoadLength(short length) {
+        this.length = length;
+      }
+
+      public short getLength() {
+        return length;
+      }
+    }
+
+    public static RoadLength[] getOrderedRoadLength() {
+      return ORDERED_ROAD_LENGTH;
     }
 
     public static String getRoadPrefab(short villageLvl, RoadType type, RoadLength length) {
@@ -112,10 +136,22 @@ public final class StructureConfig {
       return prefabs == null ? null : prefabs.get(length);
     }
 
+    public static int getRoadSize(RoadType type) {
+      return switch (type) {
+        case MAIN_ROAD -> MAIN_ROAD_SIZE;
+        case SIDE_ROAD -> SIDE_ROAD_SIZE;
+      };
+    }
+
+    public static int getRoadLength(RoadType type) {
+      return getRoadSize(type);
+    }
   }
 
   public static final class Tavern {
     public static final String PREFAB_JSON = "Structures/Temporary/Tavern.prefab.json";
+    // public static final String PREFAB_JSON =
+    // "Structures/Workplace/Workplace_Tavern.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Tavern_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
@@ -160,6 +196,8 @@ public final class StructureConfig {
 
   public static final class TownHall {
     public static final String PREFAB_JSON = "Structures/Temporary/Town_Hall.prefab.json";
+    // public static final String PREFAB_JSON =
+    // "Structures/Workplace/Workplace_Town_Hall.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Town_Hall_Core");
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.OneEighty;
     public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-4, 1, 4);

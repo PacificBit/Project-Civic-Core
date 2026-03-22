@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -15,6 +16,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
@@ -22,11 +24,16 @@ import com.pacificbytestudios.projectciviccore.village.components.house.VillageB
 import io.sentry.util.Pair;
 
 public class HouseSpawner {
-  public static boolean spawn(WorldChunk chunk, Vector3i position) {
-    return spawn(chunk, position, Rotation.None);
+  public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent heart) {
+    return spawn(chunk, position, Rotation.None, heart);
   }
 
-  public static boolean spawn(WorldChunk chunk, Vector3i position, Rotation rotation) {
+  public static boolean spawn(
+      WorldChunk chunk,
+      Vector3i position,
+      Rotation rotation,
+      VillageHeartComponent heart) {
+
     Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
@@ -39,11 +46,18 @@ public class HouseSpawner {
       return false;
     }
 
+    int blockRotation = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.Tavern.WORKPLACE_BLOCK_YAW_OFFSET,
+            structureRotation),
+        Rotation.None,
+        Rotation.None).index();
+
     Vector3i houseCoreBlockPosition = getWorkplaceBlockPosition(position, structureRotation);
     WorldChunk houseChunk = Utils.setBlockChunkAware(
         chunk,
         houseCoreBlockPosition,
-        StructureConfig.House.CORE_BLOCK);
+        StructureConfig.House.CORE_BLOCK, blockRotation);
     Ref<ChunkStore> houseCoreRef = houseChunk.getBlockComponentEntity(
         houseCoreBlockPosition.x,
         houseCoreBlockPosition.y,

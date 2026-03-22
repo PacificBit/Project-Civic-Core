@@ -6,6 +6,462 @@
   "anchorZ": 0,
   "blocks": [
     {
+      "x": -11,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -10,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -9,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -8,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -7,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -6,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": -6,
       "y": 0,
       "z": -6,
@@ -81,6 +537,18 @@
       "x": -6,
       "y": 0,
       "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -6,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -5,
+      "y": 0,
+      "z": -7,
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
@@ -162,6 +630,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": -5,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -4,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": -4,
       "y": 0,
       "z": -6,
@@ -240,6 +720,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": -4,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": -3,
       "y": 0,
       "z": -6,
@@ -318,6 +810,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": -3,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": -2,
       "y": 0,
       "z": -6,
@@ -396,6 +900,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": -2,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": -1,
       "y": 0,
       "z": -6,
@@ -474,6 +990,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": -1,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": 0,
       "y": 0,
       "z": -6,
@@ -552,6 +1080,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": 0,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": 1,
       "y": 0,
       "z": -6,
@@ -630,6 +1170,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": 1,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": 2,
       "y": 0,
       "z": -6,
@@ -708,6 +1260,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": 2,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": 3,
       "y": 0,
       "z": -6,
@@ -786,6 +1350,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": 3,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": 4,
       "y": 0,
       "z": -6,
@@ -864,6 +1440,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": 4,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": 5,
       "y": 0,
       "z": -6,
@@ -942,6 +1530,18 @@
       "name": "Cloth_Block_Wool_Red_Light"
     },
     {
+      "x": 5,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
       "x": 6,
       "y": 0,
       "z": -6,
@@ -1017,6 +1617,462 @@
       "x": 6,
       "y": 0,
       "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "z": 7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 0,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 1,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 2,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 3,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 4,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 5,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 6,
+      "name": "Cloth_Block_Wool_Red_Light"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "z": 7,
       "name": "Cloth_Block_Wool_Red_Light"
     }
   ]
