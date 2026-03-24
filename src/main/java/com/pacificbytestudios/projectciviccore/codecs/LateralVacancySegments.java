@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.hypixel.hytale.codec.Codec;
@@ -43,42 +44,115 @@ public class LateralVacancySegments {
   }
 
   public void appendSegment(Segment segment) {
-    int indexSegmentToUpdate = -1;
-    Segment resultSegment = null;
-
-    for (int i = 0; i < this.validSegments.size(); i++) {
-      Segment validSegment = this.validSegments.get(i);
-      if (validSegment.start.equals(segment.end)) {
-        resultSegment = new Segment(segment.start, validSegment.end);
-        indexSegmentToUpdate = i;
-        break;
-      }
-
-      if (validSegment.end.equals(segment.start)) {
-        resultSegment = new Segment(validSegment.start, segment.end);
-        indexSegmentToUpdate = i;
-        break;
-      }
+    if (this.validSegments == null) {
+      this.validSegments = new ArrayList<>();
     }
 
-    if (indexSegmentToUpdate < 0) {
+    if (segment.size == null) {
+      segment.recalculateSize();
+    }
+
+    if (this.roadDirectionVec == null) {
       this.validSegments.add(segment);
-    } else {
-      this.validSegments.set(indexSegmentToUpdate, resultSegment);
+      return;
     }
+
+    int mergedStart = Math.min(project(segment.start), project(segment.end));
+    int mergedEnd = Math.max(project(segment.start), project(segment.end));
+    Segment mergedTemplate = segment;
+    List<Segment> updatedSegments = new ArrayList<>();
+
+    for (Segment validSegment : this.validSegments) {
+      if (validSegment == null || validSegment.start == null || validSegment.end == null) {
+        continue;
+      }
+
+      int validStart = Math.min(project(validSegment.start), project(validSegment.end));
+      int validEnd = Math.max(project(validSegment.start), project(validSegment.end));
+
+      if (validEnd + 1 < mergedStart || validStart - 1 > mergedEnd) {
+        updatedSegments.add(validSegment);
+        continue;
+      }
+
+      mergedStart = Math.min(mergedStart, validStart);
+      mergedEnd = Math.max(mergedEnd, validEnd);
+      mergedTemplate = validSegment;
+    }
+
+    updatedSegments.add(createSegment(mergedTemplate, mergedStart, mergedEnd));
+    updatedSegments.sort(Comparator.comparingInt(this::getSegmentMinProjection));
+    this.validSegments = updatedSegments;
   }
 
-  public Segment buildValidSegment(short size) {
-    int newSize = size - 1;
-    Segment segment = getFirstValidSegment((short) newSize);
+  public Segment buildSegmentFromEnd(short size) {
+    if (size <= 0) {
+      return null;
+    }
+
+    Segment segment = getLastValidSegment(size);
     if (segment == null) {
       return null;
     }
-    return new Segment(segment.start, segment.start.clone().add(this.roadDirectionVec.clone().scale(newSize)));
+
+    Vector3i end = segment.end.clone();
+    Vector3i start = end.clone().add(this.roadDirectionVec.clone().scale(-(size - 1)));
+    return new Segment(start, end);
+  }
+
+  public Segment buildSegmentAt(Vector3i start, Vector3i end) {
+    int requestedStart = Math.min(project(start), project(end));
+    int requestedEnd = Math.max(project(start), project(end));
+
+    for (Segment validSegment : this.validSegments) {
+      if (validSegment == null || validSegment.start == null || validSegment.end == null) {
+        continue;
+      }
+
+      int validStart = Math.min(project(validSegment.start), project(validSegment.end));
+      int validEnd = Math.max(project(validSegment.start), project(validSegment.end));
+
+      if (requestedStart >= validStart && requestedEnd <= validEnd) {
+        return new Segment(start.clone(), end.clone());
+      }
+    }
+
+    return null;
+  }
+
+  public Segment buildSegmentFromStart(short size) {
+    if (size <= 0) {
+      return null;
+    }
+
+    Segment segment = getFirstValidSegment(size);
+    if (segment == null) {
+      return null;
+    }
+
+    Vector3i start = segment.start.clone();
+    Vector3i end = start.clone().add(this.roadDirectionVec.clone().scale(size - 1));
+    return new Segment(start, end);
   }
 
   public Segment getFirstValidSegment(short size) {
     for (Segment segment : this.validSegments) {
+      if (segment.size == null && segment.start != null && segment.end != null) {
+        segment.recalculateSize();
+      }
+      if (segment.size == null) {
+        continue;
+      }
+      if (segment.size >= size) {
+        return segment;
+      }
+    }
+    return null;
+  }
+
+  public Segment getLastValidSegment(short size) {
+    for (int i = this.validSegments.size() - 1; i >= 0; i--) {
+      Segment segment = this.validSegments.get(i);
       if (segment == null) {
         continue;
       }
@@ -114,11 +188,6 @@ public class LateralVacancySegments {
   }
 
   public void removeSegment(Segment segment) {
-    if (segment == null || segment.start == null || segment.end == null || this.validSegments == null
-        || this.validSegments.isEmpty() || this.roadDirectionVec == null) {
-      return;
-    }
-
     List<Segment> updatedSegments = new ArrayList<>();
     int removeStart = Math.min(project(segment.start), project(segment.end));
     int removeEnd = Math.max(project(segment.start), project(segment.end));
@@ -167,6 +236,10 @@ public class LateralVacancySegments {
         ? fromProjection(template.end, rangeEnd)
         : fromProjection(template.end, rangeStart);
     return new Segment(start, end);
+  }
+
+  private int getSegmentMinProjection(Segment segment) {
+    return Math.min(project(segment.start), project(segment.end));
   }
 
   private Vector3i fromProjection(Vector3i template, int projection) {
@@ -263,10 +336,14 @@ public class LateralVacancySegments {
     }
 
     public boolean isDotInside(Vector3i dot) {
-      return start.x <= dot.x &&
-          start.z <= dot.z &&
-          end.x >= dot.x &&
-          end.z >= dot.z;
+      int minX = Math.min(start.x, end.x);
+      int maxX = Math.max(start.x, end.x);
+      int minZ = Math.min(start.z, end.z);
+      int maxZ = Math.max(start.z, end.z);
+      return minX <= dot.x &&
+          minZ <= dot.z &&
+          maxX >= dot.x &&
+          maxZ >= dot.z;
     }
 
     public Short getSize() {
@@ -275,6 +352,7 @@ public class LateralVacancySegments {
 
     public void recalculateSize() {
       if (this.start == null || this.end == null) {
+        this.size = null;
         return;
       }
 
@@ -282,7 +360,7 @@ public class LateralVacancySegments {
       if (size == 0) {
         size = this.end.z - this.start.z;
       }
-      this.size = (short) Math.abs(size);
+      this.size = (short) (Math.abs(size) + 1);
     }
 
     @Override

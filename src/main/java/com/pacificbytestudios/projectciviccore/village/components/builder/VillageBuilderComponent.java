@@ -36,19 +36,35 @@ public class VillageBuilderComponent implements Component<ChunkStore> {
   private Boolean haveFirstRoadsBeenBuilt = false;
 
   public boolean hasProject() {
-    return this.projectPlan.hasProjects();
+    return this.projectPlan != null && this.projectPlan.hasProjects();
   }
 
   public VillageProject peekNext() {
-    return this.projectPlan.peekNextProject();
+    return this.projectPlan == null ? null : this.projectPlan.peekNextProject();
   }
 
   public VillageProject pollNextProject() {
-    return this.projectPlan.pollNextProject();
+    return this.projectPlan == null ? null : this.projectPlan.pollNextProject();
+  }
+
+  public VillageProjectPlan getProjectPlan() {
+    return this.projectPlan;
   }
 
   public void setProjectPlan(VillageProjectPlan plan) {
     this.projectPlan = plan;
+  }
+
+  public void addProject(VillageProject project) {
+    if (project == null) {
+      return;
+    }
+
+    if (this.projectPlan == null) {
+      this.projectPlan = new VillageProjectPlan();
+    }
+
+    this.projectPlan.addProject(project);
   }
 
   public Boolean isFirstVillageBuildProject() {

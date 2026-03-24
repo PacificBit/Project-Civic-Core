@@ -198,6 +198,31 @@
       "name": "Cloth_Block_Wool_Green_Light"
     },
     {
+      "x": -1,
+      "y": 1,
+      "z": 4,
+      "name": "Rock_Sandstone_Brick_Pillar_Base"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 4,
+      "name": "Rock_Sandstone_Brick_Pillar_Middle"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 4,
+      "name": "Rock_Sandstone_Brick_Pillar_Middle"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 4,
+      "name": "Rock_Sandstone_Cobble_Roof",
+      "rotation": 3
+    },
+    {
       "x": 0,
       "y": 0,
       "z": -3,
@@ -246,6 +271,19 @@
       "name": "Cloth_Block_Wool_Green_Light"
     },
     {
+      "x": 0,
+      "y": 4,
+      "z": 4,
+      "name": "Rock_Sandstone_Cobble"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 4,
+      "name": "Rock_Sandstone_Cobble_Roof_Flat",
+      "rotation": 3
+    },
+    {
       "x": 1,
       "y": 0,
       "z": -3,
@@ -292,6 +330,31 @@
       "y": 0,
       "z": 4,
       "name": "Cloth_Block_Wool_Green_Light"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 4,
+      "name": "Rock_Sandstone_Brick_Pillar_Base"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 4,
+      "name": "Rock_Sandstone_Brick_Pillar_Middle"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 4,
+      "name": "Rock_Sandstone_Brick_Pillar_Middle"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 4,
+      "name": "Rock_Sandstone_Cobble_Roof",
+      "rotation": 1
     },
     {
       "x": 2,

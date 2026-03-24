@@ -221,9 +221,8 @@ public class RoadsGraph {
     }
 
     public Pair<Vector3i, LateralVacancySegments> getLateralVacancySegmentWithFittingSpace(short size) {
-      short exclusiveSize = (short) (size - 1);
       for (Map.Entry<Vector3i, LateralVacancySegments> segments : this.lateralVacancySegments.entrySet()) {
-        if (segments.getValue().hasFittinSegment(exclusiveSize)) {
+        if (segments.getValue() != null && segments.getValue().hasFittinSegment(size)) {
           return Pair.of(segments.getKey(), segments.getValue());
         }
       }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -75,17 +76,10 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     }
 
     if (!builder.hasProject()) {
-      System.out.println("NO MORE PROJECTS TO DO");
       world.execute(() -> store.removeComponent(villageRef,
           VillageBuilderComponent.getComponentType()));
-      System.out.println(this.topology);
       return;
     }
-
-    System.out.println("Is first village project? " +
-        builder.isFirstVillageBuildProject());
-    System.out.println("Procedo nella costruzione di: ");
-    System.out.println(builder.peekNext());
 
     boolean completed = true;
     this.project = builder.peekNext();
@@ -93,7 +87,7 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
     if (objectiveType.equals(VillageObjectiveType.BUILD_HOUSE) ||
         objectiveType.equals(VillageObjectiveType.BUILD_WORKPLACE)) {
-      completed = handleNewBuildingConstruction();
+      completed = handleNewBuildingConstruction(villageRef);
     }
 
     if (completed) {
@@ -101,14 +95,122 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     }
   }
 
-  private boolean handleNewBuildingConstruction() {
-    // Rotation villageOrientation = topology.getVillageOrientation();
+  private boolean handleNewBuildingConstruction(Ref<ChunkStore> villageRef) {
+    StructureType structureType = this.project.getStructureType();
+    Vector2i size2i = Utils.getSize2i(structureType);
+    RoadsideConstructionPlacement placement = findAppropriateSegementFor(size2i);
+    if (placement == null) {
+      // TODO: build road or search other to replace
+      return false;
+    }
+
+    placement.segments.removeSegment(placement.segment);
+    reserveInitialStructureStreetSegments(
+        structureType,
+        placement.prefabAnchor,
+        placement.rotation);
+
+    final Vector3i queuedSpawningPosition = placement.prefabAnchor.clone();
+    final Rotation queuedRotation = placement.rotation;
+    this.world.execute(() -> enqueueBuildingSpawn(
+        villageRef,
+        structureType,
+        queuedSpawningPosition,
+        queuedRotation));
+
+    return true;
+  }
+
+  private RoadsideConstructionPlacement findAppropriateSegementFor(Vector2i size2i) {
+    List<UUID> roadIds = this.topology.getRegisteredRoadIdsByDepthDescending();
+    short width = (short) size2i.x;
+    for (UUID roadId : roadIds) {
+      RoadNode road = this.topology.getRoadFromId(roadId);
+      if (road == null || road.getLateralVacancySegments() == null) {
+        continue;
+      }
+
+      for (Map.Entry<Vector3i, LateralVacancySegments> segmentEntry : road.getLateralVacancySegments().entrySet()) {
+        Vector3i roadSide = segmentEntry.getKey();
+        LateralVacancySegments segments = segmentEntry.getValue();
+        Vector3i roadDirectionVec = segments == null ? null : segments.getRoadDirectionVec();
+        if (roadSide == null || segments == null || roadDirectionVec == null ||
+            segments.getValidSegments() == null || !segments.hasFittinSegment(width)) {
+          continue;
+        }
+
+        for (Segment validSegment : segments.getValidSegments()) {
+          if (validSegment == null || validSegment.getStart() == null || validSegment.getEnd() == null) {
+            continue;
+          }
+
+          if (validSegment.getSize() == null) {
+            validSegment.recalculateSize();
+          }
+          if (validSegment.getSize() == null || validSegment.getSize() < width) {
+            continue;
+          }
+
+          int candidateCount = validSegment.getSize() - width + 1;
+          for (int offset = 0; offset < candidateCount; offset++) {
+            Vector3i candidateStart = validSegment.getStart().clone()
+                .add(roadDirectionVec.clone().scale(offset));
+            Vector3i candidateEnd = candidateStart.clone().add(roadDirectionVec.clone().scale(width - 1));
+            Segment resultSegment = new Segment(candidateStart, candidateEnd);
+
+            Vector3i prefabPosition = calculateRoadsidePrefabAnchor(resultSegment, roadSide, size2i);
+            if (isValidPlacementPosition(prefabPosition,
+                Utils.rotateNormalizedVector(roadSide, Rotation.OneEighty))) {
+              return new RoadsideConstructionPlacement(
+                  segments,
+                  resultSegment,
+                  prefabPosition,
+                  Utils.getRotationFromCardinalDirection(roadSide));
+            }
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private static final class RoadsideConstructionPlacement {
+    private final LateralVacancySegments segments;
+    private final Segment segment;
+    private final Vector3i prefabAnchor;
+    private final Rotation rotation;
+
+    private RoadsideConstructionPlacement(
+        LateralVacancySegments segments,
+        Segment segment,
+        Vector3i prefabAnchor,
+        Rotation rotation) {
+      this.segments = segments;
+      this.segment = segment;
+      this.prefabAnchor = prefabAnchor;
+      this.rotation = rotation;
+    }
+  }
+
+  private boolean isValidPlacementPosition(
+      Vector3i prefabPosition,
+      Vector3i directionVec) {
+    Rotation rotation = Utils.getRotationFromCardinalDirection(directionVec);
+    TopologyStructure topologyStructure = buildTransientStructureFootprint(this.project.getStructureType(),
+        prefabPosition, rotation);
+    Set<UUID> possibleCollidingStructures = this.topology.getRegisteredStructureIdsAt(topologyStructure);
+
+    for (UUID structureId : possibleCollidingStructures) {
+      TopologyStructure collidingStructure = this.topology.getTopologyStructureFromStructureId(structureId);
+      if (collidingStructure != null && collidingStructure.collide(topologyStructure)) {
+        return false;
+      }
+    }
     return true;
   }
 
   private void handleFirstVillageProjectPlan(Ref<ChunkStore> villageRef) {
-    System.out.println("Building NEW VILLAGE!!!");
-
     if (!builder.hasProject()) {
       builder.setFirstVillageBuildProject(false);
       return;
@@ -159,6 +261,14 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
     final Vector3i queuedSpawningPosition = spawningPosition.clone();
     final Rotation queuedRotation = rotation;
+
+    if (this.project.getStructureType() == StructureType.TOWN_HALL
+        || this.project.getStructureType() == StructureType.HOUSE) {
+      reserveInitialStructureStreetSegments(
+          this.project.getStructureType(),
+          spawningPosition,
+          rotation);
+    }
 
     this.world.execute(() -> enqueueBuildingSpawn(
         villageRef,
@@ -234,7 +344,7 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
     int heartDepthTowardTownHall = heartTopology.getDepth();
     int forwardOffset = Math.max(0,
-        heartDepthTowardTownHall - StructureConfig.House.SIZE_2I.x) - 1;
+        heartDepthTowardTownHall - StructureConfig.House.SIZE_2I.x) - 3;
     int sideOffset = 1 + StructureConfig.House.SIZE_2I.x / 2;
 
     return sideEdge.add(new Vector3i(
@@ -263,49 +373,49 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
   private Pair<Vector3i, Rotation> calculateTavernPosition(TopologyStructure heartTopology) {
     Vector3i lowerDirection = Utils.getRotationVector(heartTopology.getOrientation().add(Rotation.OneEighty));
-    UUID roadId = this.topology.getRoadIdAtDirection(lowerDirection);
-    RoadNode roadNode = this.topology.getRoadFromId(roadId);
-
+    RoadNode roadNode = this.topology.getRootRoadAtDirection(lowerDirection);
     Rotation[] validDirections = new Rotation[] { Rotation.Ninety, Rotation.TwoSeventy };
 
     int indexDir = new FastRandom(this.topology.getSeed()).nextInt(0, validDirections.length);
     Vector3i roadSide = Utils.rotateNormalizedVector(lowerDirection, validDirections[indexDir]);
 
     LateralVacancySegments segments = roadNode.getLateralVacancySegment(roadSide);
-    Vector2i tavernSize2i = StructureConfig.Tavern.SIZE_2I;
-    Segment segment = segments.buildValidSegment((short) tavernSize2i.x);
-    if (segment == null) {
-      throw new IllegalStateException("No valid segment found when should exist");
-    }
-
-    Vector3i center = Utils.getCenter(segment.getStart(), segment.getEnd());
-    Vector3i prefabPosition = center.add(roadSide.clone().scale(Math.floorDiv(tavernSize2i.y, 2)));
-    segments.removeSegment(segment);
-    return Pair.of(prefabPosition, Utils.getRotationFromCardinalDirection(roadSide));
+    return reserveRoadsidePlacement(segments, roadSide, StructureConfig.Tavern.SIZE_2I);
   }
 
   private Pair<Vector3i, Rotation> calculateInitialStoragePosition(TopologyStructure heartTopology) {
     Vector3i lowerDirection = Utils.getRotationVector(heartTopology.getOrientation().add(Rotation.OneEighty));
-    UUID roadId = this.topology.getRoadIdAtDirection(lowerDirection);
-    RoadNode roadNode = this.topology.getRoadFromId(roadId);
+    RoadNode roadNode = this.topology.getRootRoadAtDirection(lowerDirection);
 
     Vector2i size2i = StructureConfig.Storage.SIZE_2I;
     Pair<Vector3i, LateralVacancySegments> result = roadNode
         .getLateralVacancySegmentWithFittingSpace((short) size2i.x);
+    if (result == null) {
+      throw new IllegalStateException("No lateral vacancy segment found when should exist");
+    }
+    return reserveRoadsidePlacement(result.right(), result.left(), size2i);
+  }
 
-    LateralVacancySegments segments = result.right();
-
-    Segment segment = segments.buildValidSegment((short) size2i.x);
+  static Pair<Vector3i, Rotation> reserveRoadsidePlacement(
+      LateralVacancySegments segments,
+      Vector3i roadSide,
+      Vector2i footprint) {
+    Segment segment = segments.buildSegmentFromStart((short) footprint.x);
     if (segment == null) {
       throw new IllegalStateException("No valid segment found when should exist");
     }
 
-    Vector3i center = Utils.getCenter(segment.getStart(), segment.getEnd());
-
-    Vector3i roadSide = result.left();
-    Vector3i prefabPosition = center.add(roadSide.clone().scale(Math.floorDiv(size2i.y, 2)));
+    Vector3i prefabPosition = calculateRoadsidePrefabAnchor(segment, roadSide, footprint);
     segments.removeSegment(segment);
     return Pair.of(prefabPosition, Utils.getRotationFromCardinalDirection(roadSide));
+  }
+
+  static Vector3i calculateRoadsidePrefabAnchor(
+      Segment segment,
+      Vector3i roadSide,
+      Vector2i footprint) {
+    Vector3i center = Utils.getCenter(segment.getStart(), segment.getEnd());
+    return center.add(roadSide.clone().scale(Math.floorDiv(footprint.y, 2)));
   }
 
   private void handleFirstVillageRoads(TopologyStructure heart) {
@@ -317,11 +427,15 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     buildBottomRoad(heart, roadLength);
   }
 
-  private void buildTopRoad(TopologyStructure heart, short roadLength) {
+  private void buildTopRoad(TopologyStructure heart, short maxRoadLength) {
     Vector3i topRoadDirectionVec = heart.getForwardVector();
 
-    int townHallWidth = StructureConfig.TownHall.SIZE_2I.x;
     int roadWidth = StructureConfig.Road.getRoadSize(RoadType.MAIN_ROAD);
+    Vector2i townHallSize = StructureConfig.TownHall.SIZE_2I;
+
+    int townHallDepth = townHallSize.y;
+    short roadLength = (short) (townHallDepth + roadWidth);
+    int townHallWidth = townHallSize.x;
     int halfRoadSize = Math.floorDiv(roadWidth, 2);
     int townHallRightOffset = Math.floorDiv(townHallWidth, 2) + halfRoadSize + 1;
 
@@ -334,6 +448,82 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
         heart.getOrientation(),
         topRoadDirectionVec,
         roadLength);
+
+    buildTopHorizontalRoad(heart, maxRoadLength);
+  }
+
+  private void buildTopHorizontalRoad(TopologyStructure heart, short maxRoadLength) {
+    int roadWidth = StructureConfig.Road.getRoadSize(RoadType.MAIN_ROAD);
+    Vector3i directionTop = Utils.getRotationVector(heart.getOrientation());
+    RoadNode node = this.topology.getRootRoadAtDirection(directionTop);
+    Vector3i right = Utils.rotateNormalizedVector(directionTop, Rotation.TwoSeventy);
+    LateralVacancySegments segments = node.getLateralVacancySegment(right);
+    Segment segment = segments.buildSegmentFromEnd((short) roadWidth);
+
+    Vector3i startingPoint = Utils.getCenter(segment.getStart(), segment.getEnd());
+
+    buildRoad(
+        node,
+        RoadType.MAIN_ROAD,
+        startingPoint.subtract(right),
+        Utils.getRotationFromCardinalDirection(right),
+        right,
+        (short) (StructureConfig.TownHall.SIZE_2I.x + roadWidth));
+    segments.removeSegment(segment);
+
+    List<UUID> roads = this.topology.getRoadsIdsAtDepth(this.topology.getHighestRoadLevel());
+    if (roads == null || roads.isEmpty()) {
+      throw new IllegalStateException("Unexpeted state, missing roads that should already be initialized");
+    }
+    RoadNode road = this.topology.getRoadFromId(roads.get(0));
+    buildTopRoadDeadEnd(heart, road);
+    buildLastTopRoad(heart, road, maxRoadLength);
+  }
+
+  private void buildTopRoadDeadEnd(TopologyStructure heart, RoadNode parentRoad) {
+    Vector3i roadSide = Utils.rotateNormalizedVector(parentRoad.getRoadDirectionVec(), Rotation.TwoSeventy);
+    LateralVacancySegments segments = parentRoad.getLateralVacancySegment(roadSide);
+    Segment segment = segments.buildSegmentFromEnd((short) StructureConfig.Road.getRoadSize(RoadType.MAIN_ROAD));
+    Vector3i startingPoint = Utils.getCenter(segment.getStart(), segment.getEnd());
+
+    buildRoad(
+        parentRoad,
+        RoadType.MAIN_ROAD,
+        startingPoint.subtract(roadSide),
+        Utils.getRotationFromCardinalDirection(roadSide),
+        roadSide,
+        (short) StructureConfig.TownHall.SIZE_2I.y);
+    segments.removeSegment(segment);
+  }
+
+  private void buildLastTopRoad(TopologyStructure heart, RoadNode parentRoad, short maxRoadLength) {
+    Vector3i roadSide = Utils.rotateNormalizedVector(parentRoad.getRoadDirectionVec(), Rotation.Ninety);
+    LateralVacancySegments segments = parentRoad.getLateralVacancySegment(roadSide);
+
+    short roadSize = (short) StructureConfig.Road.getRoadSize(RoadType.MAIN_ROAD);
+    short halfRoadSize = (short) Math.floorDiv(roadSize, 2);
+    Segment leftSideRoadSegment = segments.getFirstValidSegment(roadSize);
+
+    Vector3i center = Utils.getCenter(leftSideRoadSegment.getStart(), leftSideRoadSegment.getEnd());
+
+    Vector3i roadDirectionInverted = Utils.rotateNormalizedVector(parentRoad.getRoadDirectionVec(), Rotation.OneEighty);
+
+    Vector3i startSegment = center.clone().add(roadDirectionInverted.clone().scale(halfRoadSize))
+        .add(roadDirectionInverted.clone().scale(halfRoadSize));
+    Vector3i endSegment = center.clone().add(parentRoad.getRoadDirectionVec().clone().scale(halfRoadSize))
+        .add(roadDirectionInverted.clone().scale(halfRoadSize));
+
+    Segment segment = segments.buildSegmentAt(startSegment, endSegment);
+    Vector3i startingPoint = Utils.getCenter(segment.getStart(), segment.getEnd());
+
+    buildRoad(
+        parentRoad,
+        RoadType.MAIN_ROAD,
+        startingPoint.subtract(roadSide),
+        Utils.getRotationFromCardinalDirection(roadSide),
+        roadSide,
+        maxRoadLength);
+    segments.removeSegment(segment);
   }
 
   private void buildBottomRoad(TopologyStructure heart, short roadLength) {
@@ -386,53 +576,37 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
       Rotation prefabRotation,
       Vector3i roadDirectionVec,
       short length) {
+    buildRoadInternal(null, type, startPoint, prefabRotation, roadDirectionVec, length);
+  }
+
+  private void buildRoad(
+      RoadNode parent,
+      RoadType type,
+      Vector3i startPoint,
+      Rotation prefabRotation,
+      Vector3i roadDirectionVec,
+      short length) {
+    buildRoadInternal(parent, type, startPoint, prefabRotation, roadDirectionVec, length);
+  }
+
+  private void buildRoadInternal(
+      RoadNode parent,
+      RoadType type,
+      Vector3i startPoint,
+      Rotation prefabRotation,
+      Vector3i roadDirectionVec,
+      short length) {
     Map<RoadLength, Short> sectionsToBuild = calculateNeededRoadSections(length);
     List<RoadLength> orderedSegments = expandRoadSections(sectionsToBuild);
 
-    if (orderedSegments.isEmpty()) {
-      return;
-    }
+    Map<Vector3i, LateralVacancySegments> lateralVacancySegments = createLateralVacancySegments(
+        type,
+        startPoint,
+        roadDirectionVec,
+        length);
+    RoadNode node = createRoadNode(parent, prefabRotation, roadDirectionVec, lateralVacancySegments);
 
-    System.out.println("~~~~~~~~~~~~~~~~~~~~~~");
-    System.out.println("STARTING POINT: ");
-    System.out.println(startPoint);
-    System.out.println("PREFAB ROTATION: ");
-    System.out.println(prefabRotation);
-    System.out.println("ROAD DIRECTION VEC: ");
-    System.out.println(roadDirectionVec);
-
-    Map<Vector3i, LateralVacancySegments> lateralVacancySegments = new HashMap<>();
-    Vector3i left = Utils.rotateNormalizedVector(roadDirectionVec, Rotation.Ninety);
-    Vector3i right = Utils.rotateNormalizedVector(roadDirectionVec, Rotation.TwoSeventy);
-
-    int size = StructureConfig.Road.getRoadSize(type);
-    Vector3i leftSegmentStart = startPoint.clone().add(left.clone().scale(Math.floorDiv(size, 2))).add(left)
-        .add(roadDirectionVec);
-    Vector3i leftSegmentEnd = leftSegmentStart.clone().add(roadDirectionVec.clone().scale(length - 1));
-    Vector3i rigthSegmentStart = startPoint.clone().add(right.clone().scale(Math.floorDiv(size, 2))).add(right)
-        .add(roadDirectionVec);
-    Vector3i rightSegmentEnd = rigthSegmentStart.clone().add(roadDirectionVec.clone().scale(length - 1));
-
-    LateralVacancySegments leftSegments = new LateralVacancySegments();
-    leftSegments.setRoadDirectionVec(roadDirectionVec);
-    leftSegments.appendSegment(new Segment(leftSegmentStart, leftSegmentEnd));
-
-    LateralVacancySegments rigthSegments = new LateralVacancySegments();
-    rigthSegments.setRoadDirectionVec(roadDirectionVec);
-    rigthSegments.appendSegment(new Segment(rigthSegmentStart, rightSegmentEnd));
-    lateralVacancySegments.put(left, leftSegments);
-    lateralVacancySegments.put(right, rigthSegments);
-
-    RoadNode node = new RoadNode();
-    node.setRoadId(UUID.randomUUID());
-    node.setPrefabOrientation(prefabRotation);
-    node.setRoadDirectionVec(roadDirectionVec);
-    node.setBranchOriginKey(roadDirectionVec);
-    node.setState(VillageRoadState.EXPANDIBLE);
-    node.setDepth((byte) 0);
-    node.setLateralVacancySegments(lateralVacancySegments);
-
-    this.topology.addInitialRoad(roadDirectionVec, node);
+    this.topology.addRoad(node);
     TopologyStructure street = buildStreetTopology(
         node.getRoadId(),
         type,
@@ -441,10 +615,71 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
         roadDirectionVec,
         length);
     this.topology.registerStructure(street);
+    spawnRoadSegmentsAsync(node, type, startPoint, prefabRotation, roadDirectionVec, orderedSegments);
+  }
 
+  private Map<Vector3i, LateralVacancySegments> createLateralVacancySegments(
+      RoadType type,
+      Vector3i startPoint,
+      Vector3i roadDirectionVec,
+      short length) {
+    Map<Vector3i, LateralVacancySegments> lateralVacancySegments = new HashMap<>();
+    Vector3i left = Utils.rotateNormalizedVector(roadDirectionVec, Rotation.Ninety);
+    Vector3i right = Utils.rotateNormalizedVector(roadDirectionVec, Rotation.TwoSeventy);
+
+    int size = StructureConfig.Road.getRoadSize(type);
+    Vector3i leftSegmentStart = startPoint.clone()
+        .add(left.clone().scale(Math.floorDiv(size, 2)))
+        .add(left)
+        .add(roadDirectionVec);
+    Vector3i leftSegmentEnd = leftSegmentStart.clone().add(roadDirectionVec.clone().scale(length - 1));
+    Vector3i rightSegmentStart = startPoint.clone()
+        .add(right.clone().scale(Math.floorDiv(size, 2)))
+        .add(right)
+        .add(roadDirectionVec);
+    Vector3i rightSegmentEnd = rightSegmentStart.clone().add(roadDirectionVec.clone().scale(length - 1));
+
+    LateralVacancySegments leftSegments = new LateralVacancySegments();
+    leftSegments.setRoadDirectionVec(roadDirectionVec.clone());
+    leftSegments.appendSegment(new Segment(leftSegmentStart, leftSegmentEnd));
+
+    LateralVacancySegments rightSegments = new LateralVacancySegments();
+    rightSegments.setRoadDirectionVec(roadDirectionVec.clone());
+    rightSegments.appendSegment(new Segment(rightSegmentStart, rightSegmentEnd));
+    lateralVacancySegments.put(left, leftSegments);
+    lateralVacancySegments.put(right, rightSegments);
+    return lateralVacancySegments;
+  }
+
+  private RoadNode createRoadNode(
+      RoadNode parent,
+      Rotation prefabRotation,
+      Vector3i roadDirectionVec,
+      Map<Vector3i, LateralVacancySegments> lateralVacancySegments) {
+    RoadNode node = parent == null ? new RoadNode() : parent.newChild();
+    node.setRoadId(UUID.randomUUID());
+    node.setPrefabOrientation(prefabRotation);
+    node.setRoadDirectionVec(roadDirectionVec.clone());
+    node.setBranchOriginKey(parent == null
+        ? roadDirectionVec.clone()
+        : parent.getBranchOriginKey().clone());
+    node.setState(VillageRoadState.EXPANDIBLE);
+    node.setLateralVacancySegments(lateralVacancySegments);
+    if (parent == null) {
+      node.setDepth((byte) 0);
+    }
+    return node;
+  }
+
+  private void spawnRoadSegmentsAsync(
+      RoadNode node,
+      RoadType type,
+      Vector3i startPoint,
+      Rotation prefabRotation,
+      Vector3i roadDirectionVec,
+      List<RoadLength> orderedSegments) {
     this.world.execute(() -> {
       RoadLength firstSegment = orderedSegments.get(0);
-
       Vector3i currentPosition = startPoint.clone()
           .add(roadDirectionVec.clone().scale(firstSegment.getLength()));
 
@@ -542,6 +777,109 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     }
 
     return count;
+  }
+
+  // TODO: probably too much
+  private void reserveInitialStructureStreetSegments(
+      StructureType structureType,
+      Vector3i prefabAnchor,
+      Rotation rotation) {
+    TopologyStructure structureFootprint = buildTransientStructureFootprint(
+        structureType,
+        prefabAnchor,
+        rotation);
+    if (structureFootprint == null) {
+      return;
+    }
+
+    for (UUID roadId : this.topology.getRegisteredRoadIdsByDepthDescending()) {
+      RoadNode roadNode = this.topology.getRoadFromId(roadId);
+      if (roadNode == null || roadNode.getLateralVacancySegments() == null) {
+        continue;
+      }
+
+      for (LateralVacancySegments segments : roadNode.getLateralVacancySegments().values()) {
+        Segment occupiedSegment = buildOccupiedRoadsideSegment(structureFootprint, roadNode, segments);
+        if (occupiedSegment != null) {
+          segments.removeSegment(occupiedSegment);
+        }
+      }
+    }
+  }
+
+  private TopologyStructure buildTransientStructureFootprint(
+      StructureType structureType,
+      Vector3i prefabAnchor,
+      Rotation rotation) {
+    Vector2i structureSize = Utils.getSize2i(structureType);
+    if (structureSize == null || prefabAnchor == null) {
+      return null;
+    }
+
+    TopologyStructure structureFootprint = new TopologyStructure(
+        prefabAnchor.clone(),
+        structureSize,
+        VillageTopologyStructureType.fromStructureType(structureType),
+        rotation == null ? Rotation.None : rotation);
+    structureFootprint.setStructureType(structureType);
+    return structureFootprint;
+  }
+
+  private Segment buildOccupiedRoadsideSegment(
+      TopologyStructure structureFootprint,
+      RoadNode roadNode,
+      LateralVacancySegments segments) {
+    if (structureFootprint == null || roadNode == null || segments == null) {
+      return null;
+    }
+
+    Segment referenceSegment = getReferenceSegment(segments);
+    Vector3i roadDirectionVec = roadNode.getRoadDirectionVec();
+    if (referenceSegment == null || roadDirectionVec == null) {
+      return null;
+    }
+
+    int minX = structureFootprint.getMinX();
+    int maxX = structureFootprint.getMaxX();
+    int minZ = structureFootprint.getMinZ();
+    int maxZ = structureFootprint.getMaxZ();
+    int y = referenceSegment.getStart().y;
+
+    if (roadDirectionVec.x != 0) {
+      int stripZ = referenceSegment.getStart().z;
+      if (stripZ < minZ || stripZ > maxZ) {
+        return null;
+      }
+      return new Segment(
+          new Vector3i(minX, y, stripZ),
+          new Vector3i(maxX, y, stripZ));
+    }
+
+    if (roadDirectionVec.z != 0) {
+      int stripX = referenceSegment.getStart().x;
+      if (stripX < minX || stripX > maxX) {
+        return null;
+      }
+      return new Segment(
+          new Vector3i(stripX, y, minZ),
+          new Vector3i(stripX, y, maxZ));
+    }
+
+    return null;
+  }
+
+  private Segment getReferenceSegment(LateralVacancySegments segments) {
+    if (segments.getValidSegments() == null) {
+      return null;
+    }
+
+    for (Segment segment : segments.getValidSegments()) {
+      if (segment != null && segment.getStart() != null && segment.getEnd() != null) {
+        return segment;
+      }
+    }
+
+    return null;
   }
 
   @Override

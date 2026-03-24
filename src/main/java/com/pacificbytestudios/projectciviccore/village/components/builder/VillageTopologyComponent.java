@@ -91,6 +91,11 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
           obj -> encodeRegisteredRoads(obj.roadIdToRoad))
       .add()
 
+      .append(new KeyedCodec<>("HighestLevel", Codec.BYTE, false),
+          (obj, value) -> obj.highestRoadLevel = value,
+          obj -> obj.highestRoadLevel)
+      .add()
+
       .build();
 
   private Short villageRadius;
@@ -103,6 +108,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
   private Rotation villageOrientation;
   private Long seed;
+  private byte highestRoadLevel = -1;
 
   public VillageTopologyComponent() {
     this.seed = new FastRandom().nextLong();
@@ -128,9 +134,11 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     this.villageOrientation = villageOrientation;
   }
 
-  public void addInitialRoad(Vector3i directionKey, RoadNode node) {
+  public void addRoad(RoadNode node) {
     UUID roadId = node.getRoadId();
-    this.roads.put(directionKey.clone(), roadId);
+    if (node.getDepth() == 0 && node.getBranchOriginKey() != null) {
+      this.roads.put(node.getBranchOriginKey().clone(), roadId);
+    }
     addRoadIdToDepthGroup(roadId, node.getDepth());
     this.roadIdToRoad.put(roadId, node);
   }
@@ -138,6 +146,9 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
   private void addRoadIdToDepthGroup(UUID roadId, byte level) {
     List<UUID> roadDepthLevels = this.roadGroupPerDepth.getOrDefault(level, new ArrayList<>());
     roadDepthLevels.add(roadId);
+    if (this.highestRoadLevel < level) {
+      this.highestRoadLevel = level;
+    }
     this.roadGroupPerDepth.put(level, roadDepthLevels);
   }
 
@@ -161,12 +172,41 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return this.roads.get(directionKey);
   }
 
-  public List<UUID> getRoadIdsAtDepth(byte depth) {
+  public RoadNode getRootRoadAtDirection(Vector3i directionKey) {
+    return getRoadFromId(getRoadIdAtDirection(directionKey));
+  }
+
+  public List<UUID> getRoadsIdsAtDepth(byte depth) {
     if (this.roadGroupPerDepth == null) {
       return Collections.emptyList();
     }
 
-    return Collections.unmodifiableList(this.roadGroupPerDepth.get(depth));
+    List<UUID> roadIds = this.roadGroupPerDepth.get(depth);
+    if (roadIds == null || roadIds.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    return Collections.unmodifiableList(new ArrayList<>(roadIds));
+  }
+
+  public byte getHighestRoadLevel() {
+    return this.highestRoadLevel;
+  }
+
+  public List<UUID> getRegisteredRoadIdsByDepthDescending() {
+    if (this.roadGroupPerDepth == null || this.roadGroupPerDepth.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    List<Byte> orderedDepths = new ArrayList<>(this.roadGroupPerDepth.keySet());
+    orderedDepths.sort(Collections.reverseOrder());
+
+    List<UUID> orderedRoadIds = new ArrayList<>();
+    for (byte depth : orderedDepths) {
+      orderedRoadIds.addAll(getRoadsIdsAtDepth(depth));
+    }
+
+    return Collections.unmodifiableList(orderedRoadIds);
   }
 
   public Map<Vector3i, UUID> getRootRoadIds() {
@@ -212,6 +252,46 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       return Collections.emptySet();
     }
     return Collections.unmodifiableSet(new HashSet<>(structureIds));
+  }
+
+  public Set<UUID> getRegisteredStructureIdsAt(TopologyStructure topologyStructure) {
+    if (topologyStructure == null || this.villageGrid == null || this.villageGrid.isEmpty()) {
+      return Collections.emptySet();
+    }
+
+    Vector2i topLeft = topologyStructure.getTopLeft();
+    Vector2i botRight = topologyStructure.getBotRight();
+    Vector2i villageCenter = getCoreCenter2D();
+
+    if (topLeft == null || botRight == null || villageCenter == null) {
+      return Collections.emptySet();
+    }
+
+    int relativeMinX = Math.min(topLeft.x, botRight.x) - villageCenter.x;
+    int relativeMaxX = Math.max(topLeft.x, botRight.x) - villageCenter.x;
+    int relativeMinZ = Math.min(topLeft.y, botRight.y) - villageCenter.y;
+    int relativeMaxZ = Math.max(topLeft.y, botRight.y) - villageCenter.y;
+
+    int minXCell = blockToCellIndex(relativeMinX);
+    int maxXCell = blockToCellIndex(relativeMaxX);
+    int minZCell = blockToCellIndex(relativeMinZ);
+    int maxZCell = blockToCellIndex(relativeMaxZ);
+
+    Set<UUID> structureIds = new HashSet<>();
+    for (int xCell = minXCell; xCell <= maxXCell; xCell++) {
+      for (int zCell = minZCell; zCell <= maxZCell; zCell++) {
+        Set<UUID> cellStructureIds = this.villageGrid.get(Pair.of((byte) xCell, (byte) zCell));
+        if (cellStructureIds != null && !cellStructureIds.isEmpty()) {
+          structureIds.addAll(cellStructureIds);
+        }
+      }
+    }
+
+    if (structureIds.isEmpty()) {
+      return Collections.emptySet();
+    }
+
+    return Collections.unmodifiableSet(structureIds);
   }
 
   private static int blockToCellIndex(int blockOffset) {
@@ -325,6 +405,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
     component.roadGroupPerDepth = copyRoadLevelPerDepth(this.roadGroupPerDepth);
     component.roadIdToRoad = copyRegisteredRoads(this.roadIdToRoad);
+    component.highestRoadLevel = this.highestRoadLevel;
     return component;
   }
 

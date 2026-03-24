@@ -225,6 +225,18 @@ public class TopologyStructure extends AreaFootprint {
     return new Vector3i(center2D.x, getY(), center2D.y);
   }
 
+  public boolean collide(TopologyStructure other) {
+    if (other == null || getTopLeft() == null || getBotRight() == null ||
+        other.getTopLeft() == null || other.getBotRight() == null) {
+      return false;
+    }
+
+    return getMinX() <= other.getMaxX() &&
+        other.getMinX() <= getMaxX() &&
+        getMinZ() <= other.getMaxZ() &&
+        other.getMinZ() <= getMaxZ();
+  }
+
   private static AreaFootprint createCenteredOffset(Vector2i size2i) {
     if (size2i == null) {
       return null;
