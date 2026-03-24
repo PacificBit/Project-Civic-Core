@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
+import java.util.UUID;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -68,6 +70,9 @@ public class MineSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition);
     }
 
+    if (workplaceComponent.getUuid() == null) {
+      workplaceComponent.setUuid(UUID.randomUUID());
+    }
     workplaceComponent.setLevel((short) 1);
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MINER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));

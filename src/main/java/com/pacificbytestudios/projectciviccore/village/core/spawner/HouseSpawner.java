@@ -97,7 +97,11 @@ public class HouseSpawner {
   private static void spawnBeds(World world, WorldChunk chunk, HouseComponent house) {
     for (AppartmentComponent appartment : house.getAppartmentRegistry().getAppartments().values()) {
       for (VillageBedComponent bed : appartment.getBeds().values()) {
-        Utils.setBlockChunkAware(chunk, bed.getPosition(), StructureConfig.House.CRUDE_BED_BLOCK);
+        Utils.setBlockChunkAware(
+            chunk,
+            bed.getPosition(),
+            StructureConfig.House.CRUDE_BED_BLOCK,
+            StructurePlacementUtils.toBlockRotationIndex(bed.getRotation()));
         Utils.markNeedSaving(world, bed.getPosition());
       }
     }

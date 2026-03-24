@@ -7,6 +7,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 
 public class VillageBedComponent implements Component<ChunkStore> {
@@ -28,11 +29,17 @@ public class VillageBedComponent implements Component<ChunkStore> {
           (obj) -> obj.position)
       .add()
 
+      .append(new KeyedCodec<>("Rotation", Rotation.CODEC),
+          (obj, value) -> obj.rotation = value,
+          (obj) -> obj.rotation)
+      .add()
+
       .build();
 
   private boolean isTaken;
   private UUID owner;
   private Vector3i position;
+  private Rotation rotation;
 
   @Override
   public VillageBedComponent clone() {
@@ -40,6 +47,7 @@ public class VillageBedComponent implements Component<ChunkStore> {
     component.isTaken = this.isTaken;
     component.owner = this.owner;
     component.position = this.position == null ? null : this.position.clone();
+    component.rotation = this.rotation;
     return component;
   }
 
@@ -65,6 +73,14 @@ public class VillageBedComponent implements Component<ChunkStore> {
 
   public void setPosition(Vector3i position) {
     this.position = position;
+  }
+
+  public Rotation getRotation() {
+    return rotation;
+  }
+
+  public void setRotation(Rotation rotation) {
+    this.rotation = rotation;
   }
 
 }

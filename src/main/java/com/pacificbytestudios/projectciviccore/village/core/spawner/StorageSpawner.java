@@ -77,6 +77,9 @@ public class StorageSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
     }
 
+    if (workplaceComponent.getUuid() == null) {
+      workplaceComponent.setUuid(UUID.randomUUID());
+    }
     workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, structureRotation));

@@ -89,10 +89,8 @@ public class TownHeartSpawner {
     VillageTopologyComponent topologyComponent = store.getComponent(heartRef,
         VillageTopologyComponent.getComponentType());
     topologyComponent.setVillageOrientation(rotation);
-    topologyComponent.setSeed(42L);
 
     short radius = heartComponent.getConfig().getClaimRadiusPerLevel((short) heartComponent.getLevel());
-    System.out.println("Init Village topology");
 
     TopologyStructure coreStructure = new TopologyStructure(
         position,

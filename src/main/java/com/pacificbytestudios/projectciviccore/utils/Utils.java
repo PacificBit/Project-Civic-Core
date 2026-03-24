@@ -305,6 +305,33 @@ public class Utils {
     return rotation.getAxisDirection();
   }
 
+  public static Rotation getRotationFromCardinalDirection(Vector3i cardinalDirection) {
+    for (Rotation rotation : Rotation.values()) {
+      Vector3i rotationVector = getRotationVector(rotation);
+      if (rotationVector.x == cardinalDirection.x &&
+          rotationVector.y == cardinalDirection.y &&
+          rotationVector.z == cardinalDirection.z) {
+        return rotation;
+      }
+    }
+    return null;
+  }
+
+  public static Vector3i rotateNormalizedVector(Vector3i cardinalDirection, Rotation rotation) {
+    return getRotationVector(getRotationFromCardinalDirection(cardinalDirection).add(rotation));
+  }
+
+  public static Vector3i getCenter(Vector3i start, Vector3i end) {
+    if (start == null || end == null) {
+      return null;
+    }
+
+    return new Vector3i(
+        (int) Math.floorDiv((long) start.x + end.x, 2L),
+        (int) Math.floorDiv((long) start.y + end.y, 2L),
+        (int) Math.floorDiv((long) start.z + end.z, 2L));
+  }
+
   public static WorldChunk getWorldChunk(World world, Vector3i position) {
     return world.getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
   }

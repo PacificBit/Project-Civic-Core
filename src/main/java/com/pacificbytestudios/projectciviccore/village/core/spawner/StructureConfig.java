@@ -19,6 +19,42 @@ import com.pacificbytestudios.projectciviccore.village.components.house.HouseApp
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 
 public final class StructureConfig {
+  private static final int LONGEST_CONSTRUCTION_SIDE;
+  private static final int SMALLEST_CONSTRUCTION_SIDE;
+
+  static {
+    int longest = Math.max(getLongestSide(Mine.SIZE_2I), getLongestSide(Farm.SIZE_2I));
+    int longest1 = Math.max(getLongestSide(Storage.SIZE_2I), getLongestSide(Tavern.SIZE_2I));
+    int longest2 = Math.max(getLongestSide(House.SIZE_2I), getLongestSide(Sawmill.SIZE_2I));
+    int longest3 = Math.max(longest, longest1);
+    LONGEST_CONSTRUCTION_SIDE = Math.max(longest3, longest2);
+
+    int smallest = Math.min(getSmallestSide(Mine.SIZE_2I), getSmallestSide(Farm.SIZE_2I));
+    int smallest1 = Math.min(getSmallestSide(Storage.SIZE_2I), getSmallestSide(Tavern.SIZE_2I));
+    int smallest2 = Math.min(getSmallestSide(House.SIZE_2I), getSmallestSide(Sawmill.SIZE_2I));
+    int smallest3 = Math.min(smallest, smallest1);
+    SMALLEST_CONSTRUCTION_SIDE = Math.min(smallest3, smallest2);
+  }
+
+  public static int getLongestSide() {
+    return LONGEST_CONSTRUCTION_SIDE;
+  }
+
+  public static int getSmallestSide() {
+    return SMALLEST_CONSTRUCTION_SIDE;
+  }
+
+  private static int getLongestSide(Vector2i size) {
+    return Math.max(size.x, size.y);
+  }
+
+  private static int getSmallestSide(Vector2i size) {
+    return Math.min(size.x, size.y);
+  }
+
+  public record BlockTransform(Vector3i position, Rotation rotation) {
+  }
+
   private StructureConfig() {
   }
 
@@ -233,36 +269,40 @@ public final class StructureConfig {
   }
 
   public static final class House {
-    public static final String PREFAB_JSON = "Structures/Temporary/House.prefab.json";
+    // public static final String PREFAB_JSON =
+    // "Structures/Temporary/House.prefab.json";
+    public static final String PREFAB_JSON = "Structures/Housing/Level1/House.prefab.json";
     public static final BlockType CORE_BLOCK = BlockType.getAssetMap().getAsset("Housing_Core");
     public static final BlockType CRUDE_BED_BLOCK = BlockType.getAssetMap().getAsset("Village_Crude_Bed");
-    public static final Vector3i CORE_BLOCK_OFFSET = new Vector3i(0, 1, -3);
+    public static final Vector3i CORE_BLOCK_OFFSET = new Vector3i(-4, 1, 2);
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
-    private static final Map<Integer, List<List<Vector3i>>> APPARTMENT_BED_OFFSETS = Map.of(
+    private static final Map<Integer, List<List<BlockTransform>>> APPARTMENT_BED_OFFSETS = Map.of(
         1,
         List.of(
-            List.of(new Vector3i(-2, 1, 0)),
-            List.of(new Vector3i(2, 1, 0))));
+            List.of(new BlockTransform(new Vector3i(2, 1, -3), Rotation.None)),
+            List.of(new BlockTransform(new Vector3i(4, 1, -3), Rotation.None))));
 
     private House() {
     }
 
     public static HouseAppartmentRegistry getAppartments(Vector3i prefabAnchor, Rotation rotation, int level) {
       HouseAppartmentRegistry registry = new HouseAppartmentRegistry();
-      List<List<Vector3i>> appartments = APPARTMENT_BED_OFFSETS.getOrDefault(
+      List<List<BlockTransform>> appartments = APPARTMENT_BED_OFFSETS.getOrDefault(
           level,
           APPARTMENT_BED_OFFSETS.getOrDefault(1, List.of()));
 
-      for (List<Vector3i> bedOffsets : appartments) {
+      for (List<BlockTransform> bedOffsets : appartments) {
         AppartmentComponent appartment = new AppartmentComponent();
         Map<UUID, VillageBedComponent> beds = new HashMap<>();
 
-        for (Vector3i bedOffset : bedOffsets) {
+        for (BlockTransform bedOffset : bedOffsets) {
           VillageBedComponent bed = new VillageBedComponent();
           bed.setTaken(false);
-          bed.setPosition(toAbsolutePosition(prefabAnchor, bedOffset, rotation));
+          bed.setPosition(toAbsolutePosition(prefabAnchor, bedOffset.position, rotation));
+          Rotation finalBedRotation = StructurePlacementUtils.addYaw(bedOffset.rotation(), rotation);
+          bed.setRotation(finalBedRotation);
           beds.put(UUID.randomUUID(), bed);
         }
 

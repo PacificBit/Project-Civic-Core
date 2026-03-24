@@ -90,6 +90,9 @@ public class TownHallSpawner {
           workplaceBlockPosition, null);
     }
 
+    if (workplaceComponent.getUuid() == null) {
+      workplaceComponent.setUuid(UUID.randomUUID());
+    }
     workplaceComponent.setStorage(storage);
     workplaceComponent.setLevel((short) 1);
     workplaceComponent.setBenchPos(workplaceBlockPosition);

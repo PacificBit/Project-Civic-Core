@@ -58,7 +58,9 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
         WorkplaceComponent.getComponentType());
     workplaceComponent.setBenchPos(blockPos);
     workplaceComponent.setVillageRef(villageHeartRef);
-    workplaceComponent.setUuid(UUID.randomUUID());
+    if (workplaceComponent.getUuid() == null) {
+      workplaceComponent.setUuid(UUID.randomUUID());
+    }
 
     VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
 

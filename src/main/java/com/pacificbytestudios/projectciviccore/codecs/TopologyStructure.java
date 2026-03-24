@@ -256,6 +256,7 @@ public class TopologyStructure extends AreaFootprint {
     component.topologyType = this.topologyType;
     component.structureId = this.structureId;
     component.distanceFromCenter = this.distanceFromCenter;
+    component.structureType = this.structureType;
     component.edges = encodeEdges(this.edges);
 
     return component;

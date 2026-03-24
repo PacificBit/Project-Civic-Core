@@ -23,7 +23,6 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph;
 import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
@@ -64,8 +63,8 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       .add()
 
       .append(new KeyedCodec<>("Roads",
-          new Vector3iMapCodec<RoadsGraph, HashMap<Vector3i, RoadsGraph>>(
-              RoadsGraph.CODEC,
+          new Vector3iMapCodec<UUID, HashMap<Vector3i, UUID>>(
+              Codec.UUID_BINARY,
               HashMap::new,
               false)),
           (obj, value) -> obj.roads = value,
@@ -75,11 +74,21 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       .append(new KeyedCodec<>(
           "RoadLevelPerDepth",
           new Short2ObjectMapCodec<>(
-              new ArrayCodec<>(RoadNode.CODEC, RoadNode[]::new),
+              new ArrayCodec<>(Codec.UUID_BINARY, UUID[]::new),
               Short2ObjectOpenHashMap::new),
           false),
           (obj, value) -> obj.roadGroupPerDepth = decodeRoadLevelPerDepth(value),
           obj -> encodeRoadLevelPerDepth(obj.roadGroupPerDepth))
+      .add()
+
+      .append(new KeyedCodec<>(
+          "RegisteredRoads",
+          new MapCodec<RoadNode, HashMap<String, RoadNode>>(
+              RoadNode.CODEC,
+              HashMap::new),
+          false),
+          (obj, value) -> obj.setRegisteredRoads(decodeRegisteredRoads(value)),
+          obj -> encodeRegisteredRoads(obj.roadIdToRoad))
       .add()
 
       .build();
@@ -88,13 +97,15 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
   private Map<UUID, TopologyStructure> structureIdToTopology = new HashMap<>();
   private Map<Pair<Byte, Byte>, Set<UUID>> villageGrid = new HashMap<>();
 
-  private Map<Vector3i, RoadsGraph> roads;
-  private Map<Byte, List<RoadNode>> roadGroupPerDepth = new HashMap<>();
+  private Map<Vector3i, UUID> roads = new HashMap<>();
+  private Map<Byte, List<UUID>> roadGroupPerDepth = new HashMap<>();
+  private Map<UUID, RoadNode> roadIdToRoad = new HashMap<>();
 
   private Rotation villageOrientation;
   private Long seed;
 
   public VillageTopologyComponent() {
+    this.seed = new FastRandom().nextLong();
   }
 
   public Long getSeed() {
@@ -117,6 +128,19 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     this.villageOrientation = villageOrientation;
   }
 
+  public void addInitialRoad(Vector3i directionKey, RoadNode node) {
+    UUID roadId = node.getRoadId();
+    this.roads.put(directionKey.clone(), roadId);
+    addRoadIdToDepthGroup(roadId, node.getDepth());
+    this.roadIdToRoad.put(roadId, node);
+  }
+
+  private void addRoadIdToDepthGroup(UUID roadId, byte level) {
+    List<UUID> roadDepthLevels = this.roadGroupPerDepth.getOrDefault(level, new ArrayList<>());
+    roadDepthLevels.add(roadId);
+    this.roadGroupPerDepth.put(level, roadDepthLevels);
+  }
+
   public void initializeVillageTopology(TopologyStructure structure, Short radius) {
     this.villageRadius = radius;
     this.structureIdToTopology = new HashMap<>();
@@ -127,15 +151,39 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
     this.structureIdToTopology.put(structure.getStructureId(), structure);
     rebuildVillageGrid();
-    // TODO: delete this
-    System.out.println(this.toString());
+  }
+
+  public RoadNode getRoadFromId(UUID roadId) {
+    return this.roadIdToRoad.get(roadId);
+  }
+
+  public UUID getRoadIdAtDirection(Vector3i directionKey) {
+    return this.roads.get(directionKey);
+  }
+
+  public List<UUID> getRoadIdsAtDepth(byte depth) {
+    if (this.roadGroupPerDepth == null) {
+      return Collections.emptyList();
+    }
+
+    return Collections.unmodifiableList(this.roadGroupPerDepth.get(depth));
+  }
+
+  public Map<Vector3i, UUID> getRootRoadIds() {
+    Map<Vector3i, UUID> copy = new HashMap<>();
+    if (this.roads == null) {
+      return Collections.unmodifiableMap(copy);
+    }
+
+    this.roads.forEach((direction, roadId) -> {
+      if (direction != null && roadId != null) {
+        copy.put(direction.clone(), roadId);
+      }
+    });
+    return Collections.unmodifiableMap(copy);
   }
 
   public void registerStructure(TopologyStructure structure) {
-    if (structure == null) {
-      return;
-    }
-
     TopologyStructure clonedStructure = structure.clone();
     if (clonedStructure.getStructureId() == null) {
       clonedStructure.setStructureId(UUID.randomUUID());
@@ -181,6 +229,17 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     }
 
     rebuildVillageGrid();
+  }
+
+  private void setRegisteredRoads(Map<UUID, RoadNode> roads) {
+    this.roadIdToRoad = new HashMap<>();
+    if (roads != null) {
+      roads.forEach((roadId, road) -> {
+        if (roadId != null && road != null) {
+          this.roadIdToRoad.put(roadId, road);
+        }
+      });
+    }
   }
 
   private void rebuildVillageGrid() {
@@ -241,6 +300,11 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     }
   }
 
+  public void unregisterStructure(UUID structureId) {
+    this.structureIdToTopology.remove(structureId);
+    rebuildVillageGrid();
+  }
+
   @Override
   public VillageTopologyComponent clone() {
     VillageTopologyComponent component = new VillageTopologyComponent();
@@ -254,12 +318,13 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       component.roads = null;
     } else {
       component.roads = new HashMap<>();
-      this.roads.forEach((position, graph) -> component.roads.put(
+      this.roads.forEach((position, roadId) -> component.roads.put(
           position == null ? null : position.clone(),
-          graph == null ? null : graph.clone()));
+          roadId));
     }
 
     component.roadGroupPerDepth = copyRoadLevelPerDepth(this.roadGroupPerDepth);
+    component.roadIdToRoad = copyRegisteredRoads(this.roadIdToRoad);
     return component;
   }
 
@@ -313,29 +378,29 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return getCellMinBlock(cellIndex) + CELL_SIZE - 1;
   }
 
-  private static Map<Byte, List<RoadNode>> decodeRoadLevelPerDepth(Short2ObjectMap<RoadNode[]> encoded) {
-    Map<Byte, List<RoadNode>> decoded = new HashMap<>();
+  private static Map<Byte, List<UUID>> decodeRoadLevelPerDepth(Short2ObjectMap<UUID[]> encoded) {
+    Map<Byte, List<UUID>> decoded = new HashMap<>();
 
     if (encoded == null) {
       return decoded;
     }
 
-    encoded.forEach((depth, nodes) -> decoded.put(depth.byteValue(), decodeRoadNodes(nodes)));
+    encoded.forEach((depth, roadIds) -> decoded.put(depth.byteValue(), decodeRoadIds(roadIds)));
     return decoded;
   }
 
-  private static Short2ObjectMap<RoadNode[]> encodeRoadLevelPerDepth(Map<Byte, List<RoadNode>> roadLevelPerDepth) {
-    Short2ObjectOpenHashMap<RoadNode[]> encoded = new Short2ObjectOpenHashMap<>();
+  private static Short2ObjectMap<UUID[]> encodeRoadLevelPerDepth(Map<Byte, List<UUID>> roadLevelPerDepth) {
+    Short2ObjectOpenHashMap<UUID[]> encoded = new Short2ObjectOpenHashMap<>();
 
     if (roadLevelPerDepth == null) {
       return encoded;
     }
 
-    roadLevelPerDepth.forEach((depth, nodes) -> {
-      if (depth == null || nodes == null) {
+    roadLevelPerDepth.forEach((depth, roadIds) -> {
+      if (depth == null || roadIds == null) {
         return;
       }
-      encoded.put(depth.shortValue(), encodeRoadNodes(nodes));
+      encoded.put(depth.shortValue(), encodeRoadIds(roadIds));
     });
     return encoded;
   }
@@ -381,6 +446,47 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return encoded;
   }
 
+  private static Map<UUID, RoadNode> decodeRegisteredRoads(Map<String, RoadNode> encoded) {
+    Map<UUID, RoadNode> decoded = new HashMap<>();
+
+    if (encoded == null) {
+      return decoded;
+    }
+
+    encoded.forEach((roadId, road) -> {
+      if (roadId == null || road == null) {
+        return;
+      }
+
+      UUID uuid = UUID.fromString(roadId);
+      RoadNode storedRoad = road.clone();
+      storedRoad.setRoadId(uuid);
+      decoded.put(uuid, storedRoad);
+    });
+
+    return decoded;
+  }
+
+  private static HashMap<String, RoadNode> encodeRegisteredRoads(Map<UUID, RoadNode> roads) {
+    HashMap<String, RoadNode> encoded = new HashMap<>();
+
+    if (roads == null) {
+      return encoded;
+    }
+
+    roads.forEach((roadId, road) -> {
+      if (roadId == null || road == null) {
+        return;
+      }
+
+      RoadNode storedRoad = road.clone();
+      storedRoad.setRoadId(roadId);
+      encoded.put(roadId.toString(), storedRoad);
+    });
+
+    return encoded;
+  }
+
   private static Map<UUID, TopologyStructure> copyTopologyStructures(Map<UUID, TopologyStructure> structures) {
     Map<UUID, TopologyStructure> copy = new HashMap<>();
 
@@ -397,51 +503,69 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return copy;
   }
 
-  private static Map<Byte, List<RoadNode>> copyRoadLevelPerDepth(Map<Byte, List<RoadNode>> roadLevelPerDepth) {
-    Map<Byte, List<RoadNode>> copy = new HashMap<>();
+  private static Map<UUID, RoadNode> copyRegisteredRoads(Map<UUID, RoadNode> roads) {
+    Map<UUID, RoadNode> copy = new HashMap<>();
+
+    if (roads == null) {
+      return copy;
+    }
+
+    roads.forEach((roadId, road) -> {
+      if (roadId != null && road != null) {
+        RoadNode clonedRoad = road.clone();
+        clonedRoad.setRoadId(roadId);
+        copy.put(roadId, clonedRoad);
+      }
+    });
+
+    return copy;
+  }
+
+  private static Map<Byte, List<UUID>> copyRoadLevelPerDepth(Map<Byte, List<UUID>> roadLevelPerDepth) {
+    Map<Byte, List<UUID>> copy = new HashMap<>();
 
     if (roadLevelPerDepth == null) {
       return copy;
     }
 
-    roadLevelPerDepth.forEach((depth, nodes) -> {
+    roadLevelPerDepth.forEach((depth, roadIds) -> {
       if (depth != null) {
-        copy.put(depth, copyRoadNodes(nodes));
+        copy.put(depth, copyRoadIds(roadIds));
       }
     });
     return copy;
   }
 
-  private static List<RoadNode> decodeRoadNodes(RoadNode[] nodes) {
-    List<RoadNode> decoded = new ArrayList<>();
+  private static List<UUID> decodeRoadIds(UUID[] roadIds) {
+    List<UUID> decoded = new ArrayList<>();
 
-    if (nodes == null) {
+    if (roadIds == null) {
       return decoded;
     }
 
-    for (RoadNode node : nodes) {
-      decoded.add(node);
+    for (UUID roadId : roadIds) {
+      decoded.add(roadId);
     }
     return decoded;
   }
 
-  private static RoadNode[] encodeRoadNodes(List<RoadNode> nodes) {
-    if (nodes == null) {
-      return new RoadNode[0];
+  private static UUID[] encodeRoadIds(List<UUID> roadIds) {
+    if (roadIds == null) {
+      return new UUID[0];
     }
 
-    return nodes.toArray(RoadNode[]::new);
+    return roadIds.toArray(UUID[]::new);
   }
 
-  private static List<RoadNode> copyRoadNodes(List<RoadNode> nodes) {
-    List<RoadNode> copy = new ArrayList<>();
+  private static List<UUID> copyRoadIds(List<UUID> roadIds) {
+    List<UUID> copy = new ArrayList<>();
 
-    if (nodes == null) {
+    if (roadIds == null) {
       return copy;
     }
 
-    for (RoadNode node : nodes) {
-      copy.add(node == null ? null : node.clone());
+    for (UUID roadId : roadIds) {
+      copy.add(roadId);
     }
     return copy;
   }

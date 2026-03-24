@@ -10,6 +10,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 
 public class UnregisterWorkplaceTask extends AVillageTask {
@@ -40,6 +41,18 @@ public class UnregisterWorkplaceTask extends AVillageTask {
       VillageHeartComponent heart) {
     ProjectCivicCore.LOGGER
         .atInfo().log("[UnregisterWorkplaceTask] Unregistering workplace with id: " + this.workplace);
+
+    VillageTopologyComponent topology = heartRef.getStore().getComponent(
+        heartRef,
+        VillageTopologyComponent.getComponentType());
+    if (topology == null) {
+      ProjectCivicCore.LOGGER.atWarning().log(
+          "[UnregisterWorkplaceTask] Could not unregister workplace topology for " + this.workplace
+              + " because the village topology component is missing");
+    } else {
+      topology.unregisterStructure(this.workplace);
+    }
+
     heart.unregisterWorkplace(this.workplace);
   }
 }
