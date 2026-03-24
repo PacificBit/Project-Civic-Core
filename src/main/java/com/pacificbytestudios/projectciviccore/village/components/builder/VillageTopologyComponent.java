@@ -2,6 +2,7 @@ package com.pacificbytestudios.projectciviccore.village.components.builder;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -200,6 +201,22 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
     List<Byte> orderedDepths = new ArrayList<>(this.roadGroupPerDepth.keySet());
     orderedDepths.sort(Collections.reverseOrder());
+
+    List<UUID> orderedRoadIds = new ArrayList<>();
+    for (byte depth : orderedDepths) {
+      orderedRoadIds.addAll(getRoadsIdsAtDepth(depth));
+    }
+
+    return Collections.unmodifiableList(orderedRoadIds);
+  }
+
+  public List<UUID> getRegisteredRoadIdsByDepthAscending() {
+    if (this.roadGroupPerDepth == null || this.roadGroupPerDepth.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    List<Byte> orderedDepths = new ArrayList<>(this.roadGroupPerDepth.keySet());
+    orderedDepths.sort(Comparator.naturalOrder());
 
     List<UUID> orderedRoadIds = new ArrayList<>();
     for (byte depth : orderedDepths) {

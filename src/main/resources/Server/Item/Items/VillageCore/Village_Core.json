@@ -76,6 +76,8 @@
               "2": 12,
               "3": 16
             },
+            "FallbackMainRoadTurnChance": 70,
+            "PostBuildSideRoadChance": 15,
             "StructureLimitsPerLevel": {
               "1": {
                 "TownHall": 1,

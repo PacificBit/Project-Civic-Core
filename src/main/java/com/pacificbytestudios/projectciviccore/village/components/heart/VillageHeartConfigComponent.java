@@ -40,6 +40,16 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
           (obj) -> encodeShortMap(obj.villagerCapPerLevel))
       .add()
 
+      .append(new KeyedCodec<>("FallbackMainRoadTurnChance", Codec.SHORT, false),
+          (obj, value) -> obj.fallbackMainRoadTurnChance = value,
+          (obj) -> obj.fallbackMainRoadTurnChance)
+      .add()
+
+      .append(new KeyedCodec<>("PostBuildSideRoadChance", Codec.SHORT, false),
+          (obj, value) -> obj.postBuildSideRoadChance = value,
+          (obj) -> obj.postBuildSideRoadChance)
+      .add()
+
       .append(new KeyedCodec<>("StructureLimitsPerLevel", new Short2ObjectMapCodec<>(
           new EnumMapCodec<>(
               StructureType.class,
@@ -65,6 +75,8 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
   private short maxLevel;
   private Map<Short, Short> claimRadiusPerLevel = new HashMap<>();
   private Map<Short, Short> villagerCapPerLevel = new HashMap<>();
+  private short fallbackMainRoadTurnChance;
+  private short postBuildSideRoadChance;
   private Map<Short, Map<StructureType, Short>> structureCountLimitPerLevel = new HashMap<>();
   private Map<Short, Map<StructureType, Short>> structureMaxLevelPerVillageLevel = new HashMap<>();
 
@@ -78,6 +90,14 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
 
   public short getVillagerCapPerLevel(short level) {
     return this.villagerCapPerLevel.getOrDefault(level, (short) 0);
+  }
+
+  public short getFallbackMainRoadTurnChance() {
+    return this.fallbackMainRoadTurnChance;
+  }
+
+  public short getPostBuildSideRoadChance() {
+    return this.postBuildSideRoadChance;
   }
 
   public Map<StructureType, Short> getStructureLimitsPerLevel(short level) {
@@ -104,6 +124,8 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
     component.maxLevel = this.maxLevel;
     component.claimRadiusPerLevel = copyShortMap(this.claimRadiusPerLevel);
     component.villagerCapPerLevel = copyShortMap(this.villagerCapPerLevel);
+    component.fallbackMainRoadTurnChance = this.fallbackMainRoadTurnChance;
+    component.postBuildSideRoadChance = this.postBuildSideRoadChance;
     component.structureCountLimitPerLevel = deepCopyStructureLimitsPerLevel(this.structureCountLimitPerLevel);
     component.structureMaxLevelPerVillageLevel = deepCopyStructureLimitsPerLevel(
         this.structureMaxLevelPerVillageLevel);

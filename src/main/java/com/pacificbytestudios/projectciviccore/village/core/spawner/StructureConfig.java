@@ -23,15 +23,21 @@ public final class StructureConfig {
   private static final int SMALLEST_CONSTRUCTION_SIDE;
 
   static {
-    int longest = Math.max(getLongestSide(Mine.SIZE_2I), getLongestSide(Farm.SIZE_2I));
-    int longest1 = Math.max(getLongestSide(Storage.SIZE_2I), getLongestSide(Tavern.SIZE_2I));
-    int longest2 = Math.max(getLongestSide(House.SIZE_2I), getLongestSide(Sawmill.SIZE_2I));
+    int longest = Math.max(getLongestSide(Mine.SIZE_2I),
+        getLongestSide(Farm.SIZE_2I));
+    int longest1 = Math.max(getLongestSide(Storage.SIZE_2I),
+        getLongestSide(Tavern.SIZE_2I));
+    int longest2 = Math.max(getLongestSide(House.SIZE_2I),
+        getLongestSide(Sawmill.SIZE_2I));
     int longest3 = Math.max(longest, longest1);
     LONGEST_CONSTRUCTION_SIDE = Math.max(longest3, longest2);
 
-    int smallest = Math.min(getSmallestSide(Mine.SIZE_2I), getSmallestSide(Farm.SIZE_2I));
-    int smallest1 = Math.min(getSmallestSide(Storage.SIZE_2I), getSmallestSide(Tavern.SIZE_2I));
-    int smallest2 = Math.min(getSmallestSide(House.SIZE_2I), getSmallestSide(Sawmill.SIZE_2I));
+    int smallest = Math.min(getSmallestSide(Mine.SIZE_2I),
+        getSmallestSide(Farm.SIZE_2I));
+    int smallest1 = Math.min(getSmallestSide(Storage.SIZE_2I),
+        getSmallestSide(Tavern.SIZE_2I));
+    int smallest2 = Math.min(getSmallestSide(House.SIZE_2I),
+        getSmallestSide(Sawmill.SIZE_2I));
     int smallest3 = Math.min(smallest, smallest1);
     SMALLEST_CONSTRUCTION_SIDE = Math.min(smallest3, smallest2);
   }
@@ -98,8 +104,10 @@ public final class StructureConfig {
     public static final Rotation RIGHT_CONTAINER_YAW_OFFSET = Rotation.TwoSeventy;
     public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(0, 1, -3);
     public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(0, 0, 1);
-    public static final Vector3i LEFT_CONTAINER_ACCESS_OFFSET = new Vector3i(1, 0, 0);
-    public static final Vector3i RIGHT_CONTAINER_ACCESS_OFFSET = new Vector3i(-1, 0, 0);
+    public static final Vector3i LEFT_CONTAINER_ACCESS_OFFSET = new Vector3i(1,
+        0, 0);
+    public static final Vector3i RIGHT_CONTAINER_ACCESS_OFFSET = new Vector3i(-1,
+        0, 0);
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
@@ -137,7 +145,8 @@ public final class StructureConfig {
             RoadLength.MEDIUM, "Structures/Temporary/Side_Road_2x2.prefab.json",
             RoadLength.LARGE, "Structures/Temporary/Side_Road_2x4.prefab.json"));
 
-    private static final RoadLength[] ORDERED_ROAD_LENGTH = new RoadLength[] { RoadLength.LARGE, RoadLength.MEDIUM,
+    private static final RoadLength[] ORDERED_ROAD_LENGTH = new RoadLength[] {
+        RoadLength.LARGE, RoadLength.MEDIUM,
         RoadLength.SMALL };
 
     public enum RoadType {
@@ -162,7 +171,8 @@ public final class StructureConfig {
       return ORDERED_ROAD_LENGTH;
     }
 
-    public static String getRoadPrefab(short villageLvl, RoadType type, RoadLength length) {
+    public static String getRoadPrefab(short villageLvl, RoadType type,
+        RoadLength length) {
       Map<Short, Map<RoadLength, String>> prefabsByLevel = type.equals(RoadType.MAIN_ROAD)
           ? VILLAGE_LVL_MAIN_ROADS
           : VILLAGE_LVL_SIDE_ROADS;
@@ -192,7 +202,8 @@ public final class StructureConfig {
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
     public static final Rotation CONTAINER_BLOCK_YAW_OFFSET = Rotation.Ninety;
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-4, 1, -4);
+    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-4, 1,
+        -4);
     public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(1, 0, 0);
     public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(1, 0, 0);
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
@@ -225,8 +236,10 @@ public final class StructureConfig {
       return STORAGE_SPAWNING_OFFSETS.get(level);
     }
 
-    public static List<Interactable> getInteractables(Vector3i prefabAnchor, Rotation rotation, int level) {
-      return toAbsoluteInteractables(INTERACTABLES.get(level), prefabAnchor, rotation);
+    public static List<Interactable> getInteractables(Vector3i prefabAnchor,
+        Rotation rotation, int level) {
+      return toAbsoluteInteractables(INTERACTABLES.get(level), prefabAnchor,
+          rotation);
     }
   }
 
@@ -275,8 +288,52 @@ public final class StructureConfig {
     public static final BlockType CORE_BLOCK = BlockType.getAssetMap().getAsset("Housing_Core");
     public static final BlockType CRUDE_BED_BLOCK = BlockType.getAssetMap().getAsset("Village_Crude_Bed");
     public static final Vector3i CORE_BLOCK_OFFSET = new Vector3i(-4, 1, 2);
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    private static final String SAMPLE_PREFAB = "Structures/Housing/Level1/Stage0/House.prefab.json";
+    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(SAMPLE_PREFAB);
+    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(SAMPLE_PREFAB);
+
+    private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
+        1,
+        Map.of(
+            (short) 0,
+            "Structures/Housing/Level1/Stage0/House.prefab.json",
+
+            (short) 1,
+            "Structures/Housing/Level1/Stage1/House.prefab.json",
+
+            (short) 2,
+            "Structures/Housing/Level1/Stage2/House.prefab.json",
+
+            (short) 3,
+            "Structures/Housing/Level1/Stage3/House.prefab.json"),
+
+        2,
+        Map.of(
+            (short) 0,
+            "Structures/Housing/Level2/Stage0/House.prefab.json",
+
+            (short) 1,
+            "Structures/Housing/Level2/Stage1/House.prefab.json",
+
+            (short) 2,
+            "Structures/Housing/Level2/Stage2/House.prefab.json",
+
+            (short) 3,
+            "Structures/Housing/Level2/Stage3/House.prefab.json"),
+
+        3,
+        Map.of(
+            (short) 0,
+            "Structures/Housing/Level3/Stage0/House.prefab.json",
+
+            (short) 1,
+            "Structures/Housing/Level3/Stage1/House.prefab.json",
+
+            (short) 2,
+            "Structures/Housing/Level3/Stage2/House.prefab.json",
+
+            (short) 3,
+            "Structures/Housing/Level3/Stage3/House.prefab.json"));
 
     private static final Map<Integer, List<List<BlockTransform>>> APPARTMENT_BED_OFFSETS = Map.of(
         1,
@@ -284,10 +341,15 @@ public final class StructureConfig {
             List.of(new BlockTransform(new Vector3i(2, 1, -3), Rotation.None)),
             List.of(new BlockTransform(new Vector3i(4, 1, -3), Rotation.None))));
 
+    public static String getPrefab(int villageLevel, short stage) {
+      return PREFAB_MAP.get(villageLevel).get(stage);
+    }
+
     private House() {
     }
 
-    public static HouseAppartmentRegistry getAppartments(Vector3i prefabAnchor, Rotation rotation, int level) {
+    public static HouseAppartmentRegistry getAppartments(Vector3i prefabAnchor,
+        Rotation rotation, int level) {
       HouseAppartmentRegistry registry = new HouseAppartmentRegistry();
       List<List<BlockTransform>> appartments = APPARTMENT_BED_OFFSETS.getOrDefault(
           level,
@@ -300,7 +362,8 @@ public final class StructureConfig {
         for (BlockTransform bedOffset : bedOffsets) {
           VillageBedComponent bed = new VillageBedComponent();
           bed.setTaken(false);
-          bed.setPosition(toAbsolutePosition(prefabAnchor, bedOffset.position, rotation));
+          bed.setPosition(toAbsolutePosition(prefabAnchor, bedOffset.position,
+              rotation));
           Rotation finalBedRotation = StructurePlacementUtils.addYaw(bedOffset.rotation(), rotation);
           bed.setRotation(finalBedRotation);
           beds.put(UUID.randomUUID(), bed);
