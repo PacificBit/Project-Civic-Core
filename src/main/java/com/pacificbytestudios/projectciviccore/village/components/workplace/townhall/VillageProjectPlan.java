@@ -251,6 +251,11 @@ public class VillageProjectPlan {
             obj -> obj.structureId)
         .add()
 
+        .append(new KeyedCodec<>("TargetLevel", Codec.INTEGER, false),
+            (obj, value) -> obj.targetLevel = value,
+            obj -> obj.targetLevel)
+        .add()
+
         .append(new KeyedCodec<>("Stage", Codec.SHORT, false),
             (obj, value) -> obj.stage = value,
             obj -> obj.stage)
@@ -276,6 +281,7 @@ public class VillageProjectPlan {
     private Weight weight = Weight.LOW;
     private StructureType structureType;
     private UUID structureId;
+    private int targetLevel = 1;
     private short stage = 0;
     private short totalStages = 1;
     private MaterialQuantity[] requiredMaterialPerStage = new MaterialQuantity[0];
@@ -360,6 +366,14 @@ public class VillageProjectPlan {
       this.structureId = structureId;
     }
 
+    public int getTargetLevel() {
+      return targetLevel;
+    }
+
+    public void setTargetLevel(int targetLevel) {
+      this.targetLevel = targetLevel;
+    }
+
     public void update(VillageProject updated) {
       this.objectiveStatus = updated.objectiveStatus;
       this.stage = updated.stage;
@@ -375,6 +389,7 @@ public class VillageProjectPlan {
       component.weight = this.weight;
       component.stage = this.stage;
       component.totalStages = this.totalStages;
+      component.targetLevel = this.targetLevel;
 
       component.requiredMaterialPerStage = new MaterialQuantity[this.requiredMaterialPerStage.length];
       for (int i = 0; i < this.requiredMaterialPerStage.length; i++) {
@@ -403,6 +418,7 @@ public class VillageProjectPlan {
           ",\n weight=" + weight +
           ",\n structureType=" + structureType +
           ",\n structureId=" + structureId +
+          ",\n targetLevel=" + targetLevel +
           ",\n stage=" + stage +
           ",\n totalStages=" + totalStages +
           '}';

@@ -47,7 +47,12 @@
       ]
     },
     "VariantRotation": "NESW",
-    "ParticleColor": "#3a2014"
+    "ParticleColor": "#3a2014",
+    "BlockEntity": {
+      "Components": {
+        "BuildingSnapshotComponent": {}
+      }
+    }
   },
   "Tags": {
     "Type": [

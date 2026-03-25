@@ -246,6 +246,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return villageRef.getRef();
   }
 
+  public EntityRef getEntityRef() {
+    return this.villageRef;
+  }
+
   public void setVillageRef(EntityRef ref) {
     this.villageRef = ref;
   }

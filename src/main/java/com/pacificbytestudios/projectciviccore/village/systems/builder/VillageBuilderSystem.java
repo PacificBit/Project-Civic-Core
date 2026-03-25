@@ -35,8 +35,10 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.RoadSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadLength;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.ContinueBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageRoadState;
@@ -89,7 +91,12 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
     if (objectiveType.equals(VillageObjectiveType.BUILD_HOUSE) ||
         objectiveType.equals(VillageObjectiveType.BUILD_WORKPLACE)) {
-      completed = handleNewBuildingConstruction(villageRef);
+
+      if (this.topology.isStructureAlreadyPresent(this.project.getStructureId())) {
+        completed = handleContinueBuildingConstruction(villageRef);
+      } else {
+        completed = handleNewBuildingConstruction(villageRef);
+      }
     }
 
     if (completed) {
@@ -122,7 +129,8 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
         villageRef,
         structureType,
         queuedSpawningPosition,
-        queuedRotation));
+        queuedRotation,
+        ConstructionMode.STAGED));
 
     randomlySpawnSideStreet(road);
     return true;
@@ -138,12 +146,15 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
     boolean leftFirst = this.random.nextInt(0, 2) == 0;
 
-    int length = StructureConfig.getLongestSide() + StructureConfig.Road.getRoadSize(RoadType.MAIN_ROAD);
-    tryExpandRoadFrom(parent, RoadType.MAIN_ROAD, (short) length, true, leftFirst);
+    int length = StructureConfig.getLongestSide() +
+        StructureConfig.Road.getRoadSize(RoadType.MAIN_ROAD);
+    tryExpandRoadFrom(parent, RoadType.MAIN_ROAD, (short) length, true,
+        leftFirst);
   }
 
   private void tryExpandRoadNetwork(RoadType roadType) {
-    int length = StructureConfig.getLongestSide() + StructureConfig.Road.getRoadSize(roadType);
+    int length = StructureConfig.getLongestSide() +
+        StructureConfig.Road.getRoadSize(roadType);
     List<UUID> roadIds = getRoadIdsOrderedForExpansion();
     for (UUID roadId : roadIds) {
       RoadNode road = this.topology.getRoadFromId(roadId);
@@ -171,7 +182,8 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
       RoadNode leftRoad = this.topology.getRoadFromId(leftRoadId);
       RoadNode rightRoad = this.topology.getRoadFromId(rightRoadId);
 
-      int bySpan = Integer.compare(getRoadLinearSpan(leftRoad), getRoadLinearSpan(rightRoad));
+      int bySpan = Integer.compare(getRoadLinearSpan(leftRoad),
+          getRoadLinearSpan(rightRoad));
       if (bySpan != 0) {
         return bySpan;
       }
@@ -295,7 +307,8 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
   }
 
   private Vector3i resolveForwardRoadStartPoint(RoadNode parent) {
-    if (parent == null || parent.getRoadId() == null || parent.getRoadDirectionVec() == null) {
+    if (parent == null || parent.getRoadId() == null ||
+        parent.getRoadDirectionVec() == null) {
       return null;
     }
 
@@ -372,6 +385,23 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     return null;
   }
 
+  private boolean handleContinueBuildingConstruction(Ref<ChunkStore> villageRef) {
+    TopologyStructure structure = this.topology
+        .getTopologyStructureFromStructureId(this.project.getStructureId());
+
+    VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
+    taskQueue.registerTask(
+        new ContinueBuildingTask(
+            structure.getStructureType(),
+            structure.getPrefabAnchor(),
+            structure.getOrientation()));
+
+    this.world.execute(() -> {
+      Utils.safeVillageTaskEnqueue(villageRef, taskQueue);
+    });
+    return true;
+  }
+
   private static final class RoadsideConstructionPlacement {
     private final LateralVacancySegments segments;
     private final Segment segment;
@@ -427,7 +457,8 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
         && this.project.getStructureType() != StructureType.HOUSE
         && this.project.getStructureType() != StructureType.STORAGE
         && this.project.getStructureType() != StructureType.TAVERN) {
-      throw new IllegalArgumentException("Unsupported structure as initial: " + this.project.getStructureType());
+      throw new IllegalArgumentException("Unsupported structure as initial: " +
+          this.project.getStructureType());
     }
 
     final Vector3i spawningPosition;
@@ -468,25 +499,39 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
           rotation);
     }
 
+    this.project.setStructureId(UUID.randomUUID());
+
     this.world.execute(() -> enqueueBuildingSpawn(
         villageRef,
         this.project.getStructureType(),
         queuedSpawningPosition,
-        queuedRotation));
+        queuedRotation,
+        ConstructionMode.COMPLETED));
   }
 
   private void enqueueBuildingSpawn(
       Ref<ChunkStore> villageRef,
       StructureType structureType,
       Vector3i position,
-      Rotation rotation) {
+      Rotation rotation,
+      ConstructionMode constructionMode) {
     VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
 
     if (structureType == StructureType.HOUSE) {
-      taskQueue.registerTask(new SpawnHouseTask(position.clone(), rotation));
+      taskQueue.registerTask(new SpawnHouseTask(
+          this.project.getStructureId(),
+          position.clone(),
+          rotation,
+          this.project.getTargetLevel(),
+          constructionMode));
     } else {
-      taskQueue.registerTask(new SpawnWorkplaceTask(structureType,
-          position.clone(), rotation));
+      taskQueue.registerTask(new SpawnWorkplaceTask(
+          this.project.getStructureId(),
+          structureType,
+          position.clone(),
+          rotation,
+          this.project.getTargetLevel(),
+          constructionMode));
     }
 
     Utils.safeVillageTaskEnqueue(villageRef, taskQueue);
@@ -1156,6 +1201,7 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
         structureSize,
         VillageTopologyStructureType.fromStructureType(structureType),
         rotation == null ? Rotation.None : rotation);
+    structureFootprint.setPrefabAnchor(prefabAnchor);
     structureFootprint.setStructureType(structureType);
     return structureFootprint;
   }

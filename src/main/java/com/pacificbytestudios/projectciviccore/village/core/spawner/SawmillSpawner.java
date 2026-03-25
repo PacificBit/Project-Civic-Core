@@ -17,20 +17,69 @@ import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
 
 public class SawmillSpawner {
-  public static boolean spawn(WorldChunk chunk, Vector3i position, VillageHeartComponent heart) {
-    return spawn(chunk, position, Rotation.None, heart);
+
+  public static boolean beginNewConstruction(
+      UUID structureId,
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation,
+      VillageHeartComponent heart,
+      int targetLevel,
+      ConstructionMode constructionMode) {
+    if (constructionMode == ConstructionMode.COMPLETED) {
+      return handleNewCompletedConstruction(structureId, chunk, prefabAnchor, rotation, heart, targetLevel);
+    }
+    return handleNewStagedConstruction(structureId, chunk, prefabAnchor, rotation, heart, targetLevel);
+  }
+
+  private static boolean handleNewCompletedConstruction(
+      UUID structureId,
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation,
+      VillageHeartComponent heart,
+      int targetLevel) {
+    return false;
+  }
+
+  private static boolean handleNewStagedConstruction(
+      UUID structureId,
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation,
+      VillageHeartComponent heart,
+      int targetLevel) {
+    return false;
+  }
+
+  public static boolean beginUpgradeConstruction(
+      WorldChunk chunk,
+      Vector3i existingCoreOrSitePosition,
+      int targetLevel,
+      ConstructionMode mode) {
+    return false;
+  }
+
+  public static boolean advanceConstruction(
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation) {
+    return false;
   }
 
   public static boolean spawn(
       WorldChunk chunk,
       Vector3i position,
       Rotation rotation,
-      VillageHeartComponent heart) {
+      VillageHeartComponent heart,
+      int structureLevel,
+      short stage) {
     Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     World world = chunk.getWorld();
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(

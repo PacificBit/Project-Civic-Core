@@ -18,6 +18,9 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.AdvanceConstructionStage;
+import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginNewConstruction;
+import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginUpgradeConstruction;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.FarmSpawner;
@@ -104,22 +107,50 @@ public class Utils {
     return area;
   }
 
-  public static SpawnFunction getSpawnFunction(StructureType workplaceType) {
-    return switch (workplaceType) {
-      case TOWN_HALL -> TownHallSpawner::spawn;
-      case MINE -> MineSpawner::spawn;
-      case FARM -> FarmSpawner::spawn;
-      case TAVERN -> TavernSpawner::spawn;
-      case SAWMILL -> SawmillSpawner::spawn;
-      case STORAGE -> StorageSpawner::spawn;
-      case HOUSE -> HouseSpawner::spawn;
-      default -> throw new IllegalArgumentException("Unsupported workplace type: "
-          + workplaceType);
+  public static BeginNewConstruction getBeginNewConstructionFunction(StructureType structureType) {
+    return switch (structureType) {
+      case TOWN_HALL -> TownHallSpawner::beginNewConstruction;
+      case MINE -> MineSpawner::beginNewConstruction;
+      case FARM -> FarmSpawner::beginNewConstruction;
+      case TAVERN -> TavernSpawner::beginNewConstruction;
+      case SAWMILL -> SawmillSpawner::beginNewConstruction;
+      case STORAGE -> StorageSpawner::beginNewConstruction;
+      case HOUSE -> HouseSpawner::beginNewConstruction;
+      default -> throw new IllegalArgumentException("Unsupported structureType: "
+          + structureType);
     };
   }
 
-  public static DespawnFunction getDespawnFunction(StructureType workplaceType) {
-    return switch (workplaceType) {
+  public static BeginUpgradeConstruction getBeginUpgradeConstructionFunction(StructureType structureType) {
+    return switch (structureType) {
+      case TOWN_HALL -> TownHallSpawner::beginUpgradeConstruction;
+      case MINE -> MineSpawner::beginUpgradeConstruction;
+      case FARM -> FarmSpawner::beginUpgradeConstruction;
+      case TAVERN -> TavernSpawner::beginUpgradeConstruction;
+      case SAWMILL -> SawmillSpawner::beginUpgradeConstruction;
+      case STORAGE -> StorageSpawner::beginUpgradeConstruction;
+      case HOUSE -> HouseSpawner::beginUpgradeConstruction;
+      default -> throw new IllegalArgumentException("Unsupported structureType: "
+          + structureType);
+    };
+  }
+
+  public static AdvanceConstructionStage getAdvanceConstructionStageFunction(StructureType structureType) {
+    return switch (structureType) {
+      case TOWN_HALL -> TownHallSpawner::advanceConstruction;
+      case MINE -> MineSpawner::advanceConstruction;
+      case FARM -> FarmSpawner::advanceConstruction;
+      case TAVERN -> TavernSpawner::advanceConstruction;
+      case SAWMILL -> SawmillSpawner::advanceConstruction;
+      case STORAGE -> StorageSpawner::advanceConstruction;
+      case HOUSE -> HouseSpawner::advanceConstruction;
+      default -> throw new IllegalArgumentException("Unsupported structureType: "
+          + structureType);
+    };
+  }
+
+  public static DespawnFunction getDespawnFunction(StructureType structureType) {
+    return switch (structureType) {
       case TOWN_HALL -> TownHallSpawner::despawn;
       case MINE -> MineSpawner::despawn;
       case FARM -> FarmSpawner::despawn;
@@ -127,8 +158,8 @@ public class Utils {
       case SAWMILL -> SawmillSpawner::despawn;
       case STORAGE -> StorageSpawner::despawn;
       case HOUSE -> HouseSpawner::despawn;
-      default -> throw new IllegalArgumentException("Unsupported workplace type: "
-          + workplaceType);
+      default -> throw new IllegalArgumentException("Unsupported structureType: "
+          + structureType);
     };
   }
 

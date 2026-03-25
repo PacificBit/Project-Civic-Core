@@ -9,121 +9,132 @@
       "x": -2,
       "y": 0,
       "z": 0,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Quartzite_Gravel",
+      "support": 15
     },
     {
       "x": -2,
       "y": 0,
       "z": 1,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel",
+      "support": 15
     },
     {
       "x": -2,
       "y": 0,
       "z": 2,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Pathway"
     },
     {
       "x": -2,
       "y": 0,
       "z": 3,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel",
+      "support": 15
     },
     {
       "x": -1,
       "y": 0,
       "z": 0,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel",
+      "support": 15
     },
     {
       "x": -1,
       "y": 0,
       "z": 1,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Pathway"
     },
     {
       "x": -1,
       "y": 0,
       "z": 2,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Quartzite_Gravel",
+      "support": 15
     },
     {
       "x": -1,
       "y": 0,
       "z": 3,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Pathway"
     },
     {
       "x": 0,
       "y": 0,
       "z": 0,
-      "name": "Rock_Gold_Brick_Smooth"
+      "name": "Soil_Gravel"
     },
     {
       "x": 0,
       "y": 0,
       "z": 1,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel",
+      "support": 15
     },
     {
       "x": 0,
       "y": 0,
       "z": 2,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Pathway"
     },
     {
       "x": 0,
       "y": 0,
       "z": 3,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Quartzite_Gravel",
+      "support": 15
     },
     {
       "x": 1,
       "y": 0,
       "z": 0,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Pathway"
     },
     {
       "x": 1,
       "y": 0,
       "z": 1,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Pathway"
     },
     {
       "x": 1,
       "y": 0,
       "z": 2,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel"
     },
     {
       "x": 1,
       "y": 0,
       "z": 3,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel",
+      "support": 15
     },
     {
       "x": 2,
       "y": 0,
       "z": 0,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel",
+      "support": 15
     },
     {
       "x": 2,
       "y": 0,
       "z": 1,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Quartzite_Gravel",
+      "support": 15
     },
     {
       "x": 2,
       "y": 0,
       "z": 2,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Pathway"
     },
     {
       "x": 2,
       "y": 0,
       "z": 3,
-      "name": "Rock_Ledge_Brick_Smooth"
+      "name": "Soil_Gravel",
+      "support": 15
     }
   ]
 }

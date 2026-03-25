@@ -1037,13 +1037,14 @@
       "x": -3,
       "y": 1,
       "z": -3,
-      "name": "Empty"
+      "name": "Furniture_Desert_Torch"
     },
     {
       "x": -3,
       "y": 2,
       "z": -3,
-      "name": "Empty"
+      "name": "Furniture_Desert_Torch",
+      "filler": 1024
     },
     {
       "x": -3,
@@ -2789,18 +2790,6 @@
     },
     {
       "x": 0,
-      "y": 1,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
-      "y": 2,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 3,
       "z": 5,
       "name": "Empty"
@@ -3860,13 +3849,14 @@
       "x": 3,
       "y": 1,
       "z": -3,
-      "name": "Empty"
+      "name": "Furniture_Desert_Torch"
     },
     {
       "x": 3,
       "y": 2,
       "z": -3,
-      "name": "Empty"
+      "name": "Furniture_Desert_Torch",
+      "filler": 1024
     },
     {
       "x": 3,

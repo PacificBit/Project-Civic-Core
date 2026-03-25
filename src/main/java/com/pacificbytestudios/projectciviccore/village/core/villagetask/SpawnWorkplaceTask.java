@@ -1,5 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
+import java.util.UUID;
+
+import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
@@ -8,15 +11,21 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.utils.SpawnFunction;
+import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginNewConstruction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
 public class SpawnWorkplaceTask extends AVillageTask {
 
   public static final BuilderCodec<SpawnWorkplaceTask> CODEC = BuilderCodec
       .builder(SpawnWorkplaceTask.class, SpawnWorkplaceTask::new)
+
+      .append(new KeyedCodec<>("StructureId", Codec.UUID_BINARY, false),
+          (obj, value) -> obj.structureId = value,
+          obj -> obj.structureId)
+      .add()
 
       .append(
           new KeyedCodec<>("WorkplaceType", new EnumCodec<StructureType>(StructureType.class)),
@@ -34,23 +43,42 @@ public class SpawnWorkplaceTask extends AVillageTask {
           obj -> obj.rotation)
       .add()
 
+      .append(new KeyedCodec<>("Level", Codec.INTEGER, false),
+          (obj, value) -> obj.level = value,
+          obj -> obj.level)
+      .add()
+
+      .append(
+          new KeyedCodec<>("ConstructionMode", new EnumCodec<ConstructionMode>(ConstructionMode.class)),
+          (obj, value) -> obj.constructionMode = value,
+          (obj) -> obj.constructionMode)
+      .add()
+
       .build();
 
-  StructureType workplaceType;
-  Vector3i position;
-  Rotation rotation = Rotation.None;
+  private UUID structureId;
+  private StructureType workplaceType;
+  private Vector3i position;
+  private Rotation rotation = Rotation.None;
+  private Integer level = 1;
+  private ConstructionMode constructionMode;
 
   public SpawnWorkplaceTask() {
   }
 
-  public SpawnWorkplaceTask(StructureType workplaceType, Vector3i position) {
-    this(workplaceType, position, Rotation.None);
-  }
-
-  public SpawnWorkplaceTask(StructureType workplaceType, Vector3i position, Rotation rotation) {
+  public SpawnWorkplaceTask(
+      UUID structureId,
+      StructureType workplaceType,
+      Vector3i position,
+      Rotation rotation,
+      int level,
+      ConstructionMode constructionMode) {
+    this.structureId = structureId;
     this.workplaceType = workplaceType;
     this.position = position;
     this.rotation = rotation;
+    this.level = level;
+    this.constructionMode = constructionMode;
   }
 
   @Override
@@ -59,7 +87,14 @@ public class SpawnWorkplaceTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
-    SpawnFunction spawnFunction = Utils.getSpawnFunction(this.workplaceType);
-    spawnFunction.apply(chunk, this.position, this.rotation, heart);
+    BeginNewConstruction spawnFunction = Utils.getBeginNewConstructionFunction(this.workplaceType);
+    spawnFunction.apply(
+        this.structureId,
+        chunk,
+        this.position,
+        this.rotation,
+        heart,
+        this.level,
+        this.constructionMode);
   }
 }

@@ -153,6 +153,10 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     this.roadGroupPerDepth.put(level, roadDepthLevels);
   }
 
+  public boolean isStructureAlreadyPresent(UUID structureId) {
+    return this.structureIdToTopology.containsKey(structureId);
+  }
+
   public void initializeVillageTopology(TopologyStructure structure, Short radius) {
     this.villageRadius = radius;
     this.structureIdToTopology = new HashMap<>();
@@ -243,7 +247,11 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
   public void registerStructure(TopologyStructure structure) {
     TopologyStructure clonedStructure = structure.clone();
     if (clonedStructure.getStructureId() == null) {
-      clonedStructure.setStructureId(UUID.randomUUID());
+      throw new IllegalStateException("[VillageTopologyComponent] Found an empty structureId in: " + structure);
+    }
+
+    if (this.structureIdToTopology.containsKey(clonedStructure.getStructureId())) {
+      return;
     }
 
     this.structureIdToTopology.put(clonedStructure.getStructureId(), clonedStructure);

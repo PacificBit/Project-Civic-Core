@@ -9,13 +9,16 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
+import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
+import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
@@ -45,8 +48,13 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         VillageSpawnComponent.getComponentType());
     VillageHeartComponent villageHeart = store.getComponent(ref,
         VillageHeartComponent.getComponentType());
+    VillageTopologyComponent topology = store.getComponent(ref,
+        VillageTopologyComponent.getComponentType());
+
     int radius = spawnComponent.getSpawnNpcRange();
 
+    topology.setSeed(new FastRandom().nextLong(Long.MIN_VALUE, Long.MAX_VALUE));
+    ProjectCivicCore.LOGGER.atInfo().log("[VillageHeartPlacementSystem] New village with seed: " + topology.getSeed());
     villageHeart.setUuid(UUID.randomUUID());
 
     AreaFootprint area = Utils.claimVillageArea(villageHeart, villageHeartPos);

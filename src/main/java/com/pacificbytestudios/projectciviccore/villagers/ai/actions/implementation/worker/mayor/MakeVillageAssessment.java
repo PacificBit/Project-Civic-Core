@@ -268,6 +268,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setObjectiveType(VillageObjectiveType.UPGRADE_BUILDING);
     project.setObjectiveStatus(VillageObjectiveStatus.NEW);
     project.setWeight(Weight.LOW);
+    project.setTargetLevel(level);
     project.setTotalStages(VillageObjectiveType.getStages(structureType));
     project.setStructureType(structureType);
     project.setStructureId(structureId);
@@ -284,6 +285,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setObjectiveType(VillageObjectiveType.BUILD_WORKPLACE);
     project.setObjectiveStatus(VillageObjectiveStatus.NEW);
     project.setWeight(Weight.MID);
+    project.setTargetLevel(1);
     project.setTotalStages(VillageObjectiveType.BUILD_WORKPLACE.getStages());
     project.setStructureType(structureType);
     project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
@@ -299,6 +301,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setObjectiveType(VillageObjectiveType.BUILD_HOUSE);
     project.setObjectiveStatus(VillageObjectiveStatus.NEW);
     project.setWeight(Weight.HIGH);
+    project.setTargetLevel(1);
     project.setTotalStages(VillageObjectiveType.BUILD_HOUSE.getStages());
     project.setStructureType(StructureType.HOUSE);
     project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(

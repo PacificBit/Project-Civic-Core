@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
+import java.util.UUID;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -18,12 +20,58 @@ import com.pacificbytestudios.projectciviccore.village.components.builder.Villag
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
 public class TownHeartSpawner {
 
-  public static boolean spawn(WorldChunk chunk, Vector3i position) {
-    return spawn(chunk, position, Rotation.None);
+  public static boolean beginNewConstruction(
+      UUID structureId,
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation,
+      VillageHeartComponent heart,
+      int targetLevel,
+      ConstructionMode constructionMode) {
+    if (constructionMode == ConstructionMode.COMPLETED) {
+      return handleNewCompletedConstruction(structureId, chunk, prefabAnchor, rotation, heart, targetLevel);
+    }
+    return handleNewStagedConstruction(structureId, chunk, prefabAnchor, rotation, heart, targetLevel);
+  }
+
+  private static boolean handleNewCompletedConstruction(
+      UUID structureId,
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation,
+      VillageHeartComponent heart,
+      int targetLevel) {
+    return false;
+  }
+
+  private static boolean handleNewStagedConstruction(
+      UUID structureId,
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation,
+      VillageHeartComponent heart,
+      int targetLevel) {
+    return false;
+  }
+
+  public static boolean beginUpgradeConstruction(
+      WorldChunk chunk,
+      Vector3i existingCoreOrSitePosition,
+      int targetLevel,
+      ConstructionMode mode) {
+    return false;
+  }
+
+  public static boolean advanceConstruction(
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation) {
+    return false;
   }
 
   public static boolean spawn(WorldChunk chunk, Vector3i position, Rotation rotation) {
@@ -57,7 +105,7 @@ public class TownHeartSpawner {
 
     String worldName = heartBlockChunk.getWorld().getName();
     heartComponent.setBlockContext(new BlockContext(worldName, heartBlockChunk.getIndex(), heartBlockPosition));
-    heartComponent.setVillageRef(new EntityRef(worldName, position));
+    heartComponent.setVillageRef(new EntityRef(worldName, position.clone().add(Vector3i.UP)));
 
     VillageSpawnComponent spawnComponent = store.getComponent(heartRef, VillageSpawnComponent.getComponentType());
 

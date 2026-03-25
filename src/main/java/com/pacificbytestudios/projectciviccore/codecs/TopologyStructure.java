@@ -30,6 +30,11 @@ public class TopologyStructure extends AreaFootprint {
           (obj) -> obj.structureType)
       .add()
 
+      .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
+          (obj, value) -> obj.prefabAnchor = value,
+          obj -> obj.prefabAnchor)
+      .add()
+
       .append(new KeyedCodec<>("Orientation", Rotation.CODEC, false),
           (obj, value) -> obj.orientation = value,
           obj -> obj.orientation)
@@ -67,6 +72,7 @@ public class TopologyStructure extends AreaFootprint {
   private StructureType structureType;
   private VillageTopologyStructureType topologyType;
   private double distanceFromCenter;
+  private Vector3i prefabAnchor;
   private Rotation orientation;
   private Map<Vector3i, Vector3i> edges = new HashMap<>();
 
@@ -124,6 +130,14 @@ public class TopologyStructure extends AreaFootprint {
 
   public void setTopologyType(VillageTopologyStructureType topologyType) {
     this.topologyType = topologyType;
+  }
+
+  public Vector3i getPrefabAnchor() {
+    return prefabAnchor;
+  }
+
+  public void setPrefabAnchor(Vector3i prefabAnchor) {
+    this.prefabAnchor = prefabAnchor;
   }
 
   public Rotation getOrientation() {
@@ -270,6 +284,7 @@ public class TopologyStructure extends AreaFootprint {
     component.distanceFromCenter = this.distanceFromCenter;
     component.structureType = this.structureType;
     component.edges = encodeEdges(this.edges);
+    component.prefabAnchor = this.prefabAnchor == null ? null : this.prefabAnchor.clone();
 
     return component;
   }

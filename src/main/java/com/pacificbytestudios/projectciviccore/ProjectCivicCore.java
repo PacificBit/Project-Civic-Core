@@ -23,6 +23,7 @@ import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuilding
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
+import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -39,6 +40,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
+import com.pacificbytestudios.projectciviccore.village.systems.builder.StagedBuildingSpawnSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.VillageBuilderSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
@@ -126,6 +128,7 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private ComponentType<ChunkStore, VillageBuilderComponent> villageBuilderComponentType;
   private ComponentType<ChunkStore, VillageTopologyComponent> villageTopologyComponentType;
+  private ComponentType<ChunkStore, BuildingSnapshotComponent> buildingSnapshotComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
   private ComponentType<EntityStore, MayorComponent> mayorComponentType;
@@ -244,12 +247,18 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillageTopologyComponent",
         VillageTopologyComponent.CODEC);
 
+    this.buildingSnapshotComponentType = chunkRegistry.registerComponent(
+        BuildingSnapshotComponent.class,
+        "BuildingSnapshotComponent",
+        BuildingSnapshotComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
     chunkRegistry.registerSystem(new VillageTaskQueueSystem());
     chunkRegistry.registerSystem(new HouseSpawnSystem());
     chunkRegistry.registerSystem(new VillageBuilderSystem());
+    chunkRegistry.registerSystem(new StagedBuildingSpawnSystem());
 
     commandRegistry.registerCommand(new VillageCommands());
 
@@ -549,6 +558,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, VillageTopologyComponent> getVillageTopologyComponentType() {
     return this.villageTopologyComponentType;
+  }
+
+  public ComponentType<ChunkStore, BuildingSnapshotComponent> getBuildingSnapshotComponent() {
+    return this.buildingSnapshotComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

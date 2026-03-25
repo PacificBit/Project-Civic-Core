@@ -76,7 +76,7 @@
               "2": 12,
               "3": 16
             },
-            "FallbackMainRoadTurnChance": 70,
+            "FallbackMainRoadTurnChance": 60,
             "PostBuildSideRoadChance": 15,
             "StructureLimitsPerLevel": {
               "1": {
@@ -140,7 +140,7 @@
         },
         "VillageSpawnConfig": {
           "InitialNpcCount": 4,
-          "NpcSpawnRange": 5,
+          "NpcSpawnRange": 8,
           "StructureToSpawn": {
             "ProjectList": {
               "3": [
@@ -148,7 +148,10 @@
                   "ObjectiveType": "BuildWorkplace",
                   "ObjectiveStatus": "Completed",
                   "Weight": "High",
-                  "StructureType": "TownHall"
+                  "StructureType": "TownHall",
+                  "TargetLevel": 1,
+                  "Stage": 3,
+                  "TotalStages": 3
                 }
               ],
               "2": [
@@ -156,13 +159,19 @@
                   "ObjectiveType": "BuildWorkplace",
                   "ObjectiveStatus": "Completed",
                   "Weight": "Mid",
-                  "StructureType": "Storage"
+                  "StructureType": "Storage",
+                  "TargetLevel": 1,
+                  "Stage": 3,
+                  "TotalStages": 3
                 },
                 {
                   "ObjectiveType": "BuildWorkplace",
                   "ObjectiveStatus": "Completed",
                   "Weight": "Mid",
-                  "StructureType": "Tavern"
+                  "StructureType": "Tavern",
+                  "TargetLevel": 1,
+                  "Stage": 3,
+                  "TotalStages": 3
                 }
               ],
               "1": [
@@ -170,13 +179,19 @@
                   "ObjectiveType": "BuildHouse",
                   "ObjectiveStatus": "Completed",
                   "StructureType": "House",
-                  "Weight": "Low"
+                  "Weight": "Low",
+                  "TargetLevel": 1,
+                  "Stage": 0,
+                  "TotalStages": 3
                 },
                 {
                   "ObjectiveType": "BuildHouse",
                   "ObjectiveStatus": "Completed",
                   "StructureType": "House",
-                  "Weight": "Low"
+                  "Weight": "Low",
+                  "TargetLevel": 1,
+                  "Stage": 2,
+                  "TotalStages": 3
                 }
               ]
             }
