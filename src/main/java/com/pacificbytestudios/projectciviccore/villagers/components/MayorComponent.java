@@ -37,7 +37,7 @@ public class MayorComponent implements Component<EntityStore> {
   }
 
   public void setExecutingVillagePlan(VillageProjectPlan villagePlanToCheck) {
-    this.executingVillagePlan = villagePlanToCheck;
+    this.executingVillagePlan = villagePlanToCheck == null ? null : villagePlanToCheck.clone();
     this.currentProject = null;
   }
 
@@ -50,7 +50,8 @@ public class MayorComponent implements Component<EntityStore> {
   }
 
   public boolean hasProject() {
-    return this.currentProject != null || this.executingVillagePlan.hasProjects();
+    return this.currentProject != null ||
+        (this.executingVillagePlan != null && this.executingVillagePlan.hasProjects());
   }
 
   @Override

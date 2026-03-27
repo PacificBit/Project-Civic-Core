@@ -14,6 +14,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.farm.FarmComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.sawmill.SawmillComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -88,6 +89,7 @@ public class SetMissingResources extends VillagerActionBase {
     return switch (workplaceType) {
       case TAVERN -> chunkStore.getComponent(ref, TavernComponent.getComponentType());
       case FARM -> chunkStore.getComponent(ref, FarmComponent.getComponentType());
+      case SAWMILL -> chunkStore.getComponent(ref, SawmillComponent.getComponentType());
       default -> throw new IllegalArgumentException("Workplace type '" + workplaceType + "' not supported!");
     };
   }

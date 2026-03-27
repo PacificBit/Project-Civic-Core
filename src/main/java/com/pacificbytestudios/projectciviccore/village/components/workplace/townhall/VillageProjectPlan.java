@@ -125,12 +125,33 @@ public class VillageProjectPlan {
     return false;
   }
 
-  public void updateProjectPlan(VillageProject updatedProject) {
-    for (VillageProject project : this.projectList) {
-      if (project.getProjectId().equals(updatedProject.getProjectId())) {
-        project.update(updatedProject);
-      }
+  public boolean updateProjectPlan(VillageProject updatedProject) {
+    if (updatedProject == null || updatedProject.getProjectId() == null || this.projectList.isEmpty()) {
+      return false;
     }
+
+    PriorityQueue<VillageProject> updatedQueue = new PriorityQueue<>();
+    boolean replaced = false;
+
+    for (VillageProject project : this.projectList) {
+      if (project == null) {
+        continue;
+      }
+
+      if (!replaced && updatedProject.getProjectId().equals(project.getProjectId())) {
+        updatedQueue.add(updatedProject.clone());
+        replaced = true;
+        continue;
+      }
+
+      updatedQueue.add(project);
+    }
+
+    if (replaced) {
+      this.projectList = updatedQueue;
+    }
+
+    return replaced;
   }
 
   public void removeProject(VillageProject projectToRemove) {
@@ -372,11 +393,6 @@ public class VillageProjectPlan {
 
     public void setTargetLevel(int targetLevel) {
       this.targetLevel = targetLevel;
-    }
-
-    public void update(VillageProject updated) {
-      this.objectiveStatus = updated.objectiveStatus;
-      this.stage = updated.stage;
     }
 
     public VillageProject clone() {

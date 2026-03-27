@@ -13,6 +13,7 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryHouse
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryJobAssignmentTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.UnregisterHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.UnregisterWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.UpgradeBuildingTask;
 
 public final class VillageTaskQueueCodecs {
   private static boolean registered = false;
@@ -45,6 +46,11 @@ public final class VillageTaskQueueCodecs {
         "ContinueBuildingTask",
         ContinueBuildingTask.class,
         ContinueBuildingTask.CODEC);
+
+    VillageTaskQueueComponent.registerTaskCodec(
+        "UpgradeBuildingTask",
+        UpgradeBuildingTask.class,
+        UpgradeBuildingTask.CODEC);
 
     VillageTaskQueueComponent.registerTaskCodec(
         "SpawnVillagerTask",

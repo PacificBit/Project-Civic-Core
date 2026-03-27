@@ -10,15 +10,18 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingUpgradeCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
+import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartConfigComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
@@ -69,6 +72,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
 
     TownHallComponent townHall = this.getComponentFromWorkplace(store, ref, TownHallComponent.getComponentType());
     VillageHeartComponent village = this.getVillageHeartComponent(ref, store);
+    VillageTopologyComponent topology = getVillageTopologyComponent(ref, store);
     if (townHall == null) {
       return false;
     }
@@ -104,13 +108,14 @@ public class MakeVillageAssessment extends VillagerActionBase {
     }
 
     if (projectPlan.contains(VillageObjectiveType.VILLAGE_LEVEL_UP)) {
+      mayorComponent.setExecutingVillagePlan(projectPlan);
       return true;
     }
 
     // Step 1: check for the real necessities
-    populateHighPriorityProjects(projectPlan, villageLimits, village);
+    populateHighPriorityProjects(projectPlan, villageLimits, village, topology);
     // Step 2: check for missing structures
-    populateMidPriorityProjects(projectPlan, villageLimits, village, structureCount);
+    populateMidPriorityProjects(projectPlan, villageLimits, village, structureCount, topology);
     // Step 3: check for possible upgrades
     populateLowPriorityProjects(projectPlan, villageLimits, village);
 
@@ -124,9 +129,10 @@ public class MakeVillageAssessment extends VillagerActionBase {
   private void populateHighPriorityProjects(
       VillageProjectPlan plan,
       VillageLimits limits,
-      VillageHeartComponent village) {
+      VillageHeartComponent village,
+      VillageTopologyComponent topology) {
 
-    if (requireNewHouses(plan, limits, village)) {
+    if (requireNewHouses(plan, limits, village, topology)) {
       VillageProject project = buildNewHouseProject();
       plan.addProject(project);
       return;
@@ -144,11 +150,17 @@ public class MakeVillageAssessment extends VillagerActionBase {
       VillageProjectPlan plan,
       VillageLimits limits,
       VillageHeartComponent village,
-      Map<StructureType, Short> structureCount) {
+      Map<StructureType, Short> structureCount,
+      VillageTopologyComponent topology) {
 
     short plannedNewWorkplace = plan.getObjectiveTypeCount(VillageObjectiveType.BUILD_WORKPLACE);
     if (plannedNewWorkplace < MAX_NEW_BUILD) {
       for (StructureType structureType : WORKPLACE_BUILD_PRIORITY) {
+        if (hasStagedStructureOfType(village, topology, structureType)) {
+          logSkippedStagedPlanning(structureType);
+          continue;
+        }
+
         if (structureCount.getOrDefault(structureType, (short) 0) < limits.structureMaxCount.get(structureType) &&
             !plan.contains(structureType)) {
           VillageProject project = buildNewWorkplaceProject(structureType);
@@ -242,10 +254,70 @@ public class MakeVillageAssessment extends VillagerActionBase {
     return true;
   }
 
-  private boolean requireNewHouses(VillageProjectPlan plan, VillageLimits limits, VillageHeartComponent village) {
+  private boolean requireNewHouses(
+      VillageProjectPlan plan,
+      VillageLimits limits,
+      VillageHeartComponent village,
+      VillageTopologyComponent topology) {
+    if (hasStagedStructureOfType(village, topology, StructureType.HOUSE)) {
+      logSkippedStagedPlanning(StructureType.HOUSE);
+      return false;
+    }
+
     return village.getHouseCount() < limits.structureMaxCount.get(StructureType.HOUSE) &&
         !plan.contains(VillageObjectiveType.BUILD_HOUSE) &&
         (village.getHomelessCount() != 0 || village.getAvailableBedsCount() == 0);
+  }
+
+  private VillageTopologyComponent getVillageTopologyComponent(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    Ref<ChunkStore> villageRef = this.getVillageRef(ref, store);
+    if (!isRefValid(villageRef)) {
+      return null;
+    }
+
+    return villageRef.getStore().getComponent(villageRef, VillageTopologyComponent.getComponentType());
+  }
+
+  private boolean hasStagedStructureOfType(
+      VillageHeartComponent village,
+      VillageTopologyComponent topology,
+      StructureType structureType) {
+    if (village == null || topology == null || structureType == null) {
+      return false;
+    }
+
+    for (TopologyStructure structure : topology.getRegisteredTopologyStructures().values()) {
+      if (structure == null ||
+          structure.getStructureId() == null ||
+          structure.getStructureType() != structureType) {
+        continue;
+      }
+
+      if (!isStructureRegisteredInVillage(village, structureType, structure.getStructureId())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private boolean isStructureRegisteredInVillage(
+      VillageHeartComponent village,
+      StructureType structureType,
+      UUID structureId) {
+    if (structureType == StructureType.HOUSE) {
+      return village.getHouseFromId(structureId) != null;
+    }
+
+    return village.getWorkplaceFromId(structureId) != null;
+  }
+
+  private void logSkippedStagedPlanning(StructureType structureType) {
+    ProjectCivicCore.LOGGER.atInfo()
+        .log("[MakeVillageAssessment] Skipping new " + structureType +
+            " project because a staged construction is already registered in topology");
   }
 
   private VillageProject buildSpawnVillagerProject(short currentLevel) {
@@ -288,6 +360,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setTargetLevel(1);
     project.setTotalStages(VillageObjectiveType.BUILD_WORKPLACE.getStages());
     project.setStructureType(structureType);
+    project.setStructureId(UUID.randomUUID());
     project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
         VillageBuildingCostRegistry.getRequirementsForBuilding(structureType),
         project.getTotalStages()));
@@ -304,6 +377,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setTargetLevel(1);
     project.setTotalStages(VillageObjectiveType.BUILD_HOUSE.getStages());
     project.setStructureType(StructureType.HOUSE);
+    project.setStructureId(UUID.randomUUID());
     project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
         VillageBuildingCostRegistry.getRequirementsForBuilding(StructureType.HOUSE),
         project.getTotalStages()));

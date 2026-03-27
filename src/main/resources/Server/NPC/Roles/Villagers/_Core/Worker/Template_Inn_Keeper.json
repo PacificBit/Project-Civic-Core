@@ -449,10 +449,6 @@
               "$Comment": "Failure Gather",
               "Actions": [
                 {
-                  "Type": "Log",
-                  "Message": "NOT COMPLETED: Not enough food in storage"
-                },
-                {
                   "Type": "SetFlag",
                   "Name": "GatherIncomplete",
                   "SetTo": false
@@ -888,18 +884,6 @@
               "State": "Working.PreWorkLoop"
             }
           ]
-        },
-        {
-          "Sensor": {
-            "Type": "Any"
-          },
-          "Actions": [
-            {
-              "Type": "Log",
-              "Message": "Waiting..."
-            }
-          ],
-          "Continue": true
         },
         {
           "Sensor": {

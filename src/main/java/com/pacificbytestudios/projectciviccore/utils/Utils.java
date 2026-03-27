@@ -366,4 +366,17 @@ public class Utils {
   public static WorldChunk getWorldChunk(World world, Vector3i position) {
     return world.getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
   }
+
+  public static BlockType getBlockTypeChunkAware(World world, Vector3i position) {
+    WorldChunk chunk = getWorldChunk(world, position);
+    return chunk.getBlockType(position);
+  }
+
+  public static BlockType getBlockTypeChunkAware(World world, WorldChunk chunk, Vector3i position) {
+    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
+      return chunk.getBlockType(position);
+    }
+    WorldChunk correctChunk = getWorldChunk(world, position);
+    return correctChunk.getBlockType(position);
+  }
 }

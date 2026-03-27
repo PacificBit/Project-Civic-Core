@@ -33,6 +33,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
@@ -108,10 +109,19 @@ public class SpawnVillagerTask extends AVillageTask {
   }
 
   private Vector3d newSpawnPos(Vector3i blockPos, int radius) {
+    List<Vector3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
+
+    if (!spawningOffsets.isEmpty()) {
+      Vector3i selectedOffset = spawningOffsets.get(random.nextInt(spawningOffsets.size()));
+      Vector3i townHeartAnchor = blockPos.clone();
+
+      return townHeartAnchor
+          .add(selectedOffset)
+          .toVector3d();
+    }
+
     double angle = random.nextDouble() * Math.PI * 2.0;
-
     double distance = Math.sqrt(random.nextDouble()) * radius;
-
     double offsetX = Math.cos(angle) * distance;
     double offsetZ = Math.sin(angle) * distance;
 

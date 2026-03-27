@@ -137,17 +137,19 @@ public class RegisterHouseTask extends AVillageTask {
       return null;
     }
 
-    if (house.getUuid() == null || house.getPrefabAnchor() == null) {
+    Vector3i prefabAnchor = house.getPrefabAnchor();
+    if (house.getUuid() == null || prefabAnchor == null) {
       return null;
     }
 
     TopologyStructure topologyStructure = new TopologyStructure(
-        house.getPrefabAnchor(),
+        prefabAnchor,
         structureSize,
         VillageTopologyStructureType.HOUSE,
         orientation == null ? Rotation.None : orientation);
     topologyStructure.setStructureId(house.getUuid());
     topologyStructure.setStructureType(StructureType.HOUSE);
+    topologyStructure.setPrefabAnchor(prefabAnchor);
     return topologyStructure;
   }
 }

@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -16,11 +17,14 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -35,10 +39,12 @@ public class FarmSpawner {
       VillageHeartComponent heart,
       int targetLevel,
       ConstructionMode constructionMode) {
+    Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
+
     if (constructionMode == ConstructionMode.COMPLETED) {
-      return handleNewCompletedConstruction(structureId, chunk, prefabAnchor, rotation, heart, targetLevel);
+      return handleNewCompletedConstruction(structureId, chunk, prefabAnchor, structureRotation, heart, targetLevel);
     }
-    return handleNewStagedConstruction(structureId, chunk, prefabAnchor, rotation, heart, targetLevel);
+    return handleNewStagedConstruction(structureId, chunk, prefabAnchor, structureRotation, heart, targetLevel);
   }
 
   private static boolean handleNewCompletedConstruction(
@@ -48,7 +54,15 @@ public class FarmSpawner {
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    return false;
+    return handleLastStageBuilding(
+        structureId,
+        chunk.getWorld(),
+        chunk,
+        prefabAnchor,
+        rotation,
+        heart,
+        targetLevel,
+        null);
   }
 
   private static boolean handleNewStagedConstruction(
@@ -58,6 +72,74 @@ public class FarmSpawner {
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
+    ProjectCivicCore.LOGGER.atInfo()
+        .log(
+            "[handleNewStagedConstruction - farm] Registering new staged Farm construction of level: " +
+                targetLevel + ", with id: " + structureId);
+
+    WorldChunk chunkToUse = chunk;
+    World world = chunkToUse.getWorld();
+    short stage = (short) 0;
+    String prefab = StructureConfig.Farm.getPrefab(targetLevel, stage);
+
+    ProjectCivicCore.LOGGER.atInfo().log("[handleNewStagedConstruction - farm] Spawning prefab at: " + prefabAnchor);
+    TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
+        world,
+        prefab,
+        prefabAnchor.clone(),
+        rotation,
+        true);
+    if (trackedPlacement == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - farm] Could not spawn prefab");
+      return false;
+    }
+
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+
+    int constructionSignRotationIndex = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.Farm.CONSTRUCTION_SIGN_ROTATION,
+            rotation),
+        Rotation.None,
+        Rotation.None).index();
+    Utils.setBlockChunkAware(
+        chunkToUse,
+        constructionSignPosition,
+        StructureConfig.CONSTRUCTION_SIGN,
+        constructionSignRotationIndex);
+
+    Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
+        chunkToUse,
+        constructionSignPosition);
+
+    if (result == null || result.getSecond() == null ||
+        !result.getSecond().isValid()) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[handleNewStagedConstruction - farm] Could not fetch the construction sign entity");
+      return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
+          prefabAnchor, null);
+    }
+    chunkToUse = result.getFirst();
+    Ref<ChunkStore> constructionSignRef = result.getSecond();
+    Store<ChunkStore> store = constructionSignRef.getStore();
+
+    BuildingSnapshotComponent snapshotComponent = store.getComponent(constructionSignRef,
+        BuildingSnapshotComponent.getComponentType());
+
+    snapshotComponent.setStructureId(structureId);
+    snapshotComponent.setPrefabAnchor(prefabAnchor);
+    snapshotComponent.setCurrentStage(stage);
+    snapshotComponent.setRotation(rotation);
+    snapshotComponent.setStructureType(StructureType.FARM);
+    snapshotComponent.setVillageRef(heart.getEntityRef().clone());
+    snapshotComponent.setTargetLevel((short) targetLevel);
+
+    store.putComponent(
+        constructionSignRef,
+        TrackedPrefabPlacementComponent.getComponentType(),
+        trackedPlacement);
+
+    chunkToUse.markNeedsSaving();
     return false;
   }
 
@@ -66,92 +148,332 @@ public class FarmSpawner {
       Vector3i existingCoreOrSitePosition,
       int targetLevel,
       ConstructionMode mode) {
-    return false;
+    Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
+        chunk,
+        existingCoreOrSitePosition);
+
+    if (result == null || result.getSecond() == null ||
+        !result.getSecond().isValid()) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[beginUpgradeConstruction - farm] Could not fetch the existing farm entity");
+      return false;
+    }
+
+    WorldChunk chunkToUse = result.getFirst();
+    Ref<ChunkStore> workplaceRef = result.getSecond();
+    Store<ChunkStore> store = workplaceRef.getStore();
+
+    WorkplaceComponent workplace = store.getComponent(
+        workplaceRef,
+        WorkplaceComponent.getComponentType());
+    TrackedPrefabPlacementComponent trackedPlacement = store.getComponent(
+        workplaceRef,
+        TrackedPrefabPlacementComponent.getComponentType());
+    if (workplace == null || trackedPlacement == null) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[beginUpgradeConstruction - farm] Could not fetch the existing farm component or terrain snapshot");
+      return false;
+    }
+
+    Ref<ChunkStore> heartRef = workplace.getVillageHeartRef();
+    VillageHeartComponent heart = heartRef.getStore().getComponent(
+        heartRef,
+        VillageHeartComponent.getComponentType());
+
+    UUID structureId = workplace.getUuid();
+    int currentLevel = workplace.getLevel();
+    Vector3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
+    EntityRef villageRefSnapshot = heart.getEntityRef().clone();
+    TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
+    World world = chunkToUse.getWorld();
+
+    if (mode == ConstructionMode.COMPLETED) {
+      boolean upgraded = handleLastStageBuilding(
+          structureId,
+          world,
+          chunkToUse,
+          prefabAnchor,
+          structureRotation,
+          heart,
+          targetLevel,
+          oldTrackedPlacement);
+
+      if (!upgraded) {
+        ProjectCivicCore.LOGGER.atSevere()
+            .log("[beginUpgradeConstruction - farm] Could not complete the farm upgrade, rolling back");
+        handleLastStageBuilding(
+            structureId,
+            world,
+            chunkToUse,
+            prefabAnchor,
+            structureRotation,
+            heart,
+            currentLevel,
+            oldTrackedPlacement);
+      }
+      return upgraded;
+    }
+
+    short stage = (short) 0;
+    String prefab = StructureConfig.Farm.getPrefab(targetLevel, stage);
+    TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
+        world,
+        prefab,
+        prefabAnchor.clone(),
+        structureRotation,
+        true);
+
+    if (stagedPlacement == null) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[beginUpgradeConstruction - farm] Could not spawn the first upgrade stage prefab");
+      handleLastStageBuilding(
+          structureId,
+          world,
+          chunkToUse,
+          prefabAnchor,
+          structureRotation,
+          heart,
+          currentLevel,
+          oldTrackedPlacement);
+      return false;
+    }
+
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, structureRotation);
+    int constructionSignRotationIndex = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.Farm.CONSTRUCTION_SIGN_ROTATION,
+            structureRotation),
+        Rotation.None,
+        Rotation.None).index();
+
+    WorldChunk signChunk = Utils.setBlockChunkAware(
+        chunkToUse,
+        constructionSignPosition,
+        StructureConfig.CONSTRUCTION_SIGN,
+        constructionSignRotationIndex);
+    Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
+        signChunk,
+        constructionSignPosition);
+
+    signChunk = signResult.getFirst();
+    Ref<ChunkStore> constructionSignRef = signResult.getSecond();
+    Store<ChunkStore> signStore = constructionSignRef.getStore();
+
+    BuildingSnapshotComponent snapshotComponent = signStore.getComponent(
+        constructionSignRef,
+        BuildingSnapshotComponent.getComponentType());
+
+    snapshotComponent.setStructureId(structureId);
+    snapshotComponent.setPrefabAnchor(prefabAnchor);
+    snapshotComponent.setCurrentStage(stage);
+    snapshotComponent.setRotation(structureRotation);
+    snapshotComponent.setStructureType(StructureType.FARM);
+    snapshotComponent.setTargetLevel((short) targetLevel);
+    snapshotComponent.setVillageRef(villageRefSnapshot);
+
+    signStore.putComponent(
+        constructionSignRef,
+        TrackedPrefabPlacementComponent.getComponentType(),
+        oldTrackedPlacement);
+
+    signChunk.markNeedsSaving();
+    return true;
   }
 
   public static boolean advanceConstruction(
       WorldChunk chunk,
       Vector3i prefabAnchor,
       Rotation rotation) {
-    return false;
+
+    WorldChunk chunkToUse = chunk;
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
+        chunkToUse,
+        constructionSignPosition);
+
+    if (blockEntity == null) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[advanceConstruction - farm] Could not fetch the construction sign entity");
+    }
+
+    Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
+    chunkToUse = blockEntity.getFirst();
+    Store<ChunkStore> store = constructionSignRef.getStore();
+
+    BuildingSnapshotComponent snapshotComponent = store.getComponent(
+        constructionSignRef,
+        BuildingSnapshotComponent.getComponentType());
+
+    if (!removePreviousStagePrefab(chunk, store, constructionSignRef,
+        constructionSignPosition, snapshotComponent)) {
+      throw new IllegalStateException("[advanceConstruction - farm] Could not despawn previous prefab");
+    }
+
+    snapshotComponent.setCurrentStage((short) (snapshotComponent.getCurrentStage() + 1));
+
+    if (snapshotComponent.getCurrentStage() == VillageObjectiveType.getStages(StructureType.FARM)) {
+      VillageHeartComponent heart = store.getComponent(
+          snapshotComponent.getVillageRef().getRef(),
+          VillageHeartComponent.getComponentType());
+
+      TrackedPrefabPlacementComponent trackedPlacement = store
+          .getComponent(constructionSignRef,
+              TrackedPrefabPlacementComponent.getComponentType());
+
+      return handleLastStageBuilding(
+          snapshotComponent.getStructureId(),
+          chunkToUse.getWorld(),
+          chunkToUse,
+          snapshotComponent.getPrefabAnchor(),
+          snapshotComponent.getRotation(),
+          heart,
+          snapshotComponent.getTargetLevel(),
+          trackedPlacement);
+    }
+
+    return spawnMiddleStageBuilding(chunk, store, constructionSignRef,
+        constructionSignPosition, snapshotComponent);
   }
 
-  public static boolean spawn(
+  private static boolean removePreviousStagePrefab(
       WorldChunk chunk,
-      Vector3i position,
+      Store<ChunkStore> store,
+      Ref<ChunkStore> constructionSignRef,
+      Vector3i constructionSignPosition,
+      BuildingSnapshotComponent snapshot) {
+    TrackedPrefabPlacementComponent trackedPlacement = store
+        .getComponent(constructionSignRef,
+            TrackedPrefabPlacementComponent.getComponentType());
+
+    Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
+    boolean despawn = false;
+    String prefab = StructureConfig.Farm.getPrefab(snapshot.getTargetLevel(),
+        snapshot.getCurrentStage());
+
+    if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
+      despawn = PrefabManager.restoreTrackedPrefab(chunk.getWorld(),
+          trackedPlacement);
+    } else {
+      Vector3i prefabAnchor = snapshot.getPrefabAnchor();
+      if (prefabAnchor == null && trackedPlacement != null) {
+        prefabAnchor = trackedPlacement.getOrigin();
+      }
+
+      despawn = PrefabManager.removePrefab(
+          chunk.getWorld(),
+          prefab,
+          prefabAnchor,
+          prefabRotation,
+          true);
+    }
+
+    return despawn;
+  }
+
+  private static boolean spawnMiddleStageBuilding(
+      WorldChunk chunk,
+      Store<ChunkStore> store,
+      Ref<ChunkStore> constructionSignRef,
+      Vector3i constructionSignPosition,
+      BuildingSnapshotComponent snapshot) {
+
+    String prefab = StructureConfig.Farm.getPrefab(snapshot.getTargetLevel(),
+        snapshot.getCurrentStage());
+
+    TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
+        chunk.getWorld(),
+        prefab,
+        snapshot.getPrefabAnchor().clone(),
+        snapshot.getRotation(),
+        true);
+
+    return trackedPlacement != null;
+  }
+
+  private static boolean handleLastStageBuilding(
+      UUID structureId,
+      World world,
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
-      int structureLevel,
-      short stage) {
-    Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
-    World world = chunk.getWorld();
-    TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
+      int targetLevel,
+      TrackedPrefabPlacementComponent trackedPlacement) {
+    String prefab = StructureConfig.Farm.getPrefab(
+        targetLevel,
+        VillageObjectiveType.getStages(StructureType.FARM));
+
+    TrackedPrefabPlacementComponent snapshotToUse = trackedPlacement;
+
+    TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
-        StructureConfig.Farm.PREFAB_JSON,
-        position.clone(),
-        structureRotation,
+        prefab,
+        prefabAnchor.clone(),
+        rotation,
         true);
-    if (trackedPlacement == null) {
+    if (newSnapshot == null) {
       return false;
     }
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(position, structureRotation);
+    if (snapshotToUse == null) {
+      snapshotToUse = newSnapshot;
+    }
+
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(
         chunk,
         workplaceBlockPosition,
         StructureConfig.Farm.WORKPLACE_BLOCK,
-        StructurePlacementUtils.toBlockRotationIndex(structureRotation));
-    Ref<ChunkStore> workplace = workplaceChunk.getBlockComponentEntity(
+        StructurePlacementUtils.toBlockRotationIndex(rotation));
+    Ref<ChunkStore> workplaceRef = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
         workplaceBlockPosition.z);
 
-    if (workplace == null || !workplace.isValid()) {
+    if (workplaceRef == null || !workplaceRef.isValid()) {
       ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Workplace ref is invalid");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
+      return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
-    Store<ChunkStore> chunkStore = workplace.getStore();
+    Store<ChunkStore> chunkStore = workplaceRef.getStore();
     WorkplaceComponent workplaceComponent = chunkStore.getComponent(
-        workplace,
+        workplaceRef,
         WorkplaceComponent.getComponentType());
 
     if (workplaceComponent == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Workplace component is missing");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, null);
+      return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
-    if (workplaceComponent.getUuid() == null) {
-      workplaceComponent.setUuid(UUID.randomUUID());
-    }
-
-    workplaceComponent.setLevel((short) 1);
+    workplaceComponent.setUuid(structureId);
+    workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, structureRotation));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.FARMER });
     workplaceComponent.setWorkingArea(new AreaFootprint(
         StructureConfig.Farm.WORKING_AREA_OFFSET,
-        position,
-        structureRotation));
+        prefabAnchor,
+        rotation));
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
     chunkStore.putComponent(
-        workplace,
+        workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType(),
-        trackedPlacement);
+        snapshotToUse);
 
-    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition, structureRotation);
+    Vector3i containerPosition = getContainerPosition(workplaceBlockPosition, rotation);
     WorldChunk containerChunk = Utils.setBlockChunkAware(
         workplaceChunk,
         containerPosition,
         StructureConfig.Farm.SINGLE_STORAGE_BLOCK,
-        StructurePlacementUtils.toBlockRotationIndex(structureRotation));
+        StructurePlacementUtils.toBlockRotationIndex(StructureConfig.Farm.CONTAINER_ROTATION));
     Ref<ChunkStore> containerRef = containerChunk.getBlockComponentEntity(containerPosition.x,
         containerPosition.y, containerPosition.z);
 
     if (containerRef == null || !containerRef.isValid()) {
       ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Container ref is invalid");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, containerPosition);
+      return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
     WorkplaceContainerEntryComponent container = chunkStore.getComponent(
@@ -160,20 +482,21 @@ public class FarmSpawner {
 
     if (container == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[FarmSpawner - spawn] Container component is missing");
-      return rollbackFailedSpawn(world, workplaceChunk, trackedPlacement, workplaceBlockPosition, containerPosition);
+      return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
-    workplaceComponent.setPrefabAnchor(position.clone());
+    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
 
     container.setPosition(containerPosition);
-    container.setAccessPosition(getContainerAccessPosition(containerPosition, structureRotation));
+    container.setAccessPosition(getContainerAccessPosition(containerPosition, rotation));
     container.setUuid(UUID.randomUUID());
 
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
     storage.registerContainer(container.getUuid(), container);
     workplaceComponent.setStorage(storage);
 
-    chunk.markNeedsSaving();
+    removeConstructionSignIfPresent(chunk, prefabAnchor, rotation);
+    workplaceChunk.markNeedsSaving();
     return true;
   }
 
@@ -236,10 +559,47 @@ public class FarmSpawner {
     return despawn;
   }
 
+  private static void removeConstructionSignIfPresent(
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      Rotation rotation) {
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
+        chunk,
+        constructionSignPosition);
+    if (signResult == null) {
+      return;
+    }
+
+    WorldChunk signChunk = signResult.getFirst();
+    Ref<ChunkStore> signRef = signResult.getSecond();
+    if (signChunk == null || signRef == null || !signRef.isValid()) {
+      return;
+    }
+
+    Store<ChunkStore> signStore = signRef.getStore();
+    BuildingSnapshotComponent snapshotComponent = signStore.getComponent(
+        signRef,
+        BuildingSnapshotComponent.getComponentType());
+    if (snapshotComponent == null) {
+      return;
+    }
+
+    signChunk = Utils.breakBlockChunkAware(signChunk, constructionSignPosition);
+    signChunk.markNeedsSaving();
+  }
+
   private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         StructureConfig.Farm.WORKPLACE_BLOCK_OFFSET,
+        rotation);
+  }
+
+  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Farm.CONSTRUCTION_SIGN_OFFSET,
         rotation);
   }
 

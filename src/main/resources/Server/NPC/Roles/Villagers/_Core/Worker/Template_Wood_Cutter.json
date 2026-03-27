@@ -2,7 +2,7 @@
   "Type": "Abstract",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "DropList": {
@@ -178,12 +178,37 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 2,
-                "StopDistance": 2,
+                "SlowDownDistance": 0.8,
+                "StopDistance": 0.7,
                 "RelativeSpeed": 1
               },
               "Continue": false,
               "$Comment": "Reaching workplace"
+            },
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ],
+                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot",
+                  "Continue": true
+                }
+              ],
+              "$Comment": "No valid work area snapshot",
+              "Continue": true
             },
             {
               "Sensor": {
@@ -192,7 +217,7 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".WoorkLoop"
+                  "State": ".WorkLoop"
                 }
               ],
               "$Comment": "Workplace Reached -> .StartWork"
@@ -203,18 +228,1225 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".WoorkLoop"
+            "State": ".WorkLoop"
           },
-          "BodyMotion": {
-            "Type": "WanderInCircle",
-            "Radius": 3,
-            "RelativeSpeed": 0.3,
-            "MaxHeadingChange": 90
-          }
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Plantable_Terrain"
+                ]
+              },
+              "$Comment": "Step 1) Plant Tree",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "Self",
+                      "Filters": [
+                        {
+                          "Type": "Inventory",
+                          "Items": [
+                            "Plant_Sapling_Ash",
+                            "Plant_Sapling_Cedar",
+                            "Plant_Sapling_Spruce"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "$Comment": "If has NO Saplings in inventory",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "State",
+                          "State": "RequestStorage.Sapling"
+                        }
+                      ],
+                      "$Comment": "Ask storage for Saplings or crafting material"
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "If has Saplings in inventory",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "EquipItemFromInventory",
+                          "ItemToEquip": "Plant_Sapling_"
+                        }
+                      ],
+                      "$Comment": "Equip sapling",
+                      "Continue": true
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "ReachNextTargetInSnapshot",
+                        "BlockIds": [
+                          "Plantable_Terrain"
+                        ],
+                        "StoppingRange": 1.3,
+                        "UseCenterOfBlock": true
+                      },
+                      "$Comment": "Reach Plantable Terrain Block",
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "SlowDownDistance": 1.3,
+                        "StopDistance": 0.8,
+                        "RelativeSpeed": 0.7
+                      }
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Plant Tree",
+                      "Actions": [
+                        {
+                          "Type": "Timeout",
+                          "Delay": [
+                            0.5,
+                            1
+                          ],
+                          "Action": {
+                            "Type": "PlantTreeAction",
+                            "TerrainRepairBlockIds": [
+                              "Soil_Grass",
+                              "Soil_Pathway",
+                              "Soil_Mud_Dry"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Cuttable_Tree"
+                ]
+              },
+              "$Comment": "Step 2) Cut Tree",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "Self",
+                      "Filters": [
+                        {
+                          "Type": "Inventory",
+                          "Items": [
+                            "Village_Tool_Hatchet_*"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "$Comment": "If has NO Hatchet in inventory",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Actions": [
+                        {
+                          "Type": "State",
+                          "State": "RequestStorage.Hatchet"
+                        }
+                      ],
+                      "$Comment": "Ask storage for Hatchet or crafting material"
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "If has Hatchet in inventory",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Equip Hatchet",
+                      "Continue": true,
+                      "Actions": [
+                        {
+                          "Type": "EquipItemFromInventory",
+                          "ItemToEquip": "Village_Tool_Hatchet_"
+                        }
+                      ]
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "ReachWalkableSpaceNearSnapshotTarget",
+                        "BlockIds": [
+                          "Cuttable_Tree"
+                        ],
+                        "UseCenterOfBlock": true,
+                        "StoppingRange": 1
+                      },
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "SlowDownDistance": 1,
+                        "StopDistance": 0.8,
+                        "RelativeSpeed": 0.7
+                      }
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "ScanTreeTrunkBottom"
+                      },
+                      "$Comment": "Scan the tree bottom trunk",
+                      "Continue": true,
+                      "Instructions": [
+                        {
+                          "Sensor": {
+                            "Type": "HasTargetBlockInSnapshot",
+                            "TargetBlockIds": [
+                              "Cuttable_Block"
+                            ]
+                          },
+                          "$Comment": "Change state: -> .CutTreeLoop",
+                          "Actions": [
+                            {
+                              "Type": "State",
+                              "State": ".CutTreeLoop"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "WorkCooldown"
+                }
+              ],
+              "$Comment": "If no more work has to be done"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".CutTreeLoop"
+          },
+          "$Comment": "Cut Tree Loop",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "ReachWalkableSpaceNearSnapshotTarget",
+                "BlockIds": [
+                  "Cuttable_Block"
+                ],
+                "StoppingRange": 0.8,
+                "UseCenterOfBlock": true
+              },
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1,
+                "StopDistance": 0.5,
+                "RelativeSpeed": 0.7
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Cuttable_Block"
+                ]
+              },
+              "$Comment": "Break Tree Trunk Block",
+              "Actions": [
+                {
+                  "Type": "BreakBlockAction",
+                  "SnapshotGroup": "Cuttable_Block",
+                  "RequiredStoppingRange": 1.8,
+                  "TerrainRepairBlockIds": [
+                    "Soil_Grass",
+                    "Soil_Pathway",
+                    "Soil_Mud_Dry"
+                  ]
+                }
+              ],
+              "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Cuttable_Block"
+                  ]
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Change state to get drops",
+                  "Actions": [
+                    {
+                      "Type": "Timeout",
+                      "Delay": [
+                        1,
+                        2
+                      ],
+                      "Action": {
+                        "Type": "State",
+                        "State": ".CollectLoop"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "$Comment": "If done cutting"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".CollectLoop"
+          },
+          "$Comment": "Collect Loop",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "DroppedItem",
+                "Range": 4
+              },
+              "Actions": [
+                {
+                  "Type": "PickUpItem",
+                  "Range": 2
+                }
+              ],
+              "BodyMotion": {
+                "Type": "Seek",
+                "StopDistance": 1,
+                "SlowDownDistance": 2
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "FINITO"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ],
+              "$Comment": "Change state to .WorkLoop"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".NoWorkingAreaSnapshot"
+          },
+          "$Comment": "Needs to process the working enviroment",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Actions": [
+                {
+                  "Type": "ScanWorkArea"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ],
+              "$Comment": "If not valid work area snapshot is present",
+              "ActionsBlocking": true
+            }
+          ]
         }
       ],
       "Continue": true,
-      "$Comment": "Normal state"
+      "$Comment": "Work Process"
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "RequestStorage"
+      },
+      "$Comment": "Storage Request",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Sapling"
+          },
+          "$Comment": "Request",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch materials",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Plant_Sapling*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Plant_Sapling*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Saplings in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Working.WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "CanCraftWoodcutterResource",
+                "ResourceType": "SAPLING",
+                "Once": true
+              },
+              "$Comment": "If now can craft saplings",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Sapling"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Set missing resources",
+              "Actions": [
+                {
+                  "Type": "SetMissingResources",
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Plant_Sapling*",
+                      "FilterIn": true,
+                      "Count": 100
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": 100
+                    }
+                  ],
+                  "ResetMissingResources": true
+                },
+                {
+                  "Type": "AskStorageToDeliveResources",
+                  "SourceType": "WORKPLACE"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WaitForSaplingResources"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Hatchet"
+          },
+          "$Comment": "Request",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch materials",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Hatchet*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "*Hatchet*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Hatchet in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Working.WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "CanCraftWoodcutterResource",
+                "ResourceType": "HATCHET",
+                "Once": true
+              },
+              "$Comment": "If now can craft a hatchet",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Hatchet"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Set missing resources",
+              "Actions": [
+                {
+                  "Type": "SetMissingResources",
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Hatchet*",
+                      "FilterIn": true,
+                      "Count": 1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": 20
+                    }
+                  ],
+                  "ResetMissingResources": true
+                },
+                {
+                  "Type": "AskStorageToDeliveResources",
+                  "SourceType": "WORKPLACE"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WaitForHatchetResources"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WaitForSaplingResources"
+          },
+          "$Comment": "Wait for sapling resources",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasStoragePendingRequest"
+                }
+              },
+              "$Comment": "If no pending request",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".CheckSaplingDelivery"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WaitForHatchetResources"
+          },
+          "$Comment": "Wait for sapling resources",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasStoragePendingRequest"
+                }
+              },
+              "$Comment": "If no pending request",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".CheckHatchetDelivery"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".CheckSaplingDelivery"
+          },
+          "$Comment": "Check delivered sapling resources without re-requesting",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch delivered resources",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Plant_Sapling*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Plant_Sapling*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Saplings in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Working.WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "CanCraftWoodcutterResource",
+                "ResourceType": "SAPLING",
+                "Once": true
+              },
+              "$Comment": "If now can craft saplings",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Sapling"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Back off if delivery did not unlock crafting",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "PostWorkCooldown"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".CheckHatchetDelivery"
+          },
+          "$Comment": "Check delivered hatchet resources without re-requesting",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch delivered resources",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Hatchet*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "*Hatchet*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Hatchet in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Working.WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "CanCraftWoodcutterResource",
+                "ResourceType": "HATCHET",
+                "Once": true
+              },
+              "$Comment": "If now can craft a hatchet",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Hatchet"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Back off if delivery did not unlock crafting",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "PostWorkCooldown"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "Craft"
+      },
+      "$Comment": "Craft",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Sapling"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "CRAFTING SAPLINGS"
+            },
+            {
+              "Type": "CraftSaplings"
+            },
+            {
+              "Type": "Timeout",
+              "Delay": [
+                4,
+                6
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Hatchet"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "CRAFTING HATCHET"
+            },
+            {
+              "Type": "CraftTool",
+              "ToolType": "HATCHET",
+              "Once": true
+            },
+            {
+              "Type": "Timeout",
+              "Delay": [
+                4,
+                6
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WorkCooldown"
+      },
+      "$Comment": "After all the steps are done",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "QueryDirtyInventorySensor",
+            "ExcludeItemTypes": [
+              "Village_Tool_Hatchet*",
+              "Plant_Sapling*"
+            ]
+          },
+          "$Comment": "If has a dirty inventory",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Add to snapshot the containers",
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Try to deposit & Send clear storage request",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "DEPOSIT",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Village_Tool_Hatchet*",
+                      "FilterIn": false,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Plant_Sapling*",
+                      "FilterIn": false,
+                      "Count": -1
+                    }
+                  ]
+                },
+                {
+                  "Type": "AskClearWorkplaceStorage",
+                  "ExcludedItemTypes": [
+                    "Village_Tool_Hatchet*",
+                    "Plant_Sapling*"
+                  ],
+                  "Once": true
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "If it was not able to deposit: Send clear storage request",
+              "Actions": [
+                {
+                  "Type": "AskClearWorkplaceStorage",
+                  "ExcludedItemTypes": [
+                    "Village_Tool_Hatchet*",
+                    "Plant_Sapling*"
+                  ],
+                  "Once": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Cooldown",
+          "ActionsBlocking": true,
+          "ActionsAtomic": true,
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                25,
+                25
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "PostWorkCooldown"
+      },
+      "$Comment": "Post Cooldown Creating Snapshot Area",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "ScanWorkArea"
+            }
+          ],
+          "Continue": true,
+          "$Comment": "Scan Work Area"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.WorkLoop"
+            }
+          ],
+          "$Comment": "Start work loop"
+        }
+      ]
     }
   ],
   "NameTranslationKey": {

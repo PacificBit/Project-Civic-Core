@@ -74,33 +74,47 @@ public final class StructureConfig {
 
     private TownHeart() {
     }
+
+    private static final int SPAWNING_SCALE = 6;
+
+    private static final List<Vector3i> VILLAGER_SPAWNING_OFFSETS = List.of(
+        Vector3i.NORTH.clone().scale(SPAWNING_SCALE),
+        Vector3i.SOUTH.clone().scale(SPAWNING_SCALE),
+        Vector3i.WEST.clone().scale(SPAWNING_SCALE),
+        Vector3i.EAST.clone().scale(SPAWNING_SCALE));
+
+    public static List<Vector3i> getVillagerSpawningOffsets() {
+      return VILLAGER_SPAWNING_OFFSETS;
+    }
   }
 
   public static final class Farm {
-    public static final String PREFAB_JSON = "Structures/Temporary/Farm.prefab.json";
-    // public static final String PREFAB_JSON =
-    // "Structures/Workplace/Workplace_Farm.prefab.json";
+    public static final String PREFAB_JSON = "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
-    public static final AreaFootprint WORKING_AREA_OFFSET = new AreaFootprint(
-        new Vector2i(-3, -3),
-        new Vector2i(3, 3));
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(0, 1, -4);
-    public static final Vector3i CONTAINER_OFFSET = new Vector3i(2, 0, 0);
+    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-5, 1, -5);
     public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(0, 0, 1);
-    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, 1);
+
+    public static final Vector3i CONTAINER_OFFSET = new Vector3i(0, 0, 8);
+    public static final Rotation CONTAINER_ROTATION = Rotation.Ninety;
+
+    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, -1);
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 5);
+    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(3, 1, 6);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
+
+    public static final AreaFootprint WORKING_AREA_OFFSET = new AreaFootprint(
+        new Vector2i(-1, -4),
+        new Vector2i(7, 4));
 
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
         createStagePrefabMap(
-            PREFAB_JSON,
-            PREFAB_JSON,
-            PREFAB_JSON,
-            PREFAB_JSON),
+            "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+            "Structures/Workplace/Farm/Level1/Stage1/Farm.prefab.json",
+            "Structures/Workplace/Farm/Level1/Stage2/Farm.prefab.json",
+            "Structures/Workplace/Farm/Level1/Stage3/Farm.prefab.json"),
 
         2,
         createStagePrefabMap(
@@ -126,8 +140,6 @@ public final class StructureConfig {
 
   public static final class Storage {
     public static final String PREFAB_JSON = "Structures/Workplace/Storage/Level1/Stage3/Storage.prefab.json";
-    // public static final String PREFAB_JSON =
-    // "Structures/Workplace/Workplace_Storage.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Storage_Core");
     public static final BlockType DOUBLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Large");
     public static final Rotation LEFT_CONTAINER_YAW_OFFSET = Rotation.Ninety;
@@ -254,8 +266,6 @@ public final class StructureConfig {
 
   public static final class Tavern {
     public static final String PREFAB_JSON = "Structures/Workplace/Tavern/Level1/Stage3/Tavern.prefab.json";
-    // public static final String PREFAB_JSON =
-    // "Structures/Workplace/Workplace_Tavern.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Tavern_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.None;
@@ -332,12 +342,10 @@ public final class StructureConfig {
 
   public static final class TownHall {
     public static final String PREFAB_JSON = "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json";
-    // public static final String PREFAB_JSON =
-    // "Structures/Workplace/Workplace_Town_Hall.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Town_Hall_Core");
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
     public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-3, 1, -1);
-    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(0, 0, -1);
+    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(1, 0, 1);
     public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, 1);
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
@@ -414,13 +422,25 @@ public final class StructureConfig {
   }
 
   public static final class Sawmill {
-    public static final String PREFAB_JSON = "Structures/Temporary/Sawmill.prefab.json";
+    public static final String PREFAB_JSON = "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Sawmill_Core");
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(0, 1, 0);
+    public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
+
+    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(5, 1, 5);
+    public static final Rotation WORKPLACE_BLOCK_ROTATION = Rotation.Ninety;
+    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(-1, 0, 1);
+
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 5);
+    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 8);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
+    public static final Vector3i CONTAINER_OFFSET = new Vector3i(-4, 1, 6);
+    public static final Rotation CONTAINER_ROTATION = Rotation.Ninety;
+    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(1, 0, 0);
+
+    public static final AreaFootprint WORKING_AREA_OFFSET = new AreaFootprint(
+        new Vector2i(-4, -6),
+        new Vector2i(4, 2));
 
     private Sawmill() {
     }
@@ -428,10 +448,10 @@ public final class StructureConfig {
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
         createStagePrefabMap(
-            PREFAB_JSON,
-            PREFAB_JSON,
-            PREFAB_JSON,
-            PREFAB_JSON),
+            "Structures/Workplace/Sawmill/Level1/Stage0/Sawmill.prefab.json",
+            "Structures/Workplace/Sawmill/Level1/Stage1/Sawmill.prefab.json",
+            "Structures/Workplace/Sawmill/Level1/Stage2/Sawmill.prefab.json",
+            "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json"),
 
         2,
         createStagePrefabMap(
@@ -453,8 +473,6 @@ public final class StructureConfig {
   }
 
   public static final class House {
-    // public static final String PREFAB_JSON =
-    // "Structures/Temporary/House.prefab.json";
     public static final String PREFAB_JSON = "Structures/Housing/Level1/Stage0/House.prefab.json";
     public static final BlockType CORE_BLOCK = BlockType.getAssetMap().getAsset("Housing_Core");
     public static final BlockType CRUDE_BED_BLOCK = BlockType.getAssetMap().getAsset("Village_Crude_Bed");

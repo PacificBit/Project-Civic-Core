@@ -47,8 +47,11 @@ public class TownHallComponent implements Component<ChunkStore> {
     this.villageProjectPlan = villageProjectPlan;
   }
 
-  public void updateProjectPlan(VillageProject project) {
-    this.villageProjectPlan.updateProjectPlan(project);
+  public boolean updateProjectPlan(VillageProject project) {
+    if (this.villageProjectPlan == null) {
+      return false;
+    }
+    return this.villageProjectPlan.updateProjectPlan(project);
   }
 
   public void removeProject(VillageProject project) {

@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.systems.workplace;
 
-import java.util.UUID;
-
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -40,8 +38,10 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     }
 
     BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
-
-    assert blockContext != null;
+    if (blockContext == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] Missing block context");
+      return;
+    }
 
     WorldChunk chunk = blockContext.chunk();
     World world = chunk.getWorld();
@@ -53,21 +53,33 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
       return;
     }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
-
-    WorkplaceComponent workplaceComponent = store.getComponent(ref,
-        WorkplaceComponent.getComponentType());
-    workplaceComponent.setBenchPos(blockPos);
-    workplaceComponent.setVillageRef(villageHeartRef);
-    if (workplaceComponent.getUuid() == null) {
-      workplaceComponent.setUuid(UUID.randomUUID());
+    if (heartRef == null || !heartRef.isValid()) {
+      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] Village heart ref is invalid");
+      return;
     }
 
-    VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
-
-    taskComponent.registerTask(new RegisterWorkplaceTask(workplaceComponent));
-    taskComponent.registerTask(new TryJobAssignmentTask(workplaceComponent.getUuid()));
-
     world.execute(() -> {
+      WorkplaceComponent workplaceComponent = store.getComponent(ref,
+          WorkplaceComponent.getComponentType());
+      if (workplaceComponent == null) {
+        ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] Workplace component not found");
+        return;
+      }
+
+      workplaceComponent.setBenchPos(blockPos);
+      workplaceComponent.setVillageRef(villageHeartRef);
+
+      if (workplaceComponent.getUuid() == null) {
+        ProjectCivicCore.LOGGER.atWarning()
+            .log("[WorkplaceSpawnSystem - onEntityAdded] Workplace UUID is still null after spawn initialization at "
+                + blockPos);
+        return;
+      }
+
+      VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
+      taskComponent.registerTask(new RegisterWorkplaceTask(workplaceComponent));
+      taskComponent.registerTask(new TryJobAssignmentTask(workplaceComponent.getUuid()));
+
       Utils.safeVillageTaskEnqueue(heartRef, taskComponent);
     });
   }

@@ -33,7 +33,8 @@ import com.pacificbytestudios.projectciviccore.villagers.core.inventory.Containe
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
-public class GatherNextMealMaterialFromContainerAction extends VillagerActionBase {
+public class GatherNextMealMaterialFromContainerAction extends
+    VillagerActionBase {
   private final int successFlagSlot;
   private final int failureFlagSlot;
 
@@ -65,14 +66,16 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     World world = store.getExternalData().getWorld();
     Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
 
-    TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef, TavernComponent.getComponentType());
+    TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef,
+        TavernComponent.getComponentType());
     if (tavernComponent == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[GatherNextMealMaterialFromContainerAction] Could not fetch the tavern component");
       return this.finish(role, false);
     }
 
-    UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
+    UUIDComponent uuidComponent = store.getComponent(ref,
+        UUIDComponent.getComponentType());
     String mealToPrepare = tavernComponent.getAssignedRecipe(uuidComponent.getUuid());
 
     if (mealToPrepare == null) {
@@ -80,14 +83,6 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
           .log("[GatherNextMealMaterialFromContainerAction] Got cook request but got no meal to prepare assigned");
       return this.finish(role, false);
     }
-
-    System.out.println("=========================================================");
-    System.out.println(
-        "Gathering resources for next meal: " + mealToPrepare + ", action performed by: " + uuidComponent.getUuid());
-    System.out
-        .println(snapshot.getBlockTypePosition().get(WorkplaceStorageTargetsSnapshotAction.WORKPLACE_STORAGE_KEY));
-    System.out.println(tavernComponent.getMealToPrepare());
-    System.out.println("=========================================================");
 
     Vector3i containerCoords = snapshot.getBlockTypePosition()
         .get(WorkplaceStorageTargetsSnapshotAction.WORKPLACE_STORAGE_KEY).pollFirst();
@@ -100,7 +95,8 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
     CraftingRecipe recipe = FoodRecipeRegistry.getRecipe(mealToPrepare);
     List<MaterialQuantity> neededMaterials = CraftingManager.getInputMaterials(recipe, 1);
 
-    ResolvedContainer container = ContainerResolver.resolveContainerAt(world, containerCoords);
+    ResolvedContainer container = ContainerResolver.resolveContainerAt(world,
+        containerCoords);
     if (container == null) {
       ProjectCivicCore.LOGGER.atSevere()
           .log("[GatherNextMealMaterialFromContainerAction] No workplace container found in designated coords");
@@ -174,7 +170,8 @@ public class GatherNextMealMaterialFromContainerAction extends VillagerActionBas
 
     if (!missingMaterials.isEmpty()) {
       ProjectCivicCore.LOGGER.atFine()
-          .log("[GatherNextMealMaterialFromContainerAction] Missing materials: " + missingMaterials);
+          .log("[GatherNextMealMaterialFromContainerAction] Missing materials: " +
+              missingMaterials);
       return this.finish(role, false);
     }
 

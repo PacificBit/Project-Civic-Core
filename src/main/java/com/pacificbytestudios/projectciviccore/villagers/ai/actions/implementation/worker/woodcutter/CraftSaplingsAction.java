@@ -1,0 +1,72 @@
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.woodcutter;
+
+import java.util.List;
+import java.util.Map;
+
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
+import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.registry.registry.SaplingRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.crafting.BatchCraftingHelper;
+import com.pacificbytestudios.projectciviccore.villagers.core.crafting.BatchCraftingHelper.BatchCraftingResult;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+
+public class CraftSaplingsAction extends VillagerActionBase {
+
+  public CraftSaplingsAction(BuilderActionBase builderActionBase) {
+    super(builderActionBase);
+  }
+
+  @Override
+  public boolean execute(
+      Ref<EntityStore> ref,
+      Role role,
+      InfoProvider sensorInfo,
+      double deltaTime,
+      Store<EntityStore> store) {
+    if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
+      return false;
+    }
+    super.execute(ref, role, sensorInfo, deltaTime, store);
+
+    VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
+    ItemContainer villagerStorage = this.getVillagerStorage(ref, store);
+    if (villageHeart == null || villagerStorage == null) {
+      return false;
+    }
+
+    List<Map.Entry<String, CraftingRecipe>> orderedRecipes = getOrderedRecipes(villageHeart.getLevel());
+    if (orderedRecipes.isEmpty()) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[CraftSaplingsAction] No sapling recipes available for village level " + villageHeart.getLevel());
+      return false;
+    }
+
+    BatchCraftingResult craftResult = BatchCraftingHelper.craftAll(
+        villagerStorage,
+        orderedRecipes,
+        "[CraftSaplingsAction]");
+    if (!craftResult.success() || !craftResult.craftedAny()) {
+      return false;
+    }
+
+    ProjectCivicCore.LOGGER.atFine()
+        .log("[CraftSaplingsAction] Crafted saplings: " + craftResult.craftedCounts());
+    return true;
+  }
+
+  private List<Map.Entry<String, CraftingRecipe>> getOrderedRecipes(int villageLevel) {
+    return SaplingRecipeRegistry.getLevelDependantSaplingRecipe(villageLevel)
+        .entrySet()
+        .stream()
+        .sorted(Map.Entry.comparingByKey())
+        .toList();
+  }
+}

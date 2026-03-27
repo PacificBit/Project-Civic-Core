@@ -19,6 +19,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.farm.FarmComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.sawmill.SawmillComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestTracker;
@@ -214,6 +215,7 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     return switch (workplaceType) {
       case TAVERN -> chunkStore.getComponent(ref, TavernComponent.getComponentType());
       case FARM -> chunkStore.getComponent(ref, FarmComponent.getComponentType());
+      case SAWMILL -> chunkStore.getComponent(ref, SawmillComponent.getComponentType());
       default -> throw new IllegalArgumentException("Workplace type '" + workplaceType + "' not supported!");
     };
   }

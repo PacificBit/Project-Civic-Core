@@ -21,6 +21,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.LateralVacancySegments;
 import com.pacificbytestudios.projectciviccore.codecs.LateralVacancySegments.Segment;
 import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
@@ -29,7 +30,9 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.RoadSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
@@ -38,6 +41,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.ContinueBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.UpgradeBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
@@ -91,12 +95,15 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
     if (objectiveType.equals(VillageObjectiveType.BUILD_HOUSE) ||
         objectiveType.equals(VillageObjectiveType.BUILD_WORKPLACE)) {
-
       if (this.topology.isStructureAlreadyPresent(this.project.getStructureId())) {
         completed = handleContinueBuildingConstruction(villageRef);
       } else {
         completed = handleNewBuildingConstruction(villageRef);
       }
+    }
+
+    if (objectiveType.equals(VillageObjectiveType.UPGRADE_BUILDING)) {
+      completed = handleUpgradeBuilding(villageRef);
     }
 
     if (completed) {
@@ -400,6 +407,55 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
       Utils.safeVillageTaskEnqueue(villageRef, taskQueue);
     });
     return true;
+  }
+
+  private boolean handleUpgradeBuilding(Ref<ChunkStore> villageRef) {
+    if (this.project.getStage() > 0) {
+      return handleContinueBuildingConstruction(villageRef);
+    }
+
+    TopologyStructure structure = this.topology
+        .getTopologyStructureFromStructureId(this.project.getStructureId());
+    Vector3i existingCoreOrSitePosition = resolveUpgradeStartPosition(structure);
+    if (structure == null || existingCoreOrSitePosition == null) {
+      ProjectCivicCore.LOGGER.atWarning().log(
+          "[VillageBuilderSystem] Could not resolve upgrade start position for project "
+              + this.project.getProjectId() + " and structure " + this.project.getStructureId());
+      return false;
+    }
+
+    VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
+    taskQueue.registerTask(
+        new UpgradeBuildingTask(
+            structure.getStructureType(),
+            existingCoreOrSitePosition,
+            this.project.getTargetLevel(),
+            ConstructionMode.STAGED));
+
+    this.world.execute(() -> {
+      Utils.safeVillageTaskEnqueue(villageRef, taskQueue);
+    });
+    return true;
+  }
+
+  private Vector3i resolveUpgradeStartPosition(TopologyStructure structure) {
+    if (structure == null || structure.getStructureId() == null || structure.getStructureType() == null) {
+      return null;
+    }
+
+    if (structure.getStructureType() == StructureType.HOUSE) {
+      HouseComponent house = this.heart.getHouseFromId(structure.getStructureId());
+      if (house != null && house.getCoreBlockPosition() != null) {
+        return house.getCoreBlockPosition().clone();
+      }
+    } else {
+      WorkplaceComponent workplace = this.heart.getWorkplaceFromId(structure.getStructureId());
+      if (workplace != null && workplace.getBenchPos() != null) {
+        return workplace.getBenchPos().clone();
+      }
+    }
+
+    return structure.getPrefabAnchor() == null ? null : structure.getPrefabAnchor().clone();
   }
 
   private static final class RoadsideConstructionPlacement {

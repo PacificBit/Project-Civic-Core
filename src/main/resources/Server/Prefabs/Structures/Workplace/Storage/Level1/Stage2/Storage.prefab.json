@@ -1550,16 +1550,14 @@
       "x": -2,
       "y": 1,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Inverted_Corner_Left",
-      "rotation": 3
+      "name": "Cloth_Roof_Orange_Steep"
     },
     {
       "x": -2,
       "y": 2,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Inverted_Corner_Left",
-      "filler": 1024,
-      "rotation": 3
+      "name": "Cloth_Roof_Orange_Steep",
+      "filler": 1024
     },
     {
       "x": -2,
@@ -1589,16 +1587,13 @@
       "x": -2,
       "y": 1,
       "z": 4,
-      "name": "Cloth_Roof_Leather_Steep",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -2,
       "y": 2,
       "z": 4,
-      "name": "Cloth_Roof_Leather_Steep",
-      "filler": 1024,
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -1935,7 +1930,7 @@
       "x": -1,
       "y": 3,
       "z": 2,
-      "name": "*Cloth_Roof_Leather_State_Definitions_Inverted_Corner_Right"
+      "name": "Cloth_Roof_Leather"
     },
     {
       "x": -1,
@@ -1959,20 +1954,20 @@
       "x": -1,
       "y": 1,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Leather_Steep"
     },
     {
       "x": -1,
       "y": 2,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Leather_Steep",
+      "filler": 1024
     },
     {
       "x": -1,
       "y": 3,
       "z": 3,
-      "name": "Cloth_Roof_Orange",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -2009,8 +2004,7 @@
       "x": -1,
       "y": 3,
       "z": 4,
-      "name": "Cloth_Roof_Leather",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -2339,13 +2333,13 @@
       "x": 0,
       "y": 3,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Orange"
     },
     {
       "x": 0,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Leather_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -2363,13 +2357,14 @@
       "x": 0,
       "y": 1,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Orange_Steep"
     },
     {
       "x": 0,
       "y": 2,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Orange_Steep",
+      "filler": 1024
     },
     {
       "x": 0,
@@ -2381,7 +2376,7 @@
       "x": 0,
       "y": 4,
       "z": 3,
-      "name": "Cloth_Roof_Orange_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -2418,7 +2413,7 @@
       "x": 0,
       "y": 4,
       "z": 4,
-      "name": "Cloth_Roof_Leather_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -2731,7 +2726,7 @@
       "x": 1,
       "y": 3,
       "z": 2,
-      "name": "*Cloth_Roof_Leather_State_Definitions_Inverted_Corner_Left"
+      "name": "Cloth_Roof_Leather"
     },
     {
       "x": 1,
@@ -2755,20 +2750,20 @@
       "x": 1,
       "y": 1,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Leather_Steep"
     },
     {
       "x": 1,
       "y": 2,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Leather_Steep",
+      "filler": 1024
     },
     {
       "x": 1,
       "y": 3,
       "z": 3,
-      "name": "Cloth_Roof_Orange",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -2804,8 +2799,7 @@
       "x": 1,
       "y": 3,
       "z": 4,
-      "name": "Cloth_Roof_Leather",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -3163,13 +3157,13 @@
       "x": 2,
       "y": 1,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Inverted_Corner_Left"
+      "name": "Cloth_Roof_Orange_Steep"
     },
     {
       "x": 2,
       "y": 2,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Inverted_Corner_Left",
+      "name": "Cloth_Roof_Orange_Steep",
       "filler": 1024
     },
     {
@@ -3201,16 +3195,13 @@
       "x": 2,
       "y": 1,
       "z": 4,
-      "name": "Cloth_Roof_Leather_Steep",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 2,
       "y": 2,
       "z": 4,
-      "name": "Cloth_Roof_Leather_Steep",
-      "filler": 1024,
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 2,

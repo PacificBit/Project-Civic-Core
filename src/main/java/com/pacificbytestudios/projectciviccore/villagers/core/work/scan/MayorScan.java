@@ -18,7 +18,6 @@ public class MayorScan implements IWorkAreaScanner {
       Ref<EntityStore> villagerRef,
       UUID uuid,
       VillagerComponent villager) {
-
     VillagerWorkerComponent worker = villager.getWorkerData();
     if (worker == null) {
       return null;

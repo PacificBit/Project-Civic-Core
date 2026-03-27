@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -23,6 +24,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestTracker;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
@@ -63,8 +65,13 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
     }
 
     if (mayorComponent.getCurrentProject() == null) {
+      VillageProjectPlan executingPlan = mayorComponent.getExecutingVillagePlan();
+      if (executingPlan == null) {
+        return false;
+      }
+
       mayorComponent.setCurrentProject(
-          mayorComponent.getExecutingVillagePlan().pollNextProject());
+          executingPlan.pollNextProject());
     }
 
     this.world = store.getExternalData().getWorld();
@@ -86,13 +93,13 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
         handleSpawnVillagerProject(village, townHall, mayorComponent, project);
         break;
       case BUILD_HOUSE:
-        handleBuildHouseProject(village, townHall, mayorComponent, project);
+        handleBuilderProject(village, townHall, mayorComponent, project);
         break;
       case BUILD_WORKPLACE:
-        handleBuildWorkplaceProject(village, townHall, mayorComponent, project);
+        handleBuilderProject(village, townHall, mayorComponent, project);
         break;
       case UPGRADE_BUILDING:
-        handleUpgradeBuildingProject(village, townHall, mayorComponent, project);
+        handleBuilderProject(village, townHall, mayorComponent, project);
         break;
       case BUILD_DEFENCE:
         handleBuildDefenceProject(village, townHall, mayorComponent, project);
@@ -115,80 +122,32 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
       TownHallComponent townHall,
       MayorComponent mayorComponent,
       VillageProject project) {
-    WorkplaceComponent townHallWorkplace = village.getTownHall();
-    SimpleItemContainer container = getTownHallContainer(townHallWorkplace);
-    List<InventoryItemCriteria> requiredMaterials = buildItemCriteriaFromMaterial(project);
-    List<InventoryItemCriteria> missingMaterials = InventoryTransferValidators.getMissingCriteria(
-        container,
-        requiredMaterials);
-
-    if (!missingMaterials.isEmpty()) {
-      project.setObjectiveStatus(VillageObjectiveStatus.RESOURCE_GATHERING);
-      queueProjectMaterialRequestIfNeeded(village, townHallWorkplace, missingMaterials);
+    if (!processProjectStageWithResources(village, project)) {
+      syncProjectState(townHall, project);
       mayorComponent.setCurrentProject(null);
       return;
     }
 
-    if (!InventoryTransferValidators.removeRequestedItems(container, requiredMaterials)) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[ExecuteNextProjectStageAction] Could not consume requested materials for project "
-              + project.getProjectId());
-      project.setObjectiveStatus(VillageObjectiveStatus.RESOURCE_GATHERING);
-      mayorComponent.setCurrentProject(null);
-      return;
-    }
+    project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
+    syncProjectState(townHall, project);
 
-    project.setObjectiveStatus(VillageObjectiveStatus.EXECUTING);
-    project.setStage((short) (project.getStage() + 1));
+    SpawnVillagerTask spawnTask = new SpawnVillagerTask(
+        village.getNextRequiredRole().getRole(),
+        3);
+    TryHouseAssignmentTask homeAssignmentTask = new TryHouseAssignmentTask(
+        village.findHouseWithVacancy().getUuid());
+
+    VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
+    queueComponent.registerTask(spawnTask);
+    queueComponent.registerTask(homeAssignmentTask);
+    townHall.removeProject(project);
     mayorComponent.setCurrentProject(null);
 
-    if (project.getStage() >= project.getTotalStages()) {
-      project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
-
-      SpawnVillagerTask spawnTask = new SpawnVillagerTask(
-          village.getNextRequiredRole().getRole(),
-          3);
-      TryHouseAssignmentTask homeAssignmentTask = new TryHouseAssignmentTask(
-          village.findHouseWithVacancy().getUuid());
-
-      VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
-      queueComponent.registerTask(spawnTask);
-      queueComponent.registerTask(homeAssignmentTask);
-      townHall.removeProject(project);
-
-      this.world.execute(() -> {
-        Utils.safeVillageTaskEnqueue(
-            village.getTownHall().getVillageHeartRef(),
-            queueComponent);
-      });
-    }
-  }
-
-  private void handleBuildHouseProject(
-      VillageHeartComponent village,
-      TownHallComponent townHall,
-      MayorComponent mayorComponent,
-      VillageProject project) {
-    ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleBuildHouseProject'");
-    mayorComponent.setCurrentProject(null);
-  }
-
-  private void handleBuildWorkplaceProject(
-      VillageHeartComponent village,
-      TownHallComponent townHall,
-      MayorComponent mayorComponent,
-      VillageProject project) {
-    ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleBuildWorkplaceProject'");
-    mayorComponent.setCurrentProject(null);
-  }
-
-  private void handleUpgradeBuildingProject(
-      VillageHeartComponent village,
-      TownHallComponent townHall,
-      MayorComponent mayorComponent,
-      VillageProject project) {
-    ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleUpgradeBuildingProject'");
-    mayorComponent.setCurrentProject(null);
+    this.world.execute(() -> {
+      Utils.safeVillageTaskEnqueue(
+          village.getTownHall().getVillageHeartRef(),
+          queueComponent);
+    });
   }
 
   private void handleBuildDefenceProject(
@@ -216,6 +175,131 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
       VillageProject project) {
     ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleDemolishProject'");
     mayorComponent.setCurrentProject(null);
+  }
+
+  private void handleBuilderProject(
+      VillageHeartComponent village,
+      TownHallComponent townHall,
+      MayorComponent mayorComponent,
+      VillageProject project) {
+    if (project.getStage() == 0) {
+      processProjectStageWithoutResources(project);
+    } else {
+      if (!processProjectStageWithResources(village, project)) {
+        syncProjectState(townHall, project);
+        mayorComponent.setCurrentProject(null);
+        return;
+      }
+    }
+
+    if (project.getStructureId() == null) {
+      project.setStructureId(UUID.randomUUID());
+    }
+
+    if (project.getStage() > project.getTotalStages()) {
+      project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
+    }
+
+    syncProjectState(townHall, project);
+    if (project.getStage() > project.getTotalStages()) {
+      townHall.removeProject(project);
+    }
+
+    mayorComponent.setCurrentProject(null);
+
+    this.world.execute(() -> {
+      queueProjectForVillageBuilder(village, project);
+    });
+  }
+
+  private void processProjectStageWithoutResources(VillageProject project) {
+    project.setObjectiveStatus(VillageObjectiveStatus.EXECUTING);
+    project.setStage((short) (project.getStage() + 1));
+  }
+
+  private void queueProjectForVillageBuilder(
+      VillageHeartComponent village,
+      VillageProject project) {
+    Ref<ChunkStore> villageHeartRef = village.getTownHall().getVillageHeartRef();
+    if (villageHeartRef == null || !villageHeartRef.isValid()) {
+      ProjectCivicCore.LOGGER.atWarning()
+          .log("[ExecuteNextProjectStageAction] Could not queue builder project without a valid village ref");
+      return;
+    }
+
+    Store<ChunkStore> chunkStore = villageHeartRef.getStore();
+    VillageBuilderComponent builder = chunkStore.getComponent(
+        villageHeartRef,
+        VillageBuilderComponent.getComponentType());
+
+    boolean createdBuilder = false;
+    if (builder == null) {
+      builder = new VillageBuilderComponent();
+      builder.setProjectPlan(new VillageProjectPlan());
+      createdBuilder = true;
+    } else if (builder.getProjectPlan() == null) {
+      builder.setProjectPlan(new VillageProjectPlan());
+    }
+
+    builder.addProject(project);
+
+    if (createdBuilder) {
+      chunkStore.putComponent(
+          villageHeartRef,
+          VillageBuilderComponent.getComponentType(),
+          builder);
+    }
+  }
+
+  private boolean processProjectStageWithResources(
+      VillageHeartComponent village,
+      VillageProject project) {
+    WorkplaceComponent townHallWorkplace = village.getTownHall();
+    SimpleItemContainer container = getTownHallContainer(townHallWorkplace);
+    List<InventoryItemCriteria> requiredMaterials = buildItemCriteriaFromMaterial(project);
+    List<InventoryItemCriteria> missingMaterials = InventoryTransferValidators.getMissingCriteria(
+        container,
+        requiredMaterials);
+
+    if (!missingMaterials.isEmpty()) {
+      project.setObjectiveStatus(VillageObjectiveStatus.RESOURCE_GATHERING);
+      queueProjectMaterialRequestIfNeeded(village, townHallWorkplace, missingMaterials);
+      return false;
+    }
+
+    if (!InventoryTransferValidators.removeRequestedItems(container, requiredMaterials)) {
+      ProjectCivicCore.LOGGER.atWarning()
+          .log("[ExecuteNextProjectStageAction] Could not consume requested materials for project "
+              + project.getProjectId());
+      project.setObjectiveStatus(VillageObjectiveStatus.RESOURCE_GATHERING);
+      return false;
+    }
+
+    project.setObjectiveStatus(VillageObjectiveStatus.EXECUTING);
+    project.setStage((short) (project.getStage() + 1));
+    return true;
+  }
+
+  private void syncProjectState(
+      TownHallComponent townHall,
+      VillageProject project) {
+    if (townHall == null || project == null) {
+      return;
+    }
+
+    boolean synced = townHall.updateProjectPlan(project);
+    if (synced) {
+      ProjectCivicCore.LOGGER.atInfo()
+          .log("[ExecuteNextProjectStageAction] Synced project " + project.getProjectId()
+              + " status=" + project.getObjectiveStatus()
+              + " stage=" + project.getStage() + "/" + project.getTotalStages()
+              + " structureId=" + project.getStructureId());
+      return;
+    }
+
+    ProjectCivicCore.LOGGER.atWarning()
+        .log("[ExecuteNextProjectStageAction] Could not sync project " + project.getProjectId()
+            + " back to the town hall plan");
   }
 
   private SimpleItemContainer getTownHallContainer(WorkplaceComponent townHallWorkplace) {

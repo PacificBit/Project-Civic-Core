@@ -108,6 +108,7 @@ public class RegisterWorkplaceTask extends AVillageTask {
         orientation == null ? Rotation.None : orientation);
     topologyStructure.setStructureId(workplace.getUuid());
     topologyStructure.setStructureType(workplaceType);
+    topologyStructure.setPrefabAnchor(workplace.getPrefabAnchor());
     return topologyStructure;
   }
 }

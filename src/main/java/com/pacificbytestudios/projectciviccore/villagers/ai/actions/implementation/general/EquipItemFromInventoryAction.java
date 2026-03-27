@@ -45,6 +45,10 @@ public class EquipItemFromInventoryAction extends ActionBase {
       return this.unequipItem(itemInHand, npcEntity, hotbar, activeHotbarSlot);
     }
 
+    if (itemInHand != null && itemInHand.getItemId().startsWith(this.itemIdToEquip)) {
+      return false;
+    }
+
     return swapToItemFromInventory(inventory, activeHotbarSlot, hotbar, itemInHand);
   }
 
