@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker;
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter;
 
 import com.google.gson.JsonElement;
 import com.hypixel.hytale.server.npc.asset.builder.Builder;
@@ -14,16 +14,16 @@ import com.hypixel.hytale.server.npc.asset.builder.validators.StringNotEmptyVali
 import com.hypixel.hytale.server.npc.asset.builder.validators.StringValidator;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.BreakBlockAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.woodcutter.BreakTreeBlockAction;
 
-public class BuilderBreakBlockAction extends BuilderActionBase {
+public class BuilderBreakTreeBlockAction extends BuilderActionBase {
   private final StringHolder snapshotGroup = new StringHolder();
   private final DoubleHolder requiredStoppingRange = new DoubleHolder();
   private final StringArrayHolder terrainRepairBlockIds = new StringArrayHolder();
 
   @Override
   public Action build(BuilderSupport support) {
-    return new BreakBlockAction(this, support);
+    return new BreakTreeBlockAction(this, support);
   }
 
   @Override

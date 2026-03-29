@@ -225,7 +225,10 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   public void unregisterWorker(UUID uuid) {
     this.workers.remove(uuid);
     this.workersDesignatedArea.remove(uuid);
-    this.recalculateWorkerDesignatedArea();
+
+    if (this.workers.size() > 0) {
+      this.recalculateWorkerDesignatedArea();
+    }
   }
 
   public UUID getBossId() {

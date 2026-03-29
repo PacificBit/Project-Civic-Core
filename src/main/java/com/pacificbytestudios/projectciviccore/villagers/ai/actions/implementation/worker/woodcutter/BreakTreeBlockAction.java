@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker;
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.woodcutter;
 
 import java.util.ArrayDeque;
 
@@ -20,23 +20,24 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderBreakBlockAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderBreakTreeBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.WoodCutterTerrainRepair;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
 
-public class BreakBlockAction extends VillagerActionBase {
+public class BreakTreeBlockAction extends VillagerActionBase {
   private final String snapshotGroup;
   private final double requiredStoppingRangeSquared;
   private final WoodCutterTerrainRepair terrainRepairer;
 
   private boolean alreadyClearedTerrain = false;
 
-  public BreakBlockAction(
-      BuilderBreakBlockAction builderActionBase,
+  public BreakTreeBlockAction(
+      BuilderBreakTreeBlockAction builderActionBase,
       BuilderSupport support) {
     super(builderActionBase);
     this.snapshotGroup = builderActionBase.getSnapshotGroup(support);
@@ -143,6 +144,7 @@ public class BreakBlockAction extends VillagerActionBase {
         false, 1.0f, 0, chunkRef, store, chunkStoreObj.getStore());
 
     if (didBreak) {
+      this.consumeToolDurability(npc);
       targets.pollFirst();
       if (targets.isEmpty()) {
         snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
@@ -151,5 +153,26 @@ public class BreakBlockAction extends VillagerActionBase {
     }
 
     return didBreak;
+  }
+
+  private void consumeToolDurability(NPCEntity npc) {
+    if (npc == null) {
+      return;
+    }
+
+    byte activeHotbarSlot = npc.getInventory().getActiveHotbarSlot();
+    ItemStack holdingItem = npc.getInventory().getActiveHotbarItem();
+    if (holdingItem == null) {
+      return;
+    }
+
+    npc.getInventory().getHotbar().setItemStackForSlot(
+        activeHotbarSlot,
+        holdingItem.withDurability(holdingItem.getDurability() - 1));
+
+    ItemStack updatedItem = npc.getInventory().getActiveHotbarItem();
+    if (updatedItem != null && updatedItem.isBroken()) {
+      InventoryHelper.removeItemInHand(npc.getInventory(), 1);
+    }
   }
 }

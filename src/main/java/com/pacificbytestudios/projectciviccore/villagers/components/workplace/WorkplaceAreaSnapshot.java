@@ -149,10 +149,10 @@ public class WorkplaceAreaSnapshot {
   @Override
   public String toString() {
     return "WorkplaceAreaSnapshot{"
-        + "blockTypePosition=" + this.blockTypePosition
-        + ", capturedAt=" + this.capturedAt
-        + ", completed=" + this.completed
-        + ", lastVisited=" + this.lastVisited
+        + "\nblockTypePosition=" + this.blockTypePosition
+        + ",\n capturedAt=" + this.capturedAt
+        + ",\n completed=" + this.completed
+        + ",\n lastVisited=" + this.lastVisited
         + '}';
   }
 }

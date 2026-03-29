@@ -1,6 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
+import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -19,6 +21,12 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.Mineshaft;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftLevel;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
@@ -417,12 +425,19 @@ public class MineSpawner {
       snapshotToUse = newSnapshot;
     }
 
+    int blockRotation = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.Mine.WORKPLACE_BLOCK_YAW_OFFSET,
+            rotation),
+        Rotation.None,
+        Rotation.None).index();
+
     Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(
         chunk,
         workplaceBlockPosition,
         StructureConfig.Mine.WORKPLACE_BLOCK,
-        StructurePlacementUtils.toBlockRotationIndex(rotation));
+        blockRotation);
     Ref<ChunkStore> workplaceRef = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
@@ -438,13 +453,27 @@ public class MineSpawner {
         workplaceRef,
         WorkplaceComponent.getComponentType());
 
-    if (workplaceComponent == null) {
+    MineComponent mineComponent = chunkStore.getComponent(workplaceRef, MineComponent.getComponentType());
+
+    if (workplaceComponent == null || mineComponent == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - spawn] Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
+    Mineshaft mineshaft = new Mineshaft(
+        StructureConfig.Mine.getMineshaftGalleriesOffset(),
+        prefabAnchor.clone(),
+        rotation);
+    mineshaft.createNewMineshaftLevel();
+    mineComponent.setMineshaft(mineshaft);
+    Stream.of(mineshaft.getMineshaftLevels())
+        .flatMap(level -> level.getGalleries().keySet().stream())
+        .forEach(mineshaft::markGalleryAsCompleted);
+
     workplaceComponent.setUuid(structureId);
     workplaceComponent.setLevel((short) targetLevel);
+    workplaceComponent.setBenchPos(workplaceBlockPosition);
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MINER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
     chunkStore.putComponent(
@@ -453,6 +482,45 @@ public class MineSpawner {
         snapshotToUse);
 
     workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+
+    int containerRotation = RotationTuple.of(
+        StructurePlacementUtils.addYaw(
+            StructureConfig.Mine.CONTAINER_BLOCK_YAW_OFFSET,
+            rotation),
+        Rotation.None,
+        Rotation.None).index();
+    Vector3i containerPosition = getContainerPosition(prefabAnchor, rotation);
+    WorldChunk containerChunk = Utils.setBlockChunkAware(
+        workplaceChunk,
+        containerPosition,
+        StructureConfig.Mine.SINGLE_STORAGE_BLOCK,
+        containerRotation);
+    Ref<ChunkStore> containerRef = containerChunk.getBlockComponentEntity(
+        containerPosition.x,
+        containerPosition.y,
+        containerPosition.z);
+
+    if (containerRef == null || !containerRef.isValid()) {
+      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - spawn] Container ref is invalid");
+      return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
+    }
+
+    WorkplaceContainerEntryComponent container = chunkStore.getComponent(
+        containerRef,
+        WorkplaceContainerEntryComponent.getComponentType());
+
+    if (container == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - spawn] Container component is missing");
+      return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
+    }
+
+    container.setPosition(containerPosition);
+    container.setAccessPosition(getContainerAccessPosition(containerPosition, rotation));
+    container.setUuid(UUID.randomUUID());
+
+    WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
+    storage.registerContainer(container.getUuid(), container);
+    workplaceComponent.setStorage(storage);
 
     removeConstructionSignIfPresent(chunk, prefabAnchor, rotation);
     workplaceChunk.markNeedsSaving();
@@ -485,14 +553,19 @@ public class MineSpawner {
     WorkplaceComponent component = store.getComponent(
         workplaceRef,
         WorkplaceComponent.getComponentType());
+    MineComponent mineComponent = store.getComponent(
+        workplaceRef,
+        MineComponent.getComponentType());
     TrackedPrefabPlacementComponent trackedPlacement = store.getComponent(
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
 
-    if (component == null) {
+    if (component == null || mineComponent == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - despawn] Missing workplace component");
       return false;
     }
+
+    despawnMineshaft(workplaceChunk.getWorld(), mineComponent.getMineshaft());
 
     Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawn = false;
@@ -520,9 +593,68 @@ public class MineSpawner {
       return false;
     }
 
-    Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
+    Vector3i prefabAnchor = component.getPrefabAnchor();
+    if (prefabAnchor == null && trackedPlacement != null) {
+      prefabAnchor = trackedPlacement.getOrigin();
+    }
+    if (prefabAnchor == null) {
+      prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
+    }
 
+    Vector3i containerPosition = getContainerPosition(prefabAnchor, prefabRotation);
+    Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
+    Utils.breakBlockChunkAware(workplaceChunk, containerPosition);
+
+    Utils.markNeedSaving(workplaceChunk.getWorld(), prefabAnchor);
     return true;
+  }
+
+  private static void despawnMineshaft(World world, Mineshaft mineshaft) {
+    if (mineshaft == null) {
+      return;
+    }
+
+    for (MineshaftLevel level : mineshaft.getMineshaftLevels()) {
+      despawnGallery(world, level);
+      TrackedPrefabPlacementComponent prefab = level.getTrackedPrefab();
+
+      if (prefab == null) {
+        continue;
+      }
+
+      if (prefab.hasRestoreSnapshot()) {
+        PrefabManager.restoreTrackedPrefab(world, prefab);
+        continue;
+      }
+
+      String prefabPath = prefab.getPrefabPath() != null
+          ? prefab.getPrefabPath()
+          : StructureConfig.Mine.MineshaftLevelConf.PREFAB_JSON;
+      Vector3i prefabAnchor = level.getAnchorPoint() != null
+          ? level.getAnchorPoint()
+          : prefab.getOrigin();
+
+      PrefabManager.removePrefab(
+          world,
+          prefabPath,
+          prefabAnchor,
+          mineshaft.getRotation(),
+          true);
+    }
+  }
+
+  private static void despawnGallery(World world, MineshaftLevel mineshaftLevel) {
+    for (Entry<UUID, MineshaftGallery> gallery : mineshaftLevel.getGalleries().entrySet()) {
+      for (TrackedPrefabPlacementComponent prefab : gallery.getValue().getRestoreSnapshot()) {
+        if (prefab == null) {
+          continue;
+        }
+
+        if (prefab.hasRestoreSnapshot()) {
+          PrefabManager.restoreTrackedPrefab(world, prefab);
+        }
+      }
+    }
   }
 
   private static void removeConstructionSignIfPresent(
@@ -566,6 +698,27 @@ public class MineSpawner {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         StructureConfig.Mine.CONSTRUCTION_SIGN_OFFSET,
+        rotation);
+  }
+
+  private static Vector3i getContainerPosition(Vector3i prefabAnchor, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Mine.CONTAINER_OFFSET,
+        rotation);
+  }
+
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        workplaceBlockPosition,
+        StructureConfig.Mine.BENCH_ACCESS_OFFSET,
+        rotation);
+  }
+
+  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        containerPosition,
+        StructureConfig.Mine.CONTAINER_ACCESS_OFFSET,
         rotation);
   }
 

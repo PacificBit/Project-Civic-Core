@@ -7,7 +7,9 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
@@ -62,6 +64,13 @@ public abstract class VillagerActionBase extends ActionBase {
             workplaceRef,
             WorkplaceInteractablesMapComponent.getComponentType()),
         "workplace component");
+  }
+
+  protected UUID getVillagerId(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    UUIDComponent component = store.getComponent(ref, UUIDComponent.getComponentType());
+    return component != null ? require(component.getUuid(), "villager uuid") : null;
   }
 
   protected WorkplaceInteractablesMapComponent getVillageTavernInteractibleComponent(
@@ -132,8 +141,12 @@ public abstract class VillagerActionBase extends ActionBase {
     return require(villageHeart, "village heart component");
   }
 
+  protected World getWorld(Store<EntityStore> store) {
+    return store.getExternalData().getWorld();
+  }
+
   protected Store<ChunkStore> getChunkStore(Store<EntityStore> store) {
-    return store.getExternalData().getWorld().getChunkStore().getStore();
+    return getWorld(store).getChunkStore().getStore();
   }
 
   protected <T extends Component<ChunkStore>> T getComponent(

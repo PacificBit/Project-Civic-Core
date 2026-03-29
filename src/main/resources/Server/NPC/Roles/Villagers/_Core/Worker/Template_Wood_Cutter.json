@@ -486,7 +486,7 @@
               "$Comment": "Break Tree Trunk Block",
               "Actions": [
                 {
-                  "Type": "BreakBlockAction",
+                  "Type": "BreakTreeBlockAction",
                   "SnapshotGroup": "Cuttable_Block",
                   "RequiredStoppingRange": 1.8,
                   "TerrainRepairBlockIds": [

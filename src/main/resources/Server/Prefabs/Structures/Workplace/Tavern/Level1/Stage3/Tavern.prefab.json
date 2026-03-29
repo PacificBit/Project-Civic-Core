@@ -2017,7 +2017,7 @@
       "x": -1,
       "y": 3,
       "z": -2,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -2054,7 +2054,7 @@
       "x": -1,
       "y": 3,
       "z": -1,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -2394,7 +2394,7 @@
       "x": 0,
       "y": 3,
       "z": -2,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -2431,7 +2431,7 @@
       "x": 0,
       "y": 3,
       "z": -1,
-      "name": "Barrier"
+      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
     },
     {
       "x": 0,
@@ -3503,7 +3503,7 @@
       "x": 3,
       "y": 3,
       "z": -2,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -3541,7 +3541,7 @@
       "x": 3,
       "y": 3,
       "z": -1,
-      "name": "Barrier"
+      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
     },
     {
       "x": 3,
@@ -3616,7 +3616,7 @@
       "x": 3,
       "y": 3,
       "z": 1,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -3654,7 +3654,7 @@
       "x": 3,
       "y": 3,
       "z": 2,
-      "name": "Barrier"
+      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
     },
     {
       "x": 3,
@@ -3877,7 +3877,7 @@
       "x": 4,
       "y": 3,
       "z": -2,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3915,7 +3915,7 @@
       "x": 4,
       "y": 3,
       "z": -1,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3988,7 +3988,7 @@
       "x": 4,
       "y": 3,
       "z": 1,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -4026,7 +4026,7 @@
       "x": 4,
       "y": 3,
       "z": 2,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": 4,

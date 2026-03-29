@@ -95,8 +95,10 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     }
 
     BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
-
-    assert blockContext != null;
+    if (blockContext == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] Missing block context");
+      return;
+    }
 
     WorldChunk chunk = blockContext.chunk();
     World world = chunk.getWorld();
@@ -108,21 +110,27 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
       return;
     }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
+    if (heartRef == null || !heartRef.isValid()) {
+      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] Village heart ref is invalid");
+      return;
+    }
 
     WorkplaceComponent workplaceComponent = store.getComponent(ref,
         WorkplaceComponent.getComponentType());
+    if (workplaceComponent == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] Workplace component not found");
+      return;
+    }
 
-    VillageTaskQueueComponent existingTaskComponent = store.getComponent(heartRef,
-        VillageTaskQueueComponent.getComponentType());
-
-    VillageTaskQueueComponent taskComponent = existingTaskComponent != null ? existingTaskComponent
-        : new VillageTaskQueueComponent();
-
+    VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
     taskComponent.registerTask(new UnregisterWorkplaceTask(workplaceComponent.getUuid()));
 
     world.execute(() -> {
-      store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(),
-          taskComponent);
+      if (heartRef == null || !heartRef.isValid()) {
+        return;
+      }
+
+      Utils.safeVillageTaskEnqueue(heartRef, taskComponent);
     });
   }
 

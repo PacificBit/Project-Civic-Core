@@ -17,6 +17,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.registry.registry.CropRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.registry.registry.MinerDropRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.SaplingRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.ToolRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingCostRegistry;
@@ -38,6 +39,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.sawmill.SawmillComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
@@ -59,8 +61,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.gen
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderSetMissingResources;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderUnmountMountableAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderAskStorageForResourcesAction;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderBreakBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderCraftToolAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderRepairTerrainAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderScanWorkAreaAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderWorkplaceStorageTargetsSnapshotAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.farmer.BuilderCraftSeedsAction;
@@ -74,7 +76,13 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderPlaceFoodOnPlateAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.mayor.BuilderExecuteNextProjectStageAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.mayor.BuilderMakeVillageAssessment;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderBreakBlockInSnapshotAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderBuildNewMineshaftLevelAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderPlaceMineshaftGalleryPrefabAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderReserveMiningGalleryAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderUnregisterFromMineshaftGallery;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderBreakTreeBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderCraftSaplingsAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderPlantTreeAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
@@ -96,6 +104,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReserveNextPlateToFillSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.mayor.BuilderHasNotDoneVillageAssessment;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.mayor.BuilderHasPlanToExecuteToday;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.miner.BuilderHasReservedGallery;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.miner.BuilderScanBreakableAreaSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.woodcutter.BuilderCanCraftWoodcutterResourceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.woodcutter.BuilderScanTreeTrunkBottom;
 import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
@@ -105,6 +115,7 @@ import com.pacificbytestudios.projectciviccore.villagers.core.inventory.Inventor
 import com.pacificbytestudios.projectciviccore.villagers.interactions.VillagerOpenInventoryInteraction;
 import com.pacificbytestudios.projectciviccore.villagers.systems.EnsureVillagerComponents;
 import com.pacificbytestudios.projectciviccore.villagers.systems.SitOnChairSystem;
+import com.pacificbytestudios.projectciviccore.villagers.systems.VillagerDeathCleanupSystem;
 import com.pacificbytestudios.projectciviccore.villagers.systems.VillagerInventoryPersistenceSystem;
 
 public final class ProjectCivicCore extends JavaPlugin {
@@ -131,6 +142,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, FarmComponent> farmComponentType;
   private ComponentType<ChunkStore, TownHallComponent> townHallComponentType;
   private ComponentType<ChunkStore, SawmillComponent> sawmillComponentType;
+  private ComponentType<ChunkStore, MineComponent> mineComponentType;
 
   private ComponentType<ChunkStore, HouseComponent> houseComponentType;
   private ComponentType<ChunkStore, HouseSpawnComponent> houseSpawnComponentType;
@@ -236,6 +248,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         "SawmillComponent",
         SawmillComponent.CODEC);
 
+    this.mineComponentType = chunkRegistry.registerComponent(
+        MineComponent.class,
+        "MineComponent",
+        MineComponent.CODEC);
+
     this.workplaceInteractablesMapComponentType = chunkRegistry.registerComponent(
         WorkplaceInteractablesMapComponent.class,
         "WorkplaceInteractables",
@@ -289,6 +306,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     entityRegistry.registerSystem(new EnsureVillagerComponents());
     entityRegistry.registerSystem(new VillagerInventoryPersistenceSystem());
     entityRegistry.registerSystem(new SitOnChairSystem());
+    entityRegistry.registerSystem(new VillagerDeathCleanupSystem());
 
     // ===========================
     // Sensors
@@ -377,6 +395,14 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "CanCraftWoodcutterResource",
         BuilderCanCraftWoodcutterResourceSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "HasReservedGallery",
+        BuilderHasReservedGallery::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ScanBreakableAreaSensor",
+        BuilderScanBreakableAreaSensor::new);
 
     // ===========================
     // Actions
@@ -491,8 +517,32 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuilderPlantTreeAction::new);
 
     npcPlugin.registerCoreComponentType(
-        "BreakBlockAction",
-        BuilderBreakBlockAction::new);
+        "BreakTreeBlockAction",
+        BuilderBreakTreeBlockAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "ReserveMiningGalleryAction",
+        BuilderReserveMiningGalleryAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "BuildNewMineshaftLevel",
+        BuilderBuildNewMineshaftLevelAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "UnregisterFromMineshaftGallery",
+        BuilderUnregisterFromMineshaftGallery::new);
+
+    npcPlugin.registerCoreComponentType(
+        "RepairTerrainAction",
+        BuilderRepairTerrainAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "PlaceMineshaftGalleryPrefab",
+        BuilderPlaceMineshaftGalleryPrefabAction::new);
+
+    npcPlugin.registerCoreComponentType(
+        "BreakBlockInSnapshot",
+        BuilderBreakBlockInSnapshotAction::new);
 
     // ===========================
     // Extra
@@ -521,6 +571,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     VillageBuildingCostRegistry.initialize();
     VillageBuildingUpgradeCostRegistry.initialize();
     VillageNewVillagerCostRegistry.initialize();
+    MinerDropRegistry.initizalize();
   }
 
   public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
@@ -581,6 +632,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, SawmillComponent> getSawmillComponentType() {
     return this.sawmillComponentType;
+  }
+
+  public ComponentType<ChunkStore, MineComponent> getMineComponentType() {
+    return this.mineComponentType;
   }
 
   public ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> getWorkplaceInteractablesMapComponentType() {

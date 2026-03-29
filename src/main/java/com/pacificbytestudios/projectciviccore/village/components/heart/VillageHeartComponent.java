@@ -300,6 +300,18 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.villagerIdToComponent.remove(uuid);
   }
 
+  public void removeVillagerLinks(UUID villagerId) {
+    if (villagerId == null) {
+      return;
+    }
+
+    this.removeVillagerWorkplaceLink(villagerId);
+    this.removeVillagerHousingLink(villagerId);
+    this.unemployedRegistry.remove(villagerId);
+    this.homelessRegistry.remove(villagerId);
+    this.unregisterVillager(villagerId);
+  }
+
   public Set<UUID> getUnemployedRegistry() {
     return Collections.unmodifiableSet(unemployedRegistry);
   }
@@ -481,6 +493,50 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.villagerToWorkplace.remove(villager);
     this.unemployedRegistry.add(villager);
     this.villagerIdToComponent.get(villager).setWorkerData(null);
+  }
+
+  private void removeVillagerWorkplaceLink(UUID villagerId) {
+    UUID workplaceId = this.villagerToWorkplace.remove(villagerId);
+    if (workplaceId == null) {
+      return;
+    }
+
+    WorkplaceComponent workplace = this.workplaceIdToWorkplace.get(workplaceId);
+    if (workplace == null) {
+      return;
+    }
+
+    workplace.unregisterWorker(villagerId);
+    if (villagerId.equals(workplace.getBossId())) {
+      workplace.registerAsBoss(null);
+    }
+  }
+
+  private void removeVillagerHousingLink(UUID villagerId) {
+    UUID houseId = this.villagerToHouse.remove(villagerId);
+    if (houseId == null) {
+      return;
+    }
+
+    HouseComponent house = this.houseIdToHouse.get(houseId);
+    if (house == null || house.getAppartmentRegistry() == null) {
+      return;
+    }
+
+    house.getAppartmentRegistry().getAppartments().values().forEach(appartment -> {
+      if (appartment == null) {
+        return;
+      }
+
+      appartment.getBeds().values().forEach(bed -> {
+        if (bed == null || !villagerId.equals(bed.getOwner())) {
+          return;
+        }
+
+        bed.setOwner(null);
+        bed.setTaken(false);
+      });
+    });
   }
 
   public List<WorkplaceComponent> getWorkplaceFrom(StructureType workplaceType) {

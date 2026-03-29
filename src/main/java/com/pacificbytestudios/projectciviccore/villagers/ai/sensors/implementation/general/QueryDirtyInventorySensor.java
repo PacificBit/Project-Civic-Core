@@ -21,12 +21,15 @@ import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSens
 public class QueryDirtyInventorySensor extends VillagerSensorBase {
 
   private final String[] excludeItemTypes;
+  private final double minimumFullnessPercent;
 
   public QueryDirtyInventorySensor(
       BuilderQueryDirtyInventorySensor builderSensorBase,
       BuilderSupport support) {
     super(builderSensorBase);
     this.excludeItemTypes = builderSensorBase.getExcludeItemTypes(support);
+    this.minimumFullnessPercent = clampMinimumFullnessPercent(
+        builderSensorBase.getMinimumFullnessPercent(support));
   }
 
   @Override
@@ -45,6 +48,10 @@ public class QueryDirtyInventorySensor extends VillagerSensorBase {
       return false;
     }
 
+    if (!meetsFullnessThreshold(container)) {
+      return false;
+    }
+
     if (this.excludeItemTypes == null || this.excludeItemTypes.length == 0) {
       int freeSlots = InventoryHelper.countFreeSlots(container);
       return freeSlots != container.getCapacity();
@@ -52,6 +59,29 @@ public class QueryDirtyInventorySensor extends VillagerSensorBase {
 
     ToIntFunction<ItemStack> validator = buildDirtyInventoryValidator();
     return hasDirtyInventory(container, validator);
+  }
+
+  private double clampMinimumFullnessPercent(double configuredValue) {
+    if (configuredValue < 0) {
+      return -1;
+    }
+
+    return Math.min(configuredValue, 100.0);
+  }
+
+  private boolean meetsFullnessThreshold(ItemContainer container) {
+    if (this.minimumFullnessPercent < 0) {
+      return true;
+    }
+
+    int capacity = container.getCapacity();
+    if (capacity <= 0) {
+      return false;
+    }
+
+    int usedSlots = capacity - InventoryHelper.countFreeSlots(container);
+    double fullnessPercent = (usedSlots * 100.0) / capacity;
+    return fullnessPercent >= this.minimumFullnessPercent;
   }
 
   private ToIntFunction<ItemStack> buildDirtyInventoryValidator() {

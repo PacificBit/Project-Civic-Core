@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.general;
 
+import java.util.UUID;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -37,7 +39,8 @@ public class IsBossWorker extends VillagerSensorBase {
     }
 
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
-    return workerData.getWorkplace().getBossId().equals(uuidComponent.getUuid());
+    UUID bossId = workerData.getWorkplace().getBossId();
+    return bossId != null && bossId.equals(uuidComponent.getUuid());
   }
 
 }

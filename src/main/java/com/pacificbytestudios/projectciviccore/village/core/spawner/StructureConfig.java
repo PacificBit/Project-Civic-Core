@@ -101,6 +101,7 @@ public final class StructureConfig {
     public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, -1);
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+
     public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(3, 1, 6);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
 
@@ -383,13 +384,28 @@ public final class StructureConfig {
   }
 
   public static final class Mine {
-    public static final String PREFAB_JSON = "Structures/Temporary/Mine.prefab.json";
+    public static final String PREFAB_JSON = "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Mine_Core");
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(0, 1, 0);
+    public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
+
+    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-5, 1, 6);
+    public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
+    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(1, 0, 0);
+    public static final Vector3i CONTAINER_OFFSET = new Vector3i(-5, 1, 5);
+
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 5);
+    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 8);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
+
+    public static final Rotation CONTAINER_BLOCK_YAW_OFFSET = Rotation.Ninety;
+    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(1, 0, 0);
+
+    private static final Map<Vector3i, Vector3i> MINESHAFT_GALLERIES_OFFSETS = Map.of(
+        Vector3i.NORTH, new Vector3i(0, 0, -8),
+        Vector3i.SOUTH, new Vector3i(0, 0, 4),
+        Vector3i.WEST, new Vector3i(-6, 0, -2),
+        Vector3i.EAST, new Vector3i(6, 0, -2));
 
     private Mine() {
     }
@@ -397,10 +413,10 @@ public final class StructureConfig {
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
         createStagePrefabMap(
-            PREFAB_JSON,
-            PREFAB_JSON,
-            PREFAB_JSON,
-            PREFAB_JSON),
+            "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+            "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+            "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+            "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json"),
 
         2,
         createStagePrefabMap(
@@ -418,6 +434,49 @@ public final class StructureConfig {
 
     public static String getPrefab(int mineLevel, short stage) {
       return PREFAB_MAP.get(mineLevel).get(stage);
+    }
+
+    public static Map<Vector3i, Vector3i> getMineshaftGalleriesOffset() {
+      return MINESHAFT_GALLERIES_OFFSETS;
+    }
+
+    public static final class MineshaftLevelConf {
+      public static final String PREFAB_JSON = "Structures/Workplace/Mine/Mineshaft/MineshaftLevel/Mineshaft_Level.prefab.json";
+      public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+      public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+
+      public static Map<Vector3i, Vector3i> getMineshaftGalleriesWithPrefabOffset(
+          Vector3i prefabPos,
+          Rotation rotation) {
+        Vector3i northDirection = StructurePlacementUtils.rotateOffset(Vector3i.NORTH, rotation);
+        Vector3i westDirection = StructurePlacementUtils.rotateOffset(Vector3i.WEST, rotation);
+        Vector3i eastDirection = StructurePlacementUtils.rotateOffset(Vector3i.EAST, rotation);
+        Vector3i southDirection = StructurePlacementUtils.rotateOffset(Vector3i.SOUTH, rotation);
+
+        return Map.of(
+            northDirection,
+            StructurePlacementUtils.withOffset(prefabPos,
+                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.NORTH), rotation),
+
+            westDirection,
+            StructurePlacementUtils.withOffset(prefabPos,
+                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.WEST), rotation),
+
+            eastDirection,
+            StructurePlacementUtils.withOffset(prefabPos,
+                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.EAST), rotation),
+
+            southDirection,
+            StructurePlacementUtils.withOffset(prefabPos,
+                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.SOUTH), rotation));
+      }
+    }
+
+    public static final class MineshaftGalleryConf {
+      public static final String PREFAB_JSON = "Structures/Workplace/Mine/Mineshaft/MineshaftGallery/Mineshaft_Gallery_Section.prefab.json";
+      public static final String EMPTY_PREFAB_JSON = "Structures/Workplace/Mine/Mineshaft/MineshaftGallery/Mineshaft_Empty_Gallery_Section.prefab.json";
+      public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+      public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
     }
   }
 

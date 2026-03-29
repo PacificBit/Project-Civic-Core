@@ -4,11 +4,13 @@ import java.nio.file.Path;
 
 import org.bson.BsonDocument;
 
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.Axis;
 import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.console.ConsoleSender;
 import com.hypixel.hytale.server.core.prefab.PrefabLoadException;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
@@ -17,6 +19,8 @@ import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 
@@ -55,6 +59,50 @@ public class PrefabManager {
     BsonDocument restoreSnapshot = SelectionPrefabSerializer.serialize(before);
 
     return new TrackedPrefabPlacementComponent(prefabRelativePath, target, yaw, restoreSnapshot);
+  }
+
+  public static TrackedPrefabPlacementComponent captureTrackedPrefabSnapshot(
+      World world,
+      String footprintPrefabPath,
+      Vector3i target,
+      Rotation yaw) {
+    if (world == null || target == null) {
+      return null;
+    }
+
+    BlockSelection footprint = loadPrefabSelection(footprintPrefabPath);
+    if (footprint == null) {
+      return null;
+    }
+
+    BlockSelection transformedFootprint = footprint.cloneSelection();
+    if (yaw != null && yaw != Rotation.None) {
+      transformedFootprint = transformedFootprint.rotate(Axis.Y, yaw.getDegrees());
+    }
+
+    transformedFootprint.setPosition(target.x, target.y, target.z);
+
+    BlockSelection restoreSelection = new BlockSelection(transformedFootprint.getBlockCount(), 0);
+    restoreSelection.setAnchor(
+        transformedFootprint.getAnchorX(),
+        transformedFootprint.getAnchorY(),
+        transformedFootprint.getAnchorZ());
+    restoreSelection.setPosition(target.x, target.y, target.z);
+
+    BlockSelection captureMask = transformedFootprint;
+    captureMask.forEachBlock((localX, localY, localZ, block) -> {
+      Vector3i worldPosition = getWorldPosition(captureMask, localX, localY, localZ);
+      WorldChunk chunk = Utils.getWorldChunk(world, worldPosition);
+      restoreSelection.copyFromAtWorld(
+          worldPosition.x,
+          worldPosition.y,
+          worldPosition.z,
+          chunk,
+          getBlockPhysics(world, worldPosition));
+    });
+
+    BsonDocument restoreSnapshot = SelectionPrefabSerializer.serialize(restoreSelection);
+    return new TrackedPrefabPlacementComponent(footprintPrefabPath, target, yaw, restoreSnapshot);
   }
 
   public static Vector2i getPrefabWidthDepth(String prefabRelativePath) {
@@ -136,5 +184,28 @@ public class PrefabManager {
     }
 
     return PrefabBufferUtil.getCached(prefabPath);
+  }
+
+  private static Vector3i getWorldPosition(
+      BlockSelection selection,
+      int localX,
+      int localY,
+      int localZ) {
+    return new Vector3i(
+        localX + selection.getX() - selection.getAnchorX(),
+        localY + selection.getY() - selection.getAnchorY(),
+        localZ + selection.getZ() - selection.getAnchorZ());
+  }
+
+  private static BlockPhysics getBlockPhysics(World world, Vector3i position) {
+    Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(
+        position.x,
+        position.y,
+        position.z);
+    if (sectionRef == null || !sectionRef.isValid()) {
+      return null;
+    }
+
+    return sectionRef.getStore().getComponent(sectionRef, BlockPhysics.getComponentType());
   }
 }

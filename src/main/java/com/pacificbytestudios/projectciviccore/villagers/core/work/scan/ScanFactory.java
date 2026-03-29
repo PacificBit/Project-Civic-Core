@@ -13,7 +13,7 @@ public class ScanFactory {
     return switch (typeOfWorker) {
       case MAYOR -> new MayorScan();
       case FARMER -> new FarmerScan();
-      case MINER -> throw new IllegalArgumentException("Unsupported workplace type: " + typeOfWorker);
+      case MINER -> new MinerScan();
       case INN_KEEPER -> new InnKeeperScan();
       case WOOD_CUTTER -> new WoodCutterScan();
       case STORAGE_KEEPER -> new StorageKeeperScan();

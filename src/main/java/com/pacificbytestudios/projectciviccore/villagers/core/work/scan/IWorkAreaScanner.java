@@ -9,6 +9,8 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 
 public interface IWorkAreaScanner {
+  public static final String TERRAIN_BLOCK_TO_FILL = "Terrain_Block_To_Fill";
+  public static final String BREAKABLE_BLOCK = "Breakable_Block";
 
   public WorkplaceAreaSnapshot execute(
       Store<EntityStore> store,

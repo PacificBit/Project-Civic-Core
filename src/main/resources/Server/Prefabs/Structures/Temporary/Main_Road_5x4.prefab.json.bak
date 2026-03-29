@@ -9,7 +9,8 @@
       "x": -2,
       "y": 0,
       "z": 0,
-      "name": "Soil_Grass"
+      "name": "Soil_Quartzite_Gravel",
+      "support": 15
     },
     {
       "x": -2,
@@ -48,7 +49,8 @@
       "x": -1,
       "y": 0,
       "z": 2,
-      "name": "Soil_Grass"
+      "name": "Soil_Quartzite_Gravel",
+      "support": 15
     },
     {
       "x": -1,
@@ -79,7 +81,8 @@
       "x": 0,
       "y": 0,
       "z": 3,
-      "name": "Soil_Pathway"
+      "name": "Soil_Quartzite_Gravel",
+      "support": 15
     },
     {
       "x": 1,
@@ -110,13 +113,14 @@
       "x": 2,
       "y": 0,
       "z": 0,
-      "name": "Soil_Grass"
+      "name": "Soil_Gravel",
+      "support": 15
     },
     {
       "x": 2,
       "y": 0,
       "z": 1,
-      "name": "Soil_Gravel",
+      "name": "Soil_Quartzite_Gravel",
       "support": 15
     },
     {

@@ -122,17 +122,15 @@ public class HouseSpawnSystem extends RefSystem<ChunkStore> {
       return;
     }
 
-    VillageTaskQueueComponent existingTaskComponent = store.getComponent(heartRef,
-        VillageTaskQueueComponent.getComponentType());
-
-    VillageTaskQueueComponent taskComponent = existingTaskComponent != null ? existingTaskComponent
-        : new VillageTaskQueueComponent();
-
+    VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
     taskComponent.registerTask(new UnregisterHouseTask(houseComponent.getUuid()));
 
     world.execute(() -> {
-      store.putComponent(heartRef, VillageTaskQueueComponent.getComponentType(),
-          taskComponent);
+      if (heartRef == null || !heartRef.isValid()) {
+        return;
+      }
+
+      Utils.safeVillageTaskEnqueue(heartRef, taskComponent);
     });
   }
 

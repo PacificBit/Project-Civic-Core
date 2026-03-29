@@ -1,0 +1,43 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Mine_Gru.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Mine_Gru.png",
+  "Categories": [],
+  "Quality": "Technical",
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Models/Mine_Gru.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Textures/Mine_Gru.png",
+        "Weight": 1
+      }
+    ],
+    "ParticleColor": "#0000f4",
+    "VariantRotation": "NESW"
+  },
+  "PlayerAnimationsId": "Block",
+  "Tags": {
+    "Type": [
+      "Debug"
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.2,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      -27,
+      -6
+    ]
+  }
+}

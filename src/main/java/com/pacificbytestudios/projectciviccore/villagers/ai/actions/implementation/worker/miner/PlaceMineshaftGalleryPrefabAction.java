@@ -1,0 +1,288 @@
+package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.miner;
+
+import java.util.ArrayDeque;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Supplier;
+
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
+import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderPlaceMineshaftGalleryPrefabAction;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.MinerScan;
+
+public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
+  private final PrefabType prefabType;
+  private final String snapshotAnchorGroup;
+  private final String commitLastDiggedFromSnapshotGroup;
+
+  public PlaceMineshaftGalleryPrefabAction(
+      BuilderPlaceMineshaftGalleryPrefabAction builderActionBase,
+      BuilderSupport support) {
+    super(builderActionBase);
+    this.prefabType = builderActionBase.getPrefabType(support);
+    this.snapshotAnchorGroup = builderActionBase.getSnapshotAnchorGroup(support);
+    this.commitLastDiggedFromSnapshotGroup = builderActionBase.getCommitLastDiggedFromSnapshotGroup(support);
+  }
+
+  @Override
+  public boolean execute(
+      Ref<EntityStore> ref,
+      Role role,
+      InfoProvider sensorInfo,
+      double deltaTime,
+      Store<EntityStore> store) {
+    if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
+      return false;
+    }
+    super.execute(ref, role, sensorInfo, deltaTime, store);
+
+    WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
+    UUID villagerId = this.getVillagerId(ref, store);
+    MineComponent mineComponent = this.getComponentFromWorkplace(store, ref, MineComponent.getComponentType());
+    WorkplaceComponent workplace = this.getWorkplaceComponent(ref, store);
+    if (snapshot == null || villagerId == null || mineComponent == null || workplace == null) {
+      return false;
+    }
+
+    MineshaftGallery mineshaftGallery = mineComponent.getWorkerAllocatedGallery(villagerId);
+    if (mineshaftGallery == null) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[PlaceMineshaftGalleryPrefabAction] Could not fetch mineshaft gallery allocated to the villager: "
+              + villagerId);
+      return false;
+    }
+
+    Vector3i galleryDirection = mineshaftGallery.getCardinalDirection();
+    if (galleryDirection == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[PlaceMineshaftGalleryPrefabAction] Gallery is missing direction");
+      return false;
+    }
+
+    int depth = StructureConfig.Mine.MineshaftGalleryConf.SIZE_2I.y;
+    Vector3i galleryTarget = this.resolveGalleryTarget(snapshot, mineshaftGallery, galleryDirection, depth);
+    if (galleryTarget == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[PlaceMineshaftGalleryPrefabAction] Could not resolve gallery target");
+      return false;
+    }
+
+    Vector3i committedDigPosition = this.resolveCommittedDigPosition(snapshot, mineshaftGallery, galleryDirection,
+        depth);
+    if (this.hasValue(this.commitLastDiggedFromSnapshotGroup) && committedDigPosition == null) {
+      ProjectCivicCore.LOGGER.atSevere().log(
+          "[PlaceMineshaftGalleryPrefabAction] Could not resolve commit position from snapshot group "
+              + this.commitLastDiggedFromSnapshotGroup);
+      return false;
+    }
+
+    Rotation galleryRotation = Utils.getRotationFromCardinalDirection(galleryDirection);
+    World world = this.getWorld(store);
+
+    TrackedPrefabPlacementComponent restoreSnapshot = this.prefabType.equals(PrefabType.EMPTY)
+        ? PrefabManager.captureTrackedPrefabSnapshot(
+            world,
+            StructureConfig.Mine.MineshaftGalleryConf.PREFAB_JSON,
+            galleryTarget,
+            galleryRotation)
+        : PrefabManager.spawnTrackedPrefab(
+            world,
+            this.prefabType.getPrefab(),
+            galleryTarget,
+            galleryRotation,
+            true);
+
+    if (restoreSnapshot == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[PlaceMineshaftGalleryPrefabAction] Could not spawn prefab");
+      return false;
+    }
+
+    boolean changedPersistentState = false;
+    if (this.prefabType.equals(PrefabType.EMPTY)) {
+      mineshaftGallery.addRestoreSnapshot(restoreSnapshot);
+      changedPersistentState = true;
+    }
+
+    if (committedDigPosition != null) {
+      mineshaftGallery.setLastDiggedPosition(committedDigPosition.clone());
+      if (this.prefabType.equals(PrefabType.BEAM)) {
+        mineshaftGallery.checkIfGalleryIsCompleted();
+      }
+      this.clearSnapshotGroup(snapshot, this.snapshotAnchorGroup);
+      this.clearSnapshotGroup(snapshot, this.commitLastDiggedFromSnapshotGroup);
+      changedPersistentState = true;
+    }
+
+    if (changedPersistentState) {
+      Utils.markNeedSaving(world, workplace.getBenchPos());
+    }
+
+    return true;
+  }
+
+  private Vector3i resolveGalleryTarget(
+      WorkplaceAreaSnapshot snapshot,
+      MineshaftGallery mineshaftGallery,
+      Vector3i galleryDirection,
+      int depth) {
+    Vector3i snapshotTarget = this.resolveSnapshotPosition(snapshot, this.snapshotAnchorGroup);
+    if (snapshotTarget != null) {
+      return snapshotTarget;
+    }
+
+    Vector3i referenceDigPosition = this.resolveReferenceDigPosition(snapshot, mineshaftGallery);
+    return this.resolveAlignedSectionAnchor(mineshaftGallery, referenceDigPosition, galleryDirection, depth);
+  }
+
+  private Vector3i resolveCommittedDigPosition(
+      WorkplaceAreaSnapshot snapshot,
+      MineshaftGallery mineshaftGallery,
+      Vector3i galleryDirection,
+      int depth) {
+    Vector3i snapshotPosition = this.resolveSnapshotPosition(snapshot, this.commitLastDiggedFromSnapshotGroup);
+    if (snapshotPosition != null) {
+      return snapshotPosition;
+    }
+
+    Vector3i referenceDigPosition = this.resolveReferenceDigPosition(snapshot, mineshaftGallery);
+    if (referenceDigPosition == null) {
+      return null;
+    }
+
+    return this.resolveAlignedSectionAnchor(mineshaftGallery, referenceDigPosition, galleryDirection, depth);
+  }
+
+  private Vector3i resolveReferenceDigPosition(
+      WorkplaceAreaSnapshot snapshot,
+      MineshaftGallery mineshaftGallery) {
+    if (snapshot != null) {
+      ArrayDeque<Vector3i> digPositions = snapshot.getBlockTypePosition().get(MinerScan.DIG_POSITIONS);
+      if (digPositions != null && !digPositions.isEmpty()) {
+        Vector3i nextDigPosition = digPositions.peekFirst();
+        if (nextDigPosition != null) {
+          return nextDigPosition.clone();
+        }
+      }
+    }
+
+    Vector3i lastDiggedPosition = mineshaftGallery == null ? null : mineshaftGallery.getLastDiggedPosition();
+    return lastDiggedPosition == null ? null : lastDiggedPosition.clone();
+  }
+
+  private Vector3i resolveAlignedSectionAnchor(
+      MineshaftGallery mineshaftGallery,
+      Vector3i referenceDigPosition,
+      Vector3i galleryDirection,
+      int depth) {
+    Vector3i sectionStart = this.resolveCurrentSectionStart(mineshaftGallery, referenceDigPosition, galleryDirection,
+        depth);
+    return sectionStart == null ? null : sectionStart.addScaled(galleryDirection, depth);
+  }
+
+  private Vector3i resolveCurrentSectionStart(
+      MineshaftGallery mineshaftGallery,
+      Vector3i referenceDigPosition,
+      Vector3i galleryDirection,
+      int depth) {
+    if (mineshaftGallery == null || referenceDigPosition == null || galleryDirection == null) {
+      return null;
+    }
+
+    Vector3i galleryStartPosition = mineshaftGallery.getStartPosition();
+    if (galleryStartPosition == null) {
+      return null;
+    }
+
+    int travelledDistance = this.getTravelledDistanceAlongDirection(galleryStartPosition, referenceDigPosition,
+        galleryDirection);
+    if (travelledDistance <= 0) {
+      return galleryStartPosition.clone();
+    }
+
+    int sectionOffset = Math.floorDiv(travelledDistance, depth) * depth;
+    return galleryStartPosition.clone().addScaled(galleryDirection, sectionOffset);
+  }
+
+  private int getTravelledDistanceAlongDirection(
+      Vector3i from,
+      Vector3i to,
+      Vector3i direction) {
+    if (from == null || to == null || direction == null) {
+      return 0;
+    }
+
+    if (direction.x != 0) {
+      return (to.x - from.x) * Integer.signum(direction.x);
+    }
+
+    if (direction.z != 0) {
+      return (to.z - from.z) * Integer.signum(direction.z);
+    }
+
+    return 0;
+  }
+
+  private Vector3i resolveSnapshotPosition(WorkplaceAreaSnapshot snapshot, String groupName) {
+    if (!this.hasValue(groupName)) {
+      return null;
+    }
+
+    Map<String, ArrayDeque<Vector3i>> blockTypePositions = snapshot.getBlockTypePosition();
+    ArrayDeque<Vector3i> positions = blockTypePositions.get(groupName);
+    if (positions == null || positions.isEmpty()) {
+      return null;
+    }
+
+    Vector3i position = positions.peekFirst();
+    return position == null ? null : position.clone();
+  }
+
+  private void clearSnapshotGroup(WorkplaceAreaSnapshot snapshot, String groupName) {
+    if (!this.hasValue(groupName)) {
+      return;
+    }
+
+    snapshot.getBlockTypePosition().remove(groupName);
+  }
+
+  private boolean hasValue(String value) {
+    return value != null && !value.isEmpty();
+  }
+
+  public enum PrefabType implements Supplier<String> {
+    EMPTY("Empty", StructureConfig.Mine.MineshaftGalleryConf.EMPTY_PREFAB_JSON),
+    BEAM("Beam", StructureConfig.Mine.MineshaftGalleryConf.PREFAB_JSON);
+
+    private final String type;
+    private final String prefab;
+
+    private PrefabType(String type, String prefab) {
+      this.type = type;
+      this.prefab = prefab;
+    }
+
+    public String getPrefab() {
+      return this.prefab;
+    }
+
+    @Override
+    public String get() {
+      return this.type;
+    }
+  }
+}

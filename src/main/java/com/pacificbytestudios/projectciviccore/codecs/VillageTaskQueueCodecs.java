@@ -9,6 +9,7 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.Register
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.TeleportVillagerToTownHeartTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryHouseAssignmentTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryJobAssignmentTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.UnregisterHouseTask;
@@ -51,6 +52,11 @@ public final class VillageTaskQueueCodecs {
         "UpgradeBuildingTask",
         UpgradeBuildingTask.class,
         UpgradeBuildingTask.CODEC);
+
+    VillageTaskQueueComponent.registerTaskCodec(
+        "TeleportVillagerToTownHeartTask",
+        TeleportVillagerToTownHeartTask.class,
+        TeleportVillagerToTownHeartTask.CODEC);
 
     VillageTaskQueueComponent.registerTaskCodec(
         "SpawnVillagerTask",

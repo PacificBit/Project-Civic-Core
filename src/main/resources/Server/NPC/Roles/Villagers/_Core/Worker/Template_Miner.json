@@ -2,7 +2,7 @@
   "Type": "Abstract",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "DropList": {
@@ -55,6 +55,40 @@
       "Instructions": [
         {
           "Sensor": {
+            "Type": "Any",
+            "Once": true
+          },
+          "Actions": [
+            {
+              "Type": "UnregisterFromMineshaftGallery"
+            }
+          ],
+          "$Comment": "Unregister from gallery"
+        },
+        {
+          "Sensor": {
+            "Type": "ReachWorkplace",
+            "StoppingRange": 1
+          },
+          "Actions": [
+            {
+              "Type": "PlayAnimation",
+              "Slot": "Action",
+              "Animation": "Walk",
+              "Once": true
+            }
+          ],
+          "BodyMotion": {
+            "Type": "Seek",
+            "SlowDownDistance": 1,
+            "StopDistance": 0.8,
+            "RelativeSpeed": 1
+          },
+          "Continue": false,
+          "$Comment": "Reaching workplace"
+        },
+        {
+          "Sensor": {
             "Type": "Any"
           },
           "Actions": [
@@ -77,6 +111,18 @@
         "State": "panic"
       },
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any",
+            "Once": true
+          },
+          "Actions": [
+            {
+              "Type": "UnregisterFromMineshaftGallery"
+            }
+          ],
+          "$Comment": "Unregister from gallery"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -121,6 +167,40 @@
       },
       "$Comment": "If is not work time",
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any",
+            "Once": true
+          },
+          "Actions": [
+            {
+              "Type": "UnregisterFromMineshaftGallery"
+            }
+          ],
+          "$Comment": "Unregister from gallery"
+        },
+        {
+          "Sensor": {
+            "Type": "ReachWorkplace",
+            "StoppingRange": 1
+          },
+          "Actions": [
+            {
+              "Type": "PlayAnimation",
+              "Slot": "Action",
+              "Animation": "Walk",
+              "Once": true
+            }
+          ],
+          "BodyMotion": {
+            "Type": "Seek",
+            "SlowDownDistance": 1,
+            "StopDistance": 0.8,
+            "RelativeSpeed": 1
+          },
+          "Continue": false,
+          "$Comment": "Reaching workplace"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -178,12 +258,37 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 2,
-                "StopDistance": 2,
+                "SlowDownDistance": 1,
+                "StopDistance": 0.8,
                 "RelativeSpeed": 1
               },
               "Continue": false,
               "$Comment": "Reaching workplace"
+            },
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ],
+                  "$Comment": "Change Substate: Default -> .NoWorkingAreaSnapshot",
+                  "Continue": true
+                }
+              ],
+              "$Comment": "No valid work area snapshot",
+              "Continue": true
             },
             {
               "Sensor": {
@@ -192,10 +297,10 @@
               "Actions": [
                 {
                   "Type": "State",
-                  "State": ".WoorkLoop"
+                  "State": ".ReserveGalleryToMine"
                 }
               ],
-              "$Comment": "Workplace Reached -> .StartWork"
+              "$Comment": "Workplace Reached -> .ReserveGalleryToMine"
             }
           ],
           "$Comment": "Starting the workday"
@@ -203,18 +308,1084 @@
         {
           "Sensor": {
             "Type": "State",
-            "State": ".WoorkLoop"
+            "State": ".ReserveGalleryToMine"
           },
-          "BodyMotion": {
-            "Type": "WanderInCircle",
-            "Radius": 3,
-            "RelativeSpeed": 0.3,
-            "MaxHeadingChange": 90
-          }
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasReservedGallery"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "ReserveMiningGalleryAction"
+                    }
+                  ],
+                  "$Comment": "Reserve Gallery",
+                  "Continue": true
+                },
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "HasReservedGallery"
+                    }
+                  },
+                  "$Comment": "If",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "IsBossWorker"
+                      },
+                      "Instructions": [
+                        {
+                          "Sensor": {
+                            "Type": "Any"
+                          },
+                          "Actions": [
+                            {
+                              "Type": "BuildNewMineshaftLevel",
+                              "Once": true
+                            }
+                          ],
+                          "$Comment": "Build new shaft level"
+                        }
+                      ],
+                      "$Comment": "If"
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Not",
+                        "Sensor": {
+                          "Type": "IsBossWorker"
+                        }
+                      },
+                      "$Comment": "If",
+                      "Instructions": [
+                        {
+                          "Sensor": {
+                            "Type": "Any"
+                          },
+                          "$Comment": "Wait before re-trying",
+                          "Actions": [
+                            {
+                              "Type": "Timeout",
+                              "Delay": [
+                                5,
+                                10
+                              ],
+                              "Action": {
+                                "Type": "State",
+                                "State": ".ReserveGalleryToMine"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "If was able to reserve a gallery",
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".PreWorkLoop"
+                    }
+                  ]
+                }
+              ],
+              "$Comment": "If"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".PreWorkLoop"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Change Substate -> .NoWorkingAreaSnapshot",
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".NoWorkingAreaSnapshot"
+                    }
+                  ]
+                }
+              ],
+              "$Comment": "If"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
+            }
+          ],
+          "$Comment": ""
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WorkLoop"
+          },
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "HasTargetBlockInSnapshot",
+                "TargetBlockIds": [
+                  "Dig_Positions"
+                ]
+              },
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Not",
+                    "Sensor": {
+                      "Type": "Self",
+                      "Filters": [
+                        {
+                          "Type": "Inventory",
+                          "Items": [
+                            "*Tool_Pickaxe*"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "$Comment": "If not Pickaxe in inventory",
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": ".Pickaxe"
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "If Pickaxe in Inventory",
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Equip Pickaxe",
+                      "Continue": true,
+                      "Actions": [
+                        {
+                          "Type": "EquipItemFromInventory",
+                          "ItemToEquip": "Village_Tool_Pickaxe"
+                        }
+                      ]
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "ReachNextTargetInSnapshot",
+                        "BlockIds": [
+                          "Current_Level_Shift_Start_Position"
+                        ],
+                        "StoppingRange": 1.3,
+                        "UseCenterOfBlock": true
+                      },
+                      "Actions": [
+                        {
+                          "Type": "PlayAnimation",
+                          "Slot": "Action",
+                          "Animation": "Walk",
+                          "Once": true
+                        }
+                      ],
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "SlowDownDistance": 0.5,
+                        "StopDistance": 0.5,
+                        "RelativeSpeed": 0.7
+                      },
+                      "Continue": false,
+                      "$Comment": "Reaching shift start position"
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "Continue": true,
+                      "Actions": [
+                        {
+                          "Type": "ClearSnapshotGroup",
+                          "GroupName": "Current_Level_Shift_Start_Position"
+                        }
+                      ],
+                      "$Comment": "Clear one-shot shift start target"
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any",
+                        "Once": true
+                      },
+                      "$Comment": "Create world section snapshot",
+                      "Actions": [
+                        {
+                          "Type": "PlaceMineshaftGalleryPrefab",
+                          "PrefabType": "EMPTY",
+                          "SnapshotAnchorGroup": "Current_Section_Prefab_Anchor"
+                        }
+                      ]
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "HasTargetBlockInSnapshot",
+                        "TargetBlockIds": [
+                          "Terrain_Block_To_Fill"
+                        ]
+                      },
+                      "$Comment": "If",
+                      "Instructions": [
+                        {
+                          "Sensor": {
+                            "Type": "Any"
+                          },
+                          "$Comment": "Fill Terrain",
+                          "Actions": [
+                            {
+                              "Type": "RepairTerrainAction"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Change State To Dig",
+                      "Actions": [
+                        {
+                          "Type": "State",
+                          "State": "Dig"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "$Comment": "If Dig_Position"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "WorkCooldown"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Pickaxe"
+          },
+          "$Comment": "Request or craft pickaxe",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch pickaxe or materials",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Tool_Pickaxe*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "*Tool_Pickaxe*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Pickaxe in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Ingredient_Life_Essence*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Ingredient_Life_Essence in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Pickaxe"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Set missing resources",
+              "Actions": [
+                {
+                  "Type": "SetMissingResources",
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Tool_Pickaxe*",
+                      "FilterIn": true,
+                      "Count": 1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": 20
+                    }
+                  ],
+                  "ResetMissingResources": true
+                },
+                {
+                  "Type": "AskStorageToDeliveResources",
+                  "SourceType": "WORKPLACE"
+                },
+                {
+                  "Type": "State",
+                  "State": ".WaitForPickaxeResources"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".WaitForPickaxeResources"
+          },
+          "$Comment": "Wait for pickaxe resources",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasStoragePendingRequest"
+                }
+              },
+              "$Comment": "If no pending request",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".CheckPickaxeDelivery"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".CheckPickaxeDelivery"
+          },
+          "$Comment": "Check delivered pickaxe resources without re-requesting",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Try to fetch delivered resources",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "WITHDRAW",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "*Tool_Pickaxe*",
+                      "FilterIn": true,
+                      "Count": -1
+                    },
+                    {
+                      "ItemId": "Ingredient_Life_Essence*",
+                      "FilterIn": true,
+                      "Count": -1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "*Tool_Pickaxe*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Pickaxe in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Self",
+                "Filters": [
+                  {
+                    "Type": "Inventory",
+                    "Items": [
+                      "Ingredient_Life_Essence*"
+                    ]
+                  }
+                ],
+                "Once": true
+              },
+              "$Comment": "If now has Ingredient_Life_Essence in inventory",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "Craft.Pickaxe"
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Back off if delivery did not unlock pickaxe crafting",
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": "PostWorkCooldown"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".NoWorkingAreaSnapshot"
+          },
+          "$Comment": "Needs to process the working enviroment",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasValidWorkAraSnapshot"
+                }
+              },
+              "Actions": [
+                {
+                  "Type": "ScanWorkArea"
+                }
+              ],
+              "$Comment": "If not valid work area snapshot is present"
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "Log",
+                  "Message": "Creating a new workarea snapshot..."
+                }
+              ],
+              "$Comment": "Log",
+              "Continue": true
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "Actions": [
+                {
+                  "Type": "State",
+                  "State": ".WorkLoop"
+                }
+              ],
+              "$Comment": "Change Substate: -> .WorkLoop"
+            }
+          ]
         }
       ],
       "Continue": true,
-      "$Comment": "Normal state"
+      "$Comment": "Work Process"
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "Dig"
+      },
+      "$Comment": "Dig",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Not",
+            "Sensor": {
+              "Type": "Self",
+              "Filters": [
+                {
+                  "Type": "Inventory",
+                  "Items": [
+                    "*Tool_Pickaxe*"
+                  ]
+                }
+              ]
+            }
+          },
+          "$Comment": "If no pickaxe, recover before continuing to dig",
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.Pickaxe"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "QueryDirtyInventorySensor",
+            "ExcludeItemTypes": [
+              "Village_Tool_Pickaxe*"
+            ],
+            "MinimumFullnessPercent": 100
+          },
+          "$Comment": "If the inventory is full, unload mined items before continuing",
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "WorkCooldown"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Equip Pickaxe",
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "Village_Tool_Pickaxe"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "DroppedItem",
+            "Range": 3
+          },
+          "BodyMotion": {
+            "Type": "Seek",
+            "StopDistance": 1.6,
+            "SlowDownDistance": 2
+          },
+          "Actions": [
+            {
+              "Type": "PickUpItem",
+              "Range": 1.6
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "ScanBreakableAreaSensor"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "Scanning..."
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "ReachNextTargetInSnapshot",
+            "BlockIds": [
+              "Dig_Positions"
+            ],
+            "StoppingRange": 0.8,
+            "UseCenterOfBlock": true
+          },
+          "BodyMotion": {
+            "Type": "Seek",
+            "SlowDownDistance": 1,
+            "StopDistance": 0.5,
+            "RelativeSpeed": 0.7
+          }
+        },
+        {
+          "Sensor": {
+            "Type": "Not",
+            "Sensor": {
+              "Type": "HasTargetBlockInSnapshot",
+              "TargetBlockIds": [
+                "Dig_Positions"
+              ]
+            }
+          },
+          "$Comment": "If",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Create world section snapshot",
+              "Actions": [
+                {
+                  "Type": "PlaceMineshaftGalleryPrefab",
+                  "PrefabType": "BEAM",
+                  "SnapshotAnchorGroup": "Current_Section_Prefab_Anchor",
+                  "CommitLastDiggedFromSnapshotGroup": "Current_Section_Prefab_Anchor"
+                },
+                {
+                  "Type": "UnregisterFromMineshaftGallery"
+                },
+                {
+                  "Type": "State",
+                  "State": "WorkCooldown"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "ReachNextTargetInSnapshot",
+            "BlockIds": [
+              "Breakable_Block"
+            ],
+            "StoppingRange": 0.8,
+            "UseCenterOfBlock": true
+          },
+          "HeadMotion": {
+            "Type": "Aim"
+          },
+          "BodyMotion": {
+            "Type": "MatchLook"
+          },
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Break block",
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                0.2,
+                0.2
+              ],
+              "Action": {
+                "Type": "BreakBlockInSnapshot",
+                "PrimarySnapshotGroup": "Breakable_Block",
+                "SecondarySnapshotGroup": "Dig_Positions",
+                "RequiredStoppingRange": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "Craft"
+      },
+      "$Comment": "Craft",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "State",
+            "State": ".Pickaxe"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "CRAFTING PICKAXE"
+            },
+            {
+              "Type": "CraftTool",
+              "ToolType": "PICKAXE",
+              "Once": true
+            },
+            {
+              "Type": "Timeout",
+              "Delay": [
+                4,
+                6
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "WorkCooldown"
+      },
+      "$Comment": "After all the steps are done",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "QueryDirtyInventorySensor",
+            "ExcludeItemTypes": [
+              "Village_Tool_Pickaxe*"
+            ],
+            "MinimumFullnessPercent": 100
+          },
+          "$Comment": "If inventory is full of mined items",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "Not",
+                "Sensor": {
+                  "Type": "HasTargetBlockInSnapshot",
+                  "TargetBlockIds": [
+                    "Worker_Workplace_Storage"
+                  ]
+                },
+                "Once": true
+              },
+              "$Comment": "If the positions of the workplace containers are not in snapshot",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "Any"
+                  },
+                  "$Comment": "Add to snapshot the containers",
+                  "Actions": [
+                    {
+                      "Type": "SetWorkplaceStorageTargetInSnapshot",
+                      "ActionType": "ADD"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "ReachNextTargetInSnapshot",
+                "BlockIds": [
+                  "Worker_Workplace_Storage"
+                ],
+                "StoppingRange": 0.6
+              },
+              "$Comment": "Reach workplace storage container",
+              "BodyMotion": {
+                "Type": "Seek",
+                "SlowDownDistance": 1.5,
+                "StopDistance": 0.6,
+                "RelativeSpeed": 0.6
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "Try to deposit & Send clear storage request",
+              "Actions": [
+                {
+                  "Type": "InteractWithExternalInventory",
+                  "ActionType": "DEPOSIT",
+                  "SnapshotKey": "Worker_Workplace_Storage",
+                  "ConsumeTargetOnFail": true,
+                  "ItemCriteria": [
+                    {
+                      "ItemId": "Village_Tool_Pickaxe*",
+                      "FilterIn": false,
+                      "Count": -1
+                    }
+                  ]
+                },
+                {
+                  "Type": "AskClearWorkplaceStorage",
+                  "ExcludedItemTypes": [
+                    "Village_Tool_Pickaxe*"
+                  ],
+                  "Once": true
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "$Comment": "If it was not able to deposit: Send clear storage request",
+              "Actions": [
+                {
+                  "Type": "AskClearWorkplaceStorage",
+                  "ExcludedItemTypes": [
+                    "Village_Tool_Pickaxe*"
+                  ],
+                  "Once": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "Log",
+              "Message": "In cooldown"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "$Comment": "Cooldown",
+          "ActionsBlocking": true,
+          "ActionsAtomic": true,
+          "Actions": [
+            {
+              "Type": "Timeout",
+              "Delay": [
+                5,
+                5
+              ],
+              "Action": {
+                "Type": "State",
+                "State": "PostWorkCooldown"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sensor": {
+        "Type": "State",
+        "State": "PostWorkCooldown"
+      },
+      "$Comment": "Post Cooldown Creating Snapshot Area",
+      "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Not",
+            "Sensor": {
+              "Type": "HasReservedGallery"
+            }
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.ReserveGalleryToMine"
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "HasReservedGallery"
+          },
+          "Actions": [
+            {
+              "Type": "ScanWorkArea"
+            }
+          ],
+          "Continue": true
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Actions": [
+            {
+              "Type": "State",
+              "State": "Working.WorkLoop"
+            }
+          ]
+        }
+      ]
     }
   ],
   "NameTranslationKey": {
