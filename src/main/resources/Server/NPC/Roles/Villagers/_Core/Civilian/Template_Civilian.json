@@ -245,8 +245,57 @@
               "Instructions": [
                 {
                   "Sensor": {
-                    "Type": "ReachNextEmptyTavernSeat",
-                    "StoppingRange": 1.5
+                    "Type": "HasReservedTavern"
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "ReachNextEmptyTavernSeat",
+                        "StoppingRange": 1.5
+                      },
+                      "Actions": [
+                        {
+                          "Type": "PlayAnimation",
+                          "Slot": "Action",
+                          "Animation": "Walk",
+                          "Once": true
+                        }
+                      ],
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "SlowDownDistance": 2,
+                        "StopDistance": 1,
+                        "RelativeSpeed": 0.6
+                      }
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Sit on chair",
+                      "Actions": [
+                        {
+                          "Type": "PlayAnimation",
+                          "Slot": "Action",
+                          "Animation": "Sit",
+                          "Once": true
+                        },
+                        {
+                          "Type": "MountMountable",
+                          "StructureType": "TAVERN",
+                          "InteractableType": "EATING_SPOT"
+                        },
+                        {
+                          "Type": "State",
+                          "State": ".LunchEating"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
                   },
                   "Actions": [
                     {
@@ -257,34 +306,12 @@
                     }
                   ],
                   "BodyMotion": {
-                    "Type": "Seek",
-                    "SlowDownDistance": 2,
-                    "StopDistance": 1,
-                    "RelativeSpeed": 0.6
-                  }
-                },
-                {
-                  "Sensor": {
-                    "Type": "Any"
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
                   },
-                  "$Comment": "Sit on chair",
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Sit",
-                      "Once": true
-                    },
-                    {
-                      "Type": "MountMountable",
-                      "StructureType": "TAVERN",
-                      "InteractableType": "EATING_SPOT"
-                    },
-                    {
-                      "Type": "State",
-                      "State": ".LunchEating"
-                    }
-                  ]
+                  "$Comment": "Other wise wander in circle"
                 }
               ]
             },
@@ -678,8 +705,57 @@
               "Instructions": [
                 {
                   "Sensor": {
-                    "Type": "ReachNextEmptyTavernSeat",
-                    "StoppingRange": 1.5
+                    "Type": "HasReservedTavern"
+                  },
+                  "Instructions": [
+                    {
+                      "Sensor": {
+                        "Type": "ReachNextEmptyTavernSeat",
+                        "StoppingRange": 1.5
+                      },
+                      "Actions": [
+                        {
+                          "Type": "PlayAnimation",
+                          "Slot": "Action",
+                          "Animation": "Walk",
+                          "Once": true
+                        }
+                      ],
+                      "BodyMotion": {
+                        "Type": "Seek",
+                        "SlowDownDistance": 2,
+                        "StopDistance": 1,
+                        "RelativeSpeed": 0.6
+                      }
+                    },
+                    {
+                      "Sensor": {
+                        "Type": "Any"
+                      },
+                      "$Comment": "Sit on chair",
+                      "Actions": [
+                        {
+                          "Type": "PlayAnimation",
+                          "Slot": "Action",
+                          "Animation": "Sit",
+                          "Once": true
+                        },
+                        {
+                          "Type": "MountMountable",
+                          "StructureType": "TAVERN",
+                          "InteractableType": "EATING_SPOT"
+                        },
+                        {
+                          "Type": "State",
+                          "State": ".EatingDinner"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Sensor": {
+                    "Type": "Any"
                   },
                   "Actions": [
                     {
@@ -690,34 +766,12 @@
                     }
                   ],
                   "BodyMotion": {
-                    "Type": "Seek",
-                    "SlowDownDistance": 2,
-                    "StopDistance": 1,
-                    "RelativeSpeed": 0.6
-                  }
-                },
-                {
-                  "Sensor": {
-                    "Type": "Any"
+                    "Type": "WanderInCircle",
+                    "Radius": 10,
+                    "MaxHeadingChange": 90,
+                    "RelativeSpeed": 0.5
                   },
-                  "$Comment": "Sit on chair",
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Sit",
-                      "Once": true
-                    },
-                    {
-                      "Type": "MountMountable",
-                      "StructureType": "TAVERN",
-                      "InteractableType": "EATING_SPOT"
-                    },
-                    {
-                      "Type": "State",
-                      "State": ".EatingDinner"
-                    }
-                  ]
+                  "$Comment": "Other wise wander in circle"
                 }
               ]
             },

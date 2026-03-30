@@ -88,6 +88,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderPlantTreeAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasEatenMealTodaySensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasReservedTavernTable;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasStorageRequestInPendingSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryDirtyInventorySensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderReachEmptyTavernSeatSensor;
@@ -405,6 +406,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "ScanBreakableAreaSensor",
         BuilderScanBreakableAreaSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "HasReservedTavern",
+        BuilderHasReservedTavernTable::new);
 
     // ===========================
     // Actions

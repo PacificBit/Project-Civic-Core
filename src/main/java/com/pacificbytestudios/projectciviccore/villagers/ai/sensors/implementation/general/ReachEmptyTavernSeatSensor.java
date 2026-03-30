@@ -3,18 +3,15 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
-import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderReachEmptyTavernSeatSensor;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
 public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
@@ -47,22 +44,15 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
       return false;
     }
 
-    WorkplaceInteractablesMapComponent interactables = this.getVillageTavernInteractibleComponent(ref, store);
-    if (interactables == null) {
-      this.positionProvider.clear();
-      return false;
-    }
-
     if (!this.isTriggered()) {
       this.triggered = true;
-      Interactable interactable = interactables.getFirstAvailableInteractable(WorkplaceInteractibles.EATING_SPOT);
-      if (interactable == null) {
-        this.positionProvider.clear();
+
+      VillagerComponent villagerComponent = this.getVillagerComponent(ref, store);
+      if (villagerComponent == null || villagerComponent.getReservedInteractable() == null) {
         return false;
       }
-      UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
-      interactable.setOccupiedBy(uuidComponent.getUuid());
-      this.target = Utils.centerOf(interactable.getInteractablePosition()).toVector3d();
+
+      this.target = Utils.centerOf(villagerComponent.getReservedInteractable()).toVector3d();
       this.positionProvider.setTarget(this.target);
       return true;
     }
