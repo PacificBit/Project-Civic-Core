@@ -57,6 +57,19 @@
           "Sensor": {
             "Type": "Any"
           },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
           "Actions": [
             {
               "Type": "Role",
@@ -77,6 +90,19 @@
         "State": "panic"
       },
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -121,6 +147,19 @@
       },
       "$Comment": "If is not work time",
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -311,11 +350,6 @@
                         "Type": "Any"
                       },
                       "Actions": [
-                        {
-                          "Type": "Attack",
-                          "Attack": "Trork_Warrior_Battleaxe_Swing_Down",
-                          "Once": false
-                        },
                         {
                           "Type": "Timeout",
                           "Delay": [

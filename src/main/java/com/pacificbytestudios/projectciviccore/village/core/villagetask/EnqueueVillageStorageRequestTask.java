@@ -110,7 +110,7 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
 
     UUID requestId = storageWorkplace.addRequest(this.request);
 
-    this.callOnSuccess(requestId.toString());
+    this.callOnSuccess(storage.getUuid().toString() + ":" + requestId.toString());
 
     BlockModule.BlockStateInfo blockStateInfo = chunkStore.getComponent(storageRef,
         BlockModule.BlockStateInfo.getComponentType());

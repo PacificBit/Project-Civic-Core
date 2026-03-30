@@ -1875,7 +1875,7 @@
       "x": -9,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -2029,7 +2029,7 @@
       "x": -9,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -2183,7 +2183,7 @@
       "x": -9,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -2337,7 +2337,7 @@
       "x": -9,
       "y": 3,
       "z": 6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -2491,7 +2491,7 @@
       "x": -9,
       "y": 3,
       "z": 7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -4456,7 +4456,7 @@
       "x": -8,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -8,
@@ -5074,7 +5074,7 @@
       "x": -8,
       "y": 3,
       "z": 7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -8,
@@ -5814,7 +5814,8 @@
       "x": -7,
       "y": 1,
       "z": -5,
-      "name": "Empty"
+      "name": "Rubble_Quartzite",
+      "support": 15
     },
     {
       "x": -7,
@@ -6870,7 +6871,7 @@
       "x": -7,
       "y": 1,
       "z": 2,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -7036,7 +7037,7 @@
       "x": -7,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -7,
@@ -7649,7 +7650,7 @@
       "x": -7,
       "y": 3,
       "z": 7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -7,
@@ -9612,7 +9613,7 @@
       "x": -6,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -10225,7 +10226,7 @@
       "x": -6,
       "y": 3,
       "z": 7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -10814,7 +10815,7 @@
       "x": -5,
       "y": 1,
       "z": -6,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -12019,7 +12020,7 @@
       "x": -5,
       "y": 1,
       "z": 2,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -12185,7 +12186,7 @@
       "x": -5,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -12339,7 +12340,7 @@
       "x": -5,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -12642,7 +12643,7 @@
       "x": -5,
       "y": 3,
       "z": 6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -12796,7 +12797,7 @@
       "x": -5,
       "y": 3,
       "z": 7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -13537,7 +13538,8 @@
       "x": -4,
       "y": 1,
       "z": -5,
-      "name": "Empty"
+      "name": "Rubble_Quartzite",
+      "support": 15
     },
     {
       "x": -4,
@@ -14737,8 +14739,7 @@
       "x": -4,
       "y": 1,
       "z": 3,
-      "name": "Wood_Sticks",
-      "support": 15
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -16092,7 +16093,7 @@
       "x": -3,
       "y": 1,
       "z": -5,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -16242,7 +16243,7 @@
       "x": -3,
       "y": 1,
       "z": -4,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -19986,7 +19987,7 @@
       "x": -2,
       "y": 1,
       "z": 4,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -22239,7 +22240,7 @@
       "x": -1,
       "y": 1,
       "z": 2,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -22691,7 +22692,7 @@
       "x": -1,
       "y": 1,
       "z": 5,
-      "name": "Wood_Sticks"
+      "name": "Empty"
     },
     {
       "x": -1,

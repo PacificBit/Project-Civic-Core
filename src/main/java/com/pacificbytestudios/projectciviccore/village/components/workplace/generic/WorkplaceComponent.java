@@ -231,6 +231,10 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     }
   }
 
+  public boolean needWorker() {
+    return this.workers.size() == 0;
+  }
+
   public UUID getBossId() {
     return bossId;
   }

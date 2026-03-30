@@ -390,6 +390,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
     project.setObjectiveType(VillageObjectiveType.VILLAGE_LEVEL_UP);
     project.setObjectiveStatus(VillageObjectiveStatus.NEW);
     project.setWeight(Weight.HIGH);
+    project.setTargetLevel(level);
     project.setTotalStages(VillageObjectiveType.VILLAGE_LEVEL_UP.getStages());
     project.setRequiredMaterialPerStage(getMaterialQuantitiesPerStage(
         VillageLevelUpCostRegistry.getRequirementsForNextLevel(level),

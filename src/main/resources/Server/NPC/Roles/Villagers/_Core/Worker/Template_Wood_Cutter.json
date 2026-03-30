@@ -57,6 +57,19 @@
           "Sensor": {
             "Type": "Any"
           },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
           "Actions": [
             {
               "Type": "Role",
@@ -77,6 +90,19 @@
         "State": "panic"
       },
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -121,6 +147,19 @@
       },
       "$Comment": "If is not work time",
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -478,6 +517,21 @@
             },
             {
               "Sensor": {
+                "Type": "Block",
+                "Range": 1,
+                "Blocks": "Wood"
+              },
+              "BodyMotion": {
+                "Type": "MatchLook"
+              },
+              "$Comment": "Look at the trunk block",
+              "HeadMotion": {
+                "Type": "Aim"
+              },
+              "Continue": true
+            },
+            {
+              "Sensor": {
                 "Type": "HasTargetBlockInSnapshot",
                 "TargetBlockIds": [
                   "Cuttable_Block"
@@ -486,14 +540,21 @@
               "$Comment": "Break Tree Trunk Block",
               "Actions": [
                 {
-                  "Type": "BreakTreeBlockAction",
-                  "SnapshotGroup": "Cuttable_Block",
-                  "RequiredStoppingRange": 1.8,
-                  "TerrainRepairBlockIds": [
-                    "Soil_Grass",
-                    "Soil_Pathway",
-                    "Soil_Mud_Dry"
-                  ]
+                  "Type": "Timeout",
+                  "Delay": [
+                    0.5,
+                    0.5
+                  ],
+                  "Action": {
+                    "Type": "BreakTreeBlockAction",
+                    "SnapshotGroup": "Cuttable_Block",
+                    "RequiredStoppingRange": 1.8,
+                    "TerrainRepairBlockIds": [
+                      "Soil_Grass",
+                      "Soil_Pathway",
+                      "Soil_Mud_Dry"
+                    ]
+                  }
                 }
               ],
               "Continue": true
@@ -543,7 +604,8 @@
             {
               "Sensor": {
                 "Type": "DroppedItem",
-                "Range": 4
+                "Range": 4,
+                "LineOfSight": true
               },
               "Actions": [
                 {

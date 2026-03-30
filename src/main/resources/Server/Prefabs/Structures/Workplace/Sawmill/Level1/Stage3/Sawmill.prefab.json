@@ -39,8 +39,7 @@
       "x": -9,
       "y": 1,
       "z": -9,
-      "name": "*Wood_Softwood_Fence_State_Definitions_Corner",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -190,8 +189,7 @@
       "x": -9,
       "y": 1,
       "z": -8,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -341,8 +339,7 @@
       "x": -9,
       "y": 1,
       "z": -7,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -492,8 +489,7 @@
       "x": -9,
       "y": 1,
       "z": -6,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -644,8 +640,7 @@
       "x": -9,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -796,8 +791,7 @@
       "x": -9,
       "y": 1,
       "z": -4,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -948,8 +942,7 @@
       "x": -9,
       "y": 1,
       "z": -3,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -1100,8 +1093,7 @@
       "x": -9,
       "y": 1,
       "z": -2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -1252,8 +1244,7 @@
       "x": -9,
       "y": 1,
       "z": -1,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -1404,8 +1395,7 @@
       "x": -9,
       "y": 1,
       "z": 0,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -1556,8 +1546,7 @@
       "x": -9,
       "y": 1,
       "z": 1,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -1708,8 +1697,7 @@
       "x": -9,
       "y": 1,
       "z": 2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -2629,8 +2617,7 @@
       "x": -8,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -8,
@@ -2780,14 +2767,13 @@
       "x": -8,
       "y": 1,
       "z": -8,
-      "name": "Furniture_Desert_Torch"
+      "name": "Empty"
     },
     {
       "x": -8,
       "y": 2,
       "z": -8,
-      "name": "Furniture_Desert_Torch",
-      "filler": 1024
+      "name": "Empty"
     },
     {
       "x": -8,
@@ -4289,14 +4275,13 @@
       "x": -8,
       "y": 1,
       "z": 2,
-      "name": "Furniture_Desert_Torch"
+      "name": "Empty"
     },
     {
       "x": -8,
       "y": 2,
       "z": 2,
-      "name": "Furniture_Desert_Torch",
-      "filler": 1024
+      "name": "Empty"
     },
     {
       "x": -8,
@@ -5212,8 +5197,7 @@
       "x": -7,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -7788,8 +7772,7 @@
       "x": -6,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -10364,8 +10347,7 @@
       "x": -5,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -12935,8 +12917,7 @@
       "x": -4,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -15491,8 +15472,7 @@
       "x": -3,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -18034,8 +18014,7 @@
       "x": -2,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -20438,7 +20417,8 @@
       "x": -2,
       "y": 1,
       "z": 7,
-      "name": "Plant_Grass_Lush"
+      "name": "Plant_Grass_Lush",
+      "support": 15
     },
     {
       "x": -2,
@@ -20588,8 +20568,7 @@
       "x": -1,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -22993,7 +22972,7 @@
       "x": -1,
       "y": 1,
       "z": 7,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -23143,8 +23122,7 @@
       "x": 0,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -25546,7 +25524,7 @@
       "x": 0,
       "y": 1,
       "z": 7,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -25696,8 +25674,7 @@
       "x": 1,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -28099,7 +28076,7 @@
       "x": 1,
       "y": 1,
       "z": 7,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -28249,8 +28226,7 @@
       "x": 2,
       "y": 1,
       "z": -9,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -28400,14 +28376,13 @@
       "x": 2,
       "y": 1,
       "z": -8,
-      "name": "Furniture_Desert_Torch"
+      "name": "Empty"
     },
     {
       "x": 2,
       "y": 2,
       "z": -8,
-      "name": "Furniture_Desert_Torch",
-      "filler": 1024
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -30656,7 +30631,7 @@
       "x": 2,
       "y": 1,
       "z": 7,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -30806,7 +30781,7 @@
       "x": 3,
       "y": 1,
       "z": -9,
-      "name": "*Wood_Softwood_Fence_State_Definitions_Corner"
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -30956,8 +30931,7 @@
       "x": 3,
       "y": 1,
       "z": -8,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -31107,8 +31081,7 @@
       "x": 3,
       "y": 1,
       "z": -7,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -31259,8 +31232,7 @@
       "x": 3,
       "y": 1,
       "z": -6,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -31410,8 +31382,7 @@
       "x": 3,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -31561,8 +31532,7 @@
       "x": 3,
       "y": 1,
       "z": -4,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -31712,8 +31682,7 @@
       "x": 3,
       "y": 1,
       "z": -3,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -31863,8 +31832,7 @@
       "x": 3,
       "y": 1,
       "z": -2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -32014,8 +31982,7 @@
       "x": 3,
       "y": 1,
       "z": -1,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -32165,8 +32132,7 @@
       "x": 3,
       "y": 1,
       "z": 0,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -32316,8 +32282,7 @@
       "x": 3,
       "y": 1,
       "z": 1,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -32467,8 +32432,7 @@
       "x": 3,
       "y": 1,
       "z": 2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -32618,8 +32582,7 @@
       "x": 3,
       "y": 1,
       "z": 3,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -32769,8 +32732,7 @@
       "x": 3,
       "y": 1,
       "z": 4,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -32920,8 +32882,7 @@
       "x": 3,
       "y": 1,
       "z": 5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -33071,8 +33032,7 @@
       "x": 3,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -33222,8 +33182,7 @@
       "x": 3,
       "y": 1,
       "z": 7,
-      "name": "*Wood_Softwood_Fence_State_Definitions_Corner",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 3,

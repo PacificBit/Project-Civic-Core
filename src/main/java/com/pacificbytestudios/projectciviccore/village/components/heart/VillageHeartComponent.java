@@ -613,6 +613,15 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     this.blockContext = blockContext;
   }
 
+  public UUID getFirstWorkplaceWithMissingEmployee() {
+    for (Map.Entry<UUID, WorkplaceComponent> entry : this.workplaceIdToWorkplace.entrySet()) {
+      if (entry.getValue().needWorker()) {
+        return entry.getKey();
+      }
+    }
+    return null;
+  }
+
   public Map<StructureType, Short> getStructureTypeCount() {
     Map<StructureType, Short> structureCount = new HashMap<>();
     for (WorkplaceComponent workplace : this.workplaceIdToWorkplace.values()) {

@@ -103,8 +103,12 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
         syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
 
         EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
-        task.setOnSuccessCallback(requestId -> {
-          request.overrideRequestId(UUID.fromString(requestId));
+        task.setOnSuccessCallback(requestResult -> {
+          String[] requestParts = requestResult.split(":", 2);
+          UUID storageId = UUID.fromString(requestParts[0]);
+          request.setStorageWorkplaceId(storageId);
+          request.addTriedStorageId(storageId);
+          request.overrideRequestId(UUID.fromString(requestParts[1]));
           syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
         });
         task.setOnError((status, message) -> syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef,

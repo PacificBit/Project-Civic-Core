@@ -27,8 +27,10 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.town
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.LevelUpVillageTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryHouseAssignmentTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryJobAssignmentTask;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveStatus;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
@@ -140,6 +142,13 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
     VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
     queueComponent.registerTask(spawnTask);
     queueComponent.registerTask(homeAssignmentTask);
+
+    UUID workplaceId = village.getFirstWorkplaceWithMissingEmployee();
+    if (workplaceId != null) {
+      TryJobAssignmentTask jobAssignmentTask = new TryJobAssignmentTask(workplaceId);
+      queueComponent.registerTask(jobAssignmentTask);
+    }
+
     townHall.removeProject(project);
     mayorComponent.setCurrentProject(null);
 
@@ -164,8 +173,27 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
       TownHallComponent townHall,
       MayorComponent mayorComponent,
       VillageProject project) {
-    ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleLevelUpVillageProject'");
+    if (!processProjectStageWithResources(village, project)) {
+      syncProjectState(townHall, project);
+      mayorComponent.setCurrentProject(null);
+      return;
+    }
+
+    project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
+    syncProjectState(townHall, project);
+
+    LevelUpVillageTask levelUpTask = new LevelUpVillageTask((short) project.getTargetLevel());
+
+    VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
+    queueComponent.registerTask(levelUpTask);
+    townHall.removeProject(project);
     mayorComponent.setCurrentProject(null);
+
+    this.world.execute(() -> {
+      Utils.safeVillageTaskEnqueue(
+          village.getTownHall().getVillageHeartRef(),
+          queueComponent);
+    });
   }
 
   private void handleDemolishProject(
@@ -355,8 +383,12 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
     syncLastStorageRequest(villageHeartRef, village, townHallWorkplace, request);
 
     EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
-    task.setOnSuccessCallback(requestId -> {
-      request.overrideRequestId(UUID.fromString(requestId));
+    task.setOnSuccessCallback(requestResult -> {
+      String[] requestParts = requestResult.split(":", 2);
+      UUID storageId = UUID.fromString(requestParts[0]);
+      request.setStorageWorkplaceId(storageId);
+      request.addTriedStorageId(storageId);
+      request.overrideRequestId(UUID.fromString(requestParts[1]));
       syncLastStorageRequest(villageHeartRef, village, townHallWorkplace, request);
     });
     task.setOnError((status, message) -> syncLastStorageRequest(villageHeartRef, village, townHallWorkplace, null));

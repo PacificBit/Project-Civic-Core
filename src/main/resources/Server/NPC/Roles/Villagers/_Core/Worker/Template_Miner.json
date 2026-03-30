@@ -55,6 +55,19 @@
       "Instructions": [
         {
           "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
             "Type": "Any",
             "Once": true
           },
@@ -113,6 +126,19 @@
       "Instructions": [
         {
           "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
             "Type": "Any",
             "Once": true
           },
@@ -167,6 +193,19 @@
       },
       "$Comment": "If is not work time",
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any",
@@ -1090,6 +1129,23 @@
           "Instructions": [
             {
               "Sensor": {
+                "Type": "DroppedItem",
+                "Range": 3
+              },
+              "BodyMotion": {
+                "Type": "Seek",
+                "StopDistance": 1.6,
+                "SlowDownDistance": 2
+              },
+              "Actions": [
+                {
+                  "Type": "PickUpItem",
+                  "Range": 1.6
+                }
+              ]
+            },
+            {
+              "Sensor": {
                 "Type": "Any",
                 "Once": true
               },
@@ -1138,8 +1194,8 @@
             {
               "Type": "Timeout",
               "Delay": [
-                0.2,
-                0.2
+                0.5,
+                0.5
               ],
               "Action": {
                 "Type": "BreakBlockInSnapshot",

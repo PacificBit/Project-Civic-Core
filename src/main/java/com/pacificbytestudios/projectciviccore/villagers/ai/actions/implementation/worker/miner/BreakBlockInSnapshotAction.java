@@ -34,6 +34,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.mine
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderBreakBlockInSnapshotAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 
 public class BreakBlockInSnapshotAction extends VillagerActionBase {
   private final String primarySnapshotGroup;
@@ -140,6 +141,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     long chunkIndex = ChunkUtil.indexChunkFromBlock(target.x, target.z);
     Ref<ChunkStore> chunkRef = chunkStoreObj.getChunkReference(chunkIndex);
 
+    VillagerToolAnimationHelper.playHeldToolAnimation(ref, npc, store, "Mine");
     boolean didBreak = BlockHarvestUtils.performBlockDamage(npc, ref, target, itemStackInHand, tool, null,
         false, 1.0f, 0, chunkRef, store, chunkStoreObj.getStore());
 
