@@ -50,6 +50,7 @@ import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHear
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.house.HouseSpawnSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.workplace.TavernFoodRemovalSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderAskForClearWorkplaceStorageAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
@@ -286,6 +287,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
+    chunkRegistry.registerSystem(new TavernFoodRemovalSystem());
     chunkRegistry.registerSystem(new VillageTaskQueueSystem());
     chunkRegistry.registerSystem(new HouseSpawnSystem());
     chunkRegistry.registerSystem(new VillageBuilderSystem());

@@ -2,7 +2,7 @@
   "Type": "Abstract",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "DropList": {
@@ -144,7 +144,8 @@
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Walk"
+                      "Animation": "Walk",
+                      "Once": true
                     }
                   ],
                   "BodyMotion": {
@@ -195,7 +196,8 @@
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Walk"
+                      "Animation": "Walk",
+                      "Once": true
                     },
                     {
                       "Type": "ChangeIntoWorkRole"
@@ -241,20 +243,6 @@
               },
               "$Comment": "Lunch Time",
               "Instructions": [
-                {
-                  "Sensor": {
-                    "Type": "Any",
-                    "Once": true
-                  },
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Walk",
-                      "Once": true
-                    }
-                  ]
-                },
                 {
                   "Sensor": {
                     "Type": "ReachNextEmptyTavernSeat",
@@ -537,7 +525,8 @@
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Walk"
+                      "Animation": "Walk",
+                      "Once": true
                     }
                   ],
                   "BodyMotion": {
@@ -588,7 +577,8 @@
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Walk"
+                      "Animation": "Walk",
+                      "Once": true
                     },
                     {
                       "Type": "ChangeIntoWorkRole"
@@ -642,7 +632,8 @@
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Walk"
+                      "Animation": "Walk",
+                      "Once": true
                     }
                   ],
                   "BodyMotion": {
@@ -685,20 +676,6 @@
               },
               "$Comment": "Dinner Time",
               "Instructions": [
-                {
-                  "Sensor": {
-                    "Type": "Any",
-                    "Once": true
-                  },
-                  "Actions": [
-                    {
-                      "Type": "PlayAnimation",
-                      "Slot": "Action",
-                      "Animation": "Walk",
-                      "Once": true
-                    }
-                  ]
-                },
                 {
                   "Sensor": {
                     "Type": "ReachNextEmptyTavernSeat",
@@ -783,7 +760,8 @@
                     {
                       "Type": "PlayAnimation",
                       "Slot": "Action",
-                      "Animation": "Walk"
+                      "Animation": "Walk",
+                      "Once": true
                     }
                   ],
                   "BodyMotion": {

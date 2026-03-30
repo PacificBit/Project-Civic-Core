@@ -13,7 +13,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -84,7 +83,7 @@ public class EatTavernFoodAction extends VillagerActionBase {
     }
 
     VillageFoodComponent foodComponent = require(
-        foodRef.getStore().getComponent(foodRef, ProjectCivicCore.get().getVillageFoodComponentType()),
+        foodRef.getStore().getComponent(foodRef, VillageFoodComponent.getComponentType()),
         "village food component");
     if (foodComponent == null) {
       return false;
@@ -92,7 +91,6 @@ public class EatTavernFoodAction extends VillagerActionBase {
 
     Utils.breakBlockChunkAware(blockEntityData.getFirst(), foodPosition);
     this.registerMealConsumption(ref, store);
-    interactable.invalidate();
     return true;
   }
 

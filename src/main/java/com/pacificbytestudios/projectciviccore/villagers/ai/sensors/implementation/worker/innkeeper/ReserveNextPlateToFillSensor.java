@@ -48,6 +48,11 @@ public class ReserveNextPlateToFillSensor extends VillagerSensorBase {
     }
 
     WorkplaceInteractibles group = WorkplaceInteractibles.EATING_SPOT;
+    Interactable reservedInteractable = interactables.getInteractableOccupiedBy(group, uuidComponent.getUuid());
+    if (reservedInteractable != null && !reservedInteractable.isReady()) {
+      return true;
+    }
+
     Interactable interactable = interactables.getFirstNotReadyInteractable(group, uuidComponent.getUuid());
 
     if (interactable == null) {
