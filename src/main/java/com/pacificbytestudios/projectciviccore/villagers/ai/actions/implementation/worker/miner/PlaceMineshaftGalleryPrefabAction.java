@@ -93,13 +93,17 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
 
     Rotation galleryRotation = Utils.getRotationFromCardinalDirection(galleryDirection);
     World world = this.getWorld(store);
+    boolean shouldCaptureRestoreSnapshot = this.prefabType.equals(PrefabType.EMPTY)
+        && !mineshaftGallery.hasRestoreSnapshotAt(galleryTarget);
 
     TrackedPrefabPlacementComponent restoreSnapshot = this.prefabType.equals(PrefabType.EMPTY)
-        ? PrefabManager.captureTrackedPrefabSnapshot(
-            world,
-            StructureConfig.Mine.MineshaftGalleryConf.PREFAB_JSON,
-            galleryTarget,
-            galleryRotation)
+        ? shouldCaptureRestoreSnapshot
+            ? PrefabManager.captureTrackedPrefabSnapshot(
+                world,
+                StructureConfig.Mine.MineshaftGalleryConf.PREFAB_JSON,
+                galleryTarget,
+                galleryRotation)
+            : null
         : PrefabManager.spawnTrackedPrefab(
             world,
             this.prefabType.getPrefab(),
@@ -107,15 +111,20 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
             galleryRotation,
             true);
 
-    if (restoreSnapshot == null) {
+    if (!this.prefabType.equals(PrefabType.EMPTY) && restoreSnapshot == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[PlaceMineshaftGalleryPrefabAction] Could not spawn prefab");
+      return false;
+    }
+    if (shouldCaptureRestoreSnapshot && restoreSnapshot == null) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[PlaceMineshaftGalleryPrefabAction] Could not capture restore snapshot for section " + galleryTarget);
       return false;
     }
 
     boolean changedPersistentState = false;
     if (this.prefabType.equals(PrefabType.EMPTY)) {
-      mineshaftGallery.addRestoreSnapshot(restoreSnapshot);
-      changedPersistentState = true;
+      boolean restoreSnapshotAdded = restoreSnapshot != null && mineshaftGallery.addRestoreSnapshot(restoreSnapshot);
+      changedPersistentState = restoreSnapshotAdded;
     }
 
     if (committedDigPosition != null) {
@@ -154,17 +163,11 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       MineshaftGallery mineshaftGallery,
       Vector3i galleryDirection,
       int depth) {
-    Vector3i snapshotPosition = this.resolveSnapshotPosition(snapshot, this.commitLastDiggedFromSnapshotGroup);
-    if (snapshotPosition != null) {
-      return snapshotPosition;
-    }
-
-    Vector3i referenceDigPosition = this.resolveReferenceDigPosition(snapshot, mineshaftGallery);
-    if (referenceDigPosition == null) {
+    if (!this.hasValue(this.commitLastDiggedFromSnapshotGroup)) {
       return null;
     }
 
-    return this.resolveAlignedSectionAnchor(mineshaftGallery, referenceDigPosition, galleryDirection, depth);
+    return this.resolveSnapshotPosition(snapshot, this.commitLastDiggedFromSnapshotGroup);
   }
 
   private Vector3i resolveReferenceDigPosition(

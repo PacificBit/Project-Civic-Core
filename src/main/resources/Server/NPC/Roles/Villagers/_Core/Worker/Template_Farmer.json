@@ -711,13 +711,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 0.6
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1.5,
-                "StopDistance": 1.5,
+                "StopDistance": 0.6,
                 "RelativeSpeed": 0.6
               }
             },
@@ -886,13 +886,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 0.6
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1.5,
-                "StopDistance": 1.5,
+                "StopDistance": 0.6,
                 "RelativeSpeed": 0.6
               }
             },
@@ -1061,13 +1061,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 0.6
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1.5,
-                "StopDistance": 1.5,
+                "StopDistance": 0.6,
                 "RelativeSpeed": 0.6
               }
             },

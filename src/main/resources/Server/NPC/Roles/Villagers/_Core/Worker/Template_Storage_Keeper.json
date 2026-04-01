@@ -675,8 +675,8 @@
             {
               "Type": "Timeout",
               "Delay": [
-                25,
-                25
+                5,
+                10
               ],
               "Action": {
                 "Type": "State",

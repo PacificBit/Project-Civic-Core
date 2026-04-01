@@ -41,6 +41,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.ContinueBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.TeleportVillagerToTownHeartTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.UpgradeBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -425,6 +426,22 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     }
 
     VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
+
+    if (structure.getStructureType() != StructureType.HOUSE) {
+      this.heart.getWorkplaceFromId(structure.getStructureId())
+          .getWorkers()
+          .stream()
+          .map(TeleportVillagerToTownHeartTask::new)
+          .forEach(taskQueue::registerTask);
+    } else {
+      this.heart.getHouseFromId(structure.getStructureId())
+          .getAppartmentRegistry()
+          .getOccupants()
+          .stream()
+          .map(TeleportVillagerToTownHeartTask::new)
+          .forEach(taskQueue::registerTask);
+    }
+
     taskQueue.registerTask(
         new UpgradeBuildingTask(
             structure.getStructureType(),

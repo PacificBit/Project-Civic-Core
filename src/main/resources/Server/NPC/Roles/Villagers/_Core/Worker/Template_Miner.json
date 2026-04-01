@@ -643,6 +643,28 @@
               "Sensor": {
                 "Type": "Any"
               },
+              "$Comment": "If a section is pending finalization, resume Dig so the BEAM path can complete it",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "HasTargetBlockInSnapshot",
+                    "TargetBlockIds": [
+                      "Current_Section_Prefab_Anchor"
+                    ]
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": "Dig"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
               "Actions": [
                 {
                   "Type": "State",

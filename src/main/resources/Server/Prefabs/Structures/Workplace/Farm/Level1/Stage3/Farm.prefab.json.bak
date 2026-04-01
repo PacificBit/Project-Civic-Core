@@ -30,7 +30,7 @@
       "x": -11,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -99,7 +99,7 @@
       "x": -11,
       "y": 3,
       "z": -6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -168,7 +168,7 @@
       "x": -11,
       "y": 3,
       "z": -5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -237,7 +237,7 @@
       "x": -11,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -306,7 +306,7 @@
       "x": -11,
       "y": 3,
       "z": -3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -375,7 +375,7 @@
       "x": -11,
       "y": 3,
       "z": -2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -444,7 +444,7 @@
       "x": -11,
       "y": 3,
       "z": -1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -513,7 +513,7 @@
       "x": -11,
       "y": 3,
       "z": 0,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -582,7 +582,7 @@
       "x": -11,
       "y": 3,
       "z": 1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -651,7 +651,7 @@
       "x": -11,
       "y": 3,
       "z": 2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -720,7 +720,7 @@
       "x": -11,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -789,7 +789,7 @@
       "x": -11,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -856,7 +856,7 @@
       "x": -11,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -925,7 +925,7 @@
       "x": -10,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -10,
@@ -1730,7 +1730,7 @@
       "x": -10,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -10,
@@ -1799,7 +1799,7 @@
       "x": -9,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -2604,7 +2604,7 @@
       "x": -9,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -2673,7 +2673,7 @@
       "x": -8,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -8,
@@ -3478,7 +3478,7 @@
       "x": -8,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -8,
@@ -3547,7 +3547,7 @@
       "x": -7,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -7,
@@ -4359,7 +4359,7 @@
       "x": -7,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -7,
@@ -4428,7 +4428,7 @@
       "x": -6,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4497,7 +4497,7 @@
       "x": -6,
       "y": 3,
       "z": -6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4567,7 +4567,7 @@
       "x": -6,
       "y": 3,
       "z": -5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4637,7 +4637,7 @@
       "x": -6,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4707,7 +4707,7 @@
       "x": -6,
       "y": 3,
       "z": -3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4977,7 +4977,7 @@
       "x": -6,
       "y": 3,
       "z": 1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5047,7 +5047,7 @@
       "x": -6,
       "y": 3,
       "z": 2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5117,7 +5117,7 @@
       "x": -6,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5187,7 +5187,7 @@
       "x": -6,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5255,7 +5255,7 @@
       "x": -6,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,

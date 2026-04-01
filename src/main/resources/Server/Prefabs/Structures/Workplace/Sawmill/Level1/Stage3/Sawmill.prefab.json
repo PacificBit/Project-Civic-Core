@@ -1848,22 +1848,19 @@
       "x": -9,
       "y": 1,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Left",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 2,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Left",
-      "filler": 1024,
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 3,
       "z": 3,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -2002,22 +1999,19 @@
       "x": -9,
       "y": 1,
       "z": 4,
-      "name": "Cloth_Roof_Green_Steep",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 2,
       "z": 4,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024,
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 3,
       "z": 4,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -2156,22 +2150,19 @@
       "x": -9,
       "y": 1,
       "z": 5,
-      "name": "Cloth_Roof_Orange_Steep",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 2,
       "z": 5,
-      "name": "Cloth_Roof_Orange_Steep",
-      "filler": 1024,
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 3,
       "z": 5,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -2310,22 +2301,19 @@
       "x": -9,
       "y": 1,
       "z": 6,
-      "name": "Cloth_Roof_Green_Steep",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 2,
       "z": 6,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024,
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 3,
       "z": 6,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -2464,22 +2452,19 @@
       "x": -9,
       "y": 1,
       "z": 7,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Left",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 2,
       "z": 7,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Left",
-      "filler": 1024,
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -9,
       "y": 3,
       "z": 7,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -9,
@@ -4426,22 +4411,19 @@
       "x": -8,
       "y": 1,
       "z": 3,
-      "name": "Cloth_Roof_Green_Steep",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -8,
       "y": 2,
       "z": 3,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024,
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -8,
       "y": 3,
       "z": 3,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -8,
@@ -4596,8 +4578,7 @@
       "x": -8,
       "y": 3,
       "z": 4,
-      "name": "*Cloth_Roof_Green_State_Definitions_Corner_Right",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -8,
@@ -4744,15 +4725,16 @@
       "x": -8,
       "y": 2,
       "z": 5,
-      "name": "Furniture_Kweebec_Statue",
-      "rotation": 1
+      "name": "Wood_Oak_Trunk",
+      "support": 15,
+      "rotation": 5
     },
     {
       "x": -8,
       "y": 3,
       "z": 5,
-      "name": "Cloth_Roof_Orange",
-      "rotation": 3
+      "name": "Wood_Sticks",
+      "support": 15
     },
     {
       "x": -8,
@@ -4907,7 +4889,7 @@
       "x": -8,
       "y": 3,
       "z": 6,
-      "name": "*Cloth_Roof_Green_State_Definitions_Corner_Right"
+      "name": "Empty"
     },
     {
       "x": -8,
@@ -5046,20 +5028,21 @@
       "x": -8,
       "y": 1,
       "z": 7,
-      "name": "Cloth_Roof_Green_Steep"
+      "name": "Wood_Oak_Trunk",
+      "support": 15,
+      "rotation": 5
     },
     {
       "x": -8,
       "y": 2,
       "z": 7,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024
+      "name": "Empty"
     },
     {
       "x": -8,
       "y": 3,
       "z": 7,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -8,
@@ -7006,22 +6989,19 @@
       "x": -7,
       "y": 1,
       "z": 3,
-      "name": "Cloth_Roof_Orange_Steep",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -7,
       "y": 2,
       "z": 3,
-      "name": "Cloth_Roof_Orange_Steep",
-      "filler": 1024,
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -7,
       "y": 3,
       "z": 3,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -7175,8 +7155,7 @@
       "x": -7,
       "y": 3,
       "z": 4,
-      "name": "Cloth_Roof_Orange",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -7315,25 +7294,30 @@
       "x": -7,
       "y": 1,
       "z": 5,
-      "name": "Empty"
+      "name": "Wood_Oak_Trunk",
+      "support": 15,
+      "rotation": 5
     },
     {
       "x": -7,
       "y": 2,
       "z": 5,
-      "name": "Empty"
+      "name": "Wood_Oak_Trunk",
+      "support": 15,
+      "rotation": 5
     },
     {
       "x": -7,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Furniture_Kweebec_Statue",
+      "rotation": 1
     },
     {
       "x": -7,
       "y": 4,
       "z": 5,
-      "name": "Cloth_Roof_Orange_Flat"
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -7482,7 +7466,8 @@
       "x": -7,
       "y": 3,
       "z": 6,
-      "name": "Cloth_Roof_Orange"
+      "name": "Wood_Sticks",
+      "support": 15
     },
     {
       "x": -7,
@@ -7621,20 +7606,22 @@
       "x": -7,
       "y": 1,
       "z": 7,
-      "name": "Cloth_Roof_Orange_Steep"
+      "name": "Wood_Oak_Trunk",
+      "support": 15,
+      "rotation": 5
     },
     {
       "x": -7,
       "y": 2,
       "z": 7,
-      "name": "Cloth_Roof_Orange_Steep",
-      "filler": 1024
+      "name": "Wood_Sticks",
+      "support": 15
     },
     {
       "x": -7,
       "y": 3,
       "z": 7,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -9581,22 +9568,19 @@
       "x": -6,
       "y": 1,
       "z": 3,
-      "name": "Cloth_Roof_Green_Steep",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -6,
       "y": 2,
       "z": 3,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024,
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -6,
       "y": 3,
       "z": 3,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -9748,8 +9732,7 @@
       "x": -6,
       "y": 3,
       "z": 4,
-      "name": "*Cloth_Roof_Green_State_Definitions_Corner_Right",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -9900,8 +9883,7 @@
       "x": -6,
       "y": 3,
       "z": 5,
-      "name": "Cloth_Roof_Orange",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -10056,8 +10038,7 @@
       "x": -6,
       "y": 3,
       "z": 6,
-      "name": "*Cloth_Roof_Green_State_Definitions_Corner_Right",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -10196,20 +10177,21 @@
       "x": -6,
       "y": 1,
       "z": 7,
-      "name": "Cloth_Roof_Green_Steep"
+      "name": "Wood_Oak_Trunk",
+      "support": 15,
+      "rotation": 5
     },
     {
       "x": -6,
       "y": 2,
       "z": 7,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024
+      "name": "Empty"
     },
     {
       "x": -6,
       "y": 3,
       "z": 7,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -12153,22 +12135,19 @@
       "x": -5,
       "y": 1,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Left",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 2,
       "z": 3,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Left",
-      "filler": 1024,
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 3,
       "z": 3,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -12307,22 +12286,19 @@
       "x": -5,
       "y": 1,
       "z": 4,
-      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Right",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 2,
       "z": 4,
-      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Right",
-      "filler": 1024,
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 3,
       "z": 4,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -12473,7 +12449,7 @@
       "x": -5,
       "y": 3,
       "z": 5,
-      "name": "Cloth_Roof_Orange_Flat"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -12612,20 +12588,21 @@
       "x": -5,
       "y": 1,
       "z": 6,
-      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Left"
+      "name": "Wood_Oak_Trunk",
+      "support": 15,
+      "rotation": 5
     },
     {
       "x": -5,
       "y": 2,
       "z": 6,
-      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Left",
-      "filler": 1024
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 3,
       "z": 6,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -12764,22 +12741,20 @@
       "x": -5,
       "y": 1,
       "z": 7,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Right",
-      "rotation": 1
+      "name": "Wood_Sticks",
+      "support": 15
     },
     {
       "x": -5,
       "y": 2,
       "z": 7,
-      "name": "*Cloth_Roof_Orange_Steep_State_Definitions_Corner_Right",
-      "filler": 1024,
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 3,
       "z": 7,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -5,

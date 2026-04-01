@@ -3,6 +3,7 @@ package com.pacificbytestudios.projectciviccore.codecs;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.ContinueBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.ForceFillWorkplaceVacancyTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.LevelUpVillageTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterStructureTopologyTask;
@@ -103,5 +104,11 @@ public final class VillageTaskQueueCodecs {
         "LevelUpVillageTask",
         LevelUpVillageTask.class,
         LevelUpVillageTask.CODEC);
+
+    VillageTaskQueueComponent.registerTaskCodec(
+        "ForceFillWorkplaceVacancyTask",
+        ForceFillWorkplaceVacancyTask.class,
+        ForceFillWorkplaceVacancyTask.CODEC);
+
   }
 }

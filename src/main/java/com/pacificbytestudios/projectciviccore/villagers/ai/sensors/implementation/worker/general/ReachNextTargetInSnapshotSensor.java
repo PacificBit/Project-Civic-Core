@@ -20,7 +20,10 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
 public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
+  // private static final double NUDGE_DISTANCE = 0.75;
+
   private final PositionProvider positionProvider = new PositionProvider();
+  private Vector3d target = null;
   private String[] blockIds;
   private double stoppingRange;
   private boolean useCenterOfBlock;
@@ -41,32 +44,8 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   }
 
   @Override
-  public boolean matches(Ref<EntityStore> ref, Role role, double dt, Store<EntityStore> store) {
-    if (!super.matches(ref, role, dt, store)) {
-      this.positionProvider.clear();
-      return false;
-    }
-
-    VillagerComponent villager = this.getVillagerComponent(ref, store);
-    if (villager == null) {
-      return false;
-    }
-
-    Map<String, ArrayDeque<Vector3i>> blockPositions = villager
-        .getWorkerData()
-        .getWorkareaSnapshot()
-        .getBlockTypePosition();
-
-    Vector3i target = null;
-    for (String blockId : blockIds) {
-      ArrayDeque<Vector3i> queue = blockPositions.get(blockId);
-      if (queue != null && !queue.isEmpty()) {
-        target = queue.peekFirst();
-        break;
-      }
-    }
-
-    if (target == null) {
+  public boolean matches(Ref<EntityStore> ref, Role role, double deltaTime, Store<EntityStore> store) {
+    if (!super.matches(ref, role, deltaTime, store)) {
       this.positionProvider.clear();
       return false;
     }
@@ -78,18 +57,74 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
       return false;
     }
 
-    Vector3d targetPosition = this.useCenterOfBlock
-        ? Utils.centerOf(target).toVector3d()
-        : target.toVector3d();
+    if (!this.isTriggered()) {
+      this.triggered = true;
 
-    double distanceFromBlock = transform.getPosition().distanceSquaredTo(targetPosition);
+      VillagerComponent villager = this.getVillagerComponent(ref, store);
+      if (villager == null) {
+        this.positionProvider.clear();
+        this.triggered = false;
+        return false;
+      }
 
-    if (distanceFromBlock <= this.stoppingRange) {
+      Map<String, ArrayDeque<Vector3i>> blockPositions = villager
+          .getWorkerData()
+          .getWorkareaSnapshot()
+          .getBlockTypePosition();
+
+      Vector3i nextTarget = null;
+      for (String blockId : this.blockIds) {
+        ArrayDeque<Vector3i> queue = blockPositions.get(blockId);
+        if (queue != null && !queue.isEmpty()) {
+          nextTarget = queue.peekFirst();
+          break;
+        }
+      }
+
+      if (nextTarget == null) {
+        this.positionProvider.clear();
+        this.triggered = false;
+        return false;
+      }
+
+      this.target = this.useCenterOfBlock
+          ? Utils.centerOf(nextTarget).toVector3d()
+          : nextTarget.toVector3d();
+
+      this.positionProvider.setTarget(this.target);
+      return true;
+    }
+
+    if (this.target == null) {
       this.positionProvider.clear();
+      this.triggered = false;
       return false;
     }
 
-    this.positionProvider.setTarget(targetPosition);
+    double distanceFromBlock = transform.getPosition().distanceSquaredTo(this.target);
+
+    if (distanceFromBlock <= this.stoppingRange) {
+      this.positionProvider.clear();
+      this.target = null;
+      this.triggered = false;
+      return false;
+    }
+
+    // TODO: find a solution for when they get stuck
+    // Vector3d movementTarget = this.target;
+    // if (role.getActiveMotionController().isObstructed()) {
+    // Vector3d direction = this.target.clone().subtract(transform.getPosition());
+    // direction.y = 0.0;
+    //
+    // if (!direction.closeToZero(0.001)) {
+    // Vector3d sideways = new Vector3d(direction.x, 0.0, -direction.z)
+    // .normalize()
+    // .scale(NUDGE_DISTANCE);
+    // movementTarget = transform.getPosition().clone().add(sideways);
+    // }
+    // }
+
+    this.positionProvider.setTarget(this.target);
     return true;
   }
 }

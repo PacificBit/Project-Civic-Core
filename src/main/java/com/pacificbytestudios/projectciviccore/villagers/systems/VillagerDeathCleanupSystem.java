@@ -9,19 +9,23 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathComponent;
 import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseAppartmentRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
+import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.ForceFillWorkplaceVacancyTask;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerHousingComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
@@ -37,12 +41,17 @@ public final class VillagerDeathCleanupSystem extends DeathSystems.OnDeathSystem
       @Nonnull CommandBuffer<EntityStore> commandBuffer) {
     VillagerComponent villagerComponent = commandBuffer.getComponent(ref, VillagerComponent.getComponentType());
     UUIDComponent uuidComponent = commandBuffer.getComponent(ref, UUIDComponent.getComponentType());
+    TransformComponent transform = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
 
     if (villagerComponent == null || uuidComponent == null) {
       return;
     }
 
     UUID villagerId = uuidComponent.getUuid();
+    ProjectCivicCore.LOGGER.atWarning().log(
+        "[VillagerDeathCleanupSystem] Villager '" + villagerId + "' died!\n Death Reason: " +
+            component.getDeathCause() + "\n Death Position: " +
+            (transform == null ? "<TransformComponent not found>" : transform.getPosition()));
 
     this.cleanupPersistedWorkplace(villagerComponent, villagerId);
     this.cleanupPersistedHousing(villagerComponent, villagerId);
@@ -94,16 +103,20 @@ public final class VillagerDeathCleanupSystem extends DeathSystems.OnDeathSystem
       return;
     }
 
+    persistedWorkplace.unregisterWorker(villagerId);
+    if (villagerId.equals(persistedWorkplace.getBossId())) {
+      persistedWorkplace.registerAsBoss(null);
+    }
+
     if (workerData.getTypeOfWorker() == WorkType.MINER) {
       MineComponent mineComponent = workplaceRef.getStore().getComponent(
           workplaceRef,
           MineComponent.getComponentType());
       mineComponent.unregisterFromGallery(villagerId);
-    }
-
-    persistedWorkplace.unregisterWorker(villagerId);
-    if (villagerId.equals(persistedWorkplace.getBossId())) {
-      persistedWorkplace.registerAsBoss(null);
+    } else if (workerData.getTypeOfWorker() == WorkType.MAYOR) {
+      VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
+      taskComponent.registerTask(new ForceFillWorkplaceVacancyTask(persistedWorkplace.getUuid()));
+      Utils.safeVillageTaskEnqueue(persistedWorkplace.getVillageHeartRef(), taskComponent);
     }
 
     workplaceRef.getStore().putComponent(workplaceRef, WorkplaceComponent.getComponentType(), persistedWorkplace);

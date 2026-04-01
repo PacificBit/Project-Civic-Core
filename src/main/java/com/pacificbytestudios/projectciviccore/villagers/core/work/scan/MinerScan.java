@@ -41,7 +41,6 @@ public class MinerScan implements IWorkAreaScanner {
   public static final String DIG_POSITIONS = "Dig_Positions";
   public static final String CURRENT_LEVEL_SHIFT_START_POSITION = "Current_Level_Shift_Start_Position";
   public static final String CURRENT_SECTION_PREFAB_ANCHOR = "Current_Section_Prefab_Anchor";
-  public static final String CURRENT_SECTION_END_DIG_POSITION = "Current_Section_End_Dig_Position";
 
   private World world;
   private long start;
@@ -88,9 +87,15 @@ public class MinerScan implements IWorkAreaScanner {
       return snapshotInProgress;
     }
 
+    Mineshaft mineshaft = mineComponent.getMineshaft();
+    Short galleryLevel = mineshaft == null ? null : mineshaft.getLevelNumberForGallery(gallery.getGalleryId());
+    Rotation mineshaftRotation = mineshaft == null ? null : mineshaft.getRotation();
+    Vector3i levelAnchor = mineshaft == null ? null : this.resolveLevelAnchor(mineshaft, gallery.getGalleryId());
     TransformComponent villagerTransform = store.getComponent(villagerRef, TransformComponent.getComponentType());
-    Vector3i levelShiftStartPosition = this.shouldPopulateLevelShiftStartPosition(villagerTransform, currentDigPosition)
-        ? this.resolveLevelShiftStartPosition(mineComponent, gallery)
+    boolean shouldPopulateLevelShift = this.shouldPopulateLevelShiftStartPosition(villagerTransform,
+        currentDigPosition);
+    Vector3i levelShiftStartPosition = shouldPopulateLevelShift
+        ? this.resolveLevelShiftStartPosition(levelAnchor, galleryLevel, mineshaftRotation)
         : null;
     if (snapshotInProgress != null && snapshotInProgress.isValid(worldTimeResource)) {
       this.storeCurrentLevelShiftStartMetadata(snapshotInProgress, levelShiftStartPosition);
@@ -154,31 +159,21 @@ public class MinerScan implements IWorkAreaScanner {
   }
 
   private Vector3i resolveLevelShiftStartPosition(
-      MineComponent mineComponent,
-      MineshaftGallery gallery) {
-    if (mineComponent == null || gallery == null) {
-      return null;
-    }
-
-    Mineshaft mineshaft = mineComponent.getMineshaft();
-    if (mineshaft == null) {
-      return null;
-    }
-
-    Short levelNumber = mineshaft.getLevelNumberForGallery(gallery.getGalleryId());
+      Vector3i levelAnchor,
+      Short levelNumber,
+      Rotation mineshaftRotation) {
     if (levelNumber == null || levelNumber.shortValue() <= 1) {
       return null;
     }
 
-    Vector3i levelAnchor = this.resolveLevelAnchor(mineshaft, gallery.getGalleryId());
-    if (levelAnchor == null) {
+    if (levelAnchor == null || mineshaftRotation == null) {
       return null;
     }
 
     return StructurePlacementUtils.withOffset(
         levelAnchor,
         LEVEL_SHIFT_START_OFFSET,
-        mineshaft.getRotation());
+        mineshaftRotation);
   }
 
   private Vector3i resolveLevelAnchor(Mineshaft mineshaft, UUID galleryId) {
@@ -280,6 +275,7 @@ public class MinerScan implements IWorkAreaScanner {
     blockTypePosition.remove("Start_Position");
     blockTypePosition.remove("Gallery_Direction");
     blockTypePosition.remove("End_Position");
+    blockTypePosition.remove("Current_Section_End_Dig_Position");
   }
 
   private void resetScanProgress(WorkplaceAreaSnapshot snapshotInProgress) {
@@ -295,7 +291,6 @@ public class MinerScan implements IWorkAreaScanner {
     }
 
     blockTypePosition.remove(CURRENT_SECTION_PREFAB_ANCHOR);
-    blockTypePosition.remove(CURRENT_SECTION_END_DIG_POSITION);
 
     snapshotInProgress.setLastVisited(null);
   }
@@ -417,7 +412,6 @@ public class MinerScan implements IWorkAreaScanner {
       Vector3i galleryDirection) {
     Vector3i prefabAnchor = startPosition.clone().addScaled(galleryDirection, GALLERY_SECTION_DEPTH);
     this.setSingletonTask(snapshotInProgress, CURRENT_SECTION_PREFAB_ANCHOR, prefabAnchor);
-    this.setSingletonTask(snapshotInProgress, CURRENT_SECTION_END_DIG_POSITION, endPosition);
   }
 
   private void storeCurrentLevelShiftStartMetadata(

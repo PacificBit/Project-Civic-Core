@@ -1,0 +1,38 @@
+{
+  "GridGenerator": {
+    "Seed": "ProjectCivicCore-Pattern-CityCenter",
+    "Density": [
+      0.92,
+      1
+    ],
+    "Scale": 0.004,
+    "Jitter": 0.7
+  },
+  "HeightThreshold": {
+    "Positions": [
+      114,
+      115,
+      124,
+      125
+    ],
+    "Values": [
+      0,
+      1,
+      1,
+      0
+    ]
+  },
+  "FitHeightmap": false,
+  "Parent": [
+    "Soil_Grass",
+    "Soil_Grass_Full",
+    "Soil_Grass_Deep",
+    "Soil_Dirt",
+    "Soil_Pathway",
+    "Soil_Gravel",
+    "Soil_Pebbles"
+  ],
+  "Rotations": "ROTATION_0",
+  "MaxSize": 32,
+  "ExclusionRadius": 96
+}

@@ -1,0 +1,22 @@
+{
+  "Priority": "Normal",
+  "Target": {
+    "Root": "Default",
+    "Rules": [
+      "Zones.Zone1_Spawn.Tile.Plains_Spawn",
+      "Zones.Zone1_Tier1.Tile.Plains_Smooth",
+      "Zones.Zone1_Tier1.Tile.Plains_Birch"
+    ]
+  },
+  "Content": {
+    "Biome_Prefabs": [
+      {
+        "Operation": "Add",
+        "Content": {
+          "Type": "File",
+          "Path": "Zones.ProjectCivicCore.Biome_Prefabs.City_Center_Plains"
+        }
+      }
+    ]
+  }
+}

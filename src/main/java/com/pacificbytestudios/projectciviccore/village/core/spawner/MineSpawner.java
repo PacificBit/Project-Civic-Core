@@ -99,14 +99,8 @@ public class MineSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
-
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Mine.CONSTRUCTION_SIGN_ROTATION,
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, rotation);
     Utils.setBlockChunkAware(
         chunkToUse,
         constructionSignPosition,
@@ -244,13 +238,8 @@ public class MineSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, structureRotation);
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Mine.CONSTRUCTION_SIGN_ROTATION,
-            structureRotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
         chunkToUse,
@@ -425,14 +414,9 @@ public class MineSpawner {
       snapshotToUse = newSnapshot;
     }
 
-    int blockRotation = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Mine.WORKPLACE_BLOCK_YAW_OFFSET,
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
+    int blockRotation = getWorkplaceBlockRotationIndex(targetLevel, rotation);
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, rotation);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(
         chunk,
         workplaceBlockPosition,
@@ -473,7 +457,7 @@ public class MineSpawner {
     workplaceComponent.setUuid(structureId);
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, rotation));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MINER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
     chunkStore.putComponent(
@@ -483,13 +467,8 @@ public class MineSpawner {
 
     workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
 
-    int containerRotation = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Mine.CONTAINER_BLOCK_YAW_OFFSET,
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
-    Vector3i containerPosition = getContainerPosition(prefabAnchor, rotation);
+    int containerRotation = getContainerRotationIndex(targetLevel, rotation);
+    Vector3i containerPosition = getContainerPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk containerChunk = Utils.setBlockChunkAware(
         workplaceChunk,
         containerPosition,
@@ -515,14 +494,14 @@ public class MineSpawner {
     }
 
     container.setPosition(containerPosition);
-    container.setAccessPosition(getContainerAccessPosition(containerPosition, rotation));
+    container.setAccessPosition(getContainerAccessPosition(containerPosition, targetLevel, rotation));
     container.setUuid(UUID.randomUUID());
 
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
     storage.registerContainer(container.getUuid(), container);
     workplaceComponent.setStorage(storage);
 
-    removeConstructionSignIfPresent(chunk, prefabAnchor, rotation);
+    removeConstructionSignIfPresent(chunk, prefabAnchor, targetLevel, rotation);
     workplaceChunk.markNeedsSaving();
     return true;
   }
@@ -537,10 +516,12 @@ public class MineSpawner {
     Ref<ChunkStore> workplaceRef = result.getSecond();
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      workplaceBlockPosition = getWorkplaceBlockPosition(position, Rotation.None);
-      result = Utils.getBlockComponentEntityChunkAware(chunk, workplaceBlockPosition);
-      workplaceChunk = result.getFirst();
-      workplaceRef = result.getSecond();
+      for (int level = 1; level <= 3 && (workplaceRef == null || !workplaceRef.isValid()); level++) {
+        workplaceBlockPosition = getWorkplaceBlockPosition(position, level, Rotation.None);
+        result = Utils.getBlockComponentEntityChunkAware(chunk, workplaceBlockPosition);
+        workplaceChunk = result.getFirst();
+        workplaceRef = result.getSecond();
+      }
     }
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
@@ -577,12 +558,12 @@ public class MineSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, component.getLevel(), prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          StructureConfig.Mine.PREFAB_JSON,
+          StructureConfig.Mine.getCompletedPrefab(component.getLevel()),
           prefabAnchor,
           prefabRotation,
           true);
@@ -598,10 +579,10 @@ public class MineSpawner {
       prefabAnchor = trackedPlacement.getOrigin();
     }
     if (prefabAnchor == null) {
-      prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
+      prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, component.getLevel(), prefabRotation);
     }
 
-    Vector3i containerPosition = getContainerPosition(prefabAnchor, prefabRotation);
+    Vector3i containerPosition = getContainerPosition(prefabAnchor, component.getLevel(), prefabRotation);
     Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
     Utils.breakBlockChunkAware(workplaceChunk, containerPosition);
 
@@ -660,8 +641,9 @@ public class MineSpawner {
   private static void removeConstructionSignIfPresent(
       WorldChunk chunk,
       Vector3i prefabAnchor,
+      int level,
       Rotation rotation) {
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -687,45 +669,70 @@ public class MineSpawner {
     signChunk.markNeedsSaving();
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+  private static int getWorkplaceBlockRotationIndex(int level, Rotation rotation) {
+    Rotation workplaceRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.Mine.getLevelLayout(level).workplace().rotation(),
+        rotation);
+    return RotationTuple.of(workplaceRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static int getConstructionSignRotationIndex(int level, Rotation rotation) {
+    Rotation signRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.Mine.getLevelLayout(level).constructionSign().rotation(),
+        rotation);
+    return RotationTuple.of(signRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static int getContainerRotationIndex(int level, Rotation rotation) {
+    Rotation containerRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.Mine.getLevelLayout(level).container().rotation(),
+        rotation);
+    return RotationTuple.of(containerRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
-        StructureConfig.Mine.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.Mine.getLevelLayout(level).workplace().position(),
+        rotation);
+  }
+
+  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Mine.getLevelLayout(level).constructionSign().position(),
         rotation);
   }
 
   private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+    return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
+  }
+
+  private static Vector3i getContainerPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
-        StructureConfig.Mine.CONSTRUCTION_SIGN_OFFSET,
+        StructureConfig.Mine.getLevelLayout(level).container().position(),
         rotation);
   }
 
-  private static Vector3i getContainerPosition(Vector3i prefabAnchor, Rotation rotation) {
-    return StructurePlacementUtils.withOffset(
-        prefabAnchor,
-        StructureConfig.Mine.CONTAINER_OFFSET,
-        rotation);
-  }
-
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
-        StructureConfig.Mine.BENCH_ACCESS_OFFSET,
+        StructureConfig.Mine.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, Rotation rotation) {
+  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         containerPosition,
-        StructureConfig.Mine.CONTAINER_ACCESS_OFFSET,
+        StructureConfig.Mine.getLevelLayout(level).container().accessOffset(),
         rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.removeOffset(
         workplaceBlockPosition,
-        StructureConfig.Mine.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.Mine.getLevelLayout(level).workplace().position(),
         rotation);
   }
 

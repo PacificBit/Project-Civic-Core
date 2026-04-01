@@ -72,8 +72,8 @@ public class MakeVillageAssessment extends VillagerActionBase {
 
     TownHallComponent townHall = this.getComponentFromWorkplace(store, ref, TownHallComponent.getComponentType());
     VillageHeartComponent village = this.getVillageHeartComponent(ref, store);
-    VillageTopologyComponent topology = getVillageTopologyComponent(ref, store);
-    if (townHall == null) {
+    VillageTopologyComponent topology = this.getVillageTopologyComponent(ref, store);
+    if (townHall == null || village == null || topology == null) {
       return false;
     }
 

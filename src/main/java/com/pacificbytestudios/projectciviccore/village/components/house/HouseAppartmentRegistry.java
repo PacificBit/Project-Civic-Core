@@ -1,7 +1,9 @@
 package com.pacificbytestudios.projectciviccore.village.components.house;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -82,6 +84,24 @@ public class HouseAppartmentRegistry implements Component<ChunkStore> {
     }
     return false;
 
+  }
+
+  public Set<UUID> getOccupants() {
+    Set<UUID> occupants = new HashSet<>();
+    for (Map.Entry<UUID, AppartmentComponent> appts : this.appartments.entrySet()) {
+      AppartmentComponent value = appts.getValue();
+      if (value == null) {
+        continue;
+      }
+
+      for (VillageBedComponent bed : value.getBeds().values()) {
+        if (!bed.isTaken()) {
+          continue;
+        }
+        occupants.add(bed.getOwner());
+      }
+    }
+    return occupants;
   }
 
   public short getFreeBedsCount() {

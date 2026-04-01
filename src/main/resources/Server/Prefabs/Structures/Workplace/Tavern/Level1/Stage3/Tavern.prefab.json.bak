@@ -518,14 +518,13 @@
       "x": -5,
       "y": 1,
       "z": -1,
-      "name": "Furniture_Ancient_Bench",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 2,
       "z": -1,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -557,15 +556,13 @@
       "x": -5,
       "y": 1,
       "z": 0,
-      "name": "Furniture_Ancient_Bench",
-      "filler": 32,
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 2,
       "z": 0,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -597,15 +594,13 @@
       "x": -5,
       "y": 1,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Vertical",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 2,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Vertical",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -636,7 +631,7 @@
       "x": -5,
       "y": 1,
       "z": 2,
-      "name": "Furniture_Village_Crate"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -673,13 +668,13 @@
       "x": -5,
       "y": 1,
       "z": 3,
-      "name": "Furniture_Village_Crate"
+      "name": "Empty"
     },
     {
       "x": -5,
       "y": 2,
       "z": 3,
-      "name": "Furniture_Crude_Candle"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -989,15 +984,13 @@
       "x": -4,
       "y": 2,
       "z": 1,
-      "name": "Cloth_Roof_Green_Flap",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -4,
       "y": 3,
       "z": 1,
-      "name": "Cloth_Roof_Green_Vertical",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1022,7 +1015,7 @@
       "x": -4,
       "y": 1,
       "z": 2,
-      "name": "Empty"
+      "name": "Furniture_Tavern_Barrel"
     },
     {
       "x": -4,
@@ -1059,13 +1052,13 @@
       "x": -4,
       "y": 1,
       "z": 3,
-      "name": "Empty"
+      "name": "Furniture_Village_Crate"
     },
     {
       "x": -4,
       "y": 2,
       "z": 3,
-      "name": "Empty"
+      "name": "Furniture_Tavern_Barrel"
     },
     {
       "x": -4,

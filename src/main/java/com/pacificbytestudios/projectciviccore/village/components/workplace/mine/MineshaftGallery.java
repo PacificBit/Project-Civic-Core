@@ -1,7 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace.mine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,9 +41,7 @@ public class MineshaftGallery {
           "TrackedPrefabs",
           new ArrayCodec<>(TrackedPrefabPlacementComponent.CODEC, TrackedPrefabPlacementComponent[]::new),
           false),
-          (obj, value) -> obj.restoreSnapshot = value == null
-              ? new ArrayList<>()
-              : new ArrayList<>(Arrays.asList(value)),
+          (obj, value) -> obj.restoreSnapshot = dedupeRestoreSnapshots(value),
           obj -> obj.restoreSnapshot == null
               ? new TrackedPrefabPlacementComponent[0]
               : obj.restoreSnapshot.toArray(TrackedPrefabPlacementComponent[]::new))
@@ -125,8 +122,37 @@ public class MineshaftGallery {
     return restoreSnapshot;
   }
 
-  public void addRestoreSnapshot(TrackedPrefabPlacementComponent restoreSnapshot) {
+  public boolean hasRestoreSnapshotAt(Vector3i sectionOrigin) {
+    return containsRestoreSnapshotAt(this.restoreSnapshot, sectionOrigin);
+  }
+
+  public boolean addRestoreSnapshot(TrackedPrefabPlacementComponent restoreSnapshot) {
+    if (restoreSnapshot == null || this.hasRestoreSnapshotAt(restoreSnapshot.getOrigin())) {
+      return false;
+    }
     this.restoreSnapshot.add(restoreSnapshot);
+    return true;
+  }
+
+  public int getBuiltSectionCount() {
+    int builtSections = 0;
+    List<Vector3i> seenOrigins = new ArrayList<>();
+
+    for (TrackedPrefabPlacementComponent trackedPrefab : this.restoreSnapshot) {
+      if (trackedPrefab == null) {
+        continue;
+      }
+
+      Vector3i origin = trackedPrefab.getOrigin();
+      if (containsOrigin(seenOrigins, origin)) {
+        continue;
+      }
+
+      seenOrigins.add(origin);
+      builtSections++;
+    }
+
+    return builtSections;
   }
 
   public boolean hasProgress() {
@@ -137,7 +163,7 @@ public class MineshaftGallery {
   }
 
   public void checkIfGalleryIsCompleted() {
-    if (this.restoreSnapshot.size() >= MAX_GLALLERY_SECTION_COUNT) {
+    if (this.getBuiltSectionCount() >= MAX_GLALLERY_SECTION_COUNT) {
       this.setCompleted(true);
     }
   }
@@ -156,6 +182,59 @@ public class MineshaftGallery {
 
     component.completed = this.completed;
     return component;
+  }
+
+  private static ArrayList<TrackedPrefabPlacementComponent> dedupeRestoreSnapshots(
+      TrackedPrefabPlacementComponent[] trackedPrefabs) {
+    ArrayList<TrackedPrefabPlacementComponent> deduped = new ArrayList<>();
+    if (trackedPrefabs == null) {
+      return deduped;
+    }
+
+    for (TrackedPrefabPlacementComponent trackedPrefab : trackedPrefabs) {
+      if (trackedPrefab == null || containsRestoreSnapshotAt(deduped, trackedPrefab.getOrigin())) {
+        continue;
+      }
+
+      deduped.add(trackedPrefab);
+    }
+
+    return deduped;
+  }
+
+  private static boolean containsRestoreSnapshotAt(
+      List<TrackedPrefabPlacementComponent> trackedPrefabs,
+      Vector3i sectionOrigin) {
+    if (trackedPrefabs == null || sectionOrigin == null) {
+      return false;
+    }
+
+    for (TrackedPrefabPlacementComponent trackedPrefab : trackedPrefabs) {
+      if (trackedPrefab == null) {
+        continue;
+      }
+
+      Vector3i trackedOrigin = trackedPrefab.getOrigin();
+      if (sectionOrigin.equals(trackedOrigin)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private static boolean containsOrigin(List<Vector3i> seenOrigins, Vector3i candidate) {
+    if (seenOrigins == null || candidate == null) {
+      return false;
+    }
+
+    for (Vector3i seenOrigin : seenOrigins) {
+      if (candidate.equals(seenOrigin)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }

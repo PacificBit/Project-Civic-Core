@@ -100,14 +100,8 @@ public class TavernSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
-
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Tavern.CONSTRUCTION_SIGN_ROTATION,
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, rotation);
     Utils.setBlockChunkAware(
         chunkToUse,
         constructionSignPosition,
@@ -245,13 +239,8 @@ public class TavernSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, structureRotation);
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Tavern.CONSTRUCTION_SIGN_ROTATION,
-            structureRotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
         chunkToUse,
@@ -428,12 +417,12 @@ public class TavernSpawner {
 
     int blockRotation = RotationTuple.of(
         StructurePlacementUtils.addYaw(
-            StructureConfig.Tavern.WORKPLACE_BLOCK_YAW_OFFSET,
+            StructureConfig.Tavern.getWorkplaceSpawningOffset(targetLevel).rotation(),
             rotation),
         Rotation.None,
         Rotation.None).index();
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, rotation);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk,
         workplaceBlockPosition,
         StructureConfig.Tavern.WORKPLACE_BLOCK,
@@ -473,7 +462,7 @@ public class TavernSpawner {
     workplaceComponent.setUuid(structureId);
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, rotation));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
     workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.INN_KEEPER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
@@ -494,7 +483,7 @@ public class TavernSpawner {
     }
 
     workplaceComponent.setStorage(registry);
-    removeConstructionSignIfPresent(chunk, prefabAnchor, rotation);
+    removeConstructionSignIfPresent(chunk, prefabAnchor, targetLevel, rotation);
     workplaceChunk.markNeedsSaving();
     return true;
   }
@@ -506,18 +495,19 @@ public class TavernSpawner {
       Store<ChunkStore> chunkStore,
       Rotation structureRotation) {
     WorkplaceContainerRegistryComponent registry = new WorkplaceContainerRegistryComponent();
-    List<Vector3i> offsets = StructureConfig.Tavern.getStorageOffsetForLevel(level);
+    List<StructureConfig.ContainerTransform> layouts = StructureConfig.Tavern.getLevelLayout(level).containers();
     WorldChunk usedChunk = chunk;
     Vector3i containerPosition;
-    int rotation = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Tavern.CONTAINER_BLOCK_YAW_OFFSET,
-            structureRotation),
-        Rotation.None,
-        Rotation.None).index();
 
-    for (Vector3i offset : offsets) {
-      containerPosition = StructurePlacementUtils.withOffset(prefabAnchor, offset, structureRotation);
+    for (StructureConfig.ContainerTransform containerLayout : layouts) {
+      int rotation = RotationTuple.of(
+          StructurePlacementUtils.addYaw(
+              containerLayout.rotation(),
+              structureRotation),
+          Rotation.None,
+          Rotation.None).index();
+      containerPosition = StructurePlacementUtils.withOffset(prefabAnchor, containerLayout.position(),
+          structureRotation);
 
       usedChunk = Utils.setBlockChunkAware(
           usedChunk,
@@ -543,7 +533,7 @@ public class TavernSpawner {
       }
 
       container.setPosition(containerPosition);
-      container.setAccessPosition(getContainerAccessPosition(containerPosition, structureRotation));
+      container.setAccessPosition(getContainerAccessPosition(containerPosition, containerLayout, structureRotation));
       container.setUuid(UUID.randomUUID());
       registry.registerContainer(container.getUuid(), container);
     }
@@ -600,12 +590,12 @@ public class TavernSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation, workplace.getLevel());
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          StructureConfig.Tavern.PREFAB_JSON,
+          StructureConfig.Tavern.getCompletedPrefab(workplace.getLevel()),
           prefabAnchor,
           prefabRotation,
           true);
@@ -636,8 +626,9 @@ public class TavernSpawner {
   private static void removeConstructionSignIfPresent(
       WorldChunk chunk,
       Vector3i prefabAnchor,
+      int level,
       Rotation rotation) {
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -656,6 +647,7 @@ public class TavernSpawner {
         signRef,
         BuildingSnapshotComponent.getComponentType());
     if (snapshotComponent == null) {
+      clearArtefactBlocks(chunk, constructionSignPosition);
       return;
     }
 
@@ -663,38 +655,60 @@ public class TavernSpawner {
     signChunk.markNeedsSaving();
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+  private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
+    Utils.breakBlockChunkAware(chunk, constructionPos);
+    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(Vector3i.UP));
+  }
+
+  private static int getConstructionSignRotationIndex(int level, Rotation rotation) {
+    Rotation signRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.Tavern.getLevelLayout(level).constructionSign().rotation(),
+        rotation);
+    return RotationTuple.of(signRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
-        StructureConfig.Tavern.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.Tavern.getLevelLayout(level).workplace().position(),
+        rotation);
+  }
+
+  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Tavern.getLevelLayout(level).constructionSign().position(),
         rotation);
   }
 
   private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
-    return StructurePlacementUtils.withOffset(
-        prefabAnchor,
-        StructureConfig.Tavern.CONSTRUCTION_SIGN_OFFSET,
-        rotation);
+    return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
-        StructureConfig.Tavern.BENCH_ACCESS_OFFSET,
+        StructureConfig.Tavern.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, Rotation rotation) {
+  private static Vector3i getContainerAccessPosition(
+      Vector3i containerPosition,
+      StructureConfig.ContainerTransform containerLayout,
+      Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         containerPosition,
-        StructureConfig.Tavern.CONTAINER_ACCESS_OFFSET,
+        containerLayout.accessOffset(),
         rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getPrefabAnchorFromWorkplace(
+      Vector3i workplaceBlockPosition,
+      Rotation rotation,
+      int level) {
     return StructurePlacementUtils.removeOffset(
         workplaceBlockPosition,
-        StructureConfig.Tavern.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.Tavern.getWorkplaceSpawningOffset(level).position(),
         rotation);
   }
 
