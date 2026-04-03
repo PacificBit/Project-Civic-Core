@@ -48,7 +48,7 @@ import io.sentry.util.Pair;
 
 public class StorageSpawner {
   private static final String LIFE_ESSENCE_ITEM_ID = "Ingredient_Life_Essence";
-  private static final int STARTER_LIFE_ESSENCE = 200;
+  private static final int STARTER_LIFE_ESSENCE = 800;
   private static final int STARTER_FOOD_INGREDIENT_TOTAL = 100;
   private static final int STARTER_SEED_TOTAL = 100;
   private static final int STARTER_SAPLING_TOTAL = 100;
@@ -578,12 +578,27 @@ public class StorageSpawner {
       return null;
     }
 
-    short capacity = (short) Math.max(9, starterStacks.size());
+    short capacity = calculateRequiredStarterStorageCapacity(starterStacks);
     SimpleItemContainer starterItems = new SimpleItemContainer(capacity);
     for (ItemStack stack : starterStacks) {
       starterItems.addItemStack(stack);
     }
     return starterItems;
+  }
+
+  private static short calculateRequiredStarterStorageCapacity(List<ItemStack> starterStacks) {
+    int requiredSlots = 0;
+
+    for (ItemStack stack : starterStacks) {
+      if (stack == null || stack.isEmpty()) {
+        continue;
+      }
+
+      int maxStack = Math.max(1, stack.getItem().getMaxStack());
+      requiredSlots += Math.max(1, (stack.getQuantity() + maxStack - 1) / maxStack);
+    }
+
+    return (short) Math.max(9, requiredSlots);
   }
 
   private static void appendFoodIngredientStacks(List<ItemStack> target, int totalQuantity) {
