@@ -7,6 +7,30 @@
   "blocks": [
     {
       "x": -11,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
       "y": 0,
       "z": -7,
       "name": "Soil_Gravel"
@@ -30,7 +54,7 @@
       "x": -11,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -76,6 +100,30 @@
     },
     {
       "x": -11,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
       "y": 0,
       "z": -6,
       "name": "Soil_Gravel"
@@ -99,7 +147,7 @@
       "x": -11,
       "y": 3,
       "z": -6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -142,6 +190,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": -11,
@@ -168,7 +240,7 @@
       "x": -11,
       "y": 3,
       "z": -5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -214,6 +286,30 @@
     },
     {
       "x": -11,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
       "y": 0,
       "z": -4,
       "name": "Soil_Gravel"
@@ -237,7 +333,7 @@
       "x": -11,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -280,6 +376,30 @@
       "y": 10,
       "z": -4,
       "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
     },
     {
       "x": -11,
@@ -306,7 +426,7 @@
       "x": -11,
       "y": 3,
       "z": -3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -352,6 +472,30 @@
     },
     {
       "x": -11,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
       "y": 0,
       "z": -2,
       "name": "Soil_Gravel"
@@ -360,22 +504,22 @@
       "x": -11,
       "y": 1,
       "z": -2,
-      "name": "Cloth_Roof_Blue_Steep",
-      "rotation": 3
+      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Left",
+      "rotation": 2
     },
     {
       "x": -11,
       "y": 2,
       "z": -2,
-      "name": "Cloth_Roof_Blue_Steep",
+      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Left",
       "filler": 1024,
-      "rotation": 3
+      "rotation": 2
     },
     {
       "x": -11,
       "y": 3,
       "z": -2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -421,6 +565,30 @@
     },
     {
       "x": -11,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
       "y": 0,
       "z": -1,
       "name": "Soil_Gravel"
@@ -429,289 +597,194 @@
       "x": -11,
       "y": 1,
       "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 3,
+      "z": -1,
+      "name": "Cloth_Roof_Green_Flat"
+    },
+    {
+      "x": -11,
+      "y": 4,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 0,
+      "name": "Soil_Gravel"
+    },
+    {
+      "x": -11,
+      "y": 1,
+      "z": 0,
+      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Right"
+    },
+    {
+      "x": -11,
+      "y": 2,
+      "z": 0,
+      "name": "*Cloth_Roof_Green_Steep_State_Definitions_Inverted_Corner_Right",
+      "filler": 1024
+    },
+    {
+      "x": -11,
+      "y": 3,
+      "z": 0,
+      "name": "Barrier"
+    },
+    {
+      "x": -11,
+      "y": 4,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 8,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 1,
+      "name": "Soil_Gravel"
+    },
+    {
+      "x": -11,
+      "y": 1,
+      "z": 1,
       "name": "Cloth_Roof_Green_Steep",
       "rotation": 3
     },
     {
       "x": -11,
       "y": 2,
-      "z": -1,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024,
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 3,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 5,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 7,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 8,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 9,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 10,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 0,
-      "z": 0,
-      "name": "Soil_Gravel"
-    },
-    {
-      "x": -11,
-      "y": 1,
-      "z": 0,
-      "name": "Cloth_Roof_Blue_Steep",
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 2,
-      "z": 0,
-      "name": "Cloth_Roof_Blue_Steep",
-      "filler": 1024,
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 3,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 4,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 5,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 6,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 7,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 8,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 9,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 10,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 0,
       "z": 1,
-      "name": "Soil_Gravel"
-    },
-    {
-      "x": -11,
-      "y": 1,
-      "z": 1,
-      "name": "Cloth_Roof_Green_Steep",
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 2,
-      "z": 1,
-      "name": "Cloth_Roof_Green_Steep",
-      "filler": 1024,
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 3,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 4,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 5,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 6,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 7,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 8,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 9,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 10,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 0,
-      "z": 2,
-      "name": "Soil_Gravel"
-    },
-    {
-      "x": -11,
-      "y": 1,
-      "z": 2,
-      "name": "Cloth_Roof_Blue_Steep",
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 2,
-      "z": 2,
-      "name": "Cloth_Roof_Blue_Steep",
-      "filler": 1024,
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 3,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 4,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 5,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 6,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 7,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 8,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 9,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 10,
-      "z": 2,
-      "name": "Empty"
-    },
-    {
-      "x": -11,
-      "y": 0,
-      "z": 3,
-      "name": "Soil_Gravel"
-    },
-    {
-      "x": -11,
-      "y": 1,
-      "z": 3,
-      "name": "Cloth_Roof_Green_Steep",
-      "rotation": 3
-    },
-    {
-      "x": -11,
-      "y": 2,
-      "z": 3,
       "name": "Cloth_Roof_Green_Steep",
       "filler": 1024,
       "rotation": 3
@@ -719,8 +792,194 @@
     {
       "x": -11,
       "y": 3,
-      "z": 3,
+      "z": 1,
+      "name": "Barrier"
+    },
+    {
+      "x": -11,
+      "y": 4,
+      "z": 1,
       "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 8,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 2,
+      "name": "Soil_Gravel"
+    },
+    {
+      "x": -11,
+      "y": 1,
+      "z": 2,
+      "name": "Cloth_Roof_Blue_Steep",
+      "rotation": 3
+    },
+    {
+      "x": -11,
+      "y": 2,
+      "z": 2,
+      "name": "Cloth_Roof_Blue_Steep",
+      "filler": 1024,
+      "rotation": 3
+    },
+    {
+      "x": -11,
+      "y": 3,
+      "z": 2,
+      "name": "Barrier"
+    },
+    {
+      "x": -11,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 8,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": 0,
+      "z": 3,
+      "name": "Soil_Gravel"
+    },
+    {
+      "x": -11,
+      "y": 1,
+      "z": 3,
+      "name": "Cloth_Roof_Green_Steep",
+      "rotation": 3
+    },
+    {
+      "x": -11,
+      "y": 2,
+      "z": 3,
+      "name": "Cloth_Roof_Green_Steep",
+      "filler": 1024,
+      "rotation": 3
+    },
+    {
+      "x": -11,
+      "y": 3,
+      "z": 3,
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -763,6 +1022,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -11,
@@ -789,7 +1072,7 @@
       "x": -11,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -832,6 +1115,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": -11,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -11,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": -11,
@@ -856,7 +1163,7 @@
       "x": -11,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -11,
@@ -899,6 +1206,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -10,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -10,
@@ -925,7 +1256,7 @@
       "x": -10,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -10,
@@ -968,6 +1299,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": -10,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": -10,
@@ -1038,6 +1393,30 @@
     },
     {
       "x": -10,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
       "y": 0,
       "z": -5,
       "name": "Soil_Pathway"
@@ -1102,6 +1481,30 @@
       "y": 10,
       "z": -5,
       "name": "Empty"
+    },
+    {
+      "x": -10,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
     },
     {
       "x": -10,
@@ -1173,6 +1576,30 @@
     },
     {
       "x": -10,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
       "y": 0,
       "z": -3,
       "name": "Soil_Gravel_Mossy",
@@ -1241,6 +1668,30 @@
     },
     {
       "x": -10,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
       "y": 0,
       "z": -2,
       "name": "Soil_Gravel"
@@ -1305,6 +1756,30 @@
       "y": 10,
       "z": -2,
       "name": "Empty"
+    },
+    {
+      "x": -10,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
     },
     {
       "x": -10,
@@ -1375,6 +1850,30 @@
     },
     {
       "x": -10,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
       "y": 0,
       "z": 0,
       "name": "Soil_Gravel"
@@ -1439,6 +1938,30 @@
       "y": 10,
       "z": 0,
       "name": "Empty"
+    },
+    {
+      "x": -10,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
     },
     {
       "x": -10,
@@ -1509,6 +2032,30 @@
     },
     {
       "x": -10,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
       "y": 0,
       "z": 2,
       "name": "Soil_Gravel_Mossy"
@@ -1573,6 +2120,30 @@
       "y": 10,
       "z": 2,
       "name": "Empty"
+    },
+    {
+      "x": -10,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
     },
     {
       "x": -10,
@@ -1643,6 +2214,30 @@
     },
     {
       "x": -10,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
       "y": 0,
       "z": 4,
       "name": "Soil_Gravel"
@@ -1709,6 +2304,30 @@
     },
     {
       "x": -10,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -10,
       "y": 0,
       "z": 5,
       "name": "Soil_Gravel"
@@ -1730,7 +2349,7 @@
       "x": -10,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -10,
@@ -1773,6 +2392,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -9,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -9,
@@ -1799,7 +2442,7 @@
       "x": -9,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -1842,6 +2485,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": -9,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": -9,
@@ -1912,6 +2579,30 @@
     },
     {
       "x": -9,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
       "y": 0,
       "z": -5,
       "name": "Soil_Gravel",
@@ -1976,6 +2667,30 @@
       "y": 10,
       "z": -5,
       "name": "Empty"
+    },
+    {
+      "x": -9,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
     },
     {
       "x": -9,
@@ -2046,6 +2761,30 @@
     },
     {
       "x": -9,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
       "y": 0,
       "z": -3,
       "name": "Soil_Gravel",
@@ -2110,6 +2849,30 @@
       "y": 10,
       "z": -3,
       "name": "Empty"
+    },
+    {
+      "x": -9,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
     },
     {
       "x": -9,
@@ -2180,6 +2943,30 @@
     },
     {
       "x": -9,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
       "y": 0,
       "z": -1,
       "name": "Soil_Gravel",
@@ -2244,6 +3031,30 @@
       "y": 10,
       "z": -1,
       "name": "Empty"
+    },
+    {
+      "x": -9,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
     },
     {
       "x": -9,
@@ -2314,6 +3125,30 @@
     },
     {
       "x": -9,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
       "y": 0,
       "z": 1,
       "name": "Soil_Gravel",
@@ -2381,6 +3216,30 @@
     },
     {
       "x": -9,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
       "y": 0,
       "z": 2,
       "name": "Soil_Gravel",
@@ -2445,6 +3304,30 @@
       "y": 10,
       "z": 2,
       "name": "Empty"
+    },
+    {
+      "x": -9,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
     },
     {
       "x": -9,
@@ -2515,6 +3398,30 @@
     },
     {
       "x": -9,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
       "y": 0,
       "z": 4,
       "name": "Soil_Gravel",
@@ -2582,6 +3489,30 @@
     },
     {
       "x": -9,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -9,
       "y": 0,
       "z": 5,
       "name": "Soil_Gravel",
@@ -2604,7 +3535,7 @@
       "x": -9,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -9,
@@ -2647,6 +3578,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -8,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -8,
@@ -2673,7 +3628,7 @@
       "x": -8,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -8,
@@ -2716,6 +3671,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": -8,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": -8,
@@ -2786,6 +3765,30 @@
     },
     {
       "x": -8,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
       "y": 0,
       "z": -5,
       "name": "Soil_Gravel",
@@ -2850,6 +3853,30 @@
       "y": 10,
       "z": -5,
       "name": "Empty"
+    },
+    {
+      "x": -8,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
     },
     {
       "x": -8,
@@ -2920,6 +3947,30 @@
     },
     {
       "x": -8,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
       "y": 0,
       "z": -3,
       "name": "Soil_Gravel",
@@ -2984,6 +4035,30 @@
       "y": 10,
       "z": -3,
       "name": "Empty"
+    },
+    {
+      "x": -8,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
     },
     {
       "x": -8,
@@ -3054,6 +4129,30 @@
     },
     {
       "x": -8,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
       "y": 0,
       "z": -1,
       "name": "Soil_Gravel",
@@ -3118,6 +4217,30 @@
       "y": 10,
       "z": -1,
       "name": "Empty"
+    },
+    {
+      "x": -8,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
     },
     {
       "x": -8,
@@ -3188,6 +4311,30 @@
     },
     {
       "x": -8,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
       "y": 0,
       "z": 1,
       "name": "Soil_Gravel",
@@ -3255,6 +4402,30 @@
     },
     {
       "x": -8,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
       "y": 0,
       "z": 2,
       "name": "Soil_Gravel",
@@ -3319,6 +4490,30 @@
       "y": 10,
       "z": 2,
       "name": "Empty"
+    },
+    {
+      "x": -8,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
     },
     {
       "x": -8,
@@ -3389,6 +4584,30 @@
     },
     {
       "x": -8,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
       "y": 0,
       "z": 4,
       "name": "Soil_Gravel",
@@ -3456,6 +4675,30 @@
     },
     {
       "x": -8,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -8,
       "y": 0,
       "z": 5,
       "name": "Soil_Gravel",
@@ -3478,7 +4721,7 @@
       "x": -8,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -8,
@@ -3521,6 +4764,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -7,
@@ -3547,7 +4814,7 @@
       "x": -7,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -7,
@@ -3590,6 +4857,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": -7,
@@ -3657,6 +4948,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": -7,
@@ -3728,6 +5043,30 @@
     },
     {
       "x": -7,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": -4,
       "name": "Soil_Gravel",
@@ -3793,6 +5132,30 @@
       "y": 10,
       "z": -4,
       "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
     },
     {
       "x": -7,
@@ -3864,6 +5227,30 @@
     },
     {
       "x": -7,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": -2,
       "name": "Soil_Pathway"
@@ -3931,6 +5318,30 @@
     },
     {
       "x": -7,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": -1,
       "name": "Soil_Gravel",
@@ -3995,6 +5406,30 @@
       "y": 10,
       "z": -1,
       "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
     },
     {
       "x": -7,
@@ -4066,6 +5501,30 @@
     },
     {
       "x": -7,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": 1,
       "name": "Soil_Gravel_Mossy",
@@ -4131,6 +5590,30 @@
       "y": 10,
       "z": 1,
       "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
     },
     {
       "x": -7,
@@ -4202,6 +5685,30 @@
     },
     {
       "x": -7,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": 3,
       "name": "Soil_Gravel_Mossy",
@@ -4267,6 +5774,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -7,
@@ -4337,6 +5868,30 @@
     },
     {
       "x": -7,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": 5,
       "name": "Soil_Gravel",
@@ -4359,7 +5914,7 @@
       "x": -7,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -7,
@@ -4402,6 +5957,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -4428,7 +6007,7 @@
       "x": -6,
       "y": 3,
       "z": -7,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4471,6 +6050,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -4497,7 +6100,7 @@
       "x": -6,
       "y": 3,
       "z": -6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4540,6 +6143,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -4567,7 +6194,7 @@
       "x": -6,
       "y": 3,
       "z": -5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4610,6 +6237,30 @@
       "y": 10,
       "z": -5,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -4637,7 +6288,7 @@
       "x": -6,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4680,6 +6331,30 @@
       "y": 10,
       "z": -4,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -4707,7 +6382,7 @@
       "x": -6,
       "y": 3,
       "z": -3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -4750,6 +6425,30 @@
       "y": 10,
       "z": -3,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -4821,6 +6520,30 @@
     },
     {
       "x": -6,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": -1,
       "name": "Soil_Gravel_Mossy",
@@ -4885,6 +6608,30 @@
       "y": 10,
       "z": -1,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -4955,6 +6702,30 @@
     },
     {
       "x": -6,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": 1,
       "name": "Soil_Gravel_Mossy",
@@ -4977,7 +6748,7 @@
       "x": -6,
       "y": 3,
       "z": 1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5020,6 +6791,30 @@
       "y": 10,
       "z": 1,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -5047,7 +6842,7 @@
       "x": -6,
       "y": 3,
       "z": 2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5090,6 +6885,30 @@
       "y": 10,
       "z": 2,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -5117,7 +6936,7 @@
       "x": -6,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5160,6 +6979,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -5187,7 +7030,7 @@
       "x": -6,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5230,6 +7073,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -6,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": -6,
@@ -5255,7 +7122,7 @@
       "x": -6,
       "y": 3,
       "z": 5,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -5298,6 +7165,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -5365,6 +7256,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -5389,7 +7304,7 @@
       "x": -5,
       "y": 3,
       "z": -6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -5432,6 +7347,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -5501,6 +7440,30 @@
     },
     {
       "x": -5,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": -4,
       "name": "Soil_Gravel",
@@ -5565,6 +7528,30 @@
       "y": 10,
       "z": -4,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -5635,6 +7622,30 @@
     },
     {
       "x": -5,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": -2,
       "name": "Soil_Gravel",
@@ -5699,6 +7710,30 @@
       "y": 10,
       "z": -2,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -5768,6 +7803,30 @@
     },
     {
       "x": -5,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": 0,
       "name": "Soil_Gravel",
@@ -5832,6 +7891,30 @@
       "y": 10,
       "z": 0,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -5901,6 +7984,30 @@
     },
     {
       "x": -5,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": 2,
       "name": "Soil_Gravel_Mossy",
@@ -5968,6 +8075,30 @@
     },
     {
       "x": -5,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": 3,
       "name": "Soil_Gravel_Mossy",
@@ -6032,6 +8163,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -6056,7 +8211,7 @@
       "x": -5,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -6099,6 +8254,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -5,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": -5,
@@ -6169,6 +8348,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -7,
       "name": "Soil_Gravel_Mossy"
@@ -6233,6 +8436,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": -4,
@@ -6303,6 +8530,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass",
@@ -6370,6 +8621,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -6436,6 +8711,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -6502,6 +8801,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -6568,6 +8891,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -6634,6 +8981,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -6700,6 +9071,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -6766,6 +9161,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -6832,6 +9251,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -6895,6 +9338,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -4,
@@ -6965,6 +9432,30 @@
     },
     {
       "x": -4,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": 5,
       "name": "Soil_Grass"
@@ -7028,6 +9519,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -3,
@@ -7098,6 +9613,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -6,
       "name": "Soil_Pathway"
@@ -7161,6 +9700,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": -3,
@@ -7231,6 +9794,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -7297,6 +9884,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -7363,6 +9974,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -7429,6 +10064,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -7495,6 +10154,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -7561,6 +10244,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -7627,6 +10334,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -7693,6 +10424,30 @@
     },
     {
       "x": -3,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -7756,6 +10511,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -3,
@@ -7823,6 +10602,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -3,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": -3,
@@ -7890,6 +10693,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -2,
@@ -7960,6 +10787,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -6,
       "name": "Soil_Gravel_Mossy",
@@ -8027,6 +10878,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -8093,6 +10968,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -8159,6 +11058,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -8225,6 +11148,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -8291,6 +11238,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -8357,6 +11328,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -8423,6 +11418,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -8489,6 +11508,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -8555,6 +11598,30 @@
     },
     {
       "x": -2,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -8618,6 +11685,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -2,
@@ -8685,6 +11776,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -2,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": -2,
@@ -8751,6 +11866,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": -1,
@@ -8821,6 +11960,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": -6,
       "name": "Soil_Grass"
@@ -8884,6 +12047,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": -1,
@@ -8954,6 +12141,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -9020,6 +12231,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -9086,6 +12321,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -9152,6 +12411,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -9218,6 +12501,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -9284,6 +12591,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -9350,6 +12681,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -9416,6 +12771,30 @@
     },
     {
       "x": -1,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -9479,6 +12858,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": -1,
@@ -9546,6 +12949,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": -1,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": -1,
@@ -9617,6 +13044,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": -7,
       "name": "Soil_Grass"
@@ -9681,6 +13132,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": 0,
@@ -9751,6 +13226,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -9817,6 +13316,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -9883,6 +13406,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -9949,6 +13496,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -10012,6 +13583,30 @@
       "y": 10,
       "z": -2,
       "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
     },
     {
       "x": 0,
@@ -10083,6 +13678,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -10149,6 +13768,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -10215,6 +13858,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -10281,6 +13948,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -10344,6 +14035,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": 0,
@@ -10413,6 +14128,30 @@
     },
     {
       "x": 0,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": 5,
       "name": "Soil_Grass"
@@ -10465,6 +14204,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": 1,
@@ -10535,6 +14298,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": -6,
       "name": "Soil_Pathway"
@@ -10598,6 +14385,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": 1,
@@ -10668,6 +14479,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -10734,6 +14569,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -10800,6 +14659,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -10866,6 +14749,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -10932,6 +14839,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -10998,6 +14929,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -11064,6 +15019,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -11130,6 +15109,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -11196,6 +15199,30 @@
     },
     {
       "x": 1,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": 4,
       "name": "Soil_Grass"
@@ -11259,6 +15286,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": 1,
@@ -11329,6 +15380,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -7,
       "name": "Soil_Pathway"
@@ -11396,6 +15471,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -6,
       "name": "Soil_Gravel_Mossy",
@@ -11463,6 +15562,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -11529,6 +15652,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -11595,6 +15742,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -11661,6 +15832,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -11727,6 +15922,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -11793,6 +16012,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -11859,6 +16102,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -11925,6 +16192,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -11991,6 +16282,30 @@
     },
     {
       "x": 2,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -12054,6 +16369,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": 2,
@@ -12121,6 +16460,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": 2,
@@ -12191,6 +16554,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -7,
       "name": "Soil_Grass"
@@ -12255,6 +16642,30 @@
       "y": 10,
       "z": -7,
       "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
     },
     {
       "x": 3,
@@ -12325,6 +16736,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -12391,6 +16826,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -12457,6 +16916,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -12523,6 +17006,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -12589,6 +17096,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -12655,6 +17186,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -12721,6 +17276,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -12787,6 +17366,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -12853,6 +17456,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -12916,6 +17543,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": 3,
@@ -12985,6 +17636,30 @@
     },
     {
       "x": 3,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": 5,
       "name": "Soil_Grass"
@@ -13048,6 +17723,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": 4,
@@ -13118,6 +17817,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -6,
       "name": "Soil_Pathway"
@@ -13185,6 +17908,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -13251,6 +17998,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -13317,6 +18088,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -13383,6 +18178,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
@@ -13449,6 +18268,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -13515,6 +18358,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -13581,6 +18448,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -13647,6 +18538,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 2,
       "name": "Soil_Grass"
@@ -13713,6 +18628,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -13776,6 +18715,30 @@
       "y": 10,
       "z": 3,
       "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
     },
     {
       "x": 4,
@@ -13847,6 +18810,30 @@
     },
     {
       "x": 4,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 5,
       "name": "Soil_Grass"
@@ -13910,6 +18897,30 @@
       "y": 10,
       "z": 5,
       "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": -4,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": -7,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": -7,
+      "name": "Rock_Stone"
     },
     {
       "x": 5,
@@ -13979,6 +18990,30 @@
     },
     {
       "x": 5,
+      "y": -4,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": -6,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": -6,
       "name": "Soil_Gravel"
@@ -14043,6 +19078,30 @@
       "y": 10,
       "z": -6,
       "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": -4,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": -5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": -5,
+      "name": "Rock_Stone"
     },
     {
       "x": 5,
@@ -14114,6 +19173,30 @@
     },
     {
       "x": 5,
+      "y": -4,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": -4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": -4,
       "name": "Soil_Gravel",
@@ -14179,6 +19262,30 @@
       "y": 10,
       "z": -4,
       "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": -4,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": -3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": -3,
+      "name": "Rock_Stone"
     },
     {
       "x": 5,
@@ -14249,6 +19356,30 @@
     },
     {
       "x": 5,
+      "y": -4,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": -2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": -2,
       "name": "Soil_Pathway"
@@ -14313,6 +19444,30 @@
       "y": 10,
       "z": -2,
       "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": -4,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": -1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": -1,
+      "name": "Rock_Stone"
     },
     {
       "x": 5,
@@ -14381,6 +19536,30 @@
       "y": 10,
       "z": -1,
       "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": -4,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": 0,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 0,
+      "name": "Rock_Stone"
     },
     {
       "x": 5,
@@ -14451,6 +19630,30 @@
     },
     {
       "x": 5,
+      "y": -4,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 1,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
@@ -14515,6 +19718,30 @@
       "y": 10,
       "z": 1,
       "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": -4,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": 2,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 2,
+      "name": "Rock_Stone"
     },
     {
       "x": 5,
@@ -14585,6 +19812,30 @@
     },
     {
       "x": 5,
+      "y": -4,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 3,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": 3,
       "name": "Soil_Gravel"
@@ -14652,6 +19903,30 @@
     },
     {
       "x": 5,
+      "y": -4,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 4,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": 4,
       "name": "Soil_Grass"
@@ -14716,6 +19991,30 @@
       "y": 10,
       "z": 4,
       "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": -4,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -3,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -2,
+      "z": 5,
+      "name": "Rock_Stone"
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 5,
+      "name": "Rock_Stone"
     },
     {
       "x": 5,
@@ -14745,12 +20044,6 @@
     {
       "x": 5,
       "y": 4,
-      "z": 5,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 5,
       "z": 5,
       "name": "Empty"
     },

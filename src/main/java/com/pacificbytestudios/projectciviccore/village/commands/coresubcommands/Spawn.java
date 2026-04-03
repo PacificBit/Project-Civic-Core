@@ -59,16 +59,16 @@ public class Spawn extends CommandBase {
 
   private static Vector3i resolveVillageAnchor(World world, Vector3i origin) {
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(origin.x, origin.z));
-    Vector3i villageAnchor = origin.clone();
 
     for (int y = origin.y; y > 0; y--) {
       Vector3i probePosition = new Vector3i(origin.x, y, origin.z);
-      if (chunk.getBlockType(probePosition).getId().equals("Empty")) {
-        villageAnchor = new Vector3i(origin.x, y - 1, origin.z);
+      String blockId = chunk.getBlockType(probePosition).getId();
+      if (blockId != null && !blockId.equals("Empty")) {
+        return probePosition;
       }
     }
 
-    return villageAnchor;
+    return new Vector3i(origin.x, 0, origin.z);
   }
 
 }

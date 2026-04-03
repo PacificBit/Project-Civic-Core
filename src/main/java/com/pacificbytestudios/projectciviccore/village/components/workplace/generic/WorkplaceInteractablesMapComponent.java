@@ -108,6 +108,25 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return null;
   }
 
+  public Interactable getInteractableAtPosition(WorkplaceInteractibles group, Vector3i interactablePosition) {
+    Interactable[] interactableGroup = this.interactable.get(group);
+    if (interactableGroup == null) {
+      throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
+    }
+
+    if (interactablePosition == null) {
+      return null;
+    }
+
+    for (Interactable interactable : interactableGroup) {
+      if (interactable != null && interactablePosition.equals(interactable.getInteractablePosition())) {
+        return interactable;
+      }
+    }
+
+    return null;
+  }
+
   public boolean releaseInteractablesOccupiedBy(UUID occupantUuid) {
     if (occupantUuid == null) {
       return false;

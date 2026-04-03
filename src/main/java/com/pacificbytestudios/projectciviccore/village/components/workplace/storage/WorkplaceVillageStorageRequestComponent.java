@@ -1,9 +1,13 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace.storage;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -41,6 +45,36 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
 
   private ArrayDeque<VillageStorageRequest> requestDeque = new ArrayDeque<>();
   private Map<UUID, ArrayDeque<VillageStorageRequest>> onGoingRequests = new HashMap<>();
+
+  public static final class PurgeResult {
+    private final Set<UUID> requesterWorkplaceIds = new HashSet<>();
+    private final Set<UUID> assignedWorkerIds = new HashSet<>();
+    private boolean removedAny;
+
+    public boolean hasRemovedRequests() {
+      return this.removedAny;
+    }
+
+    public Set<UUID> getRequesterWorkplaceIds() {
+      return Collections.unmodifiableSet(this.requesterWorkplaceIds);
+    }
+
+    public Set<UUID> getAssignedWorkerIds() {
+      return Collections.unmodifiableSet(this.assignedWorkerIds);
+    }
+
+    private void registerRemoval(UUID requesterWorkplaceId, UUID assignedWorkerId) {
+      this.removedAny = true;
+
+      if (requesterWorkplaceId != null) {
+        this.requesterWorkplaceIds.add(requesterWorkplaceId);
+      }
+
+      if (assignedWorkerId != null) {
+        this.assignedWorkerIds.add(assignedWorkerId);
+      }
+    }
+  }
 
   public UUID addRequest(VillageStorageRequest workplaceRequest) {
     for (VillageStorageRequest request : this.requestDeque) {
@@ -114,6 +148,31 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
     return true;
   }
 
+  public PurgeResult purgeRequests(Predicate<VillageStorageRequest> predicate) {
+    PurgeResult result = new PurgeResult();
+    if (predicate == null) {
+      return result;
+    }
+
+    this.requestDeque = purgeRequestDeque(this.requestDeque, null, predicate, result);
+
+    Map<UUID, ArrayDeque<VillageStorageRequest>> remainingOnGoingRequests = new HashMap<>();
+    for (Map.Entry<UUID, ArrayDeque<VillageStorageRequest>> entry : this.onGoingRequests.entrySet()) {
+      ArrayDeque<VillageStorageRequest> remainingRequests = purgeRequestDeque(
+          entry.getValue(),
+          entry.getKey(),
+          predicate,
+          result);
+
+      if (!remainingRequests.isEmpty()) {
+        remainingOnGoingRequests.put(entry.getKey(), remainingRequests);
+      }
+    }
+
+    this.onGoingRequests = remainingOnGoingRequests;
+    return result;
+  }
+
   public void clearAll() {
     this.requestDeque = new ArrayDeque<>();
     this.onGoingRequests = new HashMap<>();
@@ -184,5 +243,29 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
     }
 
     return copy;
+  }
+
+  private static ArrayDeque<VillageStorageRequest> purgeRequestDeque(
+      ArrayDeque<VillageStorageRequest> source,
+      UUID assignedWorkerId,
+      Predicate<VillageStorageRequest> predicate,
+      PurgeResult result) {
+    ArrayDeque<VillageStorageRequest> remainingRequests = new ArrayDeque<>();
+    if (source == null) {
+      return remainingRequests;
+    }
+
+    while (!source.isEmpty()) {
+      VillageStorageRequest request = source.pollFirst();
+
+      if (request != null && predicate.test(request)) {
+        result.registerRemoval(request.getRequesterWorkplaceId(), assignedWorkerId);
+        continue;
+      }
+
+      remainingRequests.addLast(request);
+    }
+
+    return remainingRequests;
   }
 }

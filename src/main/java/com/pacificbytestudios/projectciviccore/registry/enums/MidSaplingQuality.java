@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.registry.enums;
 import java.util.function.Supplier;
 
 public enum MidSaplingQuality implements Supplier<String> {
-  CEDAR("Plant_Sapling_Cedar");
+  SPRUCE("Plant_Sapling_Spruce");
 
   private String id;
 

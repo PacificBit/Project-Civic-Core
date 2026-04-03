@@ -134,7 +134,7 @@ public class HouseSpawner {
         trackedPlacement);
 
     chunkToUse.markNeedsSaving();
-    return false;
+    return true;
   }
 
   public static boolean beginUpgradeConstruction(

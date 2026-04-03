@@ -8,6 +8,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.AdvanceConstructionStage;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -55,7 +56,24 @@ public class ContinueBuildingTask extends AVillageTask {
       Vector3i heartPos,
       VillageHeartComponent heart) {
     AdvanceConstructionStage function = Utils.getAdvanceConstructionStageFunction(this.structureType);
-    function.apply(chunk, this.prefabAnchor, this.rotation);
+    try {
+      boolean advanced = function.apply(chunk, this.prefabAnchor, this.rotation);
+      if (advanced) {
+        this.callOnSuccess("CONTINUE_SUCCESS");
+        return;
+      }
+
+      String message = "[ContinueBuildingTask] Could not advance " + this.structureType
+          + " construction at " + this.prefabAnchor;
+      ProjectCivicCore.LOGGER.atWarning().log(message);
+      this.callOnError("CONTINUE_FAILED", message);
+    } catch (RuntimeException exception) {
+      String message = "[ContinueBuildingTask] Failed to advance " + this.structureType
+          + " construction at " + this.prefabAnchor + ": " + exception.getMessage();
+      ProjectCivicCore.LOGGER.atWarning().log(message);
+      this.callOnError("CONTINUE_EXCEPTION", message);
+      throw exception;
+    }
   }
 
 }

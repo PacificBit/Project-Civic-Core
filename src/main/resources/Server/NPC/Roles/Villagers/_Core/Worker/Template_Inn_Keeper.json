@@ -432,13 +432,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 1
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1.5,
-                "StopDistance": 1.5,
+                "StopDistance": 0.8,
                 "RelativeSpeed": 0.6
               }
             },

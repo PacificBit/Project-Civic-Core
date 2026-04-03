@@ -70,6 +70,9 @@ public class HasReservedTavernTable extends VillagerSensorBase {
 
         this.reservedTable.occupy(villagerId);
         villagerComponent.setReservedInteractable(this.reservedTable.getInteractablePosition());
+        villagerComponent.setReservedTavernLocation(workplace.getWorkplaceRef().clone());
+        store.putComponent(ref, VillagerComponent.getComponentType(), villagerComponent);
+        break;
       }
     }
 

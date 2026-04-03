@@ -26,6 +26,7 @@ import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpC
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
+import com.pacificbytestudios.projectciviccore.village.components.builder.BufferedConstructionStorageComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -155,6 +156,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageBuilderComponent> villageBuilderComponentType;
   private ComponentType<ChunkStore, VillageTopologyComponent> villageTopologyComponentType;
   private ComponentType<ChunkStore, BuildingSnapshotComponent> buildingSnapshotComponentType;
+  private ComponentType<ChunkStore, BufferedConstructionStorageComponent> bufferedConstructionStorageComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
   private ComponentType<EntityStore, MayorComponent> mayorComponentType;
@@ -287,6 +289,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuildingSnapshotComponent.class,
         "BuildingSnapshotComponent",
         BuildingSnapshotComponent.CODEC);
+
+    this.bufferedConstructionStorageComponentType = chunkRegistry.registerComponent(
+        BufferedConstructionStorageComponent.class,
+        "BufferedConstructionStorageComponent",
+        BufferedConstructionStorageComponent.CODEC);
 
     this.villageHeartMarkerComponentType = chunkRegistry.registerComponent(
         VillageHeartMarkerComponent.class,
@@ -680,6 +687,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, BuildingSnapshotComponent> getBuildingSnapshotComponent() {
     return this.buildingSnapshotComponentType;
+  }
+
+  public ComponentType<ChunkStore, BufferedConstructionStorageComponent> getBufferedConstructionStorageComponentType() {
+    return this.bufferedConstructionStorageComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

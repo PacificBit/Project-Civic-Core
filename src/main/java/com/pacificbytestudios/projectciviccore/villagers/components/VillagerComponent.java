@@ -62,6 +62,11 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.reservedInteractable)
       .add()
 
+      .append(new KeyedCodec<>("ReservedTavernLocation", EntityRef.CODEC, false),
+          (obj, value) -> obj.reservedTavernLocation = value,
+          (obj) -> obj.reservedTavernLocation)
+      .add()
+
       .append(new KeyedCodec<Instant>("LastLunchMealTime", Codec.INSTANT),
           (obj, value) -> obj.lastLunchMealTime = value,
           (obj) -> obj.lastLunchMealTime)
@@ -83,6 +88,7 @@ public class VillagerComponent implements Component<EntityStore> {
   private VillagerHousingComponent housingData;
   private VillagerWorkerComponent workerData;
   private Vector3i reservedInteractable;
+  private EntityRef reservedTavernLocation;
   private Instant lastLunchMealTime;
   private Instant lastDinnerMealTime;
   private VillagerRole role;
@@ -176,6 +182,23 @@ public class VillagerComponent implements Component<EntityStore> {
     this.reservedInteractable = reservedInteractable;
   }
 
+  public EntityRef getReservedTavernLocation() {
+    return this.reservedTavernLocation;
+  }
+
+  public Ref<ChunkStore> getReservedTavernRef() {
+    return this.reservedTavernLocation == null ? null : this.reservedTavernLocation.getRef();
+  }
+
+  public void setReservedTavernLocation(EntityRef reservedTavernLocation) {
+    this.reservedTavernLocation = reservedTavernLocation;
+  }
+
+  public void clearReservedTavernReservation() {
+    this.reservedInteractable = null;
+    this.reservedTavernLocation = null;
+  }
+
   public AreaFootprint getWorkerArea(UUID uuid) {
     return this.getWorkerData().getWorkplace().getWorkerDesignatedArea(uuid);
   }
@@ -195,6 +218,7 @@ public class VillagerComponent implements Component<EntityStore> {
     component.housingData = this.housingData == null ? null : this.housingData.clone();
     component.workerData = this.workerData == null ? null : this.workerData.clone();
     component.reservedInteractable = this.reservedInteractable == null ? null : this.reservedInteractable.clone();
+    component.reservedTavernLocation = this.reservedTavernLocation == null ? null : this.reservedTavernLocation.clone();
     component.lastLunchMealTime = this.lastLunchMealTime;
     component.lastDinnerMealTime = this.lastDinnerMealTime;
     component.role = this.role;
@@ -208,6 +232,7 @@ public class VillagerComponent implements Component<EntityStore> {
         ",\n housingData=" + Utils.safeToString(housingData) +
         ",\n workerData=" + Utils.safeToString(workerData) +
         ",\n reservedInteractable=" + Utils.safeToString(reservedInteractable) +
+        ",\n reservedTavernLocation=" + Utils.safeToString(reservedTavernLocation) +
         ",\n lastLunchMealTime=" + this.lastLunchMealTime +
         ",\n lastDinnerMealTime=" + this.lastDinnerMealTime +
         ",\n windowsCount=" + this.windows.size() +

@@ -2,6 +2,7 @@ package com.pacificbytestudios.projectciviccore.village.components.villagetask;
 
 import java.util.ArrayDeque;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -53,6 +54,29 @@ public class VillageTaskQueueComponent implements Component<ChunkStore> {
 
   public Iterable<AVillageTask> getTasks() {
     return this.tasks;
+  }
+
+  public int removeTasksIf(Predicate<AVillageTask> predicate) {
+    if (predicate == null || this.tasks.isEmpty()) {
+      return 0;
+    }
+
+    int removed = 0;
+    ArrayDeque<AVillageTask> remainingTasks = new ArrayDeque<>();
+
+    while (!this.tasks.isEmpty()) {
+      AVillageTask task = this.tasks.pollFirst();
+
+      if (task != null && predicate.test(task)) {
+        removed += 1;
+        continue;
+      }
+
+      remainingTasks.addLast(task);
+    }
+
+    this.tasks = remainingTasks;
+    return removed;
   }
 
   public void merge(VillageTaskQueueComponent tasks) {

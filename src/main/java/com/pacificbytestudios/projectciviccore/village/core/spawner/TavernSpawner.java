@@ -27,6 +27,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestInvalidation;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
@@ -140,7 +141,7 @@ public class TavernSpawner {
         trackedPlacement);
 
     chunkToUse.markNeedsSaving();
-    return false;
+    return true;
   }
 
   public static boolean beginUpgradeConstruction(
@@ -212,6 +213,10 @@ public class TavernSpawner {
             currentLevel,
             oldTrackedPlacement);
       }
+
+      if (upgraded) {
+        VillageStorageRequestInvalidation.invalidateRequesterWorkplace(heartRef, heart, structureId);
+      }
       return upgraded;
     }
 
@@ -273,6 +278,7 @@ public class TavernSpawner {
         oldTrackedPlacement);
 
     signChunk.markNeedsSaving();
+    VillageStorageRequestInvalidation.invalidateRequesterWorkplace(heartRef, heart, structureId);
     return true;
   }
 

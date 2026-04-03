@@ -58,7 +58,7 @@ public class MountMountableAction extends VillagerActionBase {
   private boolean handleTavern(
       Ref<EntityStore> ref,
       Store<EntityStore> store) {
-    WorkplaceInteractablesMapComponent interactables = this.getVillageTavernInteractibleComponent(ref, store);
+    WorkplaceInteractablesMapComponent interactables = this.getReservedTavernInteractibleComponent(ref, store);
     if (interactables == null) {
       return false;
     }

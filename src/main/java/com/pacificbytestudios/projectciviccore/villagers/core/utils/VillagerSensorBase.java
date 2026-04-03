@@ -116,16 +116,26 @@ public abstract class VillagerSensorBase extends SensorBase {
 
   protected Ref<ChunkStore> getVillageRef(Ref<EntityStore> ref, Store<EntityStore> store) {
     VillagerComponent villager = getVillagerComponent(ref, store);
-    return villager != null ? require(villager.getVillageHeartRef(), "village heart ref") : null;
+    if (villager == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> villageRef = require(villager.getVillageHeartRef(), "village heart ref");
+    return isRefValid(villageRef) ? villageRef : null;
   }
 
   protected Ref<ChunkStore> getWorkplaceRef(Ref<EntityStore> ref, Store<EntityStore> store) {
     WorkplaceComponent workplace = getWorkplaceComponent(ref, store);
-    return workplace != null
-        ? (require(workplace.getWorkplaceRef(), "workplace ref wrapper") != null
-            ? require(workplace.getWorkplaceRef().getRef(), "workplace ref")
-            : null)
-        : null;
+    if (workplace == null) {
+      return null;
+    }
+
+    if (require(workplace.getWorkplaceRef(), "workplace ref wrapper") == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> workplaceRef = require(workplace.getWorkplaceRef().getRef(), "workplace ref");
+    return isRefValid(workplaceRef) ? workplaceRef : null;
   }
 
   protected VillageHeartComponent getVillageHeartComponent(Ref<EntityStore> ref, Store<EntityStore> store) {

@@ -16,10 +16,8 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
@@ -106,6 +104,14 @@ public class TownHeartSpawner {
     Store<ChunkStore> store = heartRef.getStore();
     VillageHeartComponent heartComponent = store.getComponent(heartRef,
         VillageHeartComponent.getComponentType());
+    if (heartComponent == null) {
+      Utils.breakBlockChunkAware(heartBlockChunk, heartBlockPosition);
+      PrefabManager.restoreTrackedPrefab(world, trackedPlacement);
+      return false;
+    }
+    if (heartComponent.getUuid() == null) {
+      heartComponent.setUuid(UUID.randomUUID());
+    }
 
     String worldName = heartBlockChunk.getWorld().getName();
     heartComponent.setBlockContext(new BlockContext(worldName,
@@ -113,25 +119,13 @@ public class TownHeartSpawner {
     heartComponent.setVillageRef(new EntityRef(worldName,
         position.clone().add(Vector3i.UP)));
 
-    VillageSpawnComponent spawnComponent = store.getComponent(heartRef,
-        VillageSpawnComponent.getComponentType());
-
-    initializeVillageTopology(position, structureRotation, heartRef, store,
-        heartComponent);
-
     store.putComponent(
         heartRef,
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);
 
-    VillageBuilderComponent builderComponent = new VillageBuilderComponent();
-    builderComponent.setProjectPlan(spawnComponent.getStructureToSpawn());
-    builderComponent.setFirstVillageBuildProject(true);
-
-    store.putComponent(
-        heartRef,
-        VillageBuilderComponent.getComponentType(),
-        builderComponent);
+    initializeVillageTopology(position, structureRotation, heartRef, store,
+        heartComponent);
 
     return true;
   }
@@ -144,6 +138,9 @@ public class TownHeartSpawner {
       VillageHeartComponent heartComponent) {
     VillageTopologyComponent topologyComponent = store.getComponent(heartRef,
         VillageTopologyComponent.getComponentType());
+    if (topologyComponent == null) {
+      return;
+    }
     topologyComponent.setVillageOrientation(rotation);
 
     short radius = heartComponent.getConfig().getClaimRadiusPerLevel((short) heartComponent.getLevel());
@@ -153,6 +150,7 @@ public class TownHeartSpawner {
         StructureConfig.TownHeart.SIZE_2I,
         VillageTopologyStructureType.CITY_CENTER,
         rotation);
+    coreStructure.setPrefabAnchor(position.clone());
     coreStructure.setStructureId(heartComponent.getUuid());
 
     topologyComponent.initializeVillageTopology(

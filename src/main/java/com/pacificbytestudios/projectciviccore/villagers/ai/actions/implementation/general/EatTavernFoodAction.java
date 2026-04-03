@@ -46,7 +46,7 @@ public class EatTavernFoodAction extends VillagerActionBase {
     }
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
-    WorkplaceInteractablesMapComponent interactables = this.getVillageTavernInteractibleComponent(ref, store);
+    WorkplaceInteractablesMapComponent interactables = this.getReservedTavernInteractibleComponent(ref, store);
     if (interactables == null) {
       return false;
     }

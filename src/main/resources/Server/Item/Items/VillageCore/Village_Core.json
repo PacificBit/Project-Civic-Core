@@ -67,13 +67,13 @@
           "Config": {
             "MaxVillageLevel": 2,
             "ClaimRadiusPerLevel": {
-              "1": 100,
-              "2": 100,
-              "3": 100
+              "1": 150,
+              "2": 150,
+              "3": 150
             },
             "VillagerCapPerLevel": {
-              "1": 6,
-              "2": 12,
+              "1": 24,
+              "2": 60,
               "3": 16
             },
             "FallbackMainRoadTurnChance": 60,
@@ -81,21 +81,21 @@
             "StructureLimitsPerLevel": {
               "1": {
                 "TownHall": 1,
-                "Farm": 1,
-                "Storage": 1,
-                "Tavern": 1,
-                "Sawmill": 1,
+                "Farm": 2,
+                "Storage": 2,
+                "Tavern": 2,
+                "Sawmill": 2,
                 "Mine": 0,
-                "House": 3
+                "House": 12
               },
               "2": {
                 "TownHall": 1,
-                "Sawmill": 2,
-                "Mine": 1,
-                "Storage": 2,
-                "Tavern": 2,
-                "Farm": 2,
-                "House": 6
+                "Sawmill": 3,
+                "Mine": 2,
+                "Storage": 4,
+                "Tavern": 5,
+                "Farm": 4,
+                "House": 20
               },
               "3": {
                 "TownHall": 1,
@@ -121,8 +121,8 @@
                 "House": 2,
                 "TownHall": 2,
                 "Mine": 1,
-                "Sawmill": 2,
-                "Farm": 2,
+                "Sawmill": 1,
+                "Farm": 1,
                 "Storage": 2,
                 "Tavern": 2
               },
@@ -139,7 +139,7 @@
           }
         },
         "VillageSpawnConfig": {
-          "InitialNpcCount": 4,
+          "InitialNpcCount": 8,
           "NpcSpawnRange": 8,
           "StructureToSpawn": {
             "ProjectList": {

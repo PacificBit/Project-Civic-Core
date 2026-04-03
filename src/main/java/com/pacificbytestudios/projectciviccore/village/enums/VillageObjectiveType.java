@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public enum VillageObjectiveType {
+  ASSIGN_HOUSE((short) 1),
+  ASSIGN_WORKER((short) 1),
   VILLAGE_LEVEL_UP((short) 1),
   SPAWN_VILLAGER((short) 1),
   BUILD_HOUSE((short) 3),

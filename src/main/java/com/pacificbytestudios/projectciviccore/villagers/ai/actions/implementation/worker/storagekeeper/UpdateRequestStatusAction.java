@@ -27,6 +27,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
@@ -123,6 +124,11 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
         continue;
       }
 
+      if (shouldLetRequesterRetry(villageHeartRef, request)) {
+        prepareRequesterRetryRequest(villageHeartRef, request, retryRequest);
+        continue;
+      }
+
       queueRetryRequest(villageHeartRef, request, retryRequest);
     }
   }
@@ -139,7 +145,11 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
         return null;
       }
 
-      return buildMissingDeliverRequest(villageHeartRef, request);
+      VillageStorageRequest retryRequest = buildMissingDeliverRequest(villageHeartRef, request);
+      if (retryRequest != null) {
+        retryRequest.setRegisteredWithStorage(false);
+      }
+      return retryRequest;
     }
 
     if (!this.status.equals(StatusType.REJECTED)) {
@@ -147,10 +157,16 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
     }
 
     if (VillageStorageRequestType.DELIVER_TO_WORKPLACE.equals(request.getType())) {
-      return buildMissingDeliverRequest(villageHeartRef, request);
+      VillageStorageRequest retryRequest = buildMissingDeliverRequest(villageHeartRef, request);
+      if (retryRequest != null) {
+        retryRequest.setRegisteredWithStorage(false);
+      }
+      return retryRequest;
     }
 
-    return request.clone();
+    VillageStorageRequest retryRequest = request.clone();
+    retryRequest.setRegisteredWithStorage(false);
+    return retryRequest;
   }
 
   private VillageStorageRequest buildMissingDeliverRequest(
@@ -243,6 +259,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
     }
 
     UUID previousRequestId = previousRequest.getRequestId();
+    retryRequest.setRegisteredWithStorage(false);
     retryRequest.setStorageWorkplaceId(null);
     retryRequest.addTriedStorageId(previousRequest.getStorageWorkplaceId());
 
@@ -250,7 +267,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
         villageHeartRef,
         previousRequestId,
         retryRequest.getRequesterWorkplaceId(),
-        retryRequest);
+        null);
 
     EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(
         retryRequest,
@@ -261,10 +278,12 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
       retryRequest.setStorageWorkplaceId(storageId);
       retryRequest.addTriedStorageId(storageId);
       retryRequest.overrideRequestId(UUID.fromString(requestParts[1]));
+      retryRequest.setRegisteredWithStorage(true);
       syncRequesterStorageRequest(villageHeartRef, previousRequestId, retryRequest.getRequesterWorkplaceId(),
           retryRequest);
     });
     task.setOnError((status, message) -> {
+      retryRequest.setRegisteredWithStorage(false);
       retryRequest.setStorageWorkplaceId(null);
       retryRequest.clearTriedStorageIds();
       syncRequesterStorageRequest(villageHeartRef, previousRequestId, retryRequest.getRequesterWorkplaceId(),
@@ -274,6 +293,49 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
     VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();
     taskComponent.registerTask(task);
     Utils.safeVillageTaskEnqueue(villageHeartRef, taskComponent);
+  }
+
+  private boolean shouldLetRequesterRetry(
+      Ref<ChunkStore> villageHeartRef,
+      VillageStorageRequest request) {
+    if (villageHeartRef == null || !villageHeartRef.isValid() || request == null ||
+        !VillageStorageRequestType.DELIVER_TO_WORKPLACE.equals(request.getType()) ||
+        request.getRequesterWorkplaceId() == null) {
+      return false;
+    }
+
+    Store<ChunkStore> heartStore = villageHeartRef.getStore();
+    VillageHeartComponent villageHeart = heartStore.getComponent(
+        villageHeartRef,
+        VillageHeartComponent.getComponentType());
+    if (villageHeart == null) {
+      return false;
+    }
+
+    WorkplaceComponent requesterWorkplace = villageHeart.getWorkplaceFromId(request.getRequesterWorkplaceId());
+    if (requesterWorkplace == null || requesterWorkplace.getWorkplaceType() == StructureType.TOWN_HALL) {
+      return false;
+    }
+
+    VillageStorageRequest lastRequest = requesterWorkplace.getLastStorageRequest();
+    return lastRequest != null &&
+        lastRequest.isRegisteredWithStorage() &&
+        VillageStorageRequestType.DELIVER_TO_WORKPLACE.equals(lastRequest.getType()) &&
+        request.getRequestId().equals(lastRequest.getRequestId());
+  }
+
+  private void prepareRequesterRetryRequest(
+      Ref<ChunkStore> villageHeartRef,
+      VillageStorageRequest previousRequest,
+      VillageStorageRequest retryRequest) {
+    if (previousRequest == null || retryRequest == null) {
+      return;
+    }
+
+    retryRequest.setRegisteredWithStorage(false);
+    retryRequest.setStorageWorkplaceId(null);
+    retryRequest.addTriedStorageId(previousRequest.getStorageWorkplaceId());
+    syncRequesterStorageRequest(villageHeartRef, previousRequest, retryRequest);
   }
 
   private void syncRequesterStorageRequest(

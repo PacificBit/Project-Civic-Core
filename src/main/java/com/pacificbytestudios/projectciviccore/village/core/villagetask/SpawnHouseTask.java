@@ -11,6 +11,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.HouseSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
@@ -76,13 +77,30 @@ public class SpawnHouseTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
-    HouseSpawner.beginNewConstruction(
-        this.structureId,
-        chunk,
-        this.position,
-        this.rotation,
-        heart,
-        this.level,
-        this.constructionMode);
+    try {
+      boolean spawned = HouseSpawner.beginNewConstruction(
+          this.structureId,
+          chunk,
+          this.position,
+          this.rotation,
+          heart,
+          this.level,
+          this.constructionMode);
+      if (spawned) {
+        this.callOnSuccess("BUILD_START_SUCCESS");
+        return;
+      }
+
+      String message = "[SpawnHouseTask] Could not start house construction for " + this.structureId
+          + " at " + this.position;
+      ProjectCivicCore.LOGGER.atWarning().log(message);
+      this.callOnError("BUILD_START_FAILED", message);
+    } catch (RuntimeException exception) {
+      String message = "[SpawnHouseTask] Failed to start house construction for " + this.structureId
+          + " at " + this.position + ": " + exception.getMessage();
+      ProjectCivicCore.LOGGER.atWarning().log(message);
+      this.callOnError("BUILD_START_EXCEPTION", message);
+      throw exception;
+    }
   }
 }

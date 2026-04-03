@@ -250,7 +250,7 @@ public final class StructureConfig {
         new LevelLayout(
             new BlockTransform(new Vector3i(-1, 1, -4), Rotation.None),
             new BlockTransform(new Vector3i(0, 1, 7), Rotation.None),
-            new Vector3i(0, 0, 1),
+            new Vector3i(0, 0, 2),
             List.of(
                 new ContainerTransform(new Vector3i(2, 1, -2), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
                 new ContainerTransform(new Vector3i(2, 1, 1), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
@@ -557,8 +557,6 @@ public final class StructureConfig {
     public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, 1);
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 5);
-    public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
 
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
@@ -570,11 +568,10 @@ public final class StructureConfig {
 
         2,
         createStagePrefabMap(
-            // TODO: complete this
-            "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json",
-            "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json",
-            "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json",
-            "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json"),
+            "Structures/Workplace/TownHall/Level2/Stage0/Town_Hall.prefab.json",
+            "Structures/Workplace/TownHall/Level2/Stage1/Town_Hall.prefab.json",
+            "Structures/Workplace/TownHall/Level2/Stage2/Town_Hall.prefab.json",
+            "Structures/Workplace/TownHall/Level2/Stage3/Town_Hall.prefab.json"),
 
         3,
         createStagePrefabMap(
@@ -587,17 +584,16 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-3, 1, -1), Rotation.Ninety),
+            new BlockTransform(new Vector3i(-2, 1, 0), Rotation.None),
             new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(1, 0, 1),
+            new Vector3i(1, 0, 0),
             new Vector3i(0, 0, 1)),
 
         2,
         new LevelLayout(
-            // TODO: complete this
-            new BlockTransform(new Vector3i(-3, 1, -1), Rotation.Ninety),
+            new BlockTransform(new Vector3i(-4, 2, 0), Rotation.OneEighty),
             new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(1, 0, 1),
+            new Vector3i(-1, 0, 0),
             new Vector3i(0, 0, 1)),
 
         3,

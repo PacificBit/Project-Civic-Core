@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace.generic;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,15 +23,15 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
       .append(
           new KeyedCodec<>(
               "Containers",
-              new MapCodec<WorkplaceContainerEntryComponent, HashMap<String, WorkplaceContainerEntryComponent>>(
+              new MapCodec<WorkplaceContainerEntryComponent, LinkedHashMap<String, WorkplaceContainerEntryComponent>>(
                   WorkplaceContainerEntryComponent.CODEC,
-                  HashMap::new)),
+                  LinkedHashMap::new)),
           (obj, value) -> {
-            obj.containers = new HashMap<>();
+            obj.containers = new LinkedHashMap<>();
             value.forEach((k, v) -> obj.containers.put(UUID.fromString(k), v));
           },
           (obj) -> {
-            HashMap<String, WorkplaceContainerEntryComponent> encoded = new HashMap<>();
+            LinkedHashMap<String, WorkplaceContainerEntryComponent> encoded = new LinkedHashMap<>();
             obj.containers.forEach((k, v) -> encoded.put(k.toString(), v));
             return encoded;
           })
@@ -39,7 +39,7 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
 
       .build();
 
-  private Map<UUID, WorkplaceContainerEntryComponent> containers = new HashMap<>();
+  private Map<UUID, WorkplaceContainerEntryComponent> containers = new LinkedHashMap<>();
 
   public Map<UUID, WorkplaceContainerEntryComponent> getContainers() {
     return Collections.unmodifiableMap(containers);
@@ -80,7 +80,7 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
   @Override
   public WorkplaceContainerRegistryComponent clone() {
     WorkplaceContainerRegistryComponent component = new WorkplaceContainerRegistryComponent();
-    component.containers = new HashMap<>();
+    component.containers = new LinkedHashMap<>();
 
     for (Map.Entry<UUID, WorkplaceContainerEntryComponent> entry : this.containers.entrySet()) {
       WorkplaceContainerEntryComponent clonedContainer = entry.getValue() != null ? entry.getValue().clone() : null;

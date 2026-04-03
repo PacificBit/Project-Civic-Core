@@ -100,8 +100,6 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
         ProjectCivicCore.LOGGER.atInfo()
             .log("[AskForClearWorkplaceStorageAction] Built request: " + request);
 
-        syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
-
         EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
         task.setOnSuccessCallback(requestResult -> {
           String[] requestParts = requestResult.split(":", 2);
@@ -109,6 +107,7 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
           request.setStorageWorkplaceId(storageId);
           request.addTriedStorageId(storageId);
           request.overrideRequestId(UUID.fromString(requestParts[1]));
+          request.setRegisteredWithStorage(true);
           syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
         });
         task.setOnError((status, message) -> syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef,

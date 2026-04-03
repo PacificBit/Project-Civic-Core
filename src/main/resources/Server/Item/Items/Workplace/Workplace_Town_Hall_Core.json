@@ -1,70 +1,25 @@
 {
   "TranslationProperties": {
-    "Name": "server.workplace.townhall.name",
-    "Description": "server.workplace.townhall.description"
+    "Name": "server.items.Workplace_Town_Hall_Core.name"
   },
-  "Icon": "Icons/ItemsGenerated/Bench_Arcane.png",
-  "Categories": [
-    "Furniture.Benches"
-  ],
+  "Icon": "Icons/ItemsGenerated/Workplace_Town_Hall_Core.png",
+  "Categories": [],
+  "Quality": "Developer",
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary"
+  },
   "BlockType": {
     "Material": "Solid",
     "DrawType": "Model",
-    "Opacity": "Transparent",
-    "CustomModel": "Blocks/Benches/ArcaneTable.blockymodel",
+    "CustomModel": "Blocks/Models/Town_Hall_Core.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Benches/ArcaneTable_Texture.png",
+        "Texture": "Blocks/Textures/Town_Hall_Core_Texture.png",
         "Weight": 1
       }
     ],
-    "HitboxType": "Bench_Alchemy",
-    "VariantRotation": "NESW",
-    "Bench": {
-      "Type": "Crafting",
-      "LocalOpenSoundEventId": "SFX_Arcane_Workbench_Open_Local",
-      "LocalCloseSoundEventId": "SFX_Arcane_Workbench_Close_Local",
-      "CompletedSoundEventId": "SFX_Arcane_Workbench_Craft",
-      "Categories": [
-        {
-          "Id": "Arcane_Portals",
-          "Icon": "Icons/CraftingCategories/Arcane/Portal_Device.png",
-          "Name": "server.benchCategories.portals"
-        },
-        {
-          "Id": "Arcane_Misc",
-          "Icon": "Icons/CraftingCategories/Arcane/Bench_Memories.png",
-          "Name": "server.benchCategories.misc"
-        }
-      ],
-      "Id": "Arcanebench"
-    },
-    "State": {
-      "Definitions": {
-        "CraftCompleted": {
-          "CustomModelAnimation": "Blocks/Benches/Alchemy_Crafting.blockyanim",
-          "Looping": true
-        },
-        "CraftCompletedInstant": {
-          "CustomModelAnimation": "Blocks/Benches/Alchemy_Crafting.blockyanim"
-        }
-      }
-    },
-    "Gathering": {
-      "Breaking": {
-        "GatherType": "Benches"
-      }
-    },
-    "BlockParticleSetId": "Wood",
-    "ParticleColor": "#6e4a2f",
-    "Support": {
-      "Down": [
-        {
-          "FaceType": "Full"
-        }
-      ]
-    },
-    "BlockSoundSetId": "Stone",
+    "ParticleColor": "#0000f4",
     "BlockEntity": {
       "Components": {
         "WorkplaceComponent": {
@@ -74,28 +29,24 @@
         "WorkplaceInteractables": {},
         "TownHallComponent": {}
       }
-    },
-    "InteractionHint": "Town Hall (Coming Soon)"
+    }
   },
   "PlayerAnimationsId": "Block",
-  "IconProperties": {
-    "Scale": 0.35,
-    "Rotation": [
-      22.5,
-      45.0,
-      22.5
-    ],
-    "Translation": [
-      11.4,
-      -18.6
-    ]
-  },
   "Tags": {
     "Type": [
-      "Bench"
+      "Debug"
     ]
   },
-  "MaxStack": 1,
-  "ItemLevel": 10,
-  "ItemSoundSetId": "ISS_Blocks_Wood"
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      293,
+      0
+    ],
+    "Translation": [
+      0,
+      -29
+    ]
+  }
 }

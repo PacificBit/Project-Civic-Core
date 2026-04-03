@@ -37,10 +37,52 @@
     },
     {
       "x": -7,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": -7,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Corner_Right",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -57,6 +99,42 @@
     },
     {
       "x": -7,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": -6,
       "name": "Wood_Darkwood_Roof_Hollow",
@@ -64,9 +142,69 @@
     },
     {
       "x": -7,
+      "y": 9,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -7,
+      "y": 1,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -83,6 +221,30 @@
     },
     {
       "x": -7,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -96,10 +258,70 @@
     },
     {
       "x": -7,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": -4,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -109,10 +331,76 @@
     },
     {
       "x": -7,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": -3,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -136,6 +424,36 @@
     },
     {
       "x": -7,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": -2,
       "name": "Wood_Darkwood_Roof_Hollow",
@@ -143,9 +461,75 @@
     },
     {
       "x": -7,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -7,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -153,6 +537,30 @@
       "z": -1,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -162,10 +570,76 @@
     },
     {
       "x": -7,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": 0,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -175,10 +649,76 @@
     },
     {
       "x": -7,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": 1,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -195,6 +735,42 @@
     },
     {
       "x": -7,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": 2,
       "name": "Wood_Darkwood_Roof_Hollow",
@@ -202,9 +778,75 @@
     },
     {
       "x": -7,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -7,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -215,9 +857,75 @@
     },
     {
       "x": -7,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": 4,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -7,
+      "y": 1,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -225,12 +933,72 @@
       "z": 4,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -7,
       "y": 0,
       "z": 5,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -7,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -247,6 +1015,30 @@
     },
     {
       "x": -7,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 0,
       "z": 6,
       "name": "Soil_Grass"
@@ -260,10 +1052,70 @@
     },
     {
       "x": -7,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 4,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 5,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": 6,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": -7,
@@ -297,9 +1149,51 @@
     },
     {
       "x": -7,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
       "y": 8,
       "z": 7,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Corner_Right"
+    },
+    {
+      "x": -7,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -7,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -309,10 +1203,76 @@
     },
     {
       "x": -6,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -6,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -336,6 +1296,42 @@
     },
     {
       "x": -6,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 4,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 5,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 8,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 9,
       "z": -6,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Corner_Left",
@@ -343,9 +1339,39 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -400,9 +1426,33 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -410,6 +1460,12 @@
       "z": -4,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 3
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -460,9 +1516,39 @@
     },
     {
       "x": -6,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -512,9 +1598,27 @@
     },
     {
       "x": -6,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -522,6 +1626,12 @@
       "z": -2,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 3
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -567,6 +1677,24 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -577,6 +1705,12 @@
       "z": -1,
       "name": "Plant_Grass_Sharp_Short",
       "support": 15
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -628,9 +1762,33 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -638,6 +1796,12 @@
       "z": 0,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 3
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -683,9 +1847,45 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": 1,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -726,6 +1926,24 @@
       "z": 1,
       "name": "Wood_Darkwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": -6,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -749,6 +1967,12 @@
     },
     {
       "x": -6,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 4,
       "z": 2,
       "name": "Wood_Hardwood_Planks_Half",
@@ -791,9 +2015,45 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -841,6 +2101,18 @@
       "z": 3,
       "name": "Wood_Darkwood_Roof",
       "rotation": 2
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -918,9 +2190,39 @@
     },
     {
       "x": -6,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": 5,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -967,6 +2269,24 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": 6,
       "name": "Soil_Grass"
@@ -980,6 +2300,48 @@
     },
     {
       "x": -6,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 4,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 5,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 6,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 7,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 8,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 9,
       "z": 6,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Corner_Left",
@@ -987,9 +2349,69 @@
     },
     {
       "x": -6,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
       "y": 0,
       "z": 7,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -6,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -998,6 +2420,30 @@
       "name": "Wood_Darkwood_Roof_Hollow"
     },
     {
+      "x": -6,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -6,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
       "x": -5,
       "y": 0,
       "z": -7,
@@ -1005,10 +2451,76 @@
     },
     {
       "x": -5,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1022,6 +2534,12 @@
       "z": -6,
       "name": "Plant_Grass_Sharp",
       "support": 15
+    },
+    {
+      "x": -5,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1073,6 +2591,24 @@
       "z": -6,
       "name": "Wood_Darkwood_Roof",
       "rotation": 2
+    },
+    {
+      "x": -5,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1108,15 +2644,33 @@
     },
     {
       "x": -5,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 6,
       "z": -5,
       "name": "Wood_Torch_Wall"
     },
     {
       "x": -5,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1127,6 +2681,18 @@
     },
     {
       "x": -5,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
@@ -1165,9 +2731,27 @@
     },
     {
       "x": -5,
+      "y": 6,
+      "z": -4,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1175,6 +2759,18 @@
       "z": -4,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Right",
       "rotation": 3
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1217,9 +2813,27 @@
     },
     {
       "x": -5,
+      "y": 6,
+      "z": -3,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1227,6 +2841,18 @@
       "z": -3,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Left",
       "rotation": 3
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1263,9 +2889,33 @@
     },
     {
       "x": -5,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1273,6 +2923,18 @@
       "z": -2,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1314,9 +2976,27 @@
     },
     {
       "x": -5,
+      "y": 6,
+      "z": -1,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1324,6 +3004,18 @@
       "z": -1,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1365,9 +3057,27 @@
     },
     {
       "x": -5,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1375,6 +3085,18 @@
       "z": 0,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1411,9 +3133,33 @@
     },
     {
       "x": -5,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1421,6 +3167,18 @@
       "z": 1,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1457,9 +3215,33 @@
     },
     {
       "x": -5,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1470,6 +3252,18 @@
     },
     {
       "x": -5,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": 3,
       "name": "Soil_Grass"
@@ -1502,9 +3296,33 @@
     },
     {
       "x": -5,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1515,6 +3333,18 @@
     },
     {
       "x": -5,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": 4,
       "name": "Soil_Grass"
@@ -1547,9 +3377,33 @@
     },
     {
       "x": -5,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1557,6 +3411,18 @@
       "z": 4,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Left",
       "rotation": 3
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1606,9 +3472,21 @@
     },
     {
       "x": -5,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1618,9 +3496,33 @@
     },
     {
       "x": -5,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": 6,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -5,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -1673,6 +3575,24 @@
     },
     {
       "x": -5,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 0,
       "z": 7,
       "name": "Soil_Grass"
@@ -1693,6 +3613,30 @@
     },
     {
       "x": -5,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
       "y": 7,
       "z": 7,
       "name": "Furniture_Human_Ruins_Banner",
@@ -1703,6 +3647,30 @@
       "y": 8,
       "z": 7,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": -5,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -5,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1719,10 +3687,70 @@
     },
     {
       "x": -4,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -4,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1732,10 +3760,22 @@
     },
     {
       "x": -4,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 2,
       "z": -6,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 2
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1782,6 +3822,24 @@
     },
     {
       "x": -4,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -1814,9 +3872,33 @@
     },
     {
       "x": -4,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -4,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1824,6 +3906,18 @@
       "z": -5,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -4,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1845,6 +3939,12 @@
     },
     {
       "x": -4,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 4,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
@@ -1854,6 +3954,18 @@
       "y": 5,
       "z": -4,
       "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": -4,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1882,6 +3994,12 @@
     },
     {
       "x": -4,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
@@ -1891,6 +4009,18 @@
       "y": 1,
       "z": -3,
       "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -4,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1906,9 +4036,33 @@
     },
     {
       "x": -4,
+      "y": 6,
+      "z": -3,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -4,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1919,15 +4073,57 @@
     },
     {
       "x": -4,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -4,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 4,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1956,9 +4152,33 @@
     },
     {
       "x": -4,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -4,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1974,6 +4194,18 @@
     },
     {
       "x": -4,
+      "y": 6,
+      "z": -1,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
@@ -1986,10 +4218,22 @@
     },
     {
       "x": -4,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 11,
       "z": -1,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -1999,10 +4243,22 @@
     },
     {
       "x": -4,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 2,
       "z": 0,
       "name": "Wood_Torch_Wall",
       "rotation": 1
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2019,6 +4275,18 @@
     },
     {
       "x": -4,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
@@ -2031,10 +4299,22 @@
     },
     {
       "x": -4,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 11,
       "z": 0,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2051,6 +4331,42 @@
     },
     {
       "x": -4,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
@@ -2063,10 +4379,22 @@
     },
     {
       "x": -4,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 11,
       "z": 1,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2090,9 +4418,51 @@
     },
     {
       "x": -4,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -4,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2100,6 +4470,12 @@
       "z": 2,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2129,6 +4505,30 @@
     },
     {
       "x": -4,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
@@ -2141,10 +4541,22 @@
     },
     {
       "x": -4,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 11,
       "z": 3,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2177,6 +4589,24 @@
       "z": 4,
       "name": "Wood_Hardwood_Stairs",
       "rotation": 2
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2202,6 +4632,12 @@
       "z": 4,
       "name": "*Wood_Darkwood_Roof_State_Definitions_Corner_Left",
       "rotation": 3
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2237,9 +4673,33 @@
     },
     {
       "x": -4,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -4,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2249,9 +4709,39 @@
     },
     {
       "x": -4,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": 6,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -4,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2297,6 +4787,24 @@
     },
     {
       "x": -4,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 0,
       "z": 7,
       "name": "Soil_Grass"
@@ -2310,15 +4818,117 @@
     },
     {
       "x": -4,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
       "y": 8,
       "z": 7,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": -4,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -4,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 0,
       "z": -7,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2329,9 +4939,45 @@
     },
     {
       "x": -3,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -6,
       "name": "Soil_Grass"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2386,6 +5032,24 @@
     },
     {
       "x": -3,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -2418,9 +5082,33 @@
     },
     {
       "x": -3,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2428,6 +5116,18 @@
       "z": -5,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2443,9 +5143,39 @@
     },
     {
       "x": -3,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 4,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2461,6 +5191,12 @@
     },
     {
       "x": -3,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 11,
       "z": -4,
       "name": "Wood_Darkwood_Roof_Hollow",
@@ -2468,9 +5204,33 @@
     },
     {
       "x": -3,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2480,9 +5240,45 @@
     },
     {
       "x": -3,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2499,15 +5295,69 @@
     },
     {
       "x": -3,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 4,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -3,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2524,15 +5374,69 @@
     },
     {
       "x": -3,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 4,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -3,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2546,6 +5450,24 @@
       "y": 0,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2569,9 +5491,33 @@
     },
     {
       "x": -3,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2595,9 +5541,63 @@
     },
     {
       "x": -3,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2628,9 +5628,57 @@
     },
     {
       "x": -3,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2667,6 +5715,30 @@
     },
     {
       "x": -3,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
@@ -2676,6 +5748,18 @@
       "y": 9,
       "z": 3,
       "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2718,6 +5802,24 @@
     },
     {
       "x": -3,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
@@ -2730,9 +5832,21 @@
     },
     {
       "x": -3,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 11,
       "z": 4,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": -3,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2768,15 +5882,51 @@
     },
     {
       "x": -3,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -3,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 10,
       "z": 5,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Right"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2790,6 +5940,18 @@
       "z": 6,
       "name": "Plant_Grass_Sharp",
       "support": 15
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -2841,15 +6003,93 @@
     },
     {
       "x": -3,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 0,
       "z": 7,
       "name": "Soil_Pathway"
     },
     {
       "x": -3,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
       "y": 8,
       "z": 7,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": -3,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -2873,10 +6113,64 @@
     },
     {
       "x": -2,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -2886,10 +6180,22 @@
     },
     {
       "x": -2,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 2,
       "z": -6,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 2
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -2936,6 +6242,24 @@
     },
     {
       "x": -2,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -2968,9 +6292,33 @@
     },
     {
       "x": -2,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -2981,15 +6329,39 @@
     },
     {
       "x": -2,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -2,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 2,
       "z": -4,
       "name": "Wood_Torch_Wall"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3005,9 +6377,33 @@
     },
     {
       "x": -2,
+      "y": 6,
+      "z": -4,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3018,9 +6414,33 @@
     },
     {
       "x": -2,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3036,9 +6456,39 @@
     },
     {
       "x": -2,
+      "y": 6,
+      "z": -3,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3055,15 +6505,69 @@
     },
     {
       "x": -2,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 4,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -2,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3080,9 +6584,33 @@
     },
     {
       "x": -2,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 4,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3093,9 +6621,33 @@
     },
     {
       "x": -2,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3167,6 +6719,24 @@
     },
     {
       "x": -2,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 12,
       "z": 0,
       "name": "Wood_Darkwood_Roof_Flat",
@@ -3177,6 +6747,18 @@
       "y": 0,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3206,9 +6788,33 @@
     },
     {
       "x": -2,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3222,6 +6828,18 @@
       "y": 0,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3245,9 +6863,39 @@
     },
     {
       "x": -2,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3261,6 +6909,18 @@
       "y": 0,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3284,9 +6944,39 @@
     },
     {
       "x": -2,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3303,6 +6993,18 @@
     },
     {
       "x": -2,
+      "y": 1,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 3,
       "z": 4,
       "name": "Cloth_Roof_Orange_Flap",
@@ -3313,6 +7015,24 @@
       "y": 4,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3328,9 +7048,21 @@
     },
     {
       "x": -2,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 11,
       "z": 4,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": -2,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3368,9 +7100,33 @@
     },
     {
       "x": -2,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3386,9 +7142,33 @@
     },
     {
       "x": -2,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": 6,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -3445,15 +7225,87 @@
     },
     {
       "x": -2,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 0,
       "z": 7,
       "name": "Soil_Pathway"
     },
     {
       "x": -2,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
       "y": 8,
       "z": 7,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": -2,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3463,10 +7315,76 @@
     },
     {
       "x": -1,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3480,6 +7398,18 @@
       "z": -6,
       "name": "Plant_Grass_Sharp",
       "support": 15
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3526,6 +7456,24 @@
     },
     {
       "x": -1,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -3559,9 +7507,33 @@
     },
     {
       "x": -1,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3569,6 +7541,18 @@
       "z": -5,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3610,9 +7594,33 @@
     },
     {
       "x": -1,
+      "y": 6,
+      "z": -4,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3623,9 +7631,33 @@
     },
     {
       "x": -1,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3641,9 +7673,39 @@
     },
     {
       "x": -1,
+      "y": 6,
+      "z": -3,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3660,15 +7722,69 @@
     },
     {
       "x": -1,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 4,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -1,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3685,15 +7801,69 @@
     },
     {
       "x": -1,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 4,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -1,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3710,9 +7880,33 @@
     },
     {
       "x": -1,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 4,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3723,9 +7917,33 @@
     },
     {
       "x": -1,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3739,6 +7957,24 @@
       "y": 0,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3754,9 +7990,39 @@
     },
     {
       "x": -1,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3770,6 +8036,24 @@
       "y": 0,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3785,9 +8069,39 @@
     },
     {
       "x": -1,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3804,15 +8118,69 @@
     },
     {
       "x": -1,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 4,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": -1,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3830,6 +8198,18 @@
     },
     {
       "x": -1,
+      "y": 1,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 3,
       "z": 4,
       "name": "Wood_Torch_Wall",
@@ -3843,9 +8223,39 @@
     },
     {
       "x": -1,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3855,9 +8265,27 @@
     },
     {
       "x": -1,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": 5,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3875,9 +8303,33 @@
     },
     {
       "x": -1,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3893,9 +8345,33 @@
     },
     {
       "x": -1,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": 6,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -3951,15 +8427,87 @@
     },
     {
       "x": -1,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 0,
       "z": 7,
       "name": "Soil_Pathway"
     },
     {
       "x": -1,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
       "y": 8,
       "z": 7,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": -1,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -3976,10 +8524,70 @@
     },
     {
       "x": 0,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -3989,10 +8597,22 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 2,
       "z": -6,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4039,6 +8659,24 @@
     },
     {
       "x": 0,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -4071,9 +8709,33 @@
     },
     {
       "x": 0,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4084,9 +8746,27 @@
     },
     {
       "x": 0,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4096,9 +8776,33 @@
     },
     {
       "x": 0,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4114,10 +8818,22 @@
     },
     {
       "x": 0,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 11,
       "z": -4,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4127,9 +8843,45 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4145,6 +8897,18 @@
     },
     {
       "x": 0,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 12,
       "z": -3,
       "name": "Wood_Darkwood_Roof_Flat",
@@ -4158,15 +8922,69 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 0,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4183,15 +9001,69 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 0,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4208,15 +9080,69 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 0,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4233,15 +9159,69 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 0,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4258,15 +9238,69 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 0,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4283,9 +9317,45 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4298,6 +9368,18 @@
       "y": 9,
       "z": 3,
       "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4315,9 +9397,45 @@
     },
     {
       "x": 0,
+      "y": 1,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 4,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4333,9 +9451,21 @@
     },
     {
       "x": 0,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 11,
       "z": 4,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4373,9 +9503,33 @@
     },
     {
       "x": 0,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4391,9 +9545,27 @@
     },
     {
       "x": 0,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": 6,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -4456,15 +9628,75 @@
     },
     {
       "x": 0,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 0,
       "z": 7,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 0,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
       "y": 8,
       "z": 7,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4474,10 +9706,76 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4498,6 +9796,12 @@
       "z": -6,
       "name": "Plant_Grass_Sharp_Tall",
       "filler": 1024
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4544,6 +9848,24 @@
     },
     {
       "x": 1,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -4576,9 +9898,33 @@
     },
     {
       "x": 1,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4586,6 +9932,18 @@
       "z": -5,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4601,6 +9959,18 @@
     },
     {
       "x": 1,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
@@ -4610,6 +9980,18 @@
       "y": 5,
       "z": -4,
       "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -4,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4638,9 +10020,33 @@
     },
     {
       "x": 1,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4656,6 +10062,18 @@
     },
     {
       "x": 1,
+      "y": 6,
+      "z": -3,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
@@ -4668,6 +10086,18 @@
     },
     {
       "x": 1,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 12,
       "z": -3,
       "name": "Wood_Darkwood_Roof_Flat",
@@ -4681,15 +10111,69 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 1,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4706,15 +10190,69 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 1,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4731,15 +10269,69 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 1,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4756,15 +10348,69 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 1,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4781,15 +10427,69 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 1,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4806,9 +10506,45 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4830,6 +10566,12 @@
     },
     {
       "x": 1,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 12,
       "z": 3,
       "name": "Wood_Darkwood_Roof_Flat",
@@ -4843,9 +10585,45 @@
     },
     {
       "x": 1,
+      "y": 1,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 4,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4870,6 +10648,12 @@
       "y": 11,
       "z": 4,
       "name": "Wood_Darkwood_Roof"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4913,9 +10697,27 @@
     },
     {
       "x": 1,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4925,15 +10727,39 @@
     },
     {
       "x": 1,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": 6,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 2,
       "z": 6,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4984,9 +10810,63 @@
     },
     {
       "x": 1,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 0,
       "z": 7,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -4995,10 +10875,76 @@
       "name": "Wood_Darkwood_Roof_Hollow"
     },
     {
+      "x": 1,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
       "x": 2,
       "y": 0,
       "z": -7,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5009,9 +10955,39 @@
     },
     {
       "x": 2,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -6,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5019,6 +10995,12 @@
       "z": -6,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 2
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5065,6 +11047,24 @@
     },
     {
       "x": 2,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -5098,9 +11098,33 @@
     },
     {
       "x": 2,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 8,
       "z": -5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5108,6 +11132,18 @@
       "z": -5,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5129,6 +11165,12 @@
     },
     {
       "x": 2,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
@@ -5138,6 +11180,18 @@
       "y": 5,
       "z": -4,
       "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -4,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5166,6 +11220,12 @@
     },
     {
       "x": 2,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
@@ -5175,6 +11235,18 @@
       "y": 1,
       "z": -3,
       "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5190,6 +11262,18 @@
     },
     {
       "x": 2,
+      "y": 6,
+      "z": -3,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
@@ -5202,10 +11286,22 @@
     },
     {
       "x": 2,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 11,
       "z": -3,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5221,9 +11317,39 @@
     },
     {
       "x": 2,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5233,10 +11359,28 @@
     },
     {
       "x": 2,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 11,
       "z": -2,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Left",
       "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5252,15 +11396,63 @@
     },
     {
       "x": 2,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 2,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5289,15 +11481,57 @@
     },
     {
       "x": 2,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 2,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5319,15 +11553,63 @@
     },
     {
       "x": 2,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 2,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 8,
       "z": 1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5349,9 +11631,39 @@
     },
     {
       "x": 2,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5361,9 +11673,27 @@
     },
     {
       "x": 2,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 11,
       "z": 2,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Left"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5379,9 +11709,39 @@
     },
     {
       "x": 2,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5410,6 +11770,12 @@
     },
     {
       "x": 2,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": 4,
       "name": "Wood_Hardwood_Planks",
@@ -5423,9 +11789,39 @@
     },
     {
       "x": 2,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 4,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5450,6 +11846,12 @@
       "y": 11,
       "z": 4,
       "name": "*Wood_Darkwood_Roof_State_Definitions_Corner_Left"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5491,9 +11893,27 @@
     },
     {
       "x": 2,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5503,9 +11923,39 @@
     },
     {
       "x": 2,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": 6,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -5551,15 +12001,99 @@
     },
     {
       "x": 2,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 0,
       "z": 7,
       "name": "Soil_Pathway"
     },
     {
       "x": 2,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 8,
       "z": 7,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5576,6 +12110,42 @@
     },
     {
       "x": 3,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
@@ -5583,9 +12153,45 @@
     },
     {
       "x": 3,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -6,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5637,6 +12243,24 @@
     },
     {
       "x": 3,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
@@ -5669,9 +12293,21 @@
     },
     {
       "x": 3,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 6,
       "z": -5,
       "name": "Wood_Torch_Wall"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5681,10 +12317,28 @@
     },
     {
       "x": 3,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 10,
       "z": -5,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Corner_Right",
       "rotation": 2
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5720,9 +12374,33 @@
     },
     {
       "x": 3,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": -4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5730,6 +12408,18 @@
       "z": -4,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5765,9 +12455,33 @@
     },
     {
       "x": 3,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": -3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5775,6 +12489,18 @@
       "z": -3,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Left",
       "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5809,9 +12535,39 @@
     },
     {
       "x": 3,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": -2,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5819,6 +12575,12 @@
       "z": -2,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5854,6 +12616,18 @@
     },
     {
       "x": 3,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 7,
       "z": -1,
       "name": "Furniture_Tavern_Trapdoor",
@@ -5864,6 +12638,24 @@
       "y": 8,
       "z": -1,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5905,6 +12697,18 @@
     },
     {
       "x": 3,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 7,
       "z": 0,
       "name": "Furniture_Tavern_Trapdoor",
@@ -5915,6 +12719,24 @@
       "y": 8,
       "z": 0,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5952,6 +12774,18 @@
       "z": 1,
       "name": "Wood_Ash_Trunk",
       "rotation": 4
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -5969,6 +12803,24 @@
     },
     {
       "x": 3,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 12,
       "z": 1,
       "name": "Wood_Darkwood_Roof_Flat"
@@ -6006,15 +12858,51 @@
     },
     {
       "x": 3,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": 2,
       "name": "Wood_Hardwood_Planks"
     },
     {
       "x": 3,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 11,
       "z": 2,
       "name": "Wood_Darkwood_Roof_Hollow"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6056,9 +12944,27 @@
     },
     {
       "x": 3,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": 3,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6066,6 +12972,18 @@
       "z": 3,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Inverted_Corner_Right",
       "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6108,9 +13026,27 @@
     },
     {
       "x": 3,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": 4,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6118,6 +13054,18 @@
       "z": 4,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6166,9 +13114,21 @@
     },
     {
       "x": 3,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 8,
       "z": 5,
       "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6179,15 +13139,39 @@
     },
     {
       "x": 3,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": 6,
       "name": "Soil_Pathway"
     },
     {
       "x": 3,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 2,
       "z": 6,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6230,9 +13214,63 @@
     },
     {
       "x": 3,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 0,
       "z": 7,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -6248,6 +13286,30 @@
       "name": "Wood_Darkwood_Roof_Hollow"
     },
     {
+      "x": 3,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
       "x": 4,
       "y": 0,
       "z": -7,
@@ -6255,10 +13317,76 @@
     },
     {
       "x": 4,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 8,
       "z": -7,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 2
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6275,6 +13403,48 @@
     },
     {
       "x": 4,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 9,
       "z": -6,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Corner_Left",
@@ -6282,9 +13452,45 @@
     },
     {
       "x": 4,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6329,9 +13535,33 @@
     },
     {
       "x": 4,
+      "y": 10,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6339,6 +13569,12 @@
       "z": -4,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 1
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6381,6 +13617,24 @@
     },
     {
       "x": 4,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
@@ -6391,6 +13645,12 @@
       "z": -3,
       "name": "Plant_Grass_Sharp",
       "support": 15
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6449,9 +13709,27 @@
     },
     {
       "x": 4,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6459,6 +13737,12 @@
       "z": -2,
       "name": "*Furniture_Tavern_Trapdoor_State_Definitions_OpenDoorOut",
       "rotation": 1
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6515,9 +13799,33 @@
     },
     {
       "x": 4,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6525,6 +13833,18 @@
       "z": -1,
       "name": "Wood_Hardwood_Stairs",
       "rotation": 11
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6539,6 +13859,18 @@
       "z": -1,
       "name": "Wood_Ash_Trunk",
       "rotation": 4
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6574,10 +13906,28 @@
     },
     {
       "x": 4,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 4,
       "z": 0,
       "name": "Wood_Hardwood_Planks_Half",
       "rotation": 8
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6593,6 +13943,18 @@
       "name": "Wood_Ash_Trunk",
       "support": 15,
       "rotation": 4
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6628,10 +13990,28 @@
     },
     {
       "x": 4,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 4,
       "z": 1,
       "name": "Wood_Hardwood_Stairs",
       "rotation": 11
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6646,6 +14026,18 @@
       "z": 1,
       "name": "Wood_Ash_Trunk",
       "rotation": 4
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6736,6 +14128,12 @@
       "y": 11,
       "z": 2,
       "name": "Wood_Darkwood_Roof"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6809,6 +14207,18 @@
     },
     {
       "x": 4,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 4,
       "name": "Soil_Grass"
@@ -6824,6 +14234,12 @@
       "y": 2,
       "z": 4,
       "name": "Ingredient_Flour"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6866,9 +14282,45 @@
     },
     {
       "x": 4,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 5,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6913,9 +14365,75 @@
     },
     {
       "x": 4,
+      "y": 10,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 6,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6925,9 +14443,69 @@
     },
     {
       "x": 4,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 0,
       "z": 7,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -6936,10 +14514,76 @@
       "name": "Wood_Darkwood_Roof_Hollow"
     },
     {
+      "x": 4,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
       "x": 5,
       "y": 0,
       "z": -7,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -6950,9 +14594,75 @@
     },
     {
       "x": 5,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": -6,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -6960,6 +14670,30 @@
       "z": -6,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -6983,6 +14717,30 @@
     },
     {
       "x": 5,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 7,
       "z": -5,
       "name": "Furniture_Human_Ruins_Banner"
@@ -6996,9 +14754,75 @@
     },
     {
       "x": 5,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7006,6 +14830,30 @@
       "z": -4,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7022,6 +14870,42 @@
     },
     {
       "x": 5,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 8,
       "z": -3,
       "name": "Wood_Darkwood_Roof_Hollow",
@@ -7029,9 +14913,51 @@
     },
     {
       "x": 5,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7049,9 +14975,69 @@
     },
     {
       "x": 5,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7059,6 +15045,54 @@
       "z": -1,
       "name": "Wood_Hardwood_Planks_Half",
       "rotation": 8
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7074,10 +15108,70 @@
     },
     {
       "x": 5,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 4,
       "z": 0,
       "name": "Wood_Hardwood_Planks_Half",
       "rotation": 8
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 0,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7090,6 +15184,72 @@
       "y": 1,
       "z": 1,
       "name": "Plant_Crop_Pumpkin_Item"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7111,6 +15271,66 @@
     },
     {
       "x": 5,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": 3,
       "name": "Soil_Pathway"
@@ -7123,10 +15343,70 @@
     },
     {
       "x": 5,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 8,
       "z": 3,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7143,6 +15423,42 @@
     },
     {
       "x": 5,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 8,
       "z": 4,
       "name": "Wood_Darkwood_Roof_Hollow",
@@ -7150,9 +15466,69 @@
     },
     {
       "x": 5,
+      "y": 9,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": 5,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7169,9 +15545,75 @@
     },
     {
       "x": 5,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 0,
       "z": 6,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7179,6 +15621,30 @@
       "z": 6,
       "name": "Wood_Darkwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -7195,9 +15661,69 @@
     },
     {
       "x": 5,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 8,
       "z": 7,
       "name": "*Wood_Darkwood_Roof_Hollow_State_Definitions_Corner_Left"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7221,9 +15747,141 @@
     },
     {
       "x": 6,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": -6,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7233,9 +15891,153 @@
     },
     {
       "x": 6,
+      "y": 1,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": -4,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7245,9 +16047,99 @@
     },
     {
       "x": 6,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": -2,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7265,6 +16157,48 @@
     },
     {
       "x": 6,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -7278,10 +16212,70 @@
     },
     {
       "x": 6,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 4,
       "z": -1,
       "name": "Wood_Hardwood_Planks_Half",
       "rotation": 8
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7291,6 +16285,24 @@
     },
     {
       "x": 6,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 4,
       "z": 0,
       "name": "Wood_Hardwood_Planks_Half",
@@ -7298,9 +16310,95 @@
     },
     {
       "x": 6,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": 1,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": 1,
+      "name": "Halloween_Wagon",
+      "filler": 992,
+      "rotation": 1
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7310,9 +16408,112 @@
     },
     {
       "x": 6,
+      "y": 8,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": 2,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": 2,
+      "name": "Halloween_Wagon",
+      "rotation": 1
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7322,15 +16523,231 @@
     },
     {
       "x": 6,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": 4,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 6,
+      "y": 1,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": 5,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -7347,9 +16764,147 @@
     },
     {
       "x": 6,
+      "y": 2,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 0,
       "z": 7,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7383,6 +16938,54 @@
     },
     {
       "x": 7,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": -6,
       "name": "Soil_Grass"
@@ -7396,9 +16999,147 @@
     },
     {
       "x": 7,
+      "y": 2,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": -5,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7422,9 +17163,141 @@
     },
     {
       "x": 7,
+      "y": 3,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": -3,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7475,6 +17348,42 @@
     },
     {
       "x": 7,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": -1,
       "name": "Soil_Grass"
@@ -7484,6 +17393,18 @@
       "y": 1,
       "z": -1,
       "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7501,6 +17422,48 @@
     },
     {
       "x": 7,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": 0,
       "name": "Soil_Grass"
@@ -7548,9 +17511,119 @@
     },
     {
       "x": 7,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": 1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": 1,
+      "name": "Halloween_Wagon",
+      "filler": 993,
+      "rotation": 1
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "z": 1,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": 1,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 1,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7560,9 +17633,155 @@
     },
     {
       "x": 7,
+      "y": 1,
+      "z": 2,
+      "name": "Halloween_Wagon",
+      "filler": 1,
+      "rotation": 1
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "z": 2,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": 3,
       "name": "Soil_Pathway"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 3,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7579,9 +17798,147 @@
     },
     {
       "x": 7,
+      "y": 2,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 0,
       "z": 5,
       "name": "Soil_Grass"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 5,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7602,6 +17959,66 @@
       "z": 6,
       "name": "Plant_Grass_Sharp_Tall",
       "filler": 1024
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 6,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -7632,6 +18049,54 @@
       "y": 4,
       "z": 7,
       "name": "Deco_Lantern"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "z": 7,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "z": 7,
+      "name": "Empty"
     }
   ]
 }

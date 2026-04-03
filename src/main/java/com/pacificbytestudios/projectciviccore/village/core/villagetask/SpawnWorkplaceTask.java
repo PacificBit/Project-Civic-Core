@@ -11,6 +11,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginNewConstruction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -87,14 +88,32 @@ public class SpawnWorkplaceTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
-    BeginNewConstruction spawnFunction = Utils.getBeginNewConstructionFunction(this.workplaceType);
-    spawnFunction.apply(
-        this.structureId,
-        chunk,
-        this.position,
-        this.rotation,
-        heart,
-        this.level,
-        this.constructionMode);
+    try {
+      BeginNewConstruction spawnFunction = Utils.getBeginNewConstructionFunction(this.workplaceType);
+      boolean spawned = spawnFunction.apply(
+          this.structureId,
+          chunk,
+          this.position,
+          this.rotation,
+          heart,
+          this.level,
+          this.constructionMode);
+      if (spawned) {
+        this.callOnSuccess("BUILD_START_SUCCESS");
+        return;
+      }
+
+      String message = "[SpawnWorkplaceTask] Could not start " + this.workplaceType
+          + " construction for " + this.structureId + " at " + this.position;
+      ProjectCivicCore.LOGGER.atWarning().log(message);
+      this.callOnError("BUILD_START_FAILED", message);
+    } catch (RuntimeException exception) {
+      String message = "[SpawnWorkplaceTask] Failed to start " + this.workplaceType
+          + " construction for " + this.structureId + " at " + this.position + ": "
+          + exception.getMessage();
+      ProjectCivicCore.LOGGER.atWarning().log(message);
+      this.callOnError("BUILD_START_EXCEPTION", message);
+      throw exception;
+    }
   }
 }

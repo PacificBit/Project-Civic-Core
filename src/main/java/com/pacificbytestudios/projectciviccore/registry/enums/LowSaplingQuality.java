@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.registry.enums;
 import java.util.function.Supplier;
 
 public enum LowSaplingQuality implements Supplier<String> {
-  ASH("Plant_Sapling_Ash");
+  CEDAR("Plant_Sapling_Cedar");
 
   private String id;
 

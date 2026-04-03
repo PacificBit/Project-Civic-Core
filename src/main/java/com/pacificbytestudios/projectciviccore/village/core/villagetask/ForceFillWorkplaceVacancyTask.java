@@ -18,8 +18,10 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public class ForceFillWorkplaceVacancyTask extends AVillageTask {
   public static final BuilderCodec<ForceFillWorkplaceVacancyTask> CODEC = BuilderCodec
@@ -54,22 +56,40 @@ public class ForceFillWorkplaceVacancyTask extends AVillageTask {
 
     if (candidate == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[ForceFillWorkplaceVacancyTask]");
+      return;
     }
 
     heart.registerVillagerAsWorkerAt(candidate, this.workplace);
     heart.getWorkplaceFromId(this.workplace).registerAsBoss(candidate);
+    UUID assignedCandidate = candidate;
+    VillagerComponent assignedVillagerSnapshot = VillageVillagerEntitySync.snapshotVillager(heart, candidate);
     ProjectCivicCore.LOGGER.atInfo().log("[ForceFillWorkplaceVacancyTask] Worker: " + candidate + " now is a worker");
 
-    if (heart.getWorkplaceFromId(this.workplace).getWorkplaceType().equals(StructureType.TOWN_HALL)) {
-      World world = chunk.getWorld();
-      Ref<EntityStore> villager = world.getEntityRef(candidate);
+    World world = chunk.getWorld();
+    WorkplaceComponent workplaceComponent = heart.getWorkplaceFromId(this.workplace);
+    if (workplaceComponent.getWorkplaceType().equals(StructureType.TOWN_HALL)) {
+      Ref<EntityStore> villager = world.getEntityRef(assignedCandidate);
       Store<EntityStore> entityStore = world.getEntityStore().getStore();
+      TownHallComponent townHall = resolveTownHallComponent(workplaceComponent);
       world.execute(() -> {
-        entityStore.putComponent(villager, MayorComponent.getComponentType(), new MayorComponent());
+        VillageVillagerEntitySync.persistVillager(world, assignedCandidate, assignedVillagerSnapshot);
+
+        MayorComponent mayorComponent = entityStore.getComponent(villager, MayorComponent.getComponentType());
+        if (mayorComponent == null) {
+          mayorComponent = new MayorComponent();
+        }
+
+        if (!mayorComponent.hasProject() && townHall != null && townHall.getVillageProjectPlan() != null) {
+          mayorComponent.setExecutingVillagePlan(townHall.getVillageProjectPlan());
+        }
+
+        entityStore.putComponent(villager, MayorComponent.getComponentType(), mayorComponent);
       });
       ProjectCivicCore.LOGGER.atInfo().log("[ForceFillWorkplaceVacancyTask] Worker: " + candidate + " now is a Mayor");
+      return;
     }
 
+    world.execute(() -> VillageVillagerEntitySync.persistVillager(world, assignedCandidate, assignedVillagerSnapshot));
   }
 
   private UUID findFirstUnemployed(VillageHeartComponent heart) {
@@ -115,5 +135,18 @@ public class ForceFillWorkplaceVacancyTask extends AVillageTask {
 
     heart.getVillager(villagerId).setWorkerData(null);
     return villagerId;
+  }
+
+  private TownHallComponent resolveTownHallComponent(WorkplaceComponent workplaceComponent) {
+    if (workplaceComponent == null || workplaceComponent.getWorkplaceRef() == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> workplaceRef = workplaceComponent.getWorkplaceRef().getRef();
+    if (workplaceRef == null || !workplaceRef.isValid()) {
+      return null;
+    }
+
+    return workplaceRef.getStore().getComponent(workplaceRef, TownHallComponent.getComponentType());
   }
 }

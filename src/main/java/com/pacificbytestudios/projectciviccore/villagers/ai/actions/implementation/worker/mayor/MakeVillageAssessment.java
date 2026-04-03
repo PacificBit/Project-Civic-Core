@@ -45,7 +45,7 @@ public class MakeVillageAssessment extends VillagerActionBase {
       StructureType.TAVERN, StructureType.SAWMILL, StructureType.MINE };
   private static final StructureType[] STRUCTURE_UPGRADE_PRIORITY = new StructureType[] {
       StructureType.STORAGE, StructureType.FARM, StructureType.TAVERN,
-      StructureType.SAWMILL, StructureType.MINE, StructureType.TOWN_HALL };
+      StructureType.SAWMILL, StructureType.MINE };
 
   private record VillageLimits(short maxVillager,
       Map<StructureType, Short> structureMaxCount,
@@ -96,6 +96,8 @@ public class MakeVillageAssessment extends VillagerActionBase {
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
     townHall.setLastDayVillageAssessment(worldTimeResource.getGameDateTime().getDayOfYear());
 
+    populateTopPriorityProjects(projectPlan, village);
+
     // Step 0: nothing in queue and cannot create new buildings or upgrade old ones
     if (!projectPlan.hasProjects() &&
         villageLevel < config.getMaxLevel() &&
@@ -114,8 +116,10 @@ public class MakeVillageAssessment extends VillagerActionBase {
 
     // Step 1: check for the real necessities
     populateHighPriorityProjects(projectPlan, villageLimits, village, topology);
+
     // Step 2: check for missing structures
     populateMidPriorityProjects(projectPlan, villageLimits, village, structureCount, topology);
+
     // Step 3: check for possible upgrades
     populateLowPriorityProjects(projectPlan, villageLimits, village);
 
@@ -143,6 +147,22 @@ public class MakeVillageAssessment extends VillagerActionBase {
         !plan.contains(VillageObjectiveType.SPAWN_VILLAGER)) {
       VillageProject project = buildSpawnVillagerProject((short) village.getLevel());
       plan.addProject(project);
+    }
+  }
+
+  private void populateTopPriorityProjects(
+      VillageProjectPlan plan,
+      VillageHeartComponent village) {
+    if (village.getHomelessCount() > 0 &&
+        village.getAvailableBedsCount() > 0 &&
+        !plan.contains(VillageObjectiveType.ASSIGN_HOUSE)) {
+      plan.addProject(buildAssignHouseProject());
+    }
+
+    if (!village.getUnemployedRegistry().isEmpty() &&
+        village.getFirstWorkplaceWithMissingEmployee() != null &&
+        !plan.contains(VillageObjectiveType.ASSIGN_WORKER)) {
+      plan.addProject(buildAssignWorkerProject());
     }
   }
 
@@ -331,6 +351,28 @@ public class MakeVillageAssessment extends VillagerActionBase {
         VillageNewVillagerCostRegistry.getRequirementsForLevel(currentLevel),
         project.getTotalStages()));
 
+    return project;
+  }
+
+  private VillageProject buildAssignHouseProject() {
+    VillageProject project = new VillageProject();
+    project.setProjectId(UUID.randomUUID());
+    project.setObjectiveType(VillageObjectiveType.ASSIGN_HOUSE);
+    project.setObjectiveStatus(VillageObjectiveStatus.NEW);
+    project.setWeight(Weight.TOP);
+    project.setTotalStages(VillageObjectiveType.ASSIGN_HOUSE.getStages());
+    project.setRequiredMaterialPerStage(new MaterialQuantity[0]);
+    return project;
+  }
+
+  private VillageProject buildAssignWorkerProject() {
+    VillageProject project = new VillageProject();
+    project.setProjectId(UUID.randomUUID());
+    project.setObjectiveType(VillageObjectiveType.ASSIGN_WORKER);
+    project.setObjectiveStatus(VillageObjectiveStatus.NEW);
+    project.setWeight(Weight.TOP);
+    project.setTotalStages(VillageObjectiveType.ASSIGN_WORKER.getStages());
+    project.setRequiredMaterialPerStage(new MaterialQuantity[0]);
     return project;
   }
 

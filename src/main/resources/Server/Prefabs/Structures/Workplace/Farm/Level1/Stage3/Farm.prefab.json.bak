@@ -1853,7 +1853,7 @@
       "x": -9,
       "y": 1,
       "z": -6,
-      "name": "Empty"
+      "name": "Furniture_Tavern_Barrel"
     },
     {
       "x": -9,
@@ -2727,7 +2727,7 @@
       "x": -8,
       "y": 1,
       "z": -6,
-      "name": "Empty"
+      "name": "Furniture_Tavern_Barrel"
     },
     {
       "x": -8,
@@ -5389,7 +5389,7 @@
       "x": -5,
       "y": 3,
       "z": -6,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -6056,7 +6056,7 @@
       "x": -5,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,

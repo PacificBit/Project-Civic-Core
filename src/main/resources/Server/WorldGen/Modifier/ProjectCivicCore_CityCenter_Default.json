@@ -4,8 +4,10 @@
     "Root": "Default",
     "Rules": [
       "Zones.Zone1_Spawn.Tile.Plains_Spawn",
-      "Zones.Zone1_Tier1.Tile.Plains_Smooth",
-      "Zones.Zone1_Tier1.Tile.Plains_Birch"
+      "Zones.Zone1_Spawn.Custom.River_Plains*",
+      "Zones.Zone1_Tier1.Tile.Plains*",
+      "Zones.Zone1_Tier1.Custom.Plains*",
+      "Zones.Zone1_Tier1.Custom.River_Plains*"
     ]
   },
   "Content": {
