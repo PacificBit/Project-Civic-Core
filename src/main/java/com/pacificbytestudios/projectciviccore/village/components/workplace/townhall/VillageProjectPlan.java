@@ -441,6 +441,7 @@ public class VillageProjectPlan {
     }
 
     public enum Weight {
+      TOP(4),
       HIGH(3),
       MID(2),
       LOW(1);

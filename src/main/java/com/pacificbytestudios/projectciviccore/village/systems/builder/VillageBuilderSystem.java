@@ -18,6 +18,7 @@ import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.math.vector.Vector2i;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -33,17 +34,21 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.RoadSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadLength;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.AVillageTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.ContinueBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnHouseTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.TeleportVillagerToTownHeartTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.UpgradeBuildingTask;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveStatus;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageRoadState;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
@@ -132,8 +137,10 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
     final Vector3i queuedSpawningPosition = placement.prefabAnchor.clone();
     final Rotation queuedRotation = placement.rotation;
+    final VillageProject queuedProject = this.project.clone();
     this.world.execute(() -> enqueueBuildingSpawn(
         villageRef,
+        queuedProject,
         structureType,
         queuedSpawningPosition,
         queuedRotation,
@@ -395,13 +402,21 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
   private boolean handleContinueBuildingConstruction(Ref<ChunkStore> villageRef) {
     TopologyStructure structure = this.topology
         .getTopologyStructureFromStructureId(this.project.getStructureId());
+    if (structure == null) {
+      ProjectCivicCore.LOGGER.atWarning().log(
+          "[VillageBuilderSystem] Could not find topology structure for project "
+              + this.project.getProjectId() + " and structure " + this.project.getStructureId());
+      return false;
+    }
 
     VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
-    taskQueue.registerTask(
-        new ContinueBuildingTask(
-            structure.getStructureType(),
-            structure.getPrefabAnchor(),
-            structure.getOrientation()));
+    VillageProject queuedProject = this.project.clone();
+    ContinueBuildingTask task = new ContinueBuildingTask(
+        structure.getStructureType(),
+        structure.getPrefabAnchor(),
+        structure.getOrientation());
+    registerBuilderProjectCallbacks(villageRef, queuedProject, task, false);
+    taskQueue.registerTask(task);
 
     this.world.execute(() -> {
       Utils.safeVillageTaskEnqueue(villageRef, taskQueue);
@@ -410,7 +425,7 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
   }
 
   private boolean handleUpgradeBuilding(Ref<ChunkStore> villageRef) {
-    if (this.project.getStage() > 0) {
+    if (this.project.getObjectiveStatus() != VillageObjectiveStatus.NEW) {
       return handleContinueBuildingConstruction(villageRef);
     }
 
@@ -425,12 +440,30 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     }
 
     VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
-    taskQueue.registerTask(
-        new UpgradeBuildingTask(
-            structure.getStructureType(),
-            existingCoreOrSitePosition,
-            this.project.getTargetLevel(),
-            ConstructionMode.STAGED));
+
+    if (structure.getStructureType() != StructureType.HOUSE) {
+      this.heart.getWorkplaceFromId(structure.getStructureId())
+          .getWorkers()
+          .stream()
+          .map(TeleportVillagerToTownHeartTask::new)
+          .forEach(taskQueue::registerTask);
+    } else {
+      this.heart.getHouseFromId(structure.getStructureId())
+          .getAppartmentRegistry()
+          .getOccupants()
+          .stream()
+          .map(TeleportVillagerToTownHeartTask::new)
+          .forEach(taskQueue::registerTask);
+    }
+
+    VillageProject queuedProject = this.project.clone();
+    UpgradeBuildingTask task = new UpgradeBuildingTask(
+        structure.getStructureType(),
+        existingCoreOrSitePosition,
+        this.project.getTargetLevel(),
+        ConstructionMode.STAGED);
+    registerBuilderProjectCallbacks(villageRef, queuedProject, task, true);
+    taskQueue.registerTask(task);
 
     this.world.execute(() -> {
       Utils.safeVillageTaskEnqueue(villageRef, taskQueue);
@@ -556,10 +589,12 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     }
 
     this.project.setStructureId(UUID.randomUUID());
+    final VillageProject queuedProject = this.project.clone();
 
     this.world.execute(() -> enqueueBuildingSpawn(
         villageRef,
-        this.project.getStructureType(),
+        queuedProject,
+        queuedProject.getStructureType(),
         queuedSpawningPosition,
         queuedRotation,
         ConstructionMode.COMPLETED));
@@ -567,30 +602,135 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
 
   private void enqueueBuildingSpawn(
       Ref<ChunkStore> villageRef,
+      VillageProject queuedProject,
       StructureType structureType,
       Vector3i position,
       Rotation rotation,
       ConstructionMode constructionMode) {
     VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
+    AVillageTask task;
 
     if (structureType == StructureType.HOUSE) {
-      taskQueue.registerTask(new SpawnHouseTask(
-          this.project.getStructureId(),
+      task = new SpawnHouseTask(
+          queuedProject.getStructureId(),
           position.clone(),
           rotation,
-          this.project.getTargetLevel(),
-          constructionMode));
+          queuedProject.getTargetLevel(),
+          constructionMode);
     } else {
-      taskQueue.registerTask(new SpawnWorkplaceTask(
-          this.project.getStructureId(),
+      task = new SpawnWorkplaceTask(
+          queuedProject.getStructureId(),
           structureType,
           position.clone(),
           rotation,
-          this.project.getTargetLevel(),
-          constructionMode));
+          queuedProject.getTargetLevel(),
+          constructionMode);
     }
 
+    if (constructionMode == ConstructionMode.STAGED) {
+      registerBuilderProjectCallbacks(villageRef, queuedProject, task, true);
+    }
+
+    taskQueue.registerTask(task);
     Utils.safeVillageTaskEnqueue(villageRef, taskQueue);
+  }
+
+  private void registerBuilderProjectCallbacks(
+      Ref<ChunkStore> villageRef,
+      VillageProject queuedProject,
+      AVillageTask task,
+      boolean initialStart) {
+    if (task == null || queuedProject == null) {
+      return;
+    }
+
+    task.setOnSuccessCallback(result -> {
+      if (initialStart) {
+        handleBuilderProjectStartSuccess(villageRef, queuedProject);
+      } else {
+        handleBuilderProjectContinuationSuccess(villageRef, queuedProject);
+      }
+    });
+
+    task.setOnError((status, message) -> ProjectCivicCore.LOGGER.atWarning().log(
+        "[VillageBuilderSystem] Builder task failed for project "
+            + queuedProject.getProjectId()
+            + " structureId=" + queuedProject.getStructureId()
+            + " status=" + status
+            + " message=" + message));
+  }
+
+  private void handleBuilderProjectStartSuccess(
+      Ref<ChunkStore> villageRef,
+      VillageProject queuedProject) {
+    VillageProject updatedProject = queuedProject.clone();
+    updatedProject.setObjectiveStatus(VillageObjectiveStatus.EXECUTING);
+    syncBuilderProjectState(villageRef, updatedProject, false);
+  }
+
+  private void handleBuilderProjectContinuationSuccess(
+      Ref<ChunkStore> villageRef,
+      VillageProject queuedProject) {
+    VillageProject updatedProject = queuedProject.clone();
+    short nextStage = (short) (updatedProject.getStage() + 1);
+    updatedProject.setStage(nextStage);
+
+    boolean completed = nextStage >= updatedProject.getTotalStages();
+    updatedProject.setObjectiveStatus(
+        completed ? VillageObjectiveStatus.COMPLETED : VillageObjectiveStatus.EXECUTING);
+    syncBuilderProjectState(villageRef, updatedProject, completed);
+  }
+
+  private boolean syncBuilderProjectState(
+      Ref<ChunkStore> villageRef,
+      VillageProject project,
+      boolean removeAfterSync) {
+    if (villageRef == null || !villageRef.isValid() || project == null) {
+      return false;
+    }
+
+    Store<ChunkStore> chunkStore = villageRef.getStore();
+    VillageHeartComponent village = chunkStore.getComponent(
+        villageRef,
+        VillageHeartComponent.getComponentType());
+    if (village == null) {
+      return false;
+    }
+
+    Ref<ChunkStore> townHallRef = village.getTownHallRef();
+    if (townHallRef == null || !townHallRef.isValid()) {
+      return false;
+    }
+
+    TownHallComponent townHall = chunkStore.getComponent(
+        townHallRef,
+        TownHallComponent.getComponentType());
+    if (townHall == null) {
+      return false;
+    }
+
+    boolean synced = townHall.updateProjectPlan(project);
+    if (!synced) {
+      return false;
+    }
+
+    if (removeAfterSync) {
+      townHall.removeProject(project);
+    }
+
+    chunkStore.putComponent(
+        townHallRef,
+        TownHallComponent.getComponentType(),
+        townHall);
+
+    BlockModule.BlockStateInfo blockStateInfo = chunkStore.getComponent(
+        townHallRef,
+        BlockModule.BlockStateInfo.getComponentType());
+    if (blockStateInfo != null) {
+      blockStateInfo.markNeedsSaving();
+    }
+
+    return true;
   }
 
   private Vector3i calculateInitialSpawingPosition(

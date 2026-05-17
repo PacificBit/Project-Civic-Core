@@ -5,10 +5,13 @@ import java.util.ArrayDeque;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
@@ -18,11 +21,14 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 
 public class TillSoilAction extends ActionBase {
   private static final BlockType TILL_BLOCK_TYPE = BlockType.getAssetMap().getAsset(FarmerScan.TILLED_SOIL_ID);
+  private static final int TILL_SOUND_EVENT_INDEX = SoundEvent.getAssetMap().getIndex("SFX_Hoe_T1_Till");
 
   public TillSoilAction(BuilderActionBase builderActionBase) {
     super(builderActionBase);
@@ -62,6 +68,10 @@ public class TillSoilAction extends ActionBase {
 
     if (soilTilled) {
       NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
+      VillagerToolAnimationHelper.playHeldToolAnimation(ref, npcEntity, store, "Till");
+      Vector3f center = Utils.centerOf(blockPos);
+      SoundUtil.playSoundEvent3d(ref, TILL_SOUND_EVENT_INDEX, center.x, center.y, center.z, store);
+
       byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();
       ItemStack holdingItem = npcEntity.getInventory().getActiveHotbarItem();
       npcEntity.getInventory().getHotbar().setItemStackForSlot(

@@ -1,0 +1,30 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Editor_Anchor.name"
+  },
+  "Icon": "Icons/ItemsGenerated/Editor_Anchor.png",
+  "Quality": "Technical",
+  "Categories": [],
+  "BlockType": {
+    "DrawType": "Cube",
+    "RequiresAlphaBlending": true,
+    "Opacity": "Transparent",
+    "Group": "@Tech",
+    "Flags": {},
+    "BlockParticleSetId": "Stone",
+    "Textures": [
+      {
+        "Weight": 1,
+        "All": "BlockTextures/EditorBlockPrefabAnchor.png",
+        "UpDown": "BlockTextures/EditorBlock.png"
+      }
+    ],
+    "BlockEntity": {
+      "Components": {
+        "VillageHeartMarkerComponent": {}
+      }
+    }
+  },
+  "PlayerAnimationsId": "Block",
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

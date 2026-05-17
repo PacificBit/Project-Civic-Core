@@ -21,13 +21,17 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
 
-public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissingResource {
+public class TavernComponent implements Component<ChunkStore>,
+    IWorkplaceMissingResource {
   public static final BuilderCodec<TavernComponent> CODEC = BuilderCodec
       .builder(TavernComponent.class, TavernComponent::new)
 
       .append(new KeyedCodec<>(
           "MealToPrepareMap",
-          new MapCodec<Integer, HashMap<String, Integer>>(Codec.INTEGER, HashMap::new)),
+          new MapCodec<Integer, HashMap<String, Integer>>(
+              Codec.INTEGER,
+              HashMap::new,
+              false)),
           (obj, value) -> obj.mealToPrepare = value,
           obj -> obj.mealToPrepare)
       .add()
@@ -108,6 +112,9 @@ public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissing
   }
 
   public void registerWorkerToRecipe(UUID workerId, String recipe) {
+    if (workerId == null || recipe == null) {
+      return;
+    }
     this.assignedRecipesToWorker.put(workerId, recipe);
   }
 
@@ -159,7 +166,7 @@ public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissing
     component.mealToPrepareCount = this.mealToPrepareCount;
 
     for (Entry<String, Integer> meal : this.mealToPrepare.entrySet()) {
-      mealToPrepare.put(meal.getKey(), meal.getValue());
+      component.mealToPrepare.put(meal.getKey(), meal.getValue());
     }
 
     component.missingResources = new HashSet<>();
@@ -193,7 +200,11 @@ public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissing
       return encoded;
     }
 
-    value.forEach((k, v) -> encoded.put(k.toString(), v));
+    value.forEach((k, v) -> {
+      if (k != null && v != null) {
+        encoded.put(k.toString(), v);
+      }
+    });
     return encoded;
   }
 

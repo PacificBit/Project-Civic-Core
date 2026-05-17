@@ -21,6 +21,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestInvalidation;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
@@ -94,14 +95,8 @@ public class TownHallSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
-
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.TownHall.CONSTRUCTION_SIGN_ROTATION,
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, rotation);
     Utils.setBlockChunkAware(
         chunkToUse,
         constructionSignPosition,
@@ -140,7 +135,7 @@ public class TownHallSpawner {
         trackedPlacement);
 
     chunkToUse.markNeedsSaving();
-    return false;
+    return true;
   }
 
   public static boolean beginUpgradeConstruction(
@@ -213,6 +208,10 @@ public class TownHallSpawner {
             currentLevel,
             oldTrackedPlacement);
       }
+
+      if (upgraded) {
+        VillageStorageRequestInvalidation.invalidateRequesterWorkplace(heartRef, heart, structureId);
+      }
       return upgraded;
     }
 
@@ -240,13 +239,8 @@ public class TownHallSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, structureRotation);
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.TownHall.CONSTRUCTION_SIGN_ROTATION,
-            structureRotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
         chunkToUse,
@@ -279,6 +273,7 @@ public class TownHallSpawner {
         oldTrackedPlacement);
 
     signChunk.markNeedsSaving();
+    VillageStorageRequestInvalidation.invalidateRequesterWorkplace(heartRef, heart, structureId);
     return true;
   }
 
@@ -421,14 +416,9 @@ public class TownHallSpawner {
       snapshotToUse = newSnapshot;
     }
 
-    int blockRotation = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.TownHall.WORKPLACE_BLOCK_YAW_OFFSET,
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
+    int blockRotation = getWorkplaceBlockRotationIndex(targetLevel, rotation);
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, rotation);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk,
         workplaceBlockPosition,
         StructureConfig.TownHall.WORKPLACE_BLOCK,
@@ -458,6 +448,7 @@ public class TownHallSpawner {
         chunk,
         chunkStore,
         heart,
+        targetLevel,
         rotation);
     if (storage == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Could not build workplace storage registry");
@@ -469,7 +460,7 @@ public class TownHallSpawner {
     workplaceComponent.setStorage(storage);
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, rotation));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
     workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
@@ -480,7 +471,7 @@ public class TownHallSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         snapshotToUse);
 
-    removeConstructionSignIfPresent(chunk, prefabAnchor, rotation);
+    removeConstructionSignIfPresent(chunk, prefabAnchor, targetLevel, rotation);
     workplaceChunk.markNeedsSaving();
     return true;
   }
@@ -489,6 +480,7 @@ public class TownHallSpawner {
       WorldChunk chunk,
       Store<ChunkStore> chunkStore,
       VillageHeartComponent village,
+      int level,
       Rotation rotation) {
     Vector3i containerPosition = getContainerPosition(village);
     Ref<ChunkStore> containerRef = Utils.getBlockComponentEntityChunkAware(chunk, containerPosition).getSecond();
@@ -507,7 +499,7 @@ public class TownHallSpawner {
     container.setPosition(containerPosition);
     container.setAccessPosition(StructurePlacementUtils.withOffset(
         containerPosition,
-        StructureConfig.TownHall.CONTAINER_ACCESS_OFFSET,
+        StructureConfig.TownHall.getLevelLayout(level).heartContainerAccessOffset(),
         rotation));
     container.setUuid(UUID.randomUUID());
 
@@ -554,12 +546,12 @@ public class TownHallSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, workplace.getLevel(), prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          StructureConfig.TownHall.PREFAB_JSON,
+          StructureConfig.TownHall.getCompletedPrefab(workplace.getLevel()),
           prefabAnchor,
           prefabRotation,
           true);
@@ -577,8 +569,9 @@ public class TownHallSpawner {
   private static void removeConstructionSignIfPresent(
       WorldChunk chunk,
       Vector3i prefabAnchor,
+      int level,
       Rotation rotation) {
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -597,6 +590,7 @@ public class TownHallSpawner {
         signRef,
         BuildingSnapshotComponent.getComponentType());
     if (snapshotComponent == null) {
+      clearArtefactBlocks(chunk, constructionSignPosition);
       return;
     }
 
@@ -604,31 +598,54 @@ public class TownHallSpawner {
     signChunk.markNeedsSaving();
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+  private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
+    Utils.breakBlockChunkAware(chunk, constructionPos);
+    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(Vector3i.UP));
+  }
+
+  private static int getWorkplaceBlockRotationIndex(int level, Rotation rotation) {
+    Rotation workplaceRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.TownHall.getLevelLayout(level).workplace().rotation(),
+        rotation);
+    return RotationTuple.of(workplaceRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static int getConstructionSignRotationIndex(int level, Rotation rotation) {
+    Rotation signRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.TownHall.getLevelLayout(level).constructionSign().rotation(),
+        rotation);
+    return RotationTuple.of(signRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
-        StructureConfig.TownHall.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.TownHall.getLevelLayout(level).workplace().position(),
+        rotation);
+  }
+
+  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.TownHall.getLevelLayout(level).constructionSign().position(),
         rotation);
   }
 
   private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
-    return StructurePlacementUtils.withOffset(
-        prefabAnchor,
-        StructureConfig.TownHall.CONSTRUCTION_SIGN_OFFSET,
-        rotation);
+    return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
-        StructureConfig.TownHall.BENCH_ACCESS_OFFSET,
+        StructureConfig.TownHall.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.removeOffset(
         workplaceBlockPosition,
-        StructureConfig.TownHall.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.TownHall.getLevelLayout(level).workplace().position(),
         rotation);
   }
 

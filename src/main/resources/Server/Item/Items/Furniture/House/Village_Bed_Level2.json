@@ -1,0 +1,91 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Furniture_Lumberjack_Bed.name"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Beds"
+  ],
+  "Set": "Furniture_Lumberjack",
+  "Icon": "Icons/ItemsGenerated/Furniture_Lumberjack_Bed.png",
+  "IconProperties": {
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Scale": 0.295,
+    "Translation": [
+      7.3,
+      -2.3
+    ]
+  },
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "Beds": [
+      {
+        "Offset": {
+          "X": 0.4,
+          "Y": 0.4,
+          "Z": 1.0
+        },
+        "Yaw": 0
+      }
+    ],
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "Bed"
+          }
+        ]
+      },
+      "Primary": "Check_Can_Break_Respawn"
+    },
+    "CustomModel": "Blocks/Models/Village_Bed_Level2.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Textures/Village_Bed_Level2_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Woods"
+      }
+    },
+    "HitboxType": "Bed_Kweebec",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#793e21",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "VariantRotation": "NESW",
+    "BlockEntity": {
+      "Components": {
+        "RespawnBlock": {}
+      }
+    },
+    "CustomModelScale": 0.8
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Lumberjack"
+    ]
+  },
+  "Scale": 0.6,
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "MaxStack": 1,
+  "ItemLevel": 4
+}

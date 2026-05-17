@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
+import com.hypixel.hytale.server.core.inventory.container.InternalContainerUtilMaterial;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
@@ -25,6 +26,9 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderGatherNextMealMaterialFromContainerAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.WorkplaceStorageTargetsSnapshotAction;
@@ -59,7 +63,8 @@ public class GatherNextMealMaterialFromContainerAction extends
     super.execute(ref, role, sensorInfo, deltaTime, store);
     Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
     WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
-    if (workplaceRef == null || snapshot == null) {
+    WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);
+    if (workplaceRef == null || snapshot == null || workplaceComponent == null) {
       return this.finish(role, false);
     }
 
@@ -73,6 +78,9 @@ public class GatherNextMealMaterialFromContainerAction extends
           .log("[GatherNextMealMaterialFromContainerAction] Could not fetch the tavern component");
       return this.finish(role, false);
     }
+
+    tavernComponent.resetMissingResources();
+    Utils.markNeedSaving(world, workplaceComponent.getBenchPos());
 
     UUIDComponent uuidComponent = store.getComponent(ref,
         UUIDComponent.getComponentType());
@@ -111,7 +119,15 @@ public class GatherNextMealMaterialFromContainerAction extends
     Map<String, Integer> missingMaterials = new HashMap<>();
 
     for (MaterialQuantity material : neededMaterials) {
-      int missing = material.getQuantity();
+      int missing = InternalContainerUtilMaterial.testRemoveMaterialFromItems(
+          npcStorage,
+          material,
+          material.getQuantity(),
+          true);
+      if (missing <= 0) {
+        continue;
+      }
+
       ItemStack itemStack = material.toItemStack();
 
       for (short slot = 0; slot < workplaceStorage.getCapacity() && missing > 0; slot++) {
@@ -169,6 +185,8 @@ public class GatherNextMealMaterialFromContainerAction extends
     }
 
     if (!missingMaterials.isEmpty()) {
+      missingMaterials.forEach((itemId, amount) -> tavernComponent
+          .addMissingResource(new ItemRequestCriterion(itemId, true, amount)));
       ProjectCivicCore.LOGGER.atFine()
           .log("[GatherNextMealMaterialFromContainerAction] Missing materials: " +
               missingMaterials);

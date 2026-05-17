@@ -334,7 +334,6 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   }
 
   public boolean assignHouse(UUID villager, UUID house) {
-    this.homelessRegistry.remove(villager);
     HouseComponent houseComponent = this.houseIdToHouse.get(house);
     assert houseComponent != null : "Assigned a house before registering the house";
 
@@ -343,6 +342,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       return false;
     }
 
+    this.homelessRegistry.remove(villager);
     Vector3i bedPosition = houseComponent.getBedPosition(bed);
     VillagerComponent villagerComponent = this.villagerIdToComponent.get(villager);
 
@@ -470,9 +470,13 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   }
 
   public void registerVillagerAsWorkerAt(UUID villager, UUID workplace) {
+    WorkplaceComponent workplaceComponent = this.workplaceIdToWorkplace.get(workplace);
+    if (workplaceComponent == null || !workplaceComponent.needWorker()) {
+      return;
+    }
+
     this.unemployedRegistry.remove(villager);
     this.villagerToWorkplace.put(villager, workplace);
-    WorkplaceComponent workplaceComponent = this.workplaceIdToWorkplace.get(workplace);
     workplaceComponent.registerWorker(villager);
 
     VillagerWorkerComponent workerData = new VillagerWorkerComponent();
@@ -611,6 +615,15 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public void setBlockContext(BlockContext blockContext) {
     this.blockContext = blockContext;
+  }
+
+  public UUID getFirstWorkplaceWithMissingEmployee() {
+    for (Map.Entry<UUID, WorkplaceComponent> entry : this.workplaceIdToWorkplace.entrySet()) {
+      if (entry.getValue().needWorker()) {
+        return entry.getKey();
+      }
+    }
+    return null;
   }
 
   public Map<StructureType, Short> getStructureTypeCount() {

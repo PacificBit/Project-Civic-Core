@@ -178,8 +178,14 @@ public final class InventoryTransferValidators {
   public static List<InventoryItemCriteria> getMissingCriteria(
       ItemContainer container,
       List<InventoryItemCriteria> itemCriteria) {
+    return getMissingCriteria(container != null ? List.of(container) : null, itemCriteria);
+  }
 
-    if (container == null) {
+  public static List<InventoryItemCriteria> getMissingCriteria(
+      Iterable<ItemContainer> containers,
+      List<InventoryItemCriteria> itemCriteria) {
+
+    if (containers == null) {
       return itemCriteria != null ? itemCriteria : List.of();
     }
 
@@ -192,42 +198,35 @@ public final class InventoryTransferValidators {
         itemCriteria,
         criterionIndex -> committedAmounts.getOrDefault(criterionIndex, 0));
 
-    for (short slot = 0; slot < container.getCapacity(); slot++) {
-      ItemStack item = container.getItemStack(slot);
-      if (!isTransferableItem(item)) {
+    for (ItemContainer container : containers) {
+      if (container == null) {
         continue;
       }
 
-      int allowedAmount = validator.applyAsInt(item);
-      if (allowedAmount <= 0) {
-        continue;
-      }
+      for (short slot = 0; slot < container.getCapacity(); slot++) {
+        ItemStack item = container.getItemStack(slot);
+        if (!isTransferableItem(item)) {
+          continue;
+        }
 
-      commitTransferredItemAmount(
-          item.getItemId(),
-          Math.min(allowedAmount, item.getQuantity()),
-          itemCriteria,
-          committedAmounts);
+        int allowedAmount = validator.applyAsInt(item);
+        if (allowedAmount <= 0) {
+          continue;
+        }
 
-      if (hasSatisfiedAllLimitedItemCriteria(itemCriteria, committedAmounts)) {
-        return List.of();
+        commitTransferredItemAmount(
+            item.getItemId(),
+            Math.min(allowedAmount, item.getQuantity()),
+            itemCriteria,
+            committedAmounts);
+
+        if (hasSatisfiedAllLimitedItemCriteria(itemCriteria, committedAmounts)) {
+          return List.of();
+        }
       }
     }
 
-    List<InventoryItemCriteria> missingCriteria = new ArrayList<>();
-    for (int i = 0; i < itemCriteria.size(); i++) {
-      InventoryItemCriteria criteria = itemCriteria.get(i);
-      if (!criteria.isFilterIn() || criteria.getCount() <= 0) {
-        continue;
-      }
-
-      int missingAmount = criteria.getCount() - committedAmounts.getOrDefault(i, 0);
-      if (missingAmount > 0) {
-        missingCriteria.add(new InventoryItemCriteria(criteria.getItemId(), true, missingAmount));
-      }
-    }
-
-    return missingCriteria;
+    return buildMissingCriteria(itemCriteria, committedAmounts);
   }
 
   public static boolean containsRequestedItems(
@@ -353,5 +352,25 @@ public final class InventoryTransferValidators {
         return;
       }
     }
+  }
+
+  private static List<InventoryItemCriteria> buildMissingCriteria(
+      List<InventoryItemCriteria> itemCriteria,
+      Map<Integer, Integer> committedAmounts) {
+    List<InventoryItemCriteria> missingCriteria = new ArrayList<>();
+
+    for (int i = 0; i < itemCriteria.size(); i++) {
+      InventoryItemCriteria criteria = itemCriteria.get(i);
+      if (!criteria.isFilterIn() || criteria.getCount() <= 0) {
+        continue;
+      }
+
+      int missingAmount = criteria.getCount() - committedAmounts.getOrDefault(i, 0);
+      if (missingAmount > 0) {
+        missingCriteria.add(new InventoryItemCriteria(criteria.getItemId(), true, missingAmount));
+      }
+    }
+
+    return missingCriteria;
   }
 }

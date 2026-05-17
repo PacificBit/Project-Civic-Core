@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.subcommands;
 
+import java.util.UUID;
+
 import javax.annotation.Nonnull;
 
 import com.hypixel.hytale.component.Ref;
@@ -24,6 +26,7 @@ import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWorkplaceTask;
+import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
@@ -76,7 +79,14 @@ public class Spawn extends CommandBase {
 
       VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
       StructureType workplaceType = StructureType.valueOf(workplace);
-      taskQueue.registerTask(new SpawnWorkplaceTask(workplaceType, playerPos, placementRotation));
+      SpawnWorkplaceTask spawnTask = new SpawnWorkplaceTask(
+          UUID.randomUUID(),
+          workplaceType,
+          playerPos,
+          placementRotation,
+          1,
+          ConstructionMode.COMPLETED);
+      taskQueue.registerTask(spawnTask);
 
       Utils.safeVillageTaskEnqueue(heartRef, taskQueue);
 

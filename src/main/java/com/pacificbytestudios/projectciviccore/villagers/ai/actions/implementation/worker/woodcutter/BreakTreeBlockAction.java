@@ -10,8 +10,8 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemTool;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -26,6 +26,7 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderBreakTreeBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.WoodCutterTerrainRepair;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
 
@@ -140,6 +141,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     long chunkIndex = ChunkUtil.indexChunkFromBlock(target.x, target.z);
     Ref<ChunkStore> chunkRef = chunkStoreObj.getChunkReference(chunkIndex);
 
+    VillagerToolAnimationHelper.playHeldToolAnimation(ref, npc, store, "Chop");
     boolean didBreak = BlockHarvestUtils.performBlockDamage(npc, ref, target, itemStackInHand, tool, null,
         false, 1.0f, 0, chunkRef, store, chunkStoreObj.getStore());
 

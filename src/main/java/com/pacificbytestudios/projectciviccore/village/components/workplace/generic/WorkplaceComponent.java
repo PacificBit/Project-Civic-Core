@@ -231,6 +231,22 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     }
   }
 
+  public boolean needWorker() {
+    return this.workers.size() < this.getMaxWorkerCount();
+  }
+
+  public int getMaxWorkerCount() {
+    int configuredCount = this.workerType == null || this.workerType.length == 0
+        ? 1
+        : this.workerType.length;
+
+    if (this.workingPlaceType == StructureType.STORAGE && this.level == 2) {
+      return Math.max(configuredCount, 4);
+    }
+
+    return configuredCount;
+  }
+
   public UUID getBossId() {
     return bossId;
   }

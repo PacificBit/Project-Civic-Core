@@ -337,7 +337,7 @@
                   "BodyMotion": {
                     "Type": "Seek",
                     "StopDistance": 1.5,
-                    "RelativeSpeed": 0.6,
+                    "RelativeSpeed": 0.85,
                     "SlowDownDistance": 1.5
                   }
                 },
@@ -380,7 +380,7 @@
                   "BodyMotion": {
                     "Type": "Seek",
                     "StopDistance": 1.5,
-                    "RelativeSpeed": 0.6,
+                    "RelativeSpeed": 0.85,
                     "SlowDownDistance": 1.5
                   }
                 },
@@ -424,7 +424,7 @@
                   "BodyMotion": {
                     "Type": "Seek",
                     "StopDistance": 1.5,
-                    "RelativeSpeed": 0.6,
+                    "RelativeSpeed": 0.85,
                     "SlowDownDistance": 1.5
                   }
                 },
@@ -475,7 +475,7 @@
                   "BodyMotion": {
                     "Type": "Seek",
                     "StopDistance": 1.5,
-                    "RelativeSpeed": 0.6,
+                    "RelativeSpeed": 0.85,
                     "SlowDownDistance": 1.5
                   }
                 },
@@ -675,8 +675,8 @@
             {
               "Type": "Timeout",
               "Delay": [
-                25,
-                25
+                3,
+                5
               ],
               "Action": {
                 "Type": "State",

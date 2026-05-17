@@ -18,6 +18,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
@@ -27,8 +28,10 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.town
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.LevelUpVillageTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVillagerTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryHouseAssignmentTask;
+import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryJobAssignmentTask;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveStatus;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
@@ -89,6 +92,12 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
     }
 
     switch (project.getObjectiveType()) {
+      case ASSIGN_HOUSE:
+        handleAssignHouseProject(village, townHall, mayorComponent, project);
+        break;
+      case ASSIGN_WORKER:
+        handleAssignWorkerProject(village, townHall, mayorComponent, project);
+        break;
       case SPAWN_VILLAGER:
         handleSpawnVillagerProject(village, townHall, mayorComponent, project);
         break;
@@ -117,11 +126,66 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
     }
   }
 
+  private void handleAssignHouseProject(
+      VillageHeartComponent village,
+      TownHallComponent townHall,
+      MayorComponent mayorComponent,
+      VillageProject project) {
+    HouseComponent house = village.findHouseWithVacancy();
+    project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
+    syncProjectState(townHall, project);
+    townHall.removeProject(project);
+    mayorComponent.setCurrentProject(null);
+
+    if (house == null || village.getHomelessCount() == 0) {
+      return;
+    }
+
+    VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
+    queueComponent.registerTask(new TryHouseAssignmentTask(house.getUuid()));
+    this.world.execute(() -> Utils.safeVillageTaskEnqueue(
+        village.getTownHall().getVillageHeartRef(),
+        queueComponent));
+  }
+
+  private void handleAssignWorkerProject(
+      VillageHeartComponent village,
+      TownHallComponent townHall,
+      MayorComponent mayorComponent,
+      VillageProject project) {
+    UUID workplaceId = village.getFirstWorkplaceWithMissingEmployee();
+    project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
+    syncProjectState(townHall, project);
+    townHall.removeProject(project);
+    mayorComponent.setCurrentProject(null);
+
+    if (workplaceId == null || village.getUnemployedRegistry().isEmpty()) {
+      return;
+    }
+
+    VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
+    queueComponent.registerTask(new TryJobAssignmentTask(workplaceId));
+    this.world.execute(() -> Utils.safeVillageTaskEnqueue(
+        village.getTownHall().getVillageHeartRef(),
+        queueComponent));
+  }
+
   private void handleSpawnVillagerProject(
       VillageHeartComponent village,
       TownHallComponent townHall,
       MayorComponent mayorComponent,
       VillageProject project) {
+    HouseComponent availableHouse = village.findHouseWithVacancy();
+    if (availableHouse == null) {
+      ProjectCivicCore.LOGGER.atWarning()
+          .log("[ExecuteNextProjectStageAction] Delaying villager spawn project "
+              + project.getProjectId() + " because no house has a vacancy");
+      project.setObjectiveStatus(VillageObjectiveStatus.NEW);
+      syncProjectState(townHall, project);
+      mayorComponent.setCurrentProject(null);
+      return;
+    }
+
     if (!processProjectStageWithResources(village, project)) {
       syncProjectState(townHall, project);
       mayorComponent.setCurrentProject(null);
@@ -135,11 +199,18 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
         village.getNextRequiredRole().getRole(),
         3);
     TryHouseAssignmentTask homeAssignmentTask = new TryHouseAssignmentTask(
-        village.findHouseWithVacancy().getUuid());
+        availableHouse.getUuid());
 
     VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
     queueComponent.registerTask(spawnTask);
     queueComponent.registerTask(homeAssignmentTask);
+
+    UUID workplaceId = village.getFirstWorkplaceWithMissingEmployee();
+    if (workplaceId != null) {
+      TryJobAssignmentTask jobAssignmentTask = new TryJobAssignmentTask(workplaceId);
+      queueComponent.registerTask(jobAssignmentTask);
+    }
+
     townHall.removeProject(project);
     mayorComponent.setCurrentProject(null);
 
@@ -164,8 +235,27 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
       TownHallComponent townHall,
       MayorComponent mayorComponent,
       VillageProject project) {
-    ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleLevelUpVillageProject'");
+    if (!processProjectStageWithResources(village, project)) {
+      syncProjectState(townHall, project);
+      mayorComponent.setCurrentProject(null);
+      return;
+    }
+
+    project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
+    syncProjectState(townHall, project);
+
+    LevelUpVillageTask levelUpTask = new LevelUpVillageTask((short) project.getTargetLevel());
+
+    VillageTaskQueueComponent queueComponent = new VillageTaskQueueComponent();
+    queueComponent.registerTask(levelUpTask);
+    townHall.removeProject(project);
     mayorComponent.setCurrentProject(null);
+
+    this.world.execute(() -> {
+      Utils.safeVillageTaskEnqueue(
+          village.getTownHall().getVillageHeartRef(),
+          queueComponent);
+    });
   }
 
   private void handleDemolishProject(
@@ -182,27 +272,19 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
       TownHallComponent townHall,
       MayorComponent mayorComponent,
       VillageProject project) {
-    if (project.getStage() == 0) {
-      processProjectStageWithoutResources(project);
-    } else {
-      if (!processProjectStageWithResources(village, project)) {
-        syncProjectState(townHall, project);
-        mayorComponent.setCurrentProject(null);
-        return;
-      }
+    if (project.getObjectiveStatus() != VillageObjectiveStatus.NEW &&
+        !processProjectStageWithResources(village, project)) {
+      syncProjectState(townHall, project);
+      mayorComponent.setCurrentProject(null);
+      return;
     }
 
     if (project.getStructureId() == null) {
       project.setStructureId(UUID.randomUUID());
     }
 
-    if (project.getStage() > project.getTotalStages()) {
-      project.setObjectiveStatus(VillageObjectiveStatus.COMPLETED);
-    }
-
-    syncProjectState(townHall, project);
-    if (project.getStage() > project.getTotalStages()) {
-      townHall.removeProject(project);
+    if (project.getObjectiveStatus() != VillageObjectiveStatus.NEW) {
+      syncProjectState(townHall, project);
     }
 
     mayorComponent.setCurrentProject(null);
@@ -210,11 +292,6 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
     this.world.execute(() -> {
       queueProjectForVillageBuilder(village, project);
     });
-  }
-
-  private void processProjectStageWithoutResources(VillageProject project) {
-    project.setObjectiveStatus(VillageObjectiveStatus.EXECUTING);
-    project.setStage((short) (project.getStage() + 1));
   }
 
   private void queueProjectForVillageBuilder(
@@ -276,7 +353,6 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
     }
 
     project.setObjectiveStatus(VillageObjectiveStatus.EXECUTING);
-    project.setStage((short) (project.getStage() + 1));
     return true;
   }
 
@@ -352,11 +428,14 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
       return;
     }
 
-    syncLastStorageRequest(villageHeartRef, village, townHallWorkplace, request);
-
     EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
-    task.setOnSuccessCallback(requestId -> {
-      request.overrideRequestId(UUID.fromString(requestId));
+    task.setOnSuccessCallback(requestResult -> {
+      String[] requestParts = requestResult.split(":", 2);
+      UUID storageId = UUID.fromString(requestParts[0]);
+      request.setStorageWorkplaceId(storageId);
+      request.addTriedStorageId(storageId);
+      request.overrideRequestId(UUID.fromString(requestParts[1]));
+      request.setRegisteredWithStorage(true);
       syncLastStorageRequest(villageHeartRef, village, townHallWorkplace, request);
     });
     task.setOnError((status, message) -> syncLastStorageRequest(villageHeartRef, village, townHallWorkplace, null));

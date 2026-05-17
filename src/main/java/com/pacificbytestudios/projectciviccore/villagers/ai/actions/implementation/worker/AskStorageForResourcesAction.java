@@ -85,14 +85,19 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
       return false;
     }
 
+    copyRetriedStorageIds(workplaceComponent, request);
+
     ProjectCivicCore.LOGGER.atInfo()
         .log("[AskStorageForResourcesAction] Built request: " + request);
 
-    syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
-
     EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
-    task.setOnSuccessCallback(requestId -> {
-      request.overrideRequestId(UUID.fromString(requestId));
+    task.setOnSuccessCallback(requestResult -> {
+      String[] requestParts = requestResult.split(":", 2);
+      UUID storageId = UUID.fromString(requestParts[0]);
+      request.setStorageWorkplaceId(storageId);
+      request.addTriedStorageId(storageId);
+      request.overrideRequestId(UUID.fromString(requestParts[1]));
+      request.setRegisteredWithStorage(true);
       syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef, workplaceComponent, request);
     });
     task.setOnError((status, message) -> syncLastStorageRequest(villageHeartRef, villageHeart, workplaceRef,
@@ -207,6 +212,25 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     }
 
     workplace.setLastStorageRequest(request != null ? request.clone() : null);
+  }
+
+  private void copyRetriedStorageIds(
+      WorkplaceComponent workplace,
+      VillageStorageRequest request) {
+    if (workplace == null || request == null ||
+        !VillageStorageRequestType.DELIVER_TO_WORKPLACE.equals(request.getType())) {
+      return;
+    }
+
+    VillageStorageRequest lastRequest = workplace.getLastStorageRequest();
+    if (lastRequest == null ||
+        lastRequest.isRegisteredWithStorage() ||
+        !VillageStorageRequestType.DELIVER_TO_WORKPLACE.equals(lastRequest.getType()) ||
+        !workplace.getUuid().equals(lastRequest.getRequesterWorkplaceId())) {
+      return;
+    }
+
+    request.setTriedStorageIds(lastRequest.getTriedStorageIds());
   }
 
   private IWorkplaceMissingResource getProperComponent(

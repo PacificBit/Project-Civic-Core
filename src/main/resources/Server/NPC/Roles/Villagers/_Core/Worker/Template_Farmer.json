@@ -57,6 +57,19 @@
           "Sensor": {
             "Type": "Any"
           },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
           "Actions": [
             {
               "Type": "Role",
@@ -77,6 +90,19 @@
         "State": "panic"
       },
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -121,6 +147,19 @@
       },
       "$Comment": "If is not work time",
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any"
@@ -311,11 +350,6 @@
                         "Type": "Any"
                       },
                       "Actions": [
-                        {
-                          "Type": "Attack",
-                          "Attack": "Trork_Warrior_Battleaxe_Swing_Down",
-                          "Once": false
-                        },
                         {
                           "Type": "Timeout",
                           "Delay": [
@@ -677,13 +711,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 0.6
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1.5,
-                "StopDistance": 1.5,
+                "StopDistance": 0.6,
                 "RelativeSpeed": 0.6
               }
             },
@@ -852,13 +886,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 0.6
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1.5,
-                "StopDistance": 1.5,
+                "StopDistance": 0.6,
                 "RelativeSpeed": 0.6
               }
             },
@@ -1027,13 +1061,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1.5
+                "StoppingRange": 0.6
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
                 "SlowDownDistance": 1.5,
-                "StopDistance": 1.5,
+                "StopDistance": 0.6,
                 "RelativeSpeed": 0.6
               }
             },

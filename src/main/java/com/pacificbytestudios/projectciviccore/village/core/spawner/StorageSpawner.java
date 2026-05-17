@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -7,25 +8,37 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
+import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
+import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.registry.registry.CropRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.registry.registry.SaplingRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
+import com.pacificbytestudios.projectciviccore.village.components.builder.BufferedConstructionStorageComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerRegistryComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequestInvalidation;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
@@ -34,6 +47,11 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 import io.sentry.util.Pair;
 
 public class StorageSpawner {
+  private static final String LIFE_ESSENCE_ITEM_ID = "Ingredient_Life_Essence";
+  private static final int STARTER_LIFE_ESSENCE = 800;
+  private static final int STARTER_FOOD_INGREDIENT_TOTAL = 100;
+  private static final int STARTER_SEED_TOTAL = 100;
+  private static final int STARTER_SAPLING_TOTAL = 100;
 
   public static boolean beginNewConstruction(
       UUID structureId,
@@ -98,14 +116,8 @@ public class StorageSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
-
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Storage.CONSTRUCTION_SIGN_ROTATION,
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, rotation);
     Utils.setBlockChunkAware(
         chunkToUse,
         constructionSignPosition,
@@ -144,7 +156,7 @@ public class StorageSpawner {
         trackedPlacement);
 
     chunkToUse.markNeedsSaving();
-    return false;
+    return true;
   }
 
   public static boolean beginUpgradeConstruction(
@@ -217,7 +229,31 @@ public class StorageSpawner {
             currentLevel,
             oldTrackedPlacement);
       }
+
+      if (upgraded) {
+        VillageStorageRequestInvalidation.invalidateRequesterWorkplace(heartRef, heart, structureId);
+        VillageStorageRequestInvalidation.invalidateTargetStorage(heartRef, heart, structureId);
+      }
       return upgraded;
+    }
+
+    WorkplaceContainerRegistryComponent existingStorage = workplace.getStorage() != null
+        ? workplace.getStorage().clone()
+        : null;
+    if (existingStorage == null || existingStorage.getContainers().isEmpty()) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[beginUpgradeConstruction - storage] Could not fetch the existing workplace storage");
+      return false;
+    }
+
+    SimpleItemContainer bufferedConstructionSignStorage = buildConstructionSignStorage(
+        existingStorage.getContainers().size());
+    ItemContainer constructionSignContainer = bufferedConstructionSignStorage;
+    if (!moveWorkplaceStorageToTarget(chunkToUse, existingStorage, constructionSignContainer)) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[beginUpgradeConstruction - storage] Could not buffer the existing storage items");
+      moveItemsToWorkplaceStorage(chunkToUse, constructionSignContainer, existingStorage);
+      return false;
     }
 
     short stage = (short) 0;
@@ -241,16 +277,12 @@ public class StorageSpawner {
           heart,
           currentLevel,
           oldTrackedPlacement);
+      moveItemsToWorkplaceStorage(chunkToUse, constructionSignContainer, existingStorage);
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, structureRotation);
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.Storage.CONSTRUCTION_SIGN_ROTATION,
-            structureRotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
         chunkToUse,
@@ -260,6 +292,23 @@ public class StorageSpawner {
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         signChunk,
         constructionSignPosition);
+
+    if (signResult == null || signResult.getSecond() == null || !signResult.getSecond().isValid()) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[beginUpgradeConstruction - storage] Could not fetch the upgrade construction sign entity");
+      Utils.breakBlockChunkAware(signChunk, constructionSignPosition);
+      handleLastStageBuilding(
+          structureId,
+          world,
+          chunkToUse,
+          prefabAnchor,
+          structureRotation,
+          heart,
+          currentLevel,
+          oldTrackedPlacement);
+      moveItemsToWorkplaceStorage(chunkToUse, constructionSignContainer, existingStorage);
+      return false;
+    }
 
     signChunk = signResult.getFirst();
     Ref<ChunkStore> constructionSignRef = signResult.getSecond();
@@ -277,12 +326,21 @@ public class StorageSpawner {
     snapshotComponent.setTargetLevel((short) targetLevel);
     snapshotComponent.setVillageRef(villageRefSnapshot);
 
+    BufferedConstructionStorageComponent bufferedStorageComponent = new BufferedConstructionStorageComponent();
+    bufferedStorageComponent.setItemContainer(bufferedConstructionSignStorage);
+    signStore.putComponent(
+        constructionSignRef,
+        BufferedConstructionStorageComponent.getComponentType(),
+        bufferedStorageComponent);
+
     signStore.putComponent(
         constructionSignRef,
         TrackedPrefabPlacementComponent.getComponentType(),
         oldTrackedPlacement);
 
     signChunk.markNeedsSaving();
+    VillageStorageRequestInvalidation.invalidateRequesterWorkplace(heartRef, heart, structureId);
+    VillageStorageRequestInvalidation.invalidateTargetStorage(heartRef, heart, structureId);
     return true;
   }
 
@@ -425,12 +483,12 @@ public class StorageSpawner {
       snapshotToUse = newSnapshot;
     }
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, rotation);
+    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(
         chunk,
         workplaceBlockPosition,
         StructureConfig.Storage.WORKPLACE_BLOCK,
-        StructurePlacementUtils.toBlockRotationIndex(rotation));
+        getWorkplaceBlockRotationIndex(targetLevel, rotation));
     Ref<ChunkStore> workplaceRef = workplaceChunk.getBlockComponentEntity(
         workplaceBlockPosition.x,
         workplaceBlockPosition.y,
@@ -454,7 +512,7 @@ public class StorageSpawner {
     workplaceComponent.setUuid(structureId);
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, rotation));
+    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.STORAGE_KEEPER });
     workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
@@ -473,9 +531,126 @@ public class StorageSpawner {
     }
 
     workplaceComponent.setStorage(registry);
-    removeConstructionSignIfPresent(chunk, prefabAnchor, rotation);
+    moveConstructionSignItemsToStorage(chunk, prefabAnchor, targetLevel, rotation, registry);
+    seedStarterStorageIfNeeded(chunk, registry, heart, targetLevel);
+    removeConstructionSignIfPresent(chunk, prefabAnchor, targetLevel, rotation);
     workplaceChunk.markNeedsSaving();
     return true;
+  }
+
+  private static void seedStarterStorageIfNeeded(
+      WorldChunk chunk,
+      WorkplaceContainerRegistryComponent storageRegistry,
+      VillageHeartComponent heart,
+      int targetLevel) {
+    if (targetLevel != 1 || heart == null || heart.getStorageWorkplaceCount() != 0) {
+      return;
+    }
+
+    SimpleItemContainer starterItems = buildStarterStorageItems();
+    if (starterItems == null || starterItems.isEmpty()) {
+      return;
+    }
+
+    if (!moveItemsToWorkplaceStorage(chunk, starterItems, storageRegistry)) {
+      ProjectCivicCore.LOGGER.atWarning()
+          .log("[Storage - spawn] Could not move all starter items into the first level 1 storage");
+    }
+  }
+
+  private static SimpleItemContainer buildStarterStorageItems() {
+    List<ItemStack> starterStacks = new ArrayList<>();
+    starterStacks.add(new ItemStack(LIFE_ESSENCE_ITEM_ID, STARTER_LIFE_ESSENCE));
+
+    appendDistributedStacks(
+        starterStacks,
+        new ArrayList<>(CropRecipeRegistry.getLevelDependantCraftingRecipe(1).keySet()),
+        STARTER_SEED_TOTAL,
+        "seed");
+    appendDistributedStacks(
+        starterStacks,
+        new ArrayList<>(SaplingRecipeRegistry.getLevelDependantSaplingRecipe(1).keySet()),
+        STARTER_SAPLING_TOTAL,
+        "sapling");
+    appendFoodIngredientStacks(starterStacks, STARTER_FOOD_INGREDIENT_TOTAL);
+
+    if (starterStacks.isEmpty()) {
+      return null;
+    }
+
+    short capacity = calculateRequiredStarterStorageCapacity(starterStacks);
+    SimpleItemContainer starterItems = new SimpleItemContainer(capacity);
+    for (ItemStack stack : starterStacks) {
+      starterItems.addItemStack(stack);
+    }
+    return starterItems;
+  }
+
+  private static short calculateRequiredStarterStorageCapacity(List<ItemStack> starterStacks) {
+    int requiredSlots = 0;
+
+    for (ItemStack stack : starterStacks) {
+      if (stack == null || stack.isEmpty()) {
+        continue;
+      }
+
+      int maxStack = Math.max(1, stack.getItem().getMaxStack());
+      requiredSlots += Math.max(1, (stack.getQuantity() + maxStack - 1) / maxStack);
+    }
+
+    return (short) Math.max(9, requiredSlots);
+  }
+
+  private static void appendFoodIngredientStacks(List<ItemStack> target, int totalQuantity) {
+    Map<String, CraftingRecipe> levelRecipes = FoodRecipeRegistry.getLevelDependantCraftingRecipe(1);
+    if (levelRecipes == null || levelRecipes.isEmpty()) {
+      ProjectCivicCore.LOGGER.atWarning()
+          .log("[Storage - spawn] No level 1 food recipes were found for starter storage");
+      return;
+    }
+
+    Set<String> ingredientIds = new HashSet<>();
+    for (CraftingRecipe recipe : levelRecipes.values()) {
+      if (recipe == null) {
+        continue;
+      }
+
+      for (MaterialQuantity material : CraftingManager.getInputMaterials(recipe, 1)) {
+        if (material == null || material.getItemId() == null || material.getItemId().isBlank()) {
+          continue;
+        }
+
+        ingredientIds.add(material.getItemId());
+      }
+    }
+
+    appendDistributedStacks(target, new ArrayList<>(ingredientIds), totalQuantity, "food ingredient");
+  }
+
+  private static void appendDistributedStacks(
+      List<ItemStack> target,
+      List<String> itemIds,
+      int totalQuantity,
+      String resourceType) {
+    if (itemIds == null || itemIds.isEmpty()) {
+      ProjectCivicCore.LOGGER.atWarning()
+          .log("[Storage - spawn] No level 1 " + resourceType + " registry entries were found for starter storage");
+      return;
+    }
+
+    itemIds.sort(String::compareTo);
+
+    int baseQuantity = totalQuantity / itemIds.size();
+    int remainder = totalQuantity % itemIds.size();
+
+    for (int index = 0; index < itemIds.size(); index++) {
+      int quantity = baseQuantity + (index < remainder ? 1 : 0);
+      if (quantity <= 0) {
+        continue;
+      }
+
+      target.add(new ItemStack(itemIds.get(index), quantity));
+    }
   }
 
   private static WorkplaceContainerRegistryComponent spawnContainers(
@@ -485,19 +660,18 @@ public class StorageSpawner {
       Store<ChunkStore> chunkStore,
       Rotation structureRotation) {
     WorkplaceContainerRegistryComponent registry = new WorkplaceContainerRegistryComponent();
-    List<Vector3i> offsets = StructureConfig.Storage.getStorageOffsetForLevel(level);
+    List<StructureConfig.ContainerTransform> layouts = StructureConfig.Storage.getLevelLayout(level).containers();
     WorldChunk usedChunk = chunk;
     Vector3i containerPosition;
 
-    for (Vector3i offset : offsets) {
+    for (StructureConfig.ContainerTransform containerLayout : layouts) {
       Rotation containerRotation = StructurePlacementUtils.addYaw(
-          offset.x < 0
-              ? StructureConfig.Storage.LEFT_CONTAINER_YAW_OFFSET
-              : StructureConfig.Storage.RIGHT_CONTAINER_YAW_OFFSET,
+          containerLayout.rotation(),
           structureRotation);
       int rotation = RotationTuple.of(containerRotation, Rotation.None, Rotation.None).index();
 
-      containerPosition = StructurePlacementUtils.withOffset(prefabAnchor, offset, structureRotation);
+      containerPosition = StructurePlacementUtils.withOffset(prefabAnchor, containerLayout.position(),
+          structureRotation);
 
       usedChunk = Utils.setBlockChunkAware(
           usedChunk,
@@ -523,12 +697,136 @@ public class StorageSpawner {
       }
 
       container.setPosition(containerPosition);
-      container.setAccessPosition(getContainerAccessPosition(containerPosition, offset, structureRotation));
+      container.setAccessPosition(getContainerAccessPosition(containerPosition, containerLayout, structureRotation));
       container.setUuid(UUID.randomUUID());
       registry.registerContainer(container.getUuid(), container);
     }
 
     return registry;
+  }
+
+  private static SimpleItemContainer buildConstructionSignStorage(int workplaceStorageCount) {
+    short capacity = (short) (9 * 4 * workplaceStorageCount);
+    return new SimpleItemContainer(capacity);
+  }
+
+  private static boolean moveWorkplaceStorageToTarget(
+      WorldChunk chunk,
+      WorkplaceContainerRegistryComponent storageRegistry,
+      ItemContainer target) {
+    ItemContainer[] storageContainers = resolveWorkplaceStorageContainers(chunk, storageRegistry);
+    if (storageContainers == null) {
+      return false;
+    }
+
+    for (ItemContainer storageContainer : storageContainers) {
+      storageContainer.moveAllItemStacksTo(target);
+      if (!storageContainer.isEmpty()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private static boolean moveItemsToWorkplaceStorage(
+      WorldChunk chunk,
+      ItemContainer source,
+      WorkplaceContainerRegistryComponent storageRegistry) {
+    ItemContainer[] storageContainers = resolveWorkplaceStorageContainers(chunk, storageRegistry);
+    if (source == null || storageContainers == null || storageContainers.length == 0) {
+      return false;
+    }
+
+    source.moveAllItemStacksTo(storageContainers);
+    return source.isEmpty();
+  }
+
+  private static ItemContainer[] resolveWorkplaceStorageContainers(
+      WorldChunk chunk,
+      WorkplaceContainerRegistryComponent storageRegistry) {
+    if (storageRegistry == null || storageRegistry.getContainers().isEmpty()) {
+      return null;
+    }
+
+    List<ItemContainer> containers = new ArrayList<>(storageRegistry.getContainers().size());
+
+    for (WorkplaceContainerEntryComponent entry : storageRegistry.getContainers().values()) {
+      Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
+          chunk,
+          entry.getPosition());
+
+      if (result == null || result.getSecond() == null || !result.getSecond().isValid()) {
+        ProjectCivicCore.LOGGER.atSevere()
+            .log("[Storage - spawn] Could not resolve workplace storage container at " + entry.getPosition());
+        return null;
+      }
+
+      Ref<ChunkStore> containerRef = result.getSecond();
+      ItemContainerBlock containerBlock = containerRef.getStore().getComponent(
+          containerRef,
+          ItemContainerBlock.getComponentType());
+
+      if (containerBlock == null) {
+        ProjectCivicCore.LOGGER.atSevere()
+            .log("[Storage - spawn] Could not fetch workplace storage container component at " + entry.getPosition());
+        return null;
+      }
+
+      containers.add(containerBlock.getItemContainer());
+    }
+
+    return containers.toArray(new ItemContainer[0]);
+  }
+
+  private static void moveConstructionSignItemsToStorage(
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      int level,
+      Rotation rotation,
+      WorkplaceContainerRegistryComponent storageRegistry) {
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
+    Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
+        chunk,
+        constructionSignPosition);
+
+    if (signResult == null || signResult.getSecond() == null || !signResult.getSecond().isValid()) {
+      return;
+    }
+
+    WorldChunk signChunk = signResult.getFirst();
+    Ref<ChunkStore> signRef = signResult.getSecond();
+    Store<ChunkStore> signStore = signRef.getStore();
+    boolean movedAnyItems = false;
+
+    BufferedConstructionStorageComponent bufferedStorage = signStore.getComponent(
+        signRef,
+        BufferedConstructionStorageComponent.getComponentType());
+    if (bufferedStorage != null
+        && bufferedStorage.getItemContainer() != null
+        && !bufferedStorage.getItemContainer().isEmpty()) {
+      movedAnyItems = true;
+      if (!moveItemsToWorkplaceStorage(chunk, bufferedStorage.getItemContainer(), storageRegistry)) {
+        ProjectCivicCore.LOGGER.atWarning()
+            .log("[Storage - spawn] Could not move all buffered construction items into the new storage containers");
+      }
+    }
+
+    ItemContainerBlock signStorage = signStore.getComponent(
+        signRef,
+        ItemContainerBlock.getComponentType());
+
+    if (signStorage != null && !signStorage.getItemContainer().isEmpty()) {
+      movedAnyItems = true;
+      if (!moveItemsToWorkplaceStorage(chunk, signStorage.getItemContainer(), storageRegistry)) {
+        ProjectCivicCore.LOGGER.atWarning()
+            .log("[Storage - spawn] Could not move all construction sign items into the new storage containers");
+      }
+    }
+
+    if (movedAnyItems) {
+      signChunk.markNeedsSaving();
+    }
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
@@ -567,12 +865,12 @@ public class StorageSpawner {
         prefabAnchor = trackedPlacement.getOrigin();
       }
       if (prefabAnchor == null) {
-        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, prefabRotation);
+        prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, workplace.getLevel(), prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           workplaceChunk.getWorld(),
-          StructureConfig.Storage.PREFAB_JSON,
+          StructureConfig.Storage.getCompletedPrefab(workplace.getLevel()),
           prefabAnchor,
           prefabRotation,
           true);
@@ -603,8 +901,9 @@ public class StorageSpawner {
   private static void removeConstructionSignIfPresent(
       WorldChunk chunk,
       Vector3i prefabAnchor,
+      int level,
       Rotation rotation) {
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -623,6 +922,7 @@ public class StorageSpawner {
         signRef,
         BuildingSnapshotComponent.getComponentType());
     if (snapshotComponent == null) {
+      clearArtefactBlocks(chunk, constructionSignPosition);
       return;
     }
 
@@ -630,41 +930,61 @@ public class StorageSpawner {
     signChunk.markNeedsSaving();
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+  private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
+    Utils.breakBlockChunkAware(chunk, constructionPos);
+    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(Vector3i.UP));
+  }
+
+  private static int getWorkplaceBlockRotationIndex(int level, Rotation rotation) {
+    Rotation workplaceRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.Storage.getLevelLayout(level).workplace().rotation(),
+        rotation);
+    return StructurePlacementUtils.toBlockRotationIndex(workplaceRotation);
+  }
+
+  private static int getConstructionSignRotationIndex(int level, Rotation rotation) {
+    Rotation signRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.Storage.getLevelLayout(level).constructionSign().rotation(),
+        rotation);
+    return RotationTuple.of(signRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
-        StructureConfig.Storage.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.Storage.getLevelLayout(level).workplace().position(),
+        rotation);
+  }
+
+  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.Storage.getLevelLayout(level).constructionSign().position(),
         rotation);
   }
 
   private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
-    return StructurePlacementUtils.withOffset(
-        prefabAnchor,
-        StructureConfig.Storage.CONSTRUCTION_SIGN_OFFSET,
-        rotation);
+    return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
-        StructureConfig.Storage.BENCH_ACCESS_OFFSET,
+        StructureConfig.Storage.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
   private static Vector3i getContainerAccessPosition(
       Vector3i containerPosition,
-      Vector3i containerOffset,
+      StructureConfig.ContainerTransform containerLayout,
       Rotation rotation) {
-    Vector3i accessOffset = containerOffset.x < 0
-        ? StructureConfig.Storage.LEFT_CONTAINER_ACCESS_OFFSET
-        : StructureConfig.Storage.RIGHT_CONTAINER_ACCESS_OFFSET;
-    return StructurePlacementUtils.withOffset(containerPosition, accessOffset, rotation);
+    return StructurePlacementUtils.withOffset(containerPosition, containerLayout.accessOffset(), rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.removeOffset(
         workplaceBlockPosition,
-        StructureConfig.Storage.WORKPLACE_BLOCK_OFFSET,
+        StructureConfig.Storage.getLevelLayout(level).workplace().position(),
         rotation);
   }
 

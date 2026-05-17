@@ -26,9 +26,11 @@ import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpC
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
+import com.pacificbytestudios.projectciviccore.village.components.builder.BufferedConstructionStorageComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartMarkerComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseSpawnComponent;
@@ -47,9 +49,11 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.town
 import com.pacificbytestudios.projectciviccore.village.systems.builder.StagedBuildingSpawnSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.VillageBuilderSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartMarkerPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.house.HouseSpawnSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.workplace.TavernFoodRemovalSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderAskForClearWorkplaceStorageAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderChangeIntoWorkRoleAction;
@@ -87,6 +91,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderPlantTreeAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderBedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasEatenMealTodaySensor;
+import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasReservedTavernTable;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderHasStorageRequestInPendingSensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryDirtyInventorySensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderReachEmptyTavernSeatSensor;
@@ -123,6 +128,7 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private static ProjectCivicCore INSTANCE;
   private ComponentType<ChunkStore, VillageHeartComponent> villageCoreComponentType;
+  private ComponentType<ChunkStore, VillageHeartMarkerComponent> villageHeartMarkerComponentType;
   private ComponentType<ChunkStore, VillageSpawnComponent> villageSpawnComponentType;
 
   private ComponentType<ChunkStore, VillageTaskQueueComponent> villageTaskQueueComponentType;
@@ -150,6 +156,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageBuilderComponent> villageBuilderComponentType;
   private ComponentType<ChunkStore, VillageTopologyComponent> villageTopologyComponentType;
   private ComponentType<ChunkStore, BuildingSnapshotComponent> buildingSnapshotComponentType;
+  private ComponentType<ChunkStore, BufferedConstructionStorageComponent> bufferedConstructionStorageComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
   private ComponentType<EntityStore, MayorComponent> mayorComponentType;
@@ -283,13 +290,25 @@ public final class ProjectCivicCore extends JavaPlugin {
         "BuildingSnapshotComponent",
         BuildingSnapshotComponent.CODEC);
 
+    this.bufferedConstructionStorageComponentType = chunkRegistry.registerComponent(
+        BufferedConstructionStorageComponent.class,
+        "BufferedConstructionStorageComponent",
+        BufferedConstructionStorageComponent.CODEC);
+
+    this.villageHeartMarkerComponentType = chunkRegistry.registerComponent(
+        VillageHeartMarkerComponent.class,
+        "VillageHeartMarkerComponent",
+        VillageHeartMarkerComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
+    chunkRegistry.registerSystem(new TavernFoodRemovalSystem());
     chunkRegistry.registerSystem(new VillageTaskQueueSystem());
     chunkRegistry.registerSystem(new HouseSpawnSystem());
     chunkRegistry.registerSystem(new VillageBuilderSystem());
     chunkRegistry.registerSystem(new StagedBuildingSpawnSystem());
+    chunkRegistry.registerSystem(new VillageHeartMarkerPlacementSystem());
 
     commandRegistry.registerCommand(new VillageCommands());
 
@@ -403,6 +422,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     npcPlugin.registerCoreComponentType(
         "ScanBreakableAreaSensor",
         BuilderScanBreakableAreaSensor::new);
+
+    npcPlugin.registerCoreComponentType(
+        "HasReservedTavern",
+        BuilderHasReservedTavernTable::new);
 
     // ===========================
     // Actions
@@ -650,6 +673,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     return this.houseSpawnComponentType;
   }
 
+  public ComponentType<ChunkStore, VillageHeartMarkerComponent> getVillageHeartMarkerComponentType() {
+    return this.villageHeartMarkerComponentType;
+  }
+
   public ComponentType<ChunkStore, VillageBuilderComponent> getVillageBuilderComponentType() {
     return this.villageBuilderComponentType;
   }
@@ -660,6 +687,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, BuildingSnapshotComponent> getBuildingSnapshotComponent() {
     return this.buildingSnapshotComponentType;
+  }
+
+  public ComponentType<ChunkStore, BufferedConstructionStorageComponent> getBufferedConstructionStorageComponentType() {
+    return this.bufferedConstructionStorageComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

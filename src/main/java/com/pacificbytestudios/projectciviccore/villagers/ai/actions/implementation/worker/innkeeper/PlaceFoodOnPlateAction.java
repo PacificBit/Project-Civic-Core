@@ -9,15 +9,22 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
+import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+
+import io.sentry.util.Pair;
 
 public class PlaceFoodOnPlateAction extends VillagerActionBase {
 
@@ -38,7 +45,8 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
     super.execute(ref, role, sensorInfo, deltaTime, store);
 
     WorkplaceInteractablesMapComponent interactables = this.getWorkplaceInteractibleComponent(ref, store);
-    if (interactables == null) {
+    WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);
+    if (interactables == null || workplaceComponent == null || workplaceComponent.getWorkplaceRef() == null) {
       return false;
     }
 
@@ -68,6 +76,22 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
       return false;
     }
 
+    Pair<WorldChunk, Ref<ChunkStore>> foodBlockEntity = Utils.getBlockComponentEntityChunkAware(chunk, platePosition);
+    Ref<ChunkStore> foodRef = foodBlockEntity.getSecond();
+    if (foodRef != null && foodRef.isValid()) {
+      Store<ChunkStore> chunkStore = foodRef.getStore();
+      VillageFoodComponent foodComponent = chunkStore.getComponent(foodRef, VillageFoodComponent.getComponentType());
+      if (foodComponent == null) {
+        foodComponent = new VillageFoodComponent();
+      }
+      Vector3i tavernPosition = workplaceComponent.getWorkplaceRef().getPosition();
+      foodComponent.setTavernRef(
+          world.getName() != null && tavernPosition != null
+              ? new EntityRef(world.getName(), tavernPosition.clone())
+              : null);
+      chunkStore.putComponent(foodRef, VillageFoodComponent.getComponentType(), foodComponent);
+    }
+
     short activeSlot = npcEntity.getInventory().getActiveHotbarSlot();
     if (activeSlot < 0) {
       return false;
@@ -79,6 +103,7 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
 
     interactable.setReady(true);
     interactable.release();
+    Utils.markNeedSaving(world, workplaceComponent.getWorkplaceRef().getPosition());
     chunk.markNeedsSaving();
     return true;
   }

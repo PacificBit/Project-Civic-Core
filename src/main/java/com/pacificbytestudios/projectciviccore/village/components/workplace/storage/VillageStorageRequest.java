@@ -31,6 +31,11 @@ public class VillageStorageRequest {
           obj -> obj.requesterWorkplaceId)
       .add()
 
+      .append(new KeyedCodec<>("StorageWorkplaceId", Codec.UUID_BINARY, false),
+          (obj, value) -> obj.storageWorkplaceId = value,
+          obj -> obj.storageWorkplaceId)
+      .add()
+
       .append(new KeyedCodec<>("Type", new EnumCodec<>(VillageStorageRequestType.class)),
           (obj, value) -> obj.type = value,
           obj -> obj.type)
@@ -51,14 +56,32 @@ public class VillageStorageRequest {
           obj -> obj.itemCriteria)
       .add()
 
+      .append(new KeyedCodec<>(
+          "TriedStorageIds",
+          new SetCodec<UUID, HashSet<UUID>>(
+              Codec.UUID_BINARY,
+              HashSet::new,
+              false)),
+          (obj, value) -> obj.triedStorageIds = value,
+          obj -> obj.triedStorageIds)
+      .add()
+
+      .append(new KeyedCodec<>("RegisteredWithStorage", Codec.BOOLEAN, false),
+          (obj, value) -> obj.registeredWithStorage = value,
+          obj -> obj.registeredWithStorage)
+      .add()
+
       .build();
 
   private UUID requestId;
   private UUID requesterWorkplaceId;
+  private UUID storageWorkplaceId;
   private VillageStorageRequestType type;
   private ArrayDeque<Vector3i> targetsWorkplaceStorage = new ArrayDeque<>();
 
   private Set<ItemRequestCriterion> itemCriteria = new HashSet<>();
+  private Set<UUID> triedStorageIds = new HashSet<>();
+  private boolean registeredWithStorage;
 
   public VillageStorageRequest() {
     this.requestId = UUID.randomUUID();
@@ -78,6 +101,14 @@ public class VillageStorageRequest {
 
   public void setRequesterWorkplaceId(UUID requesterWorkplaceId) {
     this.requesterWorkplaceId = requesterWorkplaceId;
+  }
+
+  public UUID getStorageWorkplaceId() {
+    return this.storageWorkplaceId;
+  }
+
+  public void setStorageWorkplaceId(UUID storageWorkplaceId) {
+    this.storageWorkplaceId = storageWorkplaceId;
   }
 
   public VillageStorageRequestType getType() {
@@ -100,16 +131,48 @@ public class VillageStorageRequest {
     this.itemCriteria.add(itemCriteria);
   }
 
+  public Set<UUID> getTriedStorageIds() {
+    return this.triedStorageIds;
+  }
+
+  public void setTriedStorageIds(Set<UUID> triedStorageIds) {
+    this.triedStorageIds = triedStorageIds != null ? new HashSet<>(triedStorageIds) : new HashSet<>();
+  }
+
+  public void addTriedStorageId(UUID storageWorkplaceId) {
+    if (storageWorkplaceId == null) {
+      return;
+    }
+
+    this.triedStorageIds.add(storageWorkplaceId);
+  }
+
+  public void clearTriedStorageIds() {
+    this.triedStorageIds.clear();
+  }
+
+  public boolean isRegisteredWithStorage() {
+    return this.registeredWithStorage;
+  }
+
+  public void setRegisteredWithStorage(boolean registeredWithStorage) {
+    this.registeredWithStorage = registeredWithStorage;
+  }
+
   public ArrayDeque<Vector3i> getTargetsWorkplaceStorage() {
     return targetsWorkplaceStorage;
   }
 
   public void setTargetsWorkplaceStorage(ArrayDeque<Vector3i> targetWorkplaceStorage) {
-    this.targetsWorkplaceStorage = targetWorkplaceStorage;
+    this.targetsWorkplaceStorage = targetWorkplaceStorage != null
+        ? new ArrayDeque<>(targetWorkplaceStorage)
+        : new ArrayDeque<>();
   }
 
   public void setTargetsWorkplaceStorage(List<Vector3i> targetWorkplaceStorage) {
-    this.targetsWorkplaceStorage.addAll(targetWorkplaceStorage);
+    this.targetsWorkplaceStorage = targetWorkplaceStorage != null
+        ? new ArrayDeque<>(targetWorkplaceStorage)
+        : new ArrayDeque<>();
   }
 
   @Override
@@ -132,10 +195,13 @@ public class VillageStorageRequest {
     VillageStorageRequest request = new VillageStorageRequest();
     request.requestId = this.requestId;
     request.requesterWorkplaceId = this.requesterWorkplaceId;
+    request.storageWorkplaceId = this.storageWorkplaceId;
     request.type = this.type;
     request.targetsWorkplaceStorage = this.targetsWorkplaceStorage != null ? this.targetsWorkplaceStorage.clone()
         : null;
     request.itemCriteria = new HashSet<>();
+    request.triedStorageIds = new HashSet<>(this.triedStorageIds);
+    request.registeredWithStorage = this.registeredWithStorage;
 
     for (ItemRequestCriterion criterion : this.itemCriteria) {
       request.itemCriteria.add(criterion != null ? criterion.clone() : null);
@@ -151,6 +217,9 @@ public class VillageStorageRequest {
     sb.append("VillageStorageRequest\n");
     sb.append("requestId=").append(this.requestId).append("\n");
     sb.append("requesterWorkplaceId=").append(this.requesterWorkplaceId).append("\n");
+    sb.append("storageWorkplaceId=").append(this.storageWorkplaceId).append("\n");
+    sb.append("triedStorageIds=").append(this.triedStorageIds).append("\n");
+    sb.append("registeredWithStorage=").append(this.registeredWithStorage).append("\n");
     sb.append("type=").append(this.type).append("\n");
     sb.append("targetWorkplaceStorage=").append(this.targetsWorkplaceStorage).append("\n");
     sb.append("itemCriteria=");

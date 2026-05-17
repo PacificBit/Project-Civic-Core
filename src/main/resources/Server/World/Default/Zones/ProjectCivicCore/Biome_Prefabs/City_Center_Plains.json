@@ -1,0 +1,8 @@
+{
+  "Prefab": [
+    "Structures.General.CityCenter.Level1.City_Center"
+  ],
+  "Pattern": {
+    "File": "Zones.ProjectCivicCore.PrefabPatterns.City_Center_Plains"
+  }
+}

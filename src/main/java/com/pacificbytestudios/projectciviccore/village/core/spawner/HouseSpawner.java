@@ -94,14 +94,8 @@ public class HouseSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, structureRotation);
-
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.House.CONSTRUCTION_SIGN_ROTATION,
-            structureRotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
     Utils.setBlockChunkAware(
         chunkToUse,
         constructionSignPosition,
@@ -140,7 +134,7 @@ public class HouseSpawner {
         trackedPlacement);
 
     chunkToUse.markNeedsSaving();
-    return false;
+    return true;
   }
 
   public static boolean beginUpgradeConstruction(
@@ -239,13 +233,8 @@ public class HouseSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, structureRotation);
-    int constructionSignRotationIndex = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.House.CONSTRUCTION_SIGN_ROTATION,
-            structureRotation),
-        Rotation.None,
-        Rotation.None).index();
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
         chunkToUse,
@@ -424,12 +413,14 @@ public class HouseSpawner {
 
     int blockRotation = RotationTuple.of(
         StructurePlacementUtils.addYaw(
-            StructureConfig.House.WORKPLACE_BLOCK_YAW_OFFSET,
+            StructureConfig.House.getCoreBlockOffset(targetLevel).rotation(),
             rotation),
         Rotation.None,
         Rotation.None).index();
 
-    Vector3i houseCoreBlockPosition = getWorkplaceBlockPosition(prefabAnchor,
+    Vector3i houseCoreBlockPosition = getWorkplaceBlockPosition(
+        prefabAnchor,
+        targetLevel,
         rotation);
     WorldChunk houseChunk = Utils.setBlockChunkAware(
         chunk,
@@ -472,7 +463,7 @@ public class HouseSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         snapshotToUse);
 
-    removeConstructionSignIfPresent(chunk, prefabAnchor, rotation);
+    removeConstructionSignIfPresent(chunk, prefabAnchor, targetLevel, rotation);
     houseChunk.markNeedsSaving();
     return true;
   }
@@ -483,7 +474,7 @@ public class HouseSpawner {
         Utils.setBlockChunkAware(
             chunk,
             bed.getPosition(),
-            StructureConfig.House.CRUDE_BED_BLOCK,
+            StructureConfig.House.getBedBlockPerLevel(house.getLevel()),
             StructurePlacementUtils.toBlockRotationIndex(bed.getRotation()));
         Utils.markNeedSaving(world, bed.getPosition());
       }
@@ -523,12 +514,13 @@ public class HouseSpawner {
       }
       if (prefabAnchor == null) {
         prefabAnchor = getPrefabAnchorFromWorkplace(bedBlockPosition,
+            component.getLevel(),
             prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           bedChunk.getWorld(),
-          StructureConfig.House.PREFAB_JSON,
+          StructureConfig.House.getCompletedPrefab(component.getLevel()),
           prefabAnchor,
           prefabRotation,
           true);
@@ -546,8 +538,9 @@ public class HouseSpawner {
   private static void removeConstructionSignIfPresent(
       WorldChunk chunk,
       Vector3i prefabAnchor,
+      int level,
       Rotation rotation) {
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -566,6 +559,7 @@ public class HouseSpawner {
         signRef,
         BuildingSnapshotComponent.getComponentType());
     if (snapshotComponent == null) {
+      clearArtefactBlocks(chunk, constructionSignPosition);
       return;
     }
 
@@ -573,25 +567,46 @@ public class HouseSpawner {
     signChunk.markNeedsSaving();
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor,
+  private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
+    Utils.breakBlockChunkAware(chunk, constructionPos);
+    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(Vector3i.UP));
+  }
+
+  private static int getConstructionSignRotationIndex(int level, Rotation rotation) {
+    Rotation signRotation = StructurePlacementUtils.addYaw(
+        StructureConfig.House.getLevelLayout(level).constructionSign().rotation(),
+        rotation);
+    return RotationTuple.of(signRotation, Rotation.None, Rotation.None).index();
+  }
+
+  private static Vector3i getWorkplaceBlockPosition(
+      Vector3i prefabAnchor,
+      int level,
       Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
-        StructureConfig.House.CORE_BLOCK_OFFSET,
+        StructureConfig.House.getCoreBlockOffset(level).position(),
+        rotation);
+  }
+
+  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(
+        prefabAnchor,
+        StructureConfig.House.getLevelLayout(level).constructionSign().position(),
         rotation);
   }
 
   private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
-    return StructurePlacementUtils.withOffset(
-        prefabAnchor,
-        StructureConfig.House.CONSTRUCTION_SIGN_OFFSET,
-        rotation);
+    return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, Rotation rotation) {
+  private static Vector3i getPrefabAnchorFromWorkplace(
+      Vector3i workplaceBlockPosition,
+      int targetLevel,
+      Rotation rotation) {
     return StructurePlacementUtils.removeOffset(
         workplaceBlockPosition,
-        StructureConfig.House.CORE_BLOCK_OFFSET,
+        StructureConfig.House.getCoreBlockOffset(targetLevel).position(),
         rotation);
   }
 

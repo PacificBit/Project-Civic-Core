@@ -28,6 +28,7 @@ public class WatchVillageStateSensor extends VillagerSensorBase {
     if (!ref.isValid()) {
       return false;
     }
+    this.suppressWarnings = true;
     VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
     if (villageHeart == null) {
       return false;

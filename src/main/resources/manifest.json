@@ -1,7 +1,7 @@
 {
   "Group": "com.pacificbytestudios",
   "Name": "ProjectCivicCore",
-  "Version": "0.0.1",
+  "Version": "1.0.0",
   "Main": "com.pacificbytestudios.projectciviccore.ProjectCivicCore",
   "Authors": [
     {

@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -106,6 +107,76 @@ public abstract class VillagerActionBase extends ActionBase {
         "workplace interactable component");
   }
 
+  protected Ref<ChunkStore> getReservedTavernRef(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    VillagerComponent villager = getVillagerComponent(ref, store);
+    if (villager == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> reservedTavernRef = villager.getReservedTavernRef();
+    if (isRefValid(reservedTavernRef)) {
+      return reservedTavernRef;
+    }
+
+    Vector3i reservedInteractable = villager.getReservedInteractable();
+    if (reservedInteractable == null) {
+      return null;
+    }
+
+    VillageHeartComponent heart = getVillageHeartComponent(ref, store);
+    if (heart == null) {
+      return null;
+    }
+
+    for (UUID tavernId : heart.getVillageTavernWorkplaces()) {
+      WorkplaceComponent tavern = heart.getWorkplaceFromId(tavernId);
+      if (tavern == null || tavern.getWorkplaceRef() == null) {
+        continue;
+      }
+
+      Ref<ChunkStore> tavernRef = tavern.getWorkplaceRef().getRef();
+      if (!isRefValid(tavernRef)) {
+        continue;
+      }
+
+      WorkplaceInteractablesMapComponent interactables = tavernRef.getStore().getComponent(
+          tavernRef,
+          WorkplaceInteractablesMapComponent.getComponentType());
+      if (interactables == null) {
+        continue;
+      }
+
+      if (interactables.getInteractableAtPosition(
+          com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles.EATING_SPOT,
+          reservedInteractable) == null) {
+        continue;
+      }
+
+      villager.setReservedTavernLocation(tavern.getWorkplaceRef().clone());
+      store.putComponent(ref, VillagerComponent.getComponentType(), villager);
+      return tavernRef;
+    }
+
+    return null;
+  }
+
+  protected WorkplaceInteractablesMapComponent getReservedTavernInteractibleComponent(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    Ref<ChunkStore> tavernRef = getReservedTavernRef(ref, store);
+    if (!isRefValid(tavernRef)) {
+      return null;
+    }
+
+    return require(
+        tavernRef.getStore().getComponent(
+            tavernRef,
+            WorkplaceInteractablesMapComponent.getComponentType()),
+        "reserved tavern interactable component");
+  }
+
   protected NPCEntity getNPCEntity(Ref<EntityStore> ref, Store<EntityStore> store) {
     NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
     return require(npcEntity, "NPC entity");
@@ -118,16 +189,26 @@ public abstract class VillagerActionBase extends ActionBase {
 
   protected Ref<ChunkStore> getVillageRef(Ref<EntityStore> ref, Store<EntityStore> store) {
     VillagerComponent villager = getVillagerComponent(ref, store);
-    return villager != null ? require(villager.getVillageHeartRef(), "village heart ref") : null;
+    if (villager == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> villageRef = require(villager.getVillageHeartRef(), "village heart ref");
+    return isRefValid(villageRef) ? villageRef : null;
   }
 
   protected Ref<ChunkStore> getWorkplaceRef(Ref<EntityStore> ref, Store<EntityStore> store) {
     WorkplaceComponent workplace = getWorkplaceComponent(ref, store);
-    return workplace != null
-        ? (require(workplace.getWorkplaceRef(), "workplace ref wrapper") != null
-            ? require(workplace.getWorkplaceRef().getRef(), "workplace ref")
-            : null)
-        : null;
+    if (workplace == null) {
+      return null;
+    }
+
+    if (require(workplace.getWorkplaceRef(), "workplace ref wrapper") == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> workplaceRef = require(workplace.getWorkplaceRef().getRef(), "workplace ref");
+    return isRefValid(workplaceRef) ? workplaceRef : null;
   }
 
   protected VillageHeartComponent getVillageHeartComponent(Ref<EntityStore> ref, Store<EntityStore> store) {

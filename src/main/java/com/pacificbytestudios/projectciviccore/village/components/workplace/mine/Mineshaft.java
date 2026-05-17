@@ -137,8 +137,6 @@ public class Mineshaft {
       return null;
     }
 
-    System.out.println("CREATING A NEW MINESHAFT AT: " + levelAnchorPoint);
-
     Set<UUID> galleriesId = mineshaftLevel.buildGalleries(
         StructureConfig.Mine.MineshaftLevelConf.getMineshaftGalleriesWithPrefabOffset(levelAnchorPoint, rotation));
     mineshaftLevel.setAnchorPoint(levelAnchorPoint);

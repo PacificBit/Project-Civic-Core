@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.components.house;
 
+import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.codec.Codec;
@@ -111,6 +112,10 @@ public class HouseComponent implements Component<ChunkStore> {
 
   public HouseAppartmentRegistry getAppartmentRegistry() {
     return appartmentRegistry;
+  }
+
+  public Set<UUID> getOccupants() {
+    return this.getAppartmentRegistry().getOccupants();
   }
 
   public void setAppartmentRegistry(HouseAppartmentRegistry appartmentRegistry) {

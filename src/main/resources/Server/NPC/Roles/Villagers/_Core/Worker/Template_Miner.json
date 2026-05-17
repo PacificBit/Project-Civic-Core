@@ -55,6 +55,19 @@
       "Instructions": [
         {
           "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
             "Type": "Any",
             "Once": true
           },
@@ -113,6 +126,19 @@
       "Instructions": [
         {
           "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
+        {
+          "Sensor": {
             "Type": "Any",
             "Once": true
           },
@@ -167,6 +193,19 @@
       },
       "$Comment": "If is not work time",
       "Instructions": [
+        {
+          "Sensor": {
+            "Type": "Any"
+          },
+          "Continue": true,
+          "Actions": [
+            {
+              "Type": "EquipItemFromInventory",
+              "ItemToEquip": "NULL"
+            }
+          ],
+          "$Comment": "Empty the hand"
+        },
         {
           "Sensor": {
             "Type": "Any",
@@ -604,6 +643,28 @@
               "Sensor": {
                 "Type": "Any"
               },
+              "$Comment": "If a section is pending finalization, resume Dig so the BEAM path can complete it",
+              "Instructions": [
+                {
+                  "Sensor": {
+                    "Type": "HasTargetBlockInSnapshot",
+                    "TargetBlockIds": [
+                      "Current_Section_Prefab_Anchor"
+                    ]
+                  },
+                  "Actions": [
+                    {
+                      "Type": "State",
+                      "State": "Dig"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
               "Actions": [
                 {
                   "Type": "State",
@@ -984,6 +1045,59 @@
           "Sensor": {
             "Type": "Not",
             "Sensor": {
+              "Type": "HasTargetBlockInSnapshot",
+              "TargetBlockIds": [
+                "Dig_Positions"
+              ]
+            }
+          },
+          "$Comment": "If",
+          "Instructions": [
+            {
+              "Sensor": {
+                "Type": "DroppedItem",
+                "Range": 3
+              },
+              "BodyMotion": {
+                "Type": "Seek",
+                "StopDistance": 1.6,
+                "SlowDownDistance": 2
+              },
+              "Actions": [
+                {
+                  "Type": "PickUpItem",
+                  "Range": 1.6
+                }
+              ]
+            },
+            {
+              "Sensor": {
+                "Type": "Any",
+                "Once": true
+              },
+              "$Comment": "Create world section snapshot",
+              "Actions": [
+                {
+                  "Type": "PlaceMineshaftGalleryPrefab",
+                  "PrefabType": "BEAM",
+                  "SnapshotAnchorGroup": "Current_Section_Prefab_Anchor",
+                  "CommitLastDiggedFromSnapshotGroup": "Current_Section_Prefab_Anchor"
+                },
+                {
+                  "Type": "UnregisterFromMineshaftGallery"
+                },
+                {
+                  "Type": "State",
+                  "State": "WorkCooldown"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Sensor": {
+            "Type": "Not",
+            "Sensor": {
               "Type": "Self",
               "Filters": [
                 {
@@ -1066,68 +1180,15 @@
             "BlockIds": [
               "Dig_Positions"
             ],
-            "StoppingRange": 0.8,
+            "StoppingRange": 1,
             "UseCenterOfBlock": true
           },
           "BodyMotion": {
             "Type": "Seek",
             "SlowDownDistance": 1,
-            "StopDistance": 0.5,
+            "StopDistance": 0.8,
             "RelativeSpeed": 0.7
           }
-        },
-        {
-          "Sensor": {
-            "Type": "Not",
-            "Sensor": {
-              "Type": "HasTargetBlockInSnapshot",
-              "TargetBlockIds": [
-                "Dig_Positions"
-              ]
-            }
-          },
-          "$Comment": "If",
-          "Instructions": [
-            {
-              "Sensor": {
-                "Type": "Any",
-                "Once": true
-              },
-              "$Comment": "Create world section snapshot",
-              "Actions": [
-                {
-                  "Type": "PlaceMineshaftGalleryPrefab",
-                  "PrefabType": "BEAM",
-                  "SnapshotAnchorGroup": "Current_Section_Prefab_Anchor",
-                  "CommitLastDiggedFromSnapshotGroup": "Current_Section_Prefab_Anchor"
-                },
-                {
-                  "Type": "UnregisterFromMineshaftGallery"
-                },
-                {
-                  "Type": "State",
-                  "State": "WorkCooldown"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Sensor": {
-            "Type": "ReachNextTargetInSnapshot",
-            "BlockIds": [
-              "Breakable_Block"
-            ],
-            "StoppingRange": 0.8,
-            "UseCenterOfBlock": true
-          },
-          "HeadMotion": {
-            "Type": "Aim"
-          },
-          "BodyMotion": {
-            "Type": "MatchLook"
-          },
-          "Continue": true
         },
         {
           "Sensor": {
@@ -1138,8 +1199,8 @@
             {
               "Type": "Timeout",
               "Delay": [
-                0.2,
-                0.2
+                0.5,
+                0.5
               ],
               "Action": {
                 "Type": "BreakBlockInSnapshot",

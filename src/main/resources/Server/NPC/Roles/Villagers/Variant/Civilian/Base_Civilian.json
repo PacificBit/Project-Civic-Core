@@ -3,7 +3,7 @@
   "Reference": "Template_Civilian",
   "Parameters": {
     "Appearance": {
-      "Value": "Bear_Grizzly",
+      "Value": "Player",
       "Description": "Model to be used"
     },
     "MaxHealth": {

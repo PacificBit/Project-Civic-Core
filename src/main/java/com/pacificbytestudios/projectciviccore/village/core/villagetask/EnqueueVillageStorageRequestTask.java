@@ -1,8 +1,11 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
 
@@ -74,14 +77,17 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
-    UUID storageToNotify = null;
+    Set<UUID> effectiveTriedStorageIds = this.resolveTriedStorageIds();
+    List<UUID> candidateStorages = new ArrayList<>();
     for (UUID storageWorkplaceId : heart.getVillageStorageWorkplaces()) {
-      if (this.triedStorageIds == null || !this.triedStorageIds.contains(storageWorkplaceId)) {
-        storageToNotify = storageWorkplaceId;
-        break;
+      if (effectiveTriedStorageIds == null || !effectiveTriedStorageIds.contains(storageWorkplaceId)) {
+        candidateStorages.add(storageWorkplaceId);
       }
     }
 
+    UUID storageToNotify = candidateStorages.isEmpty()
+        ? null
+        : candidateStorages.get(ThreadLocalRandom.current().nextInt(candidateStorages.size()));
     if (storageToNotify == null) {
       this.callOnError(NO_STORAGE_FOUND, "Could not get a storage to notify");
       return;
@@ -108,14 +114,24 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
       return;
     }
 
+    this.request.setStorageWorkplaceId(storage.getUuid());
+    this.request.setRegisteredWithStorage(true);
     UUID requestId = storageWorkplace.addRequest(this.request);
 
-    this.callOnSuccess(requestId.toString());
+    this.callOnSuccess(storage.getUuid().toString() + ":" + requestId.toString());
 
     BlockModule.BlockStateInfo blockStateInfo = chunkStore.getComponent(storageRef,
         BlockModule.BlockStateInfo.getComponentType());
     blockStateInfo.markNeedsSaving();
 
+  }
+
+  private Set<UUID> resolveTriedStorageIds() {
+    if (this.triedStorageIds != null) {
+      return this.triedStorageIds;
+    }
+
+    return this.request != null ? this.request.getTriedStorageIds() : null;
   }
 
 }
