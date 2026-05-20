@@ -2,9 +2,11 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -16,6 +18,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -87,7 +90,7 @@ public class TownHallSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (trackedPlacement == null) {
@@ -178,7 +181,7 @@ public class TownHallSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vector3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vector3i prefabAnchor = VectorUtil.clone(workplace.getPrefabAnchor());
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -220,7 +223,7 @@ public class TownHallSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         structureRotation,
         true);
 
@@ -380,7 +383,7 @@ public class TownHallSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        snapshot.getPrefabAnchor().clone(),
+        VectorUtil.clone(snapshot.getPrefabAnchor()),
         snapshot.getRotation(),
         true);
 
@@ -405,7 +408,7 @@ public class TownHallSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (newSnapshot == null) {
@@ -461,7 +464,7 @@ public class TownHallSpawner {
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
         workplaceBlockPosition));
@@ -509,7 +512,7 @@ public class TownHallSpawner {
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
-    Vector3i workplaceBlockPosition = position.clone();
+    Vector3i workplaceBlockPosition = VectorUtil.clone(position);
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
         chunk,
         workplaceBlockPosition);
@@ -600,7 +603,7 @@ public class TownHallSpawner {
 
   private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
     Utils.breakBlockChunkAware(chunk, constructionPos);
-    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(Vector3i.UP));
+    Utils.breakBlockChunkAware(chunk, VectorUtil.clone(constructionPos).add(Vector3iUtil.UP));
   }
 
   private static int getWorkplaceBlockRotationIndex(int level, Rotation rotation) {
@@ -650,7 +653,7 @@ public class TownHallSpawner {
   }
 
   private static Vector3i getContainerPosition(VillageHeartComponent village) {
-    return village.getBlockContext().getPosition().clone();
+    return VectorUtil.clone(village.getBlockContext().getPosition());
   }
 
   private static boolean rollbackFailedSpawn(

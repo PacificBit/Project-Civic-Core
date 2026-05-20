@@ -1,11 +1,13 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
@@ -25,7 +27,7 @@ public class UpgradeBuildingTask extends AVillageTask {
           obj -> obj.structureType)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           obj -> obj.prefabAnchor)
       .add()

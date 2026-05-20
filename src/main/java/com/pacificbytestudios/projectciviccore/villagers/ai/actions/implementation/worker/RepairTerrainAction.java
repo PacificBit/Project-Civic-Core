@@ -3,9 +3,10 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 import java.util.ArrayDeque;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -19,6 +20,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.BlockPlacementHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderRepairTerrainAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
@@ -145,7 +147,7 @@ public class RepairTerrainAction extends VillagerActionBase {
             continue;
           }
 
-          Vector3i neighbourPos = blockPos.clone().add(xOffset, 0, zOffset);
+          Vector3i neighbourPos = VectorUtil.clone(blockPos).add(xOffset, 0, zOffset);
           WorldChunk neighbourChunk = Utils.getWorldChunk(world, neighbourPos);
           if (neighbourChunk == null) {
             continue;

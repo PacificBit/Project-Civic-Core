@@ -4,9 +4,10 @@ import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -21,6 +22,7 @@ import com.hypixel.hytale.server.npc.util.BlockPlacementHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.Mineshaft;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
@@ -115,8 +117,8 @@ public class MinerScan implements IWorkAreaScanner {
         galleryStartPosition,
         currentDigPosition,
         galleryDirection);
-    Vector3i endPosition = sectionStartPosition.clone().addScaled(galleryDirection,
-        Math.max(GALLERY_SECTION_DEPTH - 1, 0));
+    Vector3i endPosition = VectorUtil.clone(sectionStartPosition).add(
+        VectorUtil.clone(galleryDirection).mul(Math.max(GALLERY_SECTION_DEPTH - 1, 0)));
 
     if (System.nanoTime() - start >= MAX_TIME_NS) {
       ProjectCivicCore.LOGGER.atInfo().log(
@@ -187,7 +189,7 @@ public class MinerScan implements IWorkAreaScanner {
       }
 
       Vector3i anchorPoint = level.getAnchorPoint();
-      return anchorPoint == null ? null : anchorPoint.clone();
+      return VectorUtil.clone(anchorPoint);
     }
 
     return null;
@@ -200,7 +202,7 @@ public class MinerScan implements IWorkAreaScanner {
       return true;
     }
 
-    Vector3i villagerPosition = villagerTransform.getPosition().toVector3i();
+    Vector3i villagerPosition = VectorUtil.toVector3i(villagerTransform.getPosition());
     return Math.abs(villagerPosition.y - digPosition.y) > SHIFT_START_VERTICAL_TOLERANCE;
   }
 
@@ -220,13 +222,13 @@ public class MinerScan implements IWorkAreaScanner {
 
     Vector3i position;
     if (this.canResumeCurrentSection(snapshotInProgress, digStartPosition, endPosition, galleryDirection)) {
-      position = snapshotInProgress.getLastVisited().clone();
+      position = VectorUtil.clone(snapshotInProgress.getLastVisited());
     } else {
       this.resetScanProgress(snapshotInProgress);
-      position = digStartPosition.clone();
+      position = VectorUtil.clone(digStartPosition);
       addTask(snapshotInProgress, DIG_POSITIONS, position);
       this.queueSupportRepairs(snapshotInProgress, position, supportOffsets);
-      snapshotInProgress.setLastVisited(position.clone());
+      snapshotInProgress.setLastVisited(VectorUtil.clone(position));
     }
 
     this.storeCurrentSectionMetadata(snapshotInProgress, sectionStartPosition, endPosition, galleryDirection);
@@ -242,7 +244,7 @@ public class MinerScan implements IWorkAreaScanner {
       position.add(galleryDirection);
       addTask(snapshotInProgress, DIG_POSITIONS, position);
       this.queueSupportRepairs(snapshotInProgress, position, supportOffsets);
-      snapshotInProgress.setLastVisited(position.clone());
+      snapshotInProgress.setLastVisited(VectorUtil.clone(position));
     }
 
     return true;
@@ -253,17 +255,17 @@ public class MinerScan implements IWorkAreaScanner {
       Vector3i currentDigPosition,
       Vector3i galleryDirection) {
     if (galleryStartPosition == null || currentDigPosition == null || galleryDirection == null) {
-      return currentDigPosition == null ? null : currentDigPosition.clone();
+      return VectorUtil.clone(currentDigPosition);
     }
 
     int travelledDistance = this.getTravelledDistanceAlongDirection(galleryStartPosition, currentDigPosition,
         galleryDirection);
     if (travelledDistance <= 0) {
-      return galleryStartPosition.clone();
+      return VectorUtil.clone(galleryStartPosition);
     }
 
     int sectionOffset = Math.floorDiv(travelledDistance, GALLERY_SECTION_DEPTH) * GALLERY_SECTION_DEPTH;
-    return galleryStartPosition.clone().addScaled(galleryDirection, sectionOffset);
+    return VectorUtil.clone(galleryStartPosition).add(VectorUtil.clone(galleryDirection).mul(sectionOffset));
   }
 
   private void sanitizeLegacySnapshot(WorkplaceAreaSnapshot snapshotInProgress) {
@@ -329,7 +331,7 @@ public class MinerScan implements IWorkAreaScanner {
   }
 
   private int getHorizontalDistance(Vector3i from, Vector3i to) {
-    Vector3i diffVec = to.clone().subtract(from);
+    Vector3i diffVec = VectorUtil.clone(to).sub(from);
     return diffVec.x != 0 ? Math.abs(diffVec.x) : Math.abs(diffVec.z);
   }
 
@@ -357,7 +359,7 @@ public class MinerScan implements IWorkAreaScanner {
       Vector3i galleryPosition,
       Vector3i[] supportOffsets) {
     for (Vector3i supportOffset : supportOffsets) {
-      Vector3i supportPosition = galleryPosition.clone().add(supportOffset);
+      Vector3i supportPosition = VectorUtil.clone(galleryPosition).add(supportOffset);
       if (this.needsSupportRepair(supportPosition)) {
         addTask(snapshotInProgress, TERRAIN_BLOCK_TO_FILL, supportPosition);
       }
@@ -410,7 +412,7 @@ public class MinerScan implements IWorkAreaScanner {
       Vector3i startPosition,
       Vector3i endPosition,
       Vector3i galleryDirection) {
-    Vector3i prefabAnchor = startPosition.clone().addScaled(galleryDirection, GALLERY_SECTION_DEPTH);
+    Vector3i prefabAnchor = VectorUtil.clone(startPosition).add(VectorUtil.clone(galleryDirection).mul(GALLERY_SECTION_DEPTH));
     this.setSingletonTask(snapshotInProgress, CURRENT_SECTION_PREFAB_ANCHOR, prefabAnchor);
   }
 
@@ -430,7 +432,7 @@ public class MinerScan implements IWorkAreaScanner {
       String taskId,
       Vector3i position) {
     ArrayDeque<Vector3i> singleton = new ArrayDeque<>(1);
-    singleton.add(position.clone());
+    singleton.add(VectorUtil.clone(position));
     snapshotInProgress.getBlockTypePosition().put(taskId, singleton);
   }
 
@@ -441,6 +443,6 @@ public class MinerScan implements IWorkAreaScanner {
     ArrayDeque<Vector3i> found = snapshotInProgress.getBlockTypePosition()
         .computeIfAbsent(taskId, key -> new ArrayDeque<>());
 
-    found.addLast(position.clone());
+    found.addLast(VectorUtil.clone(position));
   }
 }

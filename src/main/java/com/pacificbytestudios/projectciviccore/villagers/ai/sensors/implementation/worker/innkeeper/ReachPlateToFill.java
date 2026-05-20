@@ -1,8 +1,9 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.innkeeper;
 
+import org.joml.Vector3d;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -11,6 +12,7 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReachPlateToFill;
@@ -59,7 +61,7 @@ public class ReachPlateToFill extends VillagerSensorBase {
         this.positionProvider.clear();
         return false;
       }
-      this.target = interactable.getInteractablePosition().toVector3d();
+      this.target = VectorUtil.toVector3d(interactable.getInteractablePosition());
       this.positionProvider.setTarget(this.target);
       return true;
     }
@@ -67,7 +69,7 @@ public class ReachPlateToFill extends VillagerSensorBase {
     TransformComponent transform = store.getComponent(ref,
         TransformComponent.getComponentType());
 
-    if (transform.getPosition().distanceSquaredTo(this.target) <= this.stoppingRange) {
+    if (transform.getPosition().distanceSquared(this.target) <= this.stoppingRange) {
       this.positionProvider.clear();
       return false;
     }

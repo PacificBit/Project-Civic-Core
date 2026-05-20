@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.HarvestingDropType;
@@ -21,6 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -107,7 +109,7 @@ public class FarmerScan implements IWorkAreaScanner {
 
     while (ScanUtils.isInsideWorkArea(currentPoint, startX, endX, startZ, endZ, soilLevel)) {
       if (System.nanoTime() - start >= MAX_TIME_NS) {
-        snapshotInProgress.setLastVisited(currentPoint.clone());
+        snapshotInProgress.setLastVisited(VectorUtil.clone(currentPoint));
         ProjectCivicCore.LOGGER.atInfo().log(
             "[FarmerScan] Scan budget exceeded after " + scannedColumns
                 + " columns, continuing next tick from " + currentPoint);
@@ -130,7 +132,7 @@ public class FarmerScan implements IWorkAreaScanner {
       }
 
       currentPoint = nextPoint;
-      snapshotInProgress.setLastVisited(currentPoint.clone());
+      snapshotInProgress.setLastVisited(VectorUtil.clone(currentPoint));
     }
 
     snapshotInProgress.captureNow(worldTimeResource);
@@ -209,7 +211,7 @@ public class FarmerScan implements IWorkAreaScanner {
     ArrayDeque<Vector3i> found = snapshotInProgress.getBlockTypePosition()
         .computeIfAbsent(taskId, key -> new ArrayDeque<>());
 
-    found.addLast(position.clone());
+    found.addLast(VectorUtil.clone(position));
   }
 
   private WorldChunk getCorrectChunkForBlock(Vector3i currentPoint, WorldChunk chunk) {

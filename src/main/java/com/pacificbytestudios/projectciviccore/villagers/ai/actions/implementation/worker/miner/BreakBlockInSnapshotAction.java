@@ -5,13 +5,15 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemTool;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -27,8 +29,9 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.MinerDropRegistry;
-import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderBreakBlockInSnapshotAction;
@@ -105,7 +108,8 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       }
 
       Vector3i rangeAnchor = this.resolveRangeAnchor(snapshot, target);
-      double distanceFromAnchor = transform.getPosition().distanceSquaredTo(Utils.centerOf(rangeAnchor).toVector3d());
+      double distanceFromAnchor = transform.getPosition().distanceSquared(
+          VectorUtil.toVector3d(Utils.centerOf(rangeAnchor)));
       if (distanceFromAnchor > this.requiredStoppingRangeSquared) {
         return false;
       }
@@ -142,11 +146,11 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     Ref<ChunkStore> chunkRef = chunkStoreObj.getChunkReference(chunkIndex);
 
     VillagerToolAnimationHelper.playHeldToolAnimation(ref, npc, store, "Mine");
-    boolean didBreak = BlockHarvestUtils.performBlockDamage(npc, ref, target, itemStackInHand, tool, null,
+    boolean didBreak = BlockHarvestUtils.performBlockDamage(ref, target, itemStackInHand, tool, null,
         false, 1.0f, 0, chunkRef, store, chunkStoreObj.getStore());
 
     if (didBreak) {
-      this.consumeToolDurability(npc);
+      this.consumeToolDurability(ref, store);
       this.generateDropIfNeeded(ref, store);
       targets.pollFirst();
       if (targets.isEmpty()) {
@@ -157,24 +161,26 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     return didBreak;
   }
 
-  private void consumeToolDurability(NPCEntity npc) {
-    if (npc == null) {
+  private void consumeToolDurability(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    InventoryComponent.Hotbar hotbar = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
+    if (hotbar == null) {
       return;
     }
 
-    byte activeHotbarSlot = npc.getInventory().getActiveHotbarSlot();
-    ItemStack holdingItem = npc.getInventory().getActiveHotbarItem();
+    ItemStack holdingItem = hotbar.getActiveItem();
     if (holdingItem == null) {
       return;
     }
 
-    npc.getInventory().getHotbar().setItemStackForSlot(
-        activeHotbarSlot,
+    hotbar.getInventory().setItemStackForSlot(
+        hotbar.getActiveSlot(),
         holdingItem.withDurability(holdingItem.getDurability() - 1));
 
-    ItemStack updatedItem = npc.getInventory().getActiveHotbarItem();
+    ItemStack updatedItem = hotbar.getActiveItem();
     if (updatedItem != null && updatedItem.isBroken()) {
-      InventoryHelper.removeItemInHand(npc.getInventory(), 1);
+      InventoryHelper.removeItemInHand(ref, store, 1);
     }
   }
 
@@ -219,7 +225,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return;
     }
 
-    gallery.setLastDiggedPosition(nextDigPosition.clone());
+    gallery.setLastDiggedPosition(VectorUtil.clone(nextDigPosition));
   }
 
   private void generateDropIfNeeded(Ref<EntityStore> ref, Store<EntityStore> store) {

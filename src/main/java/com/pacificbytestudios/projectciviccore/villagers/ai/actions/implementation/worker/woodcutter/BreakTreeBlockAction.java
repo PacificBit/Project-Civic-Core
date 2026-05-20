@@ -5,10 +5,11 @@ import java.util.ArrayDeque;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemTool;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
@@ -23,6 +24,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderBreakTreeBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
@@ -90,7 +92,8 @@ public class BreakTreeBlockAction extends VillagerActionBase {
         return false;
       }
 
-      double distanceFromTarget = transform.getPosition().distanceSquaredTo(Utils.centerOf(target).toVector3d());
+      double distanceFromTarget = transform.getPosition().distanceSquared(
+          VectorUtil.toVector3d(Utils.centerOf(target)));
       if (distanceFromTarget > this.requiredStoppingRangeSquared) {
         return false;
       }
@@ -142,11 +145,11 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     Ref<ChunkStore> chunkRef = chunkStoreObj.getChunkReference(chunkIndex);
 
     VillagerToolAnimationHelper.playHeldToolAnimation(ref, npc, store, "Chop");
-    boolean didBreak = BlockHarvestUtils.performBlockDamage(npc, ref, target, itemStackInHand, tool, null,
+    boolean didBreak = BlockHarvestUtils.performBlockDamage(ref, target, itemStackInHand, tool, null,
         false, 1.0f, 0, chunkRef, store, chunkStoreObj.getStore());
 
     if (didBreak) {
-      this.consumeToolDurability(npc);
+      this.consumeToolDurability(ref, store);
       targets.pollFirst();
       if (targets.isEmpty()) {
         snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
@@ -157,24 +160,26 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     return didBreak;
   }
 
-  private void consumeToolDurability(NPCEntity npc) {
-    if (npc == null) {
+  private void consumeToolDurability(
+      Ref<EntityStore> ref,
+      Store<EntityStore> store) {
+    InventoryComponent.Hotbar hotbar = store.getComponent(ref, InventoryComponent.Hotbar.getComponentType());
+    if (hotbar == null) {
       return;
     }
 
-    byte activeHotbarSlot = npc.getInventory().getActiveHotbarSlot();
-    ItemStack holdingItem = npc.getInventory().getActiveHotbarItem();
+    ItemStack holdingItem = hotbar.getActiveItem();
     if (holdingItem == null) {
       return;
     }
 
-    npc.getInventory().getHotbar().setItemStackForSlot(
-        activeHotbarSlot,
+    hotbar.getInventory().setItemStackForSlot(
+        hotbar.getActiveSlot(),
         holdingItem.withDurability(holdingItem.getDurability() - 1));
 
-    ItemStack updatedItem = npc.getInventory().getActiveHotbarItem();
+    ItemStack updatedItem = hotbar.getActiveItem();
     if (updatedItem != null && updatedItem.isBroken()) {
-      InventoryHelper.removeItemInHand(npc.getInventory(), 1);
+      InventoryHelper.removeItemInHand(ref, store, 1);
     }
   }
 }

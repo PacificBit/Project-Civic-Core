@@ -3,8 +3,10 @@ package com.pacificbytestudios.projectciviccore.village.commands.housingcommands
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
@@ -35,7 +37,7 @@ public class Spawn extends CommandBase {
     world.execute(() -> {
       TransformComponent transform = entityStore.getComponent(playerRef, TransformComponent.getComponentType());
 
-      Vector3i playerPos = transform.getPosition().toVector3i();
+      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z));
 
       for (int y = playerPos.y; y > 0; y--) {
@@ -52,7 +54,7 @@ public class Spawn extends CommandBase {
       }
 
       VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
-      taskQueue.registerTask(new SpawnHouseTask(playerPos));
+      // taskQueue.registerTask(new SpawnHouseTask(playerPos));
 
       Utils.safeVillageTaskEnqueue(heartRef, taskQueue);
 

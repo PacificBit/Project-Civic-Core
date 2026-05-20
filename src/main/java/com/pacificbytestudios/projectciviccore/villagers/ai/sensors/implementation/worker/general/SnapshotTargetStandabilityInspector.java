@@ -3,9 +3,11 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Vector3d;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -15,6 +17,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.npc.util.BlockPlacementHelper;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 final class SnapshotTargetStandabilityInspector {
   private static final int MIN_WORLD_Y = 0;
@@ -28,13 +31,14 @@ final class SnapshotTargetStandabilityInspector {
       Vector3i rawTarget,
       Vector3d villagerPosition,
       boolean useCenterOfBlock) {
-    List<CandidateEvaluation> candidates = new ArrayList<>(Vector3i.CARDINAL_DIRECTIONS.length);
+    Vector3i[] cardinalDirections = VectorUtil.cardinalDirections();
+    List<CandidateEvaluation> candidates = new ArrayList<>(cardinalDirections.length);
     Vector3i bestStandableCandidate = null;
     double bestDistanceSquared = Double.MAX_VALUE;
     int bestPriority = Integer.MAX_VALUE;
 
-    for (Vector3i direction : Vector3i.CARDINAL_DIRECTIONS) {
-      Vector3i candidate = rawTarget.clone().add(direction);
+    for (Vector3i direction : cardinalDirections) {
+      Vector3i candidate = VectorUtil.clone(rawTarget).add(direction);
       CandidateEvaluation evaluation = evaluateCandidate(world, candidate, direction, villagerPosition,
           useCenterOfBlock);
       candidates.add(evaluation);
@@ -64,9 +68,9 @@ final class SnapshotTargetStandabilityInspector {
       Vector3d villagerPosition,
       boolean useCenterOfBlock) {
     Vector3d candidatePosition = useCenterOfBlock
-        ? Utils.centerOf(candidate).toVector3d()
-        : candidate.toVector3d();
-    double distanceSquared = villagerPosition.distanceSquaredTo(candidatePosition);
+        ? VectorUtil.toVector3d(Utils.centerOf(candidate))
+        : VectorUtil.toVector3d(candidate);
+    double distanceSquared = villagerPosition.distanceSquared(candidatePosition);
     CandidateRejectionReason rejectionReason = determineRejectionReason(world, candidate);
     return new CandidateEvaluation(
         direction,
@@ -81,8 +85,8 @@ final class SnapshotTargetStandabilityInspector {
       return CandidateRejectionReason.OUT_OF_BOUNDS;
     }
 
-    Vector3i headPosition = feetPosition.clone().add(Vector3i.UP);
-    Vector3i supportPosition = feetPosition.clone().add(Vector3i.DOWN);
+    Vector3i headPosition = VectorUtil.clone(feetPosition).add(Vector3iUtil.UP);
+    Vector3i supportPosition = VectorUtil.clone(feetPosition).add(Vector3iUtil.DOWN);
 
     if (hasFluidAt(world, feetPosition) || hasFluidAt(world, headPosition)) {
       return CandidateRejectionReason.FLUID;
@@ -170,13 +174,13 @@ final class SnapshotTargetStandabilityInspector {
   }
 
   private static int getDirectionPriority(Vector3i direction) {
-    if (direction == Vector3i.NORTH) {
+    if (direction.equals(VectorUtil.NORTH())) {
       return 0;
     }
-    if (direction == Vector3i.EAST) {
+    if (direction.equals(VectorUtil.EAST())) {
       return 1;
     }
-    if (direction == Vector3i.SOUTH) {
+    if (direction.equals(VectorUtil.SOUTH())) {
       return 2;
     }
     return 3;

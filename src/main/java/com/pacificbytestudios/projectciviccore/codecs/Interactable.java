@@ -3,21 +3,23 @@ package com.pacificbytestudios.projectciviccore.codecs;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 
 public class Interactable {
   public static final BuilderCodec<Interactable> CODEC = BuilderCodec
       .builder(Interactable.class, Interactable::new)
 
-      .append(new KeyedCodec<>("InteractablePosition", Vector3i.CODEC),
+      .append(new KeyedCodec<>("InteractablePosition", Vector3iUtil.CODEC),
           (obj, value) -> obj.interactablePosition = value,
           obj -> obj.interactablePosition)
       .add()
 
-      .append(new KeyedCodec<>("DependsOn", Vector3i.CODEC),
+      .append(new KeyedCodec<>("DependsOn", Vector3iUtil.CODEC),
           (obj, value) -> obj.dependsOn = value,
           obj -> obj.dependsOn)
       .add()

@@ -5,13 +5,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
@@ -37,7 +40,7 @@ public class Mineshaft {
       .append(new KeyedCodec<>(
           "GalleryOffsets",
           new Vector3iMapCodec<Vector3i, HashMap<Vector3i, Vector3i>>(
-              Vector3i.CODEC,
+              Vector3iUtil.CODEC,
               HashMap::new,
               false),
           false),
@@ -45,7 +48,7 @@ public class Mineshaft {
           obj -> obj.galleryOffsets)
       .add()
 
-      .append(new KeyedCodec<>("AnchorPoint", Vector3i.CODEC),
+      .append(new KeyedCodec<>("AnchorPoint", Vector3iUtil.CODEC),
           (obj, value) -> obj.anchorPoint = value,
           obj -> obj.anchorPoint)
       .add()
@@ -130,8 +133,8 @@ public class Mineshaft {
   public MineshaftLevel createNewMineshaftLevel() {
     MineshaftLevel mineshaftLevel = new MineshaftLevel();
     Vector3i size3i = StructureConfig.Mine.MineshaftLevelConf.SIZE_3I;
-    Vector3i levelAnchorPoint = this.anchorPoint.clone()
-        .subtract(new Vector3i(0, size3i.y, 0).scale(++this.latestLevel));
+    Vector3i levelAnchorPoint = VectorUtil.clone(this.anchorPoint)
+        .sub(new Vector3i(0, size3i.y, 0).mul(++this.latestLevel));
 
     if (levelAnchorPoint.y < 4) {
       return null;
@@ -183,10 +186,10 @@ public class Mineshaft {
         continue;
       }
 
-      component.galleryOffsets.put(key.clone(), value.clone());
+      component.galleryOffsets.put(VectorUtil.clone(key), VectorUtil.clone(value));
     }
 
-    component.anchorPoint = this.anchorPoint == null ? null : this.anchorPoint.clone();
+    component.anchorPoint = VectorUtil.clone(this.anchorPoint);
     component.rotation = this.rotation;
     component.latestLevel = this.latestLevel;
 

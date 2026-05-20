@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -15,8 +17,9 @@ import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.store.CodecKey;
 import com.hypixel.hytale.codec.store.CodecStore;
 import com.hypixel.hytale.codec.store.StoredCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageRoadState;
 
 import it.unimi.dsi.fastutil.Pair;
@@ -101,7 +104,7 @@ public class RoadsGraph {
             (obj) -> obj.state)
         .add()
 
-        .append(new KeyedCodec<>("RoadSegments", new ArrayCodec<>(Vector3i.CODEC, Vector3i[]::new)),
+        .append(new KeyedCodec<>("RoadSegments", new ArrayCodec<>(Vector3iUtil.CODEC, Vector3i[]::new)),
             (obj, value) -> obj.roadSegments = value == null ? new ArrayList<>() : Arrays.asList(value),
             (obj) -> obj.roadSegments.toArray(Vector3i[]::new))
         .add()
@@ -111,12 +114,12 @@ public class RoadsGraph {
             (obj) -> obj.prefabOrientation)
         .add()
 
-        .append(new KeyedCodec<>("OrientationVec", Vector3i.CODEC),
+        .append(new KeyedCodec<>("OrientationVec", Vector3iUtil.CODEC),
             (obj, value) -> obj.roadDirectionVec = value,
             (obj) -> obj.roadDirectionVec)
         .add()
 
-        .append(new KeyedCodec<>("BranchOriginKey", Vector3i.CODEC),
+        .append(new KeyedCodec<>("BranchOriginKey", Vector3iUtil.CODEC),
             (obj, value) -> obj.branchOriginKey = value,
             (obj) -> obj.branchOriginKey)
         .add()
@@ -285,19 +288,19 @@ public class RoadsGraph {
       } else {
         node.lateralVacancySegments = new HashMap<>();
         this.lateralVacancySegments.forEach((position, adjacentSegments) -> node.lateralVacancySegments.put(
-            position == null ? null : position.clone(),
+            VectorUtil.clone(position),
             adjacentSegments == null ? null : adjacentSegments.clone()));
       }
       node.state = this.state;
 
       node.roadSegments = new ArrayList<>();
       this.roadSegments.stream()
-          .map(Vector3i::clone)
+          .map(VectorUtil::clone)
           .forEach(node.roadSegments::add);
 
       node.prefabOrientation = this.prefabOrientation;
-      node.branchOriginKey = this.branchOriginKey == null ? null : this.branchOriginKey.clone();
-      node.roadDirectionVec = this.roadDirectionVec == null ? null : this.roadDirectionVec.clone();
+      node.branchOriginKey = VectorUtil.clone(this.branchOriginKey);
+      node.roadDirectionVec = VectorUtil.clone(this.roadDirectionVec);
       node.roadId = this.roadId;
       return node;
     }

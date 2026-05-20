@@ -2,7 +2,9 @@ package com.pacificbytestudios.projectciviccore.village.commands.startercommands
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
+
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
@@ -31,7 +33,7 @@ public class Spawn extends CommandBase {
 
       Vector3i villageAnchor = StarterVillageSupport.resolveVillageAnchor(
           world,
-          transform.getPosition().toVector3i());
+          VectorUtil.toVector3i(transform.getPosition()));
 
       if (!StarterVillageSupport.spawnStarterVillage(context, world, villageAnchor)) {
         return;

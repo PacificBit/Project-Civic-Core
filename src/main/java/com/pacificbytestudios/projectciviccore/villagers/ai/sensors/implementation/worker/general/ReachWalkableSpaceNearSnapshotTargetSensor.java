@@ -3,10 +3,11 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayDeque;
 import java.util.Map;
 
+import org.joml.Vector3d;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
@@ -15,6 +16,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWalkableSpaceNearSnapshotTargetSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -85,10 +87,10 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
     }
 
     Vector3d targetPosition = this.useCenterOfBlock
-        ? Utils.centerOf(walkableTarget).toVector3d()
-        : walkableTarget.toVector3d();
+        ? VectorUtil.toVector3d(Utils.centerOf(walkableTarget))
+        : VectorUtil.toVector3d(walkableTarget);
 
-    double distanceFromTarget = transform.getPosition().distanceSquaredTo(targetPosition);
+    double distanceFromTarget = transform.getPosition().distanceSquared(targetPosition);
     if (distanceFromTarget <= this.stoppingRangeSquared) {
       this.positionProvider.clear();
       return false;

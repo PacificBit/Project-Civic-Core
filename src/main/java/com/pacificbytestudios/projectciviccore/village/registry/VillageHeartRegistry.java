@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;

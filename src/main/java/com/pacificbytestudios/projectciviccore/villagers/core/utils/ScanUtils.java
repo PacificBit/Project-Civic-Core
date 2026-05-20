@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 
 public class ScanUtils {

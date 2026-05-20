@@ -1,16 +1,18 @@
 package com.pacificbytestudios.projectciviccore.prefab;
 
 import org.bson.BsonDocument;
+import org.joml.Vector3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
 
@@ -22,7 +24,7 @@ public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
           TrackedPrefabPlacementComponent::getPrefabPath)
       .add()
 
-      .append(new KeyedCodec<>("Origin", Vector3i.CODEC),
+      .append(new KeyedCodec<>("Origin", Vector3iUtil.CODEC),
           (obj, value) -> obj.origin = value,
           obj -> obj.origin)
       .add()
@@ -40,7 +42,7 @@ public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
       .build();
 
   private String prefabPath;
-  private Vector3i origin = Vector3i.ZERO;
+  private Vector3i origin = VectorUtil.ZERO();
   private Rotation yaw = Rotation.None;
   private BsonDocument restoreSnapshot = new BsonDocument();
 
@@ -53,7 +55,7 @@ public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
       Rotation yaw,
       BsonDocument restoreSnapshot) {
     this.prefabPath = prefabPath;
-    this.origin = origin == null ? Vector3i.ZERO : origin.clone();
+    this.origin = origin == null ? VectorUtil.ZERO() : VectorUtil.clone(origin);
     this.yaw = yaw == null ? Rotation.None : yaw;
     this.restoreSnapshot = restoreSnapshot == null ? new BsonDocument() : restoreSnapshot.clone();
   }
@@ -63,7 +65,7 @@ public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
   }
 
   public Vector3i getOrigin() {
-    return origin == null ? Vector3i.ZERO : origin.clone();
+    return origin == null ? VectorUtil.ZERO() : VectorUtil.clone(origin);
   }
 
   public Rotation getYaw() {

@@ -3,9 +3,11 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayDeque;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -18,6 +20,7 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
@@ -84,10 +87,10 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
     Vector3i left = Utils.rotateNormalizedVector(cardinalDirection, Rotation.Ninety);
     Vector3i right = Utils.rotateNormalizedVector(cardinalDirection, Rotation.TwoSeventy);
 
-    Vector3i position = nextPosition.clone()
+    Vector3i position = VectorUtil.clone(nextPosition)
         .add(cardinalDirection)
         .add(left)
-        .add(Vector3i.UP);
+        .add(Vector3iUtil.UP);
 
     Vector3i size3i = StructureConfig.Mine.MineshaftGalleryConf.SIZE_3I;
     World world = this.getWorld(store);
@@ -100,14 +103,14 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
           if (blockType != null && blockType.getMaterial() == BlockMaterial.Solid) {
             BlockGathering gathering = blockType.getGathering();
             if (gathering != null) {
-              breakableBlocks.addLast(position.clone());
+            breakableBlocks.addLast(VectorUtil.clone(position));
             }
           }
         }
 
         position.add(right);
       }
-      position.subtract(right.clone().scale(size3i.x)).add(Vector3i.UP);
+      position.sub(VectorUtil.clone(right).mul(size3i.x)).add(Vector3iUtil.UP);
     }
 
     return !breakableBlocks.isEmpty();

@@ -8,13 +8,15 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
@@ -32,8 +34,9 @@ import com.pacificbytestudios.projectciviccore.registry.registry.SaplingRecipeRe
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BufferedConstructionStorageComponent;
+import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
@@ -108,7 +111,7 @@ public class StorageSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (trackedPlacement == null) {
@@ -199,7 +202,7 @@ public class StorageSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vector3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vector3i prefabAnchor = VectorUtil.clone(workplace.getPrefabAnchor());
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -261,7 +264,7 @@ public class StorageSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         structureRotation,
         true);
 
@@ -447,7 +450,7 @@ public class StorageSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        snapshot.getPrefabAnchor().clone(),
+        VectorUtil.clone(snapshot.getPrefabAnchor()),
         snapshot.getRotation(),
         true);
 
@@ -472,7 +475,7 @@ public class StorageSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (newSnapshot == null) {
@@ -514,7 +517,7 @@ public class StorageSpawner {
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.STORAGE_KEEPER });
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
     chunkStore.putComponent(
@@ -830,7 +833,7 @@ public class StorageSpawner {
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
-    Vector3i workplaceBlockPosition = position.clone();
+    Vector3i workplaceBlockPosition = VectorUtil.clone(position);
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
         chunk,
         workplaceBlockPosition);
@@ -932,7 +935,7 @@ public class StorageSpawner {
 
   private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
     Utils.breakBlockChunkAware(chunk, constructionPos);
-    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(Vector3i.UP));
+    Utils.breakBlockChunkAware(chunk, VectorUtil.clone(constructionPos).add(Vector3iUtil.UP));
   }
 
   private static int getWorkplaceBlockRotationIndex(int level, Rotation rotation) {

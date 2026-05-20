@@ -2,12 +2,14 @@ package com.pacificbytestudios.projectciviccore.village.components.workplace.gen
 
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
@@ -21,12 +23,12 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
           (obj) -> obj.uuid)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3i.CODEC),
+      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
           (obj, value) -> obj.position = value,
           (obj) -> obj.position)
       .add()
 
-      .append(new KeyedCodec<>("AccessPosition", Vector3i.CODEC),
+      .append(new KeyedCodec<>("AccessPosition", Vector3iUtil.CODEC),
           (obj, value) -> obj.accessPosition = value,
           (obj) -> obj.accessPosition)
       .add()

@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
+import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -221,7 +223,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
 
   private List<ItemContainer> resolveTargetContainers(
       World world,
-      Iterable<com.hypixel.hytale.math.vector.Vector3i> targetPositions) {
+      Iterable<Vector3i> targetPositions) {
     List<ItemContainer> containers = new ArrayList<>();
     HashSet<String> resolvedContainerKeys = new HashSet<>();
 
@@ -229,7 +231,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
       return containers;
     }
 
-    for (com.hypixel.hytale.math.vector.Vector3i targetPosition : targetPositions) {
+    for (Vector3i targetPosition : targetPositions) {
       ContainerResolver.ResolvedContainer resolved = ContainerResolver.resolveContainerAt(world, targetPosition);
       if (resolved == null || resolved.containerBlock() == null || resolved.basePosition() == null) {
         continue;

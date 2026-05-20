@@ -1,15 +1,17 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.inventory;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class ContainerResolver {
 
@@ -92,10 +94,10 @@ public class ContainerResolver {
     }
 
     Vector3i[] adjacentPositions = new Vector3i[] {
-        pos.clone().add(Vector3i.NORTH),
-        pos.clone().add(Vector3i.SOUTH),
-        pos.clone().add(Vector3i.EAST),
-        pos.clone().add(Vector3i.WEST)
+        VectorUtil.clone(pos).add(VectorUtil.NORTH()),
+        VectorUtil.clone(pos).add(VectorUtil.SOUTH()),
+        VectorUtil.clone(pos).add(VectorUtil.EAST()),
+        VectorUtil.clone(pos).add(VectorUtil.WEST())
     };
 
     for (Vector3i adjacentPosition : adjacentPositions) {

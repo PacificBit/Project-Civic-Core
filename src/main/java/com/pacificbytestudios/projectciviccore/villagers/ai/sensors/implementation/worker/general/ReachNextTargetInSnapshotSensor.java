@@ -3,10 +3,11 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayDeque;
 import java.util.Map;
 
+import org.joml.Vector3d;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
@@ -15,6 +16,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -88,8 +90,8 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
       }
 
       this.target = this.useCenterOfBlock
-          ? Utils.centerOf(nextTarget).toVector3d()
-          : nextTarget.toVector3d();
+          ? VectorUtil.toVector3d(Utils.centerOf(nextTarget))
+          : VectorUtil.toVector3d(nextTarget);
 
       this.positionProvider.setTarget(this.target);
       return true;
@@ -101,7 +103,7 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
       return false;
     }
 
-    double distanceFromBlock = transform.getPosition().distanceSquaredTo(this.target);
+    double distanceFromBlock = transform.getPosition().distanceSquared(this.target);
 
     if (distanceFromBlock <= this.stoppingRange) {
       this.positionProvider.clear();
@@ -113,14 +115,14 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
     // TODO: find a solution for when they get stuck
     // Vector3d movementTarget = this.target;
     // if (role.getActiveMotionController().isObstructed()) {
-    // Vector3d direction = this.target.clone().subtract(transform.getPosition());
+    // Vector3d direction = new Vector3d(this.target).sub(transform.getPosition());
     // direction.y = 0.0;
     //
     // if (!direction.closeToZero(0.001)) {
     // Vector3d sideways = new Vector3d(direction.x, 0.0, -direction.z)
     // .normalize()
-    // .scale(NUDGE_DISTANCE);
-    // movementTarget = transform.getPosition().clone().add(sideways);
+    // .mul(NUDGE_DISTANCE);
+    // movementTarget = new Vector3d(transform.getPosition()).add(sideways);
     // }
     // }
 

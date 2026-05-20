@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class MineshaftGallery {
   public static final short MAX_GLALLERY_SECTION_COUNT = 5;
@@ -22,17 +25,17 @@ public class MineshaftGallery {
           obj -> obj.getGalleryId())
       .add()
 
-      .append(new KeyedCodec<>("CardinalDirection", Vector3i.CODEC, false),
+      .append(new KeyedCodec<>("CardinalDirection", Vector3iUtil.CODEC, false),
           (obj, value) -> obj.cardinalDirection = value,
           obj -> obj.cardinalDirection)
       .add()
 
-      .append(new KeyedCodec<>("StartPosition", Vector3i.CODEC),
+      .append(new KeyedCodec<>("StartPosition", Vector3iUtil.CODEC),
           (obj, value) -> obj.startPosition = value,
           obj -> obj.startPosition)
       .add()
 
-      .append(new KeyedCodec<>("LastDiggedPosition", Vector3i.CODEC, false),
+      .append(new KeyedCodec<>("LastDiggedPosition", Vector3iUtil.CODEC, false),
           (obj, value) -> obj.lastDiggedPosition = value,
           obj -> obj.lastDiggedPosition)
       .add()
@@ -67,9 +70,9 @@ public class MineshaftGallery {
 
   public MineshaftGallery(Vector3i cardinalDirection, Vector3i startPosition) {
     this();
-    this.startPosition = startPosition == null ? null : startPosition.clone();
-    this.lastDiggedPosition = startPosition == null ? null : startPosition.clone();
-    this.cardinalDirection = cardinalDirection == null ? null : cardinalDirection.clone();
+    this.startPosition = VectorUtil.clone(startPosition);
+    this.lastDiggedPosition = VectorUtil.clone(startPosition);
+    this.cardinalDirection = VectorUtil.clone(cardinalDirection);
   }
 
   public UUID getGalleryId() {
@@ -101,7 +104,7 @@ public class MineshaftGallery {
 
   public Vector3i getLastDiggedPosition() {
     if (this.lastDiggedPosition == null) {
-      this.lastDiggedPosition = this.startPosition.clone();
+      this.lastDiggedPosition = VectorUtil.clone(this.startPosition);
     }
     return this.lastDiggedPosition;
   }
@@ -171,9 +174,9 @@ public class MineshaftGallery {
   public MineshaftGallery clone() {
     MineshaftGallery component = new MineshaftGallery();
     component.galleryId = this.getGalleryId();
-    component.cardinalDirection = this.cardinalDirection == null ? null : this.cardinalDirection.clone();
-    component.startPosition = this.startPosition == null ? null : this.startPosition.clone();
-    component.lastDiggedPosition = this.lastDiggedPosition == null ? null : this.lastDiggedPosition.clone();
+    component.cardinalDirection = VectorUtil.clone(this.cardinalDirection);
+    component.startPosition = VectorUtil.clone(this.startPosition);
+    component.lastDiggedPosition = VectorUtil.clone(this.lastDiggedPosition);
 
     component.restoreSnapshot = new ArrayList<>();
     for (TrackedPrefabPlacementComponent trackedPrefab : this.restoreSnapshot) {

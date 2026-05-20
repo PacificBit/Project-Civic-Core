@@ -1,11 +1,13 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -20,7 +22,7 @@ public class EntityRef {
           (obj) -> obj.worldName)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3i.CODEC),
+      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
           (obj, value) -> obj.position = value,
           (obj) -> obj.position)
       .add()

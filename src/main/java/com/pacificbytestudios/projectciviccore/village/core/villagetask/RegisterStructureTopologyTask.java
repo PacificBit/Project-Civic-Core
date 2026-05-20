@@ -2,13 +2,15 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.UUID;
 
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -34,7 +36,7 @@ public class RegisterStructureTopologyTask extends AVillageTask {
           obj -> obj.structureType)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           obj -> obj.prefabAnchor)
       .add()

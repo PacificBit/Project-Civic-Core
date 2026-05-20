@@ -2,7 +2,9 @@ package com.pacificbytestudios.projectciviccore.village.commands.roadsubcommands
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector3i;
+
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
@@ -40,7 +42,7 @@ public class Despawn extends CommandBase {
         return;
       }
 
-      Vector3i playerPos = transform.getPosition().toVector3i();
+      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z));
       Utils.BlockContext roadAnchor = resolveTrackedRoadAnchor(chunk, playerPos);
       if (roadAnchor == null) {
@@ -61,7 +63,7 @@ public class Despawn extends CommandBase {
   private static Utils.BlockContext resolveTrackedRoadAnchor(WorldChunk chunk, Vector3i position) {
     Pair<WorldChunk, Ref<ChunkStore>> direct = Utils.getBlockComponentEntityChunkAware(chunk, position);
     if (hasTrackedRoadMetadata(direct)) {
-      return new Utils.BlockContext(direct.getFirst(), position.clone());
+      return new Utils.BlockContext(direct.getFirst(), VectorUtil.clone(position));
     }
 
     for (int verticalOffset : buildVerticalSearchOffsets()) {
@@ -72,7 +74,7 @@ public class Despawn extends CommandBase {
               continue;
             }
 
-            Vector3i candidatePosition = position.clone().add(x, verticalOffset, z);
+            Vector3i candidatePosition = VectorUtil.clone(position).add(x, verticalOffset, z);
             Pair<WorldChunk, Ref<ChunkStore>> candidate = Utils.getBlockComponentEntityChunkAware(
                 chunk,
                 candidatePosition);

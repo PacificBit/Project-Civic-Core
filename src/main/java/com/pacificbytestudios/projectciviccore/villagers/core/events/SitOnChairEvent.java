@@ -3,10 +3,11 @@ package com.pacificbytestudios.projectciviccore.villagers.core.events;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.builtin.mounts.BlockMountAPI.BlockMountResult;
 import com.hypixel.hytale.component.system.EcsEvent;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 
 public final class SitOnChairEvent extends EcsEvent {

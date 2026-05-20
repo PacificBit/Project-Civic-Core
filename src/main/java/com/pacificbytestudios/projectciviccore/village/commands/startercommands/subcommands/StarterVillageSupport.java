@@ -10,8 +10,11 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -58,7 +61,7 @@ final class StarterVillageSupport {
 
   static Vector3i resolveVillageAnchor(World world, Vector3i origin) {
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(origin.x, origin.z));
-    Vector3i villageAnchor = origin.clone();
+    Vector3i villageAnchor = VectorUtil.clone(origin);
 
     for (int y = origin.y; y > 0; y--) {
       if (chunk.getBlockType(villageAnchor).getId().equals("Empty")) {
@@ -77,10 +80,10 @@ final class StarterVillageSupport {
 
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(villageAnchor.x, villageAnchor.z));
 
-    if (!TownHeartSpawner.spawn(chunk, villageAnchor)) {
-      context.sendMessage(Message.raw("Could not spawn starter village."));
-      return false;
-    }
+    // if (!TownHeartSpawner.spawn(chunk, villageAnchor)) {
+    // context.sendMessage(Message.raw("Could not spawn starter village."));
+    // return false;
+    // }
 
     Ref<ChunkStore> heartRef = chunk.getBlockComponentEntity(
         villageAnchor.x,
@@ -103,15 +106,17 @@ final class StarterVillageSupport {
 
     VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
 
-    for (Map.Entry<StructureType, Vector3i> entry : STARTER_WORKPLACE_OFFSETS.entrySet()) {
-      taskQueue.registerTask(new SpawnWorkplaceTask(
-          entry.getKey(),
-          villageAnchor.clone().add(entry.getValue())));
-    }
-
-    for (Vector3i houseOffset : STARTER_HOUSE_OFFSETS) {
-      taskQueue.registerTask(new SpawnHouseTask(villageAnchor.clone().add(houseOffset)));
-    }
+    // for (Map.Entry<StructureType, Vector3i> entry :
+    // STARTER_WORKPLACE_OFFSETS.entrySet()) {
+    // taskQueue.registerTask(new SpawnWorkplaceTask(
+    // entry.getKey(),
+    // VectorUtil.clone(villageAnchor).add(entry.getValue())));
+    // }
+    //
+    // for (Vector3i houseOffset : STARTER_HOUSE_OFFSETS) {
+    // taskQueue.registerTask(new
+    // SpawnHouseTask(VectorUtil.clone(villageAnchor).add(houseOffset)));
+    // }
 
     Utils.safeVillageTaskEnqueue(heartRef, taskQueue);
     return true;
@@ -130,7 +135,7 @@ final class StarterVillageSupport {
       return null;
     }
 
-    Vector3i playerPos = transform.getPosition().toVector3i();
+    Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
     EntityRef heartWrapper = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
 
     if (heartWrapper == null) {
@@ -183,7 +188,7 @@ final class StarterVillageSupport {
     Rotation heartRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawnResult = trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()
         ? PrefabManager.restoreTrackedPrefab(world, trackedPlacement)
-        : TownHeartSpawner.despawn(chunk, heartPosition.clone().add(Vector3i.DOWN), heartRotation);
+        : TownHeartSpawner.despawn(chunk, VectorUtil.clone(heartPosition).add(Vector3iUtil.DOWN), heartRotation);
 
     if (!despawnResult) {
       context.sendMessage(Message.raw("Could not despawn village heart."));

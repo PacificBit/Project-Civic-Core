@@ -6,11 +6,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class MineshaftLevel {
   public static final BuilderCodec<MineshaftLevel> CODEC = BuilderCodec
@@ -32,7 +35,7 @@ public class MineshaftLevel {
           (obj) -> obj.trackedPrefab)
       .add()
 
-      .append(new KeyedCodec<>("AnchorPoint", Vector3i.CODEC),
+      .append(new KeyedCodec<>("AnchorPoint", Vector3iUtil.CODEC),
           (obj, value) -> obj.anchorPoint = value,
           (obj) -> obj.anchorPoint)
       .add()
@@ -109,7 +112,7 @@ public class MineshaftLevel {
     }
 
     component.trackedPrefab = this.trackedPrefab == null ? null : this.trackedPrefab.clone();
-    component.anchorPoint = this.anchorPoint == null ? null : this.anchorPoint.clone();
+    component.anchorPoint = VectorUtil.clone(this.anchorPoint);
 
     return component;
   }
