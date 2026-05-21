@@ -6,11 +6,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.builtin.adventure.farming.states.FarmingBlock;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -19,6 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -104,7 +106,7 @@ public class WoodCutterScan implements IWorkAreaScanner {
             aboveTerrainY)) {
 
       if (System.nanoTime() - start >= MAX_TIME_NS) {
-        snapshotInProgress.setLastVisited(currentPoint.clone());
+        snapshotInProgress.setLastVisited(VectorUtil.clone(currentPoint));
         ProjectCivicCore.LOGGER.atInfo().log(
             "[WoodCutterScan] Scan budget exceeded after " + scannedColumns
                 + " columns, continuing next tick from " + currentPoint);
@@ -129,7 +131,7 @@ public class WoodCutterScan implements IWorkAreaScanner {
       }
 
       currentPoint = nextPoint;
-      snapshotInProgress.setLastVisited(currentPoint.clone());
+      snapshotInProgress.setLastVisited(VectorUtil.clone(currentPoint));
     }
 
     snapshotInProgress.captureNow(worldTimeResource);
@@ -238,12 +240,12 @@ public class WoodCutterScan implements IWorkAreaScanner {
       int endZ,
       int soilLevel) {
 
-    Vector3i nextPoint = currentPoint.clone().add(SCAN_STEP, 0, 0);
+    Vector3i nextPoint = VectorUtil.clone(currentPoint).add(SCAN_STEP, 0, 0);
     if (nextPoint.x <= endX) {
       return nextPoint;
     }
 
-    nextPoint.assign(startX, soilLevel, currentPoint.z + SCAN_STEP);
+    nextPoint.set(startX, soilLevel, currentPoint.z + SCAN_STEP);
     if (nextPoint.z <= endZ) {
       return nextPoint;
     }
@@ -289,6 +291,6 @@ public class WoodCutterScan implements IWorkAreaScanner {
     ArrayDeque<Vector3i> found = snapshotInProgress.getBlockTypePosition()
         .computeIfAbsent(taskId, key -> new ArrayDeque<>());
 
-    found.addLast(position.clone());
+    found.addLast(VectorUtil.clone(position));
   }
 }

@@ -3,11 +3,12 @@ package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.universe.world.World;

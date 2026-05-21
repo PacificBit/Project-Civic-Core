@@ -1,10 +1,13 @@
 package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -37,7 +40,7 @@ public class Spawn extends CommandBase {
         return;
       }
 
-      Vector3i playerPos = transform.getPosition().toVector3i();
+      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
       Rotation placementRotation = StructurePlacementUtils.getPlayerPlacementRotation(entityStore, playerRef);
       Vector3i villageAnchor = resolveVillageAnchor(world, playerPos);
 

@@ -5,9 +5,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -18,6 +19,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
@@ -128,7 +130,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
     }
 
     if (committedDigPosition != null) {
-      mineshaftGallery.setLastDiggedPosition(committedDigPosition.clone());
+      mineshaftGallery.setLastDiggedPosition(VectorUtil.clone(committedDigPosition));
       if (this.prefabType.equals(PrefabType.BEAM)) {
         mineshaftGallery.checkIfGalleryIsCompleted();
       }
@@ -178,13 +180,13 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       if (digPositions != null && !digPositions.isEmpty()) {
         Vector3i nextDigPosition = digPositions.peekFirst();
         if (nextDigPosition != null) {
-          return nextDigPosition.clone();
+          return VectorUtil.clone(nextDigPosition);
         }
       }
     }
 
     Vector3i lastDiggedPosition = mineshaftGallery == null ? null : mineshaftGallery.getLastDiggedPosition();
-    return lastDiggedPosition == null ? null : lastDiggedPosition.clone();
+    return lastDiggedPosition == null ? null : VectorUtil.clone(lastDiggedPosition);
   }
 
   private Vector3i resolveAlignedSectionAnchor(
@@ -194,7 +196,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       int depth) {
     Vector3i sectionStart = this.resolveCurrentSectionStart(mineshaftGallery, referenceDigPosition, galleryDirection,
         depth);
-    return sectionStart == null ? null : sectionStart.addScaled(galleryDirection, depth);
+    return sectionStart == null ? null : VectorUtil.clone(sectionStart).add(VectorUtil.clone(galleryDirection).mul(depth));
   }
 
   private Vector3i resolveCurrentSectionStart(
@@ -214,11 +216,11 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
     int travelledDistance = this.getTravelledDistanceAlongDirection(galleryStartPosition, referenceDigPosition,
         galleryDirection);
     if (travelledDistance <= 0) {
-      return galleryStartPosition.clone();
+      return VectorUtil.clone(galleryStartPosition);
     }
 
     int sectionOffset = Math.floorDiv(travelledDistance, depth) * depth;
-    return galleryStartPosition.clone().addScaled(galleryDirection, sectionOffset);
+    return VectorUtil.clone(galleryStartPosition).add(VectorUtil.clone(galleryDirection).mul(sectionOffset));
   }
 
   private int getTravelledDistanceAlongDirection(
@@ -252,7 +254,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
     }
 
     Vector3i position = positions.peekFirst();
-    return position == null ? null : position.clone();
+    return position == null ? null : VectorUtil.clone(position);
   }
 
   private void clearSnapshotGroup(WorkplaceAreaSnapshot snapshot, String groupName) {

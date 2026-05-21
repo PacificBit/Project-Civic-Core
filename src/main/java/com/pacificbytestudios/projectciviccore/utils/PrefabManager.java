@@ -3,12 +3,12 @@ package com.pacificbytestudios.projectciviccore.utils;
 import java.nio.file.Path;
 
 import org.bson.BsonDocument;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.Axis;
 import com.hypixel.hytale.math.util.FastRandom;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.console.ConsoleSender;
@@ -120,14 +120,10 @@ public class PrefabManager {
       return null;
     }
 
-    try {
-      int width = prefabBuffer.getMaxX() - prefabBuffer.getMinX() + 1;
-      int height = prefabBuffer.getMaxY() - prefabBuffer.getMinY() + 1;
-      int depth = prefabBuffer.getMaxZ() - prefabBuffer.getMinZ() + 1;
-      return new Vector3i(width, height, depth);
-    } finally {
-      prefabBuffer.release();
-    }
+    int width = prefabBuffer.getMaxX() - prefabBuffer.getMinX() + 1;
+    int height = prefabBuffer.getMaxY() - prefabBuffer.getMinY() + 1;
+    int depth = prefabBuffer.getMaxZ() - prefabBuffer.getMinZ() + 1;
+    return new Vector3i(width, height, depth);
   }
 
   public static boolean restoreTrackedPrefab(
@@ -156,12 +152,8 @@ public class PrefabManager {
     }
 
     IPrefabBuffer prefab = PrefabBufferUtil.getCached(prefabPath);
-    try {
-      PrefabUtil.remove(prefab, world, target, yaw, force, new FastRandom(), 0, 1.0);
-      return true;
-    } finally {
-      prefab.release();
-    }
+    PrefabUtil.remove(prefab, world, target, yaw, force, new FastRandom(), 0, 1.0);
+    return true;
   }
 
   private static BlockSelection loadPrefabSelection(String prefabRelativePath) {

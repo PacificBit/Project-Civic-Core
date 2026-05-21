@@ -4,9 +4,10 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -18,6 +19,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -92,7 +94,7 @@ public class MineSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (trackedPlacement == null) {
@@ -182,7 +184,7 @@ public class MineSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vector3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vector3i prefabAnchor = VectorUtil.clone(workplace.getPrefabAnchor());
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -224,7 +226,7 @@ public class MineSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         structureRotation,
         true);
 
@@ -384,7 +386,7 @@ public class MineSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        snapshot.getPrefabAnchor().clone(),
+        VectorUtil.clone(snapshot.getPrefabAnchor()),
         snapshot.getRotation(),
         true);
 
@@ -409,7 +411,7 @@ public class MineSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (newSnapshot == null) {
@@ -452,7 +454,7 @@ public class MineSpawner {
 
     Mineshaft mineshaft = new Mineshaft(
         StructureConfig.Mine.getMineshaftGalleriesOffset(),
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation);
     mineshaft.createNewMineshaftLevel();
     mineComponent.setMineshaft(mineshaft);
@@ -471,7 +473,7 @@ public class MineSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         snapshotToUse);
 
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
 
     int containerRotation = getContainerRotationIndex(targetLevel, rotation);
     Vector3i containerPosition = getContainerPosition(prefabAnchor, targetLevel, rotation);
@@ -513,7 +515,7 @@ public class MineSpawner {
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
-    Vector3i workplaceBlockPosition = position.clone();
+    Vector3i workplaceBlockPosition = VectorUtil.clone(position);
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
         chunk,
         workplaceBlockPosition);

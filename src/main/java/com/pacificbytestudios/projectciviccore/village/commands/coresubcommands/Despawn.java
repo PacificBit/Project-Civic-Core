@@ -6,8 +6,11 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -48,7 +51,7 @@ public class Despawn extends CommandBase {
         return;
       }
 
-      Vector3i playerPos = transform.getPosition().toVector3i();
+      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
       EntityRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
 
       if (heartRef == null) {
@@ -97,7 +100,7 @@ public class Despawn extends CommandBase {
       Rotation heartRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
       boolean despawnResult = trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()
           ? PrefabManager.restoreTrackedPrefab(world, trackedPlacement)
-          : TownHeartSpawner.despawn(chunk, heartPosition.clone().add(Vector3i.DOWN), heartRotation);
+          : TownHeartSpawner.despawn(chunk, VectorUtil.clone(heartPosition).add(Vector3iUtil.DOWN), heartRotation);
 
       if (!despawnResult) {
         context.sendMessage(Message.raw("Could not despawn village"));

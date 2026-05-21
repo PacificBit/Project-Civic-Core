@@ -11,6 +11,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.Mineshaft;
@@ -49,7 +50,7 @@ public class BuildNewMineshaftLevelAction extends VillagerActionBase {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         StructureConfig.Mine.MineshaftLevelConf.PREFAB_JSON,
-        level.getAnchorPoint().clone(),
+        VectorUtil.clone(level.getAnchorPoint()),
         mineshaft.getRotation(),
         true);
     if (newSnapshot == null) {

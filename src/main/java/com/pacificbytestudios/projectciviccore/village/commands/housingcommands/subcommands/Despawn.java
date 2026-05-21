@@ -5,8 +5,10 @@ import java.util.List;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
@@ -44,7 +46,7 @@ public class Despawn extends CommandBase {
         return;
       }
 
-      Vector3i playerPos = transform.getPosition().toVector3i();
+      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
       EntityRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
 
       if (heartRef == null) {
@@ -77,12 +79,12 @@ public class Despawn extends CommandBase {
 
       HouseComponent toRemove = houses.get(0);
       Vector3i coreBlockPosition = toRemove.getCoreBlockPosition();
-      double shortestDistance = coreBlockPosition.distanceSquaredTo(playerPos);
+      double shortestDistance = coreBlockPosition.distanceSquared(playerPos);
 
       for (int i = 1; i < houses.size(); i++) {
         HouseComponent candidate = houses.get(i);
         Vector3i candidatePosition = candidate.getCoreBlockPosition();
-        double distance = candidatePosition.distanceSquaredTo(playerPos);
+        double distance = candidatePosition.distanceSquared(playerPos);
         if (distance < shortestDistance) {
           toRemove = candidate;
           coreBlockPosition = candidatePosition;

@@ -2,9 +2,11 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -16,6 +18,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
@@ -86,7 +89,7 @@ public class HouseSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         structureRotation,
         true);
     if (trackedPlacement == null) {
@@ -176,7 +179,7 @@ public class HouseSpawner {
 
     UUID structureId = house.getUuid();
     int currentLevel = house.getLevel();
-    Vector3i prefabAnchor = house.getPrefabAnchor().clone();
+    Vector3i prefabAnchor = VectorUtil.clone(house.getPrefabAnchor());
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = house.getVillageRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -214,7 +217,7 @@ public class HouseSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         structureRotation,
         true);
 
@@ -375,7 +378,7 @@ public class HouseSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        snapshot.getPrefabAnchor().clone(),
+        VectorUtil.clone(snapshot.getPrefabAnchor()),
         snapshot.getRotation(),
         true);
 
@@ -400,7 +403,7 @@ public class HouseSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (newSnapshot == null) {
@@ -450,7 +453,7 @@ public class HouseSpawner {
     house.setLevel((short) targetLevel);
     house.setUuid(structureId);
     house.setCoreBlockPosition(houseCoreBlockPosition);
-    house.setPrefabAnchor(prefabAnchor.clone());
+    house.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
     house.setHouseRef(new EntityRef(chunk.getWorld().getName(),
         houseCoreBlockPosition));
     house.setAppartmentRegistry(StructureConfig.House.getAppartments(prefabAnchor,
@@ -482,7 +485,7 @@ public class HouseSpawner {
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
-    Vector3i bedBlockPosition = position.clone();
+    Vector3i bedBlockPosition = VectorUtil.clone(position);
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
         chunk,
         bedBlockPosition);
@@ -569,7 +572,7 @@ public class HouseSpawner {
 
   private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
     Utils.breakBlockChunkAware(chunk, constructionPos);
-    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(Vector3i.UP));
+    Utils.breakBlockChunkAware(chunk, VectorUtil.clone(constructionPos).add(Vector3iUtil.UP));
   }
 
   private static int getConstructionSignRotationIndex(int level, Rotation rotation) {

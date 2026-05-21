@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -17,7 +19,7 @@ import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
@@ -49,17 +51,17 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.workingPlaceType)
       .add()
 
-      .append(new KeyedCodec<>("BenchPosition", Vector3i.CODEC),
+      .append(new KeyedCodec<>("BenchPosition", Vector3iUtil.CODEC),
           (obj, value) -> obj.benchPos = value,
           (obj) -> obj.benchPos)
       .add()
 
-      .append(new KeyedCodec<>("BenchAccessPosition", Vector3i.CODEC),
+      .append(new KeyedCodec<>("BenchAccessPosition", Vector3iUtil.CODEC),
           (obj, value) -> obj.benchAccessPos = value,
           (obj) -> obj.benchAccessPos)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           (obj) -> obj.prefabAnchor)
       .add()

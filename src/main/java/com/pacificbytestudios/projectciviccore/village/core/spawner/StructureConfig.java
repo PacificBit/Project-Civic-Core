@@ -6,14 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseAppartmentRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
@@ -82,10 +84,10 @@ public final class StructureConfig {
     private static final int SPAWNING_SCALE = 6;
 
     private static final List<Vector3i> VILLAGER_SPAWNING_OFFSETS = List.of(
-        Vector3i.NORTH.clone().scale(SPAWNING_SCALE),
-        Vector3i.SOUTH.clone().scale(SPAWNING_SCALE),
-        Vector3i.WEST.clone().scale(SPAWNING_SCALE),
-        Vector3i.EAST.clone().scale(SPAWNING_SCALE));
+        VectorUtil.NORTH().mul(SPAWNING_SCALE),
+        VectorUtil.SOUTH().mul(SPAWNING_SCALE),
+        VectorUtil.WEST().mul(SPAWNING_SCALE),
+        VectorUtil.EAST().mul(SPAWNING_SCALE));
 
     public static List<Vector3i> getVillagerSpawningOffsets() {
       return VILLAGER_SPAWNING_OFFSETS;
@@ -647,10 +649,10 @@ public final class StructureConfig {
     public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(1, 0, 0);
 
     private static final Map<Vector3i, Vector3i> MINESHAFT_GALLERIES_OFFSETS = Map.of(
-        Vector3i.NORTH, new Vector3i(0, 0, -8),
-        Vector3i.SOUTH, new Vector3i(0, 0, 4),
-        Vector3i.WEST, new Vector3i(-6, 0, -2),
-        Vector3i.EAST, new Vector3i(6, 0, -2));
+        VectorUtil.NORTH(), new Vector3i(0, 0, -8),
+        VectorUtil.SOUTH(), new Vector3i(0, 0, 4),
+        VectorUtil.WEST(), new Vector3i(-6, 0, -2),
+        VectorUtil.EAST(), new Vector3i(6, 0, -2));
 
     private Mine() {
     }
@@ -728,27 +730,27 @@ public final class StructureConfig {
       public static Map<Vector3i, Vector3i> getMineshaftGalleriesWithPrefabOffset(
           Vector3i prefabPos,
           Rotation rotation) {
-        Vector3i northDirection = StructurePlacementUtils.rotateOffset(Vector3i.NORTH, rotation);
-        Vector3i westDirection = StructurePlacementUtils.rotateOffset(Vector3i.WEST, rotation);
-        Vector3i eastDirection = StructurePlacementUtils.rotateOffset(Vector3i.EAST, rotation);
-        Vector3i southDirection = StructurePlacementUtils.rotateOffset(Vector3i.SOUTH, rotation);
+        Vector3i northDirection = StructurePlacementUtils.rotateOffset(VectorUtil.NORTH(), rotation);
+        Vector3i westDirection = StructurePlacementUtils.rotateOffset(VectorUtil.WEST(), rotation);
+        Vector3i eastDirection = StructurePlacementUtils.rotateOffset(VectorUtil.EAST(), rotation);
+        Vector3i southDirection = StructurePlacementUtils.rotateOffset(VectorUtil.SOUTH(), rotation);
 
         return Map.of(
             northDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.NORTH), rotation),
+                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.NORTH()), rotation),
 
             westDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.WEST), rotation),
+                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.WEST()), rotation),
 
             eastDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.EAST), rotation),
+                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.EAST()), rotation),
 
             southDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(Vector3i.SOUTH), rotation));
+                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.SOUTH()), rotation));
       }
     }
 

@@ -1,27 +1,30 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector2iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class AreaFootprint implements Component<ChunkStore> {
 
   public static final BuilderCodec<AreaFootprint> CODEC = BuilderCodec
       .builder(AreaFootprint.class, AreaFootprint::new)
 
-      .append(new KeyedCodec<>("TopLeft", Vector2i.CODEC),
+      .append(new KeyedCodec<>("TopLeft", Vector2iUtil.CODEC),
           AreaFootprint::setTopLeft,
           (obj) -> obj.topLeft)
       .add()
 
-      .append(new KeyedCodec<>("BotRight", Vector2i.CODEC),
+      .append(new KeyedCodec<>("BotRight", Vector2iUtil.CODEC),
           AreaFootprint::setBotRight,
           (obj) -> obj.botRight)
       .add()
@@ -62,9 +65,9 @@ public class AreaFootprint implements Component<ChunkStore> {
         new Vector3i(offset.botRight.x, 0, offset.botRight.y),
         new Vector3i());
 
-    this.topLeft = new Vector2i(center.getX() + rotatedTopLeft.x, center.getZ() +
+    this.topLeft = new Vector2i(center.x + rotatedTopLeft.x, center.z +
         rotatedTopLeft.z);
-    this.botRight = new Vector2i(center.getX() + rotatedBotRight.x, center.getZ()
+    this.botRight = new Vector2i(center.x + rotatedBotRight.x, center.z
         + rotatedBotRight.z);
     this.y = center.y;
   }
@@ -75,20 +78,20 @@ public class AreaFootprint implements Component<ChunkStore> {
 
   protected void assignBounds(Vector2i topLeft, Vector2i botRight) {
     if (topLeft == null || botRight == null) {
-      this.topLeft = topLeft == null ? null : topLeft.clone();
-      this.botRight = botRight == null ? null : botRight.clone();
+      this.topLeft = VectorUtil.clone(topLeft);
+      this.botRight = VectorUtil.clone(botRight);
       return;
     }
 
-    this.topLeft = topLeft.clone();
-    this.botRight = botRight.clone();
+    this.topLeft = VectorUtil.clone(topLeft);
+    this.botRight = VectorUtil.clone(botRight);
   }
 
   @Override
   public AreaFootprint clone() {
     AreaFootprint claimArea = new AreaFootprint();
-    claimArea.topLeft = this.topLeft == null ? null : this.topLeft.clone();
-    claimArea.botRight = this.botRight == null ? null : this.botRight.clone();
+    claimArea.topLeft = VectorUtil.clone(this.topLeft);
+    claimArea.botRight = VectorUtil.clone(this.botRight);
     claimArea.y = this.y;
     return claimArea;
   }
@@ -102,7 +105,7 @@ public class AreaFootprint implements Component<ChunkStore> {
   }
 
   public void setTopLeft(Vector2i topLeft) {
-    this.topLeft = topLeft == null ? null : topLeft.clone();
+    this.topLeft = topLeft == null ? null : VectorUtil.clone(topLeft);
   }
 
   public Vector2i getBotRight() {
@@ -114,7 +117,7 @@ public class AreaFootprint implements Component<ChunkStore> {
   }
 
   public void setBotRight(Vector2i botRight) {
-    this.botRight = botRight == null ? null : botRight.clone();
+    this.botRight = botRight == null ? null : VectorUtil.clone(botRight);
   }
 
   public int getY() {

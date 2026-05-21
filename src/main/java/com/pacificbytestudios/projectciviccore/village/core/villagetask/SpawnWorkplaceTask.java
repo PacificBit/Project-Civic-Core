@@ -2,12 +2,14 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -34,7 +36,7 @@ public class SpawnWorkplaceTask extends AVillageTask {
           (obj) -> obj.workplaceType)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3i.CODEC),
+      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
           (obj, value) -> obj.position = value,
           obj -> obj.position)
       .add()

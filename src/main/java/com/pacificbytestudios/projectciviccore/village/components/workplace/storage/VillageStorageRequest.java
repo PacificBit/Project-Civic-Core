@@ -7,12 +7,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
@@ -41,7 +43,9 @@ public class VillageStorageRequest {
           obj -> obj.type)
       .add()
 
-      .append(new KeyedCodec<>("TargetsWorkplaceStorage", new ArrayDequeCodec<Vector3i>(Vector3i.CODEC, "Target")),
+      .append(new KeyedCodec<>("TargetsWorkplaceStorage", new ArrayDequeCodec<Vector3i>(
+          Vector3iUtil.CODEC,
+          "Target")),
           (obj, value) -> obj.targetsWorkplaceStorage = value,
           obj -> obj.targetsWorkplaceStorage)
       .add()

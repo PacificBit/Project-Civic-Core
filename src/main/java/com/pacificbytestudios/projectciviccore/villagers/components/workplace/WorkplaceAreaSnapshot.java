@@ -6,13 +6,16 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class WorkplaceAreaSnapshot {
   public static final Duration EXPIRATION_AMOUNT = Duration.ofHours(1);
@@ -25,7 +28,7 @@ public class WorkplaceAreaSnapshot {
               "BlockTypePosition",
               new MapCodec<ArrayDeque<Vector3i>, HashMap<String, ArrayDeque<Vector3i>>>(
                   new ArrayDequeCodec<>(
-                      Vector3i.CODEC,
+                      Vector3iUtil.CODEC,
                       "Vector3iDeque"),
                   HashMap::new)),
           (obj, value) -> {
@@ -57,7 +60,7 @@ public class WorkplaceAreaSnapshot {
       .add()
 
       .append(
-          new KeyedCodec<>("LastVisited", Vector3i.CODEC),
+          new KeyedCodec<>("LastVisited", Vector3iUtil.CODEC),
           (obj, value) -> obj.lastVisited = value,
           obj -> obj.lastVisited)
       .add()
@@ -142,7 +145,7 @@ public class WorkplaceAreaSnapshot {
     snapshot.blockTypePosition = clonedMap;
     snapshot.capturedAt = this.capturedAt;
     snapshot.completed = this.completed;
-    snapshot.lastVisited = this.lastVisited;
+    snapshot.lastVisited = VectorUtil.clone(this.lastVisited);
     return snapshot;
   }
 

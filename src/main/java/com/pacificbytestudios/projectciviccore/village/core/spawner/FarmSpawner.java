@@ -2,9 +2,10 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -17,6 +18,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -87,7 +89,7 @@ public class FarmSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (trackedPlacement == null) {
@@ -177,7 +179,7 @@ public class FarmSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vector3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vector3i prefabAnchor = VectorUtil.clone(workplace.getPrefabAnchor());
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -219,7 +221,7 @@ public class FarmSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         structureRotation,
         true);
 
@@ -379,7 +381,7 @@ public class FarmSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        snapshot.getPrefabAnchor().clone(),
+        VectorUtil.clone(snapshot.getPrefabAnchor()),
         snapshot.getRotation(),
         true);
 
@@ -404,7 +406,7 @@ public class FarmSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        VectorUtil.clone(prefabAnchor),
         rotation,
         true);
     if (newSnapshot == null) {
@@ -480,7 +482,7 @@ public class FarmSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
 
     container.setPosition(containerPosition);
     container.setAccessPosition(getContainerAccessPosition(containerPosition, targetLevel, rotation));
@@ -496,7 +498,7 @@ public class FarmSpawner {
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
-    Vector3i workplaceBlockPosition = position.clone();
+    Vector3i workplaceBlockPosition = VectorUtil.clone(position);
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
         chunk,
         workplaceBlockPosition);

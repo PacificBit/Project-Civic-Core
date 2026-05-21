@@ -3,15 +3,18 @@ package com.pacificbytestudios.projectciviccore.village.components.house;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class HouseComponent implements Component<ChunkStore> {
   public static final BuilderCodec<HouseComponent> CODEC = BuilderCodec
@@ -28,12 +31,12 @@ public class HouseComponent implements Component<ChunkStore> {
           (obj) -> obj.level)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3i.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           (obj) -> obj.prefabAnchor)
       .add()
 
-      .append(new KeyedCodec<>("CoreBlockPosition", Vector3i.CODEC),
+      .append(new KeyedCodec<>("CoreBlockPosition", Vector3iUtil.CODEC),
           (obj, value) -> obj.coreBlockPosition = value,
           (obj) -> obj.coreBlockPosition)
       .add()
@@ -142,8 +145,8 @@ public class HouseComponent implements Component<ChunkStore> {
   public HouseComponent clone() {
     HouseComponent component = new HouseComponent();
     component.uuid = this.uuid;
-    component.prefabAnchor = this.prefabAnchor == null ? null : this.prefabAnchor.clone();
-    component.coreBlockPosition = this.coreBlockPosition == null ? null : this.coreBlockPosition.clone();
+    component.prefabAnchor = VectorUtil.clone(this.prefabAnchor);
+    component.coreBlockPosition = VectorUtil.clone(this.coreBlockPosition);
     component.villageRef = this.villageRef == null ? null : this.villageRef.clone();
     component.houseRef = this.houseRef == null ? null : this.houseRef.clone();
     component.appartmentRegistry = this.appartmentRegistry == null ? null : this.appartmentRegistry.clone();

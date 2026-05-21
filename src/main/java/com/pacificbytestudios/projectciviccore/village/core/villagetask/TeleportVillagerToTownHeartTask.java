@@ -3,18 +3,20 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 import java.util.List;
 import java.util.UUID;
 
+import org.joml.Vector3d;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 
@@ -69,10 +71,11 @@ public class TeleportVillagerToTownHeartTask extends AVillageTask {
   private static Vector3d resolveTargetPosition(Vector3i heartPos) {
     List<Vector3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
     if (spawningOffsets == null || spawningOffsets.isEmpty()) {
-      return heartPos.toVector3d();
+      return VectorUtil.toVector3d(heartPos);
     }
 
-    Vector3i target = heartPos.clone().add(spawningOffsets.getFirst());
-    return target.toVector3d();
+    Vector3i target = VectorUtil.clone(heartPos).add(spawningOffsets.getFirst());
+
+    return VectorUtil.toVector3d(target);
   }
 }

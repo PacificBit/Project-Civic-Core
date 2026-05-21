@@ -1,9 +1,10 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.innkeeper;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -18,10 +19,11 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
 import io.sentry.util.Pair;
@@ -87,7 +89,7 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
       Vector3i tavernPosition = workplaceComponent.getWorkplaceRef().getPosition();
       foodComponent.setTavernRef(
           world.getName() != null && tavernPosition != null
-              ? new EntityRef(world.getName(), tavernPosition.clone())
+              ? new EntityRef(world.getName(), VectorUtil.clone(tavernPosition))
               : null);
       chunkStore.putComponent(foodRef, VillageFoodComponent.getComponentType(), foodComponent);
     }

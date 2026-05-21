@@ -1,9 +1,13 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
@@ -31,12 +35,12 @@ public final class StructurePlacementUtils {
     return Rotation.None;
   }
 
-  public static Rotation toCardinalRotation(Vector3f rotation) {
-    if (rotation == null || Float.isNaN(rotation.getYaw())) {
+  public static Rotation toCardinalRotation(Rotation3f rotation) {
+    if (rotation == null || Float.isNaN(rotation.yaw())) {
       return Rotation.None;
     }
 
-    int quarterTurns = Math.floorMod((int) Math.round(Math.toDegrees(rotation.getYaw()) / 90.0), 4);
+    int quarterTurns = Math.floorMod((int) Math.round(Math.toDegrees(rotation.yaw()) / 90.0), 4);
     return switch (quarterTurns) {
       case 0 -> Rotation.None;
       case 1 -> Rotation.Ninety;
@@ -53,26 +57,26 @@ public final class StructurePlacementUtils {
     return normalize(baseRotation).add(normalize(structureRotation));
   }
 
-  public static Vector3i rotateOffset(Vector3i offset, Rotation rotation) {
+  public static Vector3i rotateOffset(Vector3ic offset, Rotation rotation) {
     if (offset == null) {
-      return Vector3i.ZERO.clone();
+      return VectorUtil.clone(Vector3iUtil.ZERO);
     }
 
     Rotation normalizedRotation = normalize(rotation);
     if (normalizedRotation == Rotation.None) {
-      return offset.clone();
+      return VectorUtil.clone(offset);
     }
 
-    return normalizedRotation.rotateY(offset, new Vector3i());
+    return normalizedRotation.rotateY(VectorUtil.clone(offset), new Vector3i());
   }
 
   public static Vector3i withOffset(Vector3i origin, Vector3i localOffset, Rotation rotation) {
-    return origin.clone().add(rotateOffset(localOffset, rotation));
+    return VectorUtil.clone(origin).add(rotateOffset(localOffset, rotation));
   }
 
   public static Vector3i removeOffset(Vector3i position, Vector3i localOffset, Rotation rotation) {
     Vector3i rotatedOffset = rotateOffset(localOffset, rotation);
-    return position.clone().add(new Vector3i(-rotatedOffset.x, -rotatedOffset.y, -rotatedOffset.z));
+    return VectorUtil.clone(position).add(new Vector3i(-rotatedOffset.x, -rotatedOffset.y, -rotatedOffset.z));
   }
 
   public static int toBlockRotationIndex(Rotation yaw) {

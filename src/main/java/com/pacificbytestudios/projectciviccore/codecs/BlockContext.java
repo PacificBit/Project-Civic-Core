@@ -1,9 +1,11 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 
 public class BlockContext {
   public static final BuilderCodec<BlockContext> CODEC = BuilderCodec
@@ -19,7 +21,7 @@ public class BlockContext {
           (obj) -> obj.chunkIndex)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3i.CODEC),
+      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
           (obj, value) -> obj.position = value,
           (obj) -> obj.position)
       .add()

@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.joml.Vector2i;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -19,12 +22,11 @@ import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.math.util.FastRandom;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
@@ -138,7 +140,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
   public void addRoad(RoadNode node) {
     UUID roadId = node.getRoadId();
     if (node.getDepth() == 0 && node.getBranchOriginKey() != null) {
-      this.roads.put(node.getBranchOriginKey().clone(), roadId);
+      this.roads.put(VectorUtil.clone(node.getBranchOriginKey()), roadId);
     }
     addRoadIdToDepthGroup(roadId, node.getDepth());
     this.roadIdToRoad.put(roadId, node);
@@ -238,7 +240,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
     this.roads.forEach((direction, roadId) -> {
       if (direction != null && roadId != null) {
-        copy.put(direction.clone(), roadId);
+        copy.put(VectorUtil.clone(direction), roadId);
       }
     });
     return Collections.unmodifiableMap(copy);
@@ -424,7 +426,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     } else {
       component.roads = new HashMap<>();
       this.roads.forEach((position, roadId) -> component.roads.put(
-          position == null ? null : position.clone(),
+          VectorUtil.clone(position),
           roadId));
     }
 

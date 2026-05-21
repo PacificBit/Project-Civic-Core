@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
+import org.joml.Vector3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.ExtraInfo;
@@ -19,7 +20,6 @@ import com.hypixel.hytale.codec.schema.config.ObjectSchema;
 import com.hypixel.hytale.codec.schema.config.Schema;
 import com.hypixel.hytale.codec.schema.config.StringSchema;
 import com.hypixel.hytale.codec.util.RawJsonReader;
-import com.hypixel.hytale.math.vector.Vector3i;
 
 public class Vector3iMapCodec<V, M extends Map<Vector3i, V>>
     implements Codec<Map<Vector3i, V>>, WrappedCodec<V> {

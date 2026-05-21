@@ -1,8 +1,9 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.general;
 
+import org.joml.Vector3d;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
@@ -10,6 +11,7 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderReachEmptyTavernSeatSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -52,7 +54,7 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
         return false;
       }
 
-      this.target = Utils.centerOf(villagerComponent.getReservedInteractable()).toVector3d();
+      this.target = VectorUtil.toVector3d(Utils.centerOf(villagerComponent.getReservedInteractable()));
       this.positionProvider.setTarget(this.target);
       return true;
     }
@@ -60,7 +62,7 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
     TransformComponent transform = store.getComponent(ref,
         TransformComponent.getComponentType());
 
-    if (transform.getPosition().distanceSquaredTo(this.target) <= this.stoppingRange) {
+    if (transform.getPosition().distanceSquared(this.target) <= this.stoppingRange) {
       this.positionProvider.clear();
       return false;
     }

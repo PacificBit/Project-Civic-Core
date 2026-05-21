@@ -2,10 +2,11 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.util.ArrayDeque;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -77,7 +78,7 @@ public class PlantSeedAction extends ActionBase {
         BlockType.getAssetMap().getAsset(plantBlockId));
 
     if (blockSpawned) {
-      InventoryHelper.removeItemInHand(npcEntity.getInventory(), 1);
+      InventoryHelper.removeItemInHand(ref, store, 1);
       return true;
     }
     return false;

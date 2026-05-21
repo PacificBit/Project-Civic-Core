@@ -584,8 +584,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   }
 
   @Override
-  protected void start0() {
-    super.start0();
+  protected void start() {
     FoodRecipeRegistry.initizalize();
     CropRecipeRegistry.initizalize();
     SaplingRecipeRegistry.initizalize();

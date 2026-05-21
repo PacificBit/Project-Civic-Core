@@ -1,10 +1,11 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.block.BlockEntity;
@@ -16,6 +17,7 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadLength;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
@@ -46,7 +48,7 @@ public class RoadSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        position.clone(),
+        VectorUtil.clone(position),
         structureRotation,
         true);
 
@@ -54,7 +56,7 @@ public class RoadSpawner {
       return false;
     }
 
-    Vector3i anchorBlockPosition = position.clone();
+    Vector3i anchorBlockPosition = VectorUtil.clone(position);
     Pair<WorldChunk, Ref<ChunkStore>> anchorResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         anchorBlockPosition);

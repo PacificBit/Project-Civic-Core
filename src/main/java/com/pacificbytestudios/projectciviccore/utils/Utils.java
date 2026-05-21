@@ -2,13 +2,14 @@ package com.pacificbytestudios.projectciviccore.utils;
 
 import javax.annotation.Nonnull;
 
+import org.joml.Vector2i;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector2i;
-import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
@@ -333,7 +334,7 @@ public class Utils {
   }
 
   public static Vector3i getRotationVector(Rotation rotation) {
-    return rotation.getAxisDirection();
+    return VectorUtil.clone(rotation.getAxisDirection());
   }
 
   public static Rotation getRotationFromCardinalDirection(Vector3i cardinalDirection) {

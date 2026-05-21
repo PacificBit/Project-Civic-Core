@@ -7,9 +7,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.joml.Vector3i;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -20,6 +21,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
@@ -109,7 +111,7 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
       return;
     }
     String trunkBlockId = treeTrunk.getId();
-    this.treeTrunkBottomBlocks.add(origin.clone());
+    this.treeTrunkBottomBlocks.add(VectorUtil.clone(origin));
 
     boolean foundSomething = true;
     int range = 1;
@@ -117,25 +119,25 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
     while (foundSomething && range <= MAX_SCAN_RANGE) {
       foundSomething = false;
 
-      Vector3i topLeft = origin.clone()
-          .add(Vector3i.NORTH.clone().scale(range))
-          .add(Vector3i.WEST.clone().scale(range));
+      Vector3i topLeft = VectorUtil.clone(origin)
+          .add(VectorUtil.NORTH().mul(range))
+          .add(VectorUtil.WEST().mul(range));
 
-      Vector3i botRigth = origin.clone()
-          .add(Vector3i.EAST.clone().scale(range))
-          .add(Vector3i.SOUTH.clone().scale(range));
+      Vector3i botRigth = VectorUtil.clone(origin)
+          .add(VectorUtil.EAST().mul(range))
+          .add(VectorUtil.SOUTH().mul(range));
 
-      foundSomething |= scanLine(topLeft, Vector3i.SOUTH, range * 2 + 1, trunkBlockId);
-      foundSomething |= scanLine(topLeft, Vector3i.EAST, range * 2 + 1, trunkBlockId);
-      foundSomething |= scanLine(botRigth, Vector3i.WEST, range * 2 + 1, trunkBlockId);
-      foundSomething |= scanLine(botRigth, Vector3i.NORTH, range * 2 + 1, trunkBlockId);
+      foundSomething |= scanLine(topLeft, VectorUtil.SOUTH(), range * 2 + 1, trunkBlockId);
+      foundSomething |= scanLine(topLeft, VectorUtil.EAST(), range * 2 + 1, trunkBlockId);
+      foundSomething |= scanLine(botRigth, VectorUtil.WEST(), range * 2 + 1, trunkBlockId);
+      foundSomething |= scanLine(botRigth, VectorUtil.NORTH(), range * 2 + 1, trunkBlockId);
 
       range += 1;
     }
   }
 
   private boolean scanLine(Vector3i startPoint, Vector3i direction, int count, String blockId) {
-    Vector3i position = startPoint.clone();
+    Vector3i position = VectorUtil.clone(startPoint);
     boolean foundSomething = false;
 
     for (int i = 0; i < count; i++) {
@@ -147,7 +149,7 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
       }
 
       if (blockType.getId().equals(blockId) || blockType.getId().startsWith(blockId)) {
-        this.treeTrunkBottomBlocks.add(position.clone());
+        this.treeTrunkBottomBlocks.add(VectorUtil.clone(position));
         foundSomething = true;
       }
 
