@@ -25,6 +25,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.villagers.core.events.SitOnChairEvent;
 
+@Deprecated(forRemoval = true)
 public class SitCommand extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

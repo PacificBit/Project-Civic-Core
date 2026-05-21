@@ -28,6 +28,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = true)
 public class Spawn extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

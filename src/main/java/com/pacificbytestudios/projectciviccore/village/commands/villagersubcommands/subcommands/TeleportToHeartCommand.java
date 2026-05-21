@@ -26,6 +26,7 @@ import com.pacificbytestudios.projectciviccore.village.components.villagetask.Vi
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TeleportVillagerToTownHeartTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = true)
 public class TeleportToHeartCommand extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

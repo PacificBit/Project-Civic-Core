@@ -30,6 +30,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageReque
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = true)
 public class ItemFetchRequest extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

@@ -23,6 +23,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = false)
 public class State extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

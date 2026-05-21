@@ -27,6 +27,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.tave
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = true)
 public class Dump extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

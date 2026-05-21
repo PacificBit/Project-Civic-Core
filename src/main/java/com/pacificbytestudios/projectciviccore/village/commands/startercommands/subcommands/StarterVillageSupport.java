@@ -40,6 +40,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
+@Deprecated(forRemoval = true)
 final class StarterVillageSupport {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

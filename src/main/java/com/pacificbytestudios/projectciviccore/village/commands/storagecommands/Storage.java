@@ -1,6 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.commands.storagecommands;
 
-import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands.ClearQueueRequests;
 import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.subcommands.ClearStorageRequest;
@@ -11,7 +10,7 @@ public class Storage extends AbstractCommandCollection {
 
   public Storage() {
     super("storage", "storage commands");
-    this.setPermissionGroup(GameMode.Creative);
+    this.setPermissionGroups("hytale:WorldEditor");
     this.addSubCommand(new ItemFetchRequest());
     this.addSubCommand(new ClearStorageRequest());
     this.addSubCommand(new ClearQueueRequests());

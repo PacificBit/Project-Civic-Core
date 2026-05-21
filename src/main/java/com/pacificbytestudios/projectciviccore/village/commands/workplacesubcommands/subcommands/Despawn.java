@@ -29,6 +29,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = true)
 public class Despawn extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
