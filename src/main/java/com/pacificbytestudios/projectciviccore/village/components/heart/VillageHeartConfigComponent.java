@@ -118,6 +118,10 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
     return Collections.unmodifiableMap(structureLimits);
   }
 
+  public int getMaxRadius() {
+    return getClaimRadiusPerLevel(getMaxLevel());
+  }
+
   @Override
   public VillageHeartConfigComponent clone() {
     VillageHeartConfigComponent component = new VillageHeartConfigComponent();

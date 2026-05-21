@@ -1,113 +1,201 @@
 package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
-import java.util.UUID;
+import org.joml.Vector3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
-import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
-
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.hypixel.hytale.server.core.command.system.CommandContext;
-import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
-import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
-import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
+import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
+import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;
+import com.pacificbytestudios.projectciviccore.utils.DespawnIncompleteConstructionFunction;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionContext;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionResult;
+import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.RoadSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHeartSpawner;
-import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
-public class Despawn extends CommandBase {
-  private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
+public class Despawn extends VillageCommand {
+
+  private byte currentStep, totalSteps = 6;
 
   public Despawn() {
     super("despawn", "Despawn village");
   }
 
+  /**
+   * It tries to despawn the village the player is currently in
+   *
+   * @param exeContext Contains the command context and the player, current
+   *                   position, village ref
+   */
   @Override
-  protected void executeSync(CommandContext context) {
-    Ref<EntityStore> playerRef = context.senderAsPlayerRef();
-    Store<EntityStore> entityStore = playerRef.getStore();
-    World world = entityStore.getExternalData().getWorld();
+  public void execute(ExecutionContext exeContext) {
+    if (exeContext.village() == null) {
+      CommandUtils.sendExecutionResultMessage(
+          exeContext.cmdContext(),
+          ExecutionResult.Err,
+          "No village to despawn found!");
+      return;
+    }
 
-    world.execute(() -> {
-      TransformComponent transform = entityStore.getComponent(
-          playerRef,
-          TransformComponent.getComponentType());
+    this.currentStep = 1;
+    VillageHeartComponent heart = CommandUtils.getVillageHeartComponent(exeContext);
+    VillageTopologyComponent topology = CommandUtils.getVillageTopologyComponent(exeContext);
+    World world = exeContext.world();
 
-      if (transform == null) {
-        context.sendMessage(Message.raw("Could not read player position."));
-        return;
+    if (heart == null) {
+      CommandUtils.sendExecutionResultMessage(
+          exeContext.cmdContext(),
+          ExecutionResult.Err,
+          "Could not find the village core block, either the chunk is not loaded or it was destroyed");
+      ProjectCivicCore.LOGGER.atSevere().log("[DespawnVillage - execute] Could not fetch the village core block");
+      return;
+    }
+
+    // ==============================================================
+    // Step 1 - despawn houses
+    // ==============================================================
+    despawnHouses(exeContext, heart, world);
+
+    // ==============================================================
+    // Step 2 - despawn work in progress constructions
+    // ==============================================================
+    despawnIncompleteBuildings(exeContext, heart, topology, world);
+
+    // ==============================================================
+    // Step 3 - despawn workplaces
+    // ==============================================================
+    despawnWorkplaces(exeContext, heart, world);
+
+    // ==============================================================
+    // Step 4 - despawn roads
+    // ==============================================================
+    despawnRoads(exeContext, heart, topology, world);
+
+    // ==============================================================
+    // Step 5 - despawn villagers
+    // ==============================================================
+    despawnVillagers(exeContext, heart, world);
+
+    // ==============================================================
+    // Step 6 - despawn city center
+    // ==============================================================
+    despawnCityCenter(exeContext, heart, topology, world);
+  }
+
+  private void despawnHouses(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Despawning Houses...");
+    var housesEntrySet = heart.getHouseIdToHouse().entrySet();
+    for (var entry : housesEntrySet) {
+      HouseComponent house = entry.getValue();
+      DespawnFunction despawnFunction = Utils.getDespawnFunction(StructureType.HOUSE);
+      Vector3i benchPos = house.getCoreBlockPosition();
+      WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(benchPos.x, benchPos.z));
+      despawnFunction.apply(chunk, benchPos);
+    }
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+  }
+
+  private void despawnIncompleteBuildings(ExecutionContext exeContext, VillageHeartComponent heart,
+      VillageTopologyComponent topology, World world) {
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Incomplete Buildings...");
+    Ref<ChunkStore> townHallRef = heart.getTownHall().getWorkplaceRef().getRef();
+    TownHallComponent townHall = exeContext.chunkStore().getComponent(
+        townHallRef,
+        TownHallComponent.getComponentType());
+    var projectPlan = townHall.getVillageProjectPlan();
+
+    if (projectPlan != null) {
+      var projectList = projectPlan.getProjectList();
+      for (VillageProject project : projectList) {
+        DespawnIncompleteConstructionFunction despawn = Utils.getDespawnIncompleteConstructionFunction(
+            project.getStructureType());
+        TopologyStructure structureTopology = topology.getTopologyStructureFromStructureId(project.getStructureId());
+        Vector3i anchor = structureTopology.getPrefabAnchor();
+        WorldChunk chunk = Utils.getWorldChunk(world, anchor);
+        despawn.apply(chunk, anchor, project.getTargetLevel(), structureTopology.getOrientation());
       }
+    }
 
-      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
-      EntityRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+  }
 
-      if (heartRef == null) {
-        context.sendMessage(Message.raw("No village found in range."));
-        return;
+  private void despawnWorkplaces(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Workplaces...");
+    var workplaceEntrySet = heart.getWorkplaceIdToWorkplace().entrySet();
+    for (var entry : workplaceEntrySet) {
+      WorkplaceComponent workplace = entry.getValue();
+      DespawnFunction despawnFunction = Utils.getDespawnFunction(workplace.getWorkplaceType());
+      Vector3i benchPos = workplace.getBenchPos();
+      WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(benchPos.x, benchPos.z));
+      despawnFunction.apply(chunk, benchPos);
+    }
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+  }
+
+  private void despawnRoads(
+      ExecutionContext exeContext,
+      VillageHeartComponent heart,
+      VillageTopologyComponent topology,
+      World world) {
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Roads...");
+    WorldChunk chunk = Utils.getWorldChunk(world, heart.getEntityRef().getPosition());
+    for (var entry : topology.getRoadIdToRoad().entrySet()) {
+      RoadNode road = entry.getValue();
+      for (var segment : road.getRoadSegments()) {
+        chunk = Utils.getWorldChunk(world, chunk, segment);
+        RoadSpawner.despawn(chunk, segment);
       }
+    }
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+  }
 
-      Ref<ChunkStore> heart = heartRef.getRef();
-      if (heart == null || !heart.isValid()) {
-        context.sendMessage(Message.raw("No valid village found in range."));
-        return;
-      }
+  private void despawnVillagers(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Villagers...");
+    for (var entry : heart.getVillagerIdToComponent().entrySet()) {
+      Ref<EntityStore> villager = world.getEntityRef(entry.getKey());
+      exeContext.entityStore().removeEntity(villager, RemoveReason.REMOVE);
+    }
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+  }
 
-      VillageHeartComponent villageHeartComponent = heart.getStore()
-          .getComponent(heart, VillageHeartComponent.getComponentType());
-      if (villageHeartComponent == null) {
-        context.sendMessage(Message.raw("Could not load village data."));
-        return;
-      }
+  private void despawnCityCenter(ExecutionContext exeContext, VillageHeartComponent heart,
+      VillageTopologyComponent topology,
+      World world) {
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning City Center...");
 
-      TrackedPrefabPlacementComponent trackedPlacement = heart.getStore()
-          .getComponent(heart, TrackedPrefabPlacementComponent.getComponentType());
+    Rotation rotation = topology.getVillageOrientation();
+    Vector3i position = new Vector3i(heart.getBlockContext().getPosition()).add(Vector3iUtil.DOWN);
+    WorldChunk chunk = Utils.getWorldChunk(world, position);
+    TownHeartSpawner.despawn(chunk, position, rotation);
 
-      Vector3i heartPosition = heartRef.getPosition();
-      world.getChunk(ChunkUtil.indexChunkFromBlock(heartPosition.x, heartPosition.z))
-          .breakBlock(heartPosition.x,
-              heartPosition.y, heartPosition.z);
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+  }
 
-      for (UUID villagerId : villageHeartComponent.getVillagersRegistry()) {
-        VillagerComponent villager = villageHeartComponent.getVillager(villagerId);
-        if (villager != null) {
-          Vector3i bed = villager.getBedPosition();
-          if (bed != null) {
-            world.getChunk(ChunkUtil.indexChunkFromBlock(bed.x, bed.z)).breakBlock(bed.x, bed.y, bed.z);
-          }
-        }
+  private void sendExecutionStepInfo(ExecutionContext exeContext, byte currentStep, byte totalSteps, String message) {
+    var msg = new StringBuilder();
+    msg.append("(").append(currentStep).append("/").append(totalSteps).append(")");
+    msg.append(" ").append(message);
 
-        Ref<EntityStore> npc = world.getEntityStore().getRefFromUUID(villagerId);
-        if (npc == null || !npc.isValid()) {
-          continue;
-        }
-        entityStore.removeEntity(npc, RemoveReason.REMOVE);
-      }
-
-      WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(heartPosition.x, heartPosition.z));
-      Rotation heartRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
-      boolean despawnResult = trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()
-          ? PrefabManager.restoreTrackedPrefab(world, trackedPlacement)
-          : TownHeartSpawner.despawn(chunk, VectorUtil.clone(heartPosition).add(Vector3iUtil.DOWN), heartRotation);
-
-      if (!despawnResult) {
-        context.sendMessage(Message.raw("Could not despawn village"));
-        return;
-      }
-      context.sendMessage(Message.raw("Village successfully despawned"));
-    });
+    CommandUtils.sendExecutionResultMessage(
+        exeContext.cmdContext(), ExecutionResult.Info, msg.toString());
   }
 
 }

@@ -16,6 +16,8 @@ import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartConfigComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseAppartmentRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
@@ -77,6 +79,11 @@ public final class StructureConfig {
     public static final BlockType HEART_BLOCK = BlockType.getAssetMap().getAsset("Village_Core");
     public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final VillageHeartConfigComponent DEFAULT_CONFIG;
+
+    static {
+      DEFAULT_CONFIG = HEART_BLOCK.getBlockEntity().getComponent(VillageHeartComponent.getComponentType()).getConfig();
+    }
 
     private TownHeart() {
     }

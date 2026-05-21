@@ -175,6 +175,10 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return this.roadIdToRoad.get(roadId);
   }
 
+  public Map<UUID, RoadNode> getRoadIdToRoad() {
+    return this.roadIdToRoad;
+  }
+
   public UUID getRoadIdAtDirection(Vector3i directionKey) {
     return this.roads.get(directionKey);
   }
