@@ -2,7 +2,7 @@
   "Type": "Variant",
   "Reference": "Base_Civilian",
   "Modify": {
-    "Appearance": "Female_Civilian",
+    "Appearance": "Male_Civilian",
     "MaxHealth": 100
   }
 }

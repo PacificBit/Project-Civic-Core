@@ -2,7 +2,7 @@
   "GridGenerator": {
     "Seed": "ProjectCivicCore-Pattern-CityCenter",
     "Density": [
-      0.92,
+      0.4,
       1
     ],
     "Scale": 0.004,
