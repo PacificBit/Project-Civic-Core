@@ -53,7 +53,6 @@ public class MinerScan implements IWorkAreaScanner {
       Ref<EntityStore> villagerRef,
       UUID uuid,
       VillagerComponent villager) {
-    ProjectCivicCore.LOGGER.atInfo().log("[MinerScan] Starting new miner scan");
     VillagerWorkerComponent worker = villager.getWorkerData();
     if (worker == null) {
       return null;
@@ -412,7 +411,8 @@ public class MinerScan implements IWorkAreaScanner {
       Vector3i startPosition,
       Vector3i endPosition,
       Vector3i galleryDirection) {
-    Vector3i prefabAnchor = VectorUtil.clone(startPosition).add(VectorUtil.clone(galleryDirection).mul(GALLERY_SECTION_DEPTH));
+    Vector3i prefabAnchor = VectorUtil.clone(startPosition)
+        .add(VectorUtil.clone(galleryDirection).mul(GALLERY_SECTION_DEPTH));
     this.setSingletonTask(snapshotInProgress, CURRENT_SECTION_PREFAB_ANCHOR, prefabAnchor);
   }
 

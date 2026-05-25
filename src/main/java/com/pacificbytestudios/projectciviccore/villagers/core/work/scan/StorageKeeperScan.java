@@ -31,9 +31,6 @@ public class StorageKeeperScan implements IWorkAreaScanner {
       Ref<EntityStore> villagerRef,
       UUID uuid,
       VillagerComponent villager) {
-    ProjectCivicCore.LOGGER.atInfo().log(
-        "[StorageKeeperScan] Starting new storage keeper scan");
-
     VillagerWorkerComponent worker = villager.getWorkerData();
     if (worker == null) {
       ProjectCivicCore.LOGGER.atSevere().log("[StorageKeeperScan] Could not fetch workder data");
@@ -84,7 +81,6 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     }
 
     if (request == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[StorageKeeperScan] No request pending");
       return snapshotInProgress;
     }
 

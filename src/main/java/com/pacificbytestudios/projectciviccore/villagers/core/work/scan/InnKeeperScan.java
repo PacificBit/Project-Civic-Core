@@ -18,7 +18,6 @@ public class InnKeeperScan implements IWorkAreaScanner {
       Ref<EntityStore> villagerRef,
       UUID uuid,
       VillagerComponent villager) {
-
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
 
     VillagerWorkerComponent worker = villager.getWorkerData();

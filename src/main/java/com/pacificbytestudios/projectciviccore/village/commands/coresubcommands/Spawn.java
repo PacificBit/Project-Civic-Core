@@ -4,6 +4,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -23,7 +24,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHeartSpa
 public class Spawn extends VillageCommand {
 
   public Spawn() {
-    super("spawn", "Spawn a village under the player");
+    super("spawn", "server.system.village.spawn.desc", false);
   }
 
   /**
@@ -69,13 +70,18 @@ public class Spawn extends VillageCommand {
 
     boolean spawned = TownHeartSpawner.spawn(chunk, spawnPosition, placementRotation);
     if (spawned) {
-      CommandUtils.sendExecutionResultMessage(exeContext.cmdContext(), ExecutionResult.Ok,
-          "Village spawned correctly at " + VectorUtil.toString(spawnPosition));
+      CommandUtils.sendExecutionResultMessage(
+          exeContext.cmdContext(),
+          ExecutionResult.Ok,
+          Message.translation("server.system.village.spawn.success")
+              .param("position", VectorUtil.toString(spawnPosition)));
       return;
     }
 
-    CommandUtils.sendExecutionResultMessage(exeContext.cmdContext(), ExecutionResult.Err,
-        "Could not spawn village! See the logs for more info");
+    CommandUtils.sendExecutionResultMessage(
+        exeContext.cmdContext(),
+        ExecutionResult.Err,
+        "server.system.village.spawn.err.failed");
   }
 
   /**
@@ -92,20 +98,13 @@ public class Spawn extends VillageCommand {
     var villagePos = village.getPosition();
     var distance = Math.floor(villagePos.distance((int) playerPos.x, villagePos.y, (int) playerPos.z));
 
-    var msg = new StringBuilder();
-    msg.append("Village already present at ")
-        .append(VectorUtil.toString(villagePos))
-        .append("\nThe new village core should be at least ")
-        .append(maxVillageRadius * 2)
-        .append(" blocks away.")
-        .append("\nCurrent distance from village: ")
-        .append(distance)
-        .append(" blocks");
-
     CommandUtils.sendExecutionResultMessage(
         context,
         ExecutionResult.Err,
-        msg.toString());
+        Message.translation("server.system.village.spawn.err.tooClose")
+            .param("villagePosition", VectorUtil.toString(villagePos))
+            .param("minimumDistance", maxVillageRadius * 2)
+            .param("currentDistance", distance));
   }
 
   /**

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.hypixel.hytale.codec.Codec;
@@ -153,7 +152,9 @@ public class SpawnVillagerTask extends AVillageTask {
             position,
             rotation);
 
-    assert result != null;
+    if (result == null) {
+      return null;
+    }
 
     Ref<EntityStore> npcRef = result.key();
     return npcRef;

@@ -13,11 +13,25 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionContext;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionResult;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 
 public abstract class VillageCommand extends CommandBase implements ExecutableVillageCommand {
 
+  private boolean isVillageRequire;
+
   public VillageCommand(String command, String description) {
     super(command, description);
+    this.isVillageRequire = true;
+  }
+
+  public VillageCommand(String command, String description, boolean isVillageRequire) {
+    super(command, description);
+    this.isVillageRequire = isVillageRequire;
+  }
+
+  public VillageCommand(String command, String description, boolean isVillageRequire, boolean requireConfirmation) {
+    super(command, description, requireConfirmation);
+    this.isVillageRequire = isVillageRequire;
   }
 
   @Override
@@ -47,7 +61,34 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
 
       EntityRef village = CommandUtils.findVillageAtPlayerPosition(component.getPosition());
 
+      if (this.isVillageRequire && (village == null || !village.getRef().isValid())) {
+        CommandUtils.sendExecutionResultMessage(
+            context,
+            ExecutionResult.Err,
+            "server.system.villagecommand.error.noValidVillage");
+        ProjectCivicCore.LOGGER.atSevere()
+            .log("[VillageCommand - executeSync] Could not fetch the village core block ref");
+        return;
+      }
+
       execute(new ExecutionContext(context, world, entityStore, chunkStore, playerRef, village));
     });
+  }
+
+  protected VillageHeartComponent getVillageHeart(ExecutionContext exeContext) {
+    VillageHeartComponent heart = CommandUtils.getVillageHeartComponent(exeContext);
+
+    if (heart == null) {
+      CommandUtils.sendExecutionResultMessage(
+          exeContext.cmdContext(),
+          ExecutionResult.Err,
+          "system.villagecommand.error.noVillageHeartBlock");
+
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[VillageCommand - getVillageHeart] Could not fetch the village core block");
+      return null;
+    }
+
+    return heart;
   }
 }

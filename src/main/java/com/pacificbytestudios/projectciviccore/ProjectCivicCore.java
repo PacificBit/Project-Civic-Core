@@ -34,6 +34,8 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseSpawnComponent;
+import com.pacificbytestudios.projectciviccore.village.components.simulation.SimulationComponent;
+import com.pacificbytestudios.projectciviccore.village.components.simulation.SimulationRunningComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.farm.FarmComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -52,6 +54,7 @@ import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHear
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartMarkerPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartPlacementSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.house.HouseSpawnSystem;
+import com.pacificbytestudios.projectciviccore.village.systems.simulation.SimulationSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.villagetask.VillageTaskQueueSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.TavernFoodRemovalSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.workplace.WorkplaceSpawnSystem;
@@ -157,6 +160,9 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageTopologyComponent> villageTopologyComponentType;
   private ComponentType<ChunkStore, BuildingSnapshotComponent> buildingSnapshotComponentType;
   private ComponentType<ChunkStore, BufferedConstructionStorageComponent> bufferedConstructionStorageComponentType;
+
+  private ComponentType<ChunkStore, SimulationComponent> simulationComponentType;
+  private ComponentType<ChunkStore, SimulationRunningComponent> simulationRunningComponentType;
 
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
   private ComponentType<EntityStore, MayorComponent> mayorComponentType;
@@ -300,6 +306,16 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillageHeartMarkerComponent",
         VillageHeartMarkerComponent.CODEC);
 
+    this.simulationComponentType = chunkRegistry.registerComponent(
+        SimulationComponent.class,
+        "SimulationComponent",
+        SimulationComponent.CODEC);
+
+    this.simulationRunningComponentType = chunkRegistry.registerComponent(
+        SimulationRunningComponent.class,
+        "SimulationRunningComponent",
+        SimulationRunningComponent.CODEC);
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
@@ -309,6 +325,7 @@ public final class ProjectCivicCore extends JavaPlugin {
     chunkRegistry.registerSystem(new VillageBuilderSystem());
     chunkRegistry.registerSystem(new StagedBuildingSpawnSystem());
     chunkRegistry.registerSystem(new VillageHeartMarkerPlacementSystem());
+    chunkRegistry.registerSystem(new SimulationSystem());
 
     commandRegistry.registerCommand(new VillageCommands());
 
@@ -690,6 +707,14 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, BufferedConstructionStorageComponent> getBufferedConstructionStorageComponentType() {
     return this.bufferedConstructionStorageComponentType;
+  }
+
+  public ComponentType<ChunkStore, SimulationComponent> getSimulationComponentType() {
+    return this.simulationComponentType;
+  }
+
+  public ComponentType<ChunkStore, SimulationRunningComponent> getSimulationRunningComponentType() {
+    return this.simulationRunningComponentType;
   }
 
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {

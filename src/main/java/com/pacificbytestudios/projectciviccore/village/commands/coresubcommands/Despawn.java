@@ -6,12 +6,12 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;
@@ -36,7 +36,7 @@ public class Despawn extends VillageCommand {
   private byte currentStep, totalSteps = 6;
 
   public Despawn() {
-    super("despawn", "Despawn village");
+    super("despawn", "server.system.village.despawn.desc", true, true);
   }
 
   /**
@@ -47,25 +47,12 @@ public class Despawn extends VillageCommand {
    */
   @Override
   public void execute(ExecutionContext exeContext) {
-    if (exeContext.village() == null) {
-      CommandUtils.sendExecutionResultMessage(
-          exeContext.cmdContext(),
-          ExecutionResult.Err,
-          "No village to despawn found!");
-      return;
-    }
-
     this.currentStep = 1;
-    VillageHeartComponent heart = CommandUtils.getVillageHeartComponent(exeContext);
+    VillageHeartComponent heart = this.getVillageHeart(exeContext);
     VillageTopologyComponent topology = CommandUtils.getVillageTopologyComponent(exeContext);
     World world = exeContext.world();
 
     if (heart == null) {
-      CommandUtils.sendExecutionResultMessage(
-          exeContext.cmdContext(),
-          ExecutionResult.Err,
-          "Could not find the village core block, either the chunk is not loaded or it was destroyed");
-      ProjectCivicCore.LOGGER.atSevere().log("[DespawnVillage - execute] Could not fetch the village core block");
       return;
     }
 
@@ -101,7 +88,8 @@ public class Despawn extends VillageCommand {
   }
 
   private void despawnHouses(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
-    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Despawning Houses...");
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.houses.start");
     var housesEntrySet = heart.getHouseIdToHouse().entrySet();
     for (var entry : housesEntrySet) {
       HouseComponent house = entry.getValue();
@@ -110,12 +98,14 @@ public class Despawn extends VillageCommand {
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(benchPos.x, benchPos.z));
       despawnFunction.apply(chunk, benchPos);
     }
-    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.done");
   }
 
   private void despawnIncompleteBuildings(ExecutionContext exeContext, VillageHeartComponent heart,
       VillageTopologyComponent topology, World world) {
-    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Incomplete Buildings...");
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.incompleteBuildings.start");
     Ref<ChunkStore> townHallRef = heart.getTownHall().getWorkplaceRef().getRef();
     TownHallComponent townHall = exeContext.chunkStore().getComponent(
         townHallRef,
@@ -134,11 +124,13 @@ public class Despawn extends VillageCommand {
       }
     }
 
-    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.done");
   }
 
   private void despawnWorkplaces(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
-    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Workplaces...");
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.workplaces.start");
     var workplaceEntrySet = heart.getWorkplaceIdToWorkplace().entrySet();
     for (var entry : workplaceEntrySet) {
       WorkplaceComponent workplace = entry.getValue();
@@ -147,7 +139,8 @@ public class Despawn extends VillageCommand {
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(benchPos.x, benchPos.z));
       despawnFunction.apply(chunk, benchPos);
     }
-    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.done");
   }
 
   private void despawnRoads(
@@ -155,7 +148,8 @@ public class Despawn extends VillageCommand {
       VillageHeartComponent heart,
       VillageTopologyComponent topology,
       World world) {
-    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Roads...");
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.roads.start");
     WorldChunk chunk = Utils.getWorldChunk(world, heart.getEntityRef().getPosition());
     for (var entry : topology.getRoadIdToRoad().entrySet()) {
       RoadNode road = entry.getValue();
@@ -164,38 +158,44 @@ public class Despawn extends VillageCommand {
         RoadSpawner.despawn(chunk, segment);
       }
     }
-    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.done");
   }
 
   private void despawnVillagers(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
-    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning Villagers...");
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.villagers.start");
     for (var entry : heart.getVillagerIdToComponent().entrySet()) {
       Ref<EntityStore> villager = world.getEntityRef(entry.getKey());
       exeContext.entityStore().removeEntity(villager, RemoveReason.REMOVE);
     }
-    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.done");
   }
 
   private void despawnCityCenter(ExecutionContext exeContext, VillageHeartComponent heart,
       VillageTopologyComponent topology,
       World world) {
-    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps, "Despawning City Center...");
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.cityCenter.start");
 
     Rotation rotation = topology.getVillageOrientation();
     Vector3i position = new Vector3i(heart.getBlockContext().getPosition()).add(Vector3iUtil.DOWN);
     WorldChunk chunk = Utils.getWorldChunk(world, position);
     TownHeartSpawner.despawn(chunk, position, rotation);
 
-    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps, "Done!");
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.done");
   }
 
-  private void sendExecutionStepInfo(ExecutionContext exeContext, byte currentStep, byte totalSteps, String message) {
-    var msg = new StringBuilder();
-    msg.append("(").append(currentStep).append("/").append(totalSteps).append(")");
-    msg.append(" ").append(message);
-
+  private void sendExecutionStepInfo(ExecutionContext exeContext, byte currentStep, byte totalSteps,
+      String translationKey) {
     CommandUtils.sendExecutionResultMessage(
-        exeContext.cmdContext(), ExecutionResult.Info, msg.toString());
+        exeContext.cmdContext(),
+        ExecutionResult.Info,
+        Message.translation(translationKey)
+            .param("currentStep", currentStep)
+            .param("totalSteps", totalSteps));
   }
 
 }

@@ -18,6 +18,7 @@ import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
@@ -72,36 +73,44 @@ public class CommandUtils {
   }
 
   public static VillageHeartComponent getVillageHeartComponent(ExecutionContext context) {
-    return context.chunkStore.getComponent(context.village().getRef(), VillageHeartComponent.getComponentType());
+    return context.chunkStore().getComponent(context.village().getRef(), VillageHeartComponent.getComponentType());
   }
 
   public static VillageTopologyComponent getVillageTopologyComponent(ExecutionContext context) {
-    return context.chunkStore.getComponent(context.village().getRef(), VillageTopologyComponent.getComponentType());
+    return context.chunkStore().getComponent(context.village().getRef(), VillageTopologyComponent.getComponentType());
+  }
+
+  public static TownHallComponent getTownHallComponent(ExecutionContext context, VillageHeartComponent heart) {
+    return context.chunkStore().getComponent(heart.getTownHallRef(), TownHallComponent.getComponentType());
   }
 
   public static VillageBuilderComponent getBuilderComponent(ExecutionContext context) {
     return context.chunkStore.getComponent(context.village().getRef(), VillageBuilderComponent.getComponentType());
   }
 
-  public static void sendExecutionResultMessage(CommandContext context, ExecutionResult result, String message) {
-    StringBuilder displayMsg = new StringBuilder();
-    displayMsg.append("[").append(result.type).append("] ").append(message);
-    context.sendMessage(Message.raw(displayMsg.toString()));
-  }
-
   public static void sendExecutionResultMessage(CommandContext context, ExecutionResult result) {
     sendExecutionResultMessage(context, result, result.defaultMsg);
   }
 
+  public static void sendExecutionResultMessage(CommandContext context, ExecutionResult result, String translationKey) {
+    sendExecutionResultMessage(context, result, Message.translation(translationKey));
+  }
+
+  public static void sendExecutionResultMessage(CommandContext context, ExecutionResult result, Message message) {
+    StringBuilder displayMsg = new StringBuilder();
+    displayMsg.append("[").append(result.type).append("] ");
+    context.sendMessage(Message.join(Message.raw(displayMsg.toString()), message));
+  }
+
   public enum ExecutionResult {
-    Ok("Success", "Command executed successfully!"),
-    Info("Info", "..."),
-    Err("Error", "Could not execute command! see logs for more info");
+    Ok("Success", Message.translation("server.system.commandutils.defaultMsg.ok")),
+    Info("Info", Message.raw("...")),
+    Err("Error", Message.translation("server.system.commandutils.defaultMsg.err"));
 
     String type;
-    String defaultMsg;
+    Message defaultMsg;
 
-    private ExecutionResult(String type, String defaultMsg) {
+    private ExecutionResult(String type, Message defaultMsg) {
       this.type = type;
       this.defaultMsg = defaultMsg;
     }
