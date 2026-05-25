@@ -610,6 +610,12 @@ public class VillageHeartComponent implements Component<ChunkStore> {
         .sum();
   }
 
+  public short getTotalBedsCount() {
+    return (short) this.houseIdToHouse.values().stream()
+        .mapToInt(HouseComponent::getTotalBedsCount)
+        .sum();
+  }
+
   public BlockContext getBlockContext() {
     return blockContext;
   }

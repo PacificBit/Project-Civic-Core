@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.systems.simulation;
 
-import java.util.UUID;
-
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -13,6 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -97,8 +96,7 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
       return;
     }
 
-    MayorSync mayorSync = resolveMayor(world, townHallWorkplace);
-    MayorComponent mayorComponent = mayorSync.mayorComponent();
+    MayorComponent mayorComponent = Utils.getMayorComponent(world, village);
     mayorComponent.setExecutingVillagePlan(townHall.getVillageProjectPlan());
     this.executor.executeNext(world, village, townHall, mayorComponent, true);
 
@@ -125,30 +123,6 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
     return worldTimeResource.getGameDateTime().getDayOfYear();
   }
 
-  private MayorSync resolveMayor(
-      World world,
-      WorkplaceComponent townHallWorkplace) {
-    UUID mayorId = townHallWorkplace.getBossId();
-    if (mayorId == null) {
-      return new MayorSync(null, new MayorComponent());
-    }
-
-    Ref<EntityStore> mayorRef = world.getEntityRef(mayorId);
-    if (mayorRef == null || !mayorRef.isValid()) {
-      return new MayorSync(null, new MayorComponent());
-    }
-
-    Store<EntityStore> entityStore = world.getEntityStore().getStore();
-    MayorComponent mayorComponent = entityStore.getComponent(
-        mayorRef,
-        MayorComponent.getComponentType());
-    if (mayorComponent == null) {
-      mayorComponent = new MayorComponent();
-    }
-
-    return new MayorSync(mayorRef, mayorComponent);
-  }
-
   private void stopSimulation(
       Ref<ChunkStore> villageRef,
       Store<ChunkStore> store) {
@@ -165,10 +139,5 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
         SimulationRunningComponent.getComponentType(),
         Query.not(VillageBuilderComponent.getComponentType()),
         Query.not(VillageTaskQueueComponent.getComponentType()));
-  }
-
-  private record MayorSync(
-      Ref<EntityStore> mayorRef,
-      MayorComponent mayorComponent) {
   }
 }

@@ -1,0 +1,233 @@
+$C = "../../Common.ui";
+
+@SectionTitleStyle = LabelStyle(
+  FontSize: 13,
+  RenderBold: true,
+  RenderUppercase: true,
+  TextColor: #878e9c
+);
+
+@MetricLabelStyle = LabelStyle(
+  FontSize: 13,
+  TextColor: #b8bdc7,
+  VerticalAlignment: Center
+);
+
+@MetricValueStyle = LabelStyle(
+  FontSize: 14,
+  RenderBold: true,
+  TextColor: #ffffff,
+  HorizontalAlignment: End,
+  VerticalAlignment: Center
+);
+
+@Icon = AssetImage {
+  Anchor: (Width: 24, Height: 24);
+  FallbackTexturePath: "UI/Custom/Common/WIPIcon.png";
+};
+
+$C.@PageOverlay {}
+
+$C.@DecoratedContainer {
+  Anchor: (Width: 980, Height: 680);
+
+  #Title {
+    Group {
+      LayoutMode: Center;
+      Anchor: (Full: 0);
+
+      $C.@Title {
+        @Text = "Village Status";
+      }
+    }
+  }
+
+  #Content {
+    LayoutMode: Full;
+
+    Label {
+      Anchor: (Left: 0, Top: 4, Width: 946, Height: 24);
+      Style: (
+        FontSize: 13,
+        TextColor: #aeb5c2,
+        HorizontalAlignment: Center,
+        VerticalAlignment: Center
+      );
+      Text: "Diagnostic overview for the village at your position";
+    }
+
+    $C.@Panel {
+      Anchor: (Left: 0, Top: 44, Width: 465, Height: 192);
+      LayoutMode: Full;
+
+      Label {
+        Anchor: (Left: 18, Top: 14, Width: 420, Height: 20);
+        Style: @SectionTitleStyle;
+        Text: "Population";
+      }
+
+      @Icon #LevelIcon { Anchor: (Left: 18, Top: 50, Width: 24, Height: 24); }
+      Label {
+        Anchor: (Left: 54, Top: 46, Width: 240, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Village level";
+      }
+      Label #LevelValue {
+        Anchor: (Left: 330, Top: 46, Width: 105, Height: 32);
+        Style: @MetricValueStyle;
+      }
+
+      @Icon #VillagersIcon { Anchor: (Left: 18, Top: 84, Width: 24, Height: 24); }
+      Label {
+        Anchor: (Left: 54, Top: 80, Width: 240, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Villagers";
+      }
+      Label #VillagersValue {
+        Anchor: (Left: 330, Top: 80, Width: 105, Height: 32);
+        Style: @MetricValueStyle;
+      }
+
+      Label {
+        Anchor: (Left: 54, Top: 114, Width: 240, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Homeless";
+      }
+      Label #HomelessValue {
+        Anchor: (Left: 330, Top: 114, Width: 105, Height: 32);
+        Style: @MetricValueStyle;
+      }
+
+      Label {
+        Anchor: (Left: 54, Top: 148, Width: 240, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Unemployed";
+      }
+      Label #UnemployedValue {
+        Anchor: (Left: 285, Top: 148, Width: 150, Height: 32);
+        Style: @MetricValueStyle;
+      }
+    }
+
+    $C.@Panel {
+      Anchor: (Left: 0, Top: 244, Width: 465, Height: 130);
+      LayoutMode: Full;
+
+      Label {
+        Anchor: (Left: 18, Top: 14, Width: 420, Height: 20);
+        Style: @SectionTitleStyle;
+        Text: "Housing";
+      }
+
+      @Icon #BedsIcon { Anchor: (Left: 18, Top: 50, Width: 24, Height: 24); }
+      Label {
+        Anchor: (Left: 54, Top: 46, Width: 240, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Occupied beds";
+      }
+      Label #BedsValue {
+        Anchor: (Left: 315, Top: 46, Width: 120, Height: 32);
+        Style: @MetricValueStyle;
+      }
+
+      Label {
+        Anchor: (Left: 54, Top: 80, Width: 240, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Empty beds";
+      }
+      Label #EmptyBedsValue {
+        Anchor: (Left: 315, Top: 80, Width: 120, Height: 32);
+        Style: @MetricValueStyle;
+      }
+    }
+
+    $C.@Panel {
+      Anchor: (Left: 0, Top: 380, Width: 465, Height: 124);
+      LayoutMode: Full;
+
+      Label {
+        Anchor: (Left: 18, Top: 14, Width: 420, Height: 20);
+        Style: @SectionTitleStyle;
+        Text: "Health checks";
+      }
+
+      @Icon #MayorIcon { Anchor: (Left: 18, Top: 50, Width: 24, Height: 24); }
+      Label {
+        Anchor: (Left: 54, Top: 46, Width: 220, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Mayor reference";
+      }
+      Label #MayorStatusValue {
+        Anchor: (Left: 275, Top: 46, Width: 160, Height: 32);
+        Style: @MetricValueStyle;
+      }
+
+      @Icon #NpcRefsIcon { Anchor: (Left: 18, Top: 84, Width: 24, Height: 24); }
+      Label {
+        Anchor: (Left: 54, Top: 80, Width: 220, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "NPC references";
+      }
+      Label #NpcRefsValue {
+        Anchor: (Left: 275, Top: 80, Width: 160, Height: 32);
+        Style: @MetricValueStyle;
+      }
+    }
+
+    $C.@Panel {
+      Anchor: (Left: 481, Top: 44, Width: 465, Height: 95);
+      LayoutMode: Full;
+
+      Label {
+        Anchor: (Left: 18, Top: 14, Width: 420, Height: 20);
+        Style: @SectionTitleStyle;
+        Text: "Jobs";
+      }
+
+      @Icon #WorkIcon { Anchor: (Left: 18, Top: 50, Width: 24, Height: 24); }
+      Label {
+        Anchor: (Left: 54, Top: 46, Width: 190, Height: 32);
+        Style: @MetricLabelStyle;
+        Text: "Workplace vacancies";
+      }
+      Label #WorkplaceVacancyValue {
+        Anchor: (Left: 255, Top: 46, Width: 180, Height: 32);
+        Style: @MetricValueStyle;
+      }
+    }
+
+    $C.@Panel {
+      Anchor: (Left: 481, Top: 144, Width: 465, Height: 292);
+      LayoutMode: Full;
+
+      Label {
+        Anchor: (Left: 18, Top: 14, Width: 420, Height: 20);
+        Style: @SectionTitleStyle;
+        Text: "Structures";
+      }
+
+      Label { Anchor: (Left: 24, Top: 46, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Houses"; }
+      Label #HouseValue { Anchor: (Left: 355, Top: 46, Width: 80, Height: 30); Style: @MetricValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 78, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Town halls"; }
+      Label #TownHallValue { Anchor: (Left: 355, Top: 78, Width: 80, Height: 30); Style: @MetricValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 110, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Farms"; }
+      Label #FarmValue { Anchor: (Left: 355, Top: 110, Width: 80, Height: 30); Style: @MetricValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 142, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Mines"; }
+      Label #MineValue { Anchor: (Left: 355, Top: 142, Width: 80, Height: 30); Style: @MetricValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 174, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Sawmills"; }
+      Label #SawmillValue { Anchor: (Left: 355, Top: 174, Width: 80, Height: 30); Style: @MetricValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 206, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Storage"; }
+      Label #StorageValue { Anchor: (Left: 355, Top: 206, Width: 80, Height: 30); Style: @MetricValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 238, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Taverns"; }
+      Label #TavernValue { Anchor: (Left: 355, Top: 238, Width: 80, Height: 30); Style: @MetricValueStyle; }
+    }
+  }
+}
+
+$C.@BackButton {}

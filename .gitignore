@@ -18,3 +18,5 @@ bin/
 
 # Ignore run directory
 run/
+
+.vscode/

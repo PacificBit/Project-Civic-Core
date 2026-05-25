@@ -46,11 +46,15 @@ public class AppartmentComponent implements Component<ChunkStore> {
     this.beds = beds;
   }
 
-  public short getFreeBedsCount() {
-    short registeredBeds = (short) beds.values()
+  public short getTotalBedsCount() {
+    return (short) beds.values()
         .stream()
         .filter(bed -> bed != null)
         .count();
+  }
+
+  public short getFreeBedsCount() {
+    short registeredBeds = getTotalBedsCount();
     short bedsTaken = (short) beds.values()
         .stream()
         .filter(bed -> bed != null)

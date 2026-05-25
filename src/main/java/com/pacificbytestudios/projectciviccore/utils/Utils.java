@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
+import java.util.UUID;
+
 import javax.annotation.Nonnull;
 
 import org.joml.Vector2i;
@@ -16,6 +18,7 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.AdvanceConstructionStage;
@@ -32,6 +35,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TavernSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHallSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 
 import io.sentry.util.Pair;
 
@@ -401,5 +405,21 @@ public class Utils {
     }
     WorldChunk correctChunk = getWorldChunk(world, position);
     return correctChunk.getBlockType(position);
+  }
+
+  public static MayorComponent getMayorComponent(World world, VillageHeartComponent heart) {
+    UUID villagerId = heart.getTownHall().getBossId();
+    if (villagerId == null) {
+      return null;
+    }
+
+    Ref<EntityStore> villagerRef = world.getEntityRef(villagerId);
+    if (villagerRef == null || !villagerRef.isValid()) {
+      return null;
+    }
+
+    return villagerRef.getStore().getComponent(
+        villagerRef,
+        MayorComponent.getComponentType());
   }
 }

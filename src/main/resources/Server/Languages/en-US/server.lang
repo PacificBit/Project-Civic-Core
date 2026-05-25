@@ -82,3 +82,12 @@ system.simulation.resume.success=Resumed village simulation. Remaining simulated
 system.simulation.stop.desc=Stops the current simulation
 system.simulation.stop.err.noSimulationFound=No village simulation is scheduled
 system.simulation.stop.success=Stopped village simulation. Removed {remainingDays} remaining simulated day(s)
+
+
+
+
+# === COMMANDS - DIAGNOSTIC ===
+system.diagnostic.desc=Run village diagnostic analysis or repair tasks
+
+# === COMMANDS - DIAGNOSTIC.STATUS ===
+system.diagnostic.status.desc=Run village diagnostic analysis
