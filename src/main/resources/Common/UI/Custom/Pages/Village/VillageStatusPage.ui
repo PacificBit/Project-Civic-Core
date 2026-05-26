@@ -227,6 +227,11 @@ $C.@DecoratedContainer {
       Label { Anchor: (Left: 24, Top: 238, Width: 250, Height: 30); Style: @MetricLabelStyle; Text: "Taverns"; }
       Label #TavernValue { Anchor: (Left: 355, Top: 238, Width: 80, Height: 30); Style: @MetricValueStyle; }
     }
+
+    $C.@SecondaryTextButton #RepairButton {
+      @Anchor = Anchor(Right: 0, Bottom: 0, Width: 172);
+      @Text = "Repair";
+    }
   }
 }
 

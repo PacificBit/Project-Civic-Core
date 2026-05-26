@@ -1,18 +1,34 @@
 package com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.ui;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
+import org.bson.Document;
+import org.bson.json.JsonParseException;
+
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.BasicCustomUIPage;
+import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
+import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
+import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
+import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.core.VillageRepairer;
+import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.core.VillageRepairer.VillageStatus;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
 // NOTE: This will be removed when Noesis will come out
 @Deprecated
 public class VillageStatusPage extends BasicCustomUIPage {
   private static final String PAGE_DOCUMENT = "Pages/Village/VillageStatusPage.ui";
+  private static final String REPAIR_ACTION = "repairVillage";
 
   private static final String ICON_LEVEL = "Icons/ItemCategories/Natural-Fire.png";
   private static final String ICON_VILLAGERS = "Icons/ItemCategories/Items-Clothes.png";
@@ -21,8 +37,11 @@ public class VillageStatusPage extends BasicCustomUIPage {
   private static final String ICON_HEALTH_OK = "Common/Icons/AssetNotifications/IconCheckmark@2x.png";
   private static final String ICON_HEALTH_WARN = "Common/Icons/AssetNotifications/IconAlert@2x.png";
 
+  private final World world;
+  private final VillageHeartComponent heart;
+
   private final boolean mayorValid;
-  private final int invalidNpcReferenceCount;
+  private final Set<UUID> invalidVillagerRef;
   private final short level;
   private final short villagerCount;
   private final short homelessCount;
@@ -35,8 +54,10 @@ public class VillageStatusPage extends BasicCustomUIPage {
 
   public VillageStatusPage(
       PlayerRef playerRef,
+      World world,
+      VillageHeartComponent heart,
       boolean mayorValid,
-      int invalidNpcReferenceCount,
+      Set<UUID> invalidVillagerRef,
       short level,
       short villagerCount,
       short homelessCount,
@@ -47,8 +68,10 @@ public class VillageStatusPage extends BasicCustomUIPage {
       boolean anyWorkplaceEmpty,
       Map<StructureType, Short> structureTypeMap) {
     super(playerRef, CustomPageLifetime.CanDismiss);
+    this.world = world;
+    this.heart = heart;
     this.mayorValid = mayorValid;
-    this.invalidNpcReferenceCount = invalidNpcReferenceCount;
+    this.invalidVillagerRef = invalidVillagerRef;
     this.level = level;
     this.villagerCount = villagerCount;
     this.homelessCount = homelessCount;
@@ -61,6 +84,19 @@ public class VillageStatusPage extends BasicCustomUIPage {
   }
 
   @Override
+  public void build(
+      Ref<EntityStore> player,
+      UICommandBuilder builder,
+      UIEventBuilder eventBuilder,
+      Store<EntityStore> store) {
+    this.build(builder);
+    eventBuilder.addEventBinding(
+        CustomUIEventBindingType.Activating,
+        "#RepairButton",
+        EventData.of("action", REPAIR_ACTION));
+  }
+
+  @Override
   public void build(UICommandBuilder builder) {
     builder.append(PAGE_DOCUMENT);
 
@@ -69,7 +105,10 @@ public class VillageStatusPage extends BasicCustomUIPage {
     builder.set("#BedsIcon.AssetPath", ICON_BEDS);
     builder.set("#WorkIcon.AssetPath", ICON_WORK);
     builder.set("#MayorIcon.AssetPath", this.mayorValid ? ICON_HEALTH_OK : ICON_HEALTH_WARN);
-    builder.set("#NpcRefsIcon.AssetPath", this.invalidNpcReferenceCount == 0 ? ICON_HEALTH_OK : ICON_HEALTH_WARN);
+
+    int invalidVillagerRefCount = this.invalidVillagerRef.size();
+    builder.set("#NpcRefsIcon.AssetPath",
+        invalidVillagerRefCount == 0 ? ICON_HEALTH_OK : ICON_HEALTH_WARN);
 
     this.setText(builder, "LevelValue", Short.toString(this.level));
     this.setText(builder, "VillagersValue", Short.toString(this.villagerCount));
@@ -87,8 +126,8 @@ public class VillageStatusPage extends BasicCustomUIPage {
     this.setStatus(
         builder,
         "NpcRefsValue",
-        this.invalidNpcReferenceCount == 0 ? "All valid" : this.invalidNpcReferenceCount + " invalid",
-        this.invalidNpcReferenceCount == 0);
+        invalidVillagerRefCount == 0 ? "All valid" : invalidVillagerRefCount + " invalid",
+        invalidVillagerRefCount == 0);
 
     this.setStructure(builder, StructureType.HOUSE);
     this.setStructure(builder, StructureType.TOWN_HALL);
@@ -97,6 +136,31 @@ public class VillageStatusPage extends BasicCustomUIPage {
     this.setStructure(builder, StructureType.SAWMILL);
     this.setStructure(builder, StructureType.STORAGE);
     this.setStructure(builder, StructureType.TAVERN);
+  }
+
+  @Override
+  public void handleDataEvent(Ref<EntityStore> player, Store<EntityStore> store, String data) {
+    if (!REPAIR_ACTION.equals(this.getAction(data))) {
+      return;
+    }
+
+    VillageRepairer.repairVillage(
+        this.world,
+        this.heart,
+        new VillageStatus(this.mayorValid, this.invalidVillagerRef));
+    this.close();
+  }
+
+  private String getAction(String data) {
+    if (data == null || data.isBlank()) {
+      return null;
+    }
+
+    try {
+      return Document.parse(data).getString("action");
+    } catch (JsonParseException exception) {
+      return null;
+    }
   }
 
   private void setStructure(UICommandBuilder builder, StructureType type) {

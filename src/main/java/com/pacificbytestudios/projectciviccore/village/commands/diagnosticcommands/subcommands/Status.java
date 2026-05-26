@@ -1,16 +1,18 @@
 package com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.subcommands;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionContext;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionResult;
+import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.core.VillageRepairer;
 import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.ui.VillageStatusPage;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -30,9 +32,9 @@ public class Status extends VillageCommand {
 
     World world = exeContext.world();
 
-    boolean isMayorValid = this.isMayorValid(world, heart);
+    boolean isMayorValid = VillageRepairer.isMayorValid(world, heart);
 
-    int invalidNpcReference = calculateInvalidNpcReference(world, heart);
+    Set<UUID> invalidNpcReference = VillageRepairer.getInvalidVillagerRef(world, heart);
     short level = (short) heart.getLevel();
     short villagerCount = heart.getVillagerCount();
     short homelessCount = heart.getHomelessCount();
@@ -59,6 +61,8 @@ public class Status extends VillageCommand {
         exeContext.entityStore(),
         new VillageStatusPage(
             hytalePlayerRef,
+            world,
+            heart,
             isMayorValid,
             invalidNpcReference,
             level,
@@ -70,23 +74,6 @@ public class Status extends VillageCommand {
             unemployedCount,
             isAnyWorkplaceEmpty,
             structureTypeMap));
-  }
-
-  private int calculateInvalidNpcReference(World world, VillageHeartComponent heart) {
-    return (int) heart.getVillagerIdToComponent()
-        .keySet()
-        .stream()
-        .map(world::getEntityRef)
-        .filter(ref -> ref == null || !ref.isValid())
-        .count();
-  }
-
-  private boolean isMayorValid(World world, VillageHeartComponent heart) {
-    try {
-      return Utils.getMayorComponent(world, heart) != null;
-    } catch (IllegalArgumentException exception) {
-      return false;
-    }
   }
 
 }
