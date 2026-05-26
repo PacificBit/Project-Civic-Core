@@ -31,10 +31,8 @@ public class VillageRepairer {
         queueComponent.registerTask(new SpawnVillagerTask(
             heart.getNextRequiredRole().getRole(),
             3));
-        queueComponent.registerTask(new TryJobAssignmentTask(
-            heart.getFirstWorkplaceWithMissingEmployee()));
-        queueComponent.registerTask(new TryHouseAssignmentTask(
-            heart.findHouseIdWithVacancy()));
+        queueComponent.registerTask(new TryJobAssignmentTask());
+        queueComponent.registerTask(new TryHouseAssignmentTask());
       }
     }
 

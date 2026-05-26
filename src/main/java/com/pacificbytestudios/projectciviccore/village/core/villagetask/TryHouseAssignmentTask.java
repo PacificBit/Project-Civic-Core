@@ -1,6 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.joml.Vector3i;
@@ -9,11 +11,13 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public class TryHouseAssignmentTask extends AVillageTask {
   public static final BuilderCodec<TryHouseAssignmentTask> CODEC = BuilderCodec
@@ -41,6 +45,14 @@ public class TryHouseAssignmentTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
+    if (this.house == null) {
+      this.house = heart.findHouseIdWithVacancy();
+      if (this.house == null) {
+        ProjectCivicCore.LOGGER.atInfo().log("[TryHouseAssignmentTask] No empty house found");
+        return;
+      }
+    }
+
     HouseComponent houseComponent = heart.getHouseFromId(this.house);
     if (houseComponent == null) {
       ProjectCivicCore.LOGGER.atInfo().log("[TryHouseAssignmentTask] No house found for id: " + this.house);
@@ -54,6 +66,7 @@ public class TryHouseAssignmentTask extends AVillageTask {
     }
 
     int assigned = 0;
+    Map<UUID, VillagerComponent> assignedVillagerSnapshots = new HashMap<>();
     while (houseComponent.hasVacancy() && homelessRegistry.size() > 0) {
       UUID candidate = homelessRegistry.pollFirst();
       if (candidate == null) {
@@ -62,7 +75,16 @@ public class TryHouseAssignmentTask extends AVillageTask {
 
       if (heart.assignHouse(candidate, this.house)) {
         assigned++;
+        VillagerComponent assignedVillagerSnapshot = VillageVillagerEntitySync.snapshotVillager(heart, candidate);
+        if (assignedVillagerSnapshot != null) {
+          assignedVillagerSnapshots.put(candidate, assignedVillagerSnapshot);
+        }
       }
+    }
+
+    if (!assignedVillagerSnapshots.isEmpty()) {
+      World world = chunk.getWorld();
+      world.execute(() -> VillageVillagerEntitySync.persistVillagers(world, assignedVillagerSnapshots));
     }
 
     ProjectCivicCore.LOGGER
