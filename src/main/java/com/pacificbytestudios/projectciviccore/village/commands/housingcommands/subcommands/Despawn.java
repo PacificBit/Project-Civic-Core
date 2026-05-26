@@ -23,6 +23,7 @@ import com.pacificbytestudios.projectciviccore.village.components.house.HouseCom
 import com.pacificbytestudios.projectciviccore.village.core.spawner.HouseSpawner;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = true)
 public class Despawn extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

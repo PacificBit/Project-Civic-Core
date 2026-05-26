@@ -155,4 +155,19 @@ public class VectorUtil {
     return new Vector3i((int) origin.x, (int) origin.y, (int) origin.z);
   }
 
+  // =============================
+  // To string
+  // =============================
+
+  public static String toString(Vector3i point) {
+    return "<x: " + point.x + ", y: " + point.y + ", z: " + point.z + ">";
+  }
+
+  public static String toString(Vector3d point) {
+    return "<x: " + point.x + ", y: " + point.y + ", z: " + point.z + ">";
+  }
+
+  public static String toString(Vector3f point) {
+    return "<x: " + point.x + ", y: " + point.y + ", z: " + point.z + ">";
+  }
 }

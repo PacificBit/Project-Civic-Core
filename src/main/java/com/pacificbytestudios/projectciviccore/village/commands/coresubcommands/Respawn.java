@@ -28,6 +28,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHeartSpa
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
+@Deprecated(forRemoval = true)
 public class Respawn extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
@@ -109,7 +110,8 @@ public class Respawn extends CommandBase {
         return;
       }
 
-      boolean spawnResult = TownHeartSpawner.spawn(chunk, VectorUtil.clone(heartPosition).add(Vector3iUtil.DOWN), heartRotation);
+      boolean spawnResult = TownHeartSpawner.spawn(chunk, VectorUtil.clone(heartPosition).add(Vector3iUtil.DOWN),
+          heartRotation);
 
       if (!spawnResult) {
         context.sendMessage(Message.raw("Could not spawn village"));

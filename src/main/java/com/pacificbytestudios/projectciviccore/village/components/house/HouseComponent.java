@@ -141,6 +141,10 @@ public class HouseComponent implements Component<ChunkStore> {
     return this.appartmentRegistry.getFreeBedsCount();
   }
 
+  public short getTotalBedsCount() {
+    return this.appartmentRegistry.getTotalBedsCount();
+  }
+
   @Override
   public HouseComponent clone() {
     HouseComponent component = new HouseComponent();

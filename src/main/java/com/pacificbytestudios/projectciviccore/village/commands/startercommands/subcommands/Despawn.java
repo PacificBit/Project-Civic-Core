@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 
+@Deprecated(forRemoval = true)
 public class Despawn extends CommandBase {
 
   public Despawn() {

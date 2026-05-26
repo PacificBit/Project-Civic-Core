@@ -10,15 +10,14 @@
       "Zones.Zone1_Tier1.Custom.River_Plains*"
     ]
   },
-  "Content": {
-    "Biome_Prefabs": [
-      {
-        "Operation": "Add",
-        "Content": {
-          "Type": "File",
-          "Path": "Zones.ProjectCivicCore.Biome_Prefabs.City_Center_Plains"
-        }
+  "Operations": [
+    {
+      "Type": "Add",
+      "Content": {
+        "Type": "File",
+        "ContentType": "BiomePrefab",
+        "Path": "Zones.ProjectCivicCore.Biome_Prefabs.City_Center_Plains"
       }
-    ]
-  }
+    }
+  ]
 }

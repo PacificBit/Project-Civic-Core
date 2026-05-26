@@ -1,65 +1,119 @@
 package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
-import org.joml.Vector2i;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
-
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
-import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionContext;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionResult;
+import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHeartSpawner;
-import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
-public class Spawn extends CommandBase {
-  private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
+public class Spawn extends VillageCommand {
 
   public Spawn() {
-    super("spawn", "Spawn a village under player");
+    super("spawn", "server.system.village.spawn.desc", false);
   }
 
+  /**
+   * It tries to spawn a village. It will not spawn a village if either the player
+   * is standing inside a village or if building a new village would make them
+   * collide at any point
+   *
+   * @param exeContext Contains the command context and the player, current
+   *                   position, village ref
+   */
   @Override
-  protected void executeSync(CommandContext context) {
-    Ref<EntityStore> playerRef = context.senderAsPlayerRef();
-    Store<EntityStore> entityStore = playerRef.getStore();
-    World world = entityStore.getExternalData().getWorld();
+  public void execute(ExecutionContext exeContext) {
+    EntityRef village = exeContext.village();
 
-    world.execute(() -> {
-      TransformComponent transform = entityStore.getComponent(playerRef, TransformComponent.getComponentType());
-      if (transform == null) {
-        context.sendMessage(Message.raw("Could not read player position."));
-        return;
-      }
+    var playerTransform = exeContext.entityStore().getComponent(exeContext.playerRef(),
+        TransformComponent.getComponentType());
 
-      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
-      Rotation placementRotation = StructurePlacementUtils.getPlayerPlacementRotation(entityStore, playerRef);
-      Vector3i villageAnchor = resolveVillageAnchor(world, playerPos);
+    if (village != null) {
+      sendVillageTooCloseMsg(exeContext.cmdContext(), village, playerTransform.getPosition());
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[SpawnVillage - spawnVillage] Trying to spawn a village inside another village");
+      return;
+    }
 
-      if (villageStore.getVillageHeartIn(new Vector2i(villageAnchor.x, villageAnchor.z)) != null) {
-        context.sendMessage(Message.raw("A village already exists at this position."));
-        return;
-      }
+    village = CommandUtils.doesVillagePlacementCollide(playerTransform);
+    if (village != null) {
+      sendVillageTooCloseMsg(exeContext.cmdContext(), village, playerTransform.getPosition());
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[SpawnVillage - spawnVillage] Trying to spawn a village that would collide with another");
+      return;
+    }
 
-      WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(villageAnchor.x, villageAnchor.z));
-      boolean spawnResult = TownHeartSpawner.spawn(chunk, villageAnchor, placementRotation);
+    var playerPos = playerTransform.getPosition();
+    WorldChunk chunk = exeContext.world().getChunk(ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z));
 
-      if (!spawnResult) {
-        context.sendMessage(Message.raw("Could not spawn village."));
-        return;
-      }
-      context.sendMessage(Message.raw("Village successfully spawned"));
-    });
+    Rotation placementRotation = StructurePlacementUtils.getPlayerPlacementRotation(
+        exeContext.entityStore(),
+        exeContext.playerRef());
+
+    var spawnPosition = resolveVillageAnchor(
+        exeContext.world(),
+        VectorUtil.toVector3i(playerPos));
+
+    boolean spawned = TownHeartSpawner.spawn(chunk, spawnPosition, placementRotation);
+    if (spawned) {
+      CommandUtils.sendExecutionResultMessage(
+          exeContext.cmdContext(),
+          ExecutionResult.Ok,
+          Message.translation("server.system.village.spawn.success")
+              .param("position", VectorUtil.toString(spawnPosition)));
+      return;
+    }
+
+    CommandUtils.sendExecutionResultMessage(
+        exeContext.cmdContext(),
+        ExecutionResult.Err,
+        "server.system.village.spawn.err.failed");
   }
 
+  /**
+   * Writes a message to the player console notifing the player that the new
+   * village is too close
+   * to an existing one
+   * 
+   * @param context Hytale's command context
+   * @param village Reference of the already present village
+   */
+  private void sendVillageTooCloseMsg(CommandContext context, EntityRef village, Vector3d playerPos) {
+    int maxVillageRadius = StructureConfig.TownHeart.DEFAULT_CONFIG.getMaxRadius();
+
+    var villagePos = village.getPosition();
+    var distance = Math.floor(villagePos.distance((int) playerPos.x, villagePos.y, (int) playerPos.z));
+
+    CommandUtils.sendExecutionResultMessage(
+        context,
+        ExecutionResult.Err,
+        Message.translation("server.system.village.spawn.err.tooClose")
+            .param("villagePosition", VectorUtil.toString(villagePos))
+            .param("minimumDistance", maxVillageRadius * 2)
+            .param("currentDistance", distance));
+  }
+
+  /**
+   * Returns the appropriate {@link Vector3i} where to spawn the village
+   * 
+   * @param world  World instance
+   * @param origin Player position
+   * @return Appropriate village spawn position
+   */
   private static Vector3i resolveVillageAnchor(World world, Vector3i origin) {
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(origin.x, origin.z));
 

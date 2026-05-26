@@ -1,37 +1,24 @@
 package com.pacificbytestudios.projectciviccore.village.commands;
 
-import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Despawn;
-import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Dump;
-import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Level;
-import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Respawn;
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Spawn;
-import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.State;
-import com.pacificbytestudios.projectciviccore.village.commands.housingcommands.Housing;
-import com.pacificbytestudios.projectciviccore.village.commands.roadsubcommands.Road;
-import com.pacificbytestudios.projectciviccore.village.commands.startercommands.StarterVillage;
-import com.pacificbytestudios.projectciviccore.village.commands.storagecommands.Storage;
-import com.pacificbytestudios.projectciviccore.village.commands.villagersubcommands.Villager;
-import com.pacificbytestudios.projectciviccore.village.commands.workplacesubcommands.Workplace;
+import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.Diagnostic;
+import com.pacificbytestudios.projectciviccore.village.commands.simulationcommands.Simulation;
 
 public class VillageCommands extends AbstractCommandCollection {
 
   public VillageCommands() {
     super("village", "Village debug command tools");
-    this.setPermissionGroup(GameMode.Creative);
-    this.addSubCommand(new Workplace());
-    this.addSubCommand(new Road());
-    this.addSubCommand(new Storage());
-    this.addSubCommand(new Villager());
-    this.addSubCommand(new Housing());
-    this.addSubCommand(new StarterVillage());
-    this.addSubCommand(new Dump());
+    this.setPermissionGroups("hytale:WorldEditor");
+
+    // Core sub commands
     this.addSubCommand(new Spawn());
     this.addSubCommand(new Despawn());
-    this.addSubCommand(new Respawn());
-    this.addSubCommand(new State());
-    this.addSubCommand(new Level());
+    this.addSubCommand(new Simulation());
+
+    // Diagnostic sub commands
+    this.addSubCommand(new Diagnostic());
   }
 
 }

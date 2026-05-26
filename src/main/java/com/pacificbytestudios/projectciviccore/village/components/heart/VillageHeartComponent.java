@@ -267,6 +267,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return workplace;
   }
 
+  public UUID getTownHallId() {
+    return this.townHallId;
+  }
+
   public Ref<ChunkStore> getTownHallRef() {
     return this.getTownHall().getWorkplaceRef().getRef();
   }
@@ -363,6 +367,15 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return null;
   }
 
+  public UUID findHouseIdWithVacancy() {
+    for (Map.Entry<UUID, HouseComponent> house : this.houseIdToHouse.entrySet()) {
+      if (house.getValue().hasVacancy()) {
+        return house.getKey();
+      }
+    }
+    return null;
+  }
+
   public void registerHouse(HouseComponent house) {
     this.houseIdToHouse.put(house.getUuid(), house);
   }
@@ -422,11 +435,18 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
     Map<VillagerRole, Integer> roleCounts = new EnumMap<>(VillagerRole.class);
     for (VillagerComponent villager : this.villagerIdToComponent.values()) {
-      int count = roleCounts.getOrDefault(villager.getRole(), 0);
-      roleCounts.put(villager.getRole(), count + 1);
+      VillagerRole role = villager.getRole();
+      if (role == null) {
+        continue;
+      }
+
+      int count = roleCounts.getOrDefault(role, 0);
+      roleCounts.put(role, count + 1);
     }
 
-    if (roleCounts.get(VillagerRole.FEMALE) < roleCounts.get(VillagerRole.MALE)) {
+    int femaleCount = roleCounts.getOrDefault(VillagerRole.FEMALE, 0);
+    int maleCount = roleCounts.getOrDefault(VillagerRole.MALE, 0);
+    if (femaleCount < maleCount) {
       return VillagerRole.FEMALE;
     }
     return VillagerRole.MALE;
@@ -607,6 +627,12 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   public short getAvailableBedsCount() {
     return (short) this.houseIdToHouse.values().stream()
         .mapToInt(HouseComponent::getFreeBedCount)
+        .sum();
+  }
+
+  public short getTotalBedsCount() {
+    return (short) this.houseIdToHouse.values().stream()
+        .mapToInt(HouseComponent::getTotalBedsCount)
         .sum();
   }
 

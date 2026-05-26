@@ -3705,22 +3705,19 @@
       "x": -3,
       "y": 1,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Vertical",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 2,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Vertical",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 3,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Vertical",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -13565,3 +13562,4 @@
     }
   ]
 }
+

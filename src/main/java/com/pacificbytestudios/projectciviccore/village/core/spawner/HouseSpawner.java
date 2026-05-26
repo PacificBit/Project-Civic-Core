@@ -484,6 +484,72 @@ public class HouseSpawner {
     }
   }
 
+  public static boolean despawnIncompleteBuilding(
+      WorldChunk chunk,
+      Vector3i prefabAnchor,
+      int level,
+      Rotation rotation) {
+    if (chunk == null || prefabAnchor == null) {
+      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - house] Missing chunk or prefab anchor");
+      return false;
+    }
+
+    Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
+    WorldChunk chunkToUse = chunk;
+    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, structureRotation);
+    Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
+        chunkToUse,
+        constructionSignPosition);
+
+    if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
+      ProjectCivicCore.LOGGER.atSevere()
+          .log("[despawnIncompleteBuilding - house] Could not fetch the construction sign entity");
+      return false;
+    }
+
+    Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
+    chunkToUse = blockEntity.getFirst();
+    Store<ChunkStore> store = constructionSignRef.getStore();
+
+    BuildingSnapshotComponent snapshotComponent = store.getComponent(
+        constructionSignRef,
+        BuildingSnapshotComponent.getComponentType());
+    TrackedPrefabPlacementComponent trackedPlacement = store.getComponent(
+        constructionSignRef,
+        TrackedPrefabPlacementComponent.getComponentType());
+
+    Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : structureRotation;
+    Vector3i targetAnchor = snapshotComponent != null && snapshotComponent.getPrefabAnchor() != null
+        ? snapshotComponent.getPrefabAnchor()
+        : VectorUtil.clone(prefabAnchor);
+    if (targetAnchor == null && trackedPlacement != null) {
+      targetAnchor = trackedPlacement.getOrigin();
+    }
+
+    int targetLevel = snapshotComponent != null ? snapshotComponent.getTargetLevel() : level;
+    short currentStage = snapshotComponent != null ? snapshotComponent.getCurrentStage() : (short) 0;
+
+    boolean despawn = false;
+    if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
+      despawn = PrefabManager.restoreTrackedPrefab(chunkToUse.getWorld(), trackedPlacement);
+    } else if (targetAnchor != null) {
+      despawn = PrefabManager.removePrefab(
+          chunkToUse.getWorld(),
+          StructureConfig.House.getPrefab(targetLevel, currentStage),
+          targetAnchor,
+          prefabRotation,
+          true);
+    }
+
+    if (!despawn) {
+      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - house] Could not despawn house prefab");
+      return false;
+    }
+
+    removeConstructionSignIfPresent(chunkToUse, targetAnchor, targetLevel, structureRotation);
+    return true;
+  }
+
   public static boolean despawn(WorldChunk chunk, Vector3i position) {
     Vector3i bedBlockPosition = VectorUtil.clone(position);
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(

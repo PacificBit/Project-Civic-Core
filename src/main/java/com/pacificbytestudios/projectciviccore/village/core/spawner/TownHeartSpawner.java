@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
@@ -23,6 +24,8 @@ import com.pacificbytestudios.projectciviccore.village.components.builder.Villag
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
+
+import io.sentry.util.Pair;
 
 public class TownHeartSpawner {
 
@@ -166,11 +169,33 @@ public class TownHeartSpawner {
   }
 
   public static boolean despawn(WorldChunk chunk, Vector3i position, Rotation rotation) {
-    return PrefabManager.removePrefab(
-        chunk.getWorld(),
-        StructureConfig.TownHeart.PREFAB_JSON,
-        VectorUtil.clone(position),
-        StructurePlacementUtils.normalize(rotation),
-        true);
+    Vector3i blockPosition = VectorUtil.clone(position).add(Vector3iUtil.UP);
+    Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
+        chunk,
+        blockPosition);
+
+    Ref<ChunkStore> blockRef = result.getSecond();
+
+    if (blockRef == null || !blockRef.isValid()) {
+      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Invalid workplaceRef");
+      return false;
+    }
+
+    Store<ChunkStore> store = blockRef.getStore();
+
+    TrackedPrefabPlacementComponent trackedPlacement = store
+        .getComponent(blockRef,
+            TrackedPrefabPlacementComponent.getComponentType());
+
+    if (trackedPlacement == null) {
+      return PrefabManager.removePrefab(
+          chunk.getWorld(),
+          StructureConfig.TownHeart.PREFAB_JSON,
+          VectorUtil.clone(position),
+          StructurePlacementUtils.normalize(rotation),
+          true);
+    }
+
+    return PrefabManager.restoreTrackedPrefab(chunk.getWorld(), trackedPlacement);
   }
 }

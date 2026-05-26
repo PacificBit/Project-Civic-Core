@@ -21,6 +21,7 @@ import com.pacificbytestudios.projectciviccore.village.components.villagetask.Vi
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnHouseTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 
+@Deprecated(forRemoval = true)
 public class Spawn extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 

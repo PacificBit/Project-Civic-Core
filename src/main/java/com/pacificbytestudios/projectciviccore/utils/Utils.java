@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
+import java.util.UUID;
+
 import javax.annotation.Nonnull;
 
 import org.joml.Vector2i;
@@ -16,8 +18,8 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.AdvanceConstructionStage;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginNewConstruction;
@@ -33,6 +35,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TavernSpawner;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.TownHallSpawner;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 
 import io.sentry.util.Pair;
 
@@ -95,15 +98,16 @@ public class Utils {
     return new BlockContext(worldChunk, new Vector3i(worldX, worldY, worldZ));
   }
 
+  public static AreaFootprint calculateAreaFootprint(Vector3i origin, int radius) {
+    Vector2i topLeft = new Vector2i(origin.x - radius, origin.z - radius);
+    Vector2i botRight = new Vector2i(origin.x + radius, origin.z + radius);
+    return new AreaFootprint(topLeft, botRight);
+  }
+
   public static AreaFootprint claimVillageArea(VillageHeartComponent heart, Vector3i origin) {
     short level = (short) heart.getLevel();
     int radius = heart.getConfig().getClaimRadiusPerLevel(level);
-    Vector2i topLeft = new Vector2i(origin.x - radius, origin.z - radius);
-    Vector2i botRight = new Vector2i(origin.x + radius, origin.z + radius);
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[claimVillageArea] Created new village with anchor points: " + topLeft
-            + " and: " + botRight);
-    AreaFootprint area = new AreaFootprint(topLeft, botRight);
+    AreaFootprint area = calculateAreaFootprint(origin, radius);
     heart.setClaimedArea(area);
     return area;
   }
@@ -159,6 +163,21 @@ public class Utils {
       case SAWMILL -> SawmillSpawner::despawn;
       case STORAGE -> StorageSpawner::despawn;
       case HOUSE -> HouseSpawner::despawn;
+      default -> throw new IllegalArgumentException("Unsupported structureType: "
+          + structureType);
+    };
+  }
+
+  public static DespawnIncompleteConstructionFunction getDespawnIncompleteConstructionFunction(
+      StructureType structureType) {
+    return switch (structureType) {
+      case TOWN_HALL -> TownHallSpawner::despawnIncompleteBuilding;
+      case MINE -> MineSpawner::despawnIncompleteBuilding;
+      case FARM -> FarmSpawner::despawnIncompleteBuilding;
+      case TAVERN -> TavernSpawner::despawnIncompleteBuilding;
+      case SAWMILL -> SawmillSpawner::despawnIncompleteBuilding;
+      case STORAGE -> StorageSpawner::despawnIncompleteBuilding;
+      case HOUSE -> HouseSpawner::despawnIncompleteBuilding;
       default -> throw new IllegalArgumentException("Unsupported structureType: "
           + structureType);
     };
@@ -368,6 +387,13 @@ public class Utils {
     return world.getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
   }
 
+  public static WorldChunk getWorldChunk(World world, WorldChunk chunk, Vector3i position) {
+    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
+      return chunk;
+    }
+    return getWorldChunk(world, position);
+  }
+
   public static BlockType getBlockTypeChunkAware(World world, Vector3i position) {
     WorldChunk chunk = getWorldChunk(world, position);
     return chunk.getBlockType(position);
@@ -379,5 +405,21 @@ public class Utils {
     }
     WorldChunk correctChunk = getWorldChunk(world, position);
     return correctChunk.getBlockType(position);
+  }
+
+  public static MayorComponent getMayorComponent(World world, VillageHeartComponent heart) {
+    UUID villagerId = heart.getTownHall().getBossId();
+    if (villagerId == null) {
+      return null;
+    }
+
+    Ref<EntityStore> villagerRef = world.getEntityRef(villagerId);
+    if (villagerRef == null || !villagerRef.isValid()) {
+      return null;
+    }
+
+    return villagerRef.getStore().getComponent(
+        villagerRef,
+        MayorComponent.getComponentType());
   }
 }

@@ -21,3 +21,76 @@ workplace.chest.large.description=Large workplace found in villages, cannot be c
 
 workplace.storage.name=Storage Workplace
 workplace.storage.description=Storage workplace found in villages, cannot be crafted
+
+
+
+
+# === SYSTEM - VillageCommand ===
+system.villagecommand.error.noValidVillage=You are not inside a valid village
+system.villagecommand.error.noVillageHeartBlock=Could not find the village core block, either the chunk is not loaded or it was destroyed
+
+# === SYSTEM - CommandUtils ===
+system.commandutils.defaultMsg.ok=Command executed successfully!
+system.commandutils.defaultMsg.err=Could not execute command! see logs for more info
+
+
+
+
+# === COMMANDS - VILLAGE.SPAWN ===
+system.village.spawn.desc=Spawn a village under the player
+system.village.spawn.success=Village spawned correctly at {position}
+system.village.spawn.err.failed=Could not spawn village! See the logs for more info
+system.village.spawn.err.tooClose=Village already present at {villagePosition}\nThe new village core should be at least {minimumDistance} blocks away.\nCurrent distance from village: {currentDistance} blocks
+
+# === COMMANDS - VILLAGE.DESPAWN ===
+system.village.despawn.desc=Despawn village
+system.village.despawn.step.houses.start=({currentStep}/{totalSteps}) Despawning Houses...
+system.village.despawn.step.incompleteBuildings.start=({currentStep}/{totalSteps}) Despawning Incomplete Buildings...
+system.village.despawn.step.workplaces.start=({currentStep}/{totalSteps}) Despawning Workplaces...
+system.village.despawn.step.roads.start=({currentStep}/{totalSteps}) Despawning Roads...
+system.village.despawn.step.villagers.start=({currentStep}/{totalSteps}) Despawning Villagers...
+system.village.despawn.step.cityCenter.start=({currentStep}/{totalSteps}) Despawning City Center...
+system.village.despawn.step.done=({currentStep}/{totalSteps}) Done!
+
+
+
+
+# === COMMANDS - SIMULATION ===
+system.simulation.desc=Simulate village progress
+
+# === COMMANDS - SIMULATION.START ===
+system.simulation.start.desc=Number of mayor days to simulate
+system.simulation.start.param.day.description=Number of mayor days to simulate
+system.simulation.start.err.invalidDays=Simulation days must be greater than 0
+system.simulation.start.start=Started village simulation for {addedDays} day(s). Remaining simulated days: {remainingDays}
+system.simulation.start.action=Added {addedDays} day(s). Remaining simulated days: {remainingDays}
+system.simulation.start.resume=Resumed village simulation and added {addedDays} day(s). Remaining simulated days: {remainingDays}
+
+# === COMMANDS - SIMULATION.PAUSE ===
+system.simulation.pause.desc=Pause the current simulation
+system.simulation.pause.err.noSimulationFound=No village simulation is scheduled
+system.simulation.pause.err.alreadyPaused=Village simulation is already paused. Remaining simulated days: {remainingDays}
+system.simulation.pause.success=Paused village simulation. Remaining simulated days: {remainingDays}
+
+# === COMMANDS - SIMULATION.RESUME ===
+system.simulation.resume.desc=Resume the current simulation
+system.simulation.resume.err.noSimulationFound=No village simulation is scheduled
+system.simulation.resume.err.simulationAlreadyRunning=Village simulation is already running. Remaining simulated days: {remainingDays}
+system.simulation.resume.success=Resumed village simulation. Remaining simulated days: {remainingDays}
+
+# === COMMANDS - SIMULATION.STOP ===
+system.simulation.stop.desc=Stops the current simulation
+system.simulation.stop.err.noSimulationFound=No village simulation is scheduled
+system.simulation.stop.success=Stopped village simulation. Removed {remainingDays} remaining simulated day(s)
+
+
+
+
+# === COMMANDS - DIAGNOSTIC ===
+system.diagnostic.desc=Run village diagnostic analysis or repair tasks
+
+# === COMMANDS - DIAGNOSTIC.STATUS ===
+system.diagnostic.status.desc=Run village diagnostic analysis
+
+# === COMMANDS - DIAGNOSTIC.REPAIR ===
+system.diagnostic.repair.desc=Repairs village (respawn mayor, and missing villagers)

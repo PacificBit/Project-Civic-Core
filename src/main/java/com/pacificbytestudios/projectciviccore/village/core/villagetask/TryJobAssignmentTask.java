@@ -48,6 +48,14 @@ public class TryJobAssignmentTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
+    if (this.workplace == null) {
+      this.workplace = heart.getFirstWorkplaceWithMissingEmployee();
+      if (this.workplace == null) {
+        ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] No workplace that need new employee");
+        return;
+      }
+    }
+
     WorkplaceComponent workplaceComponent = heart.getWorkplaceFromId(this.workplace);
     if (workplaceComponent == null) {
       ProjectCivicCore.LOGGER.atWarning()

@@ -19,6 +19,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.RoadSpawner;
 
 import io.sentry.util.Pair;
 
+@Deprecated(forRemoval = true)
 public class Despawn extends CommandBase {
   private static final int TRACKED_BLOCK_SEARCH_RADIUS = 4;
   private static final int TRACKED_BLOCK_VERTICAL_SEARCH_RADIUS = 6;

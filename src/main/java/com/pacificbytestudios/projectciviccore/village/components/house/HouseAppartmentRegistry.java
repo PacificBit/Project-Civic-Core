@@ -106,7 +106,17 @@ public class HouseAppartmentRegistry implements Component<ChunkStore> {
   }
 
   public short getFreeBedsCount() {
-    return (short) this.appartments.values().stream().mapToInt(AppartmentComponent::getFreeBedsCount).sum();
+    return (short) this.appartments.values()
+        .stream()
+        .mapToInt(AppartmentComponent::getFreeBedsCount)
+        .sum();
+  }
+
+  public short getTotalBedsCount() {
+    return (short) this.appartments.values()
+        .stream()
+        .mapToInt(AppartmentComponent::getTotalBedsCount)
+        .sum();
   }
 
   @Override
