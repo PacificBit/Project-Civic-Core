@@ -61,12 +61,9 @@ val hytaleMainClass: Provider<String> =
  * Dev workflow:
  *
  * - plugin Java: Gradle runtimeClasspath
- * - assets: src/main/resources
- * - Hytale --mods: src/main
+ * - source assets: src/main/resources
+ * - Hytale --assets: Assets.zip, then src/main/resources
  */
-val hytaleDevModsDir =
-    layout.projectDirectory.dir("src/main")
-
 val hytaleResourcesDir =
     layout.projectDirectory.dir("src/main/resources")
 
@@ -144,8 +141,7 @@ tasks.register("printArtifactInfo") {
         println("Assets zip     = ${hytaleAssetsZip.get()}")
         println("Main class     = ${hytaleMainClass.get()}")
         println("Include assets = ${includeAssets.get()}")
-        println("Dev mods dir   = ${hytaleDevModsDir.asFile.absolutePath}")
-        println("Resources dir  = ${hytaleResourcesDir.asFile.absolutePath}")
+        println("Dev assets dir = ${hytaleResourcesDir.asFile.absolutePath}")
         println("Manifest       = ${manifestFile.asFile.absolutePath}")
     }
 }
@@ -201,8 +197,8 @@ tasks.register<JavaExec>("runHytaleServer") {
 
         println("Hytale dev server")
         println(" - run dir      = ${runDir.absolutePath}")
-        println(" - mods arg     = ${hytaleDevModsDir.asFile.absolutePath}")
-        println(" - resources    = ${hytaleResourcesDir.asFile.absolutePath}")
+        println(" - base assets  = ${assetsFile.absolutePath}")
+        println(" - dev assets   = ${hytaleResourcesDir.asFile.absolutePath}")
         println(" - manifest     = ${manifestFile.asFile.absolutePath}")
     }
 
@@ -211,6 +207,6 @@ tasks.register<JavaExec>("runHytaleServer") {
         "--accept-early-plugins",
         "--disable-sentry",
         "--assets=${hytaleAssetsZip.get()}",
-        "--mods=${hytaleDevModsDir.asFile.absolutePath}",
+        "--assets=${hytaleResourcesDir.asFile.absolutePath}",
     )
 }
