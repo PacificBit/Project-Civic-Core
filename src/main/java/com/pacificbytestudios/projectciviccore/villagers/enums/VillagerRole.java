@@ -1,16 +1,22 @@
 package com.pacificbytestudios.projectciviccore.villagers.enums;
 
 public enum VillagerRole {
-  FEMALE("Female_Civilian"), MALE("Male_Civilian");
+  FEMALE("Female_Civilian", "Female"), MALE("Male_Civilian", "Male");
 
   private final String role;
+  private final String gender;
 
-  private VillagerRole(String role) {
+  private VillagerRole(String role, String gender) {
     this.role = role;
+    this.gender = gender;
   }
 
   public String getRole() {
     return this.role;
+  }
+
+  public String getGender() {
+    return gender;
   }
 
   public static VillagerRole fromNpcRole(String npcRole) {
