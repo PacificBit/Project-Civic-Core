@@ -9,6 +9,7 @@ public enum VillageTopologyStructureType {
   HOUSE(VillageTopologyStructureCategory.PRIMARY_BUILDING),
   STORAGE(VillageTopologyStructureCategory.PRIMARY_BUILDING),
   TAVERN(VillageTopologyStructureCategory.PRIMARY_BUILDING),
+  MARKET(VillageTopologyStructureCategory.PRIMARY_BUILDING),
 
   MINE(VillageTopologyStructureCategory.SECONDARY_BUILDING),
   SAWMILL(VillageTopologyStructureCategory.SECONDARY_BUILDING),
@@ -40,6 +41,7 @@ public enum VillageTopologyStructureType {
       case FARM -> FARM;
       case STORAGE -> STORAGE;
       case TAVERN -> TAVERN;
+      case MARKET -> MARKET;
     };
   }
 

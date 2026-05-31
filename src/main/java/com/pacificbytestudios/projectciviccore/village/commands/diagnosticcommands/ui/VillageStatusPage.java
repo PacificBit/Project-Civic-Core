@@ -177,6 +177,7 @@ public class VillageStatusPage extends BasicCustomUIPage {
       case SAWMILL -> "SawmillValue";
       case STORAGE -> "StorageValue";
       case TAVERN -> "TavernValue";
+      case MARKET -> "MarketValue";
     };
   }
 

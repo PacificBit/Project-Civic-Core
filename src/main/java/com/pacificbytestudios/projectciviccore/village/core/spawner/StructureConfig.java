@@ -326,16 +326,16 @@ public final class StructureConfig {
     private static final Map<Short, Map<RoadLength, String>> VILLAGE_LVL_MAIN_ROADS = Map.of(
         (short) 1,
         Map.of(
-            RoadLength.SMALL, "Structures/Temporary/Main_Road_5x1.prefab.json",
-            RoadLength.MEDIUM, "Structures/Temporary/Main_Road_5x2.prefab.json",
-            RoadLength.LARGE, "Structures/Temporary/Main_Road_5x4.prefab.json"));
+            RoadLength.SMALL, "Structures/Roads/Main_Road_5x1.prefab.json",
+            RoadLength.MEDIUM, "Structures/Roads/Main_Road_5x2.prefab.json",
+            RoadLength.LARGE, "Structures/Roads/Main_Road_5x4.prefab.json"));
 
     private static final Map<Short, Map<RoadLength, String>> VILLAGE_LVL_SIDE_ROADS = Map.of(
         (short) 1,
         Map.of(
-            RoadLength.SMALL, "Structures/Temporary/Side_Road_2x1.prefab.json",
-            RoadLength.MEDIUM, "Structures/Temporary/Side_Road_2x2.prefab.json",
-            RoadLength.LARGE, "Structures/Temporary/Side_Road_2x4.prefab.json"));
+            RoadLength.SMALL, "Structures/Roads/Side_Road_2x1.prefab.json",
+            RoadLength.MEDIUM, "Structures/Roads/Side_Road_2x2.prefab.json",
+            RoadLength.LARGE, "Structures/Roads/Side_Road_2x4.prefab.json"));
 
     private static final RoadLength[] ORDERED_ROAD_LENGTH = new RoadLength[] {
         RoadLength.LARGE, RoadLength.MEDIUM,
@@ -548,6 +548,10 @@ public final class StructureConfig {
     public static BlockTransform getWorkplaceSpawningOffset(int level) {
       return getLevelLayout(level).workplace();
     }
+  }
+
+  public static final class Market {
+    public static final String PREFAB_JSON = "Structures/Workplace/Market/Level1/Stage3/Town_Hall.prefab.json";
   }
 
   public static final class TownHall {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -140,13 +141,15 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     final Vector3i queuedSpawningPosition = VectorUtil.clone(placement.prefabAnchor);
     final Rotation queuedRotation = placement.rotation;
     final VillageProject queuedProject = this.project.clone();
+    final ConstructionMode constructionMode = Optional.ofNullable(
+      this.project.getConstructionMode()).orElse(ConstructionMode.STAGED);
     this.world.execute(() -> enqueueBuildingSpawn(
         villageRef,
         queuedProject,
         structureType,
         queuedSpawningPosition,
         queuedRotation,
-        ConstructionMode.STAGED));
+        constructionMode));
 
     randomlySpawnSideStreet(road);
     return true;
