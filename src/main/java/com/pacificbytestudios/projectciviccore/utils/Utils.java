@@ -8,6 +8,8 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
+import com.hypixel.hytale.builtin.triggervolumes.TriggerVolumesPlugin;
+import com.hypixel.hytale.builtin.triggervolumes.manager.TriggerVolumeManager;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -60,6 +62,13 @@ public class Utils {
         WorldChunk.getComponentType());
 
     return buildWorldBlockContext(info, worldChunk);
+  }
+
+  public static TriggerVolumeManager getTriggerVolumeManager(World world) {
+    TriggerVolumesPlugin plugin = TriggerVolumesPlugin.get();
+    Store<EntityStore> store = world.getEntityStore().getStore();
+    TriggerVolumeManager manager = store.getResource(plugin.getManagerResourceType());
+    return manager;
   }
 
   public static BlockContext getWorldBlockContext(
