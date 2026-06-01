@@ -34,7 +34,7 @@ system.commandutils.defaultMsg.ok=Command executed successfully!
 system.commandutils.defaultMsg.err=Could not execute command! see logs for more info
 
 # === SYSTEM - VillageHeartPlacementSystem ===
-system.villageheartplacementsystem.welcomeToVillage=Welcome to Village
+system.villageheartplacementsystem.welcomeToVillage=Welcome To
 
 
 
