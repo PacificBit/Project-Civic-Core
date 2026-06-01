@@ -8,6 +8,7 @@ import java.util.Map;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
 import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
 import com.hypixel.hytale.component.Component;
@@ -70,6 +71,31 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
           (obj) -> encodeMap(obj.structureMaxLevelPerVillageLevel))
       .add()
 
+      .append(new KeyedCodec<>("TriggerVolumeHeightAboveGround", Codec.SHORT, false),
+          (obj, value) -> obj.triggerVolumeHeightAboveGround = value,
+          (obj) -> obj.triggerVolumeHeightAboveGround)
+      .add()
+
+      .append(new KeyedCodec<>("TriggerVolumeHeightBelowGround", Codec.SHORT, false),
+          (obj, value) -> obj.triggerVolumeHeightBelowGround = value,
+          (obj) -> obj.triggerVolumeHeightBelowGround)
+      .add()
+
+      .append(new KeyedCodec<>("FirstVillageNameComponents", new ArrayCodec<String>(Codec.STRING, String[]::new)),
+          (obj, value) -> obj.firstVillageNameComponents = value,
+          (obj) -> obj.firstVillageNameComponents)
+      .add()
+
+      .append(new KeyedCodec<>("SecondVillageNameComponents", new ArrayCodec<String>(Codec.STRING, String[]::new)),
+          (obj, value) -> obj.secondVillageNameComponents = value,
+          (obj) -> obj.secondVillageNameComponents)
+      .add()
+
+      .append(new KeyedCodec<>("WelcomeMessageCooldown", Codec.SHORT, false),
+          (obj, value) -> obj.welcomeMessageCooldown = value,
+          (obj) -> obj.welcomeMessageCooldown)
+      .add()
+
       .build();
 
   private short maxLevel;
@@ -79,9 +105,54 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
   private short postBuildSideRoadChance;
   private Map<Short, Map<StructureType, Short>> structureCountLimitPerLevel = new HashMap<>();
   private Map<Short, Map<StructureType, Short>> structureMaxLevelPerVillageLevel = new HashMap<>();
+  private String[] firstVillageNameComponents;
+  private String[] secondVillageNameComponents;
+  private short triggerVolumeHeightAboveGround;
+  private short triggerVolumeHeightBelowGround;
+  private short welcomeMessageCooldown;
 
   public short getMaxLevel() {
     return maxLevel;
+  }
+
+  public String[] getFirstVillageNameComponents() {
+    return firstVillageNameComponents;
+  }
+
+  public void setFirstVillageNameComponents(String[] firstVillageNameComponents) {
+    this.firstVillageNameComponents = firstVillageNameComponents;
+  }
+
+  public String[] getSecondVillageNameComponents() {
+    return secondVillageNameComponents;
+  }
+
+  public void setSecondVillageNameComponents(String[] secondVillageNameComponents) {
+    this.secondVillageNameComponents = secondVillageNameComponents;
+  }
+
+  public short getTriggerVolumeHeightAboveGround() {
+    return triggerVolumeHeightAboveGround;
+  }
+
+  public void setTriggerVolumeHeightAboveGround(short triggerVolumeHeightAboveGround) {
+    this.triggerVolumeHeightAboveGround = triggerVolumeHeightAboveGround;
+  }
+
+  public short getTriggerVolumeHeightBelowGround() {
+    return triggerVolumeHeightBelowGround;
+  }
+
+  public void setTriggerVolumeHeightBelowGround(short triggerVolumeHeightBelowGround) {
+    this.triggerVolumeHeightBelowGround = triggerVolumeHeightBelowGround;
+  }
+
+  public short getWelcomeMessageCooldown() {
+    return welcomeMessageCooldown;
+  }
+
+  public void setWelcomeMessageCooldown(short welcomeMessageCooldown) {
+    this.welcomeMessageCooldown = welcomeMessageCooldown;
   }
 
   public short getClaimRadiusPerLevel(short level) {
@@ -133,6 +204,11 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
     component.structureCountLimitPerLevel = deepCopyStructureLimitsPerLevel(this.structureCountLimitPerLevel);
     component.structureMaxLevelPerVillageLevel = deepCopyStructureLimitsPerLevel(
         this.structureMaxLevelPerVillageLevel);
+    component.firstVillageNameComponents = this.firstVillageNameComponents;
+    component.secondVillageNameComponents = this.secondVillageNameComponents;
+    component.triggerVolumeHeightAboveGround = this.triggerVolumeHeightAboveGround;
+    component.triggerVolumeHeightBelowGround = this.triggerVolumeHeightBelowGround;
+    component.welcomeMessageCooldown = this.welcomeMessageCooldown;
     return component;
   }
 

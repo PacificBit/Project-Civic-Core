@@ -6,6 +6,8 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.hypixel.hytale.server.core.universe.Universe;
+import com.hypixel.hytale.server.core.universe.world.World;
 
 public class BlockContext {
   public static final BuilderCodec<BlockContext> CODEC = BuilderCodec
@@ -44,6 +46,10 @@ public class BlockContext {
 
   public String getWorldName() {
     return worldName;
+  }
+
+  public World getWorld() {
+    return Universe.get().getWorld(worldName);
   }
 
   public Vector3i getPosition() {

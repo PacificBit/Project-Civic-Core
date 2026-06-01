@@ -135,7 +135,36 @@
                 "Storage": 3,
                 "Tavern": 3
               }
-            }
+            },
+            "TriggerVolumeHeightAboveGround": 20,
+            "TriggerVolumeHeightBelowGround": 15,
+            "WelcomeMessageCooldown": 120,
+            "FirstVillageNameComponents": [
+              "Wood",
+              "Iron",
+              "Stone",
+              "Gold",
+              "Obsidian",
+              "Sun",
+              "Fossil",
+              "Frost",
+              "Vulcan",
+              "Ashes",
+              "Void",
+              "Dune"
+            ],
+            "SecondVillageNameComponents": [
+              "Bound",
+              "Rise",
+              "Fall",
+              "Forge",
+              "Shift",
+              "Clash",
+              "Glide",
+              "Sweep",
+              "Dash",
+              "Vault"
+            ]
           }
         },
         "VillageSpawnConfig": {

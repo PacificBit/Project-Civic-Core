@@ -12,8 +12,18 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
+import com.hypixel.hytale.builtin.triggervolumes.EntityTargetType;
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEffect;
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEventType;
+import com.hypixel.hytale.builtin.triggervolumes.effect.builtin.PlaySoundEffect;
+import com.hypixel.hytale.builtin.triggervolumes.effect.builtin.ShowEventTitleEffect;
+import com.hypixel.hytale.builtin.triggervolumes.effect.builtin.conditions.CooldownCondition;
+import com.hypixel.hytale.builtin.triggervolumes.manager.TriggerVolumeManager;
+import com.hypixel.hytale.builtin.triggervolumes.manager.VolumeEntry;
+import com.hypixel.hytale.builtin.triggervolumes.shape.BoxShape;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -22,12 +32,15 @@ import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.triggervolumeeffects.TeleportVillagerToTownHeartEffect;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -212,11 +225,13 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       .build();
 
   private UUID uuid;
+  private String name;
   private EntityRef villageRef;
   private VillageHeartConfigComponent config;
   private VillageHeartState state = VillageHeartState.NORMAL;
   private int level = 1;
   private AreaFootprint claimedArea;
+  private VolumeEntry volumeEntry;
   private BlockContext blockContext;
 
   private Set<UUID> villagersRegistry = new HashSet<>();
@@ -234,6 +249,14 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   private Set<UUID> villageStorageWorkplaces = new HashSet<>();
   private Set<UUID> villageTavernWorkplaces = new HashSet<>();
   private UUID townHallId;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 
   public UUID getUuid() {
     return uuid;
@@ -418,6 +441,84 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public void setClaimedArea(AreaFootprint claimedChunks) {
     this.claimedArea = claimedChunks;
+    setTriggerVolumeArea(this.claimedArea);
+  }
+
+  public VolumeEntry getTriggerVolumeEntry() {
+    return volumeEntry;
+  }
+
+  public void setTriggerVolumeEntry(VolumeEntry volumeEntry) {
+    this.volumeEntry = volumeEntry;
+  }
+
+  private void setTriggerVolumeArea(AreaFootprint area) {
+    if (volumeEntry == null) {
+      // If the village is being spawned for the first time
+      // Generate a trigger volume to register enter/exit village events
+      volumeEntry = generateTriggerVolumeEntry(getBlockContext().getWorld(), area);
+
+      // Add condition for cooldown to not always show the welcome message
+      volumeEntry.getConditions().add(
+          CooldownCondition.create(TriggerEventType.ENTER, config.getWelcomeMessageCooldown()));
+
+      // Add effects
+      ProjectCivicCore.LOGGER.atInfo().log("[setTriggervolumeArea] Registering village events for volume: " + name);
+      List<TriggerEffect> triggerEffects = volumeEntry.getEffects();
+      String welcomeMessage = "server.system.villageheartplacementsystem.welcomeToVillage";
+      triggerEffects.add(ShowEventTitleEffect.create(TriggerEventType.ENTER, name, welcomeMessage, false));
+      triggerEffects.add(PlaySoundEffect.create(TriggerEventType.ENTER, "SFX_AVATAR_POWERS_ENABLE"));
+
+      // Add teleport village to core when exiting radius
+      triggerEffects.add(TeleportVillagerToTownHeartEffect.create(TriggerEventType.EXIT, this.getEntityRef()));
+    } else {
+      // Trigger volume already exist, so change its shape according to the area
+      BoxShape newShape = generateVolumeEntryShapeFromArea(area);
+      volumeEntry.setShape(newShape);
+      TriggerVolumeManager manager = Utils.getTriggerVolumeManager(getBlockContext().getWorld());
+      manager.markSpatialDirty();
+      manager.notifyViewersAdd(volumeEntry);
+    }
+  }
+
+  private BoxShape generateVolumeEntryShapeFromArea(AreaFootprint area) {
+    double halfX = (area.getMaxX() - area.getMinX()) / 2.0;
+    double halfZ = (area.getMaxZ() - area.getMinZ()) / 2.0;
+    BoxShape shape = new BoxShape(
+        new Vector3d(-halfX, -config.getTriggerVolumeHeightBelowGround(), -halfZ), // Min bound
+        new Vector3d(halfX, config.getTriggerVolumeHeightAboveGround(), halfZ)); // Max bound
+
+    return shape;
+  }
+
+  private VolumeEntry generateTriggerVolumeEntry(World world, AreaFootprint villageArea) {
+    BoxShape shape = generateVolumeEntryShapeFromArea(villageArea);
+
+    // Generate position
+    Vector3d position = VectorUtil.toVector3d(villageArea.getCenter3D());
+    position.y = getBlockContext().getPosition().y;
+
+    ProjectCivicCore.LOGGER.atInfo().log(
+        "[generateVolumeEntryShapeFromArea] Shape: " + shape.toString() + " Position: "
+            + VectorUtil.toString(position));
+
+    // Retrieve TriggerVolume manager
+    TriggerVolumeManager manager = Utils.getTriggerVolumeManager(world);
+    if (manager == null) {
+      throw new IllegalStateException("Trigger volume manager not found");
+    }
+
+    // Create Volume
+    String name = "village_" + getUuid().toString().replace("-", "_");
+    VolumeEntry entry = new VolumeEntry(
+        name, world.getName(), position, shape, new ArrayList<TriggerEffect>(),
+        Set.of(EntityTargetType.PLAYER, EntityTargetType.NPC), true);
+
+    // Register volume
+    manager.register(name, entry);
+    manager.notifyViewersAdd(entry);
+
+    return entry;
   }
 
   public int getLevel() {

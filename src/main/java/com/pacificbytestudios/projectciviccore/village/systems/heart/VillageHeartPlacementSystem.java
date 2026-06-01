@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.systems.heart;
 
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.joml.Vector3i;
 
@@ -18,6 +19,7 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
@@ -28,6 +30,7 @@ import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartConfigComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
@@ -67,6 +70,14 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     if (spawnComponent == null || villageHeart == null || topology == null) {
       return;
     }
+
+    // Generate and set random Village name
+    VillageHeartConfigComponent heartConfig = villageHeart.getConfig();
+    String villageName = this.generateRandomVillageName(
+        heartConfig.getFirstVillageNameComponents(), heartConfig.getSecondVillageNameComponents());
+    villageHeart.setName(villageName);
+    ProjectCivicCore.LOGGER.atInfo()
+        .log("[VillageHeartPlacementSystem] Generated Village name: " + villageHeart.getName());
 
     int radius = spawnComponent.getSpawnNpcRange();
     if (villageHeart.getUuid() == null) {
@@ -119,6 +130,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     if (area == null) {
       area = Utils.claimVillageArea(villageHeart, villageHeartPos);
     }
+
     villageStore.registerVillage(
         villageHeart.getUuid(),
         worldName,
@@ -143,5 +155,15 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         VillageSpawnComponent.getComponentType(),
         VillageTopologyComponent.getComponentType(),
         BlockModule.BlockStateInfo.getComponentType());
+  }
+
+  private String generateRandomVillageName(String[] firstComponents, String[] secondComponents) {
+    int randomFirstComponentIdx = ThreadLocalRandom.current().nextInt(firstComponents.length);
+    String firstComponent = firstComponents[randomFirstComponentIdx];
+
+    int randomSecondComponentIdx = ThreadLocalRandom.current().nextInt(secondComponents.length);
+    String secondComponent = secondComponents[randomSecondComponentIdx];
+
+    return firstComponent + " " + secondComponent;
   }
 }
