@@ -12,7 +12,6 @@ public enum StructureType implements Supplier<String> {
   MINE("Mine"),
   SAWMILL("Sawmill"),
   FARM("Farm"),
-  MARKET("Market"),
   STORAGE("Storage"),
   TAVERN("Tavern");
 
