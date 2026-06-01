@@ -166,6 +166,16 @@ public class AreaFootprint implements Component<ChunkStore> {
     return new Vector2i(centerX, centerZ);
   }
 
+  public Vector3i getCenter3D() {
+    if (this.topLeft == null || this.botRight == null) {
+      return null;
+    }
+
+    int centerX = getMinX() + ((getMaxX() - getMinX()) / 2);
+    int centerZ = getMinZ() + ((getMaxZ() - getMinZ()) / 2);
+    return new Vector3i(centerX, y, centerZ);
+  }
+
   public ComponentType<ChunkStore, AreaFootprint> getComponentType() {
     return ProjectCivicCore.get().getClaimedAreaComponent();
   }

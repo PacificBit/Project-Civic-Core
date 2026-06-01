@@ -33,7 +33,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
 public class Despawn extends VillageCommand {
 
-  private byte currentStep, totalSteps = 6;
+  private byte currentStep, totalSteps = 7;
 
   public Despawn() {
     super("despawn", "server.system.village.despawn.desc", true, true);
@@ -85,6 +85,11 @@ public class Despawn extends VillageCommand {
     // Step 6 - despawn city center
     // ==============================================================
     despawnCityCenter(exeContext, heart, topology, world);
+
+    // ==============================================================
+    // Step 7 - despawn trigger volume
+    // ==============================================================
+    despawnTriggerVolume(exeContext, heart, world);
   }
 
   private void despawnHouses(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
@@ -183,6 +188,16 @@ public class Despawn extends VillageCommand {
     Vector3i position = new Vector3i(heart.getBlockContext().getPosition()).add(Vector3iUtil.DOWN);
     WorldChunk chunk = Utils.getWorldChunk(world, position);
     TownHeartSpawner.despawn(chunk, position, rotation);
+
+    sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.done");
+  }
+
+  private void despawnTriggerVolume(ExecutionContext exeContext, VillageHeartComponent heart, World world) {
+    sendExecutionStepInfo(exeContext, ++this.currentStep, this.totalSteps,
+        "server.system.village.despawn.step.triggerVolume.start");
+
+    heart.getTriggerVolumeEntry().markPendingDestroy();
 
     sendExecutionStepInfo(exeContext, this.currentStep, this.totalSteps,
         "server.system.village.despawn.step.done");

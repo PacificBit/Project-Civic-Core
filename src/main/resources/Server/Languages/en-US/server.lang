@@ -33,6 +33,8 @@ system.villagecommand.error.noVillageHeartBlock=Could not find the village core 
 system.commandutils.defaultMsg.ok=Command executed successfully!
 system.commandutils.defaultMsg.err=Could not execute command! see logs for more info
 
+# === SYSTEM - VillageHeartPlacementSystem ===
+system.villageheartplacementsystem.welcomeToVillage=Welcome To
 
 
 
@@ -50,6 +52,7 @@ system.village.despawn.step.workplaces.start=({currentStep}/{totalSteps}) Despaw
 system.village.despawn.step.roads.start=({currentStep}/{totalSteps}) Despawning Roads...
 system.village.despawn.step.villagers.start=({currentStep}/{totalSteps}) Despawning Villagers...
 system.village.despawn.step.cityCenter.start=({currentStep}/{totalSteps}) Despawning City Center...
+system.village.despawn.step.triggerVolume.start=({currentStep}/{totalSteps}) Despawning Trigger Volume...
 system.village.despawn.step.done=({currentStep}/{totalSteps}) Done!
 
 
