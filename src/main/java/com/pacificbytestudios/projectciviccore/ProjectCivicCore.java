@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore;
 
+import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEffect;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -24,6 +25,7 @@ import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuilding
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingUpgradeCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
+import com.pacificbytestudios.projectciviccore.triggervolumeeffects.TeleportVillagerToTownHeartEffect;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BufferedConstructionStorageComponent;
@@ -598,6 +600,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillagerOpenInventoryInteraction",
         VillagerOpenInventoryInteraction.class,
         VillagerOpenInventoryInteraction.CODEC);
+
+    TriggerEffect.CODEC.register(
+        "TeleportVillagerToTownHeart",
+        TeleportVillagerToTownHeartEffect.class,
+        TeleportVillagerToTownHeartEffect.CODEC);
   }
 
   @Override

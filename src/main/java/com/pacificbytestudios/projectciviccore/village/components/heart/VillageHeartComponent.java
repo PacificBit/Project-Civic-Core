@@ -39,6 +39,7 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.triggervolumeeffects.TeleportVillagerToTownHeartEffect;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
@@ -468,6 +469,9 @@ public class VillageHeartComponent implements Component<ChunkStore> {
       String welcomeMessage = "server.system.villageheartplacementsystem.welcomeToVillage";
       triggerEffects.add(ShowEventTitleEffect.create(TriggerEventType.ENTER, name, welcomeMessage, false));
       triggerEffects.add(PlaySoundEffect.create(TriggerEventType.ENTER, "SFX_AVATAR_POWERS_ENABLE"));
+
+      // Add teleport village to core when exiting radius
+      triggerEffects.add(TeleportVillagerToTownHeartEffect.create(TriggerEventType.EXIT, this.getEntityRef()));
     } else {
       // Trigger volume already exist, so change its shape according to the area
       BoxShape newShape = generateVolumeEntryShapeFromArea(area);
@@ -509,7 +513,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     String name = "village_" + getUuid().toString().replace("-", "_");
     VolumeEntry entry = new VolumeEntry(
         name, world.getName(), position, shape, new ArrayList<TriggerEffect>(),
-        EnumSet.of(EntityTargetType.PLAYER), true);
+        Set.of(EntityTargetType.PLAYER, EntityTargetType.NPC), true);
 
     // Register volume
     manager.register(name, entry);
