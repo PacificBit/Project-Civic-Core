@@ -5,7 +5,6 @@ public enum WorkType {
   MINER("Miner"),
   FARMER("Farmer"),
   WOOD_CUTTER("Wood_Cutter"),
-  SHOP_KEEPER("Shop_Keeper"),
   STORAGE_KEEPER("Storage_Keeper"),
   INN_KEEPER("Inn_Keeper");
 
