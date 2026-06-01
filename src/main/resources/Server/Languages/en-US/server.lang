@@ -27,7 +27,7 @@ workplace.storage.description=Storage workplace found in villages, cannot be cra
 
 # === SYSTEM - VillageCommand ===
 system.villagecommand.error.noValidVillage=You are not inside a valid village
-system.villagecommand.error.noVillageHeartBlock=Could not find the village core block, either the chunk is not loaded or it was destroyed
+system.villagecommand.error.noVillageHeartBlock=Could not find the village core component, either the chunk is not loaded or it was destroyed
 
 # === SYSTEM - CommandUtils ===
 system.commandutils.defaultMsg.ok=Command executed successfully!
@@ -97,3 +97,17 @@ system.diagnostic.status.desc=Run village diagnostic analysis
 
 # === COMMANDS - DIAGNOSTIC.REPAIR ===
 system.diagnostic.repair.desc=Repairs village (respawn mayor, and missing villagers)
+
+
+
+
+# === COMMANDS - STRUCTURE ===
+system.structure.desc=Spawn or remove a structure from the village
+
+# === COMMANDS - STRUCTURE.SPAWN ===
+system.structure.spawn.desc=Spawn a structure to the current village
+system.structure.spawn.param.type=Type of structure to spawn
+system.structure.spawn.param.level=Structure level to spawn
+system.structure.spawn.param.complete=Whether or not to spawn the complete version (default true)
+system.structure.spawn.error.missingType=Please, provide a structure type. Allowed structure types are: {structureType}
+system.structure.spawn.success=Correctly queued the structure to build

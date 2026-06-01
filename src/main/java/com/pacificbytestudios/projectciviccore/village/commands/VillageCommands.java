@@ -5,6 +5,7 @@ import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Spawn;
 import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.Diagnostic;
 import com.pacificbytestudios.projectciviccore.village.commands.simulationcommands.Simulation;
+import com.pacificbytestudios.projectciviccore.village.commands.structurecommands.Structure;
 
 public class VillageCommands extends AbstractCommandCollection {
 
@@ -19,6 +20,9 @@ public class VillageCommands extends AbstractCommandCollection {
 
     // Diagnostic sub commands
     this.addSubCommand(new Diagnostic());
+
+    // Structure sub commands
+    this.addSubCommand(new Structure());
   }
 
 }

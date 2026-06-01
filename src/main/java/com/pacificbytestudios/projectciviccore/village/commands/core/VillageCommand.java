@@ -82,10 +82,10 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
       CommandUtils.sendExecutionResultMessage(
           exeContext.cmdContext(),
           ExecutionResult.Err,
-          "system.villagecommand.error.noVillageHeartBlock");
+          "server.system.villagecommand.error.noVillageHeartBlock");
 
       ProjectCivicCore.LOGGER.atSevere()
-          .log("[VillageCommand - getVillageHeart] Could not fetch the village core block");
+          .log("[VillageCommand - getVillageHeart] Could not fetch the village core component");
       return null;
     }
 
