@@ -9,6 +9,20 @@ public class Logger {
   /**
    * Used to log errors.
    * Prints the caller's class and the method name
+   *
+   * Object values can be passed to format the message
+   *
+   * @param message message to print
+   * @param values  values to pass the string formatter
+   */
+  public static void logSevere(String message, Object... values) {
+    logSevere(message.formatted(values));
+  }
+
+  /**
+   * Used to log errors.
+   * Prints the caller's class and the method name
+   *
    * @param message message to print
    */
   public static void logSevere(String message) {
@@ -23,6 +37,20 @@ public class Logger {
   /**
    * Used to log info at a finer level (more verbose).
    * Prints the caller's class and the method name
+   *
+   * Object values can be passed to format the message
+   *
+   * @param message message to print
+   * @param values  values to pass the string formatter
+   */
+  public static void logFiner(String message, Object... values) {
+    logFiner(message.formatted(values));
+  }
+
+  /**
+   * Used to log info at a finer level (more verbose).
+   * Prints the caller's class and the method name
+   *
    * @param message message to print
    */
   public static void logFiner(String message) {
@@ -37,6 +65,20 @@ public class Logger {
   /**
    * Used to log as much info as possible (extremely verbose).
    * Prints the caller's class and the method name
+   *
+   * Object values can be passed to format the message
+   * 
+   * @param message message to print
+   * @param values  values to pass the string formatter
+   */
+  public static void logFinest(String message, Object... values) {
+    logFinest(message.formatted(values));
+  }
+
+  /**
+   * Used to log as much info as possible (extremely verbose).
+   * Prints the caller's class and the method name
+   * 
    * @param message message to print
    */
   public static void logFinest(String message) {
@@ -50,6 +92,19 @@ public class Logger {
 
   /**
    * Used to log errors that are recoverable
+   *
+   * Object values can be passed to format the message
+   * 
+   * @param message message to print
+   * @param values  values to pass the string formatter
+   */
+  public static void logFine(String message, Object... values) {
+    logFine(message.formatted(values));
+  }
+
+  /**
+   * Used to log errors that are recoverable
+   * 
    * @param message message to print
    */
   public static void logFine(String message) {
@@ -63,6 +118,19 @@ public class Logger {
 
   /**
    * Used to log generic info
+   *
+   * Object values can be passed to format the message
+   * 
+   * @param message message to print
+   * @param values  values to pass the string formatter
+   */
+  public static void logInfo(String message, Object... values) {
+    logInfo(message.formatted(values));
+  }
+
+  /**
+   * Used to log generic info
+   * 
    * @param message message to print
    */
   public static void logInfo(String message) {
@@ -76,6 +144,19 @@ public class Logger {
 
   /**
    * Used to log a potential bug or problematic state of the program
+   *
+   * Object values can be passed to format the message
+   * 
+   * @param message message to print
+   * @param values  values to pass the string formatter
+   */
+  public static void logWarning(String message, Object... values) {
+    logWarning(message.formatted(values));
+  }
+
+  /**
+   * Used to log a potential bug or problematic state of the program
+   * 
    * @param message message to print
    */
   public static void logWarning(String message) {
@@ -89,6 +170,19 @@ public class Logger {
 
   /**
    * Used to log config info
+   *
+   * Object values can be passed to format the message
+   * 
+   * @param message message to print
+   * @param values  values to pass the string formatter
+   */
+  public static void logConfig(String message, Object... values) {
+    logConfig(message.formatted(values));
+  }
+
+  /**
+   * Used to log config info
+   * 
    * @param message message to print
    */
   public static void logConfig(String message) {

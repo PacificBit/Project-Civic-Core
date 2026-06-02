@@ -8,6 +8,7 @@ import org.joml.Vector3ic;
 
 import com.hypixel.hytale.math.vector.Vector3iUtil;
 
+@Deprecated(forRemoval = true)
 public class VectorUtil {
 
   // =============================
