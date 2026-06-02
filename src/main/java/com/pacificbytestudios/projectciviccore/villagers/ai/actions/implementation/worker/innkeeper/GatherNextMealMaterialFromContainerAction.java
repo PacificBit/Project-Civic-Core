@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
@@ -91,7 +91,7 @@ public class GatherNextMealMaterialFromContainerAction extends
       return this.finish(role, false);
     }
 
-    Vector3i containerCoords = snapshot.getBlockTypePosition()
+    Vec3i containerCoords = snapshot.getBlockTypePosition()
         .get(WorkplaceStorageTargetsSnapshotAction.WORKPLACE_STORAGE_KEY).pollFirst();
     if (containerCoords == null) {
       Logger.logWarning("No container coords found");

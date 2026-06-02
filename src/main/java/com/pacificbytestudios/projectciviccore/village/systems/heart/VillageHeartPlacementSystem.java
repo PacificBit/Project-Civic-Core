@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.village.systems.heart;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -13,7 +13,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.math.util.FastRandom;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -25,7 +24,6 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -59,7 +57,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
     WorldChunk chunk = context.chunk();
     World world = chunk.getWorld();
-    Vector3i villageHeartPos = context.position();
+    Vec3i villageHeartPos = context.position();
 
     VillageSpawnComponent spawnComponent = store.getComponent(ref,
         VillageSpawnComponent.getComponentType());
@@ -84,11 +82,11 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     }
 
     String worldName = world.getName();
-    villageHeart.setBlockContext(new BlockContext(worldName, chunk.getIndex(), VectorUtil.clone(villageHeartPos)));
-    villageHeart.setVillageRef(new EntityRef(worldName, VectorUtil.clone(villageHeartPos)));
+    villageHeart.setBlockContext(new BlockContext(worldName, chunk.getIndex(), Vec3i.from(villageHeartPos)));
+    villageHeart.setVillageRef(new EntityRef(worldName, Vec3i.from(villageHeartPos)));
 
     Rotation topologyRotation = Rotation.None;
-    Vector3i prefabAnchor = VectorUtil.clone(villageHeartPos).add(Vector3iUtil.DOWN);
+    Vec3i prefabAnchor = Vec3i.from(villageHeartPos).add(Vec3i.safeDown());
 
     TrackedPrefabPlacementComponent trackedPlacement = store.getComponent(
         ref,
@@ -103,11 +101,11 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
 
     short claimRadius = (short) villageHeart.getConfig().getClaimRadiusPerLevel((short) villageHeart.getLevel());
     TopologyStructure coreStructure = new TopologyStructure(
-        VectorUtil.clone(prefabAnchor),
+        Vec3i.from(prefabAnchor),
         StructureConfig.TownHeart.SIZE_2I,
         VillageTopologyStructureType.CITY_CENTER,
         topologyRotation);
-    coreStructure.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
+    coreStructure.setPrefabAnchor(Vec3i.from(prefabAnchor));
     coreStructure.setStructureId(villageHeart.getUuid());
     topology.initializeVillageTopology(coreStructure, claimRadius);
 

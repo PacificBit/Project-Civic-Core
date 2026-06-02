@@ -4,10 +4,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import org.joml.Vector2i;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.builtin.triggervolumes.TriggerVolumesPlugin;
 import com.hypixel.hytale.builtin.triggervolumes.manager.TriggerVolumeManager;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -23,6 +19,9 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.AdvanceConstructionStage;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginNewConstruction;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginUpgradeConstruction;
@@ -43,7 +42,7 @@ import io.sentry.util.Pair;
 
 public class Utils {
 
-  public record BlockContext(WorldChunk chunk, Vector3i position) {
+  public record BlockContext(WorldChunk chunk, Vec3i position) {
   }
 
   public static BlockContext getWorldBlockContext(
@@ -104,16 +103,16 @@ public class Utils {
     int worldY = localY;
     int worldZ = ChunkUtil.worldCoordFromLocalCoord(worldChunk.getZ(), localZ);
 
-    return new BlockContext(worldChunk, new Vector3i(worldX, worldY, worldZ));
+    return new BlockContext(worldChunk, new Vec3i(worldX, worldY, worldZ));
   }
 
-  public static AreaFootprint calculateAreaFootprint(Vector3i origin, int radius) {
-    Vector2i topLeft = new Vector2i(origin.x - radius, origin.z - radius);
-    Vector2i botRight = new Vector2i(origin.x + radius, origin.z + radius);
+  public static AreaFootprint calculateAreaFootprint(Vec3i origin, int radius) {
+    Vec2i topLeft = new Vec2i(origin.x - radius, origin.z - radius);
+    Vec2i botRight = new Vec2i(origin.x + radius, origin.z + radius);
     return new AreaFootprint(topLeft, botRight);
   }
 
-  public static AreaFootprint claimVillageArea(VillageHeartComponent heart, Vector3i origin) {
+  public static AreaFootprint claimVillageArea(VillageHeartComponent heart, Vec3i origin) {
     short level = (short) heart.getLevel();
     int radius = heart.getConfig().getClaimRadiusPerLevel(level);
     AreaFootprint area = calculateAreaFootprint(origin, radius);
@@ -192,7 +191,7 @@ public class Utils {
     };
   }
 
-  public static Vector2i getSize2i(StructureType structureType) {
+  public static Vec2i getSize2i(StructureType structureType) {
     return switch (structureType) {
       case TOWN_HALL -> StructureConfig.TownHall.SIZE_2I;
       case MINE -> StructureConfig.Mine.SIZE_2I;
@@ -206,11 +205,11 @@ public class Utils {
     };
   }
 
-  public static Vector2i getVillageHeartSize2i() {
+  public static Vec2i getVillageHeartSize2i() {
     return StructureConfig.TownHeart.SIZE_2I;
   }
 
-  public static Vector3i getSize3i(StructureType structureType) {
+  public static Vec3i getSize3i(StructureType structureType) {
     return switch (structureType) {
       case TOWN_HALL -> StructureConfig.TownHall.SIZE_3I;
       case MINE -> StructureConfig.Mine.SIZE_3I;
@@ -224,11 +223,11 @@ public class Utils {
     };
   }
 
-  public static Vector3i getVillageHeartSize3i() {
+  public static Vec3i getVillageHeartSize3i() {
     return StructureConfig.TownHeart.SIZE_3I;
   }
 
-  public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType) {
+  public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vec3i position, BlockType blockType) {
     WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(),
         position.x, position.z)
             ? chunk
@@ -239,7 +238,7 @@ public class Utils {
     return targetChunk;
   }
 
-  public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vector3i position, BlockType blockType, int rotation) {
+  public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vec3i position, BlockType blockType, int rotation) {
     int blockId = BlockType.getAssetMap().getIndex(blockType.getId());
 
     WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(),
@@ -254,7 +253,7 @@ public class Utils {
     return targetChunk;
   }
 
-  public static WorldChunk breakBlockChunkAware(WorldChunk chunk, Vector3i position) {
+  public static WorldChunk breakBlockChunkAware(WorldChunk chunk, Vec3i position) {
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x,
         position.z)) {
       chunk.breakBlock(position.x, position.y, position.z);
@@ -268,7 +267,7 @@ public class Utils {
   }
 
   public static Pair<WorldChunk, Ref<ChunkStore>> getBlockComponentEntityChunkAware(WorldChunk chunk,
-      Vector3i position) {
+      Vec3i position) {
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x,
         position.z)) {
       return new Pair<>(chunk, chunk.getBlockComponentEntity(position.x,
@@ -298,7 +297,7 @@ public class Utils {
     taskQueue.merge(task);
   }
 
-  public static void markNeedSaving(World world, Vector3i position) {
+  public static void markNeedSaving(World world, Vec3i position) {
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(position.x,
         position.z));
     chunk.markNeedsSaving();
@@ -338,11 +337,11 @@ public class Utils {
 
       result[i] = splitHorizontally
           ? new AreaFootprint(
-              new Vector2i(start, minY),
-              new Vector2i(end, maxY))
+              new Vec2i(start, minY),
+              new Vec2i(end, maxY))
           : new AreaFootprint(
-              new Vector2i(minX, start),
-              new Vector2i(maxX, end));
+              new Vec2i(minX, start),
+              new Vec2i(maxX, end));
 
       current = end + 1;
     }
@@ -354,20 +353,20 @@ public class Utils {
     return value == null ? "null" : value.toString();
   }
 
-  public static Vector3f centerOf(@Nonnull Vector3i blockPos) {
-    return new Vector3f(
+  public static Vec3f centerOf(@Nonnull Vec3i blockPos) {
+    return new Vec3f(
         blockPos.x + 0.5f,
         blockPos.y + 0.5f,
         blockPos.z + 0.5f);
   }
 
-  public static Vector3i getRotationVector(Rotation rotation) {
-    return VectorUtil.clone(rotation.getAxisDirection());
+  public static Vec3i getRotationVector(Rotation rotation) {
+    return Vec3i.from(rotation.getAxisDirection());
   }
 
-  public static Rotation getRotationFromCardinalDirection(Vector3i cardinalDirection) {
+  public static Rotation getRotationFromCardinalDirection(Vec3i cardinalDirection) {
     for (Rotation rotation : Rotation.values()) {
-      Vector3i rotationVector = getRotationVector(rotation);
+      Vec3i rotationVector = getRotationVector(rotation);
       if (rotationVector.x == cardinalDirection.x &&
           rotationVector.y == cardinalDirection.y &&
           rotationVector.z == cardinalDirection.z) {
@@ -377,38 +376,38 @@ public class Utils {
     return null;
   }
 
-  public static Vector3i rotateNormalizedVector(Vector3i cardinalDirection, Rotation rotation) {
+  public static Vec3i rotateNormalizedVector(Vec3i cardinalDirection, Rotation rotation) {
     return getRotationVector(getRotationFromCardinalDirection(cardinalDirection).add(rotation));
   }
 
-  public static Vector3i getCenter(Vector3i start, Vector3i end) {
+  public static Vec3i getCenter(Vec3i start, Vec3i end) {
     if (start == null || end == null) {
       return null;
     }
 
-    return new Vector3i(
+    return new Vec3i(
         (int) Math.floorDiv((long) start.x + end.x, 2L),
         (int) Math.floorDiv((long) start.y + end.y, 2L),
         (int) Math.floorDiv((long) start.z + end.z, 2L));
   }
 
-  public static WorldChunk getWorldChunk(World world, Vector3i position) {
+  public static WorldChunk getWorldChunk(World world, Vec3i position) {
     return world.getChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
   }
 
-  public static WorldChunk getWorldChunk(World world, WorldChunk chunk, Vector3i position) {
+  public static WorldChunk getWorldChunk(World world, WorldChunk chunk, Vec3i position) {
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
       return chunk;
     }
     return getWorldChunk(world, position);
   }
 
-  public static BlockType getBlockTypeChunkAware(World world, Vector3i position) {
+  public static BlockType getBlockTypeChunkAware(World world, Vec3i position) {
     WorldChunk chunk = getWorldChunk(world, position);
     return chunk.getBlockType(position);
   }
 
-  public static BlockType getBlockTypeChunkAware(World world, WorldChunk chunk, Vector3i position) {
+  public static BlockType getBlockTypeChunkAware(World world, WorldChunk chunk, Vec3i position) {
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
       return chunk.getBlockType(position);
     }

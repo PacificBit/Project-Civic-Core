@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
@@ -30,7 +30,7 @@ public final class VillageHeartRegistry {
   public void registerVillage(
       UUID uuid,
       String worldName,
-      Vector3i position,
+      Vec3i position,
       AreaFootprint claimedArea) {
     villageIdToArea.put(uuid, claimedArea);
     claimAreaToHeartRef.put(claimedArea, new EntityRef(worldName, position));
@@ -71,7 +71,7 @@ public final class VillageHeartRegistry {
     }
   }
 
-  public EntityRef getVillageHeartIn(Vector2i coord2d) {
+  public EntityRef getVillageHeartIn(Vec2i coord2d) {
     for (Map.Entry<AreaFootprint, EntityRef> entry : claimAreaToHeartRef.entrySet()) {
       if (entry.getKey().isInside(coord2d)) {
         return entry.getValue();

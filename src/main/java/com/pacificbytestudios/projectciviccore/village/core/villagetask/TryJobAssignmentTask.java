@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -46,7 +46,7 @@ public class TryJobAssignmentTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     if (this.workplace == null) {
       this.workplace = heart.getFirstWorkplaceWithMissingEmployee();

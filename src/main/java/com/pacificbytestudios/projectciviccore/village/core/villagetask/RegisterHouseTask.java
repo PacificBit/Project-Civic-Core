@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -43,7 +43,7 @@ public class RegisterHouseTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     if (this.house == null) {
       Logger.logWarning(
@@ -84,7 +84,7 @@ public class RegisterHouseTask extends AVillageTask {
       return null;
     }
 
-    Vector3i prefabAnchor = house.getPrefabAnchor();
+    Vec3i prefabAnchor = house.getPrefabAnchor();
     if (prefabAnchor == null) {
       Logger.logWarning(
           "Could not register house topology for " + house.getUuid()
@@ -117,7 +117,7 @@ public class RegisterHouseTask extends AVillageTask {
       return null;
     }
 
-    Vector2i structureSize = Utils.getSize2i(StructureType.HOUSE);
+    Vec2i structureSize = Utils.getSize2i(StructureType.HOUSE);
     if (structureSize == null) {
       Logger.logWarning(
           "Could not register house topology for " + house.getUuid()
@@ -130,13 +130,13 @@ public class RegisterHouseTask extends AVillageTask {
 
   private static TopologyStructure buildTopologyStructure(
       HouseComponent house,
-      Vector2i structureSize,
+      Vec2i structureSize,
       Rotation orientation) {
     if (house == null || structureSize == null) {
       return null;
     }
 
-    Vector3i prefabAnchor = house.getPrefabAnchor();
+    Vec3i prefabAnchor = house.getPrefabAnchor();
     if (house.getUuid() == null || prefabAnchor == null) {
       return null;
     }

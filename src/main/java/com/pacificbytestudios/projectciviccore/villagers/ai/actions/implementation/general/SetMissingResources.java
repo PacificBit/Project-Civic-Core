@@ -2,7 +2,7 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.util.List;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -65,7 +65,7 @@ public class SetMissingResources extends VillagerActionBase {
     }
 
     World world = workplaceRef.getStore().getExternalData().getWorld();
-    Vector3i workplacePosition = workplace.getBenchPos();
+    Vec3i workplacePosition = workplace.getBenchPos();
 
     if (this.resetMissingResources) {
       missingResourceComponent.resetMissingResources();

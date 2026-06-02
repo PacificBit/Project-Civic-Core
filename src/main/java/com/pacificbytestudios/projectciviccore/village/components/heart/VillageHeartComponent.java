@@ -12,9 +12,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.builtin.triggervolumes.EntityTargetType;
 import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEffect;
 import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEventType;
@@ -38,9 +35,10 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.triggervolumeeffects.TeleportVillagerToTownHeartEffect;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -372,7 +370,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     }
 
     this.homelessRegistry.remove(villager);
-    Vector3i bedPosition = houseComponent.getBedPosition(bed);
+    Vec3i bedPosition = houseComponent.getBedPosition(bed);
     VillagerComponent villagerComponent = this.villagerIdToComponent.get(villager);
 
     this.villagerToHouse.put(villager, house);
@@ -486,8 +484,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     double halfX = (area.getMaxX() - area.getMinX()) / 2.0;
     double halfZ = (area.getMaxZ() - area.getMinZ()) / 2.0;
     BoxShape shape = new BoxShape(
-        new Vector3d(-halfX, -config.getTriggerVolumeHeightBelowGround(), -halfZ), // Min bound
-        new Vector3d(halfX, config.getTriggerVolumeHeightAboveGround(), halfZ)); // Max bound
+        new Vec3d(-halfX, -config.getTriggerVolumeHeightBelowGround(), -halfZ), // Min bound
+        new Vec3d(halfX, config.getTriggerVolumeHeightAboveGround(), halfZ)); // Max bound
 
     return shape;
   }
@@ -496,12 +494,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     BoxShape shape = generateVolumeEntryShapeFromArea(villageArea);
 
     // Generate position
-    Vector3d position = VectorUtil.toVector3d(villageArea.getCenter3D());
+    Vec3d position = villageArea.getCenter3D().to3d();
     position.y = getBlockContext().getPosition().y;
 
-    Logger.logInfo(
-        "Shape: " + shape.toString() + " Position: "
-            + VectorUtil.toString(position));
+    Logger.logInfo("Generating TriggerVolume (Shape: %s, Position: %s)", shape, position);
 
     // Retrieve TriggerVolume manager
     TriggerVolumeManager manager = Utils.getTriggerVolumeManager(world);

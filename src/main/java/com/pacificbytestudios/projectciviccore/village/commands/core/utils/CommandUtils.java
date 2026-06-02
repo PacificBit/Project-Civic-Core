@@ -1,8 +1,5 @@
 package com.pacificbytestudios.projectciviccore.village.commands.core.utils;
 
-import org.joml.Vector2i;
-import org.joml.Vector3d;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -13,8 +10,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -34,12 +33,12 @@ public class CommandUtils {
   }
 
   public static EntityRef findVillageAtPlayerPosition(TransformComponent playerTransform) {
-    var playerPos = playerTransform.getPosition();
+    Vec3d playerPos = Vec3d.from(playerTransform.getPosition());
     return findVillageAtPlayerPosition(playerPos);
   }
 
-  public static EntityRef findVillageAtPlayerPosition(Vector3d origin) {
-    var xzCoords = new Vector2i((int) origin.x, (int) origin.z);
+  public static EntityRef findVillageAtPlayerPosition(Vec3d origin) {
+    var xzCoords = new Vec2i((int) origin.x, (int) origin.z);
     return VillageHeartRegistry.get().getVillageHeartIn(xzCoords);
   }
 
@@ -47,22 +46,22 @@ public class CommandUtils {
     var config = StructureConfig.TownHeart.DEFAULT_CONFIG;
     var radius = config.getMaxRadius();
 
-    var playerPosition = VectorUtil.toVector3i(playerTransform.getPosition());
+    Vec3i playerPosition = Vec3i.from(playerTransform.getPosition());
     AreaFootprint footprint = Utils.calculateAreaFootprint(playerPosition, radius);
 
-    Vector2i topLeft = footprint.getTopLeft();
-    Vector2i bottomRight = footprint.getBotRight();
+    Vec2i topLeft = footprint.getTopLeft();
+    Vec2i bottomRight = footprint.getBotRight();
 
-    Vector2i[] corners = {
+    Vec2i[] corners = {
         topLeft,
-        new Vector2i(topLeft.x, bottomRight.y),
+        new Vec2i(topLeft.x, bottomRight.y),
         bottomRight,
-        new Vector2i(bottomRight.x, topLeft.y)
+        new Vec2i(bottomRight.x, topLeft.y)
     };
 
     VillageHeartRegistry registry = VillageHeartRegistry.get();
 
-    for (Vector2i corner : corners) {
+    for (Vec2i corner : corners) {
       EntityRef village = registry.getVillageHeartIn(corner);
       if (village != null) {
         return village;
@@ -97,9 +96,8 @@ public class CommandUtils {
   }
 
   public static void sendExecutionResultMessage(CommandContext context, ExecutionResult result, Message message) {
-    StringBuilder displayMsg = new StringBuilder();
-    displayMsg.append("[").append(result.type).append("] ");
-    context.sendMessage(Message.join(Message.raw(displayMsg.toString()), message));
+    String msgPrefix = "[%s] ".formatted(result.type);
+    context.sendMessage(Message.join(Message.raw(msgPrefix), message));
   }
 
   public enum ExecutionResult {

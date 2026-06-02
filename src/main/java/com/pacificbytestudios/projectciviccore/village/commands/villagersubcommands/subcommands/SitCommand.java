@@ -7,10 +7,9 @@ import javax.annotation.Nonnull;
 import com.hypixel.hytale.builtin.mounts.BlockMountAPI;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
@@ -30,7 +29,7 @@ public class SitCommand extends CommandBase {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   @Nonnull
-  private final RequiredArg<Vector3i> chairCoords = this.withRequiredArg(
+  private final RequiredArg<org.joml.Vector3i> chairCoords = this.withRequiredArg(
       "coord",
       "Coord of the chair",
       ArgTypes.VECTOR3I);
@@ -55,8 +54,8 @@ public class SitCommand extends CommandBase {
         return;
       }
 
-      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
-      EntityRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
+      Vec3i playerPos = Vec3i.from(transform.getPosition());
+      EntityRef heartRef = villageStore.getVillageHeartIn(new Vec2i(playerPos.x, playerPos.z));
 
       if (heartRef == null) {
         context.sendMessage(Message.raw("No village found in range."));
@@ -89,7 +88,7 @@ public class SitCommand extends CommandBase {
         return;
       }
 
-      Vector3i chairPos = this.chairCoords.get(context);
+      Vec3i chairPos = Vec3i.from(this.chairCoords.get(context));
       SitOnChairEvent event = new SitOnChairEvent(chairPos);
       entityStore.invoke(villagerRef, event);
       BlockMountAPI.BlockMountResult result = event.getResult();

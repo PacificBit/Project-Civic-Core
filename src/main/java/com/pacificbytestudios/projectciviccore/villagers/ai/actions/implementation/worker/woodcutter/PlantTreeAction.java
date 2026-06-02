@@ -5,7 +5,7 @@ import java.util.ArrayDeque;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -51,7 +51,7 @@ public class PlantTreeAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> blockPositions = villager
+    ArrayDeque<Vec3i> blockPositions = villager
         .getWorkerData()
         .getWorkareaSnapshot()
         .getBlockTypePosition().get(WoodCutterScan.PLANTABLE_TERRAIN);
@@ -60,7 +60,7 @@ public class PlantTreeAction extends VillagerActionBase {
       throw new IllegalStateException("[PlantTree] No Plantable soil block available");
     }
 
-    Vector3i blockPos = blockPositions.peekFirst();
+    Vec3i blockPos = blockPositions.peekFirst();
     if (blockPos == null) {
       Logger.logWarning("Snapshot returned a null plant target");
       return false;

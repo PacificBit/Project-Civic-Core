@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayDeque;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
@@ -44,12 +44,12 @@ public class WaterSoilAction extends ActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> blockPositions = villager
+    ArrayDeque<Vec3i> blockPositions = villager
         .getWorkerData()
         .getWorkareaSnapshot()
         .getBlockTypePosition().get(FarmerScan.WATERABLE_TERRAIN);
 
-    Vector3i blockPos;
+    Vec3i blockPos;
 
     if (blockPositions != null && !blockPositions.isEmpty()) {
       blockPos = blockPositions.pollFirst();
@@ -61,7 +61,7 @@ public class WaterSoilAction extends ActionBase {
     return waterTilledSoil(world, blockPos);
   }
 
-  public static boolean waterTilledSoil(World world, Vector3i soilPos) {
+  public static boolean waterTilledSoil(World world, Vec3i soilPos) {
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(soilPos.x, soilPos.z));
 
     Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(soilPos.x, soilPos.y, soilPos.z);

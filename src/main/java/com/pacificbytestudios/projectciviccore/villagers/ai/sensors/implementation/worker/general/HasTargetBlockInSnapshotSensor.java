@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayDeque;
 import java.util.Map;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -45,10 +45,10 @@ public class HasTargetBlockInSnapshotSensor extends VillagerSensorBase {
       return false;
     }
 
-    Map<String, ArrayDeque<Vector3i>> blockPositions = snapshot.getBlockTypePosition();
+    Map<String, ArrayDeque<Vec3i>> blockPositions = snapshot.getBlockTypePosition();
 
     for (String targetBlockId : this.targetBlockIds) {
-      ArrayDeque<Vector3i> queue = blockPositions.get(targetBlockId);
+      ArrayDeque<Vec3i> queue = blockPositions.get(targetBlockId);
       if (queue != null && queue.size() > 0) {
         return true;
       }

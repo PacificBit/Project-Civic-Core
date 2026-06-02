@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
@@ -22,7 +22,7 @@ public class WoodCutterTerrainRepair {
     this.terrainRepairBlockTypes = this.resolveTerrainRepairBlocks(terrainRepairBlockTypes);
   }
 
-  public void repairTerrainBelowSapling(World world, Vector3i saplingPosition) {
+  public void repairTerrainBelowSapling(World world, Vec3i saplingPosition) {
     if (this.terrainRepairBlockTypes.length == 0) {
       return;
     }
@@ -37,7 +37,7 @@ public class WoodCutterTerrainRepair {
         for (int depth = 1; depth <= TERRAIN_REPAIR_DEPTH; depth++) {
           int y = saplingPosition.y - depth;
 
-          Vector3i terrainPosition = new Vector3i(x, y, z);
+          Vec3i terrainPosition = new Vec3i(x, y, z);
           BlockType existingBlock = Utils.getBlockTypeChunkAware(world, chunk, terrainPosition);
           if (existingBlock != null && !isRoot(existingBlock) && existingBlock.getMaterial() == BlockMaterial.Solid) {
             continue;

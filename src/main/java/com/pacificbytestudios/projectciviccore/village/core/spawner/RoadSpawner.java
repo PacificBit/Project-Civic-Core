@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
@@ -16,7 +16,6 @@ import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComp
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadLength;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
@@ -27,7 +26,7 @@ import com.pacificbytestudios.projectciviccore.utils.Logger;
 public class RoadSpawner {
   public static boolean spawn(
       WorldChunk chunk,
-      Vector3i position,
+      Vec3i position,
       Rotation rotation,
       VillageHeartComponent village,
       RoadType type,
@@ -46,7 +45,7 @@ public class RoadSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        VectorUtil.clone(position),
+        position.clone(),
         structureRotation,
         true);
 
@@ -54,7 +53,7 @@ public class RoadSpawner {
       return false;
     }
 
-    Vector3i anchorBlockPosition = VectorUtil.clone(position);
+    Vec3i anchorBlockPosition = position.clone();
     Pair<WorldChunk, Ref<ChunkStore>> anchorResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         anchorBlockPosition);
@@ -99,7 +98,7 @@ public class RoadSpawner {
     return true;
   }
 
-  public static boolean despawn(WorldChunk chunk, Vector3i position) {
+  public static boolean despawn(WorldChunk chunk, Vec3i position) {
     WorldChunk anchorChunk = chunk;
     Ref<ChunkStore> anchorRef = anchorChunk.getBlockComponentEntity(
         position.x,
@@ -138,7 +137,7 @@ public class RoadSpawner {
     return true;
   }
 
-  private static Holder<ChunkStore> createAnchorHolder(WorldChunk chunk, Vector3i position) {
+  private static Holder<ChunkStore> createAnchorHolder(WorldChunk chunk, Vec3i position) {
     int index = ChunkUtil.indexBlockInColumn(position.x, position.y, position.z);
     Holder<ChunkStore> holder = chunk.getBlockComponentChunk().getEntityHolder(index);
     return holder != null ? holder.clone() : ChunkStore.REGISTRY.newHolder();

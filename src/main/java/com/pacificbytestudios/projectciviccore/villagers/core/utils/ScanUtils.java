@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 
@@ -9,7 +9,7 @@ public class ScanUtils {
   private static final String STATE_DEFINITIONS_MARKER = "_State_Definitions_";
 
   public static boolean isInsideWorkArea(
-      Vector3i point,
+      Vec3i point,
       int minX,
       int maxX,
       int minZ,
@@ -71,8 +71,8 @@ public class ScanUtils {
     return normalized;
   }
 
-  public static Vector3i getNextPoint(
-      Vector3i currentPoint,
+  public static Vec3i getNextPoint(
+      Vec3i currentPoint,
       int minX,
       int maxX,
       int minZ,
@@ -80,11 +80,11 @@ public class ScanUtils {
       int soilLevel) {
 
     if (currentPoint.x < maxX) {
-      return new Vector3i(currentPoint.x + 1, soilLevel, currentPoint.z);
+      return new Vec3i(currentPoint.x + 1, soilLevel, currentPoint.z);
     }
 
     if (currentPoint.z < maxZ) {
-      return new Vector3i(minX, soilLevel, currentPoint.z + 1);
+      return new Vec3i(minX, soilLevel, currentPoint.z + 1);
     }
 
     return null;

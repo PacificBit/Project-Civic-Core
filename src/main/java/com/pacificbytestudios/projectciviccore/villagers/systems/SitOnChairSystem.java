@@ -9,7 +9,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.events.SitOnChairEvent;
 
@@ -39,6 +39,6 @@ public final class SitOnChairSystem extends EntityEventSystem<EntityStore, SitOn
         villagerRef,
         commandBuffer,
         event.getTargetBlock(),
-        VectorUtil.toVector3d(event.getInteractPos())));
+        Vec3d.from(event.getInteractPos())));
   }
 }

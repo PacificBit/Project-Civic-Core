@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.systems.builder;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -38,9 +38,9 @@ public class StagedBuildingSpawnSystem extends RefSystem<ChunkStore> {
     BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
     WorldChunk chunk = blockContext.chunk();
     World world = chunk.getWorld();
-    Vector3i blockPos = blockContext.position();
+    Vec3i blockPos = blockContext.position();
 
-    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vec2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {
       Logger.logWarning("No village found");
       return;

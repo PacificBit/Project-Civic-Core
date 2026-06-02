@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.core.work.scan;
 import java.util.ArrayDeque;
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -112,17 +112,17 @@ public class StorageKeeperScan implements IWorkAreaScanner {
 
   private void putSnapshotTargets(
       WorkplaceAreaSnapshot snapshot,
-      String fetchKey, Iterable<Vector3i> fetchTargets,
-      String dumpKey, Iterable<Vector3i> dumpTargets) {
+      String fetchKey, Iterable<Vec3i> fetchTargets,
+      String dumpKey, Iterable<Vec3i> dumpTargets) {
 
-    ArrayDeque<Vector3i> fetchFrom = new ArrayDeque<>();
-    ArrayDeque<Vector3i> dumpTo = new ArrayDeque<>();
+    ArrayDeque<Vec3i> fetchFrom = new ArrayDeque<>();
+    ArrayDeque<Vec3i> dumpTo = new ArrayDeque<>();
 
-    for (Vector3i position : fetchTargets) {
+    for (Vec3i position : fetchTargets) {
       fetchFrom.add(position);
     }
 
-    for (Vector3i position : dumpTargets) {
+    for (Vec3i position : dumpTargets) {
       dumpTo.add(position);
     }
 
@@ -153,7 +153,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
         VillageHeartComponent.getComponentType());
   }
 
-  private Iterable<Vector3i> resolveRequestStorageTargets(
+  private Iterable<Vec3i> resolveRequestStorageTargets(
       VillageStorageRequest request,
       VillageHeartComponent villageHeart) {
     if (request == null) {

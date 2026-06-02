@@ -1,12 +1,11 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -26,7 +25,7 @@ public class ContinueBuildingTask extends AVillageTask {
           obj -> obj.structureType)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           obj -> obj.prefabAnchor)
       .add()
@@ -39,13 +38,13 @@ public class ContinueBuildingTask extends AVillageTask {
       .build();
 
   private StructureType structureType;
-  private Vector3i prefabAnchor;
+  private Vec3i prefabAnchor;
   private Rotation rotation;
 
   public ContinueBuildingTask() {
   }
 
-  public ContinueBuildingTask(StructureType structureType, Vector3i prefabAnchor, Rotation rotation) {
+  public ContinueBuildingTask(StructureType structureType, Vec3i prefabAnchor, Rotation rotation) {
     this.structureType = structureType;
     this.prefabAnchor = prefabAnchor;
     this.rotation = rotation;
@@ -55,7 +54,7 @@ public class ContinueBuildingTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     AdvanceConstructionStage function = Utils.getAdvanceConstructionStageFunction(this.structureType);
     try {

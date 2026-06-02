@@ -5,7 +5,8 @@ import java.util.ArrayDeque;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemTool;
@@ -23,7 +24,6 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderBreakTreeBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
@@ -71,14 +71,14 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> targets = snapshot.getBlockTypePosition().get(this.snapshotGroup);
+    ArrayDeque<Vec3i> targets = snapshot.getBlockTypePosition().get(this.snapshotGroup);
     if (targets == null || targets.isEmpty()) {
       Logger.logInfo(
           "No targets available for snapshot group " + this.snapshotGroup);
       return false;
     }
 
-    Vector3i target = targets.peekFirst();
+    Vec3i target = targets.peekFirst();
     if (target == null) {
       Logger.logInfo(
           "Snapshot group " + this.snapshotGroup + " returned a null target");
@@ -93,7 +93,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       }
 
       double distanceFromTarget = transform.getPosition().distanceSquared(
-          VectorUtil.toVector3d(Utils.centerOf(target)));
+          Vec3d.from(Utils.centerOf(target)));
       if (distanceFromTarget > this.requiredStoppingRangeSquared) {
         return false;
       }

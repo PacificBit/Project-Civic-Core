@@ -15,9 +15,9 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseAppartmentRegistry;
@@ -51,7 +51,7 @@ public final class VillagerDeathCleanupSystem extends DeathSystems.OnDeathSystem
     UUID villagerId = uuidComponent.getUuid();
     String position = transform == null ?
       "<TransformComponent not found>" :
-      VectorUtil.toString(transform.getPosition());
+      Vec3d.toString(transform.getPosition());
 
     Logger.logWarning("Villager '%s' died!\n\tDeath Reason: %s\n\tDeath Position: %s"
       .formatted(villagerId, component.getDeathCause(), position));

@@ -2,16 +2,14 @@ package com.pacificbytestudios.projectciviccore.village.components.workplace.gen
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceContainerEntryComponent> CODEC = BuilderCodec
@@ -23,12 +21,12 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
           (obj) -> obj.uuid)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
           (obj, value) -> obj.position = value,
           (obj) -> obj.position)
       .add()
 
-      .append(new KeyedCodec<>("AccessPosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("AccessPosition", Vec3i.CODEC),
           (obj, value) -> obj.accessPosition = value,
           (obj) -> obj.accessPosition)
       .add()
@@ -36,8 +34,8 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
       .build();
 
   private UUID uuid;
-  private Vector3i position;
-  private Vector3i accessPosition;
+  private Vec3i position;
+  private Vec3i accessPosition;
 
   public UUID getUuid() {
     return uuid;
@@ -47,19 +45,19 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
     this.uuid = uuid;
   }
 
-  public Vector3i getPosition() {
+  public Vec3i getPosition() {
     return position;
   }
 
-  public void setPosition(Vector3i position) {
+  public void setPosition(Vec3i position) {
     this.position = position;
   }
 
-  public Vector3i getAccessPosition() {
+  public Vec3i getAccessPosition() {
     return this.accessPosition != null ? this.accessPosition : this.position;
   }
 
-  public void setAccessPosition(Vector3i accessPosition) {
+  public void setAccessPosition(Vec3i accessPosition) {
     this.accessPosition = accessPosition;
   }
 
@@ -67,7 +65,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
   public WorkplaceContainerEntryComponent clone() {
     WorkplaceContainerEntryComponent container = new WorkplaceContainerEntryComponent();
     container.uuid = this.uuid;
-    container.position = this.position;
+    container.position = Vec3i.from(this.position);
     container.accessPosition = this.accessPosition;
     return container;
   }
@@ -78,10 +76,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
 
   @Override
   public String toString() {
-    return "WorkplaceContainerEntryComponent{\n" +
-        "uuid=" + uuid +
-        "\n, position=" + position +
-        "\n, accessPosition=" + accessPosition +
-        '}';
+    return "WorkplaceContainerEntryComponent: {\n\tUUID: %s,\n\tPosition: %s,\n\tAccessPosition: %s\n\t}"
+        .formatted(uuid, position, accessPosition);
   }
 }

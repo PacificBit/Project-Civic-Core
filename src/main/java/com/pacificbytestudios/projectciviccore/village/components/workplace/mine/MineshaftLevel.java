@@ -6,14 +6,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class MineshaftLevel {
   public static final BuilderCodec<MineshaftLevel> CODEC = BuilderCodec
@@ -35,7 +32,7 @@ public class MineshaftLevel {
           (obj) -> obj.trackedPrefab)
       .add()
 
-      .append(new KeyedCodec<>("AnchorPoint", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("AnchorPoint", Vec3i.CODEC),
           (obj, value) -> obj.anchorPoint = value,
           (obj) -> obj.anchorPoint)
       .add()
@@ -44,15 +41,15 @@ public class MineshaftLevel {
 
   private Map<UUID, MineshaftGallery> galleries = new HashMap<>();
   private TrackedPrefabPlacementComponent trackedPrefab;
-  private Vector3i anchorPoint;
+  private Vec3i anchorPoint;
 
   public Map<UUID, MineshaftGallery> getGalleries() {
     return galleries;
   }
 
-  public Set<UUID> buildGalleries(Map<Vector3i, Vector3i> galleryStartPosition) {
+  public Set<UUID> buildGalleries(Map<Vec3i, Vec3i> galleryStartPosition) {
     Set<UUID> galleriesIds = new HashSet<>();
-    for (Map.Entry<Vector3i, Vector3i> gallery : galleryStartPosition.entrySet()) {
+    for (Map.Entry<Vec3i, Vec3i> gallery : galleryStartPosition.entrySet()) {
       MineshaftGallery mineshaftGallery = new MineshaftGallery(gallery.getKey(), gallery.getValue());
       UUID galleryId = mineshaftGallery.getGalleryId();
       this.galleries.put(galleryId, mineshaftGallery);
@@ -90,11 +87,11 @@ public class MineshaftLevel {
     this.trackedPrefab = trackedPrefab;
   }
 
-  public Vector3i getAnchorPoint() {
+  public Vec3i getAnchorPoint() {
     return anchorPoint;
   }
 
-  public void setAnchorPoint(Vector3i anchorPoint) {
+  public void setAnchorPoint(Vec3i anchorPoint) {
     this.anchorPoint = anchorPoint;
   }
 
@@ -112,7 +109,7 @@ public class MineshaftLevel {
     }
 
     component.trackedPrefab = this.trackedPrefab == null ? null : this.trackedPrefab.clone();
-    component.anchorPoint = VectorUtil.clone(this.anchorPoint);
+    component.anchorPoint = Vec3i.from(this.anchorPoint);
 
     return component;
   }

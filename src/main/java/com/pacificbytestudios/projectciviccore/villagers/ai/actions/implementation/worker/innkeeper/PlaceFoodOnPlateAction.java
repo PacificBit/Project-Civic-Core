@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.innkeeper;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -20,7 +20,6 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
@@ -66,7 +65,7 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
       return false;
     }
 
-    Vector3i platePosition = interactable.getDependsOn();
+    Vec3i platePosition = interactable.getDependsOn();
     World world = store.getExternalData().getWorld();
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(platePosition.x, platePosition.z));
 
@@ -86,10 +85,10 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
       if (foodComponent == null) {
         foodComponent = new VillageFoodComponent();
       }
-      Vector3i tavernPosition = workplaceComponent.getWorkplaceRef().getPosition();
+      Vec3i tavernPosition = workplaceComponent.getWorkplaceRef().getPosition();
       foodComponent.setTavernRef(
           world.getName() != null && tavernPosition != null
-              ? new EntityRef(world.getName(), VectorUtil.clone(tavernPosition))
+              ? new EntityRef(world.getName(), Vec3i.from(tavernPosition))
               : null);
       chunkStore.putComponent(foodRef, VillageFoodComponent.getComponentType(), foodComponent);
     }

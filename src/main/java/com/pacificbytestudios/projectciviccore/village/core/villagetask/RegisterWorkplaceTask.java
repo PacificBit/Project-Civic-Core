@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -43,7 +43,7 @@ public class RegisterWorkplaceTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     Logger.logInfo("Registering workplace '" + this.workplace.getWorkplaceType() + "' with id: "
             + this.workplace.getUuid());
@@ -82,20 +82,20 @@ public class RegisterWorkplaceTask extends AVillageTask {
       return null;
     }
 
-    Vector2i structureSize = Utils.getSize2i(workplaceType);
+    Vec2i structureSize = Utils.getSize2i(workplaceType);
     return buildTopologyStructure(workplace, structureSize, trackedPlacement.getYaw());
   }
 
   private static TopologyStructure buildTopologyStructure(
       WorkplaceComponent workplace,
-      Vector2i structureSize,
+      Vec2i structureSize,
       Rotation orientation) {
     if (workplace == null || structureSize == null) {
       return null;
     }
 
     StructureType workplaceType = workplace.getWorkplaceType();
-    Vector3i prefabAnchor = workplace.getPrefabAnchor();
+    Vec3i prefabAnchor = workplace.getPrefabAnchor();
     if (workplace.getUuid() == null || workplaceType == null || prefabAnchor == null) {
       return null;
     }

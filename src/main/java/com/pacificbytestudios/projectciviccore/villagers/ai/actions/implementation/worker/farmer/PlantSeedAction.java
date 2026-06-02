@@ -2,7 +2,7 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.util.ArrayDeque;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -41,12 +41,12 @@ public class PlantSeedAction extends ActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> blockPositions = villager
+    ArrayDeque<Vec3i> blockPositions = villager
         .getWorkerData()
         .getWorkareaSnapshot()
         .getBlockTypePosition().get(FarmerScan.PLANTABLE_TERRAIN);
 
-    Vector3i blockPos;
+    Vec3i blockPos;
 
     if (blockPositions != null && !blockPositions.isEmpty()) {
       blockPos = blockPositions.pollFirst();

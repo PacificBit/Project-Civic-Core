@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.farmer;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.FarmingUtil;
 import com.hypixel.hytale.component.Ref;
@@ -39,7 +39,7 @@ public class HarvestCropAction extends VillagerActionBase {
     }
 
     World world = store.getExternalData().getWorld();
-    Vector3i cropCoord = snapshot.getBlockTypePosition().get(FarmerScan.HARVESTABLE_CROP).pollFirst();
+    Vec3i cropCoord = snapshot.getBlockTypePosition().get(FarmerScan.HARVESTABLE_CROP).pollFirst();
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(
         cropCoord.x,
         cropCoord.z));

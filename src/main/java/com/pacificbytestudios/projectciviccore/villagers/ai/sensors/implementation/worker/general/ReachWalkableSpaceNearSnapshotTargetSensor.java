@@ -3,8 +3,8 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayDeque;
 import java.util.Map;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -15,7 +15,6 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWalkableSpaceNearSnapshotTargetSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -26,7 +25,7 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
   private final String[] blockIds;
   private final double stoppingRangeSquared;
   private final boolean useCenterOfBlock;
-  private Vector3i target = null;
+  private Vec3i target = null;
 
   public ReachWalkableSpaceNearSnapshotTargetSensor(
       BuilderReachWalkableSpaceNearSnapshotTargetSensor builderSensorBase,
@@ -78,17 +77,17 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
     SnapshotTargetStandabilityInspector.Inspection standabilityInspection = SnapshotTargetStandabilityInspector.inspect(
         store.getExternalData().getWorld(),
         this.target,
-        transform.getPosition(),
+        Vec3d.from(transform.getPosition()),
         this.useCenterOfBlock);
-    Vector3i walkableTarget = standabilityInspection.getBestStandableCandidate();
+    Vec3i walkableTarget = standabilityInspection.getBestStandableCandidate();
     if (walkableTarget == null) {
       this.positionProvider.clear();
       return false;
     }
 
-    Vector3d targetPosition = this.useCenterOfBlock
-        ? VectorUtil.toVector3d(Utils.centerOf(walkableTarget))
-        : VectorUtil.toVector3d(walkableTarget);
+    Vec3d targetPosition = this.useCenterOfBlock
+        ? Vec3d.from(Utils.centerOf(walkableTarget))
+        : Vec3d.from(walkableTarget);
 
     double distanceFromTarget = transform.getPosition().distanceSquared(targetPosition);
     if (distanceFromTarget <= this.stoppingRangeSquared) {
@@ -100,11 +99,11 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
     return true;
   }
 
-  private void findSnapshotTarget(Map<String, ArrayDeque<Vector3i>> blockPositions) {
+  private void findSnapshotTarget(Map<String, ArrayDeque<Vec3i>> blockPositions) {
     for (String blockId : this.blockIds) {
-      ArrayDeque<Vector3i> queue = blockPositions.get(blockId);
+      ArrayDeque<Vec3i> queue = blockPositions.get(blockId);
       if (queue != null && !queue.isEmpty()) {
-        Vector3i target = queue.peekFirst();
+        Vec3i target = queue.peekFirst();
         if (target != null) {
           this.target = target;
           return;

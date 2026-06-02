@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.ToIntFunction;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -79,7 +79,7 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
     World world = store.getExternalData().getWorld();
     ToIntFunction<ItemStack> validator = buildDirtyInventoryValidator();
 
-    for (Vector3i containerPos : workplaceComponent.getStorage().getAllContainerPositions()) {
+    for (Vec3i containerPos : workplaceComponent.getStorage().getAllContainerPositions()) {
       ResolvedContainer resolvedContainer = ContainerResolver.resolveContainerAt(world, containerPos);
 
       if (resolvedContainer == null || resolvedContainer.containerBlock() == null) {

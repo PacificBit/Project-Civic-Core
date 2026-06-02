@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -17,7 +17,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.math.vector.Rotation3fc;
-import com.hypixel.hytale.math.vector.Vector3dUtil;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
@@ -33,7 +32,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
@@ -80,11 +78,11 @@ public class SpawnVillagerTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     World world = chunk.getWorld();
     Store<EntityStore> entityStore = world.getEntityStore().getStore();
-    Vector3d spawnPos = this.newSpawnPos(heartPos, this.spawnRadius);
+    Vec3d spawnPos = this.newSpawnPos(heartPos, this.spawnRadius);
     Rotation3fc rotation = Rotation3f.ZERO;
     Ref<EntityStore> npcRef = this.spawnNpc(entityStore, spawnPos, rotation);
 
@@ -112,14 +110,14 @@ public class SpawnVillagerTask extends AVillageTask {
     entityStore.putComponent(npcRef, VillagerComponent.getComponentType(), villagerComponent);
   }
 
-  private Vector3d newSpawnPos(Vector3i blockPos, int radius) {
-    List<Vector3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
+  private Vec3d newSpawnPos(Vec3i blockPos, int radius) {
+    List<Vec3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
 
     if (!spawningOffsets.isEmpty()) {
-      Vector3i selectedOffset = spawningOffsets.get(random.nextInt(spawningOffsets.size()));
-      Vector3i townHeartAnchor = VectorUtil.clone(blockPos);
+      Vec3i selectedOffset = spawningOffsets.get(random.nextInt(spawningOffsets.size()));
+      Vec3i townHeartAnchor = Vec3i.from(blockPos);
 
-      return VectorUtil.toVector3d(townHeartAnchor
+      return Vec3d.from(townHeartAnchor
           .add(selectedOffset));
     }
 
@@ -128,13 +126,13 @@ public class SpawnVillagerTask extends AVillageTask {
     double offsetX = Math.cos(angle) * distance;
     double offsetZ = Math.sin(angle) * distance;
 
-    Vector3d spawnPos = new Vector3d(
+    Vec3d spawnPos = new Vec3d(
         blockPos.x + offsetX,
         blockPos.y,
         blockPos.z + offsetZ);
 
-    if (VectorUtil.toVector3i(spawnPos).equals(blockPos)) {
-      spawnPos.add(Vector3dUtil.LEFT);
+    if (Vec3i.from(spawnPos).equals(blockPos)) {
+      spawnPos.add(Vec3d.safeLeft());
     }
 
     return spawnPos;
@@ -142,7 +140,7 @@ public class SpawnVillagerTask extends AVillageTask {
 
   private Ref<EntityStore> spawnNpc(
       Store<EntityStore> entityStore,
-      Vector3d position,
+      Vec3d position,
       Rotation3fc rotation) {
     Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get()
         .spawnNPC(

@@ -12,6 +12,12 @@ public class Vec3d extends org.joml.Vector3d {
       .builder(Vec3d.class, Vec3d::new, Vector3dUtil.CODEC)
       .build();
 
+  public static Vec3d LEFT = new Vec3d(Vector3dUtil.LEFT);
+
+  public static Vec3d safeLeft() {
+    return new Vec3d(Vector3dUtil.LEFT);
+  }
+
   public Vec3d() {
   }
 
@@ -71,6 +77,36 @@ public class Vec3d extends org.joml.Vector3d {
     return result;
   }
 
+  @Override
+  public Vec3d add(Vector3dc vector) {
+    super.add(vector);
+    return this;
+  }
+
+  @Override
+  public Vec3d add(double x, double y, double z) {
+    super.add(x, y, z);
+    return this;
+  }
+
+  @Override
+  public Vec3d sub(Vector3dc vector) {
+    super.sub(vector);
+    return this;
+  }
+
+  @Override
+  public Vec3d sub(double x, double y, double z) {
+    super.sub(x, y, z);
+    return this;
+  }
+
+  @Override
+  public Vec3d mul(double scalar) {
+    super.mul(scalar);
+    return this;
+  }
+
   public Vec3f to3f() {
     Vec3f result = new Vec3f();
     result.x = (float) this.x;
@@ -87,9 +123,51 @@ public class Vec3d extends org.joml.Vector3d {
     return result;
   }
 
+  public static Vec3d from(Vec3d vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3d(vector);
+  }
+
+  public static Vec3d from(org.joml.Vector3d vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3d(vector);
+  }
+
+  public static Vec3d from(Vector3dc vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3d(vector);
+  }
+
+  public static Vec3d from(org.joml.Vector3fc vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3d(vector.x(), vector.y(), vector.z());
+  }
+
+  public static Vec3d from(org.joml.Vector3ic vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3d(vector.x(), vector.y(), vector.z());
+  }
+
+  public static String toString(org.joml.Vector3d vector) {
+    if (vector == null) {
+      return "null";
+    }
+    return "<x: %f, y: %f, z: %f>".formatted(vector.x, vector.y, vector.z);
+  }
+
   @Override
   public String toString() {
-    return "(x: %d, y: %d, z: %d)".formatted(this.x, this.y, this.z);
+    return "<x: %f, y: %f, z: %f>".formatted(this.x, this.y, this.z);
   }
 
   @Override

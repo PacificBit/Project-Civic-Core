@@ -3,10 +3,9 @@ package com.pacificbytestudios.projectciviccore.village.commands.housingcommands
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.CommandBase;
@@ -38,16 +37,16 @@ public class Spawn extends CommandBase {
     world.execute(() -> {
       TransformComponent transform = entityStore.getComponent(playerRef, TransformComponent.getComponentType());
 
-      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
+      Vec3i playerPos = Vec3i.from(transform.getPosition());
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z));
 
       for (int y = playerPos.y; y > 0; y--) {
         if (chunk.getBlockType(playerPos).getId().equals("Empty")) {
-          playerPos = new Vector3i(playerPos.x, y + 2, playerPos.z);
+          playerPos = new Vec3i(playerPos.x, y + 2, playerPos.z);
         }
       }
 
-      EntityRef heartRefWrapper = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
+      EntityRef heartRefWrapper = villageStore.getVillageHeartIn(new Vec2i(playerPos.x, playerPos.z));
       Ref<ChunkStore> heartRef = heartRefWrapper.getRef();
       if (heartRef == null || !heartRef.isValid()) {
         context.sendMessage(Message.raw("Could not get village reference"));

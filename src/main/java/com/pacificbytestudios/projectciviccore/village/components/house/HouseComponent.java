@@ -3,18 +3,15 @@ package com.pacificbytestudios.projectciviccore.village.components.house;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class HouseComponent implements Component<ChunkStore> {
   public static final BuilderCodec<HouseComponent> CODEC = BuilderCodec
@@ -31,12 +28,12 @@ public class HouseComponent implements Component<ChunkStore> {
           (obj) -> obj.level)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           (obj) -> obj.prefabAnchor)
       .add()
 
-      .append(new KeyedCodec<>("CoreBlockPosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("CoreBlockPosition", Vec3i.CODEC),
           (obj, value) -> obj.coreBlockPosition = value,
           (obj) -> obj.coreBlockPosition)
       .add()
@@ -60,8 +57,8 @@ public class HouseComponent implements Component<ChunkStore> {
   private UUID uuid;
   private Short level = 1;
   private EntityRef villageRef;
-  private Vector3i coreBlockPosition;
-  private Vector3i prefabAnchor;
+  private Vec3i coreBlockPosition;
+  private Vec3i prefabAnchor;
   private EntityRef houseRef;
   private HouseAppartmentRegistry appartmentRegistry;
 
@@ -89,19 +86,19 @@ public class HouseComponent implements Component<ChunkStore> {
     this.villageRef = villageRef;
   }
 
-  public Vector3i getCoreBlockPosition() {
+  public Vec3i getCoreBlockPosition() {
     return coreBlockPosition;
   }
 
-  public void setCoreBlockPosition(Vector3i coreBlockPosition) {
+  public void setCoreBlockPosition(Vec3i coreBlockPosition) {
     this.coreBlockPosition = coreBlockPosition;
   }
 
-  public Vector3i getPrefabAnchor() {
+  public Vec3i getPrefabAnchor() {
     return prefabAnchor;
   }
 
-  public void setPrefabAnchor(Vector3i prefabAnchor) {
+  public void setPrefabAnchor(Vec3i prefabAnchor) {
     this.prefabAnchor = prefabAnchor;
   }
 
@@ -129,7 +126,7 @@ public class HouseComponent implements Component<ChunkStore> {
     return this.appartmentRegistry.assignAppartment(villager);
   }
 
-  public Vector3i getBedPosition(UUID bed) {
+  public Vec3i getBedPosition(UUID bed) {
     return this.appartmentRegistry.getBedPosition(bed);
   }
 
@@ -149,8 +146,8 @@ public class HouseComponent implements Component<ChunkStore> {
   public HouseComponent clone() {
     HouseComponent component = new HouseComponent();
     component.uuid = this.uuid;
-    component.prefabAnchor = VectorUtil.clone(this.prefabAnchor);
-    component.coreBlockPosition = VectorUtil.clone(this.coreBlockPosition);
+    component.prefabAnchor = Vec3i.from(this.prefabAnchor);
+    component.coreBlockPosition = Vec3i.from(this.coreBlockPosition);
     component.villageRef = this.villageRef == null ? null : this.villageRef.clone();
     component.houseRef = this.houseRef == null ? null : this.houseRef.clone();
     component.appartmentRegistry = this.appartmentRegistry == null ? null : this.appartmentRegistry.clone();

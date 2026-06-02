@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -77,13 +77,13 @@ public class InteractWithExternalInventory extends VillagerActionBase {
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
     this.workerId = uuidComponent.getUuid();
 
-    ArrayDeque<Vector3i> coords = snapshot.getBlockTypePosition().get(this.snapshotKey);
+    ArrayDeque<Vec3i> coords = snapshot.getBlockTypePosition().get(this.snapshotKey);
     if (coords == null || coords.isEmpty()) {
       Logger.logWarning("Could not find coords in snapshot for key: " + this.snapshotKey);
       return false;
     }
 
-    Vector3i containerPosition = coords.peek();
+    Vec3i containerPosition = coords.peek();
     World world = store.getExternalData().getWorld();
     ResolvedContainer resolvedContainer = ContainerResolver.resolveContainerAt(world, containerPosition);
 

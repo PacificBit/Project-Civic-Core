@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionContext;
@@ -58,7 +59,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
         return;
       }
 
-      EntityRef village = CommandUtils.findVillageAtPlayerPosition(component.getPosition());
+      EntityRef village = CommandUtils.findVillageAtPlayerPosition(Vec3d.from(component.getPosition()));
 
       if (this.isVillageRequire && (village == null || !village.getRef().isValid())) {
         CommandUtils.sendExecutionResultMessage(

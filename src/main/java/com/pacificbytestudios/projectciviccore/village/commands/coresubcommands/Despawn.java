@@ -1,11 +1,8 @@
 package com.pacificbytestudios.projectciviccore.village.commands.coresubcommands;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -13,6 +10,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;
 import com.pacificbytestudios.projectciviccore.utils.DespawnIncompleteConstructionFunction;
@@ -99,7 +97,7 @@ public class Despawn extends VillageCommand {
     for (var entry : housesEntrySet) {
       HouseComponent house = entry.getValue();
       DespawnFunction despawnFunction = Utils.getDespawnFunction(StructureType.HOUSE);
-      Vector3i benchPos = house.getCoreBlockPosition();
+      Vec3i benchPos = house.getCoreBlockPosition();
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(benchPos.x, benchPos.z));
       despawnFunction.apply(chunk, benchPos);
     }
@@ -123,7 +121,7 @@ public class Despawn extends VillageCommand {
         DespawnIncompleteConstructionFunction despawn = Utils.getDespawnIncompleteConstructionFunction(
             project.getStructureType());
         TopologyStructure structureTopology = topology.getTopologyStructureFromStructureId(project.getStructureId());
-        Vector3i anchor = structureTopology.getPrefabAnchor();
+        Vec3i anchor = structureTopology.getPrefabAnchor();
         WorldChunk chunk = Utils.getWorldChunk(world, anchor);
         despawn.apply(chunk, anchor, project.getTargetLevel(), structureTopology.getOrientation());
       }
@@ -140,7 +138,7 @@ public class Despawn extends VillageCommand {
     for (var entry : workplaceEntrySet) {
       WorkplaceComponent workplace = entry.getValue();
       DespawnFunction despawnFunction = Utils.getDespawnFunction(workplace.getWorkplaceType());
-      Vector3i benchPos = workplace.getBenchPos();
+      Vec3i benchPos = workplace.getBenchPos();
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(benchPos.x, benchPos.z));
       despawnFunction.apply(chunk, benchPos);
     }
@@ -185,7 +183,8 @@ public class Despawn extends VillageCommand {
         "server.system.village.despawn.step.cityCenter.start");
 
     Rotation rotation = topology.getVillageOrientation();
-    Vector3i position = new Vector3i(heart.getBlockContext().getPosition()).add(Vector3iUtil.DOWN);
+
+    Vec3i position = Vec3i.safeDown().add(heart.getBlockContext().getPosition());
     WorldChunk chunk = Utils.getWorldChunk(world, position);
     TownHeartSpawner.despawn(chunk, position, rotation);
 

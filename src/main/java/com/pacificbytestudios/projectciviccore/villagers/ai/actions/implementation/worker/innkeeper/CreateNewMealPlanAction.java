@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
@@ -80,7 +80,7 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
     int targetMealCount = Math.max(0, villageHeart.getVillagerCount() + this.mealBuffer);
 
     List<ItemContainer> storageSnapshots = new ArrayList<>();
-    for (Vector3i storagePosition : workplaceComponent.getStorage().getAllContainerPositions()) {
+    for (Vec3i storagePosition : workplaceComponent.getStorage().getAllContainerPositions()) {
       ResolvedContainer resolvedStorage = ContainerResolver.resolveContainerAt(world, storagePosition);
       if (resolvedStorage == null) {
         Logger.logWarning("Dead reference of a container is present at " + storagePosition);

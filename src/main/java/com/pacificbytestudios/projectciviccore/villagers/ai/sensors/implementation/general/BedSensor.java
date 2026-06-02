@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.general;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
@@ -37,11 +36,11 @@ public class BedSensor extends VillagerSensorBase {
     }
 
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
-    Vector3i bedPositionV3i = villager.getBedPosition();
+    Vec3i bedPositionV3i = villager.getBedPosition();
     if (bedPositionV3i == null) {
       return false;
     }
-    Vector3d bedPosition = VectorUtil.toVector3d(Utils.centerOf(bedPositionV3i));
+    Vec3d bedPosition = Vec3d.from(Utils.centerOf(bedPositionV3i));
     double distanceFromBed = transform.getPosition().distanceSquared(bedPosition);
     if (distanceFromBed == 0 || distanceFromBed < 0.5) {
       this.positionProvider.clear();

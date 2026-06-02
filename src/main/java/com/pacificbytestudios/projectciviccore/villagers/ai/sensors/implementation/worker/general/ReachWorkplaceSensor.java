@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.general;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWorkplaceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -47,14 +46,14 @@ public class ReachWorkplaceSensor extends VillagerSensorBase {
       return false;
     }
 
-    Vector3i benchAccessPos = workplace.getBenchAccessPos();
+    Vec3i benchAccessPos = workplace.getBenchAccessPos();
     if (benchAccessPos == null) {
       this.positionProvider.clear();
       return false;
     }
 
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
-    Vector3d workplacePos = VectorUtil.toVector3d(Utils.centerOf(benchAccessPos));
+    Vec3d workplacePos = Vec3d.from(Utils.centerOf(benchAccessPos));
     double distanceFromWorkplace = transform.getPosition().distanceSquared(workplacePos);
 
     if (distanceFromWorkplace <= this.stoppingRange) {

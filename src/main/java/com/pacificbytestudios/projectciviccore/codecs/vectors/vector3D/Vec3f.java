@@ -67,6 +67,36 @@ public class Vec3f extends org.joml.Vector3f {
     return result;
   }
 
+  @Override
+  public Vec3f add(Vector3fc vector) {
+    super.add(vector);
+    return this;
+  }
+
+  @Override
+  public Vec3f add(float x, float y, float z) {
+    super.add(x, y, z);
+    return this;
+  }
+
+  @Override
+  public Vec3f sub(Vector3fc vector) {
+    super.sub(vector);
+    return this;
+  }
+
+  @Override
+  public Vec3f sub(float x, float y, float z) {
+    super.sub(x, y, z);
+    return this;
+  }
+
+  @Override
+  public Vec3f mul(float scalar) {
+    super.mul(scalar);
+    return this;
+  }
+
   public Vec3d to3d() {
     Vec3d result = new Vec3d();
     result.x = this.x;
@@ -83,9 +113,44 @@ public class Vec3f extends org.joml.Vector3f {
     return result;
   }
 
+  public static Vec3f from(Vec3f vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3f(vector);
+  }
+
+  public static Vec3f from(org.joml.Vector3f vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3f(vector);
+  }
+
+  public static Vec3f from(Vector3fc vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3f(vector);
+  }
+
+  public static Vec3f from(org.joml.Vector3dc vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3f((float) vector.x(), (float) vector.y(), (float) vector.z());
+  }
+
+  public static Vec3f from(org.joml.Vector3ic vector) {
+    if (vector == null) {
+      return null;
+    }
+    return new Vec3f(vector.x(), vector.y(), vector.z());
+  }
+
   @Override
   public String toString() {
-    return "(x: %d, y: %d, z: %d)".formatted(this.x, this.y, this.z);
+    return "<x: %f, y: %f, z: %f>".formatted(this.x, this.y, this.z);
   }
 
   @Override

@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -121,7 +121,7 @@ public abstract class VillagerActionBase extends ActionBase {
       return reservedTavernRef;
     }
 
-    Vector3i reservedInteractable = villager.getReservedInteractable();
+    Vec3i reservedInteractable = villager.getReservedInteractable();
     if (reservedInteractable == null) {
       return null;
     }

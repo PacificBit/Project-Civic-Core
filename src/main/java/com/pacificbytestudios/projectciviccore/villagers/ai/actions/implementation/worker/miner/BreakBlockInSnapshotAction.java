@@ -5,7 +5,8 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -29,7 +30,6 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.registry.registry.MinerDropRegistry;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
@@ -81,7 +81,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> targets = snapshot.getBlockTypePosition().get(this.primarySnapshotGroup);
+    ArrayDeque<Vec3i> targets = snapshot.getBlockTypePosition().get(this.primarySnapshotGroup);
     if (targets == null) {
       return false;
     }
@@ -91,7 +91,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return false;
     }
 
-    Vector3i target = targets.peekFirst();
+    Vec3i target = targets.peekFirst();
     if (target == null) {
       targets.pollFirst();
       if (targets.isEmpty()) {
@@ -107,9 +107,9 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
         return false;
       }
 
-      Vector3i rangeAnchor = this.resolveRangeAnchor(snapshot, target);
+      Vec3i rangeAnchor = this.resolveRangeAnchor(snapshot, target);
       double distanceFromAnchor = transform.getPosition().distanceSquared(
-          VectorUtil.toVector3d(Utils.centerOf(rangeAnchor)));
+          Vec3d.from(Utils.centerOf(rangeAnchor)));
       if (distanceFromAnchor > this.requiredStoppingRangeSquared) {
         return false;
       }
@@ -184,13 +184,13 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     }
   }
 
-  private Vector3i resolveRangeAnchor(WorkplaceAreaSnapshot snapshot, Vector3i fallbackTarget) {
-    ArrayDeque<Vector3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
+  private Vec3i resolveRangeAnchor(WorkplaceAreaSnapshot snapshot, Vec3i fallbackTarget) {
+    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
     if (digPositions == null || digPositions.isEmpty()) {
       return fallbackTarget;
     }
 
-    Vector3i digPosition = digPositions.peekFirst();
+    Vec3i digPosition = digPositions.peekFirst();
     return digPosition == null ? fallbackTarget : digPosition;
   }
 
@@ -200,7 +200,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       UUID villagerId) {
     snapshot.getBlockTypePosition().remove(this.primarySnapshotGroup);
 
-    ArrayDeque<Vector3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
+    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
     if (digPositions == null || digPositions.isEmpty()) {
       return;
     }
@@ -215,7 +215,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
   private void persistNextDigPosition(
       MineComponent mineComponent,
       UUID villagerId,
-      Vector3i nextDigPosition) {
+      Vec3i nextDigPosition) {
     if (mineComponent == null || villagerId == null || nextDigPosition == null) {
       return;
     }
@@ -225,7 +225,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return;
     }
 
-    gallery.setLastDiggedPosition(VectorUtil.clone(nextDigPosition));
+    gallery.setLastDiggedPosition(Vec3i.from(nextDigPosition));
   }
 
   private void generateDropIfNeeded(Ref<EntityStore> ref, Store<EntityStore> store) {

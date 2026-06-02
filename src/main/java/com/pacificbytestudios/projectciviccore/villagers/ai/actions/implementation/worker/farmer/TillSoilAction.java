@@ -2,8 +2,8 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.util.ArrayDeque;
 
-import org.joml.Vector3f;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -49,12 +49,12 @@ public class TillSoilAction extends ActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> blockPositions = villager
+    ArrayDeque<Vec3i> blockPositions = villager
         .getWorkerData()
         .getWorkareaSnapshot()
         .getBlockTypePosition().get(FarmerScan.TILLABLE_TERRAIN);
 
-    Vector3i blockPos;
+    Vec3i blockPos;
 
     if (blockPositions != null && !blockPositions.isEmpty()) {
       blockPos = blockPositions.pollFirst();
@@ -70,7 +70,7 @@ public class TillSoilAction extends ActionBase {
     if (soilTilled) {
       NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
       VillagerToolAnimationHelper.playHeldToolAnimation(ref, npcEntity, store, "Till");
-      Vector3f center = Utils.centerOf(blockPos);
+      Vec3f center = Utils.centerOf(blockPos);
       SoundUtil.playSoundEvent3d(ref, TILL_SOUND_EVENT_INDEX, center.x, center.y, center.z, store);
 
       byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();

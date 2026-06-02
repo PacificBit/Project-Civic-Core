@@ -1,13 +1,12 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginUpgradeConstruction;
@@ -27,7 +26,7 @@ public class UpgradeBuildingTask extends AVillageTask {
           obj -> obj.structureType)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           obj -> obj.prefabAnchor)
       .add()
@@ -45,7 +44,7 @@ public class UpgradeBuildingTask extends AVillageTask {
       .build();
 
   private StructureType structureType;
-  private Vector3i prefabAnchor;
+  private Vec3i prefabAnchor;
   private int targetLevel;
   private ConstructionMode mode;
 
@@ -54,14 +53,14 @@ public class UpgradeBuildingTask extends AVillageTask {
 
   public UpgradeBuildingTask(
       StructureType structureType,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       int targetLevel) {
     this(structureType, prefabAnchor, targetLevel, ConstructionMode.STAGED);
   }
 
   public UpgradeBuildingTask(
       StructureType structureType,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       int targetLevel,
       ConstructionMode mode) {
     this.structureType = structureType;
@@ -74,7 +73,7 @@ public class UpgradeBuildingTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     BeginUpgradeConstruction function = Utils.getBeginUpgradeConstructionFunction(this.structureType);
     try {

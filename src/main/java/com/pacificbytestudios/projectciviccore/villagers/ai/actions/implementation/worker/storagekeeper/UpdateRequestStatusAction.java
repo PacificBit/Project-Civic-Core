@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -222,7 +222,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
 
   private List<ItemContainer> resolveTargetContainers(
       World world,
-      Iterable<Vector3i> targetPositions) {
+      Iterable<Vec3i> targetPositions) {
     List<ItemContainer> containers = new ArrayList<>();
     HashSet<String> resolvedContainerKeys = new HashSet<>();
 
@@ -230,7 +230,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
       return containers;
     }
 
-    for (Vector3i targetPosition : targetPositions) {
+    for (Vec3i targetPosition : targetPositions) {
       ContainerResolver.ResolvedContainer resolved = ContainerResolver.resolveContainerAt(world, targetPosition);
       if (resolved == null || resolved.containerBlock() == null || resolved.basePosition() == null) {
         continue;

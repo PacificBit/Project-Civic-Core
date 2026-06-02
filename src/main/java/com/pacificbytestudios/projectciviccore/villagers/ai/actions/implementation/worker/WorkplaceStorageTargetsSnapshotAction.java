@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 import java.util.ArrayDeque;
 import java.util.function.Supplier;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -46,7 +46,7 @@ public class WorkplaceStorageTargetsSnapshotAction extends VillagerActionBase {
     }
 
     if (this.actionType.equals(ActionType.ADD)) {
-      ArrayDeque<Vector3i> storagePosition = new ArrayDeque<>();
+      ArrayDeque<Vec3i> storagePosition = new ArrayDeque<>();
       storagePosition.addAll(workplace.getStorage().getAllContainerAccessPositions());
       snapshot.getBlockTypePosition().put(WORKPLACE_STORAGE_KEY, storagePosition);
     } else if (snapshot.getBlockTypePosition().get(WORKPLACE_STORAGE_KEY) != null) {

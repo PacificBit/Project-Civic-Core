@@ -2,14 +2,13 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -28,7 +27,7 @@ public class SpawnHouseTask extends AVillageTask {
           obj -> obj.structureId)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
           (obj, value) -> obj.position = value,
           obj -> obj.position)
       .add()
@@ -52,7 +51,7 @@ public class SpawnHouseTask extends AVillageTask {
       .build();
 
   private UUID structureId;
-  private Vector3i position;
+  private Vec3i position;
   private Rotation rotation = Rotation.None;
   private Integer level = 1;
   private ConstructionMode constructionMode;
@@ -62,7 +61,7 @@ public class SpawnHouseTask extends AVillageTask {
 
   public SpawnHouseTask(
       UUID structureId,
-      Vector3i position,
+      Vec3i position,
       Rotation rotation,
       int level,
       ConstructionMode constructionMode) {
@@ -77,7 +76,7 @@ public class SpawnHouseTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     try {
       boolean spawned = HouseSpawner.beginNewConstruction(

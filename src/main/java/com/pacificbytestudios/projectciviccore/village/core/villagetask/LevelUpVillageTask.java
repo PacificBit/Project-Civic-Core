@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -9,7 +9,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -41,7 +40,7 @@ public class LevelUpVillageTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     if (this.level > heart.getConfig().getMaxLevel() || this.level < 0) {
       Logger.logWarning("Received a village level too high: " + this.level);
@@ -83,7 +82,7 @@ public class LevelUpVillageTask extends AVillageTask {
     VillageTaskQueueComponent taskQueue = new VillageTaskQueueComponent();
     taskQueue.registerTask(new UpgradeBuildingTask(
         StructureType.TOWN_HALL,
-        VectorUtil.clone(townHall.getBenchPos()),
+        Vec3i.from(townHall.getBenchPos()),
         this.level,
         ConstructionMode.COMPLETED));
     Utils.safeVillageTaskEnqueue(heartRef, taskQueue);

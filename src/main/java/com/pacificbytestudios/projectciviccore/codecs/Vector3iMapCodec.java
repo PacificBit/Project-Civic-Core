@@ -9,7 +9,6 @@ import javax.annotation.Nonnull;
 
 import org.bson.BsonDocument;
 import org.bson.BsonValue;
-import org.joml.Vector3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.ExtraInfo;
@@ -20,9 +19,10 @@ import com.hypixel.hytale.codec.schema.config.ObjectSchema;
 import com.hypixel.hytale.codec.schema.config.Schema;
 import com.hypixel.hytale.codec.schema.config.StringSchema;
 import com.hypixel.hytale.codec.util.RawJsonReader;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-public class Vector3iMapCodec<V, M extends Map<Vector3i, V>>
-    implements Codec<Map<Vector3i, V>>, WrappedCodec<V> {
+public class Vector3iMapCodec<V, M extends Map<Vec3i, V>>
+    implements Codec<Map<Vec3i, V>>, WrappedCodec<V> {
   private final Codec<V> valueCodec;
   private final Supplier<M> supplier;
   private final boolean unmodifiable;
@@ -43,9 +43,9 @@ public class Vector3iMapCodec<V, M extends Map<Vector3i, V>>
   }
 
   @Override
-  public Map<Vector3i, V> decode(@Nonnull BsonValue bsonValue, @Nonnull ExtraInfo extraInfo) {
+  public Map<Vec3i, V> decode(@Nonnull BsonValue bsonValue, @Nonnull ExtraInfo extraInfo) {
     BsonDocument bsonDocument = bsonValue.asDocument();
-    Map<Vector3i, V> map = this.supplier.get();
+    Map<Vec3i, V> map = this.supplier.get();
 
     for (Map.Entry<String, BsonValue> entry : bsonDocument.entrySet()) {
       String key = entry.getKey();
@@ -69,10 +69,10 @@ public class Vector3iMapCodec<V, M extends Map<Vector3i, V>>
 
   @Override
   @Nonnull
-  public BsonValue encode(@Nonnull Map<Vector3i, V> map, ExtraInfo extraInfo) {
+  public BsonValue encode(@Nonnull Map<Vec3i, V> map, ExtraInfo extraInfo) {
     BsonDocument bsonDocument = new BsonDocument();
 
-    for (Map.Entry<Vector3i, V> entry : map.entrySet()) {
+    for (Map.Entry<Vec3i, V> entry : map.entrySet()) {
       BsonValue value = this.valueCodec.encode(entry.getValue(), extraInfo);
       if (value == null || value.isNull() || value.isDocument() && value.asDocument().isEmpty()
           || value.isArray() && value.asArray().isEmpty()) {
@@ -85,7 +85,7 @@ public class Vector3iMapCodec<V, M extends Map<Vector3i, V>>
   }
 
   @Override
-  public Map<Vector3i, V> decodeJson(@Nonnull RawJsonReader reader, @Nonnull ExtraInfo extraInfo) throws IOException {
+  public Map<Vec3i, V> decodeJson(@Nonnull RawJsonReader reader, @Nonnull ExtraInfo extraInfo) throws IOException {
     reader.expect('{');
     reader.consumeWhiteSpace();
 
@@ -93,11 +93,11 @@ public class Vector3iMapCodec<V, M extends Map<Vector3i, V>>
       return this.unmodifiable ? Collections.emptyMap() : this.supplier.get();
     }
 
-    Map<Vector3i, V> map = this.supplier.get();
+    Map<Vec3i, V> map = this.supplier.get();
 
     while (true) {
       String rawKey = reader.readString();
-      Vector3i key = decodeKey(rawKey);
+      Vec3i key = decodeKey(rawKey);
       reader.consumeWhiteSpace();
       reader.expect(':');
       reader.consumeWhiteSpace();
@@ -131,18 +131,18 @@ public class Vector3iMapCodec<V, M extends Map<Vector3i, V>>
   }
 
   @Nonnull
-  public static String encodeKey(@Nonnull Vector3i position) {
+  public static String encodeKey(@Nonnull Vec3i position) {
     return position.x + "," + position.y + "," + position.z;
   }
 
   @Nonnull
-  public static Vector3i decodeKey(@Nonnull String raw) {
+  public static Vec3i decodeKey(@Nonnull String raw) {
     String[] parts = raw.split(",", 3);
     if (parts.length != 3) {
-      throw new IllegalArgumentException("Invalid Vector3i key: " + raw);
+      throw new IllegalArgumentException("Invalid Vec3i key: " + raw);
     }
 
-    return new Vector3i(
+    return new Vec3i(
         Integer.parseInt(parts[0]),
         Integer.parseInt(parts[1]),
         Integer.parseInt(parts[2]));

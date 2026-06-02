@@ -2,10 +2,9 @@ package com.pacificbytestudios.projectciviccore.utils;
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 
@@ -16,7 +15,7 @@ public class SpawnerFunctions {
     boolean apply(
         UUID structureId,
         WorldChunk chunk,
-        Vector3i prefabAnchor,
+        Vec3i prefabAnchor,
         Rotation rotation,
         VillageHeartComponent village,
         int targetLevel,
@@ -27,7 +26,7 @@ public class SpawnerFunctions {
   public interface BeginUpgradeConstruction {
     boolean apply(
         WorldChunk chunk,
-        Vector3i existingCoreOrSitePosition,
+        Vec3i existingCoreOrSitePosition,
         int targetLevel,
         ConstructionMode mode);
   }
@@ -36,7 +35,7 @@ public class SpawnerFunctions {
   public interface AdvanceConstructionStage {
     boolean apply(
         WorldChunk chunk,
-        Vector3i prefabAnchor,
+        Vec3i prefabAnchor,
         Rotation rotation);
   }
 }

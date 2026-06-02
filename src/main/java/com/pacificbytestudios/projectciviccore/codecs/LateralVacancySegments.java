@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class LateralVacancySegments {
   public static final BuilderCodec<LateralVacancySegments> CODEC = BuilderCodec
@@ -32,7 +29,7 @@ public class LateralVacancySegments {
           (obj) -> obj.validSegments == null ? new Segment[0] : obj.validSegments.toArray(new Segment[0]))
       .add()
 
-      .append(new KeyedCodec<>("OrientationVec", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("OrientationVec", Vec3i.CODEC),
           (obj, value) -> obj.roadDirectionVec = value,
           (obj) -> obj.roadDirectionVec)
       .add()
@@ -40,7 +37,7 @@ public class LateralVacancySegments {
       .build();
 
   private List<Segment> validSegments = new ArrayList<>();
-  private Vector3i roadDirectionVec;
+  private Vec3i roadDirectionVec;
 
   public List<Segment> getValidSegments() {
     return validSegments;
@@ -98,13 +95,13 @@ public class LateralVacancySegments {
       return null;
     }
 
-    Vector3i end = VectorUtil.clone(segment.end);
-    Vector3i start = VectorUtil.clone(end)
-        .add(VectorUtil.clone(this.roadDirectionVec).mul(-(size - 1)));
+    Vec3i end = Vec3i.from(segment.end);
+    Vec3i start = Vec3i.from(end).add(
+        Vec3i.from(this.roadDirectionVec).mul(-(size - 1)));
     return new Segment(start, end);
   }
 
-  public Segment buildSegmentAt(Vector3i start, Vector3i end) {
+  public Segment buildSegmentAt(Vec3i start, Vec3i end) {
     int requestedStart = Math.min(project(start), project(end));
     int requestedEnd = Math.max(project(start), project(end));
 
@@ -117,7 +114,7 @@ public class LateralVacancySegments {
       int validEnd = Math.max(project(validSegment.start), project(validSegment.end));
 
       if (requestedStart >= validStart && requestedEnd <= validEnd) {
-        return new Segment(VectorUtil.clone(start), VectorUtil.clone(end));
+        return new Segment(Vec3i.from(start), Vec3i.from(end));
       }
     }
 
@@ -134,9 +131,9 @@ public class LateralVacancySegments {
       return null;
     }
 
-    Vector3i start = VectorUtil.clone(segment.start);
-    Vector3i end = VectorUtil.clone(start)
-        .add(VectorUtil.clone(this.roadDirectionVec).mul(size - 1));
+    Vec3i start = Vec3i.from(segment.start);
+    Vec3i end = Vec3i.from(start).add(
+        Vec3i.from(this.roadDirectionVec).mul(size - 1));
     return new Segment(start, end);
   }
 
@@ -226,7 +223,7 @@ public class LateralVacancySegments {
     this.validSegments = updatedSegments;
   }
 
-  private int project(Vector3i point) {
+  private int project(Vec3i point) {
     return this.roadDirectionVec.x != 0
         ? point.x * this.roadDirectionVec.x
         : point.z * this.roadDirectionVec.z;
@@ -234,10 +231,10 @@ public class LateralVacancySegments {
 
   private Segment createSegment(Segment template, int rangeStart, int rangeEnd) {
     boolean preserveOrder = project(template.start) <= project(template.end);
-    Vector3i start = preserveOrder
+    Vec3i start = preserveOrder
         ? fromProjection(template.start, rangeStart)
         : fromProjection(template.start, rangeEnd);
-    Vector3i end = preserveOrder
+    Vec3i end = preserveOrder
         ? fromProjection(template.end, rangeEnd)
         : fromProjection(template.end, rangeStart);
     return new Segment(start, end);
@@ -247,8 +244,8 @@ public class LateralVacancySegments {
     return Math.min(project(segment.start), project(segment.end));
   }
 
-  private Vector3i fromProjection(Vector3i template, int projection) {
-    Vector3i result = VectorUtil.clone(template);
+  private Vec3i fromProjection(Vec3i template, int projection) {
+    Vec3i result = Vec3i.from(template);
     if (this.roadDirectionVec.x != 0) {
       result.x = projection * this.roadDirectionVec.x;
     } else {
@@ -257,11 +254,11 @@ public class LateralVacancySegments {
     return result;
   }
 
-  public Vector3i getRoadDirectionVec() {
+  public Vec3i getRoadDirectionVec() {
     return roadDirectionVec;
   }
 
-  public void setRoadDirectionVec(Vector3i roadDirectionVec) {
+  public void setRoadDirectionVec(Vec3i roadDirectionVec) {
     this.roadDirectionVec = roadDirectionVec;
   }
 
@@ -275,7 +272,7 @@ public class LateralVacancySegments {
       }
     }
 
-    adjacentSegments.roadDirectionVec = VectorUtil.clone(this.roadDirectionVec);
+    adjacentSegments.roadDirectionVec = Vec3i.from(this.roadDirectionVec);
     return adjacentSegments;
   }
 
@@ -283,12 +280,12 @@ public class LateralVacancySegments {
     public static final BuilderCodec<Segment> CODEC = BuilderCodec
         .builder(Segment.class, Segment::new)
 
-        .append(new KeyedCodec<>("Start", Vector3iUtil.CODEC),
+        .append(new KeyedCodec<>("Start", Vec3i.CODEC),
             (obj, value) -> obj.start = value,
             (obj) -> obj.start)
         .add()
 
-        .append(new KeyedCodec<>("End", Vector3iUtil.CODEC),
+        .append(new KeyedCodec<>("End", Vec3i.CODEC),
             (obj, value) -> obj.end = value,
             (obj) -> obj.end)
         .add()
@@ -300,14 +297,14 @@ public class LateralVacancySegments {
 
         .build();
 
-    protected Vector3i start;
-    protected Vector3i end;
+    protected Vec3i start;
+    protected Vec3i end;
     protected Short size;
 
     public Segment() {
     }
 
-    public Segment(Vector3i start, Vector3i end) {
+    public Segment(Vec3i start, Vec3i end) {
       this.start = start;
       this.end = end;
       recalculateSize();
@@ -316,31 +313,31 @@ public class LateralVacancySegments {
     @Override
     public Segment clone() {
       Segment segment = new Segment();
-      segment.start = VectorUtil.clone(this.start);
-      segment.end = VectorUtil.clone(this.end);
+      segment.start = Vec3i.from(this.start);
+      segment.end = Vec3i.from(this.end);
       segment.size = this.size;
       return segment;
     }
 
-    public Vector3i getStart() {
+    public Vec3i getStart() {
       return start;
     }
 
-    public void setStart(Vector3i start) {
+    public void setStart(Vec3i start) {
       this.start = start;
       recalculateSize();
     }
 
-    public Vector3i getEnd() {
+    public Vec3i getEnd() {
       return end;
     }
 
-    public void setEnd(Vector3i end) {
+    public void setEnd(Vec3i end) {
       this.end = end;
       recalculateSize();
     }
 
-    public boolean isDotInside(Vector3i dot) {
+    public boolean isDotInside(Vec3i dot) {
       int minX = Math.min(start.x, end.x);
       int maxX = Math.max(start.x, end.x);
       int minZ = Math.min(start.z, end.z);
@@ -370,7 +367,7 @@ public class LateralVacancySegments {
 
     @Override
     public String toString() {
-      return "Segment [start=" + start + ", end=" + end + ", size=" + size + "]";
+      return "Segment: { Start: %s, End: %s, Size: %d }".formatted(this.start, this.end, this.size);
     }
   }
 }
