@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.systems.heart;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -33,7 +33,7 @@ public class VillageHeartMarkerPlacementSystem extends RefSystem<ChunkStore> {
     }
 
     WorldChunk chunk = context.chunk();
-    Vector3i markerPosition = context.position();
+    Vec3i markerPosition = context.position();
     chunk.getWorld().execute(() -> Utils.setBlockChunkAware(
         chunk,
         markerPosition,

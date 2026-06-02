@@ -7,17 +7,17 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.Mineshaft;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftLevel;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class BuildNewMineshaftLevelAction extends VillagerActionBase {
 
@@ -50,11 +50,11 @@ public class BuildNewMineshaftLevelAction extends VillagerActionBase {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         StructureConfig.Mine.MineshaftLevelConf.PREFAB_JSON,
-        VectorUtil.clone(level.getAnchorPoint()),
+        Vec3i.from(level.getAnchorPoint()),
         mineshaft.getRotation(),
         true);
     if (newSnapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[BuildNewMineshaftLevelAction] could not build new mineshaft level");
+      Logger.logWarning("could not build new mineshaft level");
       return false;
     }
 

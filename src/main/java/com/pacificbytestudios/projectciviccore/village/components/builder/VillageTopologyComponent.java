@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -26,9 +23,10 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
 import it.unimi.dsi.fastutil.Pair;
@@ -66,7 +64,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       .add()
 
       .append(new KeyedCodec<>("Roads",
-          new Vector3iMapCodec<UUID, HashMap<Vector3i, UUID>>(
+          new Vector3iMapCodec<UUID, HashMap<Vec3i, UUID>>(
               Codec.UUID_BINARY,
               HashMap::new,
               false)),
@@ -105,7 +103,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
   private Map<UUID, TopologyStructure> structureIdToTopology = new HashMap<>();
   private Map<Pair<Byte, Byte>, Set<UUID>> villageGrid = new HashMap<>();
 
-  private Map<Vector3i, UUID> roads = new HashMap<>();
+  private Map<Vec3i, UUID> roads = new HashMap<>();
   private Map<Byte, List<UUID>> roadGroupPerDepth = new HashMap<>();
   private Map<UUID, RoadNode> roadIdToRoad = new HashMap<>();
 
@@ -140,7 +138,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
   public void addRoad(RoadNode node) {
     UUID roadId = node.getRoadId();
     if (node.getDepth() == 0 && node.getBranchOriginKey() != null) {
-      this.roads.put(VectorUtil.clone(node.getBranchOriginKey()), roadId);
+      this.roads.put(node.getBranchOriginKey().clone(), roadId);
     }
     addRoadIdToDepthGroup(roadId, node.getDepth());
     this.roadIdToRoad.put(roadId, node);
@@ -179,11 +177,11 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return this.roadIdToRoad;
   }
 
-  public UUID getRoadIdAtDirection(Vector3i directionKey) {
+  public UUID getRoadIdAtDirection(Vec3i directionKey) {
     return this.roads.get(directionKey);
   }
 
-  public RoadNode getRootRoadAtDirection(Vector3i directionKey) {
+  public RoadNode getRootRoadAtDirection(Vec3i directionKey) {
     return getRoadFromId(getRoadIdAtDirection(directionKey));
   }
 
@@ -236,15 +234,15 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return Collections.unmodifiableList(orderedRoadIds);
   }
 
-  public Map<Vector3i, UUID> getRootRoadIds() {
-    Map<Vector3i, UUID> copy = new HashMap<>();
+  public Map<Vec3i, UUID> getRootRoadIds() {
+    Map<Vec3i, UUID> copy = new HashMap<>();
     if (this.roads == null) {
       return Collections.unmodifiableMap(copy);
     }
 
     this.roads.forEach((direction, roadId) -> {
       if (direction != null && roadId != null) {
-        copy.put(VectorUtil.clone(direction), roadId);
+        copy.put(direction.clone(), roadId);
       }
     });
     return Collections.unmodifiableMap(copy);
@@ -290,9 +288,9 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       return Collections.emptySet();
     }
 
-    Vector2i topLeft = topologyStructure.getTopLeft();
-    Vector2i botRight = topologyStructure.getBotRight();
-    Vector2i villageCenter = getCoreCenter2D();
+    Vec2i topLeft = topologyStructure.getTopLeft();
+    Vec2i botRight = topologyStructure.getBotRight();
+    Vec2i villageCenter = getCoreCenter2D();
 
     if (topLeft == null || botRight == null || villageCenter == null) {
       return Collections.emptySet();
@@ -355,7 +353,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
   private void rebuildVillageGrid() {
     this.villageGrid = new HashMap<>();
-    Vector2i villageCenter = getCoreCenter2D();
+    Vec2i villageCenter = getCoreCenter2D();
 
     if (this.villageRadius != null) {
       int minCell = blockToCellIndex(-this.villageRadius);
@@ -378,21 +376,21 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     }
   }
 
-  private void registerStructureOnGrid(TopologyStructure structure, Vector2i villageCenter) {
+  private void registerStructureOnGrid(TopologyStructure structure, Vec2i villageCenter) {
     if (structure == null || structure.getStructureId() == null || villageCenter == null) {
       return;
     }
 
-    Vector2i topLeft = structure.getAxisAlignedTopLeft();
-    Vector2i botRight = structure.getAxisAlignedBotRight();
+    Vec2i topLeft = structure.getAxisAlignedTopLeft();
+    Vec2i botRight = structure.getAxisAlignedBotRight();
     if (topLeft == null || botRight == null) {
       return;
     }
 
-    Vector2i relativeTopLeft = new Vector2i(
+    Vec2i relativeTopLeft = new Vec2i(
         topLeft.x - villageCenter.x,
         topLeft.y - villageCenter.y);
-    Vector2i relativeBotRight = new Vector2i(
+    Vec2i relativeBotRight = new Vec2i(
         botRight.x - villageCenter.x,
         botRight.y - villageCenter.y);
 
@@ -430,7 +428,7 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     } else {
       component.roads = new HashMap<>();
       this.roads.forEach((position, roadId) -> component.roads.put(
-          VectorUtil.clone(position),
+          position.clone(),
           roadId));
     }
 
@@ -444,11 +442,11 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return ProjectCivicCore.get().getVillageTopologyComponentType();
   }
 
-  private static Vector2i getStructureCenter2D(TopologyStructure structure) {
+  private static Vec2i getStructureCenter2D(TopologyStructure structure) {
     return structure.getCenter2D();
   }
 
-  private Vector2i getCoreCenter2D() {
+  private Vec2i getCoreCenter2D() {
     for (TopologyStructure structure : this.structureIdToTopology.values()) {
       if (structure == null || structure.getTopologyType() != VillageTopologyStructureType.CITY_CENTER) {
         continue;
@@ -463,8 +461,8 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
   private static boolean doesCellOverlapStructure(
       int xCell,
       int zCell,
-      Vector2i relativeTopLeft,
-      Vector2i relativeBotRight) {
+      Vec2i relativeTopLeft,
+      Vec2i relativeBotRight) {
     int cellMinX = getCellMinBlock(xCell);
     int cellMaxX = getCellMaxBlock(xCell);
     int cellMinZ = getCellMinBlock(zCell);

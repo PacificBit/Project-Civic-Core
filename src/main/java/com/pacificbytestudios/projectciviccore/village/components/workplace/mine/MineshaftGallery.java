@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class MineshaftGallery {
   public static final short MAX_GLALLERY_SECTION_COUNT = 5;
@@ -25,17 +22,17 @@ public class MineshaftGallery {
           obj -> obj.getGalleryId())
       .add()
 
-      .append(new KeyedCodec<>("CardinalDirection", Vector3iUtil.CODEC, false),
+      .append(new KeyedCodec<>("CardinalDirection", Vec3i.CODEC, false),
           (obj, value) -> obj.cardinalDirection = value,
           obj -> obj.cardinalDirection)
       .add()
 
-      .append(new KeyedCodec<>("StartPosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("StartPosition", Vec3i.CODEC),
           (obj, value) -> obj.startPosition = value,
           obj -> obj.startPosition)
       .add()
 
-      .append(new KeyedCodec<>("LastDiggedPosition", Vector3iUtil.CODEC, false),
+      .append(new KeyedCodec<>("LastDiggedPosition", Vec3i.CODEC, false),
           (obj, value) -> obj.lastDiggedPosition = value,
           obj -> obj.lastDiggedPosition)
       .add()
@@ -58,9 +55,9 @@ public class MineshaftGallery {
       .build();
 
   private UUID galleryId;
-  private Vector3i cardinalDirection;
-  private Vector3i startPosition;
-  private Vector3i lastDiggedPosition;
+  private Vec3i cardinalDirection;
+  private Vec3i startPosition;
+  private Vec3i lastDiggedPosition;
   private List<TrackedPrefabPlacementComponent> restoreSnapshot = new ArrayList<>();
   private boolean completed = false;
 
@@ -68,11 +65,11 @@ public class MineshaftGallery {
     this.galleryId = UUID.randomUUID();
   }
 
-  public MineshaftGallery(Vector3i cardinalDirection, Vector3i startPosition) {
+  public MineshaftGallery(Vec3i cardinalDirection, Vec3i startPosition) {
     this();
-    this.startPosition = VectorUtil.clone(startPosition);
-    this.lastDiggedPosition = VectorUtil.clone(startPosition);
-    this.cardinalDirection = VectorUtil.clone(cardinalDirection);
+    this.startPosition = startPosition.clone();
+    this.lastDiggedPosition = startPosition.clone();
+    this.cardinalDirection = cardinalDirection.clone();
   }
 
   public UUID getGalleryId() {
@@ -82,11 +79,11 @@ public class MineshaftGallery {
     return galleryId;
   }
 
-  public Vector3i getCardinalDirection() {
+  public Vec3i getCardinalDirection() {
     return cardinalDirection;
   }
 
-  public void setCardinalDirection(Vector3i cardinalDirection) {
+  public void setCardinalDirection(Vec3i cardinalDirection) {
     this.cardinalDirection = cardinalDirection;
   }
 
@@ -102,22 +99,22 @@ public class MineshaftGallery {
     this.completed = completed;
   }
 
-  public Vector3i getLastDiggedPosition() {
+  public Vec3i getLastDiggedPosition() {
     if (this.lastDiggedPosition == null) {
-      this.lastDiggedPosition = VectorUtil.clone(this.startPosition);
+      this.lastDiggedPosition = this.startPosition.clone();
     }
     return this.lastDiggedPosition;
   }
 
-  public Vector3i getStartPosition() {
+  public Vec3i getStartPosition() {
     return startPosition;
   }
 
-  public void setStartPosition(Vector3i startPosition) {
+  public void setStartPosition(Vec3i startPosition) {
     this.startPosition = startPosition;
   }
 
-  public void setLastDiggedPosition(Vector3i lastDiggedPosition) {
+  public void setLastDiggedPosition(Vec3i lastDiggedPosition) {
     this.lastDiggedPosition = lastDiggedPosition;
   }
 
@@ -125,7 +122,7 @@ public class MineshaftGallery {
     return restoreSnapshot;
   }
 
-  public boolean hasRestoreSnapshotAt(Vector3i sectionOrigin) {
+  public boolean hasRestoreSnapshotAt(Vec3i sectionOrigin) {
     return containsRestoreSnapshotAt(this.restoreSnapshot, sectionOrigin);
   }
 
@@ -139,14 +136,14 @@ public class MineshaftGallery {
 
   public int getBuiltSectionCount() {
     int builtSections = 0;
-    List<Vector3i> seenOrigins = new ArrayList<>();
+    List<Vec3i> seenOrigins = new ArrayList<>();
 
     for (TrackedPrefabPlacementComponent trackedPrefab : this.restoreSnapshot) {
       if (trackedPrefab == null) {
         continue;
       }
 
-      Vector3i origin = trackedPrefab.getOrigin();
+      Vec3i origin = trackedPrefab.getOrigin();
       if (containsOrigin(seenOrigins, origin)) {
         continue;
       }
@@ -174,9 +171,9 @@ public class MineshaftGallery {
   public MineshaftGallery clone() {
     MineshaftGallery component = new MineshaftGallery();
     component.galleryId = this.getGalleryId();
-    component.cardinalDirection = VectorUtil.clone(this.cardinalDirection);
-    component.startPosition = VectorUtil.clone(this.startPosition);
-    component.lastDiggedPosition = VectorUtil.clone(this.lastDiggedPosition);
+    component.cardinalDirection = Vec3i.from(this.cardinalDirection);
+    component.startPosition = Vec3i.from(this.startPosition);
+    component.lastDiggedPosition = Vec3i.from(this.lastDiggedPosition);
 
     component.restoreSnapshot = new ArrayList<>();
     for (TrackedPrefabPlacementComponent trackedPrefab : this.restoreSnapshot) {
@@ -207,7 +204,7 @@ public class MineshaftGallery {
 
   private static boolean containsRestoreSnapshotAt(
       List<TrackedPrefabPlacementComponent> trackedPrefabs,
-      Vector3i sectionOrigin) {
+      Vec3i sectionOrigin) {
     if (trackedPrefabs == null || sectionOrigin == null) {
       return false;
     }
@@ -217,7 +214,7 @@ public class MineshaftGallery {
         continue;
       }
 
-      Vector3i trackedOrigin = trackedPrefab.getOrigin();
+      Vec3i trackedOrigin = trackedPrefab.getOrigin();
       if (sectionOrigin.equals(trackedOrigin)) {
         return true;
       }
@@ -226,12 +223,12 @@ public class MineshaftGallery {
     return false;
   }
 
-  private static boolean containsOrigin(List<Vector3i> seenOrigins, Vector3i candidate) {
+  private static boolean containsOrigin(List<Vec3i> seenOrigins, Vec3i candidate) {
     if (seenOrigins == null || candidate == null) {
       return false;
     }
 
-    for (Vector3i seenOrigin : seenOrigins) {
+    for (Vec3i seenOrigin : seenOrigins) {
       if (candidate.equals(seenOrigin)) {
         return true;
       }

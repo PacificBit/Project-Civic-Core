@@ -13,7 +13,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
@@ -32,6 +31,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageReque
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderAskStorageForResourcesAction;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class AskStorageForResourcesAction extends VillagerActionBase {
   private List<InventoryItemCriteria> itemCriteria;
@@ -72,23 +72,20 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
         VillageStorageRequestType.DELIVER_TO_WORKPLACE);
 
     if (hasPendingDeliverRequest) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[AskStorageForResourcesAction] Deliver request already present");
+      Logger.logInfo("Deliver request already present");
       return false;
     }
 
     VillageStorageRequest request = buildClearRequest(workplaceComponent);
     if (request.getItemCriteria() == null || request.getItemCriteria().isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[AskStorageForResourcesAction] Refusing to enqueue an empty deliver request for workplace "
+      Logger.logWarning("Refusing to enqueue an empty deliver request for workplace "
               + workplaceComponent.getUuid());
       return false;
     }
 
     copyRetriedStorageIds(workplaceComponent, request);
 
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[AskStorageForResourcesAction] Built request: " + request);
+    Logger.logInfo("Built request: " + request);
 
     EnqueueVillageStorageRequestTask task = new EnqueueVillageStorageRequestTask(request);
     task.setOnSuccessCallback(requestResult -> {
@@ -151,8 +148,7 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
 
     Set<ItemRequestCriterion> criterions = missingResourceComponent.getMissingResources();
     if (criterions == null || criterions.isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[AskStorageForResourcesAction] Asked for tavern resources but no missing criteria are present");
+      Logger.logWarning("Asked for tavern resources but no missing criteria are present");
       return;
     }
 

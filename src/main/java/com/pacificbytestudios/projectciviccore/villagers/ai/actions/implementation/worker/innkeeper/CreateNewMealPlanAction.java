@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
@@ -25,7 +25,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -35,6 +34,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class CreateNewMealPlanAction extends VillagerActionBase {
   private final int successFlagSlot;
@@ -72,8 +72,7 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
 
     TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef, TavernComponent.getComponentType());
     if (tavernComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CreateNewMealPlanAction] Could not fetch the tavern component");
+      Logger.logWarning("Could not fetch the tavern component");
       return this.finish(role, false);
     }
 
@@ -81,11 +80,10 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
     int targetMealCount = Math.max(0, villageHeart.getVillagerCount() + this.mealBuffer);
 
     List<ItemContainer> storageSnapshots = new ArrayList<>();
-    for (Vector3i storagePosition : workplaceComponent.getStorage().getAllContainerPositions()) {
+    for (Vec3i storagePosition : workplaceComponent.getStorage().getAllContainerPositions()) {
       ResolvedContainer resolvedStorage = ContainerResolver.resolveContainerAt(world, storagePosition);
       if (resolvedStorage == null) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[CreateNewMealPlanAction] Dead reference of a container is present at " + storagePosition);
+        Logger.logWarning("Dead reference of a container is present at " + storagePosition);
         return this.finish(role, false);
       }
 
@@ -100,8 +98,7 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
 
     if (committedMealCount >= targetMealCount) {
       tavernComponent.resetMissingResources();
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[CreateNewMealPlanAction] Workplace food target already satisfied: "
+      Logger.logInfo("Workplace food target already satisfied: "
               + committedMealCount
               + "/"
               + targetMealCount);
@@ -215,8 +212,7 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
     for (MaterialQuantity material : neededMaterials) {
       String itemId = material.getItemId();
       if (itemId == null || itemId.isBlank()) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[CreateNewMealPlanAction] Cannot buffer missing material for recipe "
+        Logger.logWarning("Cannot buffer missing material for recipe "
                 + recipeId
                 + " because it has no item id: "
                 + material);

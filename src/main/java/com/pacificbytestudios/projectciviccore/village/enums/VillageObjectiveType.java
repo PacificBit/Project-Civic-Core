@@ -42,4 +42,8 @@ public enum VillageObjectiveType {
   public static short getStages(StructureType structureType) {
     return STRUCTURE_TYPE_TO_OBJECTIVE.get(structureType).getStages();
   }
+
+  public static VillageObjectiveType getObjectiveTypeFrom(StructureType structureType) {
+    return STRUCTURE_TYPE_TO_OBJECTIVE.get(structureType);
+  }
 }

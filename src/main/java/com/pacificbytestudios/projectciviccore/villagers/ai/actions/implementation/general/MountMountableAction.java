@@ -2,7 +2,7 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.mounts.BlockMountAPI;
 import com.hypixel.hytale.component.Ref;
@@ -79,7 +79,7 @@ public class MountMountableAction extends VillagerActionBase {
   }
 
   private boolean handleChairInteratible(
-      Vector3i target,
+      Vec3i target,
       Ref<EntityStore> ref,
       Store<EntityStore> store) {
 

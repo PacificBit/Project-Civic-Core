@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ReserveMiningGalleryAction extends VillagerActionBase {
 
@@ -38,7 +38,7 @@ public class ReserveMiningGalleryAction extends VillagerActionBase {
 
     UUID galleryId = mineComponent.getFirstAvailableGalleryId();
     if (galleryId == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[ReserveMiningGalleryAction] Could not find a valid gallery to mine");
+      Logger.logInfo("Could not find a valid gallery to mine");
       return false;
     }
 

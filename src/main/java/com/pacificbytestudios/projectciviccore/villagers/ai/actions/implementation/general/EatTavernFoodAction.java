@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -64,7 +64,7 @@ public class EatTavernFoodAction extends VillagerActionBase {
       return false;
     }
 
-    Vector3i foodPosition = require(interactable.getDependsOn(), "tavern food position");
+    Vec3i foodPosition = require(interactable.getDependsOn(), "tavern food position");
     if (foodPosition == null) {
       return false;
     }

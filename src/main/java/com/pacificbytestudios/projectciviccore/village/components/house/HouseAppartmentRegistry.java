@@ -6,13 +6,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class HouseAppartmentRegistry implements Component<ChunkStore> {
 
@@ -52,9 +51,9 @@ public class HouseAppartmentRegistry implements Component<ChunkStore> {
     this.appartments = appartments;
   }
 
-  public Vector3i getBedPosition(UUID bed) {
+  public Vec3i getBedPosition(UUID bed) {
     for (Map.Entry<UUID, AppartmentComponent> appts : this.appartments.entrySet()) {
-      Vector3i bedPosition = appts.getValue().getBedPosition(bed);
+      Vec3i bedPosition = appts.getValue().getBedPosition(bed);
       if (bedPosition != null) {
         return bedPosition;
       }

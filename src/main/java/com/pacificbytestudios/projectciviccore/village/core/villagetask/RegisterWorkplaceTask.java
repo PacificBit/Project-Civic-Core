@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -9,7 +9,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -18,6 +17,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class RegisterWorkplaceTask extends AVillageTask {
   public static final BuilderCodec<RegisterWorkplaceTask> CODEC = BuilderCodec
@@ -43,11 +43,9 @@ public class RegisterWorkplaceTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
-    ProjectCivicCore.LOGGER
-        .atInfo()
-        .log("[RegisterWorkplaceTask] Registering workplace '" + this.workplace.getWorkplaceType() + "' with id: "
+    Logger.logInfo("Registering workplace '" + this.workplace.getWorkplaceType() + "' with id: "
             + this.workplace.getUuid());
     heart.registerWorkplace(this.workplace);
 
@@ -68,8 +66,8 @@ public class RegisterWorkplaceTask extends AVillageTask {
 
     Ref<ChunkStore> workplaceRef = workplace.getWorkplaceRef().getRef();
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[RegisterWorkplaceTask] Could not register workplace topology for " + workplace.getUuid()
+      Logger.logWarning(
+          "Could not register workplace topology for " + workplace.getUuid()
               + " because the workplace ref is invalid");
       return null;
     }
@@ -78,26 +76,26 @@ public class RegisterWorkplaceTask extends AVillageTask {
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[RegisterWorkplaceTask] Could not register workplace topology for " + workplace.getUuid()
+      Logger.logWarning(
+          "Could not register workplace topology for " + workplace.getUuid()
               + " because the tracked prefab placement is missing");
       return null;
     }
 
-    Vector2i structureSize = Utils.getSize2i(workplaceType);
+    Vec2i structureSize = Utils.getSize2i(workplaceType);
     return buildTopologyStructure(workplace, structureSize, trackedPlacement.getYaw());
   }
 
   private static TopologyStructure buildTopologyStructure(
       WorkplaceComponent workplace,
-      Vector2i structureSize,
+      Vec2i structureSize,
       Rotation orientation) {
     if (workplace == null || structureSize == null) {
       return null;
     }
 
     StructureType workplaceType = workplace.getWorkplaceType();
-    Vector3i prefabAnchor = workplace.getPrefabAnchor();
+    Vec3i prefabAnchor = workplace.getPrefabAnchor();
     if (workplace.getUuid() == null || workplaceType == null || prefabAnchor == null) {
       return null;
     }

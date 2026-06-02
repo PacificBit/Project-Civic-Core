@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.farmer;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.FarmingUtil;
 import com.hypixel.hytale.component.Ref;
@@ -15,10 +15,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class HarvestCropAction extends VillagerActionBase {
 
@@ -39,12 +39,12 @@ public class HarvestCropAction extends VillagerActionBase {
     }
 
     World world = store.getExternalData().getWorld();
-    Vector3i cropCoord = snapshot.getBlockTypePosition().get(FarmerScan.HARVESTABLE_CROP).pollFirst();
+    Vec3i cropCoord = snapshot.getBlockTypePosition().get(FarmerScan.HARVESTABLE_CROP).pollFirst();
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(
         cropCoord.x,
         cropCoord.z));
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[HarvestCrop] Could not fetch the chunk");
+      Logger.logWarning("Could not fetch the chunk");
       return true;
     }
     BlockType cropBlockType = chunk.getBlockType(cropCoord);

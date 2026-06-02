@@ -2,8 +2,8 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.util.ArrayDeque;
 
-import org.joml.Vector3f;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -21,11 +21,11 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TillSoilAction extends ActionBase {
   private static final BlockType TILL_BLOCK_TYPE = BlockType.getAssetMap().getAsset(FarmerScan.TILLED_SOIL_ID);
@@ -45,16 +45,16 @@ public class TillSoilAction extends ActionBase {
 
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
     if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[TillSoilAction] Could not fetch villager component");
+      Logger.logWarning("Could not fetch villager component");
       return false;
     }
 
-    ArrayDeque<Vector3i> blockPositions = villager
+    ArrayDeque<Vec3i> blockPositions = villager
         .getWorkerData()
         .getWorkareaSnapshot()
         .getBlockTypePosition().get(FarmerScan.TILLABLE_TERRAIN);
 
-    Vector3i blockPos;
+    Vec3i blockPos;
 
     if (blockPositions != null && !blockPositions.isEmpty()) {
       blockPos = blockPositions.pollFirst();
@@ -70,7 +70,7 @@ public class TillSoilAction extends ActionBase {
     if (soilTilled) {
       NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
       VillagerToolAnimationHelper.playHeldToolAnimation(ref, npcEntity, store, "Till");
-      Vector3f center = Utils.centerOf(blockPos);
+      Vec3f center = Utils.centerOf(blockPos);
       SoundUtil.playSoundEvent3d(ref, TILL_SOUND_EVENT_INDEX, center.x, center.y, center.z, store);
 
       byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();

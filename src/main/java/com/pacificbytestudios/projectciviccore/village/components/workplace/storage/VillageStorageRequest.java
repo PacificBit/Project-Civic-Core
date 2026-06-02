@@ -7,15 +7,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.set.SetCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
@@ -43,8 +41,8 @@ public class VillageStorageRequest {
           obj -> obj.type)
       .add()
 
-      .append(new KeyedCodec<>("TargetsWorkplaceStorage", new ArrayDequeCodec<Vector3i>(
-          Vector3iUtil.CODEC,
+      .append(new KeyedCodec<>("TargetsWorkplaceStorage", new ArrayDequeCodec<Vec3i>(
+          Vec3i.CODEC,
           "Target")),
           (obj, value) -> obj.targetsWorkplaceStorage = value,
           obj -> obj.targetsWorkplaceStorage)
@@ -81,7 +79,7 @@ public class VillageStorageRequest {
   private UUID requesterWorkplaceId;
   private UUID storageWorkplaceId;
   private VillageStorageRequestType type;
-  private ArrayDeque<Vector3i> targetsWorkplaceStorage = new ArrayDeque<>();
+  private ArrayDeque<Vec3i> targetsWorkplaceStorage = new ArrayDeque<>();
 
   private Set<ItemRequestCriterion> itemCriteria = new HashSet<>();
   private Set<UUID> triedStorageIds = new HashSet<>();
@@ -163,17 +161,17 @@ public class VillageStorageRequest {
     this.registeredWithStorage = registeredWithStorage;
   }
 
-  public ArrayDeque<Vector3i> getTargetsWorkplaceStorage() {
+  public ArrayDeque<Vec3i> getTargetsWorkplaceStorage() {
     return targetsWorkplaceStorage;
   }
 
-  public void setTargetsWorkplaceStorage(ArrayDeque<Vector3i> targetWorkplaceStorage) {
+  public void setTargetsWorkplaceStorage(ArrayDeque<Vec3i> targetWorkplaceStorage) {
     this.targetsWorkplaceStorage = targetWorkplaceStorage != null
         ? new ArrayDeque<>(targetWorkplaceStorage)
         : new ArrayDeque<>();
   }
 
-  public void setTargetsWorkplaceStorage(List<Vector3i> targetWorkplaceStorage) {
+  public void setTargetsWorkplaceStorage(List<Vec3i> targetWorkplaceStorage) {
     this.targetsWorkplaceStorage = targetWorkplaceStorage != null
         ? new ArrayDeque<>(targetWorkplaceStorage)
         : new ArrayDeque<>();

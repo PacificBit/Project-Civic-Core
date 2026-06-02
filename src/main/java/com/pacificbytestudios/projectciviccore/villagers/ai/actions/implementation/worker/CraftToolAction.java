@@ -15,12 +15,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.enums.LowToolQuality;
 import com.pacificbytestudios.projectciviccore.registry.registry.ToolRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderCraftToolAction;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class CraftToolAction extends VillagerActionBase {
   private final ToolType toolType;
@@ -54,29 +54,25 @@ public class CraftToolAction extends VillagerActionBase {
     }
 
     if (!applyCraft(villagerStorage, recipe)) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CraftToolAction] Planned craft failed for tool type " + this.toolType);
+      Logger.logWarning("Planned craft failed for tool type " + this.toolType);
       return false;
     }
 
-    ProjectCivicCore.LOGGER.atFine()
-        .log("[CraftToolAction] Crafted tool " + this.toolType + " for village level " + villageHeart.getLevel());
+    Logger.logFine("Crafted tool " + this.toolType + " for village level " + villageHeart.getLevel());
     return true;
   }
 
   private CraftingRecipe getToolRecipe(int villageLevel) {
     Map<String, CraftingRecipe> levelRecipes = ToolRecipeRegistry.getLevelDependantCraftingRecipe(villageLevel);
     if (levelRecipes.isEmpty()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CraftToolAction] No tool recipes available for village level " + villageLevel);
+      Logger.logWarning("No tool recipes available for village level " + villageLevel);
       return null;
     }
 
     String recipeId = this.toolType.getRecipeId(villageLevel);
     CraftingRecipe recipe = levelRecipes.get(recipeId);
     if (recipe == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CraftToolAction] No recipe found for tool type " + this.toolType + " at village level " + villageLevel
+      Logger.logWarning("No recipe found for tool type " + this.toolType + " at village level " + villageLevel
               + " using recipe id " + recipeId);
     }
 
@@ -95,15 +91,13 @@ public class CraftToolAction extends VillagerActionBase {
 
     List<ItemStack> outputItems = CraftingManager.getOutputItemStacks(recipe, 1);
     if (outputItems.size() != 1) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CraftToolAction] Expected exactly one tool output but got " + outputItems.size());
+      Logger.logWarning("Expected exactly one tool output but got " + outputItems.size());
       return false;
     }
 
     ItemStack craftedTool = outputItems.get(0);
     if (craftedTool == null || craftedTool.isEmpty() || craftedTool.getQuantity() != 1) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CraftToolAction] Expected exactly one crafted tool item but got " + craftedTool);
+      Logger.logWarning("Expected exactly one crafted tool item but got " + craftedTool);
       return false;
     }
 

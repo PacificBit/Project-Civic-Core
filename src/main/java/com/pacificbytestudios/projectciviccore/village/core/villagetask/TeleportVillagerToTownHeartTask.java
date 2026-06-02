@@ -3,8 +3,8 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 import java.util.List;
 import java.util.UUID;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -16,10 +16,9 @@ import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TeleportVillagerToTownHeartTask extends AVillageTask {
   public static final BuilderCodec<TeleportVillagerToTownHeartTask> CODEC = BuilderCodec
@@ -45,7 +44,7 @@ public class TeleportVillagerToTownHeartTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     if (this.villagerId == null || heart == null || heart.getVillager(this.villagerId) == null) {
       return;
@@ -68,18 +67,18 @@ public class TeleportVillagerToTownHeartTask extends AVillageTask {
         Teleport.createExact(resolveTargetPosition(heartPos), transform.getRotation().clone()));
     this.callOnSuccess(this.villagerId.toString());
 
-    ProjectCivicCore.LOGGER.atInfo().log("[TeleportVillagerToTownHeartEffect] Teleporting villager %s to town heart"
+    Logger.logInfo("Teleporting villager %s to town heart"
         .formatted(this.villagerId));
   }
 
-  private static Vector3d resolveTargetPosition(Vector3i heartPos) {
-    List<Vector3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
+  private static Vec3d resolveTargetPosition(Vec3i heartPos) {
+    List<Vec3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
     if (spawningOffsets == null || spawningOffsets.isEmpty()) {
-      return VectorUtil.toVector3d(heartPos);
+      return Vec3d.from(heartPos);
     }
 
-    Vector3i target = VectorUtil.clone(heartPos).add(spawningOffsets.getFirst());
+    Vec3i target = Vec3i.from(heartPos).add(spawningOffsets.getFirst());
 
-    return VectorUtil.toVector3d(target);
+    return Vec3d.from(target);
   }
 }

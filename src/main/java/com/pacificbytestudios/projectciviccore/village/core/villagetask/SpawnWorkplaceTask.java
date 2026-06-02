@@ -2,23 +2,22 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginNewConstruction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class SpawnWorkplaceTask extends AVillageTask {
 
@@ -36,7 +35,7 @@ public class SpawnWorkplaceTask extends AVillageTask {
           (obj) -> obj.workplaceType)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
           (obj, value) -> obj.position = value,
           obj -> obj.position)
       .add()
@@ -61,7 +60,7 @@ public class SpawnWorkplaceTask extends AVillageTask {
 
   private UUID structureId;
   private StructureType workplaceType;
-  private Vector3i position;
+  private Vec3i position;
   private Rotation rotation = Rotation.None;
   private Integer level = 1;
   private ConstructionMode constructionMode;
@@ -72,7 +71,7 @@ public class SpawnWorkplaceTask extends AVillageTask {
   public SpawnWorkplaceTask(
       UUID structureId,
       StructureType workplaceType,
-      Vector3i position,
+      Vec3i position,
       Rotation rotation,
       int level,
       ConstructionMode constructionMode) {
@@ -88,7 +87,7 @@ public class SpawnWorkplaceTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     try {
       BeginNewConstruction spawnFunction = Utils.getBeginNewConstructionFunction(this.workplaceType);
@@ -105,15 +104,15 @@ public class SpawnWorkplaceTask extends AVillageTask {
         return;
       }
 
-      String message = "[SpawnWorkplaceTask] Could not start " + this.workplaceType
+      String message = "Could not start " + this.workplaceType
           + " construction for " + this.structureId + " at " + this.position;
-      ProjectCivicCore.LOGGER.atWarning().log(message);
+      Logger.logWarning(message);
       this.callOnError("BUILD_START_FAILED", message);
     } catch (RuntimeException exception) {
-      String message = "[SpawnWorkplaceTask] Failed to start " + this.workplaceType
+      String message = "Failed to start " + this.workplaceType
           + " construction for " + this.structureId + " at " + this.position + ": "
           + exception.getMessage();
-      ProjectCivicCore.LOGGER.atWarning().log(message);
+      Logger.logWarning(message);
       this.callOnError("BUILD_START_EXCEPTION", message);
       throw exception;
     }

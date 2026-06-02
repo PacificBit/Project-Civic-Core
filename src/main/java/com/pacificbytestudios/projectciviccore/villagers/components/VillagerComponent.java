@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -16,7 +14,6 @@ import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWindow;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -24,8 +21,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerMealType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
@@ -43,7 +40,7 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.villageHeartLocation)
       .add()
 
-      .append(new KeyedCodec<>("BedPosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("BedPosition", Vec3i.CODEC),
           (obj, value) -> obj.setBedPosition(value),
           (obj) -> obj.getBedPosition())
       .add()
@@ -60,7 +57,7 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.workerData)
       .add()
 
-      .append(new KeyedCodec<>("ReservedInteractable", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("ReservedInteractable", Vec3i.CODEC),
           (obj, value) -> obj.reservedInteractable = value,
           (obj) -> obj.reservedInteractable)
       .add()
@@ -90,18 +87,18 @@ public class VillagerComponent implements Component<EntityStore> {
   private EntityRef villageHeartLocation;
   private VillagerHousingComponent housingData;
   private VillagerWorkerComponent workerData;
-  private Vector3i reservedInteractable;
+  private Vec3i reservedInteractable;
   private EntityRef reservedTavernLocation;
   private Instant lastLunchMealTime;
   private Instant lastDinnerMealTime;
   private VillagerRole role;
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
-  public Vector3i getBedPosition() {
+  public Vec3i getBedPosition() {
     return this.housingData != null ? this.housingData.getBedPosition() : null;
   }
 
-  public void setBedPosition(Vector3i bedPosition) {
+  public void setBedPosition(Vec3i bedPosition) {
     if (this.housingData == null && bedPosition == null) {
       return;
     }
@@ -177,11 +174,11 @@ public class VillagerComponent implements Component<EntityStore> {
     return currentDate.equals(lastMealDateTime.toLocalDate());
   }
 
-  public Vector3i getReservedInteractable() {
+  public Vec3i getReservedInteractable() {
     return reservedInteractable;
   }
 
-  public void setReservedInteractable(Vector3i reservedInteractable) {
+  public void setReservedInteractable(Vec3i reservedInteractable) {
     this.reservedInteractable = reservedInteractable;
   }
 
@@ -220,7 +217,7 @@ public class VillagerComponent implements Component<EntityStore> {
     component.villageHeartLocation = this.villageHeartLocation == null ? null : this.villageHeartLocation.clone();
     component.housingData = this.housingData == null ? null : this.housingData.clone();
     component.workerData = this.workerData == null ? null : this.workerData.clone();
-    component.reservedInteractable = VectorUtil.clone(this.reservedInteractable);
+    component.reservedInteractable = this.reservedInteractable == null ? null : this.reservedInteractable.clone();
     component.reservedTavernLocation = this.reservedTavernLocation == null ? null : this.reservedTavernLocation.clone();
     component.lastLunchMealTime = this.lastLunchMealTime;
     component.lastDinnerMealTime = this.lastDinnerMealTime;

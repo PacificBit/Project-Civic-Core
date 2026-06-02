@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.general;
 
-import org.joml.Vector3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderReachEmptyTavernSeatSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -28,7 +27,7 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
   }
 
   private final PositionProvider positionProvider = new PositionProvider();
-  private Vector3d target = null;
+  private Vec3d target = null;
 
   @Override
   public InfoProvider getSensorInfo() {
@@ -54,7 +53,7 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
         return false;
       }
 
-      this.target = VectorUtil.toVector3d(Utils.centerOf(villagerComponent.getReservedInteractable()));
+      this.target = Vec3d.from(Utils.centerOf(villagerComponent.getReservedInteractable()));
       this.positionProvider.setTarget(this.target);
       return true;
     }

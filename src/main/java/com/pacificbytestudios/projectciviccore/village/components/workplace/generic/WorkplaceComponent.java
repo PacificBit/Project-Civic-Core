@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -19,11 +17,11 @@ import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
@@ -51,17 +49,17 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.workingPlaceType)
       .add()
 
-      .append(new KeyedCodec<>("BenchPosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("BenchPosition", Vec3i.CODEC),
           (obj, value) -> obj.benchPos = value,
           (obj) -> obj.benchPos)
       .add()
 
-      .append(new KeyedCodec<>("BenchAccessPosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("BenchAccessPosition", Vec3i.CODEC),
           (obj, value) -> obj.benchAccessPos = value,
           (obj) -> obj.benchAccessPos)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           (obj) -> obj.prefabAnchor)
       .add()
@@ -136,9 +134,9 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private Short level = 1;
   private StructureType workingPlaceType;
   private WorkType[] workerType;
-  private Vector3i benchPos;
-  private Vector3i benchAccessPos;
-  private Vector3i prefabAnchor;
+  private Vec3i benchPos;
+  private Vec3i benchAccessPos;
+  private Vec3i prefabAnchor;
 
   private EntityRef villageRef;
   private EntityRef workplaceRef;
@@ -175,27 +173,27 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.workingPlaceType = workingPlaceType;
   }
 
-  public Vector3i getBenchPos() {
+  public Vec3i getBenchPos() {
     return benchPos;
   }
 
-  public void setBenchPos(Vector3i benchPos) {
+  public void setBenchPos(Vec3i benchPos) {
     this.benchPos = benchPos;
   }
 
-  public Vector3i getBenchAccessPos() {
+  public Vec3i getBenchAccessPos() {
     return this.benchAccessPos != null ? this.benchAccessPos : this.benchPos;
   }
 
-  public void setBenchAccessPos(Vector3i benchAccessPos) {
+  public void setBenchAccessPos(Vec3i benchAccessPos) {
     this.benchAccessPos = benchAccessPos;
   }
 
-  public Vector3i getPrefabAnchor() {
+  public Vec3i getPrefabAnchor() {
     return prefabAnchor;
   }
 
-  public void setPrefabAnchor(Vector3i prefabAnchor) {
+  public void setPrefabAnchor(Vec3i prefabAnchor) {
     this.prefabAnchor = prefabAnchor;
   }
 
@@ -311,14 +309,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.uuid = this.uuid;
     component.level = this.level;
     component.workingPlaceType = this.workingPlaceType;
-    component.benchPos = this.benchPos;
-    component.benchAccessPos = this.benchAccessPos;
+    component.benchPos = Vec3i.from(this.benchPos);
+    component.benchAccessPos = Vec3i.from(this.benchAccessPos);
     component.villageRef = this.villageRef;
     component.workplaceRef = this.workplaceRef;
     component.workers = new HashSet<>(this.workers);
     component.bossId = this.bossId;
     component.storage = this.storage != null ? this.storage.clone() : null;
-    component.prefabAnchor = this.prefabAnchor;
+    component.prefabAnchor = Vec3i.from(this.prefabAnchor);
     component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
     component.workerType = this.workerType != null ? this.workerType.clone() : null;
     component.workersDesignatedArea = new HashMap<>(this.workersDesignatedArea);
@@ -329,20 +327,20 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   @Override
   public String toString() {
     return "WorkplaceComponent{" +
-        "\n uuid=" + uuid + "," +
-        "\n level=" + level + "," +
-        "\n workingPlaceType=" + workingPlaceType + "," +
-        "\n benchPos=" + benchPos + "," +
-        "\n benchAccessPos=" + benchAccessPos + "," +
-        "\n prefabAnchor=" + prefabAnchor + "," +
-        "\n villageHeartLocation=" + villageRef + "," +
-        "\n workspaceLocation=" + workplaceRef + "," +
-        "\n bossId=" + bossId + "," +
-        "\n workers=" + workers + "," +
-        "\n typeWorkers=[" + workerType + "]," +
-        "\n workersDesignatedArea=" + workersDesignatedArea + "," +
-        "\n storage=" + storage + "," +
-        "\n lastStorageRequest=" + lastStorageRequest + "," +
+        "\n\tuuid=" + uuid + "," +
+        "\n\tlevel=" + level + "," +
+        "\n\tworkingPlaceType=" + workingPlaceType + "," +
+        "\n\tbenchPos=" + benchPos + "," +
+        "\n\tbenchAccessPos=" + benchAccessPos + "," +
+        "\n\tprefabAnchor=" + prefabAnchor + "," +
+        "\n\tvillageHeartLocation=" + villageRef + "," +
+        "\n\tworkspaceLocation=" + workplaceRef + "," +
+        "\n\tbossId=" + bossId + "," +
+        "\n\tworkers=" + workers + "," +
+        "\n\ttypeWorkers=[" + workerType + "]," +
+        "\n\tworkersDesignatedArea=" + workersDesignatedArea + "," +
+        "\n\tstorage=" + storage + "," +
+        "\n\tlastStorageRequest=" + lastStorageRequest + "," +
         '}';
   }
 

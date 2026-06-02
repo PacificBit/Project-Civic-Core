@@ -12,6 +12,7 @@ import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.codecs.map.Int2ObjectMapCodec;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
+import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveStatus;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
@@ -294,6 +295,11 @@ public class VillageProjectPlan {
             obj -> obj.requiredMaterialPerStage)
         .add()
 
+        .append(new KeyedCodec<>("ConstructionMode", new EnumCodec<>(ConstructionMode.class), false),
+            (obj, value) -> obj.constructionMode = value,
+            obj -> obj.constructionMode)
+        .add()
+
         .build();
 
     private UUID projectId;
@@ -306,6 +312,7 @@ public class VillageProjectPlan {
     private short stage = 0;
     private short totalStages = 1;
     private MaterialQuantity[] requiredMaterialPerStage = new MaterialQuantity[0];
+    private ConstructionMode constructionMode;
 
     public UUID getProjectId() {
       return projectId;
@@ -395,6 +402,14 @@ public class VillageProjectPlan {
       this.targetLevel = targetLevel;
     }
 
+    public ConstructionMode getConstructionMode() {
+      return constructionMode;
+    }
+
+    public void setConstructionMode(ConstructionMode constructionMode) {
+      this.constructionMode = constructionMode;
+    }
+
     public VillageProject clone() {
       VillageProject component = new VillageProject();
       component.projectId = this.projectId;
@@ -406,6 +421,7 @@ public class VillageProjectPlan {
       component.stage = this.stage;
       component.totalStages = this.totalStages;
       component.targetLevel = this.targetLevel;
+      component.constructionMode = this.constructionMode;
 
       component.requiredMaterialPerStage = new MaterialQuantity[this.requiredMaterialPerStage.length];
       for (int i = 0; i < this.requiredMaterialPerStage.length; i++) {

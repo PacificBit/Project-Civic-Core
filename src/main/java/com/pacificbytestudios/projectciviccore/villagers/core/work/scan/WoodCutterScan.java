@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.states.FarmingBlock;
 import com.hypixel.hytale.component.Ref;
@@ -18,13 +18,12 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.ScanUtils;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class WoodCutterScan implements IWorkAreaScanner {
   private static final long MAX_TIME_NS = 1_000_000;
@@ -75,7 +74,7 @@ public class WoodCutterScan implements IWorkAreaScanner {
     int startZ = workingArea.getMinZ();
     int endZ = workingArea.getMaxZ();
 
-    Vector3i currentPoint = getInitialScanPoint(
+    Vec3i currentPoint = getInitialScanPoint(
         snapshotInProgress.getLastVisited(),
         startX,
         endX,
@@ -103,9 +102,9 @@ public class WoodCutterScan implements IWorkAreaScanner {
             aboveTerrainY)) {
 
       if (System.nanoTime() - start >= MAX_TIME_NS) {
-        snapshotInProgress.setLastVisited(VectorUtil.clone(currentPoint));
-        ProjectCivicCore.LOGGER.atInfo().log(
-            "[WoodCutterScan] Scan budget exceeded after " + scannedColumns
+        snapshotInProgress.setLastVisited(Vec3i.from(currentPoint));
+        Logger.logInfo(
+            "Scan budget exceeded after " + scannedColumns
                 + " columns, continuing next tick from " + currentPoint);
         return snapshotInProgress;
       }
@@ -113,22 +112,22 @@ public class WoodCutterScan implements IWorkAreaScanner {
       soilChunk = getCorrectChunkForBlock(currentPoint, soilChunk);
 
       if (soilChunk == null) {
-        ProjectCivicCore.LOGGER.atSevere().log(
-            "[WoodCutterScan] Chunk is null while scanning point " + currentPoint);
+        Logger.logWarning(
+            "Chunk is null while scanning point " + currentPoint);
         break;
       }
 
       scanColumnTasks(snapshotInProgress, soilChunk, currentPoint);
       scannedColumns++;
 
-      Vector3i nextPoint = getNextScanPoint(currentPoint, startX, endX, startZ,
+      Vec3i nextPoint = getNextScanPoint(currentPoint, startX, endX, startZ,
           endZ, aboveTerrainY);
       if (nextPoint == null) {
         break;
       }
 
       currentPoint = nextPoint;
-      snapshotInProgress.setLastVisited(VectorUtil.clone(currentPoint));
+      snapshotInProgress.setLastVisited(Vec3i.from(currentPoint));
     }
 
     snapshotInProgress.captureNow(worldTimeResource);
@@ -139,7 +138,7 @@ public class WoodCutterScan implements IWorkAreaScanner {
   private void scanColumnTasks(
       WorkplaceAreaSnapshot snapshotInProgress,
       WorldChunk chunk,
-      Vector3i aboveTerrainPosition) {
+      Vec3i aboveTerrainPosition) {
 
     BlockType aboveTerrainBlock = chunk.getBlockType(aboveTerrainPosition);
 
@@ -163,8 +162,8 @@ public class WoodCutterScan implements IWorkAreaScanner {
 
   }
 
-  private Vector3i getInitialScanPoint(
-      Vector3i lastVisited,
+  private Vec3i getInitialScanPoint(
+      Vec3i lastVisited,
       int startX,
       int endX,
       int startZ,
@@ -174,10 +173,10 @@ public class WoodCutterScan implements IWorkAreaScanner {
     if (lastVisited == null
         || !ScanUtils.isInsideWorkArea(lastVisited, startX, endX, startZ, endZ,
             soilLevel)) {
-      return new Vector3i(startX, soilLevel, startZ);
+      return new Vec3i(startX, soilLevel, startZ);
     }
 
-    Vector3i clampedPoint = new Vector3i(
+    Vec3i clampedPoint = new Vec3i(
         ScanUtils.clamp(lastVisited.x, startX, endX),
         soilLevel,
         ScanUtils.clamp(lastVisited.z, startZ, endZ));
@@ -185,8 +184,8 @@ public class WoodCutterScan implements IWorkAreaScanner {
     return snapToScanGrid(clampedPoint, startX, endX, startZ, endZ, soilLevel);
   }
 
-  private Vector3i snapToScanGrid(
-      Vector3i point,
+  private Vec3i snapToScanGrid(
+      Vec3i point,
       int startX,
       int endX,
       int startZ,
@@ -211,7 +210,7 @@ public class WoodCutterScan implements IWorkAreaScanner {
       }
     }
 
-    return new Vector3i(snappedX, soilLevel, snappedZ);
+    return new Vec3i(snappedX, soilLevel, snappedZ);
   }
 
   private int snapUpToGrid(int value, int origin) {
@@ -229,15 +228,15 @@ public class WoodCutterScan implements IWorkAreaScanner {
     return value + (SCAN_STEP - remainder);
   }
 
-  private Vector3i getNextScanPoint(
-      Vector3i currentPoint,
+  private Vec3i getNextScanPoint(
+      Vec3i currentPoint,
       int startX,
       int endX,
       int startZ,
       int endZ,
       int soilLevel) {
 
-    Vector3i nextPoint = VectorUtil.clone(currentPoint).add(SCAN_STEP, 0, 0);
+    Vec3i nextPoint = Vec3i.from(currentPoint).add(SCAN_STEP, 0, 0);
     if (nextPoint.x <= endX) {
       return nextPoint;
     }
@@ -267,7 +266,7 @@ public class WoodCutterScan implements IWorkAreaScanner {
     return chunk;
   }
 
-  private WorldChunk getCorrectChunkForBlock(Vector3i currentPoint, WorldChunk chunk) {
+  private WorldChunk getCorrectChunkForBlock(Vec3i currentPoint, WorldChunk chunk) {
     if (chunk == null || !ChunkUtil.isInsideChunk(
         chunk.getX(),
         chunk.getZ(),
@@ -284,10 +283,10 @@ public class WoodCutterScan implements IWorkAreaScanner {
   private void addTask(
       WorkplaceAreaSnapshot snapshotInProgress,
       String taskId,
-      Vector3i position) {
-    ArrayDeque<Vector3i> found = snapshotInProgress.getBlockTypePosition()
+      Vec3i position) {
+    ArrayDeque<Vec3i> found = snapshotInProgress.getBlockTypePosition()
         .computeIfAbsent(taskId, key -> new ArrayDeque<>());
 
-    found.addLast(VectorUtil.clone(position));
+    found.addLast(Vec3i.from(position));
   }
 }

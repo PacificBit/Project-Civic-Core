@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.inventory;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -11,17 +11,16 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class ContainerResolver {
 
   public record ResolvedContainer(
-      Vector3i basePosition,
+      Vec3i basePosition,
       Ref<ChunkStore> blockRef,
       ItemContainerBlock containerBlock) {
   }
 
-  private static BlockSection getBlockSection(World world, Vector3i pos) {
+  private static BlockSection getBlockSection(World world, Vec3i pos) {
     Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReference(
         ChunkUtil.chunkCoordinate(pos.x),
         ChunkUtil.chunkCoordinate(pos.y),
@@ -35,7 +34,7 @@ public class ContainerResolver {
     return chunkStore.getComponent(sectionRef, BlockSection.getComponentType());
   }
 
-  private static Vector3i resolveBaseBlockPosition(World world, Vector3i pos) {
+  private static Vec3i resolveBaseBlockPosition(World world, Vec3i pos) {
     BlockSection section = getBlockSection(world, pos);
     if (section == null) {
       return null;
@@ -46,18 +45,18 @@ public class ContainerResolver {
       return pos;
     }
 
-    return new Vector3i(
+    return new Vec3i(
         pos.x - FillerBlockUtil.unpackX(filler),
         pos.y - FillerBlockUtil.unpackY(filler),
         pos.z - FillerBlockUtil.unpackZ(filler));
   }
 
-  private static ResolvedContainer resolveContainerAtExact(World world, Vector3i pos) {
+  private static ResolvedContainer resolveContainerAtExact(World world, Vec3i pos) {
     if (world == null || pos == null) {
       return null;
     }
 
-    Vector3i basePos = resolveBaseBlockPosition(world, pos);
+    Vec3i basePos = resolveBaseBlockPosition(world, pos);
     if (basePos == null) {
       return null;
     }
@@ -83,7 +82,7 @@ public class ContainerResolver {
     return new ResolvedContainer(basePos, blockRef, containerBlock);
   }
 
-  public static ResolvedContainer resolveContainerAt(World world, Vector3i pos) {
+  public static ResolvedContainer resolveContainerAt(World world, Vec3i pos) {
     ResolvedContainer resolved = resolveContainerAtExact(world, pos);
     if (resolved != null) {
       return resolved;
@@ -93,14 +92,14 @@ public class ContainerResolver {
       return null;
     }
 
-    Vector3i[] adjacentPositions = new Vector3i[] {
-        VectorUtil.clone(pos).add(VectorUtil.NORTH()),
-        VectorUtil.clone(pos).add(VectorUtil.SOUTH()),
-        VectorUtil.clone(pos).add(VectorUtil.EAST()),
-        VectorUtil.clone(pos).add(VectorUtil.WEST())
+    Vec3i[] adjacentPositions = new Vec3i[] {
+        Vec3i.from(pos).add(Vec3i.safeNorth()),
+        Vec3i.from(pos).add(Vec3i.safeSouth()),
+        Vec3i.from(pos).add(Vec3i.safeEast()),
+        Vec3i.from(pos).add(Vec3i.safeWest())
     };
 
-    for (Vector3i adjacentPosition : adjacentPositions) {
+    for (Vec3i adjacentPosition : adjacentPositions) {
       resolved = resolveContainerAtExact(world, adjacentPosition);
       if (resolved != null) {
         return resolved;

@@ -8,10 +8,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderUnregisterFromMineshaftGallery;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class UnregisterFromMineshaftGallery extends VillagerActionBase {
   private boolean markAsCompleted;
@@ -44,8 +44,7 @@ public class UnregisterFromMineshaftGallery extends VillagerActionBase {
     boolean success = galleryId != null;
 
     if (!success) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UnregisterFromMineshaftGallery] Could not unregister gallery");
+      Logger.logWarning("Could not unregister gallery");
       return false;
     }
 
@@ -54,8 +53,7 @@ public class UnregisterFromMineshaftGallery extends VillagerActionBase {
     }
 
     if (!success) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UnregisterFromMineshaftGallery] Could not unregister gallery or mark as completed");
+      Logger.logWarning("Could not unregister gallery or mark as completed");
     }
 
     return success;

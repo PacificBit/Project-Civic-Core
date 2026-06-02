@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 import java.util.ArrayDeque;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -18,13 +18,12 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.BlockPlacementHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderRepairTerrainAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.IWorkAreaScanner;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class RepairTerrainAction extends VillagerActionBase {
   private static final int MAX_DEDUCTION_RADIUS = 3;
@@ -56,7 +55,7 @@ public class RepairTerrainAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> terrainToFill = snapshot.getBlockTypePosition().get(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
+    ArrayDeque<Vec3i> terrainToFill = snapshot.getBlockTypePosition().get(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
     if (terrainToFill == null || terrainToFill.isEmpty()) {
       snapshot.getBlockTypePosition().remove(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
       return false;
@@ -65,7 +64,7 @@ public class RepairTerrainAction extends VillagerActionBase {
     World world = this.getWorld(store);
     boolean repairedAllBlocks = true;
 
-    for (Vector3i blockPos : terrainToFill) {
+    for (Vec3i blockPos : terrainToFill) {
       repairedAllBlocks &= this.repairTerrainBlock(world, blockPos);
     }
 
@@ -76,15 +75,15 @@ public class RepairTerrainAction extends VillagerActionBase {
     return repairedAllBlocks;
   }
 
-  private boolean repairTerrainBlock(World world, Vector3i blockPos) {
+  private boolean repairTerrainBlock(World world, Vec3i blockPos) {
     if (blockPos == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[RepairTerrainAction] Snapshot contains a null terrain position");
+      Logger.logWarning("Snapshot contains a null terrain position");
       return false;
     }
 
     WorldChunk chunk = Utils.getWorldChunk(world, blockPos);
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[RepairTerrainAction] Could not load chunk for " + blockPos);
+      Logger.logWarning("Could not load chunk for " + blockPos);
       return false;
     }
 
@@ -95,27 +94,25 @@ public class RepairTerrainAction extends VillagerActionBase {
 
     String blockId = this.getBlockIdToPlace(world, blockPos);
     if (blockId == null || blockId.isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[RepairTerrainAction] Could not resolve repair block id for " + blockPos);
+      Logger.logWarning("Could not resolve repair block id for " + blockPos);
       return false;
     }
 
     BlockType repairBlock = BlockType.getAssetMap().getAsset(blockId);
     if (repairBlock == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[RepairTerrainAction] Unknown repair block id " + blockId + " for " + blockPos);
+      Logger.logWarning("Unknown repair block id " + blockId + " for " + blockPos);
       return false;
     }
 
     boolean repaired = chunk.setBlock(blockPos.x, blockPos.y, blockPos.z, repairBlock);
     if (!repaired) {
-      ProjectCivicCore.LOGGER.atWarning().log("[RepairTerrainAction] Failed to place " + blockId + " at " + blockPos);
+      Logger.logWarning("Failed to place " + blockId + " at " + blockPos);
     }
 
     return repaired;
   }
 
-  private boolean isValidSupportBlock(World world, Vector3i blockPos, BlockType blockType) {
+  private boolean isValidSupportBlock(World world, Vec3i blockPos, BlockType blockType) {
     if (blockType == null || blockType.getMaterial() != BlockMaterial.Solid) {
       return false;
     }
@@ -130,7 +127,7 @@ public class RepairTerrainAction extends VillagerActionBase {
     return BlockPlacementHelper.testSupportingBlock(blockType, rotation, filler);
   }
 
-  private String getBlockIdToPlace(World world, Vector3i blockPos) {
+  private String getBlockIdToPlace(World world, Vec3i blockPos) {
     if (this.repairBlockSet == null || this.repairBlockSet.length == 0 || this.repairBlockSet[0].equals("*")) {
       return this.getBlockIdFromNeighbour(world, blockPos);
     }
@@ -139,7 +136,7 @@ public class RepairTerrainAction extends VillagerActionBase {
     return this.repairBlockSet[index];
   }
 
-  private String getBlockIdFromNeighbour(World world, Vector3i blockPos) {
+  private String getBlockIdFromNeighbour(World world, Vec3i blockPos) {
     for (int radius = 1; radius <= MAX_DEDUCTION_RADIUS; radius++) {
       for (int xOffset = -radius; xOffset <= radius; xOffset++) {
         for (int zOffset = -radius; zOffset <= radius; zOffset++) {
@@ -147,7 +144,7 @@ public class RepairTerrainAction extends VillagerActionBase {
             continue;
           }
 
-          Vector3i neighbourPos = VectorUtil.clone(blockPos).add(xOffset, 0, zOffset);
+          Vec3i neighbourPos = Vec3i.from(blockPos).add(xOffset, 0, zOffset);
           WorldChunk neighbourChunk = Utils.getWorldChunk(world, neighbourPos);
           if (neighbourChunk == null) {
             continue;
@@ -166,7 +163,7 @@ public class RepairTerrainAction extends VillagerActionBase {
     return FALLBACK_REPAIR_BLOCK_ID;
   }
 
-  private BlockSection getBlockSection(World world, Vector3i position) {
+  private BlockSection getBlockSection(World world, Vec3i position) {
     if (world == null || position == null || position.y < MIN_WORLD_Y || position.y > MAX_WORLD_Y) {
       return null;
     }

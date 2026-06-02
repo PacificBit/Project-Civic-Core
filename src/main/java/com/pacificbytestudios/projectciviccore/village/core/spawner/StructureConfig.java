@@ -6,16 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartConfigComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
@@ -56,18 +54,18 @@ public final class StructureConfig {
     return SMALLEST_CONSTRUCTION_SIDE;
   }
 
-  private static int getLongestSide(Vector2i size) {
+  private static int getLongestSide(Vec2i size) {
     return Math.max(size.x, size.y);
   }
 
-  private static int getSmallestSide(Vector2i size) {
+  private static int getSmallestSide(Vec2i size) {
     return Math.min(size.x, size.y);
   }
 
-  public record BlockTransform(Vector3i position, Rotation rotation) {
+  public record BlockTransform(Vec3i position, Rotation rotation) {
   }
 
-  public record ContainerTransform(Vector3i position, Rotation rotation, Vector3i accessOffset) {
+  public record ContainerTransform(Vec3i position, Rotation rotation, Vec3i accessOffset) {
   }
 
   private StructureConfig() {
@@ -77,8 +75,8 @@ public final class StructureConfig {
     public static final String PREFAB_JSON = "Structures/General/CityCenter/Level1/City_Center.prefab.json";
     public static final BlockType MARKER_BLOCK = BlockType.getAssetMap().getAsset("Village_Heart_Marker");
     public static final BlockType HEART_BLOCK = BlockType.getAssetMap().getAsset("Village_Core");
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
     public static final VillageHeartConfigComponent DEFAULT_CONFIG;
 
     static {
@@ -90,13 +88,13 @@ public final class StructureConfig {
 
     private static final int SPAWNING_SCALE = 6;
 
-    private static final List<Vector3i> VILLAGER_SPAWNING_OFFSETS = List.of(
-        VectorUtil.NORTH().mul(SPAWNING_SCALE),
-        VectorUtil.SOUTH().mul(SPAWNING_SCALE),
-        VectorUtil.WEST().mul(SPAWNING_SCALE),
-        VectorUtil.EAST().mul(SPAWNING_SCALE));
+    private static final List<Vec3i> VILLAGER_SPAWNING_OFFSETS = List.of(
+        Vec3i.NORTH.safeMul(SPAWNING_SCALE),
+        Vec3i.SOUTH.safeMul(SPAWNING_SCALE),
+        Vec3i.WEST.safeMul(SPAWNING_SCALE),
+        Vec3i.EAST.safeMul(SPAWNING_SCALE));
 
-    public static List<Vector3i> getVillagerSpawningOffsets() {
+    public static List<Vec3i> getVillagerSpawningOffsets() {
       return VILLAGER_SPAWNING_OFFSETS;
     }
   }
@@ -105,7 +103,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vector3i benchAccessOffset,
+        Vec3i benchAccessOffset,
         ContainerTransform container,
         AreaFootprint workingAreaOffset) {
     }
@@ -113,22 +111,22 @@ public final class StructureConfig {
     public static final String PREFAB_JSON = "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-5, 1, -5);
-    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(0, 0, 1);
+    public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(-5, 1, -5);
+    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(0, 0, 1);
 
-    public static final Vector3i CONTAINER_OFFSET = new Vector3i(0, 0, 8);
+    public static final Vec3i CONTAINER_OFFSET = new Vec3i(0, 0, 8);
     public static final Rotation CONTAINER_ROTATION = Rotation.Ninety;
 
-    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, -1);
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(0, 0, -1);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(3, 1, 6);
+    public static final Vec3i CONSTRUCTION_SIGN_OFFSET = new Vec3i(3, 1, 6);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
 
     public static final AreaFootprint WORKING_AREA_OFFSET = new AreaFootprint(
-        new Vector2i(-1, -4),
-        new Vector2i(7, 4));
+        new Vec2i(-1, -4),
+        new Vec2i(7, 4));
 
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
@@ -157,29 +155,29 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-5, 1, -4), Rotation.None),
-            new BlockTransform(new Vector3i(3, 1, 6), Rotation.None),
-            new Vector3i(0, 0, 1),
-            new ContainerTransform(new Vector3i(-5, 1, 3), Rotation.TwoSeventy, new Vector3i(0, 0, -1)),
-            new AreaFootprint(new Vector2i(-1, -4), new Vector2i(7, 4))),
+            new BlockTransform(new Vec3i(-5, 1, -4), Rotation.None),
+            new BlockTransform(new Vec3i(3, 1, 6), Rotation.None),
+            new Vec3i(0, 0, 1),
+            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.TwoSeventy, new Vec3i(0, 0, -1)),
+            new AreaFootprint(new Vec2i(-1, -4), new Vec2i(7, 4))),
 
         2,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(-5, 1, -5), Rotation.None),
-            new BlockTransform(new Vector3i(3, 1, 6), Rotation.None),
-            new Vector3i(0, 0, 1),
-            new ContainerTransform(new Vector3i(-5, 1, 3), Rotation.Ninety, new Vector3i(0, 0, -1)),
-            new AreaFootprint(new Vector2i(-1, -4), new Vector2i(7, 4))),
+            new BlockTransform(new Vec3i(-5, 1, -5), Rotation.None),
+            new BlockTransform(new Vec3i(3, 1, 6), Rotation.None),
+            new Vec3i(0, 0, 1),
+            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.Ninety, new Vec3i(0, 0, -1)),
+            new AreaFootprint(new Vec2i(-1, -4), new Vec2i(7, 4))),
 
         3,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(-5, 1, -5), Rotation.None),
-            new BlockTransform(new Vector3i(3, 1, 6), Rotation.None),
-            new Vector3i(0, 0, 1),
-            new ContainerTransform(new Vector3i(-5, 1, 3), Rotation.Ninety, new Vector3i(0, 0, -1)),
-            new AreaFootprint(new Vector2i(-1, -4), new Vector2i(7, 4))));
+            new BlockTransform(new Vec3i(-5, 1, -5), Rotation.None),
+            new BlockTransform(new Vec3i(3, 1, 6), Rotation.None),
+            new Vec3i(0, 0, 1),
+            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.Ninety, new Vec3i(0, 0, -1)),
+            new AreaFootprint(new Vec2i(-1, -4), new Vec2i(7, 4))));
 
     private Farm() {
     }
@@ -202,7 +200,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vector3i benchAccessOffset,
+        Vec3i benchAccessOffset,
         List<ContainerTransform> containers) {
     }
 
@@ -211,14 +209,14 @@ public final class StructureConfig {
     public static final BlockType DOUBLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Large");
     public static final Rotation LEFT_CONTAINER_YAW_OFFSET = Rotation.Ninety;
     public static final Rotation RIGHT_CONTAINER_YAW_OFFSET = Rotation.TwoSeventy;
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(0, 1, -3);
-    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(0, 0, 1);
-    public static final Vector3i LEFT_CONTAINER_ACCESS_OFFSET = new Vector3i(1,
+    public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(0, 1, -3);
+    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(0, 0, 1);
+    public static final Vec3i LEFT_CONTAINER_ACCESS_OFFSET = new Vec3i(1,
         0, 0);
-    public static final Vector3i RIGHT_CONTAINER_ACCESS_OFFSET = new Vector3i(-1,
+    public static final Vec3i RIGHT_CONTAINER_ACCESS_OFFSET = new Vec3i(-1,
         0, 0);
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
@@ -246,52 +244,52 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(0, 1, -3), Rotation.None),
-            new BlockTransform(new Vector3i(0, 1, 7), Rotation.None),
-            new Vector3i(0, 0, 1),
+            new BlockTransform(new Vec3i(0, 1, -3), Rotation.None),
+            new BlockTransform(new Vec3i(0, 1, 7), Rotation.None),
+            new Vec3i(0, 0, 1),
             List.of(
-                new ContainerTransform(new Vector3i(-3, 1, 1), Rotation.Ninety, new Vector3i(1, 0, 0)),
-                new ContainerTransform(new Vector3i(-3, 1, -2), Rotation.Ninety, new Vector3i(1, 0, 0)),
-                new ContainerTransform(new Vector3i(3, 1, 2), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
-                new ContainerTransform(new Vector3i(3, 1, -1), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)))),
+                new ContainerTransform(new Vec3i(-3, 1, 1), Rotation.Ninety, new Vec3i(1, 0, 0)),
+                new ContainerTransform(new Vec3i(-3, 1, -2), Rotation.Ninety, new Vec3i(1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, 2), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, -1), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)))),
 
         2,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-1, 1, -4), Rotation.None),
-            new BlockTransform(new Vector3i(0, 1, 7), Rotation.None),
-            new Vector3i(0, 0, 2),
+            new BlockTransform(new Vec3i(-1, 1, -4), Rotation.None),
+            new BlockTransform(new Vec3i(0, 1, 7), Rotation.None),
+            new Vec3i(0, 0, 2),
             List.of(
-                new ContainerTransform(new Vector3i(2, 1, -2), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
-                new ContainerTransform(new Vector3i(2, 1, 1), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
-                new ContainerTransform(new Vector3i(2, 1, 4), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(2, 1, -2), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(2, 1, 1), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(2, 1, 4), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
 
-                new ContainerTransform(new Vector3i(-5, 5, -1), Rotation.OneEighty, new Vector3i(0, 0, -1)),
-                new ContainerTransform(new Vector3i(3, 5, 4), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
-                new ContainerTransform(new Vector3i(-1, 5, 1), Rotation.Ninety, new Vector3i(1, 0, 0)),
-                new ContainerTransform(new Vector3i(1, 5, 5), Rotation.OneEighty, new Vector3i(0, 0, -1)),
+                new ContainerTransform(new Vec3i(-5, 5, -1), Rotation.OneEighty, new Vec3i(0, 0, -1)),
+                new ContainerTransform(new Vec3i(3, 5, 4), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(-1, 5, 1), Rotation.Ninety, new Vec3i(1, 0, 0)),
+                new ContainerTransform(new Vec3i(1, 5, 5), Rotation.OneEighty, new Vec3i(0, 0, -1)),
 
-                new ContainerTransform(new Vector3i(-4, 5, -3), Rotation.None, new Vector3i(0, 0, 1)),
-                new ContainerTransform(new Vector3i(-5, 5, -4), Rotation.OneEighty, new Vector3i(0, 0, -1)),
+                new ContainerTransform(new Vec3i(-4, 5, -3), Rotation.None, new Vec3i(0, 0, 1)),
+                new ContainerTransform(new Vec3i(-5, 5, -4), Rotation.OneEighty, new Vec3i(0, 0, -1)),
 
-                new ContainerTransform(new Vector3i(-1, 5, -3), Rotation.None, new Vector3i(0, 0, 1)),
-                new ContainerTransform(new Vector3i(-2, 5, -4), Rotation.OneEighty, new Vector3i(0, 0, -1)),
+                new ContainerTransform(new Vec3i(-1, 5, -3), Rotation.None, new Vec3i(0, 0, 1)),
+                new ContainerTransform(new Vec3i(-2, 5, -4), Rotation.OneEighty, new Vec3i(0, 0, -1)),
 
-                new ContainerTransform(new Vector3i(2, 5, -3), Rotation.None, new Vector3i(0, 0, 1)),
-                new ContainerTransform(new Vector3i(1, 5, -4), Rotation.OneEighty, new Vector3i(0, 0, -1))
+                new ContainerTransform(new Vec3i(2, 5, -3), Rotation.None, new Vec3i(0, 0, 1)),
+                new ContainerTransform(new Vec3i(1, 5, -4), Rotation.OneEighty, new Vec3i(0, 0, -1))
 
             )),
 
         3,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(0, 1, -3), Rotation.None),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(0, 0, 1),
+            new BlockTransform(new Vec3i(0, 1, -3), Rotation.None),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
+            new Vec3i(0, 0, 1),
             List.of(
-                new ContainerTransform(new Vector3i(-3, 1, 1), Rotation.Ninety, new Vector3i(1, 0, 0)),
-                new ContainerTransform(new Vector3i(-3, 1, -2), Rotation.Ninety, new Vector3i(1, 0, 0)),
-                new ContainerTransform(new Vector3i(3, 1, 2), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)),
-                new ContainerTransform(new Vector3i(3, 1, -1), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)))));
+                new ContainerTransform(new Vec3i(-3, 1, 1), Rotation.Ninety, new Vec3i(1, 0, 0)),
+                new ContainerTransform(new Vec3i(-3, 1, -2), Rotation.Ninety, new Vec3i(1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, 2), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, -1), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)))));
 
     private Storage() {
     }
@@ -309,9 +307,9 @@ public final class StructureConfig {
       return LEVEL_LAYOUTS.getOrDefault(storageLevel, LEVEL_LAYOUTS.get(1));
     }
 
-    public static List<Vector3i> getStorageOffsetForLevel(int level) {
+    public static List<Vec3i> getStorageOffsetForLevel(int level) {
       LevelLayout layout = getLevelLayout(level);
-      List<Vector3i> offsets = new ArrayList<>();
+      List<Vec3i> offsets = new ArrayList<>();
       for (ContainerTransform container : layout.containers()) {
         offsets.add(container.position());
       }
@@ -326,16 +324,16 @@ public final class StructureConfig {
     private static final Map<Short, Map<RoadLength, String>> VILLAGE_LVL_MAIN_ROADS = Map.of(
         (short) 1,
         Map.of(
-            RoadLength.SMALL, "Structures/Temporary/Main_Road_5x1.prefab.json",
-            RoadLength.MEDIUM, "Structures/Temporary/Main_Road_5x2.prefab.json",
-            RoadLength.LARGE, "Structures/Temporary/Main_Road_5x4.prefab.json"));
+            RoadLength.SMALL, "Structures/Roads/Main_Road_5x1.prefab.json",
+            RoadLength.MEDIUM, "Structures/Roads/Main_Road_5x2.prefab.json",
+            RoadLength.LARGE, "Structures/Roads/Main_Road_5x4.prefab.json"));
 
     private static final Map<Short, Map<RoadLength, String>> VILLAGE_LVL_SIDE_ROADS = Map.of(
         (short) 1,
         Map.of(
-            RoadLength.SMALL, "Structures/Temporary/Side_Road_2x1.prefab.json",
-            RoadLength.MEDIUM, "Structures/Temporary/Side_Road_2x2.prefab.json",
-            RoadLength.LARGE, "Structures/Temporary/Side_Road_2x4.prefab.json"));
+            RoadLength.SMALL, "Structures/Roads/Side_Road_2x1.prefab.json",
+            RoadLength.MEDIUM, "Structures/Roads/Side_Road_2x2.prefab.json",
+            RoadLength.LARGE, "Structures/Roads/Side_Road_2x4.prefab.json"));
 
     private static final RoadLength[] ORDERED_ROAD_LENGTH = new RoadLength[] {
         RoadLength.LARGE, RoadLength.MEDIUM,
@@ -390,7 +388,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vector3i benchAccessOffset,
+        Vec3i benchAccessOffset,
         List<ContainerTransform> containers) {
     }
 
@@ -398,11 +396,11 @@ public final class StructureConfig {
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Tavern_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
     public static final Rotation CONTAINER_BLOCK_YAW_OFFSET = Rotation.OneEighty;
-    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(0, 0, 1);
-    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, -1);
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 5);
+    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(0, 0, 1);
+    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(0, 0, -1);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final Vec3i CONSTRUCTION_SIGN_OFFSET = new Vec3i(0, 1, 5);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
 
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
@@ -431,88 +429,88 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-4, 1, -3), Rotation.None),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(0, 0, 1),
-            List.of(new ContainerTransform(new Vector3i(-5, 1, 3), Rotation.OneEighty, new Vector3i(0, 0, -1)))),
+            new BlockTransform(new Vec3i(-4, 1, -3), Rotation.None),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
+            new Vec3i(0, 0, 1),
+            List.of(new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.OneEighty, new Vec3i(0, 0, -1)))),
 
         2,
         new LevelLayout(
-            new BlockTransform(new Vector3i(5, -3, 0), Rotation.TwoSeventy),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(-1, 0, 0),
-            List.of(new ContainerTransform(new Vector3i(5, -3, -3), Rotation.TwoSeventy, new Vector3i(-1, 0, 0)))),
+            new BlockTransform(new Vec3i(5, -3, 0), Rotation.TwoSeventy),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
+            new Vec3i(-1, 0, 0),
+            List.of(new ContainerTransform(new Vec3i(5, -3, -3), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)))),
 
         3,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(5, -3, 0), Rotation.TwoSeventy),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(0, 0, 1),
-            List.of(new ContainerTransform(new Vector3i(5, -3, -3), Rotation.OneEighty, new Vector3i(0, 0, -1)))));
+            new BlockTransform(new Vec3i(5, -3, 0), Rotation.TwoSeventy),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
+            new Vec3i(0, 0, 1),
+            List.of(new ContainerTransform(new Vec3i(5, -3, -3), Rotation.OneEighty, new Vec3i(0, 0, -1)))));
 
     private static final Map<Integer, List<Interactable>> INTERACTABLES = Map.of(
         1,
         List.of(
-            new Interactable(new Vector3i(0, 1, 0), new Vector3i(0, 2, -1), true),
-            new Interactable(new Vector3i(-1, 1, 0), new Vector3i(-1, 2, -1), true),
-            new Interactable(new Vector3i(0, 1, -3), new Vector3i(0, 2, -2), true),
-            new Interactable(new Vector3i(-1, 1, -3), new Vector3i(-1, 2, -2), true),
+            new Interactable(new Vec3i(0, 1, 0), new Vec3i(0, 2, -1), true),
+            new Interactable(new Vec3i(-1, 1, 0), new Vec3i(-1, 2, -1), true),
+            new Interactable(new Vec3i(0, 1, -3), new Vec3i(0, 2, -2), true),
+            new Interactable(new Vec3i(-1, 1, -3), new Vec3i(-1, 2, -2), true),
 
-            new Interactable(new Vector3i(2, 1, -1), new Vector3i(3, 2, -1), true),
-            new Interactable(new Vector3i(2, 1, -2), new Vector3i(3, 2, -2), true),
-            new Interactable(new Vector3i(5, 1, -1), new Vector3i(4, 2, -1), true),
-            new Interactable(new Vector3i(5, 1, -2), new Vector3i(4, 2, -2), true),
+            new Interactable(new Vec3i(2, 1, -1), new Vec3i(3, 2, -1), true),
+            new Interactable(new Vec3i(2, 1, -2), new Vec3i(3, 2, -2), true),
+            new Interactable(new Vec3i(5, 1, -1), new Vec3i(4, 2, -1), true),
+            new Interactable(new Vec3i(5, 1, -2), new Vec3i(4, 2, -2), true),
 
-            new Interactable(new Vector3i(2, 1, 1), new Vector3i(3, 2, 1), true),
-            new Interactable(new Vector3i(2, 1, 2), new Vector3i(3, 2, 2), true),
-            new Interactable(new Vector3i(5, 1, 1), new Vector3i(4, 2, 1), true),
-            new Interactable(new Vector3i(5, 1, 2), new Vector3i(4, 2, 2), true)),
+            new Interactable(new Vec3i(2, 1, 1), new Vec3i(3, 2, 1), true),
+            new Interactable(new Vec3i(2, 1, 2), new Vec3i(3, 2, 2), true),
+            new Interactable(new Vec3i(5, 1, 1), new Vec3i(4, 2, 1), true),
+            new Interactable(new Vec3i(5, 1, 2), new Vec3i(4, 2, 2), true)),
 
         2,
         List.of(
-            new Interactable(new Vector3i(-1, -3, 3), new Vector3i(0, -2, 3), true),
-            new Interactable(new Vector3i(-1, -3, 4), new Vector3i(0, -2, 4), true),
-            new Interactable(new Vector3i(2, -3, 3), new Vector3i(1, -2, 3), true),
-            new Interactable(new Vector3i(2, -3, 4), new Vector3i(1, -2, 4), true),
+            new Interactable(new Vec3i(-1, -3, 3), new Vec3i(0, -2, 3), true),
+            new Interactable(new Vec3i(-1, -3, 4), new Vec3i(0, -2, 4), true),
+            new Interactable(new Vec3i(2, -3, 3), new Vec3i(1, -2, 3), true),
+            new Interactable(new Vec3i(2, -3, 4), new Vec3i(1, -2, 4), true),
 
-            new Interactable(new Vector3i(-2, -3, 1), new Vector3i(-3, -2, 1), true),
-            new Interactable(new Vector3i(-2, -3, 2), new Vector3i(-3, -2, 2), true),
-            new Interactable(new Vector3i(-5, -3, 1), new Vector3i(-4, -2, 1), true),
-            new Interactable(new Vector3i(-5, -3, 2), new Vector3i(-4, -2, 2), true),
+            new Interactable(new Vec3i(-2, -3, 1), new Vec3i(-3, -2, 1), true),
+            new Interactable(new Vec3i(-2, -3, 2), new Vec3i(-3, -2, 2), true),
+            new Interactable(new Vec3i(-5, -3, 1), new Vec3i(-4, -2, 1), true),
+            new Interactable(new Vec3i(-5, -3, 2), new Vec3i(-4, -2, 2), true),
 
-            new Interactable(new Vector3i(-2, -3, 3), new Vector3i(-3, -2, 3), true),
-            new Interactable(new Vector3i(-2, -3, 4), new Vector3i(-3, -2, 4), true),
-            new Interactable(new Vector3i(-5, -3, 3), new Vector3i(-4, -2, 3), true),
-            new Interactable(new Vector3i(-5, -3, 4), new Vector3i(-4, -2, 4), true),
+            new Interactable(new Vec3i(-2, -3, 3), new Vec3i(-3, -2, 3), true),
+            new Interactable(new Vec3i(-2, -3, 4), new Vec3i(-3, -2, 4), true),
+            new Interactable(new Vec3i(-5, -3, 3), new Vec3i(-4, -2, 3), true),
+            new Interactable(new Vec3i(-5, -3, 4), new Vec3i(-4, -2, 4), true),
 
-            new Interactable(new Vector3i(0, 5, -1), new Vector3i(0, 6, 0), true),
-            new Interactable(new Vector3i(1, 5, -1), new Vector3i(1, 6, 0), true),
-            new Interactable(new Vector3i(0, 5, 2), new Vector3i(0, 6, 1), true),
-            new Interactable(new Vector3i(1, 5, 2), new Vector3i(1, 6, 1), true),
+            new Interactable(new Vec3i(0, 5, -1), new Vec3i(0, 6, 0), true),
+            new Interactable(new Vec3i(1, 5, -1), new Vec3i(1, 6, 0), true),
+            new Interactable(new Vec3i(0, 5, 2), new Vec3i(0, 6, 1), true),
+            new Interactable(new Vec3i(1, 5, 2), new Vec3i(1, 6, 1), true),
 
-            new Interactable(new Vector3i(-2, 5, -1), new Vector3i(-2, 6, 0), true),
-            new Interactable(new Vector3i(-3, 5, -1), new Vector3i(-3, 6, 0), true),
-            new Interactable(new Vector3i(-2, 5, 2), new Vector3i(-2, 6, 1), true),
-            new Interactable(new Vector3i(-3, 5, 2), new Vector3i(-3, 6, 1), true)),
+            new Interactable(new Vec3i(-2, 5, -1), new Vec3i(-2, 6, 0), true),
+            new Interactable(new Vec3i(-3, 5, -1), new Vec3i(-3, 6, 0), true),
+            new Interactable(new Vec3i(-2, 5, 2), new Vec3i(-2, 6, 1), true),
+            new Interactable(new Vec3i(-3, 5, 2), new Vec3i(-3, 6, 1), true)),
 
         3,
         List.of(
             // TODO: complete this
-            new Interactable(new Vector3i(-1, -3, 3), new Vector3i(0, -2, 3), true),
-            new Interactable(new Vector3i(-1, -3, 4), new Vector3i(0, -2, 4), true),
-            new Interactable(new Vector3i(2, -3, 3), new Vector3i(1, -2, 3), true),
-            new Interactable(new Vector3i(2, -3, 4), new Vector3i(1, -2, 4), true),
+            new Interactable(new Vec3i(-1, -3, 3), new Vec3i(0, -2, 3), true),
+            new Interactable(new Vec3i(-1, -3, 4), new Vec3i(0, -2, 4), true),
+            new Interactable(new Vec3i(2, -3, 3), new Vec3i(1, -2, 3), true),
+            new Interactable(new Vec3i(2, -3, 4), new Vec3i(1, -2, 4), true),
 
-            new Interactable(new Vector3i(-2, -3, 1), new Vector3i(-3, -2, 1), true),
-            new Interactable(new Vector3i(-2, -3, 2), new Vector3i(-3, -2, 2), true),
-            new Interactable(new Vector3i(-5, -3, 1), new Vector3i(-4, -2, 1), true),
-            new Interactable(new Vector3i(-5, -3, 2), new Vector3i(-4, -2, 2), true),
+            new Interactable(new Vec3i(-2, -3, 1), new Vec3i(-3, -2, 1), true),
+            new Interactable(new Vec3i(-2, -3, 2), new Vec3i(-3, -2, 2), true),
+            new Interactable(new Vec3i(-5, -3, 1), new Vec3i(-4, -2, 1), true),
+            new Interactable(new Vec3i(-5, -3, 2), new Vec3i(-4, -2, 2), true),
 
-            new Interactable(new Vector3i(-2, -3, 3), new Vector3i(-3, -2, 3), true),
-            new Interactable(new Vector3i(-2, -3, 4), new Vector3i(-3, -2, 4), true),
-            new Interactable(new Vector3i(-5, -3, 3), new Vector3i(-4, -2, 3), true),
-            new Interactable(new Vector3i(-5, -3, 4), new Vector3i(-4, -2, 4), true)));
+            new Interactable(new Vec3i(-2, -3, 3), new Vec3i(-3, -2, 3), true),
+            new Interactable(new Vec3i(-2, -3, 4), new Vec3i(-3, -2, 4), true),
+            new Interactable(new Vec3i(-5, -3, 3), new Vec3i(-4, -2, 3), true),
+            new Interactable(new Vec3i(-5, -3, 4), new Vec3i(-4, -2, 4), true)));
 
     private Tavern() {
     }
@@ -530,16 +528,16 @@ public final class StructureConfig {
       return LEVEL_LAYOUTS.getOrDefault(tavernLevel, LEVEL_LAYOUTS.get(1));
     }
 
-    public static List<Vector3i> getStorageOffsetForLevel(int level) {
+    public static List<Vec3i> getStorageOffsetForLevel(int level) {
       LevelLayout layout = getLevelLayout(level);
-      List<Vector3i> offsets = new ArrayList<>();
+      List<Vec3i> offsets = new ArrayList<>();
       for (ContainerTransform container : layout.containers()) {
         offsets.add(container.position());
       }
       return offsets;
     }
 
-    public static List<Interactable> getInteractables(Vector3i prefabAnchor,
+    public static List<Interactable> getInteractables(Vec3i prefabAnchor,
         Rotation rotation, int level) {
       return toAbsoluteInteractables(INTERACTABLES.getOrDefault(level, INTERACTABLES.get(1)), prefabAnchor,
           rotation);
@@ -550,22 +548,26 @@ public final class StructureConfig {
     }
   }
 
+  public static final class Market {
+    public static final String PREFAB_JSON = "Structures/Workplace/Market/Level1/Stage3/Town_Hall.prefab.json";
+  }
+
   public static final class TownHall {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vector3i benchAccessOffset,
-        Vector3i heartContainerAccessOffset) {
+        Vec3i benchAccessOffset,
+        Vec3i heartContainerAccessOffset) {
     }
 
     public static final String PREFAB_JSON = "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Town_Hall_Core");
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-3, 1, -1);
-    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(1, 0, 1);
-    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(0, 0, 1);
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(-3, 1, -1);
+    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(1, 0, 1);
+    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(0, 0, 1);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
@@ -593,25 +595,25 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-2, 1, 0), Rotation.None),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(1, 0, 0),
-            new Vector3i(0, 0, 1)),
+            new BlockTransform(new Vec3i(-2, 1, 0), Rotation.None),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
+            new Vec3i(1, 0, 0),
+            new Vec3i(0, 0, 1)),
 
         2,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-4, 2, 0), Rotation.OneEighty),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(-1, 0, 0),
-            new Vector3i(0, 0, 1)),
+            new BlockTransform(new Vec3i(-4, 2, 0), Rotation.OneEighty),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
+            new Vec3i(-1, 0, 0),
+            new Vec3i(0, 0, 1)),
 
         3,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(-3, 1, -1), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None),
-            new Vector3i(1, 0, 1),
-            new Vector3i(0, 0, 1)));
+            new BlockTransform(new Vec3i(-3, 1, -1), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
+            new Vec3i(1, 0, 1),
+            new Vec3i(0, 0, 1)));
 
     private TownHall() {
     }
@@ -634,7 +636,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vector3i benchAccessOffset,
+        Vec3i benchAccessOffset,
         ContainerTransform container) {
     }
 
@@ -642,24 +644,24 @@ public final class StructureConfig {
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Mine_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
 
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(-5, 1, 6);
+    public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(-5, 1, 6);
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
-    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(1, 0, 0);
-    public static final Vector3i CONTAINER_OFFSET = new Vector3i(-5, 1, 5);
+    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(1, 0, 0);
+    public static final Vec3i CONTAINER_OFFSET = new Vec3i(-5, 1, 5);
 
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 8);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final Vec3i CONSTRUCTION_SIGN_OFFSET = new Vec3i(0, 1, 8);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
 
     public static final Rotation CONTAINER_BLOCK_YAW_OFFSET = Rotation.Ninety;
-    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(1, 0, 0);
+    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(1, 0, 0);
 
-    private static final Map<Vector3i, Vector3i> MINESHAFT_GALLERIES_OFFSETS = Map.of(
-        VectorUtil.NORTH(), new Vector3i(0, 0, -8),
-        VectorUtil.SOUTH(), new Vector3i(0, 0, 4),
-        VectorUtil.WEST(), new Vector3i(-6, 0, -2),
-        VectorUtil.EAST(), new Vector3i(6, 0, -2));
+    private static final Map<Vec3i, Vec3i> MINESHAFT_GALLERIES_OFFSETS = Map.of(
+        Vec3i.NORTH, new Vec3i(0, 0, -8),
+        Vec3i.SOUTH, new Vec3i(0, 0, 4),
+        Vec3i.WEST, new Vec3i(-6, 0, -2),
+        Vec3i.EAST, new Vec3i(6, 0, -2));
 
     private Mine() {
     }
@@ -691,26 +693,26 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-5, 1, 6), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 8), Rotation.None),
-            new Vector3i(1, 0, 0),
-            new ContainerTransform(new Vector3i(-5, 1, 5), Rotation.Ninety, new Vector3i(1, 0, 0))),
+            new BlockTransform(new Vec3i(-5, 1, 6), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
+            new Vec3i(1, 0, 0),
+            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3i(1, 0, 0))),
 
         2,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(-5, 1, 6), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 8), Rotation.None),
-            new Vector3i(1, 0, 0),
-            new ContainerTransform(new Vector3i(-5, 1, 5), Rotation.Ninety, new Vector3i(1, 0, 0))),
+            new BlockTransform(new Vec3i(-5, 1, 6), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
+            new Vec3i(1, 0, 0),
+            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3i(1, 0, 0))),
 
         3,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(-5, 1, 6), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 8), Rotation.None),
-            new Vector3i(1, 0, 0),
-            new ContainerTransform(new Vector3i(-5, 1, 5), Rotation.Ninety, new Vector3i(1, 0, 0))));
+            new BlockTransform(new Vec3i(-5, 1, 6), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
+            new Vec3i(1, 0, 0),
+            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3i(1, 0, 0))));
 
     public static String getPrefab(int mineLevel, short stage) {
       Map<Short, String> stagePrefabs = PREFAB_MAP.getOrDefault(mineLevel, PREFAB_MAP.get(1));
@@ -725,47 +727,47 @@ public final class StructureConfig {
       return LEVEL_LAYOUTS.getOrDefault(mineLevel, LEVEL_LAYOUTS.get(1));
     }
 
-    public static Map<Vector3i, Vector3i> getMineshaftGalleriesOffset() {
+    public static Map<Vec3i, Vec3i> getMineshaftGalleriesOffset() {
       return MINESHAFT_GALLERIES_OFFSETS;
     }
 
     public static final class MineshaftLevelConf {
       public static final String PREFAB_JSON = "Structures/Workplace/Mine/Mineshaft/MineshaftLevel/Mineshaft_Level.prefab.json";
-      public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-      public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+      public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+      public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
-      public static Map<Vector3i, Vector3i> getMineshaftGalleriesWithPrefabOffset(
-          Vector3i prefabPos,
+      public static Map<Vec3i, Vec3i> getMineshaftGalleriesWithPrefabOffset(
+          Vec3i prefabPos,
           Rotation rotation) {
-        Vector3i northDirection = StructurePlacementUtils.rotateOffset(VectorUtil.NORTH(), rotation);
-        Vector3i westDirection = StructurePlacementUtils.rotateOffset(VectorUtil.WEST(), rotation);
-        Vector3i eastDirection = StructurePlacementUtils.rotateOffset(VectorUtil.EAST(), rotation);
-        Vector3i southDirection = StructurePlacementUtils.rotateOffset(VectorUtil.SOUTH(), rotation);
+        Vec3i northDirection = StructurePlacementUtils.rotateOffset(Vec3i.NORTH, rotation);
+        Vec3i westDirection = StructurePlacementUtils.rotateOffset(Vec3i.WEST, rotation);
+        Vec3i eastDirection = StructurePlacementUtils.rotateOffset(Vec3i.EAST, rotation);
+        Vec3i southDirection = StructurePlacementUtils.rotateOffset(Vec3i.SOUTH, rotation);
 
         return Map.of(
             northDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.NORTH()), rotation),
+                MINESHAFT_GALLERIES_OFFSETS.get(Vec3i.NORTH), rotation),
 
             westDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.WEST()), rotation),
+                MINESHAFT_GALLERIES_OFFSETS.get(Vec3i.WEST), rotation),
 
             eastDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.EAST()), rotation),
+                MINESHAFT_GALLERIES_OFFSETS.get(Vec3i.EAST), rotation),
 
             southDirection,
             StructurePlacementUtils.withOffset(prefabPos,
-                MINESHAFT_GALLERIES_OFFSETS.get(VectorUtil.SOUTH()), rotation));
+                MINESHAFT_GALLERIES_OFFSETS.get(Vec3i.SOUTH), rotation));
       }
     }
 
     public static final class MineshaftGalleryConf {
       public static final String PREFAB_JSON = "Structures/Workplace/Mine/Mineshaft/MineshaftGallery/Mineshaft_Gallery_Section.prefab.json";
       public static final String EMPTY_PREFAB_JSON = "Structures/Workplace/Mine/Mineshaft/MineshaftGallery/Mineshaft_Empty_Gallery_Section.prefab.json";
-      public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-      public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+      public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+      public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
     }
   }
 
@@ -773,7 +775,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vector3i benchAccessOffset,
+        Vec3i benchAccessOffset,
         ContainerTransform container,
         AreaFootprint workingAreaOffset) {
     }
@@ -782,21 +784,21 @@ public final class StructureConfig {
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Sawmill_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
 
-    public static final Vector3i WORKPLACE_BLOCK_OFFSET = new Vector3i(5, 1, 5);
+    public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(5, 1, 5);
     public static final Rotation WORKPLACE_BLOCK_ROTATION = Rotation.Ninety;
-    public static final Vector3i BENCH_ACCESS_OFFSET = new Vector3i(-1, 0, 1);
+    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(-1, 0, 1);
 
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 8);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
+    public static final Vec3i CONSTRUCTION_SIGN_OFFSET = new Vec3i(0, 1, 8);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
-    public static final Vector3i CONTAINER_OFFSET = new Vector3i(-4, 1, 6);
+    public static final Vec3i CONTAINER_OFFSET = new Vec3i(-4, 1, 6);
     public static final Rotation CONTAINER_ROTATION = Rotation.Ninety;
-    public static final Vector3i CONTAINER_ACCESS_OFFSET = new Vector3i(1, 0, 0);
+    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(1, 0, 0);
 
     public static final AreaFootprint WORKING_AREA_OFFSET = new AreaFootprint(
-        new Vector2i(-4, -6),
-        new Vector2i(4, 2));
+        new Vec2i(-4, -6),
+        new Vec2i(4, 2));
 
     private Sawmill() {
     }
@@ -828,28 +830,28 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(5, 1, 5), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 8), Rotation.None),
-            new Vector3i(-1, 0, 1),
-            new ContainerTransform(new Vector3i(-3, 1, 6), Rotation.Ninety, new Vector3i(1, 0, 0)),
-            new AreaFootprint(new Vector2i(-4, -6), new Vector2i(4, 2))),
+            new BlockTransform(new Vec3i(5, 1, 5), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
+            new Vec3i(-1, 0, 1),
+            new ContainerTransform(new Vec3i(-3, 1, 6), Rotation.Ninety, new Vec3i(1, 0, 0)),
+            new AreaFootprint(new Vec2i(-4, -6), new Vec2i(4, 2))),
 
         2,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(5, 1, 5), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 8), Rotation.None), new Vector3i(-1, 0, 1),
-            new ContainerTransform(new Vector3i(-4, 1, 6), Rotation.Ninety, new Vector3i(1, 0, 0)),
-            new AreaFootprint(new Vector2i(-4, -6), new Vector2i(4, 2))),
+            new BlockTransform(new Vec3i(5, 1, 5), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None), new Vec3i(-1, 0, 1),
+            new ContainerTransform(new Vec3i(-4, 1, 6), Rotation.Ninety, new Vec3i(1, 0, 0)),
+            new AreaFootprint(new Vec2i(-4, -6), new Vec2i(4, 2))),
 
         3,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(5, 1, 5), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 8), Rotation.None),
-            new Vector3i(-1, 0, 1),
-            new ContainerTransform(new Vector3i(-4, 1, 6), Rotation.Ninety, new Vector3i(1, 0, 0)),
-            new AreaFootprint(new Vector2i(-4, -6), new Vector2i(4, 2))));
+            new BlockTransform(new Vec3i(5, 1, 5), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
+            new Vec3i(-1, 0, 1),
+            new ContainerTransform(new Vec3i(-4, 1, 6), Rotation.Ninety, new Vec3i(1, 0, 0)),
+            new AreaFootprint(new Vec2i(-4, -6), new Vec2i(4, 2))));
 
     public static String getPrefab(int sawmillLevel, short stage) {
       Map<Short, String> stagePrefabs = PREFAB_MAP.getOrDefault(sawmillLevel, PREFAB_MAP.get(1));
@@ -875,14 +877,14 @@ public final class StructureConfig {
     private static final String LEVEL_3_PREFAB_JSON = "Structures/Housing/Level3/House.prefab.json";
     public static final BlockType CORE_BLOCK = BlockType.getAssetMap().getAsset("Housing_Core");
     public static final BlockType CRUDE_BED_BLOCK = BlockType.getAssetMap().getAsset("Village_Crude_Bed");
-    public static final Vector3i CORE_BLOCK_OFFSET = new Vector3i(-4, 1, 2);
+    public static final Vec3i CORE_BLOCK_OFFSET = new Vec3i(-4, 1, 2);
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
-    public static final Vector3i CONSTRUCTION_SIGN_OFFSET = new Vector3i(0, 1, 5);
+    public static final Vec3i CONSTRUCTION_SIGN_OFFSET = new Vec3i(0, 1, 5);
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
     private static final String SAMPLE_PREFAB = "Structures/Housing/Level1/Stage0/House.prefab.json";
 
-    public static final Vector2i SIZE_2I = PrefabManager.getPrefabWidthDepth(SAMPLE_PREFAB);
-    public static final Vector3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(SAMPLE_PREFAB);
+    public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(SAMPLE_PREFAB);
+    public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(SAMPLE_PREFAB);
 
     private static final Map<Integer, Map<Short, String>> PREFAB_MAP = Map.of(
         1,
@@ -915,38 +917,38 @@ public final class StructureConfig {
     private static final Map<Integer, LevelLayout> LEVEL_LAYOUTS = Map.of(
         1,
         new LevelLayout(
-            new BlockTransform(new Vector3i(-4, 1, 2), Rotation.Ninety),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None)),
+            new BlockTransform(new Vec3i(-4, 1, 2), Rotation.Ninety),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None)),
 
         2,
         new LevelLayout(
-            new BlockTransform(new Vector3i(2, 1, -1), Rotation.None),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None)),
+            new BlockTransform(new Vec3i(2, 1, -1), Rotation.None),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None)),
 
         3,
         new LevelLayout(
             // TODO: complete this
-            new BlockTransform(new Vector3i(2, 1, -1), Rotation.None),
-            new BlockTransform(new Vector3i(0, 1, 5), Rotation.None)));
+            new BlockTransform(new Vec3i(2, 1, -1), Rotation.None),
+            new BlockTransform(new Vec3i(0, 1, 5), Rotation.None)));
 
     private static final Map<Integer, List<List<BlockTransform>>> APPARTMENT_BED_OFFSETS = Map.of(
         1,
         List.of(
-            List.of(new BlockTransform(new Vector3i(2, 1, -3), Rotation.None)),
-            List.of(new BlockTransform(new Vector3i(4, 1, -3), Rotation.None))),
+            List.of(new BlockTransform(new Vec3i(2, 1, -3), Rotation.None)),
+            List.of(new BlockTransform(new Vec3i(4, 1, -3), Rotation.None))),
 
         2,
         List.of(
-            List.of(new BlockTransform(new Vector3i(-2, 1, -1), Rotation.None)),
-            List.of(new BlockTransform(new Vector3i(3, 5, 0), Rotation.TwoSeventy)),
-            List.of(new BlockTransform(new Vector3i(3, 5, -2), Rotation.TwoSeventy))),
+            List.of(new BlockTransform(new Vec3i(-2, 1, -1), Rotation.None)),
+            List.of(new BlockTransform(new Vec3i(3, 5, 0), Rotation.TwoSeventy)),
+            List.of(new BlockTransform(new Vec3i(3, 5, -2), Rotation.TwoSeventy))),
 
         3,
         List.of(
             // TODO: complete this
-            List.of(new BlockTransform(new Vector3i(-2, 1, -1), Rotation.None)),
-            List.of(new BlockTransform(new Vector3i(3, 5, 0), Rotation.TwoSeventy)),
-            List.of(new BlockTransform(new Vector3i(3, 5, -2), Rotation.TwoSeventy))));
+            List.of(new BlockTransform(new Vec3i(-2, 1, -1), Rotation.None)),
+            List.of(new BlockTransform(new Vec3i(3, 5, 0), Rotation.TwoSeventy)),
+            List.of(new BlockTransform(new Vec3i(3, 5, -2), Rotation.TwoSeventy))));
 
     public static String getPrefab(int houseLevel, short stage) {
       Map<Short, String> stagePrefabs = PREFAB_MAP.get(houseLevel);
@@ -972,7 +974,7 @@ public final class StructureConfig {
     private House() {
     }
 
-    public static HouseAppartmentRegistry getAppartments(Vector3i prefabAnchor,
+    public static HouseAppartmentRegistry getAppartments(Vec3i prefabAnchor,
         Rotation rotation, int level) {
       HouseAppartmentRegistry registry = new HouseAppartmentRegistry();
       List<List<BlockTransform>> appartments = APPARTMENT_BED_OFFSETS.getOrDefault(
@@ -1003,7 +1005,7 @@ public final class StructureConfig {
 
   private static List<Interactable> toAbsoluteInteractables(
       List<Interactable> template,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation) {
     if (template == null || template.isEmpty()) {
       return List.of();
@@ -1034,7 +1036,7 @@ public final class StructureConfig {
     return result;
   }
 
-  private static Vector3i toAbsolutePosition(Vector3i prefabAnchor, Vector3i offset, Rotation rotation) {
+  private static Vec3i toAbsolutePosition(Vec3i prefabAnchor, Vec3i offset, Rotation rotation) {
     return StructurePlacementUtils.withOffset(prefabAnchor, offset, rotation);
   }
 

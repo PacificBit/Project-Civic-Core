@@ -10,7 +10,6 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
@@ -24,6 +23,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.MayorCompone
 import com.pacificbytestudios.projectciviccore.villagers.core.work.mayor.MayorVillageAssessmentExecutor;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.mayor.MayorVillageAssessmentPlanner;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.mayor.MayorVillageAssessmentPlanner.AssessmentResult;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
   private final MayorVillageAssessmentPlanner planner = new MayorVillageAssessmentPlanner();
@@ -63,16 +63,14 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
 
     WorkplaceComponent townHallWorkplace = village.getTownHall();
     if (townHallWorkplace == null || townHallWorkplace.getWorkplaceRef() == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[SimulationSystem] Could not resolve town hall while simulating days");
+      Logger.logWarning("Could not resolve town hall while simulating days");
       stopSimulation(villageRef, store);
       return;
     }
 
     Ref<ChunkStore> townHallRef = townHallWorkplace.getWorkplaceRef().getRef();
     if (townHallRef == null || !townHallRef.isValid()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[SimulationSystem] Town hall ref is invalid while simulating days");
+      Logger.logWarning("Town hall ref is invalid while simulating days");
       stopSimulation(villageRef, store);
       return;
     }
@@ -81,8 +79,7 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
         townHallRef,
         TownHallComponent.getComponentType());
     if (townHall == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[SimulationSystem] Could not load town hall component while simulating days");
+      Logger.logWarning("Could not load town hall component while simulating days");
       stopSimulation(villageRef, store);
       return;
     }
@@ -90,8 +87,7 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
     int today = resolveCurrentDay(world);
     AssessmentResult result = this.planner.assess(townHall, village, topology, today);
     if (!result.success() || result.projectPlan().getProjectList().isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[SimulationSystem] Mayor assessment failed while simulating days");
+      Logger.logWarning("Mayor assessment failed while simulating days");
       stopSimulation(villageRef, store);
       return;
     }
@@ -105,8 +101,7 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
 
     if (simulation.getRemainingDays() <= 0) {
       stopSimulation(villageRef, store);
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[SimulationSystem] Completed village simulation after "
+      Logger.logInfo("Completed village simulation after "
               + simulation.getProcessedDays() + " simulated day(s)");
       return;
     }

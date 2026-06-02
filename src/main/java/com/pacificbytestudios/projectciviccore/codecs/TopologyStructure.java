@@ -4,21 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.joml.Vector2i;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
@@ -38,7 +35,7 @@ public class TopologyStructure extends AreaFootprint {
           (obj) -> obj.structureType)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           obj -> obj.prefabAnchor)
       .add()
@@ -60,8 +57,8 @@ public class TopologyStructure extends AreaFootprint {
       .add()
 
       .append(new KeyedCodec<>("Edges",
-          new Vector3iMapCodec<Vector3i, HashMap<Vector3i, Vector3i>>(
-              Vector3iUtil.CODEC,
+          new Vector3iMapCodec<Vec3i, HashMap<Vec3i, Vec3i>>(
+              Vec3i.CODEC,
               HashMap::new,
               false),
           false),
@@ -80,24 +77,24 @@ public class TopologyStructure extends AreaFootprint {
   private StructureType structureType;
   private VillageTopologyStructureType topologyType;
   private double distanceFromCenter;
-  private Vector3i prefabAnchor;
+  private Vec3i prefabAnchor;
   private Rotation orientation;
-  private Map<Vector3i, Vector3i> edges = new HashMap<>();
+  private Map<Vec3i, Vec3i> edges = new HashMap<>();
 
   public TopologyStructure() {
   }
 
   public TopologyStructure(
-      Vector3i center,
-      Vector2i size2i,
+      Vec3i center,
+      Vec2i size2i,
       VillageTopologyStructureType type,
       Rotation rotation) {
     this(center, size2i, type, rotation, 0);
   }
 
   public TopologyStructure(
-      Vector3i center,
-      Vector2i size2i,
+      Vec3i center,
+      Vec2i size2i,
       VillageTopologyStructureType type,
       Rotation rotation,
       double distanceFromCenter) {
@@ -140,11 +137,11 @@ public class TopologyStructure extends AreaFootprint {
     this.topologyType = topologyType;
   }
 
-  public Vector3i getPrefabAnchor() {
+  public Vec3i getPrefabAnchor() {
     return prefabAnchor;
   }
 
-  public void setPrefabAnchor(Vector3i prefabAnchor) {
+  public void setPrefabAnchor(Vec3i prefabAnchor) {
     this.prefabAnchor = prefabAnchor;
   }
 
@@ -177,51 +174,51 @@ public class TopologyStructure extends AreaFootprint {
         : getAxisAlignedWidth();
   }
 
-  public Vector3i getEdge(Vector3i normalizedDirection) {
-    Vector3i edge = this.edges.get(normalizedDirection);
-    return VectorUtil.clone(edge);
+  public Vec3i getEdge(Vec3i normalizedDirection) {
+    Vec3i edge = this.edges.get(normalizedDirection);
+    return Vec3i.from(edge);
   }
 
-  public Vector3i getForwardVector() {
-    return VectorUtil.clone(getOrientation().getAxisDirection());
+  public Vec3i getForwardVector() {
+    return Vec3i.from(getOrientation().getAxisDirection());
   }
 
-  public Vector3i getBackVector() {
-    return VectorUtil.clone(getOrientation().add(Rotation.OneEighty).getAxisDirection());
+  public Vec3i getBackVector() {
+    return Vec3i.from(getOrientation().add(Rotation.OneEighty).getAxisDirection());
   }
 
-  public Vector3i getLeftVector() {
-    return VectorUtil.clone(getOrientation().add(Rotation.Ninety).getAxisDirection());
+  public Vec3i getLeftVector() {
+    return Vec3i.from(getOrientation().add(Rotation.Ninety).getAxisDirection());
   }
 
-  public Vector3i getRightVector() {
-    return VectorUtil.clone(getOrientation().add(Rotation.TwoSeventy).getAxisDirection());
+  public Vec3i getRightVector() {
+    return Vec3i.from(getOrientation().add(Rotation.TwoSeventy).getAxisDirection());
   }
 
-  public Vector3i getFrontEdge() {
+  public Vec3i getFrontEdge() {
     return getEdge(getForwardVector());
   }
 
-  public Vector3i getBackEdge() {
+  public Vec3i getBackEdge() {
     return getEdge(getBackVector());
   }
 
-  public Vector3i getLeftEdge() {
+  public Vec3i getLeftEdge() {
     return getEdge(getLeftVector());
   }
 
-  public Vector3i getRightEdge() {
+  public Vec3i getRightEdge() {
     return getEdge(getRightVector());
   }
 
   @Override
-  public void setTopLeft(Vector2i topLeft) {
+  public void setTopLeft(Vec2i topLeft) {
     super.setTopLeft(topLeft);
     rebuildEdges();
   }
 
   @Override
-  public void setBotRight(Vector2i botRight) {
+  public void setBotRight(Vec2i botRight) {
     super.setBotRight(botRight);
     rebuildEdges();
   }
@@ -233,18 +230,18 @@ public class TopologyStructure extends AreaFootprint {
   }
 
   @Override
-  protected void assignBounds(Vector2i topLeft, Vector2i botRight) {
+  protected void assignBounds(Vec2i topLeft, Vec2i botRight) {
     super.assignBounds(topLeft, botRight);
     rebuildEdges();
   }
 
-  public Vector3i getCenter() {
-    Vector2i center2D = getCenter2D();
+  public Vec3i getCenter() {
+    Vec2i center2D = getCenter2D();
     if (center2D == null) {
       return null;
     }
 
-    return new Vector3i(center2D.x, getY(), center2D.y);
+    return new Vec3i(center2D.x, getY(), center2D.y);
   }
 
   public boolean collide(TopologyStructure other) {
@@ -259,7 +256,7 @@ public class TopologyStructure extends AreaFootprint {
         other.getMinZ() <= getMaxZ();
   }
 
-  private static AreaFootprint createCenteredOffset(Vector2i size2i) {
+  private static AreaFootprint createCenteredOffset(Vec2i size2i) {
     if (size2i == null) {
       return null;
     }
@@ -273,30 +270,30 @@ public class TopologyStructure extends AreaFootprint {
     int localMaxZ = localMinZ + depth - 1;
 
     return new AreaFootprint(
-        new Vector2i(localMinX, localMinZ),
-        new Vector2i(localMaxX, localMaxZ));
+        new Vec2i(localMinX, localMinZ),
+        new Vec2i(localMaxX, localMaxZ));
   }
 
-  public void debug(World world, Vector3f color) {
+  public void debug(World world, Vec3f color) {
     debug(world, color, color);
   }
 
-  public void debug(World world, Vector3f shape_color, Vector3f anchor_color) {
+  public void debug(World world, Vec3f shape_color, Vec3f anchor_color) {
     if (structureType == null) {
       return;
     }
 
     // TODO: Fix y of the structure size
-    Vector3d center = VectorUtil.toVector3d(Utils.centerOf(getCenter()));
-    Vector3d anchor = VectorUtil.toVector3d(Utils.centerOf(prefabAnchor));
-    Vector3d size = VectorUtil.toVector3d(Utils.getSize3i(structureType));
+    Vec3d center = Utils.centerOf(getCenter()).to3d();
+    Vec3d anchor = Utils.centerOf(prefabAnchor).to3d();
+    Vec3d size = Utils.getSize3i(structureType).to3d();
     Rotation rotation = getOrientation();
 
     // Apply rotation
-    size = rotation.rotateY(size, new Vector3d());
+    size = Vec3d.from(rotation.rotateY(size, new Vec3d()));
 
     // Draw anchor
-    Vector3d anchor_end = new Vector3d(anchor).add(0, 10, 0);
+    Vec3d anchor_end = anchor.safeAdd(0, 10, 0);
     DrawUtils.addLine(world, anchor, anchor_end, anchor_color, .2f, DrawUtils.FOREVER,
         DrawUtils.FLAG_NONE);
 
@@ -307,8 +304,8 @@ public class TopologyStructure extends AreaFootprint {
   @Override
   public TopologyStructure clone() {
     TopologyStructure component = new TopologyStructure();
-    component.setTopLeft(VectorUtil.clone(getTopLeft()));
-    component.setBotRight(VectorUtil.clone(getBotRight()));
+    component.setTopLeft(Vec2i.from(getTopLeft()));
+    component.setBotRight(Vec2i.from(getBotRight()));
 
     component.setY(this.getY());
     component.orientation = this.orientation;
@@ -317,40 +314,36 @@ public class TopologyStructure extends AreaFootprint {
     component.distanceFromCenter = this.distanceFromCenter;
     component.structureType = this.structureType;
     component.edges = encodeEdges(this.edges);
-    component.prefabAnchor = VectorUtil.clone(this.prefabAnchor);
+    component.prefabAnchor = Vec3i.from(this.prefabAnchor);
 
     return component;
   }
 
   @Override
   public String toString() {
-    return "TopologyStructure{"
-        + "\n structureId=" + this.structureId
-        + "\n topologyType=" + this.topologyType
-        + ",\n topLeft=" + VectorUtil.toString(getTopLeft())
-        + ",\n botRight=" + VectorUtil.toString(getBotRight())
-        + ",\n y=" + getY()
-        + ",\n distanceFromCenter=" + this.distanceFromCenter
-        + '}';
+    return ("TopologyStructure: {\n\tStructureId: %s,\n\tTopologyType: %s,\n\tTopLeft: %s," +
+        "\n\tBotRight: %s,\n\tY: %d,\n\tDistanceFromCenter: %d\n\t}")
+        .formatted(this.structureId, this.topologyType, getTopLeft(), getBotRight(), getY(),
+            this.distanceFromCenter);
   }
 
-  private HashMap<Vector3i, Vector3i> buildEdges() {
-    Vector2i axisAlignedTopLeft = getAxisAlignedTopLeft();
-    Vector2i axisAlignedBotRight = getAxisAlignedBotRight();
-    Vector2i center2D = getCenter2D();
+  private HashMap<Vec3i, Vec3i> buildEdges() {
+    Vec2i axisAlignedTopLeft = getAxisAlignedTopLeft();
+    Vec2i axisAlignedBotRight = getAxisAlignedBotRight();
+    Vec2i center2D = getCenter2D();
     if (axisAlignedTopLeft == null || axisAlignedBotRight == null || center2D == null) {
       return new HashMap<>();
     }
 
-    HashMap<Vector3i, Vector3i> computedEdges = new HashMap<>(4);
+    HashMap<Vec3i, Vec3i> computedEdges = new HashMap<>(4);
     int y = getY();
     int centerX = center2D.x;
     int centerZ = center2D.y;
 
-    computedEdges.put(VectorUtil.clone(VectorUtil.NORTH()), new Vector3i(centerX, y, axisAlignedTopLeft.y));
-    computedEdges.put(VectorUtil.clone(VectorUtil.WEST()), new Vector3i(axisAlignedTopLeft.x, y, centerZ));
-    computedEdges.put(VectorUtil.clone(VectorUtil.EAST()), new Vector3i(axisAlignedBotRight.x, y, centerZ));
-    computedEdges.put(VectorUtil.clone(VectorUtil.SOUTH()), new Vector3i(centerX, y, axisAlignedBotRight.y));
+    computedEdges.put(Vec3i.NORTH, new Vec3i(centerX, y, axisAlignedTopLeft.y));
+    computedEdges.put(Vec3i.WEST, new Vec3i(axisAlignedTopLeft.x, y, centerZ));
+    computedEdges.put(Vec3i.EAST, new Vec3i(axisAlignedBotRight.x, y, centerZ));
+    computedEdges.put(Vec3i.SOUTH, new Vec3i(centerX, y, axisAlignedBotRight.y));
     return computedEdges;
   }
 
@@ -372,12 +365,12 @@ public class TopologyStructure extends AreaFootprint {
     this.edges = buildEdges();
   }
 
-  private static HashMap<Vector3i, Vector3i> decodeEdges(Map<Vector3i, Vector3i> encoded) {
+  private static HashMap<Vec3i, Vec3i> decodeEdges(Map<Vec3i, Vec3i> encoded) {
     return encodeEdges(encoded);
   }
 
-  private static HashMap<Vector3i, Vector3i> encodeEdges(Map<Vector3i, Vector3i> edges) {
-    HashMap<Vector3i, Vector3i> copy = new HashMap<>();
+  private static HashMap<Vec3i, Vec3i> encodeEdges(Map<Vec3i, Vec3i> edges) {
+    HashMap<Vec3i, Vec3i> copy = new HashMap<>();
 
     if (edges == null) {
       return copy;
@@ -388,7 +381,7 @@ public class TopologyStructure extends AreaFootprint {
         return;
       }
 
-      copy.put(VectorUtil.clone(direction), VectorUtil.clone(edge));
+      copy.put(Vec3i.from(direction), Vec3i.from(edge));
     });
     return copy;
   }

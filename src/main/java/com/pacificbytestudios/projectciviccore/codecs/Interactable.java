@@ -3,23 +3,21 @@ package com.pacificbytestudios.projectciviccore.codecs;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class Interactable {
   public static final BuilderCodec<Interactable> CODEC = BuilderCodec
       .builder(Interactable.class, Interactable::new)
 
-      .append(new KeyedCodec<>("InteractablePosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("InteractablePosition", Vec3i.CODEC),
           (obj, value) -> obj.interactablePosition = value,
           obj -> obj.interactablePosition)
       .add()
 
-      .append(new KeyedCodec<>("DependsOn", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("DependsOn", Vec3i.CODEC),
           (obj, value) -> obj.dependsOn = value,
           obj -> obj.dependsOn)
       .add()
@@ -41,8 +39,8 @@ public class Interactable {
 
       .build();
 
-  private Vector3i interactablePosition;
-  private Vector3i dependsOn;
+  private Vec3i interactablePosition;
+  private Vec3i dependsOn;
   private UUID occupiedBy;
   private boolean invalidateOnUse;
   private boolean isReady = false;
@@ -50,11 +48,11 @@ public class Interactable {
   public Interactable() {
   }
 
-  public Interactable(Vector3i interactablePosition, boolean invalidateOnUse) {
+  public Interactable(Vec3i interactablePosition, boolean invalidateOnUse) {
     this(interactablePosition, null, invalidateOnUse);
   }
 
-  public Interactable(Vector3i interactablePosition, Vector3i dependsOn, boolean invalidateOnUse) {
+  public Interactable(Vec3i interactablePosition, Vec3i dependsOn, boolean invalidateOnUse) {
     this.interactablePosition = interactablePosition;
     this.invalidateOnUse = invalidateOnUse;
     this.dependsOn = dependsOn;
@@ -72,7 +70,7 @@ public class Interactable {
     return this.dependsOn != null;
   }
 
-  public boolean dependsOn(Vector3i position) {
+  public boolean dependsOn(Vec3i position) {
     return Objects.equals(this.dependsOn, position);
   }
 
@@ -88,19 +86,19 @@ public class Interactable {
     this.isReady = false;
   }
 
-  public Vector3i getInteractablePosition() {
+  public Vec3i getInteractablePosition() {
     return interactablePosition;
   }
 
-  public void setInteractablePosition(Vector3i interactablePosition) {
+  public void setInteractablePosition(Vec3i interactablePosition) {
     this.interactablePosition = interactablePosition;
   }
 
-  public Vector3i getDependsOn() {
+  public Vec3i getDependsOn() {
     return dependsOn;
   }
 
-  public void setDependsOn(Vector3i dependsOn) {
+  public void setDependsOn(Vec3i dependsOn) {
     this.dependsOn = dependsOn;
   }
 
@@ -131,8 +129,8 @@ public class Interactable {
   @Override
   public Interactable clone() {
     Interactable interactable = new Interactable();
-    interactable.interactablePosition = this.interactablePosition;
-    interactable.dependsOn = this.dependsOn;
+    interactable.interactablePosition = Vec3i.from(this.interactablePosition);
+    interactable.dependsOn = Vec3i.from(this.dependsOn);
     interactable.occupiedBy = this.occupiedBy;
     interactable.invalidateOnUse = this.invalidateOnUse;
     interactable.isReady = this.isReady;
@@ -141,12 +139,13 @@ public class Interactable {
 
   @Override
   public String toString() {
-    return "Interactable{\n"
-        + "  interactablePosition=" + interactablePosition + ",\n"
-        + "  dependsOn=" + dependsOn + ",\n"
-        + "  occupiedBy=" + occupiedBy + ",\n"
-        + "  invalidateOnUse=" + invalidateOnUse + ",\n"
-        + "  isReady=" + isReady + "\n"
-        + "}";
+    return ("Interactable: {\n\tInteractablePosition: %s,\n\tDependsOn: %s," +
+        "\n\tOccupiedBy: %s,\n\tInvalidateOnUse: %b,\n\tIsReady: %b\n\t}")
+        .formatted(
+            this.interactablePosition.toString(),
+            this.dependsOn.toString(),
+            this.occupiedBy.toString(),
+            this.invalidateOnUse,
+            this.isReady);
   }
 }

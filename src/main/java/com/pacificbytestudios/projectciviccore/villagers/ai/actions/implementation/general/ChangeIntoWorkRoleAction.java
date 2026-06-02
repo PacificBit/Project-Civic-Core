@@ -41,10 +41,9 @@ public class ChangeIntoWorkRoleAction extends VillagerActionBase {
 
     WorkType workType = workerData.getTypeOfWorker();
     String gender = villager.getRole().getGender();
-    String appearance = gender + "_" + workType.getRoleId();
+    String appearance = "%s_%s".formatted(gender, workType.getRoleId());
 
     int roleIndex = NPCPlugin.get().getIndex(workType.getRoleId());
-
     RoleChangeSystem.requestRoleChange(ref, role, roleIndex, false, DEFAULT_STATE, DEFAULT_SUBSTATE, store);
     role.setReachedTerminalAction(true);
 

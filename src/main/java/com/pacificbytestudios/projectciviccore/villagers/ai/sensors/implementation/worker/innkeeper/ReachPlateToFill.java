@@ -1,6 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.innkeeper;
 
-import org.joml.Vector3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReachPlateToFill;
@@ -21,7 +20,7 @@ import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSens
 public class ReachPlateToFill extends VillagerSensorBase {
   private double stoppingRange;
   private final PositionProvider positionProvider = new PositionProvider();
-  private Vector3d target = null;
+  private Vec3d target = null;
 
   public ReachPlateToFill(BuilderReachPlateToFill builderSensorBase, BuilderSupport support) {
     super(builderSensorBase);
@@ -61,7 +60,7 @@ public class ReachPlateToFill extends VillagerSensorBase {
         this.positionProvider.clear();
         return false;
       }
-      this.target = VectorUtil.toVector3d(interactable.getInteractablePosition());
+      this.target = Vec3d.from(interactable.getInteractablePosition());
       this.positionProvider.setTarget(this.target);
       return true;
     }

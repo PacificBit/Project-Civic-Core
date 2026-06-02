@@ -11,10 +11,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderHasNextMealInPlannedSensor;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class HasNextMealInPlannedSensor extends VillagerSensorBase {
   private boolean assignMealToSelfIfPossible;
@@ -51,8 +51,7 @@ public class HasNextMealInPlannedSensor extends VillagerSensorBase {
 
     TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef, TavernComponent.getComponentType());
     if (tavernComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[HasNextMealInPlannedSensor] Could not fetch the tavern component");
+      Logger.logWarning("Could not fetch the tavern component");
       return false;
     }
 

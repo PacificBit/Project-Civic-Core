@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -17,7 +17,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
@@ -25,6 +24,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.MayorCompone
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public abstract class VillagerActionBase extends ActionBase {
   protected boolean suppressWarnings = false;
@@ -121,7 +121,7 @@ public abstract class VillagerActionBase extends ActionBase {
       return reservedTavernRef;
     }
 
-    Vector3i reservedInteractable = villager.getReservedInteractable();
+    Vec3i reservedInteractable = villager.getReservedInteractable();
     if (reservedInteractable == null) {
       return null;
     }
@@ -262,16 +262,14 @@ public abstract class VillagerActionBase extends ActionBase {
 
   protected Ref<ChunkStore> require(Ref<ChunkStore> value, String what) {
     if (!isRefValid(value) && !this.suppressWarnings) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[" + getClass().getSimpleName() + "] Could not find " + what);
+      Logger.logWarning(getClass().getSimpleName() + " could not find " + what);
     }
     return value;
   }
 
   protected <T> T require(T value, String what) {
     if (value == null && !this.suppressWarnings) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[" + getClass().getSimpleName() + "] Could not find " + what);
+      Logger.logWarning(getClass().getSimpleName() + " could not find " + what);
     }
     return value;
   }

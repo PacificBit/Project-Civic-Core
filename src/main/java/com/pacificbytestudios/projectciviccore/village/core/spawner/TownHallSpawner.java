@@ -2,23 +2,20 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -31,13 +28,14 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveTyp
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TownHallSpawner {
 
   public static boolean beginNewConstruction(
       UUID structureId,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel,
@@ -53,7 +51,7 @@ public class TownHallSpawner {
   private static boolean handleNewCompletedConstruction(
       UUID structureId,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
@@ -71,13 +69,12 @@ public class TownHallSpawner {
   private static boolean handleNewStagedConstruction(
       UUID structureId,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log(
-            "[handleNewStagedConstruction - townhall] Registering new staged Town Hall construction of level: " +
+    Logger.logInfo(
+            "Registering new staged Town Hall construction of level: " +
                 targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
@@ -85,20 +82,19 @@ public class TownHallSpawner {
     short stage = (short) 0;
     String prefab = StructureConfig.TownHall.getPrefab(targetLevel, stage);
 
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[handleNewStagedConstruction - townhall] Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        VectorUtil.clone(prefabAnchor),
+        prefabAnchor.clone(),
         rotation,
         true);
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - townhall] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
     int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, rotation);
     Utils.setBlockChunkAware(
         chunkToUse,
@@ -112,8 +108,7 @@ public class TownHallSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[handleNewStagedConstruction - townhall] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
           prefabAnchor, null);
     }
@@ -143,7 +138,7 @@ public class TownHallSpawner {
 
   public static boolean beginUpgradeConstruction(
       WorldChunk chunk,
-      Vector3i existingCoreOrSitePosition,
+      Vec3i existingCoreOrSitePosition,
       int targetLevel,
       ConstructionMode mode) {
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
@@ -152,8 +147,7 @@ public class TownHallSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - townhall] Could not fetch the existing town hall entity");
+      Logger.logWarning("Could not fetch the existing town hall entity");
       return false;
     }
 
@@ -168,9 +162,8 @@ public class TownHallSpawner {
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log(
-              "[beginUpgradeConstruction - townhall] Could not fetch the existing town hall component or terrain snapshot");
+      Logger.logWarning(
+              "Could not fetch the existing town hall component or terrain snapshot");
       return false;
     }
 
@@ -181,7 +174,7 @@ public class TownHallSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vector3i prefabAnchor = VectorUtil.clone(workplace.getPrefabAnchor());
+    Vec3i prefabAnchor = workplace.getPrefabAnchor().clone();
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -199,8 +192,7 @@ public class TownHallSpawner {
           oldTrackedPlacement);
 
       if (!upgraded) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[beginUpgradeConstruction - townhall] Could not complete the town hall upgrade, rolling back");
+        Logger.logWarning("Could not complete the town hall upgrade, rolling back");
         handleLastStageBuilding(
             structureId,
             world,
@@ -223,13 +215,12 @@ public class TownHallSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        VectorUtil.clone(prefabAnchor),
+        prefabAnchor.clone(),
         structureRotation,
         true);
 
     if (stagedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - townhall] Could not spawn the first upgrade stage prefab");
+      Logger.logWarning("Could not spawn the first upgrade stage prefab");
       handleLastStageBuilding(
           structureId,
           world,
@@ -242,7 +233,7 @@ public class TownHallSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
     int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
@@ -282,18 +273,17 @@ public class TownHallSpawner {
 
   public static boolean advanceConstruction(
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation) {
 
     WorldChunk chunkToUse = chunk;
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
         chunkToUse,
         constructionSignPosition);
 
     if (blockEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[advanceConstruction - townhall] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
@@ -339,7 +329,7 @@ public class TownHallSpawner {
       WorldChunk chunk,
       Store<ChunkStore> store,
       Ref<ChunkStore> constructionSignRef,
-      Vector3i constructionSignPosition,
+      Vec3i constructionSignPosition,
       BuildingSnapshotComponent snapshot) {
     TrackedPrefabPlacementComponent trackedPlacement = store
         .getComponent(constructionSignRef,
@@ -354,7 +344,7 @@ public class TownHallSpawner {
       despawn = PrefabManager.restoreTrackedPrefab(chunk.getWorld(),
           trackedPlacement);
     } else {
-      Vector3i prefabAnchor = snapshot.getPrefabAnchor();
+      Vec3i prefabAnchor = snapshot.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -374,7 +364,7 @@ public class TownHallSpawner {
       WorldChunk chunk,
       Store<ChunkStore> store,
       Ref<ChunkStore> constructionSignRef,
-      Vector3i constructionSignPosition,
+      Vec3i constructionSignPosition,
       BuildingSnapshotComponent snapshot) {
 
     String prefab = StructureConfig.TownHall.getPrefab(snapshot.getTargetLevel(),
@@ -383,7 +373,7 @@ public class TownHallSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        VectorUtil.clone(snapshot.getPrefabAnchor()),
+        snapshot.getPrefabAnchor().clone(),
         snapshot.getRotation(),
         true);
 
@@ -394,7 +384,7 @@ public class TownHallSpawner {
       UUID structureId,
       World world,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel,
@@ -408,7 +398,7 @@ public class TownHallSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        VectorUtil.clone(prefabAnchor),
+        prefabAnchor.clone(),
         rotation,
         true);
     if (newSnapshot == null) {
@@ -421,7 +411,7 @@ public class TownHallSpawner {
 
     int blockRotation = getWorkplaceBlockRotationIndex(targetLevel, rotation);
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
+    Vec3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(chunk,
         workplaceBlockPosition,
         StructureConfig.TownHall.WORKPLACE_BLOCK,
@@ -432,7 +422,7 @@ public class TownHallSpawner {
         workplaceBlockPosition.z);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Workplace ref is invalid");
+      Logger.logWarning("Workplace ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -442,7 +432,7 @@ public class TownHallSpawner {
         workplaceRef,
         WorkplaceComponent.getComponentType());
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Workplace component is missing");
+      Logger.logWarning("Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -454,7 +444,7 @@ public class TownHallSpawner {
         targetLevel,
         rotation);
     if (storage == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Could not build workplace storage registry");
+      Logger.logWarning("Could not build workplace storage registry");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -464,7 +454,7 @@ public class TownHallSpawner {
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
-    workplaceComponent.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
+    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
         workplaceBlockPosition));
@@ -485,7 +475,7 @@ public class TownHallSpawner {
       VillageHeartComponent village,
       int level,
       Rotation rotation) {
-    Vector3i containerPosition = getContainerPosition(village);
+    Vec3i containerPosition = getContainerPosition(village);
     Ref<ChunkStore> containerRef = Utils.getBlockComponentEntityChunkAware(chunk, containerPosition).getSecond();
     if (containerRef == null || !containerRef.isValid()) {
       return null;
@@ -513,24 +503,23 @@ public class TownHallSpawner {
 
   public static boolean despawnIncompleteBuilding(
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       int level,
       Rotation rotation) {
     if (chunk == null || prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - townhall] Missing chunk or prefab anchor");
+      Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
     Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     WorldChunk chunkToUse = chunk;
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, structureRotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, structureRotation);
     Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
         chunkToUse,
         constructionSignPosition);
 
     if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - townhall] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return false;
     }
 
@@ -546,9 +535,9 @@ public class TownHallSpawner {
         TrackedPrefabPlacementComponent.getComponentType());
 
     Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : structureRotation;
-    Vector3i targetAnchor = snapshotComponent != null && snapshotComponent.getPrefabAnchor() != null
+    Vec3i targetAnchor = snapshotComponent != null && snapshotComponent.getPrefabAnchor() != null
         ? snapshotComponent.getPrefabAnchor()
-        : VectorUtil.clone(prefabAnchor);
+        : prefabAnchor.clone();
     if (targetAnchor == null && trackedPlacement != null) {
       targetAnchor = trackedPlacement.getOrigin();
     }
@@ -569,8 +558,7 @@ public class TownHallSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - townhall] Could not despawn townhall prefab");
+      Logger.logWarning("Could not despawn townhall prefab");
       return false;
     }
 
@@ -578,8 +566,8 @@ public class TownHallSpawner {
     return true;
   }
 
-  public static boolean despawn(WorldChunk chunk, Vector3i position) {
-    Vector3i workplaceBlockPosition = VectorUtil.clone(position);
+  public static boolean despawn(WorldChunk chunk, Vec3i position) {
+    Vec3i workplaceBlockPosition = position.clone();
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
         chunk,
         workplaceBlockPosition);
@@ -588,7 +576,7 @@ public class TownHallSpawner {
     Ref<ChunkStore> workplaceRef = result.getSecond();
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 
@@ -601,7 +589,7 @@ public class TownHallSpawner {
             TrackedPrefabPlacementComponent.getComponentType());
 
     if (workplace == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Missing workplace component");
+      Logger.logWarning("Missing workplace component");
       return false;
     }
 
@@ -611,7 +599,7 @@ public class TownHallSpawner {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(),
           trackedPlacement);
     } else {
-      Vector3i prefabAnchor = workplace.getPrefabAnchor();
+      Vec3i prefabAnchor = workplace.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -628,7 +616,7 @@ public class TownHallSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Could not despawn storage prefab");
+      Logger.logWarning("Could not despawn storage prefab");
       return false;
     }
 
@@ -638,10 +626,10 @@ public class TownHallSpawner {
 
   private static void removeConstructionSignIfPresent(
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       int level,
       Rotation rotation) {
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -668,9 +656,9 @@ public class TownHallSpawner {
     signChunk.markNeedsSaving();
   }
 
-  private static void clearArtefactBlocks(WorldChunk chunk, Vector3i constructionPos) {
+  private static void clearArtefactBlocks(WorldChunk chunk, Vec3i constructionPos) {
     Utils.breakBlockChunkAware(chunk, constructionPos);
-    Utils.breakBlockChunkAware(chunk, VectorUtil.clone(constructionPos).add(Vector3iUtil.UP));
+    Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(new Vec3i(0, 1, 0)));
   }
 
   private static int getWorkplaceBlockRotationIndex(int level, Rotation rotation) {
@@ -687,48 +675,48 @@ public class TownHallSpawner {
     return RotationTuple.of(signRotation, Rotation.None, Rotation.None).index();
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+  private static Vec3i getWorkplaceBlockPosition(Vec3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         StructureConfig.TownHall.getLevelLayout(level).workplace().position(),
         rotation);
   }
 
-  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+  private static Vec3i getConstructionSignBlockPosition(Vec3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         StructureConfig.TownHall.getLevelLayout(level).constructionSign().position(),
         rotation);
   }
 
-  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+  private static Vec3i getConstructionSignBlockPosition(Vec3i prefabAnchor, Rotation rotation) {
     return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3i getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
         StructureConfig.TownHall.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3i getPrefabAnchorFromWorkplace(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.removeOffset(
         workplaceBlockPosition,
         StructureConfig.TownHall.getLevelLayout(level).workplace().position(),
         rotation);
   }
 
-  private static Vector3i getContainerPosition(VillageHeartComponent village) {
-    return VectorUtil.clone(village.getBlockContext().getPosition());
+  private static Vec3i getContainerPosition(VillageHeartComponent village) {
+    return village.getBlockContext().getPosition().clone();
   }
 
   private static boolean rollbackFailedSpawn(
       World world,
       WorldChunk chunk,
       TrackedPrefabPlacementComponent trackedPlacement,
-      Vector3i workplaceBlockPosition,
-      Vector3i containerPosition) {
+      Vec3i workplaceBlockPosition,
+      Vec3i containerPosition) {
     Utils.breakBlockChunkAware(chunk, workplaceBlockPosition);
     if (containerPosition != null) {
       Utils.breakBlockChunkAware(chunk, containerPosition);

@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayDeque;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
@@ -19,9 +19,9 @@ import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class WaterSoilAction extends ActionBase {
   private static final long WATERED_DURATION = 86400;
@@ -40,16 +40,16 @@ public class WaterSoilAction extends ActionBase {
 
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
     if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WaterSoilAction] Could not fetch villager component");
+      Logger.logWarning("Could not fetch villager component");
       return false;
     }
 
-    ArrayDeque<Vector3i> blockPositions = villager
+    ArrayDeque<Vec3i> blockPositions = villager
         .getWorkerData()
         .getWorkareaSnapshot()
         .getBlockTypePosition().get(FarmerScan.WATERABLE_TERRAIN);
 
-    Vector3i blockPos;
+    Vec3i blockPos;
 
     if (blockPositions != null && !blockPositions.isEmpty()) {
       blockPos = blockPositions.pollFirst();
@@ -61,12 +61,12 @@ public class WaterSoilAction extends ActionBase {
     return waterTilledSoil(world, blockPos);
   }
 
-  public static boolean waterTilledSoil(World world, Vector3i soilPos) {
+  public static boolean waterTilledSoil(World world, Vec3i soilPos) {
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(soilPos.x, soilPos.z));
 
     Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(soilPos.x, soilPos.y, soilPos.z);
     if (blockEntityRef == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WaterSoilAction] Could not fetch the soil block entityRef");
+      Logger.logWarning("Could not fetch the soil block entityRef");
       return false;
     }
 
@@ -75,7 +75,7 @@ public class WaterSoilAction extends ActionBase {
 
     TilledSoilBlock tilledSoil = chunkStore.getComponent(blockEntityRef, TilledSoilBlock.getComponentType());
     if (tilledSoil == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WaterSoilAction] Tilled soil component was removed from the block");
+      Logger.logWarning("Tilled soil component was removed from the block");
       return false;
     }
 

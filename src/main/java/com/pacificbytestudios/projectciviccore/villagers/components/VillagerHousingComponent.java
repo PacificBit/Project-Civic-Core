@@ -1,14 +1,11 @@
 package com.pacificbytestudios.projectciviccore.villagers.components;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 
 public class VillagerHousingComponent implements Component<EntityStore> {
@@ -20,7 +17,7 @@ public class VillagerHousingComponent implements Component<EntityStore> {
           (obj) -> obj.house)
       .add()
 
-      .append(new KeyedCodec<>("BedPosition", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("BedPosition", Vec3i.CODEC),
           (obj, value) -> obj.bedPosition = value,
           (obj) -> obj.bedPosition)
       .add()
@@ -28,7 +25,7 @@ public class VillagerHousingComponent implements Component<EntityStore> {
       .build();
 
   private HouseComponent house;
-  private Vector3i bedPosition;
+  private Vec3i bedPosition;
 
   public HouseComponent getHouse() {
     return house;
@@ -38,11 +35,11 @@ public class VillagerHousingComponent implements Component<EntityStore> {
     this.house = house;
   }
 
-  public Vector3i getBedPosition() {
+  public Vec3i getBedPosition() {
     return bedPosition;
   }
 
-  public void setBedPosition(Vector3i bedPosition) {
+  public void setBedPosition(Vec3i bedPosition) {
     this.bedPosition = bedPosition;
   }
 
@@ -50,7 +47,7 @@ public class VillagerHousingComponent implements Component<EntityStore> {
   public VillagerHousingComponent clone() {
     VillagerHousingComponent component = new VillagerHousingComponent();
     component.house = this.house == null ? null : this.house.clone();
-    component.bedPosition = VectorUtil.clone(this.bedPosition);
+    component.bedPosition = this.bedPosition == null ? null : this.bedPosition.clone();
     return component;
   }
 

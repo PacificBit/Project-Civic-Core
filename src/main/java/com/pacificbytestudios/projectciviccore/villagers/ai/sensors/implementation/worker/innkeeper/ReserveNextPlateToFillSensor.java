@@ -7,11 +7,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ReserveNextPlateToFillSensor extends VillagerSensorBase {
 
@@ -42,8 +42,8 @@ public class ReserveNextPlateToFillSensor extends VillagerSensorBase {
 
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
     if (uuidComponent == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[ReserveNextPlateToFillSensor] Missing UUIDComponent for entity");
+      Logger.logWarning(
+          "Missing UUIDComponent for entity");
       return false;
     }
 
@@ -56,8 +56,8 @@ public class ReserveNextPlateToFillSensor extends VillagerSensorBase {
     Interactable interactable = interactables.getFirstNotReadyInteractable(group, uuidComponent.getUuid());
 
     if (interactable == null) {
-      ProjectCivicCore.LOGGER.atInfo().log(
-          "[ReserveNextPlateToFillSensor] No more plates need filling");
+      Logger.logInfo(
+          "No more plates need filling");
       return false;
     }
 

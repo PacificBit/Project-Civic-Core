@@ -6,8 +6,8 @@ import java.util.function.Supplier;
 
 import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.enums.LowToolQuality;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ToolRecipeRegistry {
   private static final Map<String, CraftingRecipe> lowToolQualityRecipe = new ConcurrentHashMap<>();
@@ -27,7 +27,7 @@ public class ToolRecipeRegistry {
     for (Supplier<String> food : foods) {
       Item item = Item.getAssetMap().getAsset(food.get());
       if (item == null) {
-        ProjectCivicCore.LOGGER.atSevere().log("[ToolRecipeRegistry] Could not fetch item for item id: " + food.get());
+        Logger.logSevere("Could not fetch item for item id: " + food.get());
       }
 
       CraftingRecipe recipe = CraftingRecipe
@@ -35,8 +35,7 @@ public class ToolRecipeRegistry {
           .getAsset(CraftingRecipe.generateIdFromItemRecipe(item, 0));
 
       if (recipe == null) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[ToolRecipeRegistry] Could not fetch recipe for item id: " + food.get());
+        Logger.logSevere("Could not fetch recipe for item id: " + food.get());
         return;
       }
 
