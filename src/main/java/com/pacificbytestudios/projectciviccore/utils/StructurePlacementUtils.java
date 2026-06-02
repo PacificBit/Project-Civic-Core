@@ -1,17 +1,14 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
-import org.joml.Vector3i;
-import org.joml.Vector3ic;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Rotation3f;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public final class StructurePlacementUtils {
 
@@ -56,26 +53,26 @@ public final class StructurePlacementUtils {
     return normalize(baseRotation).add(normalize(structureRotation));
   }
 
-  public static Vector3i rotateOffset(Vector3ic offset, Rotation rotation) {
+  public static Vec3i rotateOffset(Vec3i offset, Rotation rotation) {
     if (offset == null) {
-      return VectorUtil.clone(Vector3iUtil.ZERO);
+      return Vec3i.safeZero();
     }
 
     Rotation normalizedRotation = normalize(rotation);
     if (normalizedRotation == Rotation.None) {
-      return VectorUtil.clone(offset);
+      return Vec3i.from(offset);
     }
 
-    return normalizedRotation.rotateY(VectorUtil.clone(offset), new Vector3i());
+    return Vec3i.from(normalizedRotation.rotateY(offset, new Vec3i()));
   }
 
-  public static Vector3i withOffset(Vector3i origin, Vector3i localOffset, Rotation rotation) {
-    return VectorUtil.clone(origin).add(rotateOffset(localOffset, rotation));
+  public static Vec3i withOffset(Vec3i origin, Vec3i localOffset, Rotation rotation) {
+    return origin.clone().add(rotateOffset(localOffset, rotation));
   }
 
-  public static Vector3i removeOffset(Vector3i position, Vector3i localOffset, Rotation rotation) {
-    Vector3i rotatedOffset = rotateOffset(localOffset, rotation);
-    return VectorUtil.clone(position).add(new Vector3i(-rotatedOffset.x, -rotatedOffset.y, -rotatedOffset.z));
+  public static Vec3i removeOffset(Vec3i position, Vec3i localOffset, Rotation rotation) {
+    Vec3i rotatedOffset = rotateOffset(localOffset, rotation);
+    return position.clone().add(new Vec3i(-rotatedOffset.x, -rotatedOffset.y, -rotatedOffset.z));
   }
 
   public static int toBlockRotationIndex(Rotation yaw) {

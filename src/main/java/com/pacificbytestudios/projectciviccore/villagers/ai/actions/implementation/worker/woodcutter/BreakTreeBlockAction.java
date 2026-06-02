@@ -5,7 +5,8 @@ import java.util.ArrayDeque;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemTool;
@@ -22,15 +23,14 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderBreakTreeBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.WoodCutterTerrainRepair;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class BreakTreeBlockAction extends VillagerActionBase {
   private final String snapshotGroup;
@@ -67,33 +67,33 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
     NPCEntity npc = this.getNPCEntity(ref, store);
     if (npc == null || snapshot == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockAction] Could not find NPC or snapshot");
+      Logger.logWarning("Could not find NPC or snapshot");
       return false;
     }
 
-    ArrayDeque<Vector3i> targets = snapshot.getBlockTypePosition().get(this.snapshotGroup);
+    ArrayDeque<Vec3i> targets = snapshot.getBlockTypePosition().get(this.snapshotGroup);
     if (targets == null || targets.isEmpty()) {
-      ProjectCivicCore.LOGGER.atInfo().log(
-          "[BreakBlockAction] No targets available for snapshot group " + this.snapshotGroup);
+      Logger.logInfo(
+          "No targets available for snapshot group " + this.snapshotGroup);
       return false;
     }
 
-    Vector3i target = targets.peekFirst();
+    Vec3i target = targets.peekFirst();
     if (target == null) {
-      ProjectCivicCore.LOGGER.atInfo().log(
-          "[BreakBlockAction] Snapshot group " + this.snapshotGroup + " returned a null target");
+      Logger.logInfo(
+          "Snapshot group " + this.snapshotGroup + " returned a null target");
       return false;
     }
 
     if (this.requiredStoppingRangeSquared >= 0.0) {
       TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
       if (transform == null) {
-        ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockAction] Could not find transform component");
+        Logger.logWarning("Could not find transform component");
         return false;
       }
 
       double distanceFromTarget = transform.getPosition().distanceSquared(
-          VectorUtil.toVector3d(Utils.centerOf(target)));
+          Vec3d.from(Utils.centerOf(target)));
       if (distanceFromTarget > this.requiredStoppingRangeSquared) {
         return false;
       }
@@ -101,32 +101,32 @@ public class BreakTreeBlockAction extends VillagerActionBase {
 
     ItemStack itemStackInHand = npc.getInventory().getItemInHand();
     if (itemStackInHand == null || itemStackInHand.getItem() == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockAction] NPC has no valid item in hand");
+      Logger.logInfo("NPC has no valid item in hand");
       return false;
     }
 
     Item itemInHand = itemStackInHand.getItem();
     ItemTool tool = itemInHand.getTool();
     if (tool == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockAction] Item in hand is not a tool");
+      Logger.logInfo("Item in hand is not a tool");
       return false;
     }
 
     World world = store.getExternalData().getWorld();
     WorldChunk chunk = Utils.getWorldChunk(world, target);
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockAction] Could not load chunk for " + target);
+      Logger.logWarning("Could not load chunk for " + target);
       return false;
     }
 
     BlockType blockType = Utils.getBlockTypeChunkAware(world, chunk, target);
     if (blockType == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockAction] No block type found at " + target);
+      Logger.logInfo("No block type found at " + target);
       return false;
     }
 
     if (BlockHarvestUtils.getSpecPowerDamageBlock(itemInHand, blockType, tool) == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockAction] The tool in hand cannot break the target block");
+      Logger.logInfo("The tool in hand cannot break the target block");
       targets.pollFirst();
       if (targets.isEmpty()) {
         snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();

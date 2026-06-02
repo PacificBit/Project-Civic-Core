@@ -2,25 +2,24 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.UUID;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class RegisterStructureTopologyTask extends AVillageTask {
   public static final BuilderCodec<RegisterStructureTopologyTask> CODEC = BuilderCodec
@@ -36,7 +35,7 @@ public class RegisterStructureTopologyTask extends AVillageTask {
           obj -> obj.structureType)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           obj -> obj.prefabAnchor)
       .add()
@@ -50,7 +49,7 @@ public class RegisterStructureTopologyTask extends AVillageTask {
 
   private UUID structureId;
   private StructureType structureType;
-  private Vector3i prefabAnchor;
+  private Vec3i prefabAnchor;
   private Rotation rotation = Rotation.None;
 
   public RegisterStructureTopologyTask() {
@@ -59,7 +58,7 @@ public class RegisterStructureTopologyTask extends AVillageTask {
   public RegisterStructureTopologyTask(
       UUID structureId,
       StructureType structureType,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation) {
     this.structureId = structureId;
     this.structureType = structureType;
@@ -71,11 +70,11 @@ public class RegisterStructureTopologyTask extends AVillageTask {
   public void execute(
       WorldChunk chunk,
       Ref<ChunkStore> heartRef,
-      Vector3i heartPos,
+      Vec3i heartPos,
       VillageHeartComponent heart) {
     if (this.structureId == null || this.structureType == null || this.prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[RegisterStructureTopologyTask] Could not register structure topology because the task data is incomplete");
+      Logger.logWarning(
+          "Could not register structure topology because the task data is incomplete");
       return;
     }
 
@@ -83,16 +82,16 @@ public class RegisterStructureTopologyTask extends AVillageTask {
         heartRef,
         VillageTopologyComponent.getComponentType());
     if (topology == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[RegisterStructureTopologyTask] Could not register structure topology for " + this.structureId
+      Logger.logWarning(
+          "Could not register structure topology for " + this.structureId
               + " because the village topology component is missing");
       return;
     }
 
-    Vector2i structureSize = Utils.getSize2i(this.structureType);
+    Vec2i structureSize = Utils.getSize2i(this.structureType);
     if (structureSize == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[RegisterStructureTopologyTask] Could not register structure topology for " + this.structureId
+      Logger.logWarning(
+          "Could not register structure topology for " + this.structureId
               + " because the structure size is missing");
       return;
     }
@@ -106,8 +105,8 @@ public class RegisterStructureTopologyTask extends AVillageTask {
     topologyStructure.setStructureType(this.structureType);
     topologyStructure.setPrefabAnchor(this.prefabAnchor);
 
-    ProjectCivicCore.LOGGER.atInfo().log(
-        "[RegisterStructureTopologyTask] Registering topology for '" + this.structureType + "' with id: "
+    Logger.logInfo(
+        "Registering topology for '" + this.structureType + "' with id: "
             + this.structureId);
     topology.registerStructure(topologyStructure);
   }

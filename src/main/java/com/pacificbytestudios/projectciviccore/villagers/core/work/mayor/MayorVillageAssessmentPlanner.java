@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingUpgradeCostRegistry;
@@ -25,6 +24,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.town
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveStatus;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class MayorVillageAssessmentPlanner {
 
@@ -271,8 +271,7 @@ public class MayorVillageAssessmentPlanner {
     boolean removed = plan.getProjectList().removeIf(project -> project != null
         && project.getObjectiveType() == VillageObjectiveType.SPAWN_VILLAGER);
     if (removed) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[MakeVillageAssessment] Removed blocked villager spawn project because no house has a vacancy");
+      Logger.logInfo("Removed blocked villager spawn project because no house has a vacancy");
     }
   }
 
@@ -311,8 +310,7 @@ public class MayorVillageAssessmentPlanner {
   }
 
   private void logSkippedStagedPlanning(StructureType structureType) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[MakeVillageAssessment] Skipping new " + structureType +
+    Logger.logInfo("Skipping new " + structureType +
             " project because a staged construction is already registered in topology");
   }
 

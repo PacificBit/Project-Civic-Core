@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -20,6 +19,7 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueV
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public final class VillageStorageRequestInvalidation {
   private VillageStorageRequestInvalidation() {
@@ -115,8 +115,7 @@ public final class VillageStorageRequestInvalidation {
     heartStore.putComponent(villageHeartRef, VillageTaskQueueComponent.getComponentType(), taskQueue);
     markChunkComponentDirty(heartStore, villageHeartRef);
 
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[VillageStorageRequestInvalidation] Removed " + removedTasks
+    Logger.logInfo("Removed " + removedTasks
             + " pending storage task(s) for requester workplace " + requesterWorkplaceId);
     return true;
   }
@@ -237,8 +236,7 @@ public final class VillageStorageRequestInvalidation {
     markChunkComponentDirty(villageHeartRef.getStore(), villageHeartRef);
 
     if (!affectedRequesterIds.isEmpty() || !affectedStorageWorkerIds.isEmpty()) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[VillageStorageRequestInvalidation] Cleared stale storage links. Requesters="
+      Logger.logInfo("Cleared stale storage links. Requesters="
               + affectedRequesterIds + ", affected storage workers=" + affectedStorageWorkerIds);
     }
   }

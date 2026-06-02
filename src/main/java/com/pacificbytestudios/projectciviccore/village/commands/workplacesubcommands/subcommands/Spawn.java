@@ -7,10 +7,9 @@ import javax.annotation.Nonnull;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -22,7 +21,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -31,6 +29,7 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWor
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 @Deprecated(forRemoval = true)
 public class Spawn extends CommandBase {
@@ -59,23 +58,23 @@ public class Spawn extends CommandBase {
         return;
       }
 
-      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
+      Vec3i playerPos = Vec3i.from(transform.getPosition());
       Rotation placementRotation = StructurePlacementUtils.getPlayerPlacementRotation(entityStore, playerRef);
       WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(playerPos.x, playerPos.z));
 
       for (int y = playerPos.y; y > 0; y--) {
         if (chunk.getBlockType(playerPos).getId().equals("Empty")) {
-          playerPos = new Vector3i(playerPos.x, y + 2, playerPos.z);
+          playerPos = new Vec3i(playerPos.x, y + 2, playerPos.z);
         }
       }
 
-      EntityRef heartRefWrapper = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
+      EntityRef heartRefWrapper = villageStore.getVillageHeartIn(new Vec2i(playerPos.x, playerPos.z));
 
       String workplace = this.workplaceType.get(context).toUpperCase();
       Ref<ChunkStore> heartRef = heartRefWrapper.getRef();
 
       if (!heartRef.isValid()) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Workplace - Spawn] Could not find the village reference");
+        Logger.logWarning("Could not find the village reference");
         context.sendMessage(Message.raw("Spawn of '" + workplace + "' failed, reason: could not locate village"));
         return;
       }

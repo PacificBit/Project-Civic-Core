@@ -91,7 +91,6 @@ public class SpawnStructure extends VillageCommand {
           exeContext.cmdContext(),
           ExecutionResult.Ok,
           "server.system.structure.spawn.success");
-
   }
 
 }

@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -13,13 +13,11 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -36,13 +34,14 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveTyp
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class MineSpawner {
 
   public static boolean beginNewConstruction(
       UUID structureId,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel,
@@ -58,7 +57,7 @@ public class MineSpawner {
   private static boolean handleNewCompletedConstruction(
       UUID structureId,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
@@ -76,13 +75,12 @@ public class MineSpawner {
   private static boolean handleNewStagedConstruction(
       UUID structureId,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log(
-            "[handleNewStagedConstruction - mine] Registering new staged Mine construction of level: " +
+    Logger.logInfo(
+            "Registering new staged Mine construction of level: " +
                 targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
@@ -90,19 +88,19 @@ public class MineSpawner {
     short stage = (short) 0;
     String prefab = StructureConfig.Mine.getPrefab(targetLevel, stage);
 
-    ProjectCivicCore.LOGGER.atInfo().log("[handleNewStagedConstruction - mine] Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        VectorUtil.clone(prefabAnchor),
+        prefabAnchor.clone(),
         rotation,
         true);
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - mine] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, rotation);
     int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, rotation);
     Utils.setBlockChunkAware(
         chunkToUse,
@@ -116,8 +114,7 @@ public class MineSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[handleNewStagedConstruction - mine] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
           prefabAnchor, null);
     }
@@ -147,7 +144,7 @@ public class MineSpawner {
 
   public static boolean beginUpgradeConstruction(
       WorldChunk chunk,
-      Vector3i existingCoreOrSitePosition,
+      Vec3i existingCoreOrSitePosition,
       int targetLevel,
       ConstructionMode mode) {
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
@@ -156,8 +153,7 @@ public class MineSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - mine] Could not fetch the existing mine entity");
+      Logger.logWarning("Could not fetch the existing mine entity");
       return false;
     }
 
@@ -172,8 +168,7 @@ public class MineSpawner {
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - mine] Could not fetch the existing mine component or terrain snapshot");
+      Logger.logWarning("Could not fetch the existing mine component or terrain snapshot");
       return false;
     }
 
@@ -184,7 +179,7 @@ public class MineSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vector3i prefabAnchor = VectorUtil.clone(workplace.getPrefabAnchor());
+    Vec3i prefabAnchor = workplace.getPrefabAnchor().clone();
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -202,8 +197,7 @@ public class MineSpawner {
           oldTrackedPlacement);
 
       if (!upgraded) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[beginUpgradeConstruction - mine] Could not complete the mine upgrade, rolling back");
+        Logger.logWarning("Could not complete the mine upgrade, rolling back");
         handleLastStageBuilding(
             structureId,
             world,
@@ -226,13 +220,12 @@ public class MineSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        VectorUtil.clone(prefabAnchor),
+        prefabAnchor.clone(),
         structureRotation,
         true);
 
     if (stagedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - mine] Could not spawn the first upgrade stage prefab");
+      Logger.logWarning("Could not spawn the first upgrade stage prefab");
       handleLastStageBuilding(
           structureId,
           world,
@@ -245,7 +238,7 @@ public class MineSpawner {
       return false;
     }
 
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
     int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
@@ -285,18 +278,17 @@ public class MineSpawner {
 
   public static boolean advanceConstruction(
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation) {
 
     WorldChunk chunkToUse = chunk;
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
         chunkToUse,
         constructionSignPosition);
 
     if (blockEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[advanceConstruction - mine] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
@@ -342,7 +334,7 @@ public class MineSpawner {
       WorldChunk chunk,
       Store<ChunkStore> store,
       Ref<ChunkStore> constructionSignRef,
-      Vector3i constructionSignPosition,
+      Vec3i constructionSignPosition,
       BuildingSnapshotComponent snapshot) {
     TrackedPrefabPlacementComponent trackedPlacement = store
         .getComponent(constructionSignRef,
@@ -357,7 +349,7 @@ public class MineSpawner {
       despawn = PrefabManager.restoreTrackedPrefab(chunk.getWorld(),
           trackedPlacement);
     } else {
-      Vector3i prefabAnchor = snapshot.getPrefabAnchor();
+      Vec3i prefabAnchor = snapshot.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -377,7 +369,7 @@ public class MineSpawner {
       WorldChunk chunk,
       Store<ChunkStore> store,
       Ref<ChunkStore> constructionSignRef,
-      Vector3i constructionSignPosition,
+      Vec3i constructionSignPosition,
       BuildingSnapshotComponent snapshot) {
 
     String prefab = StructureConfig.Mine.getPrefab(snapshot.getTargetLevel(),
@@ -386,7 +378,7 @@ public class MineSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        VectorUtil.clone(snapshot.getPrefabAnchor()),
+        snapshot.getPrefabAnchor().clone(),
         snapshot.getRotation(),
         true);
 
@@ -397,7 +389,7 @@ public class MineSpawner {
       UUID structureId,
       World world,
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel,
@@ -411,7 +403,7 @@ public class MineSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        VectorUtil.clone(prefabAnchor),
+        prefabAnchor.clone(),
         rotation,
         true);
     if (newSnapshot == null) {
@@ -424,7 +416,7 @@ public class MineSpawner {
 
     int blockRotation = getWorkplaceBlockRotationIndex(targetLevel, rotation);
 
-    Vector3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
+    Vec3i workplaceBlockPosition = getWorkplaceBlockPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk workplaceChunk = Utils.setBlockChunkAware(
         chunk,
         workplaceBlockPosition,
@@ -436,7 +428,7 @@ public class MineSpawner {
         workplaceBlockPosition.z);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - spawn] Workplace ref is invalid");
+      Logger.logWarning("Workplace ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
@@ -448,13 +440,13 @@ public class MineSpawner {
     MineComponent mineComponent = chunkStore.getComponent(workplaceRef, MineComponent.getComponentType());
 
     if (workplaceComponent == null || mineComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - spawn] Workplace component is missing");
+      Logger.logWarning("Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
     Mineshaft mineshaft = new Mineshaft(
         StructureConfig.Mine.getMineshaftGalleriesOffset(),
-        VectorUtil.clone(prefabAnchor),
+        prefabAnchor.clone(),
         rotation);
     mineshaft.createNewMineshaftLevel();
     mineComponent.setMineshaft(mineshaft);
@@ -473,10 +465,10 @@ public class MineSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         snapshotToUse);
 
-    workplaceComponent.setPrefabAnchor(VectorUtil.clone(prefabAnchor));
+    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
 
     int containerRotation = getContainerRotationIndex(targetLevel, rotation);
-    Vector3i containerPosition = getContainerPosition(prefabAnchor, targetLevel, rotation);
+    Vec3i containerPosition = getContainerPosition(prefabAnchor, targetLevel, rotation);
     WorldChunk containerChunk = Utils.setBlockChunkAware(
         workplaceChunk,
         containerPosition,
@@ -488,7 +480,7 @@ public class MineSpawner {
         containerPosition.z);
 
     if (containerRef == null || !containerRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - spawn] Container ref is invalid");
+      Logger.logWarning("Container ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
@@ -497,7 +489,7 @@ public class MineSpawner {
         WorkplaceContainerEntryComponent.getComponentType());
 
     if (container == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - spawn] Container component is missing");
+      Logger.logWarning("Container component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
@@ -516,24 +508,23 @@ public class MineSpawner {
 
   public static boolean despawnIncompleteBuilding(
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       int level,
       Rotation rotation) {
     if (chunk == null || prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - mine] Missing chunk or prefab anchor");
+      Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
     Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
     WorldChunk chunkToUse = chunk;
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, structureRotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, structureRotation);
     Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
         chunkToUse,
         constructionSignPosition);
 
     if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - mine] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return false;
     }
 
@@ -549,9 +540,9 @@ public class MineSpawner {
         TrackedPrefabPlacementComponent.getComponentType());
 
     Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : structureRotation;
-    Vector3i targetAnchor = snapshotComponent != null && snapshotComponent.getPrefabAnchor() != null
+    Vec3i targetAnchor = snapshotComponent != null && snapshotComponent.getPrefabAnchor() != null
         ? snapshotComponent.getPrefabAnchor()
-        : VectorUtil.clone(prefabAnchor);
+        : prefabAnchor.clone();
     if (targetAnchor == null && trackedPlacement != null) {
       targetAnchor = trackedPlacement.getOrigin();
     }
@@ -572,7 +563,7 @@ public class MineSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - mine] Could not despawn mine prefab");
+      Logger.logWarning("Could not despawn mine prefab");
       return false;
     }
 
@@ -580,8 +571,8 @@ public class MineSpawner {
     return true;
   }
 
-  public static boolean despawn(WorldChunk chunk, Vector3i position) {
-    Vector3i workplaceBlockPosition = VectorUtil.clone(position);
+  public static boolean despawn(WorldChunk chunk, Vec3i position) {
+    Vec3i workplaceBlockPosition = position.clone();
     Pair<WorldChunk, Ref<ChunkStore>> result = Utils.getBlockComponentEntityChunkAware(
         chunk,
         workplaceBlockPosition);
@@ -599,7 +590,7 @@ public class MineSpawner {
     }
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 
@@ -616,7 +607,7 @@ public class MineSpawner {
         TrackedPrefabPlacementComponent.getComponentType());
 
     if (component == null || mineComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - despawn] Missing workplace component");
+      Logger.logWarning("Missing workplace component");
       return false;
     }
 
@@ -627,7 +618,7 @@ public class MineSpawner {
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(), trackedPlacement);
     } else {
-      Vector3i prefabAnchor = component.getPrefabAnchor();
+      Vec3i prefabAnchor = component.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -644,11 +635,11 @@ public class MineSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MineSpawner - despawn] Could not despawn mine prefab");
+      Logger.logWarning("Could not despawn mine prefab");
       return false;
     }
 
-    Vector3i prefabAnchor = component.getPrefabAnchor();
+    Vec3i prefabAnchor = component.getPrefabAnchor();
     if (prefabAnchor == null && trackedPlacement != null) {
       prefabAnchor = trackedPlacement.getOrigin();
     }
@@ -656,7 +647,7 @@ public class MineSpawner {
       prefabAnchor = getPrefabAnchorFromWorkplace(workplaceBlockPosition, component.getLevel(), prefabRotation);
     }
 
-    Vector3i containerPosition = getContainerPosition(prefabAnchor, component.getLevel(), prefabRotation);
+    Vec3i containerPosition = getContainerPosition(prefabAnchor, component.getLevel(), prefabRotation);
     Utils.breakBlockChunkAware(workplaceChunk, workplaceBlockPosition);
     Utils.breakBlockChunkAware(workplaceChunk, containerPosition);
 
@@ -685,7 +676,7 @@ public class MineSpawner {
       String prefabPath = prefab.getPrefabPath() != null
           ? prefab.getPrefabPath()
           : StructureConfig.Mine.MineshaftLevelConf.PREFAB_JSON;
-      Vector3i prefabAnchor = level.getAnchorPoint() != null
+      Vec3i prefabAnchor = level.getAnchorPoint() != null
           ? level.getAnchorPoint()
           : prefab.getOrigin();
 
@@ -714,10 +705,10 @@ public class MineSpawner {
 
   private static void removeConstructionSignIfPresent(
       WorldChunk chunk,
-      Vector3i prefabAnchor,
+      Vec3i prefabAnchor,
       int level,
       Rotation rotation) {
-    Vector3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -764,46 +755,46 @@ public class MineSpawner {
     return RotationTuple.of(containerRotation, Rotation.None, Rotation.None).index();
   }
 
-  private static Vector3i getWorkplaceBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+  private static Vec3i getWorkplaceBlockPosition(Vec3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         StructureConfig.Mine.getLevelLayout(level).workplace().position(),
         rotation);
   }
 
-  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+  private static Vec3i getConstructionSignBlockPosition(Vec3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         StructureConfig.Mine.getLevelLayout(level).constructionSign().position(),
         rotation);
   }
 
-  private static Vector3i getConstructionSignBlockPosition(Vector3i prefabAnchor, Rotation rotation) {
+  private static Vec3i getConstructionSignBlockPosition(Vec3i prefabAnchor, Rotation rotation) {
     return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vector3i getContainerPosition(Vector3i prefabAnchor, int level, Rotation rotation) {
+  private static Vec3i getContainerPosition(Vec3i prefabAnchor, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         StructureConfig.Mine.getLevelLayout(level).container().position(),
         rotation);
   }
 
-  private static Vector3i getBenchAccessPosition(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3i getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
         StructureConfig.Mine.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vector3i getContainerAccessPosition(Vector3i containerPosition, int level, Rotation rotation) {
+  private static Vec3i getContainerAccessPosition(Vec3i containerPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         containerPosition,
         StructureConfig.Mine.getLevelLayout(level).container().accessOffset(),
         rotation);
   }
 
-  private static Vector3i getPrefabAnchorFromWorkplace(Vector3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3i getPrefabAnchorFromWorkplace(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.removeOffset(
         workplaceBlockPosition,
         StructureConfig.Mine.getLevelLayout(level).workplace().position(),
@@ -814,8 +805,8 @@ public class MineSpawner {
       World world,
       WorldChunk chunk,
       TrackedPrefabPlacementComponent trackedPlacement,
-      Vector3i workplaceBlockPosition,
-      Vector3i containerPosition) {
+      Vec3i workplaceBlockPosition,
+      Vec3i containerPosition) {
     Utils.breakBlockChunkAware(chunk, workplaceBlockPosition);
     if (containerPosition != null) {
       Utils.breakBlockChunkAware(chunk, containerPosition);

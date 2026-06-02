@@ -1,7 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.systems.workplace;
 
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -13,7 +13,6 @@ import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
@@ -24,6 +23,7 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.Register
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TryJobAssignmentTask;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.UnregisterWorkplaceTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
@@ -40,22 +40,22 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
 
     BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
     if (blockContext == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] Missing block context");
+      Logger.logWarning("Missing block context");
       return;
     }
 
     WorldChunk chunk = blockContext.chunk();
     World world = chunk.getWorld();
-    Vector3i blockPos = blockContext.position();
+    Vec3i blockPos = blockContext.position();
 
-    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vec2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] No village found");
+      Logger.logWarning("No village found");
       return;
     }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
     if (heartRef == null || !heartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] Village heart ref is invalid");
+      Logger.logWarning("Village heart ref is invalid");
       return;
     }
 
@@ -63,7 +63,7 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
       WorkplaceComponent workplaceComponent = store.getComponent(ref,
           WorkplaceComponent.getComponentType());
       if (workplaceComponent == null) {
-        ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityAdded] Workplace component not found");
+        Logger.logWarning("Workplace component not found");
         return;
       }
 
@@ -71,8 +71,7 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
       workplaceComponent.setVillageRef(villageHeartRef);
 
       if (workplaceComponent.getUuid() == null) {
-        ProjectCivicCore.LOGGER.atWarning()
-            .log("[WorkplaceSpawnSystem - onEntityAdded] Workplace UUID is still null after spawn initialization at "
+        Logger.logWarning("Workplace UUID is still null after spawn initialization at "
                 + blockPos);
         return;
       }
@@ -97,29 +96,29 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
 
     BlockContext blockContext = Utils.getWorldBlockContext(ref, commandBuffer);
     if (blockContext == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] Missing block context");
+      Logger.logWarning("Missing block context");
       return;
     }
 
     WorldChunk chunk = blockContext.chunk();
     World world = chunk.getWorld();
-    Vector3i blockPos = blockContext.position();
+    Vec3i blockPos = blockContext.position();
 
-    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
+    EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vec2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] No village found");
+      Logger.logWarning("No village found");
       return;
     }
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
     if (heartRef == null || !heartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] Village heart ref is invalid");
+      Logger.logWarning("Village heart ref is invalid");
       return;
     }
 
     WorkplaceComponent workplaceComponent = store.getComponent(ref,
         WorkplaceComponent.getComponentType());
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[WorkplaceSpawnSystem - onEntityRemove] Workplace component not found");
+      Logger.logWarning("Workplace component not found");
       return;
     }
 

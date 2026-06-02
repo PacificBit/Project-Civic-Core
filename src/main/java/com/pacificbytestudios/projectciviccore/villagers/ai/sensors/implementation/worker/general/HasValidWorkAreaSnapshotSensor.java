@@ -7,10 +7,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasValidWorkAreaSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class HasValidWorkAreaSnapshotSensor extends VillagerSensorBase {
   private final PositionProvider positionProvider = new PositionProvider();
@@ -41,7 +41,7 @@ public class HasValidWorkAreaSnapshotSensor extends VillagerSensorBase {
 
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
     if (worldTimeResource == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[HasValidWorkAreaSnapshotSensor] Could not fetch worldTimeResource");
+      Logger.logWarning("Could not fetch worldTimeResource");
       return false;
     }
 

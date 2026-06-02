@@ -15,12 +15,12 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public final class InventoryTransferValidators {
 
@@ -38,22 +38,19 @@ public final class InventoryTransferValidators {
       UUID workerId) {
 
     if (workerData == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InventoryTransferValidators] Could not fetch worker data");
+      Logger.logWarning("Could not fetch worker data");
       return ResolvedCriteria.empty();
     }
 
     WorkplaceComponent workplaceComponent = workerData.getWorkplace();
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InventoryTransferValidators] Could not fetch workplace component");
+      Logger.logWarning("Could not fetch workplace component");
       return ResolvedCriteria.empty();
     }
 
     Ref<ChunkStore> workplaceRef = workplaceComponent.getWorkplaceRef().getRef();
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InventoryTransferValidators] Could not fetch workplace ref");
+      Logger.logWarning("Could not fetch workplace ref");
       return ResolvedCriteria.empty();
     }
 
@@ -63,16 +60,14 @@ public final class InventoryTransferValidators {
         WorkplaceVillageStorageRequestComponent.getComponentType());
 
     if (storageComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InventoryTransferValidators] Could not fetch village storage component");
+      Logger.logWarning("Could not fetch village storage component");
       return ResolvedCriteria.empty();
     }
 
     ArrayDeque<VillageStorageRequest> requestQueue = storageComponent.getAssignedRequest(workerId);
 
     if (requestQueue == null || requestQueue.isEmpty()) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[InventoryTransferValidators] No request criteria found");
+      Logger.logInfo("No request criteria found");
       return ResolvedCriteria.empty();
     }
 
@@ -265,8 +260,7 @@ public final class InventoryTransferValidators {
 
       int amountToRemove = Math.min(allowedAmount, item.getQuantity());
       if (!container.removeItemStackFromSlot(slot, amountToRemove, true, true).succeeded()) {
-        ProjectCivicCore.LOGGER.atWarning()
-            .log("[InventoryTransferValidators] Could not remove requested item stack");
+        Logger.logWarning("Could not remove requested item stack");
         return false;
       }
 

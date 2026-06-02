@@ -6,10 +6,10 @@ import java.util.function.Supplier;
 
 import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.enums.LowSaplingQuality;
 import com.pacificbytestudios.projectciviccore.registry.enums.MidSaplingQuality;
 import com.pacificbytestudios.projectciviccore.registry.enums.TopSaplingQuality;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class SaplingRecipeRegistry {
   private static final Map<String, CraftingRecipe> topSaplingQualityRecipe = new ConcurrentHashMap<>();
@@ -33,8 +33,7 @@ public class SaplingRecipeRegistry {
     for (Supplier<String> sapling : samplings) {
       Item item = Item.getAssetMap().getAsset(sapling.get());
       if (item == null) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[SaplingRecipeRegistry] Could not fetch item for item id: " + sapling.get());
+        Logger.logSevere("Could not fetch item for item id: " + sapling.get());
       }
 
       CraftingRecipe recipe = CraftingRecipe
@@ -42,8 +41,7 @@ public class SaplingRecipeRegistry {
           .getAsset(CraftingRecipe.generateIdFromItemRecipe(item, 0));
 
       if (recipe == null) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[SaplingRecipeRegistry] Could not fetch recipe for item id: " + sapling.get());
+        Logger.logSevere("Could not fetch recipe for item id: " + sapling.get());
         return;
       }
 

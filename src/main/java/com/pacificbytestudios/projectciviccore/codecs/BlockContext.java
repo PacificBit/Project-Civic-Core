@@ -1,13 +1,11 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class BlockContext {
   public static final BuilderCodec<BlockContext> CODEC = BuilderCodec
@@ -23,7 +21,7 @@ public class BlockContext {
           (obj) -> obj.chunkIndex)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
           (obj, value) -> obj.position = value,
           (obj) -> obj.position)
       .add()
@@ -32,13 +30,13 @@ public class BlockContext {
 
   private String worldName;
   private Long chunkIndex;
-  private Vector3i position;
+  private Vec3i position;
 
   public BlockContext() {
     this(null, null, null);
   }
 
-  public BlockContext(String worldName, Long chunkIndex, Vector3i position) {
+  public BlockContext(String worldName, Long chunkIndex, Vec3i position) {
     this.worldName = worldName;
     this.position = position;
     this.chunkIndex = chunkIndex;
@@ -52,7 +50,7 @@ public class BlockContext {
     return Universe.get().getWorld(worldName);
   }
 
-  public Vector3i getPosition() {
+  public Vec3i getPosition() {
     return this.position;
   }
 
@@ -64,12 +62,13 @@ public class BlockContext {
     BlockContext newLocation = new BlockContext();
     newLocation.worldName = this.worldName;
     newLocation.chunkIndex = this.chunkIndex;
-    newLocation.position = this.position;
+    newLocation.position = Vec3i.from(this.position);
     return newLocation;
   }
 
   @Override
   public String toString() {
-    return "BlockContext located at [" + this.worldName + " | pos=" + this.position + "]";
+    return "BlockContext: { WorldName: %s, ChunkIndex: %d, Position: %s }"
+        .formatted(this.worldName, this.chunkIndex, this.position.toString());
   }
 }

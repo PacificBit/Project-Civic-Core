@@ -6,11 +6,9 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
@@ -52,8 +50,8 @@ public class Respawn extends CommandBase {
         return;
       }
 
-      Vector3i playerPos = VectorUtil.toVector3i(transform.getPosition());
-      EntityRef heartRef = villageStore.getVillageHeartIn(new Vector2i(playerPos.x, playerPos.z));
+      Vec3i playerPos = Vec3i.from(transform.getPosition());
+      EntityRef heartRef = villageStore.getVillageHeartIn(new Vec2i(playerPos.x, playerPos.z));
 
       if (heartRef == null) {
         context.sendMessage(Message.raw("No village found in range."));
@@ -76,7 +74,7 @@ public class Respawn extends CommandBase {
       TrackedPrefabPlacementComponent trackedPlacement = heart.getStore()
           .getComponent(heart, TrackedPrefabPlacementComponent.getComponentType());
 
-      Vector3i heartPosition = heartRef.getPosition();
+      Vec3i heartPosition = heartRef.getPosition();
       world.getChunk(ChunkUtil.indexChunkFromBlock(heartPosition.x, heartPosition.z))
           .breakBlock(heartPosition.x,
               heartPosition.y, heartPosition.z);
@@ -84,7 +82,7 @@ public class Respawn extends CommandBase {
       for (UUID villagerId : villageHeartComponent.getVillagersRegistry()) {
         VillagerComponent villager = villageHeartComponent.getVillager(villagerId);
         if (villager != null) {
-          Vector3i bed = villager.getBedPosition();
+          Vec3i bed = villager.getBedPosition();
           if (bed != null) {
             world.getChunk(ChunkUtil.indexChunkFromBlock(bed.x, bed.z)).breakBlock(bed.x, bed.y, bed.z);
           }
@@ -103,14 +101,14 @@ public class Respawn extends CommandBase {
       Rotation heartRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
       boolean despawnResult = trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()
           ? PrefabManager.restoreTrackedPrefab(world, trackedPlacement)
-          : TownHeartSpawner.despawn(chunk, VectorUtil.clone(heartPosition).add(Vector3iUtil.DOWN), heartRotation);
+          : TownHeartSpawner.despawn(chunk, Vec3i.from(heartPosition).add(Vec3i.safeDown()), heartRotation);
 
       if (!despawnResult) {
         context.sendMessage(Message.raw("Could not despawn village"));
         return;
       }
 
-      boolean spawnResult = TownHeartSpawner.spawn(chunk, VectorUtil.clone(heartPosition).add(Vector3iUtil.DOWN),
+      boolean spawnResult = TownHeartSpawner.spawn(chunk, Vec3i.from(heartPosition).add(Vec3i.safeDown()),
           heartRotation);
 
       if (!spawnResult) {

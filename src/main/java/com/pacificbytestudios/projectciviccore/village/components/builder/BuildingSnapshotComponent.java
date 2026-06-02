@@ -2,20 +2,17 @@ package com.pacificbytestudios.projectciviccore.village.components.builder;
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
 public class BuildingSnapshotComponent implements Component<ChunkStore> {
@@ -32,7 +29,7 @@ public class BuildingSnapshotComponent implements Component<ChunkStore> {
           (obj) -> obj.villageRef)
       .add()
 
-      .append(new KeyedCodec<>("PrefabAnchor", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
           (obj, value) -> obj.prefabAnchor = value,
           (obj) -> obj.prefabAnchor)
       .add()
@@ -61,7 +58,7 @@ public class BuildingSnapshotComponent implements Component<ChunkStore> {
       .build();
 
   private UUID structureId;
-  private Vector3i prefabAnchor;
+  private Vec3i prefabAnchor;
   private Rotation rotation;
   private StructureType structureType;
   private EntityRef villageRef;
@@ -76,11 +73,11 @@ public class BuildingSnapshotComponent implements Component<ChunkStore> {
     this.structureId = structureId;
   }
 
-  public Vector3i getPrefabAnchor() {
+  public Vec3i getPrefabAnchor() {
     return prefabAnchor;
   }
 
-  public void setPrefabAnchor(Vector3i prefabAnchor) {
+  public void setPrefabAnchor(Vec3i prefabAnchor) {
     this.prefabAnchor = prefabAnchor;
   }
 
@@ -127,7 +124,7 @@ public class BuildingSnapshotComponent implements Component<ChunkStore> {
   public BuildingSnapshotComponent clone() {
     BuildingSnapshotComponent component = new BuildingSnapshotComponent();
     component.structureId = this.structureId;
-    component.prefabAnchor = VectorUtil.clone(this.prefabAnchor);
+    component.prefabAnchor = Vec3i.from(this.prefabAnchor);
     component.rotation = this.rotation;
     component.structureType = this.structureType;
     component.villageRef = this.villageRef == null ? null : this.villageRef.clone();

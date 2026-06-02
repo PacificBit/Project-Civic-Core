@@ -3,8 +3,8 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayDeque;
 import java.util.Map;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -14,18 +14,17 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   // private static final double NUDGE_DISTANCE = 0.75;
 
   private final PositionProvider positionProvider = new PositionProvider();
-  private Vector3d target = null;
+  private Vec3d target = null;
   private String[] blockIds;
   private double stoppingRange;
   private boolean useCenterOfBlock;
@@ -54,7 +53,7 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
 
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
     if (transform == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[ReachNextTillableSoilSensor] Could not find transform component");
+      Logger.logWarning("Could not find transform component");
       this.positionProvider.clear();
       return false;
     }
@@ -69,14 +68,14 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
         return false;
       }
 
-      Map<String, ArrayDeque<Vector3i>> blockPositions = villager
+      Map<String, ArrayDeque<Vec3i>> blockPositions = villager
           .getWorkerData()
           .getWorkareaSnapshot()
           .getBlockTypePosition();
 
-      Vector3i nextTarget = null;
+      Vec3i nextTarget = null;
       for (String blockId : this.blockIds) {
-        ArrayDeque<Vector3i> queue = blockPositions.get(blockId);
+        ArrayDeque<Vec3i> queue = blockPositions.get(blockId);
         if (queue != null && !queue.isEmpty()) {
           nextTarget = queue.peekFirst();
           break;
@@ -90,8 +89,8 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
       }
 
       this.target = this.useCenterOfBlock
-          ? VectorUtil.toVector3d(Utils.centerOf(nextTarget))
-          : VectorUtil.toVector3d(nextTarget);
+          ? Vec3d.from(Utils.centerOf(nextTarget))
+          : Vec3d.from(nextTarget);
 
       this.positionProvider.setTarget(this.target);
       return true;
@@ -113,16 +112,16 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
     }
 
     // TODO: find a solution for when they get stuck
-    // Vector3d movementTarget = this.target;
+    // Vec3d movementTarget = this.target;
     // if (role.getActiveMotionController().isObstructed()) {
-    // Vector3d direction = new Vector3d(this.target).sub(transform.getPosition());
+    // Vec3d direction = new Vec3d(this.target).sub(transform.getPosition());
     // direction.y = 0.0;
     //
     // if (!direction.closeToZero(0.001)) {
-    // Vector3d sideways = new Vector3d(direction.x, 0.0, -direction.z)
+    // Vec3d sideways = new Vec3d(direction.x, 0.0, -direction.z)
     // .normalize()
     // .mul(NUDGE_DISTANCE);
-    // movementTarget = new Vector3d(transform.getPosition()).add(sideways);
+    // movementTarget = new Vec3d(transform.getPosition()).add(sideways);
     // }
     // }
 

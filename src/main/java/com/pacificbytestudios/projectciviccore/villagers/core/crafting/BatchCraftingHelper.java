@@ -11,7 +11,7 @@ import com.hypixel.hytale.server.core.asset.type.item.config.CraftingRecipe;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public final class BatchCraftingHelper {
   private BatchCraftingHelper() {
@@ -31,8 +31,7 @@ public final class BatchCraftingHelper {
     Map<String, Integer> craftedItems = new LinkedHashMap<>();
     for (Map.Entry<String, CraftingRecipe> recipeEntry : craftSequence) {
       if (!applyCraft(itemContainer, recipeEntry.getValue())) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log(logPrefix + " Planned craft failed for recipe " + recipeEntry.getKey());
+        Logger.logWarning(logPrefix + " Planned craft failed for recipe " + recipeEntry.getKey());
         return new BatchCraftingResult(false, !craftedItems.isEmpty(), craftedItems);
       }
 
@@ -81,8 +80,7 @@ public final class BatchCraftingHelper {
           continue;
         }
         if (!applyCraft(storageSnapshot, recipeEntry.getValue())) {
-          ProjectCivicCore.LOGGER.atSevere()
-              .log(logPrefix + " Snapshot craft failed unexpectedly for recipe " + recipeEntry.getKey());
+          Logger.logWarning(logPrefix + " Snapshot craft failed unexpectedly for recipe " + recipeEntry.getKey());
           continue;
         }
 

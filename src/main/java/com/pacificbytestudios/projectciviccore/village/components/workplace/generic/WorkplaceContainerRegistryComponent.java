@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.MapCodec;
@@ -15,6 +13,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class WorkplaceContainerRegistryComponent implements Component<ChunkStore> {
 
@@ -46,14 +45,14 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
     return Collections.unmodifiableMap(containers);
   }
 
-  public List<Vector3i> getAllContainerPositions() {
+  public List<Vec3i> getAllContainerPositions() {
     return containers.entrySet()
         .stream()
         .map(entry -> entry.getValue().getPosition())
         .toList();
   }
 
-  public List<Vector3i> getAllContainerAccessPositions() {
+  public List<Vec3i> getAllContainerAccessPositions() {
     return containers.entrySet()
         .stream()
         .map(entry -> entry.getValue().getAccessPosition())
@@ -97,8 +96,6 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
 
   @Override
   public String toString() {
-    return "WorkplaceContainerRegistryComponent{\n" +
-        "containers=" + containers +
-        '}';
+    return "WorkplaceContainerRegistryComponent: {\nContainers: " + containers + "\n}";
   }
 }

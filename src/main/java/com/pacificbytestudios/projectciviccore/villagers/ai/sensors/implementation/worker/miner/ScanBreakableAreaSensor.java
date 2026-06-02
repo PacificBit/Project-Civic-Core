@@ -3,11 +3,10 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementat
 import java.util.ArrayDeque;
 import java.util.UUID;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -18,15 +17,14 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.MinerScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ScanBreakableAreaSensor extends VillagerSensorBase {
 
@@ -57,26 +55,26 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> breakableBlocks = snapshot.getBlockTypePosition().get(MinerScan.BREAKABLE_BLOCK);
+    ArrayDeque<Vec3i> breakableBlocks = snapshot.getBlockTypePosition().get(MinerScan.BREAKABLE_BLOCK);
     if (breakableBlocks != null && !breakableBlocks.isEmpty()) {
       return false;
     }
 
-    ArrayDeque<Vector3i> digPositions = snapshot.getBlockTypePosition().get(MinerScan.DIG_POSITIONS);
+    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(MinerScan.DIG_POSITIONS);
     if (digPositions == null || digPositions.isEmpty()) {
       snapshot.getBlockTypePosition().remove(MinerScan.BREAKABLE_BLOCK);
-      ProjectCivicCore.LOGGER.atInfo().log("[ScanBreakableAreaSensor] No more dig position are present");
+      Logger.logInfo("No more dig position are present");
       return false;
     }
 
     MineshaftGallery mineshaftGallery = mineComponent.getWorkerAllocatedGallery(villagerId);
     if (mineshaftGallery == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[ScanBreakableAreaSensor] Could not find an allocated gallery");
+      Logger.logWarning("Could not find an allocated gallery");
       return false;
     }
 
-    Vector3i nextPosition = digPositions.peekFirst();
-    Vector3i cardinalDirection = mineshaftGallery.getCardinalDirection();
+    Vec3i nextPosition = digPositions.peekFirst();
+    Vec3i cardinalDirection = mineshaftGallery.getCardinalDirection();
     if (nextPosition == null || cardinalDirection == null) {
       return false;
     }
@@ -84,15 +82,15 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
     breakableBlocks = new ArrayDeque<>();
     snapshot.getBlockTypePosition().put(MinerScan.BREAKABLE_BLOCK, breakableBlocks);
 
-    Vector3i left = Utils.rotateNormalizedVector(cardinalDirection, Rotation.Ninety);
-    Vector3i right = Utils.rotateNormalizedVector(cardinalDirection, Rotation.TwoSeventy);
+    Vec3i left = Utils.rotateNormalizedVector(cardinalDirection, Rotation.Ninety);
+    Vec3i right = Utils.rotateNormalizedVector(cardinalDirection, Rotation.TwoSeventy);
 
-    Vector3i position = VectorUtil.clone(nextPosition)
+    Vec3i position = Vec3i.from(nextPosition)
         .add(cardinalDirection)
         .add(left)
-        .add(Vector3iUtil.UP);
+        .add(Vec3i.safeUp());
 
-    Vector3i size3i = StructureConfig.Mine.MineshaftGalleryConf.SIZE_3I;
+    Vec3i size3i = StructureConfig.Mine.MineshaftGalleryConf.SIZE_3I;
     World world = this.getWorld(store);
 
     for (int y = 0; y < size3i.y; y++) {
@@ -103,14 +101,14 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
           if (blockType != null && blockType.getMaterial() == BlockMaterial.Solid) {
             BlockGathering gathering = blockType.getGathering();
             if (gathering != null) {
-            breakableBlocks.addLast(VectorUtil.clone(position));
+            breakableBlocks.addLast(Vec3i.from(position));
             }
           }
         }
 
         position.add(right);
       }
-      position.sub(VectorUtil.clone(right).mul(size3i.x)).add(Vector3iUtil.UP);
+      position.sub(Vec3i.from(right).mul(size3i.x)).add(Vec3i.safeUp());
     }
 
     return !breakableBlocks.isEmpty();

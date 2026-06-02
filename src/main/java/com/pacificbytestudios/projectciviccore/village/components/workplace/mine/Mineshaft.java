@@ -5,16 +5,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
@@ -39,8 +36,8 @@ public class Mineshaft {
 
       .append(new KeyedCodec<>(
           "GalleryOffsets",
-          new Vector3iMapCodec<Vector3i, HashMap<Vector3i, Vector3i>>(
-              Vector3iUtil.CODEC,
+          new Vector3iMapCodec<Vec3i, HashMap<Vec3i, Vec3i>>(
+              Vec3i.CODEC,
               HashMap::new,
               false),
           false),
@@ -48,7 +45,7 @@ public class Mineshaft {
           obj -> obj.galleryOffsets)
       .add()
 
-      .append(new KeyedCodec<>("AnchorPoint", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("AnchorPoint", Vec3i.CODEC),
           (obj, value) -> obj.anchorPoint = value,
           obj -> obj.anchorPoint)
       .add()
@@ -66,9 +63,9 @@ public class Mineshaft {
       .build();
 
   private Map<Short, MineshaftLevel> mineshaftLevels = new HashMap<>();
-  private Map<Vector3i, Vector3i> galleryOffsets = new HashMap<>();
+  private Map<Vec3i, Vec3i> galleryOffsets = new HashMap<>();
   private Map<UUID, Short> galleryIdToMineshaftLevel = new HashMap<>();
-  private Vector3i anchorPoint;
+  private Vec3i anchorPoint;
   private Rotation rotation;
 
   private Short latestLevel = 0;
@@ -76,7 +73,7 @@ public class Mineshaft {
   public Mineshaft() {
   }
 
-  public Mineshaft(Map<Vector3i, Vector3i> galleryOffsets, Vector3i anchorPoint, Rotation rotation) {
+  public Mineshaft(Map<Vec3i, Vec3i> galleryOffsets, Vec3i anchorPoint, Rotation rotation) {
     this.galleryOffsets = galleryOffsets;
     this.anchorPoint = anchorPoint;
     this.rotation = rotation;
@@ -132,9 +129,11 @@ public class Mineshaft {
 
   public MineshaftLevel createNewMineshaftLevel() {
     MineshaftLevel mineshaftLevel = new MineshaftLevel();
-    Vector3i size3i = StructureConfig.Mine.MineshaftLevelConf.SIZE_3I;
-    Vector3i levelAnchorPoint = VectorUtil.clone(this.anchorPoint)
-        .sub(new Vector3i(0, size3i.y, 0).mul(++this.latestLevel));
+    Vec3i size3i = StructureConfig.Mine.MineshaftLevelConf.SIZE_3I;
+
+    Vec3i currentMineshaftLevel = new Vec3i(0, size3i.y, 0);
+    Vec3i levelAnchorPoint = Vec3i.from(this.anchorPoint.clone().sub(
+        currentMineshaftLevel.mul(++this.latestLevel)));
 
     if (levelAnchorPoint.y < 4) {
       return null;
@@ -178,18 +177,18 @@ public class Mineshaft {
     component.galleryIdToMineshaftLevel = rebuildGalleryIdIndex(component.mineshaftLevels);
 
     component.galleryOffsets = new HashMap<>();
-    for (Map.Entry<Vector3i, Vector3i> entry : this.galleryOffsets.entrySet()) {
-      Vector3i key = entry.getKey();
-      Vector3i value = entry.getValue();
+    for (Map.Entry<Vec3i, Vec3i> entry : this.galleryOffsets.entrySet()) {
+      Vec3i key = entry.getKey();
+      Vec3i value = entry.getValue();
 
       if (key == null || value == null) {
         continue;
       }
 
-      component.galleryOffsets.put(VectorUtil.clone(key), VectorUtil.clone(value));
+      component.galleryOffsets.put(key.clone(), value.clone());
     }
 
-    component.anchorPoint = VectorUtil.clone(this.anchorPoint);
+    component.anchorPoint = Vec3i.from(this.anchorPoint);
     component.rotation = this.rotation;
     component.latestLevel = this.latestLevel;
 

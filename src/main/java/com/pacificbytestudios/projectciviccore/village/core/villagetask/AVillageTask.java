@@ -3,7 +3,7 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -15,7 +15,7 @@ public abstract class AVillageTask {
   protected BiConsumer<String, String> onErrorCallback;
   protected Consumer<String> onSuccessCallback;
 
-  public abstract void execute(WorldChunk chunk, Ref<ChunkStore> heartRef, Vector3i heartPos,
+  public abstract void execute(WorldChunk chunk, Ref<ChunkStore> heartRef, Vec3i heartPos,
       VillageHeartComponent heart);
 
   public void setOnError(BiConsumer<String, String> callback) {

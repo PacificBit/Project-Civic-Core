@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -17,9 +15,8 @@ import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.store.CodecKey;
 import com.hypixel.hytale.codec.store.CodecStore;
 import com.hypixel.hytale.codec.store.StoredCodec;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageRoadState;
 
 import it.unimi.dsi.fastutil.Pair;
@@ -90,7 +87,7 @@ public class RoadsGraph {
         .add()
 
         .append(new KeyedCodec<>("LateralVacancySegments",
-            new Vector3iMapCodec<LateralVacancySegments, HashMap<Vector3i, LateralVacancySegments>>(
+            new Vector3iMapCodec<LateralVacancySegments, HashMap<Vec3i, LateralVacancySegments>>(
                 LateralVacancySegments.CODEC,
                 HashMap::new,
                 false),
@@ -104,9 +101,9 @@ public class RoadsGraph {
             (obj) -> obj.state)
         .add()
 
-        .append(new KeyedCodec<>("RoadSegments", new ArrayCodec<>(Vector3iUtil.CODEC, Vector3i[]::new)),
+        .append(new KeyedCodec<>("RoadSegments", new ArrayCodec<>(Vec3i.CODEC, Vec3i[]::new)),
             (obj, value) -> obj.roadSegments = value == null ? new ArrayList<>() : Arrays.asList(value),
-            (obj) -> obj.roadSegments.toArray(Vector3i[]::new))
+            (obj) -> obj.roadSegments.toArray(Vec3i[]::new))
         .add()
 
         .append(new KeyedCodec<>("Orientation", Rotation.CODEC),
@@ -114,12 +111,12 @@ public class RoadsGraph {
             (obj) -> obj.prefabOrientation)
         .add()
 
-        .append(new KeyedCodec<>("OrientationVec", Vector3iUtil.CODEC),
+        .append(new KeyedCodec<>("OrientationVec", Vec3i.CODEC),
             (obj, value) -> obj.roadDirectionVec = value,
             (obj) -> obj.roadDirectionVec)
         .add()
 
-        .append(new KeyedCodec<>("BranchOriginKey", Vector3iUtil.CODEC),
+        .append(new KeyedCodec<>("BranchOriginKey", Vec3i.CODEC),
             (obj, value) -> obj.branchOriginKey = value,
             (obj) -> obj.branchOriginKey)
         .add()
@@ -136,12 +133,12 @@ public class RoadsGraph {
     private RoadNode parent;
     private RoadNode[] children = new RoadNode[0];
     private byte depth;
-    private Map<Vector3i, LateralVacancySegments> lateralVacancySegments = new HashMap<>();
+    private Map<Vec3i, LateralVacancySegments> lateralVacancySegments = new HashMap<>();
     private VillageRoadState state;
-    private List<Vector3i> roadSegments = new ArrayList<>();
+    private List<Vec3i> roadSegments = new ArrayList<>();
     private Rotation prefabOrientation;
-    private Vector3i roadDirectionVec;
-    private Vector3i branchOriginKey;
+    private Vec3i roadDirectionVec;
+    private Vec3i branchOriginKey;
 
     public RoadNode() {
     }
@@ -215,16 +212,16 @@ public class RoadsGraph {
       }
     }
 
-    public Map<Vector3i, LateralVacancySegments> getLateralVacancySegments() {
+    public Map<Vec3i, LateralVacancySegments> getLateralVacancySegments() {
       return lateralVacancySegments;
     }
 
-    public LateralVacancySegments getLateralVacancySegment(Vector3i cardinalDirection) {
+    public LateralVacancySegments getLateralVacancySegment(Vec3i cardinalDirection) {
       return this.lateralVacancySegments.get(cardinalDirection);
     }
 
-    public Pair<Vector3i, LateralVacancySegments> getLateralVacancySegmentWithFittingSpace(short size) {
-      for (Map.Entry<Vector3i, LateralVacancySegments> segments : this.lateralVacancySegments.entrySet()) {
+    public Pair<Vec3i, LateralVacancySegments> getLateralVacancySegmentWithFittingSpace(short size) {
+      for (Map.Entry<Vec3i, LateralVacancySegments> segments : this.lateralVacancySegments.entrySet()) {
         if (segments.getValue() != null && segments.getValue().hasFittinSegment(size)) {
           return Pair.of(segments.getKey(), segments.getValue());
         }
@@ -232,31 +229,31 @@ public class RoadsGraph {
       return null;
     }
 
-    public void setLateralVacancySegments(Map<Vector3i, LateralVacancySegments> lateralVacancySegments) {
+    public void setLateralVacancySegments(Map<Vec3i, LateralVacancySegments> lateralVacancySegments) {
       this.lateralVacancySegments = lateralVacancySegments;
     }
 
-    public List<Vector3i> getRoadSegments() {
+    public List<Vec3i> getRoadSegments() {
       return roadSegments;
     }
 
-    public void appendRoadSegment(Vector3i segment) {
+    public void appendRoadSegment(Vec3i segment) {
       this.roadSegments.add(segment);
     }
 
-    public Vector3i getBranchOriginKey() {
+    public Vec3i getBranchOriginKey() {
       return branchOriginKey;
     }
 
-    public void setBranchOriginKey(Vector3i branchOriginKey) {
+    public void setBranchOriginKey(Vec3i branchOriginKey) {
       this.branchOriginKey = branchOriginKey;
     }
 
-    public Vector3i getRoadDirectionVec() {
+    public Vec3i getRoadDirectionVec() {
       return roadDirectionVec;
     }
 
-    public void setRoadDirectionVec(Vector3i roadDirectionVec) {
+    public void setRoadDirectionVec(Vec3i roadDirectionVec) {
       this.roadDirectionVec = roadDirectionVec;
     }
 
@@ -288,19 +285,19 @@ public class RoadsGraph {
       } else {
         node.lateralVacancySegments = new HashMap<>();
         this.lateralVacancySegments.forEach((position, adjacentSegments) -> node.lateralVacancySegments.put(
-            VectorUtil.clone(position),
+            Vec3i.from(position),
             adjacentSegments == null ? null : adjacentSegments.clone()));
       }
       node.state = this.state;
 
       node.roadSegments = new ArrayList<>();
       this.roadSegments.stream()
-          .map(VectorUtil::clone)
+          .map(Vec3i::clone)
           .forEach(node.roadSegments::add);
 
       node.prefabOrientation = this.prefabOrientation;
-      node.branchOriginKey = VectorUtil.clone(this.branchOriginKey);
-      node.roadDirectionVec = VectorUtil.clone(this.roadDirectionVec);
+      node.branchOriginKey = Vec3i.from(this.branchOriginKey);
+      node.roadDirectionVec = Vec3i.from(this.roadDirectionVec);
       node.roadId = this.roadId;
       return node;
     }

@@ -5,7 +5,8 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -27,10 +28,8 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.MinerDropRegistry;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
@@ -38,6 +37,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class BreakBlockInSnapshotAction extends VillagerActionBase {
   private final String primarySnapshotGroup;
@@ -81,7 +81,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vector3i> targets = snapshot.getBlockTypePosition().get(this.primarySnapshotGroup);
+    ArrayDeque<Vec3i> targets = snapshot.getBlockTypePosition().get(this.primarySnapshotGroup);
     if (targets == null) {
       return false;
     }
@@ -91,7 +91,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return false;
     }
 
-    Vector3i target = targets.peekFirst();
+    Vec3i target = targets.peekFirst();
     if (target == null) {
       targets.pollFirst();
       if (targets.isEmpty()) {
@@ -103,13 +103,13 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     if (this.requiredStoppingRangeSquared >= 0.0) {
       TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
       if (transform == null) {
-        ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] Could not find transform component");
+        Logger.logWarning("Could not find transform component");
         return false;
       }
 
-      Vector3i rangeAnchor = this.resolveRangeAnchor(snapshot, target);
+      Vec3i rangeAnchor = this.resolveRangeAnchor(snapshot, target);
       double distanceFromAnchor = transform.getPosition().distanceSquared(
-          VectorUtil.toVector3d(Utils.centerOf(rangeAnchor)));
+          Vec3d.from(Utils.centerOf(rangeAnchor)));
       if (distanceFromAnchor > this.requiredStoppingRangeSquared) {
         return false;
       }
@@ -118,26 +118,26 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     World world = this.getWorld(store);
     WorldChunk chunk = Utils.getWorldChunk(world, target);
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] Could not load chunk for " + target);
+      Logger.logWarning("Could not load chunk for " + target);
       return false;
     }
 
     BlockType blockType = Utils.getBlockTypeChunkAware(world, chunk, target);
     if (blockType == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] No block type found at " + target);
+      Logger.logInfo("No block type found at " + target);
       return false;
     }
 
     ItemStack itemStackInHand = npc.getInventory().getItemInHand();
     if (itemStackInHand == null || itemStackInHand.getItem() == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] NPC has no valid item in hand");
+      Logger.logInfo("NPC has no valid item in hand");
       return false;
     }
 
     Item itemInHand = itemStackInHand.getItem();
     ItemTool tool = itemInHand.getTool();
     if (tool == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] Item in hand is not a tool");
+      Logger.logInfo("Item in hand is not a tool");
       return false;
     }
 
@@ -184,13 +184,13 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     }
   }
 
-  private Vector3i resolveRangeAnchor(WorkplaceAreaSnapshot snapshot, Vector3i fallbackTarget) {
-    ArrayDeque<Vector3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
+  private Vec3i resolveRangeAnchor(WorkplaceAreaSnapshot snapshot, Vec3i fallbackTarget) {
+    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
     if (digPositions == null || digPositions.isEmpty()) {
       return fallbackTarget;
     }
 
-    Vector3i digPosition = digPositions.peekFirst();
+    Vec3i digPosition = digPositions.peekFirst();
     return digPosition == null ? fallbackTarget : digPosition;
   }
 
@@ -200,7 +200,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       UUID villagerId) {
     snapshot.getBlockTypePosition().remove(this.primarySnapshotGroup);
 
-    ArrayDeque<Vector3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
+    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
     if (digPositions == null || digPositions.isEmpty()) {
       return;
     }
@@ -215,7 +215,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
   private void persistNextDigPosition(
       MineComponent mineComponent,
       UUID villagerId,
-      Vector3i nextDigPosition) {
+      Vec3i nextDigPosition) {
     if (mineComponent == null || villagerId == null || nextDigPosition == null) {
       return;
     }
@@ -225,7 +225,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return;
     }
 
-    gallery.setLastDiggedPosition(VectorUtil.clone(nextDigPosition));
+    gallery.setLastDiggedPosition(Vec3i.from(nextDigPosition));
   }
 
   private void generateDropIfNeeded(Ref<EntityStore> ref, Store<EntityStore> store) {
@@ -241,19 +241,19 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
 
     String dropId = this.getDrop(this.dropType, villageHeart.getLevel());
     if (dropId == null || dropId.isBlank()) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] No drop id generated for drop type "
+      Logger.logWarning("No drop id generated for drop type "
           + this.dropType);
       return;
     }
 
     if (Item.getAssetMap().getAsset(dropId) == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] Invalid generated drop id " + dropId);
+      Logger.logWarning("Invalid generated drop id " + dropId);
       return;
     }
 
     ItemStack dropStack = new ItemStack(dropId, 1);
     if (!villagerStorage.canAddItemStack(dropStack)) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] Could not store generated drop " + dropId);
+      Logger.logInfo("Could not store generated drop " + dropId);
       return;
     }
 

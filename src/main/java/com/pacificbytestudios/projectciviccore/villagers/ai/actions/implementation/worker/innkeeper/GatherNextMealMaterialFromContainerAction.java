@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
@@ -25,7 +25,6 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -37,6 +36,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.workplace.Wo
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class GatherNextMealMaterialFromContainerAction extends
     VillagerActionBase {
@@ -75,8 +75,7 @@ public class GatherNextMealMaterialFromContainerAction extends
     TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef,
         TavernComponent.getComponentType());
     if (tavernComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Could not fetch the tavern component");
+      Logger.logWarning("Could not fetch the tavern component");
       return this.finish(role, false);
     }
 
@@ -88,16 +87,14 @@ public class GatherNextMealMaterialFromContainerAction extends
     String mealToPrepare = tavernComponent.getAssignedRecipe(uuidComponent.getUuid());
 
     if (mealToPrepare == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] Got cook request but got no meal to prepare assigned");
+      Logger.logWarning("Got cook request but got no meal to prepare assigned");
       return this.finish(role, false);
     }
 
-    Vector3i containerCoords = snapshot.getBlockTypePosition()
+    Vec3i containerCoords = snapshot.getBlockTypePosition()
         .get(WorkplaceStorageTargetsSnapshotAction.WORKPLACE_STORAGE_KEY).pollFirst();
     if (containerCoords == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] No container coords found");
+      Logger.logWarning("No container coords found");
       return this.finish(role, false);
     }
 
@@ -107,8 +104,7 @@ public class GatherNextMealMaterialFromContainerAction extends
     ResolvedContainer container = ContainerResolver.resolveContainerAt(world,
         containerCoords);
     if (container == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[GatherNextMealMaterialFromContainerAction] No workplace container found in designated coords");
+      Logger.logWarning("No workplace container found in designated coords");
       return this.finish(role, false);
     }
 
@@ -154,8 +150,7 @@ public class GatherNextMealMaterialFromContainerAction extends
             false,
             true);
         if (move == null || !move.succeeded()) {
-          ProjectCivicCore.LOGGER.atWarning()
-              .log("[GatherNextMealMaterialFromContainerAction] Could not move "
+          Logger.logWarning("Could not move "
                   + quantityToMove
                   + " of "
                   + stack.getItemId()
@@ -176,8 +171,7 @@ public class GatherNextMealMaterialFromContainerAction extends
       if (missing > 0) {
         String itemId = material.getItemId();
         if (itemId == null || itemId.isBlank()) {
-          ProjectCivicCore.LOGGER.atSevere()
-              .log("[GatherNextMealMaterialFromContainerAction] Cannot buffer missing material without item id: "
+          Logger.logWarning("Cannot buffer missing material without item id: "
                   + material);
           continue;
         }
@@ -188,8 +182,7 @@ public class GatherNextMealMaterialFromContainerAction extends
     if (!missingMaterials.isEmpty()) {
       missingMaterials.forEach((itemId, amount) -> tavernComponent
           .addMissingResource(new ItemRequestCriterion(itemId, true, amount)));
-      ProjectCivicCore.LOGGER.atFine()
-          .log("[GatherNextMealMaterialFromContainerAction] Missing materials: " +
+      Logger.logFine("Missing materials: " +
               missingMaterials);
       return this.finish(role, false);
     }

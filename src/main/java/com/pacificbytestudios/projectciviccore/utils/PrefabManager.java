@@ -3,8 +3,6 @@ package com.pacificbytestudios.projectciviccore.utils;
 import java.nio.file.Path;
 
 import org.bson.BsonDocument;
-import org.joml.Vector2i;
-import org.joml.Vector3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.Axis;
@@ -22,6 +20,8 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 
 public class PrefabManager {
@@ -32,7 +32,7 @@ public class PrefabManager {
   public static boolean spawnPrefab(
       World world,
       String prefabRelativePath,
-      Vector3i target,
+      Vec3i target,
       Rotation yaw,
       boolean force) {
     return spawnTrackedPrefab(world, prefabRelativePath, target, yaw, force) != null;
@@ -41,7 +41,7 @@ public class PrefabManager {
   public static TrackedPrefabPlacementComponent spawnTrackedPrefab(
       World world,
       String prefabRelativePath,
-      Vector3i target,
+      Vec3i target,
       Rotation yaw,
       boolean force) {
     BlockSelection prefab = loadPrefabSelection(prefabRelativePath);
@@ -64,7 +64,7 @@ public class PrefabManager {
   public static TrackedPrefabPlacementComponent captureTrackedPrefabSnapshot(
       World world,
       String footprintPrefabPath,
-      Vector3i target,
+      Vec3i target,
       Rotation yaw) {
     if (world == null || target == null) {
       return null;
@@ -91,7 +91,7 @@ public class PrefabManager {
 
     BlockSelection captureMask = transformedFootprint;
     captureMask.forEachBlock((localX, localY, localZ, block) -> {
-      Vector3i worldPosition = getWorldPosition(captureMask, localX, localY, localZ);
+      Vec3i worldPosition = getWorldPosition(captureMask, localX, localY, localZ);
       WorldChunk chunk = Utils.getWorldChunk(world, worldPosition);
       restoreSelection.copyFromAtWorld(
           worldPosition.x,
@@ -105,16 +105,16 @@ public class PrefabManager {
     return new TrackedPrefabPlacementComponent(footprintPrefabPath, target, yaw, restoreSnapshot);
   }
 
-  public static Vector2i getPrefabWidthDepth(String prefabRelativePath) {
-    Vector3i dimensions = getPrefabWidthHeightDepth(prefabRelativePath);
+  public static Vec2i getPrefabWidthDepth(String prefabRelativePath) {
+    Vec3i dimensions = getPrefabWidthHeightDepth(prefabRelativePath);
     if (dimensions == null) {
       return null;
     }
 
-    return new Vector2i(dimensions.x, dimensions.z);
+    return new Vec2i(dimensions.x, dimensions.z);
   }
 
-  public static Vector3i getPrefabWidthHeightDepth(String prefabRelativePath) {
+  public static Vec3i getPrefabWidthHeightDepth(String prefabRelativePath) {
     IPrefabBuffer prefabBuffer = loadPrefabBuffer(prefabRelativePath);
     if (prefabBuffer == null) {
       return null;
@@ -123,7 +123,7 @@ public class PrefabManager {
     int width = prefabBuffer.getMaxX() - prefabBuffer.getMinX() + 1;
     int height = prefabBuffer.getMaxY() - prefabBuffer.getMinY() + 1;
     int depth = prefabBuffer.getMaxZ() - prefabBuffer.getMinZ() + 1;
-    return new Vector3i(width, height, depth);
+    return new Vec3i(width, height, depth);
   }
 
   public static boolean restoreTrackedPrefab(
@@ -134,7 +134,7 @@ public class PrefabManager {
     }
 
     BlockSelection restoreSelection = SelectionPrefabSerializer.deserialize(trackedPlacement.getRestoreSnapshot());
-    Vector3i origin = trackedPlacement.getOrigin();
+    Vec3i origin = trackedPlacement.getOrigin();
     restoreSelection.setPosition(origin.x, origin.y, origin.z);
     restoreSelection.place(ConsoleSender.INSTANCE, world);
     return true;
@@ -143,7 +143,7 @@ public class PrefabManager {
   public static boolean removePrefab(
       World world,
       String prefabRelativePath,
-      Vector3i target,
+      Vec3i target,
       Rotation yaw,
       boolean force) {
     Path prefabPath = PrefabStore.get().findAssetPrefabPath(prefabRelativePath);
@@ -178,18 +178,18 @@ public class PrefabManager {
     return PrefabBufferUtil.getCached(prefabPath);
   }
 
-  private static Vector3i getWorldPosition(
+  private static Vec3i getWorldPosition(
       BlockSelection selection,
       int localX,
       int localY,
       int localZ) {
-    return new Vector3i(
+    return new Vec3i(
         localX + selection.getX() - selection.getAnchorX(),
         localY + selection.getY() - selection.getAnchorY(),
         localZ + selection.getZ() - selection.getAnchorZ());
   }
 
-  private static BlockPhysics getBlockPhysics(World world, Vector3i position) {
+  private static BlockPhysics getBlockPhysics(World world, Vec3i position) {
     Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(
         position.x,
         position.y,

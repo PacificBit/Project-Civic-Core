@@ -2,7 +2,7 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.util.ArrayDeque;
 
-import org.joml.Vector3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -39,13 +39,13 @@ public class ClearSnapshotGroupPositions extends VillagerActionBase {
     }
 
     if (this.conditionalGroup != null && !this.conditionalGroup.isEmpty()) {
-      ArrayDeque<Vector3i> conditionalGroup = snapshot.getBlockTypePosition().get(this.conditionalGroup);
+      ArrayDeque<Vec3i> conditionalGroup = snapshot.getBlockTypePosition().get(this.conditionalGroup);
       if (conditionalGroup != null && conditionalGroup.size() != 0) {
         return false;
       }
     }
 
-    ArrayDeque<Vector3i> coords = snapshot.getBlockTypePosition().get(this.groupName);
+    ArrayDeque<Vec3i> coords = snapshot.getBlockTypePosition().get(this.groupName);
     if (coords != null) {
       coords.clear();
     }

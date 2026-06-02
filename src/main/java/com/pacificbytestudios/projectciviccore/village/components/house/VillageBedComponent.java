@@ -2,16 +2,13 @@ package com.pacificbytestudios.projectciviccore.village.components.house;
 
 import java.util.UUID;
 
-import org.joml.Vector3i;
-
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
-import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class VillageBedComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageBedComponent> CODEC = BuilderCodec
@@ -27,7 +24,7 @@ public class VillageBedComponent implements Component<ChunkStore> {
           (obj) -> obj.owner)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vector3iUtil.CODEC),
+      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
           (obj, value) -> obj.position = value,
           (obj) -> obj.position)
       .add()
@@ -41,7 +38,7 @@ public class VillageBedComponent implements Component<ChunkStore> {
 
   private boolean isTaken;
   private UUID owner;
-  private Vector3i position;
+  private Vec3i position;
   private Rotation rotation;
 
   @Override
@@ -49,7 +46,7 @@ public class VillageBedComponent implements Component<ChunkStore> {
     VillageBedComponent component = new VillageBedComponent();
     component.isTaken = this.isTaken;
     component.owner = this.owner;
-    component.position = VectorUtil.clone(this.position);
+    component.position = Vec3i.from(this.position);
     component.rotation = this.rotation;
     return component;
   }
@@ -70,11 +67,11 @@ public class VillageBedComponent implements Component<ChunkStore> {
     this.owner = owner;
   }
 
-  public Vector3i getPosition() {
+  public Vec3i getPosition() {
     return position;
   }
 
-  public void setPosition(Vector3i position) {
+  public void setPosition(Vec3i position) {
     this.position = position;
   }
 

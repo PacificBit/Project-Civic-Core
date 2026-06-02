@@ -16,10 +16,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class CookMealAction extends VillagerActionBase {
 
@@ -55,7 +55,7 @@ public class CookMealAction extends VillagerActionBase {
 
     String meal = tavern.getAssignedRecipe(workerId);
     if (meal == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[CookMealAction] Unexpected empty recipe to cook");
+      Logger.logWarning("Unexpected empty recipe to cook");
       return false;
     }
 
@@ -63,7 +63,7 @@ public class CookMealAction extends VillagerActionBase {
     List<MaterialQuantity> materialToRemove = CraftingManager.getInputMaterials(craftingRecipe);
 
     if (!villagerStorage.canRemoveMaterials(materialToRemove)) {
-      ProjectCivicCore.LOGGER.atSevere().log("[CookMealAction] Cannot proceed with the cooking, missing materials");
+      Logger.logWarning("Cannot proceed with the cooking, missing materials");
       return false;
     }
 
