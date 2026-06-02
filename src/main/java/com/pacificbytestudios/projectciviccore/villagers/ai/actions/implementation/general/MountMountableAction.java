@@ -72,8 +72,6 @@ public class MountMountableAction extends VillagerActionBase {
 
     return switch (this.interactibleGroup) {
       case EATING_SPOT -> handleChairInteratible(interactable.getInteractablePosition(), ref, store);
-      case RELAX_SPOT ->
-        throw new IllegalArgumentException("Interactible type: " + this.interactibleGroup + " not supported");
       default -> throw new IllegalArgumentException("Interactible type: " + this.interactibleGroup + " not supported");
     };
   }

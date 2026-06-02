@@ -1,5 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace.generic;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +126,14 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     }
 
     return null;
+  }
+
+  public Interactable[] getAllInteractablesOfGroup(WorkplaceInteractibles group) {
+    return this.interactable.get(group);
+  }
+
+  public Map<WorkplaceInteractibles, Interactable[]> getAllInteractables() {
+    return Collections.unmodifiableMap(this.interactable);
   }
 
   public boolean releaseInteractablesOccupiedBy(UUID occupantUuid) {

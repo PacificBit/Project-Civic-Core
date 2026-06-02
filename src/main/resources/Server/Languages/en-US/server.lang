@@ -111,3 +111,12 @@ system.structure.spawn.param.level=Structure level to spawn
 system.structure.spawn.param.complete=Whether or not to spawn the complete version (default true)
 system.structure.spawn.error.missingType=Please, provide a structure type. Allowed structure types are: {structureType}
 system.structure.spawn.success=Correctly queued the structure to build
+
+
+
+
+# === COMMANDS - MARKERS ===
+system.markers.desc=Marker (villagers POIs) related commands
+
+# === COMMANDS - MARKERS.DRAW ===
+system.markers.display.desc=Draw all the markers

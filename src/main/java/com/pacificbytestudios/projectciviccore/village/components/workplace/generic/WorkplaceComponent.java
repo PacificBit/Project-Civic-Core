@@ -303,6 +303,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.lastStorageRequest = lastStorageRequest;
   }
 
+  public <T extends Component<ChunkStore>> T getComponent(ComponentType<ChunkStore, T> componentType) {
+    Ref<ChunkStore> ref = this.workplaceRef.getRef();
+    return ref.getStore().getComponent(ref, componentType);
+  }
+
   @Override
   public WorkplaceComponent clone() {
     WorkplaceComponent component = new WorkplaceComponent();

@@ -6,24 +6,36 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
+
 public enum StructureType implements Supplier<String> {
-  HOUSE("House"),
-  TOWN_HALL("Town_Hall"),
-  MINE("Mine"),
-  SAWMILL("Sawmill"),
-  FARM("Farm"),
-  STORAGE("Storage"),
-  TAVERN("Tavern");
+  TOWN_HALL("Town_Hall", MarkerType.DEFAULTS),
+  MINE("Mine", MarkerType.DEFAULTS),
+  SAWMILL("Sawmill", MarkerType.DEFAULTS),
+  FARM("Farm", MarkerType.DEFAULTS),
+  STORAGE("Storage", MarkerType.DEFAULTS),
+  HOUSE("House", MarkerType.DEFAULTS),
+  TAVERN("Tavern",
+      MarkerType.markersTypeBuilder(
+          MarkerType.DEFAULTS,
+          MarkerType.TAVERN_CHAIR,
+          MarkerType.TAVERN_PLATE));
 
   private String type;
+  private MarkerType[] markerTypes;
 
-  private StructureType(String type) {
+  private StructureType(String type, MarkerType[] markerTypes) {
     this.type = type;
+    this.markerTypes = markerTypes;
   }
 
   @Override
   public String get() {
     return this.type;
+  }
+
+  public MarkerType[] getMarkerTypes() {
+    return markerTypes;
   }
 
   public static String getTypes() {
