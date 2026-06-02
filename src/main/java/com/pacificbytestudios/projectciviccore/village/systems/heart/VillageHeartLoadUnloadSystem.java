@@ -12,13 +12,13 @@ import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
@@ -30,16 +30,16 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
     if (reason.equals(AddReason.SPAWN)) {
-      ProjectCivicCore.LOGGER.atInfo().log("[onEntityAdded] - Skippin: " + reason);
+      Logger.logInfo("Skippin: " + reason);
       return;
     }
-    ProjectCivicCore.LOGGER.atInfo().log("[onEntityAdded] - Loading reason: " +
+    Logger.logInfo("Loading reason: " +
         reason);
 
     BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
 
     if (context == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[onEntityAdded] - No context found");
+      Logger.logInfo("No context found");
       return;
     }
 
@@ -52,24 +52,21 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
           VillageHeartComponent.getComponentType());
 
       if (heart == null) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[VillageHeartLoadUnloadSystem - onEntityAdded] Could not find the heart component");
+        Logger.logWarning("Could not find the heart component");
         return;
       }
 
       for (UUID uuid : heart.getVillagersRegistry()) {
         Ref<EntityStore> npcRef = entityStore.getRefFromUUID(uuid);
         if (npcRef == null || !npcRef.isValid()) {
-          ProjectCivicCore.LOGGER.atSevere()
-              .log("[VillageHeartLoadUnloadSystem - onEntityAdded] Reference to npc is invalid");
+          Logger.logWarning("Reference to npc is invalid");
           continue;
         }
 
         VillagerComponent npcComponent = storeEntityStore.getComponent(npcRef,
             VillagerComponent.getComponentType());
         if (npcComponent == null) {
-          ProjectCivicCore.LOGGER.atSevere()
-              .log("[VillageHeartLoadUnloadSystem - onEntityAdded] Villager component not found");
+          Logger.logWarning("Villager component not found");
           continue;
         }
         heart.registerVillager(uuid, npcComponent);
@@ -93,14 +90,13 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       RemoveReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    ProjectCivicCore.LOGGER.atInfo().log("[VillageHeartLoadUnloadSystem - onEntityRemove] Unloading reason: " + reason);
+    Logger.logInfo("Unloading reason: " + reason);
 
     VillageHeartComponent heart = store.getComponent(ref,
         VillageHeartComponent.getComponentType());
 
     if (heart == null) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[VillageHeartLoadUnloadSystem - onEntityRemove] - Could not find the heart component");
+      Logger.logInfo("Could not find the heart component");
       return;
     }
 

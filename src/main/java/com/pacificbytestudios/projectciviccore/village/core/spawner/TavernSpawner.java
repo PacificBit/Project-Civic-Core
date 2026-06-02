@@ -17,7 +17,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
@@ -38,6 +37,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractib
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TavernSpawner {
 
@@ -82,9 +82,8 @@ public class TavernSpawner {
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log(
-            "[handleNewStagedConstruction - tavern] Registering new staged Tavern construction of level: " +
+    Logger.logInfo(
+            "Registering new staged Tavern construction of level: " +
                 targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
@@ -92,7 +91,7 @@ public class TavernSpawner {
     short stage = (short) 0;
     String prefab = StructureConfig.Tavern.getPrefab(targetLevel, stage);
 
-    ProjectCivicCore.LOGGER.atInfo().log("[handleNewStagedConstruction - tavern] Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -100,7 +99,7 @@ public class TavernSpawner {
         rotation,
         true);
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - tavern] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
 
@@ -118,8 +117,7 @@ public class TavernSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[handleNewStagedConstruction - tavern] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
           prefabAnchor, null);
     }
@@ -158,8 +156,7 @@ public class TavernSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - tavern] Could not fetch the existing tavern entity");
+      Logger.logWarning("Could not fetch the existing tavern entity");
       return false;
     }
 
@@ -174,8 +171,7 @@ public class TavernSpawner {
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - tavern] Could not fetch the existing tavern component or terrain snapshot");
+      Logger.logWarning("Could not fetch the existing tavern component or terrain snapshot");
       return false;
     }
 
@@ -204,8 +200,7 @@ public class TavernSpawner {
           oldTrackedPlacement);
 
       if (!upgraded) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[beginUpgradeConstruction - tavern] Could not complete the tavern upgrade, rolling back");
+        Logger.logWarning("Could not complete the tavern upgrade, rolling back");
         handleLastStageBuilding(
             structureId,
             world,
@@ -233,8 +228,7 @@ public class TavernSpawner {
         true);
 
     if (stagedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - tavern] Could not spawn the first upgrade stage prefab");
+      Logger.logWarning("Could not spawn the first upgrade stage prefab");
       handleLastStageBuilding(
           structureId,
           world,
@@ -297,8 +291,7 @@ public class TavernSpawner {
         constructionSignPosition);
 
     if (blockEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[advanceConstruction - tavern] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
@@ -442,7 +435,7 @@ public class TavernSpawner {
         workplaceBlockPosition.z);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Workplace ref is invalid");
+      Logger.logWarning("Workplace ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -452,7 +445,7 @@ public class TavernSpawner {
         workplaceRef,
         WorkplaceComponent.getComponentType());
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Workplace component is missing");
+      Logger.logWarning("Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -461,7 +454,7 @@ public class TavernSpawner {
         workplaceRef,
         WorkplaceInteractablesMapComponent.getComponentType());
     if (interactables == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Interactables component is missing");
+      Logger.logWarning("Interactables component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -486,7 +479,7 @@ public class TavernSpawner {
         targetLevel, prefabAnchor, workplaceChunk, chunkStore, rotation);
 
     if (registry == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Tavern - spawn] Could not spawn correctly the containers");
+      Logger.logWarning("Could not spawn correctly the containers");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -528,7 +521,7 @@ public class TavernSpawner {
           containerPosition.y, containerPosition.z);
 
       if (containerRef == null || !containerRef.isValid()) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container ref is invalid");
+        Logger.logWarning("Container ref is invalid");
         return null;
       }
 
@@ -537,7 +530,7 @@ public class TavernSpawner {
           WorkplaceContainerEntryComponent.getComponentType());
 
       if (container == null) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container component is missing");
+        Logger.logWarning("Container component is missing");
         return null;
       }
 
@@ -567,7 +560,7 @@ public class TavernSpawner {
       int level,
       Rotation rotation) {
     if (chunk == null || prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - tavern] Missing chunk or prefab anchor");
+      Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
@@ -579,8 +572,7 @@ public class TavernSpawner {
         constructionSignPosition);
 
     if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - tavern] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return false;
     }
 
@@ -619,7 +611,7 @@ public class TavernSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - tavern] Could not despawn tavern prefab");
+      Logger.logWarning("Could not despawn tavern prefab");
       return false;
     }
 
@@ -637,7 +629,7 @@ public class TavernSpawner {
     Ref<ChunkStore> workplaceRef = result.getSecond();
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 
@@ -650,7 +642,7 @@ public class TavernSpawner {
             TrackedPrefabPlacementComponent.getComponentType());
 
     if (workplace == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Missing workplace component");
+      Logger.logWarning("Missing workplace component");
       return false;
     }
 
@@ -677,7 +669,7 @@ public class TavernSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Could not despawn storage prefab");
+      Logger.logWarning("Could not despawn storage prefab");
       return false;
     }
 

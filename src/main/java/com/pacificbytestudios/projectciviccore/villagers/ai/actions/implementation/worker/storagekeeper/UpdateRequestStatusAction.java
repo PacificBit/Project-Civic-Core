@@ -20,7 +20,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
@@ -37,6 +36,7 @@ import com.pacificbytestudios.projectciviccore.villagers.core.inventory.Containe
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class UpdateRequestStatusAction extends VillagerActionBase {
 
@@ -74,8 +74,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
         WorkplaceVillageStorageRequestComponent.getComponentType());
 
     if (storage == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[UpdateRequestStatusAction] Could not fetch workplace storage request component for workplace ref "
+      Logger.logWarning("Could not fetch workplace storage request component for workplace ref "
               + workplaceRef);
       return false;
     }

@@ -7,7 +7,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -18,6 +17,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.mine
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftLevel;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class BuildNewMineshaftLevelAction extends VillagerActionBase {
 
@@ -54,7 +54,7 @@ public class BuildNewMineshaftLevelAction extends VillagerActionBase {
         mineshaft.getRotation(),
         true);
     if (newSnapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[BuildNewMineshaftLevelAction] could not build new mineshaft level");
+      Logger.logWarning("could not build new mineshaft level");
       return false;
     }
 

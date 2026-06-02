@@ -16,12 +16,12 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderPlantTreeAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.WoodCutterTerrainRepair;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class PlantTreeAction extends VillagerActionBase {
   private final WoodCutterTerrainRepair terrainRepairer;
@@ -62,15 +62,14 @@ public class PlantTreeAction extends VillagerActionBase {
 
     Vector3i blockPos = blockPositions.peekFirst();
     if (blockPos == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[PlantTree] Snapshot returned a null plant target");
+      Logger.logWarning("Snapshot returned a null plant target");
       return false;
     }
 
     ItemStack sapling = npcEntity.getInventory().getActiveHotbarItem();
 
     if (sapling == null || sapling.getItemId() == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[PlantTree] Could not find a sapling at hand, this should be called when a sapling is held");
+      Logger.logWarning("Could not find a sapling at hand, this should be called when a sapling is held");
       return false;
     }
 
@@ -79,7 +78,7 @@ public class PlantTreeAction extends VillagerActionBase {
 
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[PlantTree] Could not load chunk for " + blockPos);
+      Logger.logWarning("Could not load chunk for " + blockPos);
       return false;
     }
 
@@ -92,7 +91,7 @@ public class PlantTreeAction extends VillagerActionBase {
       return true;
     }
 
-    ProjectCivicCore.LOGGER.atFine().log("[PlantTree] Failed to place sapling at " + blockPos);
+    Logger.logFine("Failed to place sapling at " + blockPos);
     return false;
   }
 }

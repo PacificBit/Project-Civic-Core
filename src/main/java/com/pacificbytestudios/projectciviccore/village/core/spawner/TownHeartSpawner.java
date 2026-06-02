@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
@@ -26,6 +25,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TownHeartSpawner {
 
@@ -177,7 +177,7 @@ public class TownHeartSpawner {
     Ref<ChunkStore> blockRef = result.getSecond();
 
     if (blockRef == null || !blockRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 

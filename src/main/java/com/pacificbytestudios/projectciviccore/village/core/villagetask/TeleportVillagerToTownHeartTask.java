@@ -16,10 +16,10 @@ import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TeleportVillagerToTownHeartTask extends AVillageTask {
   public static final BuilderCodec<TeleportVillagerToTownHeartTask> CODEC = BuilderCodec
@@ -68,7 +68,7 @@ public class TeleportVillagerToTownHeartTask extends AVillageTask {
         Teleport.createExact(resolveTargetPosition(heartPos), transform.getRotation().clone()));
     this.callOnSuccess(this.villagerId.toString());
 
-    ProjectCivicCore.LOGGER.atInfo().log("[TeleportVillagerToTownHeartEffect] Teleporting villager %s to town heart"
+    Logger.logInfo("Teleporting villager %s to town heart"
         .formatted(this.villagerId));
   }
 

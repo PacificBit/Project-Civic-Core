@@ -19,12 +19,12 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ScanTreeTrunkBottom extends VillagerSensorBase {
   private static final int MAX_SCAN_RANGE = 3;
@@ -66,20 +66,20 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
 
       ArrayDeque<Vector3i> treeTargets = snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE);
       if (treeTargets == null || treeTargets.isEmpty()) {
-        ProjectCivicCore.LOGGER.atFine().log("[FindNextTrunkToCutSensor] No cuttable tree target is available");
+        Logger.logFine("No cuttable tree target is available");
         return false;
       }
 
       this.centerTreeBlock = treeTargets.peekFirst();
       if (this.centerTreeBlock == null) {
-        ProjectCivicCore.LOGGER.atFine().log("[FindNextTrunkToCutSensor] Cuttable tree target was null");
+        Logger.logFine("Cuttable tree target was null");
         return false;
       }
 
       this.world = store.getExternalData().getWorld();
       this.chunk = Utils.getWorldChunk(this.world, this.centerTreeBlock);
       if (this.chunk == null) {
-        ProjectCivicCore.LOGGER.atFine().log("[FindNextTrunkToCutSensor] Could not load chunk for " +
+        Logger.logFine("Could not load chunk for " +
             this.centerTreeBlock);
         return false;
       }
@@ -88,7 +88,7 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
 
       if (treeTrunkBottomBlocks.isEmpty()) {
         treeTargets.pollFirst();
-        ProjectCivicCore.LOGGER.atFine().log("[FindNextTrunkToCutSensor] Started cutting tree at: " +
+        Logger.logFine("Started cutting tree at: " +
             this.centerTreeBlock + ", but no tree was found");
         return false;
       }
@@ -106,7 +106,7 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
 
   private void scanTreeTrunk(Vector3i origin) {
     BlockType treeTrunk = Utils.getBlockTypeChunkAware(this.world, this.chunk, origin);
-    ProjectCivicCore.LOGGER.atInfo().log("[scanTreeTrunk] Started new tree scan");
+    Logger.logInfo("Started new tree scan");
     if (treeTrunk == null || treeTrunk.getId() == null) {
       return;
     }

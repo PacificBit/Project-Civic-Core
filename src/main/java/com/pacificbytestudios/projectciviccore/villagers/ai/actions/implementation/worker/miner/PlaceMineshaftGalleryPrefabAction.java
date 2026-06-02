@@ -15,7 +15,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -28,6 +27,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.MinerScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
   private final PrefabType prefabType;
@@ -65,30 +65,29 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
 
     MineshaftGallery mineshaftGallery = mineComponent.getWorkerAllocatedGallery(villagerId);
     if (mineshaftGallery == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[PlaceMineshaftGalleryPrefabAction] Could not fetch mineshaft gallery allocated to the villager: "
+      Logger.logWarning("Could not fetch mineshaft gallery allocated to the villager: "
               + villagerId);
       return false;
     }
 
     Vector3i galleryDirection = mineshaftGallery.getCardinalDirection();
     if (galleryDirection == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[PlaceMineshaftGalleryPrefabAction] Gallery is missing direction");
+      Logger.logWarning("Gallery is missing direction");
       return false;
     }
 
     int depth = StructureConfig.Mine.MineshaftGalleryConf.SIZE_2I.y;
     Vector3i galleryTarget = this.resolveGalleryTarget(snapshot, mineshaftGallery, galleryDirection, depth);
     if (galleryTarget == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[PlaceMineshaftGalleryPrefabAction] Could not resolve gallery target");
+      Logger.logWarning("Could not resolve gallery target");
       return false;
     }
 
     Vector3i committedDigPosition = this.resolveCommittedDigPosition(snapshot, mineshaftGallery, galleryDirection,
         depth);
     if (this.hasValue(this.commitLastDiggedFromSnapshotGroup) && committedDigPosition == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[PlaceMineshaftGalleryPrefabAction] Could not resolve commit position from snapshot group "
+      Logger.logWarning(
+          "Could not resolve commit position from snapshot group "
               + this.commitLastDiggedFromSnapshotGroup);
       return false;
     }
@@ -114,12 +113,11 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
             true);
 
     if (!this.prefabType.equals(PrefabType.EMPTY) && restoreSnapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[PlaceMineshaftGalleryPrefabAction] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
     if (shouldCaptureRestoreSnapshot && restoreSnapshot == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[PlaceMineshaftGalleryPrefabAction] Could not capture restore snapshot for section " + galleryTarget);
+      Logger.logWarning("Could not capture restore snapshot for section " + galleryTarget);
       return false;
     }
 

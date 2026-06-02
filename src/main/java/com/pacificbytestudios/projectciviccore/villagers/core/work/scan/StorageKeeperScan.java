@@ -10,7 +10,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
@@ -18,6 +17,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class StorageKeeperScan implements IWorkAreaScanner {
   public static final String FETCH_ALL = "Fetch_All";
@@ -33,7 +33,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
       VillagerComponent villager) {
     VillagerWorkerComponent worker = villager.getWorkerData();
     if (worker == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[StorageKeeperScan] Could not fetch workder data");
+      Logger.logWarning("Could not fetch workder data");
       return null;
     }
 
@@ -41,7 +41,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
 
     if (snapshotInProgress != null && snapshotInProgress.isValid(worldTimeResource)) {
-      ProjectCivicCore.LOGGER.atInfo().log("[StorageKeeperScan] Already has a valid snapshot");
+      Logger.logInfo("Already has a valid snapshot");
       return snapshotInProgress;
     }
 
@@ -51,7 +51,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     VillageHeartComponent villageHeart = this.getVillageHeart(villager);
     Ref<ChunkStore> storageRef = workplaceComponent.getWorkplaceRef().getRef();
     if (storageRef == null || !storageRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[StorageKeeperScan] Could not fetch storage reference");
+      Logger.logWarning("Could not fetch storage reference");
       return snapshotInProgress;
     }
 
@@ -60,7 +60,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
         WorkplaceVillageStorageRequestComponent.getComponentType());
 
     if (storageReqComp == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[StorageKeeperScan] Could not fetch storage request component");
+      Logger.logWarning("Could not fetch storage request component");
       return snapshotInProgress;
     }
 
@@ -71,8 +71,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     if (request == null) {
       request = requests.peekFirst();
       if (request != null && !storageReqComp.assignRequest(uuid, request.getRequestId())) {
-        ProjectCivicCore.LOGGER.atWarning()
-            .log("[StorageKeeperScan] Could not assign request " + request.getRequestId() + " to worker " + uuid);
+        Logger.logWarning("Could not assign request " + request.getRequestId() + " to worker " + uuid);
         return snapshotInProgress;
       }
 
@@ -104,8 +103,7 @@ public class StorageKeeperScan implements IWorkAreaScanner {
         break;
 
       default:
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[StorageKeeperScan] Invalid request type: " + request.getType());
+        Logger.logWarning("Invalid request type: " + request.getType());
         return snapshotInProgress;
     }
 

@@ -27,7 +27,6 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.MinerDropRegistry;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
@@ -38,6 +37,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class BreakBlockInSnapshotAction extends VillagerActionBase {
   private final String primarySnapshotGroup;
@@ -103,7 +103,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     if (this.requiredStoppingRangeSquared >= 0.0) {
       TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
       if (transform == null) {
-        ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] Could not find transform component");
+        Logger.logWarning("Could not find transform component");
         return false;
       }
 
@@ -118,26 +118,26 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     World world = this.getWorld(store);
     WorldChunk chunk = Utils.getWorldChunk(world, target);
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] Could not load chunk for " + target);
+      Logger.logWarning("Could not load chunk for " + target);
       return false;
     }
 
     BlockType blockType = Utils.getBlockTypeChunkAware(world, chunk, target);
     if (blockType == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] No block type found at " + target);
+      Logger.logInfo("No block type found at " + target);
       return false;
     }
 
     ItemStack itemStackInHand = npc.getInventory().getItemInHand();
     if (itemStackInHand == null || itemStackInHand.getItem() == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] NPC has no valid item in hand");
+      Logger.logInfo("NPC has no valid item in hand");
       return false;
     }
 
     Item itemInHand = itemStackInHand.getItem();
     ItemTool tool = itemInHand.getTool();
     if (tool == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] Item in hand is not a tool");
+      Logger.logInfo("Item in hand is not a tool");
       return false;
     }
 
@@ -241,19 +241,19 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
 
     String dropId = this.getDrop(this.dropType, villageHeart.getLevel());
     if (dropId == null || dropId.isBlank()) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] No drop id generated for drop type "
+      Logger.logWarning("No drop id generated for drop type "
           + this.dropType);
       return;
     }
 
     if (Item.getAssetMap().getAsset(dropId) == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[BreakBlockInSnapshotAction] Invalid generated drop id " + dropId);
+      Logger.logWarning("Invalid generated drop id " + dropId);
       return;
     }
 
     ItemStack dropStack = new ItemStack(dropId, 1);
     if (!villagerStorage.canAddItemStack(dropStack)) {
-      ProjectCivicCore.LOGGER.atInfo().log("[BreakBlockInSnapshotAction] Could not store generated drop " + dropId);
+      Logger.logInfo("Could not store generated drop " + dropId);
       return;
     }
 

@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
@@ -29,6 +28,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class HouseSpawner {
 
@@ -75,9 +75,8 @@ public class HouseSpawner {
       Rotation structureRotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log(
-            "[handleNewStagedConstruction - house] Registering new staged House construction of level: " +
+    Logger.logInfo(
+            "Registering new staged House construction of level: " +
                 targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
@@ -85,7 +84,7 @@ public class HouseSpawner {
     short stage = (short) 0;
     String prefab = StructureConfig.House.getPrefab(targetLevel, stage);
 
-    ProjectCivicCore.LOGGER.atInfo().log("[handleNewStagedConstruction - house] Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -93,7 +92,7 @@ public class HouseSpawner {
         structureRotation,
         true);
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - house] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
 
@@ -111,8 +110,7 @@ public class HouseSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[handleNewStagedConstruction - house] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
           prefabAnchor, null);
     }
@@ -151,8 +149,7 @@ public class HouseSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - house] Could not fetch the existing house entity");
+      Logger.logWarning("Could not fetch the existing house entity");
       return false;
     }
 
@@ -167,8 +164,7 @@ public class HouseSpawner {
         houseRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (house == null || trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - house] Could not fetch the existing house component or terrain snapshot");
+      Logger.logWarning("Could not fetch the existing house component or terrain snapshot");
       return false;
     }
 
@@ -197,8 +193,7 @@ public class HouseSpawner {
           oldTrackedPlacement);
 
       if (!upgraded) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[beginUpgradeConstruction - house] Could not complete the house upgrade, rolling back");
+        Logger.logWarning("Could not complete the house upgrade, rolling back");
         handleLastStageBuilding(
             structureId,
             world,
@@ -222,8 +217,7 @@ public class HouseSpawner {
         true);
 
     if (stagedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - house] Could not spawn the first upgrade stage prefab");
+      Logger.logWarning("Could not spawn the first upgrade stage prefab");
       handleLastStageBuilding(
           structureId,
           world,
@@ -285,8 +279,7 @@ public class HouseSpawner {
         constructionSignPosition);
 
     if (blockEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[advanceConstruction - house] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
@@ -435,7 +428,7 @@ public class HouseSpawner {
         houseCoreBlockPosition.z);
 
     if (houseCoreRef == null || !houseCoreRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[House - spawn] House ref is invalid");
+      Logger.logWarning("House ref is invalid");
       return rollbackFailedSpawn(world, houseChunk, snapshotToUse,
           houseCoreBlockPosition, null);
     }
@@ -445,7 +438,7 @@ public class HouseSpawner {
     HouseComponent house = chunkStore.getComponent(houseCoreRef,
         HouseComponent.getComponentType());
     if (house == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[House - spawn] Could not fetch house component");
+      Logger.logWarning("Could not fetch house component");
       return rollbackFailedSpawn(world, houseChunk, snapshotToUse,
           houseCoreBlockPosition, null);
     }
@@ -490,7 +483,7 @@ public class HouseSpawner {
       int level,
       Rotation rotation) {
     if (chunk == null || prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - house] Missing chunk or prefab anchor");
+      Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
@@ -502,8 +495,7 @@ public class HouseSpawner {
         constructionSignPosition);
 
     if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - house] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return false;
     }
 
@@ -542,7 +534,7 @@ public class HouseSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - house] Could not despawn house prefab");
+      Logger.logWarning("Could not despawn house prefab");
       return false;
     }
 
@@ -560,7 +552,7 @@ public class HouseSpawner {
     Ref<ChunkStore> bedRef = result.getSecond();
 
     if (bedRef == null || !bedRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[House - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 
@@ -596,7 +588,7 @@ public class HouseSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[House - despawn] Could not despawn farm prefab");
+      Logger.logWarning("Could not despawn farm prefab");
       return false;
     }
 

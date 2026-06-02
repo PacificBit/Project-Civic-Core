@@ -25,7 +25,6 @@ import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBloc
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.registry.registry.CropRecipeRegistry;
@@ -48,6 +47,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveTyp
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class StorageSpawner {
   private static final String LIFE_ESSENCE_ITEM_ID = "Ingredient_Life_Essence";
@@ -97,9 +97,8 @@ public class StorageSpawner {
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log(
-            "[handleNewStagedConstruction - storage] Registering new staged Storage construction of level: " +
+    Logger.logInfo(
+            "Registering new staged Storage construction of level: " +
                 targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
@@ -107,7 +106,7 @@ public class StorageSpawner {
     short stage = (short) 0;
     String prefab = StructureConfig.Storage.getPrefab(targetLevel, stage);
 
-    ProjectCivicCore.LOGGER.atInfo().log("[handleNewStagedConstruction - storage] Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -115,7 +114,7 @@ public class StorageSpawner {
         rotation,
         true);
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - storage] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
 
@@ -133,8 +132,7 @@ public class StorageSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[handleNewStagedConstruction - storage] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
           prefabAnchor, null);
     }
@@ -173,8 +171,7 @@ public class StorageSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - storage] Could not fetch the existing storage entity");
+      Logger.logWarning("Could not fetch the existing storage entity");
       return false;
     }
 
@@ -189,9 +186,8 @@ public class StorageSpawner {
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log(
-              "[beginUpgradeConstruction - storage] Could not fetch the existing storage component or terrain snapshot");
+      Logger.logWarning(
+              "Could not fetch the existing storage component or terrain snapshot");
       return false;
     }
 
@@ -220,8 +216,7 @@ public class StorageSpawner {
           oldTrackedPlacement);
 
       if (!upgraded) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[beginUpgradeConstruction - storage] Could not complete the storage upgrade, rolling back");
+        Logger.logWarning("Could not complete the storage upgrade, rolling back");
         handleLastStageBuilding(
             structureId,
             world,
@@ -244,8 +239,7 @@ public class StorageSpawner {
         ? workplace.getStorage().clone()
         : null;
     if (existingStorage == null || existingStorage.getContainers().isEmpty()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - storage] Could not fetch the existing workplace storage");
+      Logger.logWarning("Could not fetch the existing workplace storage");
       return false;
     }
 
@@ -253,8 +247,7 @@ public class StorageSpawner {
         existingStorage.getContainers().size());
     ItemContainer constructionSignContainer = bufferedConstructionSignStorage;
     if (!moveWorkplaceStorageToTarget(chunkToUse, existingStorage, constructionSignContainer)) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - storage] Could not buffer the existing storage items");
+      Logger.logWarning("Could not buffer the existing storage items");
       moveItemsToWorkplaceStorage(chunkToUse, constructionSignContainer, existingStorage);
       return false;
     }
@@ -269,8 +262,7 @@ public class StorageSpawner {
         true);
 
     if (stagedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - storage] Could not spawn the first upgrade stage prefab");
+      Logger.logWarning("Could not spawn the first upgrade stage prefab");
       handleLastStageBuilding(
           structureId,
           world,
@@ -297,8 +289,7 @@ public class StorageSpawner {
         constructionSignPosition);
 
     if (signResult == null || signResult.getSecond() == null || !signResult.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - storage] Could not fetch the upgrade construction sign entity");
+      Logger.logWarning("Could not fetch the upgrade construction sign entity");
       Utils.breakBlockChunkAware(signChunk, constructionSignPosition);
       handleLastStageBuilding(
           structureId,
@@ -359,8 +350,7 @@ public class StorageSpawner {
         constructionSignPosition);
 
     if (blockEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[advanceConstruction - storage] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
@@ -498,7 +488,7 @@ public class StorageSpawner {
         workplaceBlockPosition.z);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Workplace ref is invalid");
+      Logger.logWarning("Workplace ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
@@ -508,7 +498,7 @@ public class StorageSpawner {
         WorkplaceComponent.getComponentType());
 
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Workplace component is missing");
+      Logger.logWarning("Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
@@ -529,7 +519,7 @@ public class StorageSpawner {
         targetLevel, prefabAnchor, workplaceChunk, chunkStore, rotation);
 
     if (registry == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Could not spawn correctly the containers");
+      Logger.logWarning("Could not spawn correctly the containers");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
@@ -556,8 +546,7 @@ public class StorageSpawner {
     }
 
     if (!moveItemsToWorkplaceStorage(chunk, starterItems, storageRegistry)) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[Storage - spawn] Could not move all starter items into the first level 1 storage");
+      Logger.logWarning("Could not move all starter items into the first level 1 storage");
     }
   }
 
@@ -607,8 +596,7 @@ public class StorageSpawner {
   private static void appendFoodIngredientStacks(List<ItemStack> target, int totalQuantity) {
     Map<String, CraftingRecipe> levelRecipes = FoodRecipeRegistry.getLevelDependantCraftingRecipe(1);
     if (levelRecipes == null || levelRecipes.isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[Storage - spawn] No level 1 food recipes were found for starter storage");
+      Logger.logWarning("No level 1 food recipes were found for starter storage");
       return;
     }
 
@@ -636,8 +624,7 @@ public class StorageSpawner {
       int totalQuantity,
       String resourceType) {
     if (itemIds == null || itemIds.isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[Storage - spawn] No level 1 " + resourceType + " registry entries were found for starter storage");
+      Logger.logWarning("No level 1 " + resourceType + " registry entries were found for starter storage");
       return;
     }
 
@@ -686,7 +673,7 @@ public class StorageSpawner {
           containerPosition.y, containerPosition.z);
 
       if (containerRef == null || !containerRef.isValid()) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container ref is invalid");
+        Logger.logWarning("Container ref is invalid");
         return null;
       }
 
@@ -695,7 +682,7 @@ public class StorageSpawner {
           WorkplaceContainerEntryComponent.getComponentType());
 
       if (container == null) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Storage - spawn] Container component is missing");
+        Logger.logWarning("Container component is missing");
         return null;
       }
 
@@ -760,8 +747,7 @@ public class StorageSpawner {
           entry.getPosition());
 
       if (result == null || result.getSecond() == null || !result.getSecond().isValid()) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[Storage - spawn] Could not resolve workplace storage container at " + entry.getPosition());
+        Logger.logWarning("Could not resolve workplace storage container at " + entry.getPosition());
         return null;
       }
 
@@ -771,8 +757,7 @@ public class StorageSpawner {
           ItemContainerBlock.getComponentType());
 
       if (containerBlock == null) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[Storage - spawn] Could not fetch workplace storage container component at " + entry.getPosition());
+        Logger.logWarning("Could not fetch workplace storage container component at " + entry.getPosition());
         return null;
       }
 
@@ -810,8 +795,7 @@ public class StorageSpawner {
         && !bufferedStorage.getItemContainer().isEmpty()) {
       movedAnyItems = true;
       if (!moveItemsToWorkplaceStorage(chunk, bufferedStorage.getItemContainer(), storageRegistry)) {
-        ProjectCivicCore.LOGGER.atWarning()
-            .log("[Storage - spawn] Could not move all buffered construction items into the new storage containers");
+        Logger.logWarning("Could not move all buffered construction items into the new storage containers");
       }
     }
 
@@ -822,8 +806,7 @@ public class StorageSpawner {
     if (signStorage != null && !signStorage.getItemContainer().isEmpty()) {
       movedAnyItems = true;
       if (!moveItemsToWorkplaceStorage(chunk, signStorage.getItemContainer(), storageRegistry)) {
-        ProjectCivicCore.LOGGER.atWarning()
-            .log("[Storage - spawn] Could not move all construction sign items into the new storage containers");
+        Logger.logWarning("Could not move all construction sign items into the new storage containers");
       }
     }
 
@@ -838,7 +821,7 @@ public class StorageSpawner {
       int level,
       Rotation rotation) {
     if (chunk == null || prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - storage] Missing chunk or prefab anchor");
+      Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
@@ -850,8 +833,7 @@ public class StorageSpawner {
         constructionSignPosition);
 
     if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - storage] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return false;
     }
 
@@ -890,8 +872,7 @@ public class StorageSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - storage] Could not despawn storage prefab");
+      Logger.logWarning("Could not despawn storage prefab");
       return false;
     }
 
@@ -909,7 +890,7 @@ public class StorageSpawner {
     Ref<ChunkStore> workplaceRef = result.getSecond();
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 
@@ -921,7 +902,7 @@ public class StorageSpawner {
         .getComponent(workplaceRef, TrackedPrefabPlacementComponent.getComponentType());
 
     if (workplace == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Missing workplace component");
+      Logger.logWarning("Missing workplace component");
       return false;
     }
 
@@ -947,7 +928,7 @@ public class StorageSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Could not despawn storage prefab");
+      Logger.logWarning("Could not despawn storage prefab");
       return false;
     }
 

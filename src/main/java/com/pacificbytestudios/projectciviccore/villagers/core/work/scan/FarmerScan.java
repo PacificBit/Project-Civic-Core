@@ -20,13 +20,13 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.ScanUtils;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class FarmerScan implements IWorkAreaScanner {
   private static final String SOIL_GRASS_ID = "Soil_Grass";
@@ -96,8 +96,8 @@ public class FarmerScan implements IWorkAreaScanner {
     WorldChunk soilChunk = getOrLoadChunk(initialChunkIndex);
 
     if (soilChunk == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[FarmerScan] Initial chunk is null for point " + currentPoint);
+      Logger.logWarning(
+          "Initial chunk is null for point " + currentPoint);
       return snapshotInProgress;
     }
 
@@ -107,16 +107,16 @@ public class FarmerScan implements IWorkAreaScanner {
     while (ScanUtils.isInsideWorkArea(currentPoint, startX, endX, startZ, endZ, soilLevel)) {
       if (System.nanoTime() - start >= MAX_TIME_NS) {
         snapshotInProgress.setLastVisited(VectorUtil.clone(currentPoint));
-        ProjectCivicCore.LOGGER.atInfo().log(
-            "[FarmerScan] Scan budget exceeded after " + scannedColumns
+        Logger.logInfo(
+            "Scan budget exceeded after " + scannedColumns
                 + " columns, continuing next tick from " + currentPoint);
         return snapshotInProgress;
       }
 
       soilChunk = getCorrectChunkForBlock(currentPoint, soilChunk);
       if (soilChunk == null) {
-        ProjectCivicCore.LOGGER.atSevere().log(
-            "[FarmerScan] Chunk is null while scanning point " + currentPoint);
+        Logger.logWarning(
+            "Chunk is null while scanning point " + currentPoint);
         break;
       }
 

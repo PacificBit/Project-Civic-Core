@@ -15,7 +15,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
@@ -23,6 +22,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.town
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ForceFillWorkplaceVacancyTask extends AVillageTask {
   public static final BuilderCodec<ForceFillWorkplaceVacancyTask> CODEC = BuilderCodec
@@ -56,7 +56,7 @@ public class ForceFillWorkplaceVacancyTask extends AVillageTask {
     }
 
     if (candidate == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[ForceFillWorkplaceVacancyTask]");
+      Logger.logWarning("No villager available for workplace vacancy " + this.workplace);
       return;
     }
 
@@ -64,7 +64,7 @@ public class ForceFillWorkplaceVacancyTask extends AVillageTask {
     heart.getWorkplaceFromId(this.workplace).registerAsBoss(candidate);
     UUID assignedCandidate = candidate;
     VillagerComponent assignedVillagerSnapshot = VillageVillagerEntitySync.snapshotVillager(heart, candidate);
-    ProjectCivicCore.LOGGER.atInfo().log("[ForceFillWorkplaceVacancyTask] Worker: " + candidate + " now is a worker");
+    Logger.logInfo("Worker: " + candidate + " now is a worker");
 
     World world = chunk.getWorld();
     WorkplaceComponent workplaceComponent = heart.getWorkplaceFromId(this.workplace);
@@ -86,7 +86,7 @@ public class ForceFillWorkplaceVacancyTask extends AVillageTask {
 
         entityStore.putComponent(villager, MayorComponent.getComponentType(), mayorComponent);
       });
-      ProjectCivicCore.LOGGER.atInfo().log("[ForceFillWorkplaceVacancyTask] Worker: " + candidate + " now is a Mayor");
+      Logger.logInfo("Worker: " + candidate + " now is a Mayor");
       return;
     }
 
@@ -97,7 +97,7 @@ public class ForceFillWorkplaceVacancyTask extends AVillageTask {
     Set<UUID> unemployed = heart.getUnemployedRegistry();
 
     if (unemployed.size() == 0) {
-      ProjectCivicCore.LOGGER.atInfo().log("[ForceFillWorkplaceVacancyTask] No unemployed villagers found");
+      Logger.logInfo("No unemployed villagers found");
       return null;
     }
 

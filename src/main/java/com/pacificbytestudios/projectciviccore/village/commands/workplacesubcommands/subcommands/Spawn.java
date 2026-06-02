@@ -22,7 +22,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -31,6 +30,7 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnWor
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 @Deprecated(forRemoval = true)
 public class Spawn extends CommandBase {
@@ -75,7 +75,7 @@ public class Spawn extends CommandBase {
       Ref<ChunkStore> heartRef = heartRefWrapper.getRef();
 
       if (!heartRef.isValid()) {
-        ProjectCivicCore.LOGGER.atSevere().log("[Workplace - Spawn] Could not find the village reference");
+        Logger.logWarning("Could not find the village reference");
         context.sendMessage(Message.raw("Spawn of '" + workplace + "' failed, reason: could not locate village"));
         return;
       }

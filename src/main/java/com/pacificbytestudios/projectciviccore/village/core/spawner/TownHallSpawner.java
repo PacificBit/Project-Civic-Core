@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
@@ -31,6 +30,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveTyp
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TownHallSpawner {
 
@@ -75,9 +75,8 @@ public class TownHallSpawner {
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log(
-            "[handleNewStagedConstruction - townhall] Registering new staged Town Hall construction of level: " +
+    Logger.logInfo(
+            "Registering new staged Town Hall construction of level: " +
                 targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
@@ -85,8 +84,7 @@ public class TownHallSpawner {
     short stage = (short) 0;
     String prefab = StructureConfig.TownHall.getPrefab(targetLevel, stage);
 
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[handleNewStagedConstruction - townhall] Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -94,7 +92,7 @@ public class TownHallSpawner {
         rotation,
         true);
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - townhall] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
 
@@ -112,8 +110,7 @@ public class TownHallSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[handleNewStagedConstruction - townhall] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
           prefabAnchor, null);
     }
@@ -152,8 +149,7 @@ public class TownHallSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - townhall] Could not fetch the existing town hall entity");
+      Logger.logWarning("Could not fetch the existing town hall entity");
       return false;
     }
 
@@ -168,9 +164,8 @@ public class TownHallSpawner {
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log(
-              "[beginUpgradeConstruction - townhall] Could not fetch the existing town hall component or terrain snapshot");
+      Logger.logWarning(
+              "Could not fetch the existing town hall component or terrain snapshot");
       return false;
     }
 
@@ -199,8 +194,7 @@ public class TownHallSpawner {
           oldTrackedPlacement);
 
       if (!upgraded) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[beginUpgradeConstruction - townhall] Could not complete the town hall upgrade, rolling back");
+        Logger.logWarning("Could not complete the town hall upgrade, rolling back");
         handleLastStageBuilding(
             structureId,
             world,
@@ -228,8 +222,7 @@ public class TownHallSpawner {
         true);
 
     if (stagedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - townhall] Could not spawn the first upgrade stage prefab");
+      Logger.logWarning("Could not spawn the first upgrade stage prefab");
       handleLastStageBuilding(
           structureId,
           world,
@@ -292,8 +285,7 @@ public class TownHallSpawner {
         constructionSignPosition);
 
     if (blockEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[advanceConstruction - townhall] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
@@ -432,7 +424,7 @@ public class TownHallSpawner {
         workplaceBlockPosition.z);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Workplace ref is invalid");
+      Logger.logWarning("Workplace ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -442,7 +434,7 @@ public class TownHallSpawner {
         workplaceRef,
         WorkplaceComponent.getComponentType());
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Workplace component is missing");
+      Logger.logWarning("Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -454,7 +446,7 @@ public class TownHallSpawner {
         targetLevel,
         rotation);
     if (storage == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Town Hall - Spawn] Could not build workplace storage registry");
+      Logger.logWarning("Could not build workplace storage registry");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse,
           workplaceBlockPosition, null);
     }
@@ -517,7 +509,7 @@ public class TownHallSpawner {
       int level,
       Rotation rotation) {
     if (chunk == null || prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - townhall] Missing chunk or prefab anchor");
+      Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
@@ -529,8 +521,7 @@ public class TownHallSpawner {
         constructionSignPosition);
 
     if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - townhall] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return false;
     }
 
@@ -569,8 +560,7 @@ public class TownHallSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - townhall] Could not despawn townhall prefab");
+      Logger.logWarning("Could not despawn townhall prefab");
       return false;
     }
 
@@ -588,7 +578,7 @@ public class TownHallSpawner {
     Ref<ChunkStore> workplaceRef = result.getSecond();
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 
@@ -601,7 +591,7 @@ public class TownHallSpawner {
             TrackedPrefabPlacementComponent.getComponentType());
 
     if (workplace == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Missing workplace component");
+      Logger.logWarning("Missing workplace component");
       return false;
     }
 
@@ -628,7 +618,7 @@ public class TownHallSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[Storage - despawn] Could not despawn storage prefab");
+      Logger.logWarning("Could not despawn storage prefab");
       return false;
     }
 

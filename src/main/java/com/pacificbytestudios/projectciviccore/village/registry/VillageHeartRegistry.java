@@ -7,9 +7,9 @@ import java.util.UUID;
 import org.joml.Vector2i;
 import org.joml.Vector3i;
 
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public final class VillageHeartRegistry {
   private static VillageHeartRegistry INSTANCE;
@@ -35,28 +35,24 @@ public final class VillageHeartRegistry {
     villageIdToArea.put(uuid, claimedArea);
     claimAreaToHeartRef.put(claimedArea, new EntityRef(worldName, position));
 
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[registerVillage] Successfully registered village with id: " + uuid.toString());
+    Logger.logInfo("Successfully registered village with id: " + uuid.toString());
   }
 
   public void unregisterVillage(UUID villageUUID) {
     if (!villageIdToArea.containsKey(villageUUID)) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[unregisterVillage] No village registered with id: " + villageUUID.toString());
+      Logger.logInfo("No village registered with id: " + villageUUID.toString());
       return;
     }
     AreaFootprint area = villageIdToArea.get(villageUUID);
 
     villageIdToArea.remove(villageUUID);
     if (area == null) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[unregisterVillage] No village claimed area registered with id: " + villageUUID.toString());
+      Logger.logInfo("No village claimed area registered with id: " + villageUUID.toString());
       return;
     }
 
     claimAreaToHeartRef.remove(area);
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[unregisterVillage] Village removed correctly");
+    Logger.logInfo("Village removed correctly");
   }
 
   public void updateClaimedArea(AreaFootprint oldArea, AreaFootprint newArea) {

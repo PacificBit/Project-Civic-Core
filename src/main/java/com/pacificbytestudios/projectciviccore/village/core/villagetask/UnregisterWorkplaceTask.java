@@ -14,11 +14,11 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class UnregisterWorkplaceTask extends AVillageTask {
   public static final BuilderCodec<UnregisterWorkplaceTask> CODEC = BuilderCodec
@@ -46,8 +46,7 @@ public class UnregisterWorkplaceTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vector3i heartPos,
       VillageHeartComponent heart) {
-    ProjectCivicCore.LOGGER
-        .atInfo().log("[UnregisterWorkplaceTask] Unregistering workplace with id: " + this.workplace);
+    Logger.logInfo("Unregistering workplace with id: " + this.workplace);
 
     WorkplaceComponent workplace = heart.getWorkplaceFromId(this.workplace);
     Set<UUID> affectedWorkers = new HashSet<>();
@@ -62,8 +61,8 @@ public class UnregisterWorkplaceTask extends AVillageTask {
         heartRef,
         VillageTopologyComponent.getComponentType());
     if (topology == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[UnregisterWorkplaceTask] Could not unregister workplace topology for " + this.workplace
+      Logger.logWarning(
+          "Could not unregister workplace topology for " + this.workplace
               + " because the village topology component is missing");
     } else {
       topology.unregisterStructure(this.workplace);

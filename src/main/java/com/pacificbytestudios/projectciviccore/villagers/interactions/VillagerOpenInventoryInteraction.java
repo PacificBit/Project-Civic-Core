@@ -39,13 +39,13 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
 
     Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
     if (player == null) {
-      Logger.logSevere("Could not find player using interaction context");
+      Logger.logWarning("Could not find player using interaction context");
       return;
     }
 
     UUIDComponent uuidComp = commandBuffer.getComponent(playerRef, UUIDComponent.getComponentType());
     if (uuidComp == null) {
-      Logger.logSevere("Could not find UUIDComponent for player");
+      Logger.logWarning("Could not find UUIDComponent for player");
       return;
     }
     UUID playerUuid = uuidComp.getUuid();
@@ -54,33 +54,33 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
 
     Ref<EntityStore> target = context.getTargetEntity();
     if (target == null) {
-      Logger.logSevere("Target entity is null. playerUuid=%s".formatted(playerUuid));
+      Logger.logWarning("Target entity is null. playerUuid=%s".formatted(playerUuid));
       return;
     }
 
     if (!target.isValid()) {
-      Logger.logSevere("Target entity is invalid. playerUuid=%s, target=%s"
+      Logger.logWarning("Target entity is invalid. playerUuid=%s, target=%s"
         .formatted(playerUuid, target));
       return;
     }
 
     VillagerComponent villager = store.getComponent(target, VillagerComponent.getComponentType());
     if (villager == null) {
-      Logger.logSevere("Target entity is missing VillagerComponent. playerUuid=%s, target=%s"
+      Logger.logWarning("Target entity is missing VillagerComponent. playerUuid=%s, target=%s"
         .formatted(playerUuid, target));
       return;
     }
 
     NPCEntity targetNpc = commandBuffer.getComponent(target, NPCEntity.getComponentType());
     if (targetNpc == null) {
-      Logger.logSevere("Target entity is missing NPCEntity component. playerUuid=%s, target=%s"
+      Logger.logWarning("Target entity is missing NPCEntity component. playerUuid=%s, target=%s"
         .formatted(playerUuid, target));
       return;
     }
 
     ItemContainer container = targetNpc.getInventory().getCombinedStorageFirst();
     if (container == null) {
-      Logger.logSevere("Combined storage container is null after inventory setup. playerUuid=%s, target=%s"
+      Logger.logWarning("Combined storage container is null after inventory setup. playerUuid=%s, target=%s"
         .formatted(playerUuid, target));
       return;
     }
@@ -95,7 +95,7 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
     }
 
     if (!player.getPageManager().setPageWithWindows(playerRef, store, Page.Bench, true, window)) {
-      Logger.logSevere("Failed to open villager inventory page for player. playerUuid=%s, target=%s"
+      Logger.logWarning("Failed to open villager inventory page for player. playerUuid=%s, target=%s"
         .formatted(playerUuid, target));
       windows.remove(playerUuid, window);
       return;

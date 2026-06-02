@@ -17,10 +17,10 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 import com.pacificbytestudios.projectciviccore.villagers.enums.Crops;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class PlantSeedAction extends ActionBase {
 
@@ -37,7 +37,7 @@ public class PlantSeedAction extends ActionBase {
       Store<EntityStore> store) {
     VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
     if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[PlantSeed] Could not fetch villager component");
+      Logger.logWarning("Could not fetch villager component");
       return false;
     }
 
@@ -58,16 +58,14 @@ public class PlantSeedAction extends ActionBase {
     ItemStack seeds = npcEntity.getInventory().getActiveHotbarItem();
 
     if (seeds == null || seeds.getItemId() == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[PlantSeed] Could not find a seed at hand, this should be called when a seed is held");
+      Logger.logWarning("Could not find a seed at hand, this should be called when a seed is held");
       return false;
     }
 
     String plantBlockId = Crops.getBlockFromSeed(seeds.getItemId());
 
     if (plantBlockId == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[PlantSeed] Invalid seed with id: " + seeds.getItemId());
+      Logger.logWarning("Invalid seed with id: " + seeds.getItemId());
       return false;
     }
 

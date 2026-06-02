@@ -17,11 +17,11 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 @Deprecated(forRemoval = false)
 public class State extends CommandBase {
@@ -86,7 +86,7 @@ public class State extends CommandBase {
         .getComponent(villageHeart, VillageHeartComponent.getComponentType());
 
     if (villageHeartComponent == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[updateVillageState] - Could not fetch village heart component");
+      Logger.logInfo("Could not fetch village heart component");
       return false;
     }
 

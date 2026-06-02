@@ -14,10 +14,10 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TryHouseAssignmentTask extends AVillageTask {
   public static final BuilderCodec<TryHouseAssignmentTask> CODEC = BuilderCodec
@@ -48,20 +48,20 @@ public class TryHouseAssignmentTask extends AVillageTask {
     if (this.house == null) {
       this.house = heart.findHouseIdWithVacancy();
       if (this.house == null) {
-        ProjectCivicCore.LOGGER.atInfo().log("[TryHouseAssignmentTask] No empty house found");
+        Logger.logInfo("No empty house found");
         return;
       }
     }
 
     HouseComponent houseComponent = heart.getHouseFromId(this.house);
     if (houseComponent == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[TryHouseAssignmentTask] No house found for id: " + this.house);
+      Logger.logInfo("No house found for id: " + this.house);
       return;
     }
 
     ArrayDeque<UUID> homelessRegistry = new ArrayDeque<>(heart.getHomelessRegistry());
     if (homelessRegistry.size() == 0) {
-      ProjectCivicCore.LOGGER.atInfo().log("[TryHouseAssignmentTask] No homeless villagers found");
+      Logger.logInfo("No homeless villagers found");
       return;
     }
 
@@ -87,8 +87,6 @@ public class TryHouseAssignmentTask extends AVillageTask {
       world.execute(() -> VillageVillagerEntitySync.persistVillagers(world, assignedVillagerSnapshots));
     }
 
-    ProjectCivicCore.LOGGER
-        .atInfo()
-        .log("[TryHouseAssignmentTask] Assigned " + assigned + " villagers to house: " + this.house);
+    Logger.logInfo("Assigned " + assigned + " villagers to house: " + this.house);
   }
 }

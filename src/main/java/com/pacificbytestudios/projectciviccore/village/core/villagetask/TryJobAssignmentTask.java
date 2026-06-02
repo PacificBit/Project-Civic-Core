@@ -14,13 +14,13 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class TryJobAssignmentTask extends AVillageTask {
   public static final BuilderCodec<TryJobAssignmentTask> CODEC = BuilderCodec
@@ -51,22 +51,21 @@ public class TryJobAssignmentTask extends AVillageTask {
     if (this.workplace == null) {
       this.workplace = heart.getFirstWorkplaceWithMissingEmployee();
       if (this.workplace == null) {
-        ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] No workplace that need new employee");
+        Logger.logInfo("No workplace that need new employee");
         return;
       }
     }
 
     WorkplaceComponent workplaceComponent = heart.getWorkplaceFromId(this.workplace);
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[TryJobAssignmentTask] Could not find workplace " + this.workplace + " to assign a worker");
+      Logger.logWarning("Could not find workplace " + this.workplace + " to assign a worker");
       return;
     }
 
     Set<UUID> unemployed = heart.getUnemployedRegistry();
 
     if (unemployed.size() == 0) {
-      ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] No unemployed villagers found");
+      Logger.logInfo("No unemployed villagers found");
       return;
     }
 
@@ -82,7 +81,7 @@ public class TryJobAssignmentTask extends AVillageTask {
     workplaceComponent.registerAsBoss(candidate);
     UUID assignedCandidate = candidate;
     VillagerComponent assignedVillagerSnapshot = VillageVillagerEntitySync.snapshotVillager(heart, candidate);
-    ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] Worker: " + candidate + " now is a worker");
+    Logger.logInfo("Worker: " + candidate + " now is a worker");
 
     if (workplaceComponent.getWorkplaceType().equals(StructureType.TOWN_HALL)) {
       Ref<EntityStore> villager = world.getEntityRef(assignedCandidate);
@@ -102,7 +101,7 @@ public class TryJobAssignmentTask extends AVillageTask {
 
         entityStore.putComponent(villager, MayorComponent.getComponentType(), mayorComponent);
       });
-      ProjectCivicCore.LOGGER.atInfo().log("[TryJobAssignmentTask] Worker: " + candidate + " now is a Mayor");
+      Logger.logInfo("Worker: " + candidate + " now is a Mayor");
       return;
     }
 

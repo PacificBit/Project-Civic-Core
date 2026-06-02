@@ -10,7 +10,6 @@ import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -35,6 +34,7 @@ import com.pacificbytestudios.projectciviccore.villagers.core.inventory.Containe
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class MayorVillageAssessmentExecutor {
 
@@ -110,12 +110,11 @@ public class MayorVillageAssessmentExecutor {
           return true;
         default:
           throw new IllegalArgumentException(
-              "[VillageBuildingSystem - handleCurrentProject] No handlers declared for objective type: "
+              "No handlers declared for objective type: "
                   + project.getObjectiveType());
       }
     } catch (Exception e) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[MayorVillageAssessmentExecutor - executeNext] Could not execute project "
+      Logger.logWarning("Could not execute project "
               + project.getProjectId() + ". REASON:\n" + e.getMessage());
       e.printStackTrace();
       mayorComponent.setCurrentProject(null);
@@ -174,8 +173,7 @@ public class MayorVillageAssessmentExecutor {
       VillageProject project) {
     HouseComponent availableHouse = village.findHouseWithVacancy();
     if (availableHouse == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[ExecuteNextProjectStageAction] Removing villager spawn project "
+      Logger.logWarning("Removing villager spawn project "
               + project.getProjectId() + " because no house has a vacancy");
       townHall.removeProject(project);
       mayorComponent.setCurrentProject(null);
@@ -222,7 +220,7 @@ public class MayorVillageAssessmentExecutor {
       TownHallComponent townHall,
       MayorComponent mayorComponent,
       VillageProject project) {
-    ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleBuildDefenceProject'");
+    Logger.logSevere("Unimplemented method 'handleBuildDefenceProject'");
     mayorComponent.setCurrentProject(null);
   }
 
@@ -259,7 +257,7 @@ public class MayorVillageAssessmentExecutor {
       TownHallComponent townHall,
       MayorComponent mayorComponent,
       VillageProject project) {
-    ProjectCivicCore.LOGGER.atSevere().log("Unimplemented method 'handleDemolishProject'");
+    Logger.logSevere("Unimplemented method 'handleDemolishProject'");
     mayorComponent.setCurrentProject(null);
   }
 
@@ -295,8 +293,7 @@ public class MayorVillageAssessmentExecutor {
       VillageProject project) {
     Ref<ChunkStore> villageHeartRef = village.getTownHall().getVillageHeartRef();
     if (villageHeartRef == null || !villageHeartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[ExecuteNextProjectStageAction] Could not queue builder project without a valid village ref");
+      Logger.logWarning("Could not queue builder project without a valid village ref");
       return;
     }
 
@@ -346,8 +343,7 @@ public class MayorVillageAssessmentExecutor {
     }
 
     if (!InventoryTransferValidators.removeRequestedItems(container, requiredMaterials)) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[ExecuteNextProjectStageAction] Could not consume requested materials for project "
+      Logger.logWarning("Could not consume requested materials for project "
               + project.getProjectId());
       project.setObjectiveStatus(VillageObjectiveStatus.RESOURCE_GATHERING);
       return false;
@@ -366,16 +362,14 @@ public class MayorVillageAssessmentExecutor {
 
     boolean synced = townHall.updateProjectPlan(project);
     if (synced) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[ExecuteNextProjectStageAction] Synced project " + project.getProjectId()
+      Logger.logInfo("Synced project " + project.getProjectId()
               + " status=" + project.getObjectiveStatus()
               + " stage=" + project.getStage() + "/" + project.getTotalStages()
               + " structureId=" + project.getStructureId());
       return;
     }
 
-    ProjectCivicCore.LOGGER.atWarning()
-        .log("[ExecuteNextProjectStageAction] Could not sync project " + project.getProjectId()
+    Logger.logWarning("Could not sync project " + project.getProjectId()
             + " back to the town hall plan");
   }
 
@@ -408,8 +402,7 @@ public class MayorVillageAssessmentExecutor {
       List<InventoryItemCriteria> missingMaterials) {
     Ref<ChunkStore> villageHeartRef = townHallWorkplace.getVillageHeartRef();
     if (villageHeartRef == null || !villageHeartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[ExecuteNextProjectStageAction] Could not queue a material request without a valid village ref");
+      Logger.logWarning("Could not queue a material request without a valid village ref");
       return;
     }
 

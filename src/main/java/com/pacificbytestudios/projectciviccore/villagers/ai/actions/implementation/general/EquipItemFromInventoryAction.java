@@ -11,8 +11,8 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class EquipItemFromInventoryAction extends ActionBase {
   private String itemIdToEquip;
@@ -81,8 +81,7 @@ public class EquipItemFromInventoryAction extends ActionBase {
 
     ItemContainer storage = npcEntity.getInventory().getStorage();
     if (InventoryHelper.countFreeSlots(storage) < 1) {
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[EquipItemFromInventoryAction] Storage is full, cannot free the hand slot");
+      Logger.logInfo("Storage is full, cannot free the hand slot");
       return false;
     }
     for (short slot = (short) (storage.getCapacity() - 1); slot >= 0; slot--) {

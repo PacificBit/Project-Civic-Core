@@ -7,12 +7,12 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.AVillageTask;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
   private static final long MAX_TIME_NS = 1_000_000;
@@ -27,7 +27,7 @@ public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
     Ref<ChunkStore> villageHeartRef = archetypeChunk.getReferenceTo(index);
 
     if (villageHeartRef == null || !villageHeartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atInfo().log("[VillageTaskQueueSystem] - No valid ref found");
+      Logger.logInfo("No valid ref found");
       return;
     }
 

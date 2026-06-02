@@ -32,7 +32,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -42,6 +41,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
 import it.unimi.dsi.fastutil.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class SpawnVillagerTask extends AVillageTask {
   public static final BuilderCodec<SpawnVillagerTask> CODEC = BuilderCodec
@@ -177,8 +177,8 @@ public class SpawnVillagerTask extends AVillageTask {
     TransformComponent transform = entityStore.getComponent(npcRef, TransformComponent.getComponentType());
 
     if (storage == null || hotbar == null || utility == null || transform == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[SpawnVillagerTask] Missing inventory components for spawned villager. npcRef=" + npcRef);
+      Logger.logWarning(
+          "Missing inventory components for spawned villager. npcRef=" + npcRef);
       return;
     }
 
@@ -201,8 +201,8 @@ public class SpawnVillagerTask extends AVillageTask {
     }
 
     if (!remainder.isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[SpawnVillagerTask] Villager inventory resize produced remainder items. npcRef=" +
+      Logger.logWarning(
+          "Villager inventory resize produced remainder items. npcRef=" +
               npcRef +
               ", remainder=" +
               remainder);

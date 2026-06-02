@@ -19,7 +19,6 @@ import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.util.BlockPlacementHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
@@ -31,6 +30,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class MinerScan implements IWorkAreaScanner {
   private static final long MAX_TIME_NS = 1_000_000;
@@ -64,19 +64,19 @@ public class MinerScan implements IWorkAreaScanner {
 
     Ref<ChunkStore> workplaceRef = worker.getWorkplace().getWorkplaceRef().getRef();
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MinerScan] Could not fetch workplaceRef");
+      Logger.logWarning("Could not fetch workplaceRef");
       return snapshotInProgress;
     }
 
     MineComponent mineComponent = this.getMineComponent(workplaceRef);
     if (mineComponent == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[MinerScan] Error during key info fetch");
+      Logger.logInfo("Error during key info fetch");
       return snapshotInProgress;
     }
 
     MineshaftGallery gallery = this.getAllocatedGallery(mineComponent, uuid);
     if (gallery == null) {
-      ProjectCivicCore.LOGGER.atInfo().log("[MinerScan] Error during key info fetch");
+      Logger.logInfo("Error during key info fetch");
       return snapshotInProgress;
     }
 
@@ -84,7 +84,7 @@ public class MinerScan implements IWorkAreaScanner {
     Vector3i galleryStartPosition = gallery.getStartPosition();
     Vector3i currentDigPosition = gallery.getLastDiggedPosition();
     if (galleryDirection == null || galleryStartPosition == null || currentDigPosition == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MinerScan] Gallery is missing scan coordinates");
+      Logger.logWarning("Gallery is missing scan coordinates");
       return snapshotInProgress;
     }
 
@@ -120,8 +120,8 @@ public class MinerScan implements IWorkAreaScanner {
         VectorUtil.clone(galleryDirection).mul(Math.max(GALLERY_SECTION_DEPTH - 1, 0)));
 
     if (System.nanoTime() - start >= MAX_TIME_NS) {
-      ProjectCivicCore.LOGGER.atInfo().log(
-          "[MinerScan] Scan budget exceeded after fetching base info");
+      Logger.logInfo(
+          "Scan budget exceeded after fetching base info");
       return snapshotInProgress;
     }
 
@@ -140,7 +140,7 @@ public class MinerScan implements IWorkAreaScanner {
         workplaceRef,
         MineComponent.getComponentType());
     if (mineComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MinerScan] Could not fetch mine component");
+      Logger.logWarning("Could not fetch mine component");
       return null;
     }
 
@@ -152,7 +152,7 @@ public class MinerScan implements IWorkAreaScanner {
       UUID villagerId) {
     MineshaftGallery gallery = mineComponent.getWorkerAllocatedGallery(villagerId);
     if (gallery == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[MinerScan] Could not fetch working gallery");
+      Logger.logWarning("Could not fetch working gallery");
       return null;
     }
 
@@ -235,8 +235,8 @@ public class MinerScan implements IWorkAreaScanner {
     int distance = this.getHorizontalDistance(position, endPosition);
     for (int i = 0; i < distance; i++) {
       if (System.nanoTime() - start >= MAX_TIME_NS) {
-        ProjectCivicCore.LOGGER.atInfo().log(
-            "[MinerScan] Scan budget exceeded after '" + i + "' blocks while checking the terrain");
+        Logger.logInfo(
+            "Scan budget exceeded after '" + i + "' blocks while checking the terrain");
         return false;
       }
 

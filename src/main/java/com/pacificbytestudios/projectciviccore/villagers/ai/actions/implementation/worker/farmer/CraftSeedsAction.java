@@ -11,12 +11,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.CropRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.crafting.BatchCraftingHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.crafting.BatchCraftingHelper.BatchCraftingResult;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class CraftSeedsAction extends VillagerActionBase {
 
@@ -44,8 +44,7 @@ public class CraftSeedsAction extends VillagerActionBase {
 
     List<Map.Entry<String, CraftingRecipe>> orderedRecipes = getOrderedRecipes(villageHeart.getLevel());
     if (orderedRecipes.isEmpty()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CraftSeedsAction] No crop recipes available for village level " + villageHeart.getLevel());
+      Logger.logWarning("No crop recipes available for village level " + villageHeart.getLevel());
       return false;
     }
 
@@ -57,8 +56,7 @@ public class CraftSeedsAction extends VillagerActionBase {
       return false;
     }
 
-    ProjectCivicCore.LOGGER.atFine()
-        .log("[CraftSeedsAction] Crafted seeds: " + craftResult.craftedCounts());
+    Logger.logFine("Crafted seeds: " + craftResult.craftedCounts());
     return true;
   }
 

@@ -24,7 +24,6 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.LateralVacancySegments;
 import com.pacificbytestudios.projectciviccore.codecs.LateralVacancySegments.Segment;
 import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
@@ -57,6 +56,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageRoadState;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
 import it.unimi.dsi.fastutil.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
   private VillageTopologyComponent topology;
@@ -409,8 +409,8 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     TopologyStructure structure = this.topology
         .getTopologyStructureFromStructureId(this.project.getStructureId());
     if (structure == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[VillageBuilderSystem] Could not find topology structure for project "
+      Logger.logWarning(
+          "Could not find topology structure for project "
               + this.project.getProjectId() + " and structure " + this.project.getStructureId());
       return false;
     }
@@ -439,8 +439,8 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
         .getTopologyStructureFromStructureId(this.project.getStructureId());
     Vector3i existingCoreOrSitePosition = resolveUpgradeStartPosition(structure);
     if (structure == null || existingCoreOrSitePosition == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[VillageBuilderSystem] Could not resolve upgrade start position for project "
+      Logger.logWarning(
+          "Could not resolve upgrade start position for project "
               + this.project.getProjectId() + " and structure " + this.project.getStructureId());
       return false;
     }
@@ -658,8 +658,8 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
       }
     });
 
-    task.setOnError((status, message) -> ProjectCivicCore.LOGGER.atWarning().log(
-        "[VillageBuilderSystem] Builder task failed for project "
+    task.setOnError((status, message) -> Logger.logWarning(
+        "Builder task failed for project "
             + queuedProject.getProjectId()
             + " structureId=" + queuedProject.getStructureId()
             + " status=" + status

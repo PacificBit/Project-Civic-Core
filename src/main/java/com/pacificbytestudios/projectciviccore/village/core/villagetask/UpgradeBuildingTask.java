@@ -10,12 +10,12 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginUpgradeConstruction;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class UpgradeBuildingTask extends AVillageTask {
 
@@ -85,14 +85,14 @@ public class UpgradeBuildingTask extends AVillageTask {
         return;
       }
 
-      String message = "[UpgradeBuildingTask] Could not start " + this.structureType
+      String message = "Could not start " + this.structureType
           + " upgrade at " + this.prefabAnchor + " for target level " + this.targetLevel;
-      ProjectCivicCore.LOGGER.atWarning().log(message);
+      Logger.logWarning(message);
       this.callOnError("UPGRADE_START_FAILED", message);
     } catch (RuntimeException exception) {
-      String message = "[UpgradeBuildingTask] Failed to start " + this.structureType
+      String message = "Failed to start " + this.structureType
           + " upgrade at " + this.prefabAnchor + ": " + exception.getMessage();
-      ProjectCivicCore.LOGGER.atWarning().log(message);
+      Logger.logWarning(message);
       this.callOnError("UPGRADE_START_EXCEPTION", message);
       throw exception;
     }

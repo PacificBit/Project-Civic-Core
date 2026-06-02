@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.modules.block.BlockEntity;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
@@ -23,6 +22,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class RoadSpawner {
   public static boolean spawn(
@@ -36,11 +36,9 @@ public class RoadSpawner {
     Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
 
     if (prefab == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[RoadSpawner - spawn] Missing road prefab for villageLevel=%s, type=%s, length=%s",
-          village.getLevel(),
-          type,
-          length);
+      Logger.logWarning(
+          "Missing road prefab for villageLevel=%s, type=%s, length=%s"
+              .formatted(village.getLevel(), type, length));
       return false;
     }
 
@@ -86,9 +84,8 @@ public class RoadSpawner {
         anchorBlockPosition.z);
 
     if (anchorRef == null || !anchorRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[RoadSpawner - spawn] Anchor ref is invalid at %s",
-          anchorBlockPosition);
+      Logger.logWarning(
+          "Anchor ref is invalid at %s".formatted(anchorBlockPosition));
       return rollbackFailedSpawn(world, trackedPlacement);
     }
 
@@ -109,7 +106,7 @@ public class RoadSpawner {
         position.y,
         position.z);
     if (anchorRef == null || !anchorRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[RoadSpawner - despawn] Invalid anchor ref");
+      Logger.logWarning("Invalid anchor ref");
       return false;
     }
 
@@ -119,7 +116,7 @@ public class RoadSpawner {
         TrackedPrefabPlacementComponent.getComponentType());
 
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[RoadSpawner - despawn] Missing tracked prefab metadata");
+      Logger.logWarning("Missing tracked prefab metadata");
       return false;
     }
 
@@ -133,7 +130,7 @@ public class RoadSpawner {
             true);
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[RoadSpawner - despawn] Could not despawn road prefab");
+      Logger.logWarning("Could not despawn road prefab");
       return false;
     }
 

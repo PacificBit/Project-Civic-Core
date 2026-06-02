@@ -15,10 +15,10 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class HarvestCropAction extends VillagerActionBase {
 
@@ -44,7 +44,7 @@ public class HarvestCropAction extends VillagerActionBase {
         cropCoord.x,
         cropCoord.z));
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[HarvestCrop] Could not fetch the chunk");
+      Logger.logWarning("Could not fetch the chunk");
       return true;
     }
     BlockType cropBlockType = chunk.getBlockType(cropCoord);

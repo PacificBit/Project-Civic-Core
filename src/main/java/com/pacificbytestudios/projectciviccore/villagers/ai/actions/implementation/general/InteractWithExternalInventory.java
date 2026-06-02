@@ -23,7 +23,6 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -32,6 +31,7 @@ import com.pacificbytestudios.projectciviccore.villagers.core.inventory.Containe
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class InteractWithExternalInventory extends VillagerActionBase {
   private final String snapshotKey;
@@ -79,8 +79,7 @@ public class InteractWithExternalInventory extends VillagerActionBase {
 
     ArrayDeque<Vector3i> coords = snapshot.getBlockTypePosition().get(this.snapshotKey);
     if (coords == null || coords.isEmpty()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InteractWithExternalInventory] Could not find coords in snapshot for key: " + this.snapshotKey);
+      Logger.logWarning("Could not find coords in snapshot for key: " + this.snapshotKey);
       return false;
     }
 
@@ -89,8 +88,7 @@ public class InteractWithExternalInventory extends VillagerActionBase {
     ResolvedContainer resolvedContainer = ContainerResolver.resolveContainerAt(world, containerPosition);
 
     if (resolvedContainer == null || resolvedContainer.containerBlock() == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[InteractWithExternalInventory] Could not resolve container at " + containerPosition);
+      Logger.logWarning("Could not resolve container at " + containerPosition);
       return false;
     }
 
@@ -169,8 +167,7 @@ public class InteractWithExternalInventory extends VillagerActionBase {
         }
       }
 
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[InteractWithExternalInventory] Could not move requested item stack");
+      Logger.logWarning("Could not move requested item stack");
       return false;
     }
 

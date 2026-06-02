@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
@@ -31,6 +30,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveTyp
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class SawmillSpawner {
 
@@ -75,9 +75,8 @@ public class SawmillSpawner {
       Rotation rotation,
       VillageHeartComponent heart,
       int targetLevel) {
-    ProjectCivicCore.LOGGER.atInfo()
-        .log(
-            "[handleNewStagedConstruction - sawmill] Registering new staged Sawmill construction of level: " +
+    Logger.logInfo(
+            "Registering new staged Sawmill construction of level: " +
                 targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
@@ -85,8 +84,7 @@ public class SawmillSpawner {
     short stage = (short) 0;
     String prefab = StructureConfig.Sawmill.getPrefab(targetLevel, stage);
 
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[handleNewStagedConstruction - sawmill] Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -94,7 +92,7 @@ public class SawmillSpawner {
         rotation,
         true);
     if (trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[handleNewStagedConstruction - sawmill] Could not spawn prefab");
+      Logger.logWarning("Could not spawn prefab");
       return false;
     }
 
@@ -112,8 +110,7 @@ public class SawmillSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[handleNewStagedConstruction - sawmill] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return rollbackFailedSpawn(world, result.getFirst(), trackedPlacement,
           prefabAnchor, null);
     }
@@ -152,8 +149,7 @@ public class SawmillSpawner {
 
     if (result == null || result.getSecond() == null ||
         !result.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - sawmill] Could not fetch the existing sawmill entity");
+      Logger.logWarning("Could not fetch the existing sawmill entity");
       return false;
     }
 
@@ -168,9 +164,8 @@ public class SawmillSpawner {
         workplaceRef,
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log(
-              "[beginUpgradeConstruction - sawmill] Could not fetch the existing sawmill component or terrain snapshot");
+      Logger.logWarning(
+              "Could not fetch the existing sawmill component or terrain snapshot");
       return false;
     }
 
@@ -199,8 +194,7 @@ public class SawmillSpawner {
           oldTrackedPlacement);
 
       if (!upgraded) {
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[beginUpgradeConstruction - sawmill] Could not complete the sawmill upgrade, rolling back");
+        Logger.logWarning("Could not complete the sawmill upgrade, rolling back");
         handleLastStageBuilding(
             structureId,
             world,
@@ -228,8 +222,7 @@ public class SawmillSpawner {
         true);
 
     if (stagedPlacement == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[beginUpgradeConstruction - sawmill] Could not spawn the first upgrade stage prefab");
+      Logger.logWarning("Could not spawn the first upgrade stage prefab");
       handleLastStageBuilding(
           structureId,
           world,
@@ -292,8 +285,7 @@ public class SawmillSpawner {
         constructionSignPosition);
 
     if (blockEntity == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[advanceConstruction - sawmill] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
@@ -433,7 +425,7 @@ public class SawmillSpawner {
         workplaceBlockPosition.z);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[SawmillSpawner - spawn] Workplace ref is invalid");
+      Logger.logWarning("Workplace ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
@@ -443,7 +435,7 @@ public class SawmillSpawner {
         WorkplaceComponent.getComponentType());
 
     if (workplaceComponent == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[SawmillSpawner - spawn] Workplace component is missing");
+      Logger.logWarning("Workplace component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, null);
     }
 
@@ -473,7 +465,7 @@ public class SawmillSpawner {
         containerPosition.y, containerPosition.z);
 
     if (containerRef == null || !containerRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[SawmillSpawner - spawn] Container ref is invalid");
+      Logger.logWarning("Container ref is invalid");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
@@ -482,7 +474,7 @@ public class SawmillSpawner {
         WorkplaceContainerEntryComponent.getComponentType());
 
     if (container == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[SawmillSpawner - spawn] Container component is missing");
+      Logger.logWarning("Container component is missing");
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
@@ -507,7 +499,7 @@ public class SawmillSpawner {
       int level,
       Rotation rotation) {
     if (chunk == null || prefabAnchor == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[despawnIncompleteBuilding - sawmill] Missing chunk or prefab anchor");
+      Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
@@ -519,8 +511,7 @@ public class SawmillSpawner {
         constructionSignPosition);
 
     if (blockEntity == null || blockEntity.getSecond() == null || !blockEntity.getSecond().isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - sawmill] Could not fetch the construction sign entity");
+      Logger.logWarning("Could not fetch the construction sign entity");
       return false;
     }
 
@@ -559,8 +550,7 @@ public class SawmillSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[despawnIncompleteBuilding - sawmill] Could not despawn sawmill prefab");
+      Logger.logWarning("Could not despawn sawmill prefab");
       return false;
     }
 
@@ -587,7 +577,7 @@ public class SawmillSpawner {
     }
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[SawmillSpawner - despawn] Invalid workplaceRef");
+      Logger.logWarning("Invalid workplaceRef");
       return false;
     }
 
@@ -601,7 +591,7 @@ public class SawmillSpawner {
         TrackedPrefabPlacementComponent.getComponentType());
 
     if (component == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[SawmillSpawner - despawn] Missing workplace component");
+      Logger.logWarning("Missing workplace component");
       return false;
     }
 
@@ -627,7 +617,7 @@ public class SawmillSpawner {
     }
 
     if (!despawn) {
-      ProjectCivicCore.LOGGER.atSevere().log("[SawmillSpawner - despawn] Could not despawn sawmill prefab");
+      Logger.logWarning("Could not despawn sawmill prefab");
       return false;
     }
 

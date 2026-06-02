@@ -39,7 +39,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
     Ref<EntityStore> playerRef = context.senderAsPlayerRef();
 
     if (playerRef == null || !playerRef.isValid()) {
-      Logger.logSevere("Could not get the player ref");
+      Logger.logWarning("Could not get the player ref");
       return;
     }
 
@@ -54,7 +54,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
 
       if (component == null) {
         CommandUtils.sendExecutionResultMessage(context, ExecutionResult.Err);
-        Logger.logSevere("Could not fetch the player transform component");
+        Logger.logWarning("Could not fetch the player transform component");
         return;
       }
 
@@ -65,7 +65,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
             context,
             ExecutionResult.Err,
             "server.system.villagecommand.error.noValidVillage");
-        Logger.logSevere("Could not fetch the village core block ref");
+        Logger.logWarning("Could not fetch the village core block ref");
         return;
       }
 
@@ -82,7 +82,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
           ExecutionResult.Err,
           "server.system.villagecommand.error.noVillageHeartBlock");
 
-      Logger.logSevere("Could not fetch the village core component");
+      Logger.logWarning("Could not fetch the village core component");
       return null;
     }
 

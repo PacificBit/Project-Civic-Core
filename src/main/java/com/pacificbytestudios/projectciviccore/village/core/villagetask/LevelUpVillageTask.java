@@ -8,7 +8,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -16,6 +15,7 @@ import com.pacificbytestudios.projectciviccore.village.components.villagetask.Vi
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class LevelUpVillageTask extends AVillageTask {
   public static final BuilderCodec<LevelUpVillageTask> CODEC = BuilderCodec
@@ -44,7 +44,7 @@ public class LevelUpVillageTask extends AVillageTask {
       Vector3i heartPos,
       VillageHeartComponent heart) {
     if (this.level > heart.getConfig().getMaxLevel() || this.level < 0) {
-      ProjectCivicCore.LOGGER.atSevere().log("[LevelUpVillageTask] Received a village level too high: " + this.level);
+      Logger.logWarning("Received a village level too high: " + this.level);
       return;
     }
     heart.setLevel(this.level);
@@ -59,15 +59,13 @@ public class LevelUpVillageTask extends AVillageTask {
     try {
       townHall = heart.getTownHall();
     } catch (IllegalArgumentException exception) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[LevelUpVillageTask] Could not resolve town hall for village level-up: "
+      Logger.logWarning("Could not resolve town hall for village level-up: "
               + exception.getMessage());
       return;
     }
 
     if (townHall == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[LevelUpVillageTask] Village leveled up to " + this.level
+      Logger.logWarning("Village leveled up to " + this.level
               + " without a registered town hall to upgrade");
       return;
     }
@@ -77,8 +75,7 @@ public class LevelUpVillageTask extends AVillageTask {
     }
 
     if (townHall.getBenchPos() == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[LevelUpVillageTask] Could not upgrade town hall to level " + this.level
+      Logger.logWarning("Could not upgrade town hall to level " + this.level
               + " because the bench position is missing");
       return;
     }

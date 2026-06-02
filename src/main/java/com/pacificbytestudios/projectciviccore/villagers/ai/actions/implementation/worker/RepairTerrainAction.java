@@ -18,13 +18,13 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.BlockPlacementHelper;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.BuilderRepairTerrainAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.IWorkAreaScanner;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class RepairTerrainAction extends VillagerActionBase {
   private static final int MAX_DEDUCTION_RADIUS = 3;
@@ -78,13 +78,13 @@ public class RepairTerrainAction extends VillagerActionBase {
 
   private boolean repairTerrainBlock(World world, Vector3i blockPos) {
     if (blockPos == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[RepairTerrainAction] Snapshot contains a null terrain position");
+      Logger.logWarning("Snapshot contains a null terrain position");
       return false;
     }
 
     WorldChunk chunk = Utils.getWorldChunk(world, blockPos);
     if (chunk == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[RepairTerrainAction] Could not load chunk for " + blockPos);
+      Logger.logWarning("Could not load chunk for " + blockPos);
       return false;
     }
 
@@ -95,21 +95,19 @@ public class RepairTerrainAction extends VillagerActionBase {
 
     String blockId = this.getBlockIdToPlace(world, blockPos);
     if (blockId == null || blockId.isEmpty()) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[RepairTerrainAction] Could not resolve repair block id for " + blockPos);
+      Logger.logWarning("Could not resolve repair block id for " + blockPos);
       return false;
     }
 
     BlockType repairBlock = BlockType.getAssetMap().getAsset(blockId);
     if (repairBlock == null) {
-      ProjectCivicCore.LOGGER.atWarning()
-          .log("[RepairTerrainAction] Unknown repair block id " + blockId + " for " + blockPos);
+      Logger.logWarning("Unknown repair block id " + blockId + " for " + blockPos);
       return false;
     }
 
     boolean repaired = chunk.setBlock(blockPos.x, blockPos.y, blockPos.z, repairBlock);
     if (!repaired) {
-      ProjectCivicCore.LOGGER.atWarning().log("[RepairTerrainAction] Failed to place " + blockId + " at " + blockPos);
+      Logger.logWarning("Failed to place " + blockId + " at " + blockPos);
     }
 
     return repaired;

@@ -48,6 +48,7 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageHeartComponent implements Component<ChunkStore> {
 
@@ -463,7 +464,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
           CooldownCondition.create(TriggerEventType.ENTER, config.getWelcomeMessageCooldown()));
 
       // Add effects
-      ProjectCivicCore.LOGGER.atInfo().log("[setTriggervolumeArea] Registering village events for volume: " + name);
+      Logger.logInfo("Registering village events for volume: " + name);
       List<TriggerEffect> triggerEffects = volumeEntry.getEffects();
       String welcomeMessage = "server.system.villageheartplacementsystem.welcomeToVillage";
       triggerEffects.add(ShowEventTitleEffect.create(TriggerEventType.ENTER, name, welcomeMessage, false));
@@ -498,8 +499,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     Vector3d position = VectorUtil.toVector3d(villageArea.getCenter3D());
     position.y = getBlockContext().getPosition().y;
 
-    ProjectCivicCore.LOGGER.atInfo().log(
-        "[generateVolumeEntryShapeFromArea] Shape: " + shape.toString() + " Position: "
+    Logger.logInfo(
+        "Shape: " + shape.toString() + " Position: "
             + VectorUtil.toString(position));
 
     // Retrieve TriggerVolume manager

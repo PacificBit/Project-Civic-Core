@@ -61,7 +61,7 @@ public final class VillagerDeathCleanupSystem extends DeathSystems.OnDeathSystem
 
     Ref<ChunkStore> heartRef = this.resolveVillageHeartRef(villagerComponent);
     if (heartRef == null || !heartRef.isValid()) {
-      Logger.logSevere("Could not resolve village heart for dead villager " + villagerId);
+      Logger.logWarning("Could not resolve village heart for dead villager " + villagerId);
       this.clearEntityLinks(villagerComponent);
       return;
     }
@@ -70,7 +70,7 @@ public final class VillagerDeathCleanupSystem extends DeathSystems.OnDeathSystem
         heartRef,
         VillageHeartComponent.getComponentType());
     if (villageHeart == null) {
-      Logger.logSevere("Could not find village heart component for dead villager " + villagerId);
+      Logger.logWarning("Could not find village heart component for dead villager " + villagerId);
       this.clearEntityLinks(villagerComponent);
       return;
     }

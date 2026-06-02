@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.registry.registry.SaplingRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.ToolRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -20,6 +19,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.woodcutter.BuilderCanCraftWoodcutterResourceSensor;
 import com.pacificbytestudios.projectciviccore.villagers.core.crafting.BatchCraftingHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class CanCraftWoodcutterResourceSensor extends VillagerSensorBase {
   private final ResourceType resourceType;
@@ -67,8 +67,7 @@ public class CanCraftWoodcutterResourceSensor extends VillagerSensorBase {
         .toList();
 
     if (orderedRecipes.isEmpty()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CanCraftWoodcutterResourceSensor] No sapling recipes available for village level " + villageLevel);
+      Logger.logWarning("No sapling recipes available for village level " + villageLevel);
       return false;
     }
 
@@ -78,16 +77,14 @@ public class CanCraftWoodcutterResourceSensor extends VillagerSensorBase {
   private boolean canCraftHatchet(ItemContainer villagerStorage, int villageLevel) {
     Map<String, CraftingRecipe> levelRecipes = ToolRecipeRegistry.getLevelDependantCraftingRecipe(villageLevel);
     if (levelRecipes.isEmpty()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CanCraftWoodcutterResourceSensor] No tool recipes available for village level " + villageLevel);
+      Logger.logWarning("No tool recipes available for village level " + villageLevel);
       return false;
     }
 
     String recipeId = ToolType.HATCHET.getRecipeId(villageLevel);
     CraftingRecipe recipe = levelRecipes.get(recipeId);
     if (recipe == null) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[CanCraftWoodcutterResourceSensor] No hatchet recipe found for village level " + villageLevel
+      Logger.logWarning("No hatchet recipe found for village level " + villageLevel
               + " using recipe id " + recipeId);
       return false;
     }

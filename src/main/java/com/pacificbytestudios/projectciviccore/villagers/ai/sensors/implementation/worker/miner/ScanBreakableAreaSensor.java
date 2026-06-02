@@ -18,7 +18,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
@@ -27,6 +26,7 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.MinerScan;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ScanBreakableAreaSensor extends VillagerSensorBase {
 
@@ -65,13 +65,13 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
     ArrayDeque<Vector3i> digPositions = snapshot.getBlockTypePosition().get(MinerScan.DIG_POSITIONS);
     if (digPositions == null || digPositions.isEmpty()) {
       snapshot.getBlockTypePosition().remove(MinerScan.BREAKABLE_BLOCK);
-      ProjectCivicCore.LOGGER.atInfo().log("[ScanBreakableAreaSensor] No more dig position are present");
+      Logger.logInfo("No more dig position are present");
       return false;
     }
 
     MineshaftGallery mineshaftGallery = mineComponent.getWorkerAllocatedGallery(villagerId);
     if (mineshaftGallery == null) {
-      ProjectCivicCore.LOGGER.atWarning().log("[ScanBreakableAreaSensor] Could not find an allocated gallery");
+      Logger.logWarning("Could not find an allocated gallery");
       return false;
     }
 

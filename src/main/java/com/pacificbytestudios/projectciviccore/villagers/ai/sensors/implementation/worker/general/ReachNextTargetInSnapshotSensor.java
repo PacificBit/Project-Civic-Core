@@ -14,12 +14,12 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   // private static final double NUDGE_DISTANCE = 0.75;
@@ -54,7 +54,7 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
 
     TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
     if (transform == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[ReachNextTillableSoilSensor] Could not find transform component");
+      Logger.logWarning("Could not find transform component");
       this.positionProvider.clear();
       return false;
     }

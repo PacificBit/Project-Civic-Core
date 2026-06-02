@@ -10,8 +10,8 @@ import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class WoodCutterTerrainRepair {
   private final BlockType[] terrainRepairBlockTypes;
@@ -75,7 +75,7 @@ public class WoodCutterTerrainRepair {
     for (String blockId : terrainRepairBlockIds) {
       BlockType blockType = BlockType.getAssetMap().getAsset(blockId);
       if (blockType == null) {
-        ProjectCivicCore.LOGGER.atWarning().log("[PlantTree] Unknown terrain repair block id: " + blockId);
+        Logger.logWarning("Unknown terrain repair block id: " + blockId);
         continue;
       }
       resolvedBlocks.add(blockType);

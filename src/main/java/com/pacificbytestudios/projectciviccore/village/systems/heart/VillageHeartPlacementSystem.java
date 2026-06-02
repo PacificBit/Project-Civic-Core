@@ -19,7 +19,6 @@ import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
@@ -38,6 +37,7 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVil
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
   private static final VillagerRole[] SPAWNABLE_NPC = VillagerRole.values();
@@ -76,8 +76,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     String villageName = this.generateRandomVillageName(
         heartConfig.getFirstVillageNameComponents(), heartConfig.getSecondVillageNameComponents());
     villageHeart.setName(villageName);
-    ProjectCivicCore.LOGGER.atInfo()
-        .log("[VillageHeartPlacementSystem] Generated Village name: " + villageHeart.getName());
+    Logger.logInfo("Generated Village name: " + villageHeart.getName());
 
     int radius = spawnComponent.getSpawnNpcRange();
     if (villageHeart.getUuid() == null) {

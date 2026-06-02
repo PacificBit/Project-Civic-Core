@@ -13,7 +13,6 @@ import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
@@ -21,6 +20,7 @@ import com.pacificbytestudios.projectciviccore.village.components.builder.Buildi
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.RegisterStructureTopologyTask;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class StagedBuildingSpawnSystem extends RefSystem<ChunkStore> {
   private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
@@ -42,14 +42,13 @@ public class StagedBuildingSpawnSystem extends RefSystem<ChunkStore> {
 
     EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vector2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {
-      ProjectCivicCore.LOGGER.atSevere().log("[StagedBuildingSpawnSystem - onEntityAdded] No village found");
+      Logger.logWarning("No village found");
       return;
     }
 
     Ref<ChunkStore> heartRef = villageHeartRef.getRef();
     if (heartRef == null || !heartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[StagedBuildingSpawnSystem - onEntityAdded] Village heart ref is invalid");
+      Logger.logWarning("Village heart ref is invalid");
       return;
     }
 
@@ -57,8 +56,7 @@ public class StagedBuildingSpawnSystem extends RefSystem<ChunkStore> {
       BuildingSnapshotComponent snapshotComponent = store.getComponent(ref,
           BuildingSnapshotComponent.getComponentType());
 
-      ProjectCivicCore.LOGGER.atInfo()
-          .log("[StagedBuildingSpawnSystem - onEntityAdded] Registering topology of new building with id: "
+      Logger.logInfo("Registering topology of new building with id: "
               + snapshotComponent.getStructureId());
 
       VillageTaskQueueComponent taskComponent = new VillageTaskQueueComponent();

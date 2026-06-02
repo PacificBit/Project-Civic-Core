@@ -15,7 +15,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.SensorBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
@@ -23,6 +22,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.MayorCompone
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public abstract class VillagerSensorBase extends SensorBase {
   protected boolean suppressWarnings = false;
@@ -188,16 +188,14 @@ public abstract class VillagerSensorBase extends SensorBase {
 
   protected Ref<ChunkStore> require(Ref<ChunkStore> value, String what) {
     if (!isRefValid(value) && !this.suppressWarnings) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[" + getClass().getSimpleName() + "] Could not find " + what);
+      Logger.logWarning(getClass().getSimpleName() + " could not find " + what);
     }
     return value;
   }
 
   protected <T> T require(T value, String what) {
     if (value == null && !this.suppressWarnings) {
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[" + getClass().getSimpleName() + "] Could not find " + what);
+      Logger.logWarning(getClass().getSimpleName() + " could not find " + what);
     }
     return value;
   }
