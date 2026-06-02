@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.joml.Vector2i;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.hypixel.hytale.codec.Codec;
@@ -13,6 +15,9 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
@@ -272,6 +277,33 @@ public class TopologyStructure extends AreaFootprint {
         new Vector2i(localMaxX, localMaxZ));
   }
 
+  public void debug(World world, Vector3f color) {
+    debug(world, color, color);
+  }
+
+  public void debug(World world, Vector3f shape_color, Vector3f anchor_color) {
+    if (structureType == null) {
+      return;
+    }
+
+    // TODO: Fix y of the structure size
+    Vector3d center = VectorUtil.toVector3d(Utils.centerOf(getCenter()));
+    Vector3d anchor = VectorUtil.toVector3d(Utils.centerOf(prefabAnchor));
+    Vector3d size = VectorUtil.toVector3d(Utils.getSize3i(structureType));
+    Rotation rotation = getOrientation();
+
+    // Apply rotation
+    size = rotation.rotateY(size, new Vector3d());
+
+    // Draw anchor
+    Vector3d anchor_end = new Vector3d(anchor).add(0, 10, 0);
+    DrawUtils.addLine(world, anchor, anchor_end, anchor_color, .2f, DrawUtils.FOREVER,
+        DrawUtils.FLAG_NONE);
+
+    // Draw shape
+    DrawUtils.addCuboid(world, center, size, shape_color, .4f, DrawUtils.FOREVER, DrawUtils.FLAG_NONE);
+  }
+
   @Override
   public TopologyStructure clone() {
     TopologyStructure component = new TopologyStructure();
@@ -295,8 +327,8 @@ public class TopologyStructure extends AreaFootprint {
     return "TopologyStructure{"
         + "\n structureId=" + this.structureId
         + "\n topologyType=" + this.topologyType
-        + ",\n topLeft=" + getTopLeft()
-        + ",\n botRight=" + getBotRight()
+        + ",\n topLeft=" + VectorUtil.toString(getTopLeft())
+        + ",\n botRight=" + VectorUtil.toString(getBotRight())
         + ",\n y=" + getY()
         + ",\n distanceFromCenter=" + this.distanceFromCenter
         + '}';

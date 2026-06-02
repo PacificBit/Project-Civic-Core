@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.hypixel.hytale.codec.Codec;
@@ -19,6 +21,8 @@ import com.hypixel.hytale.codec.store.CodecStore;
 import com.hypixel.hytale.codec.store.StoredCodec;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageRoadState;
 
@@ -124,6 +128,16 @@ public class RoadsGraph {
             (obj) -> obj.branchOriginKey)
         .add()
 
+        .append(new KeyedCodec<>("StartPoint", Vector3iUtil.CODEC),
+            (obj, value) -> obj.startPoint = value,
+            (obj) -> obj.startPoint)
+        .add()
+
+        .append(new KeyedCodec<>("Length", Codec.SHORT),
+            (obj, value) -> obj.length = value,
+            (obj) -> obj.length)
+        .add()
+
         .afterDecode((node) -> node.rebuildParentLinks(node.parent))
 
         .build();
@@ -142,6 +156,10 @@ public class RoadsGraph {
     private Rotation prefabOrientation;
     private Vector3i roadDirectionVec;
     private Vector3i branchOriginKey;
+    // TODO: Check these data if they are correct during road expansion and if
+    // needed
+    private Vector3i startPoint;
+    private short length;
 
     public RoadNode() {
     }
@@ -266,6 +284,30 @@ public class RoadsGraph {
 
     public void setPrefabOrientation(Rotation orientation) {
       this.prefabOrientation = orientation;
+    }
+
+    public Vector3i getStartPoint() {
+      return startPoint;
+    }
+
+    public void setStartPoint(Vector3i startPoint) {
+      this.startPoint = startPoint;
+    }
+
+    public short getLength() {
+      return length;
+    }
+
+    public void setLength(short length) {
+      this.length = length;
+    }
+
+    public void debug(World world, Vector3f color) {
+      short length = getLength();
+      Vector3d origin = new Vector3d(getStartPoint()).add(0, 1, 0);
+      Vector3d direction = new Vector3d(getRoadDirectionVec()).mul(length);
+
+      DrawUtils.addArrow(world, origin, direction, color, DrawUtils.FOREVER, DrawUtils.FLAG_NONE);
     }
 
     @Override

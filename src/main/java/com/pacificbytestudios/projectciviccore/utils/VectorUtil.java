@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
+import org.joml.Vector2d;
+import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
@@ -158,6 +160,18 @@ public class VectorUtil {
   // =============================
   // To string
   // =============================
+
+  public static String toString(Vector2i point) {
+    return "<x: " + point.x + ", y: " + point.y + ">";
+  }
+
+  public static String toString(Vector2d point) {
+    return "<x: " + point.x + ", y: " + point.y + ">";
+  }
+
+  public static String toString(Vector2f point) {
+    return "<x: " + point.x + ", y: " + point.y + ">";
+  }
 
   public static String toString(Vector3i point) {
     return "<x: " + point.x + ", y: " + point.y + ", z: " + point.z + ">";

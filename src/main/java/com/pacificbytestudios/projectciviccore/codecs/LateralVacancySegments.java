@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.hypixel.hytale.codec.Codec;
@@ -11,6 +13,9 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 
 public class LateralVacancySegments {
@@ -371,6 +376,19 @@ public class LateralVacancySegments {
     @Override
     public String toString() {
       return "Segment [start=" + start + ", end=" + end + ", size=" + size + "]";
+    }
+
+    public void debug(World world, Vector3f color) {
+      debug(world, color, false);
+    }
+
+    public void debug(World world, Vector3f color, boolean log) {
+      if (log) {
+        ProjectCivicCore.LOGGER.atInfo().log("[Segment] Debug - %s".formatted(toString()));
+      }
+
+      DrawUtils.addLine(world, new Vector3d(start).add(0, 1, 0), new Vector3d(end).add(0, 1, 0), color, 0.2f,
+          DrawUtils.FOREVER, DrawUtils.FLAG_NONE);
     }
   }
 }
