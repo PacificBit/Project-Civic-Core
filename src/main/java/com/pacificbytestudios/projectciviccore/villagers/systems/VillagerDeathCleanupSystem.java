@@ -15,8 +15,9 @@ import com.hypixel.hytale.server.core.modules.entity.damage.DeathSystems;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
+import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseAppartmentRegistry;
@@ -48,18 +49,19 @@ public final class VillagerDeathCleanupSystem extends DeathSystems.OnDeathSystem
     }
 
     UUID villagerId = uuidComponent.getUuid();
-    ProjectCivicCore.LOGGER.atWarning().log(
-        "[VillagerDeathCleanupSystem] Villager '" + villagerId + "' died!\n Death Reason: " +
-            component.getDeathCause() + "\n Death Position: " +
-            (transform == null ? "<TransformComponent not found>" : transform.getPosition()));
+    String position = transform == null ?
+      "<TransformComponent not found>" :
+      VectorUtil.toString(transform.getPosition());
+
+    Logger.logWarning("Villager '%s' died!\n\tDeath Reason: %s\n\tDeath Position: %s"
+      .formatted(villagerId, component.getDeathCause(), position));
 
     this.cleanupPersistedWorkplace(villagerComponent, villagerId);
     this.cleanupPersistedHousing(villagerComponent, villagerId);
 
     Ref<ChunkStore> heartRef = this.resolveVillageHeartRef(villagerComponent);
     if (heartRef == null || !heartRef.isValid()) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[VillagerDeathCleanupSystem] Could not resolve village heart for dead villager " + villagerId);
+      Logger.logSevere("Could not resolve village heart for dead villager " + villagerId);
       this.clearEntityLinks(villagerComponent);
       return;
     }
@@ -68,8 +70,7 @@ public final class VillagerDeathCleanupSystem extends DeathSystems.OnDeathSystem
         heartRef,
         VillageHeartComponent.getComponentType());
     if (villageHeart == null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[VillagerDeathCleanupSystem] Could not find village heart component for dead villager " + villagerId);
+      Logger.logSevere("Could not find village heart component for dead villager " + villagerId);
       this.clearEntityLinks(villagerComponent);
       return;
     }

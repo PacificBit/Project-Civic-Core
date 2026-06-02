@@ -18,7 +18,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHa
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
 public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
@@ -39,17 +39,13 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
 
     Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
     if (player == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Could not find player using interaction context. playerRef=%s",
-          playerRef);
+      Logger.logSevere("Could not find player using interaction context");
       return;
     }
 
     UUIDComponent uuidComp = commandBuffer.getComponent(playerRef, UUIDComponent.getComponentType());
     if (uuidComp == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Could not find UUIDComponent for player. playerRef=%s",
-          playerRef);
+      Logger.logSevere("Could not find UUIDComponent for player");
       return;
     }
     UUID playerUuid = uuidComp.getUuid();
@@ -58,40 +54,34 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
 
     Ref<EntityStore> target = context.getTargetEntity();
     if (target == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Target entity is null. playerUuid=%s",
-          playerUuid);
+      Logger.logSevere("Target entity is null. playerUuid=%s".formatted(playerUuid));
       return;
     }
 
     if (!target.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Target entity is invalid. playerUuid=%s, target=%s",
-          playerUuid, target);
+      Logger.logSevere("Target entity is invalid. playerUuid=%s, target=%s"
+        .formatted(playerUuid, target));
       return;
     }
 
     VillagerComponent villager = store.getComponent(target, VillagerComponent.getComponentType());
     if (villager == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Target entity is missing VillagerComponent. playerUuid=%s, target=%s",
-          playerUuid, target);
+      Logger.logSevere("Target entity is missing VillagerComponent. playerUuid=%s, target=%s"
+        .formatted(playerUuid, target));
       return;
     }
 
     NPCEntity targetNpc = commandBuffer.getComponent(target, NPCEntity.getComponentType());
     if (targetNpc == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Target entity is missing NPCEntity component. playerUuid=%s, target=%s",
-          playerUuid, target);
+      Logger.logSevere("Target entity is missing NPCEntity component. playerUuid=%s, target=%s"
+        .formatted(playerUuid, target));
       return;
     }
 
     ItemContainer container = targetNpc.getInventory().getCombinedStorageFirst();
     if (container == null) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Combined storage container is null after inventory setup. playerUuid=%s, target=%s",
-          playerUuid, target);
+      Logger.logSevere("Combined storage container is null after inventory setup. playerUuid=%s, target=%s"
+        .formatted(playerUuid, target));
       return;
     }
 
@@ -99,16 +89,14 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
     ContainerWindow window = new ContainerWindow(container);
 
     if (windows.putIfAbsent(playerUuid, window) != null) {
-      ProjectCivicCore.LOGGER.atWarning().log(
-          "[VillagerOpenInventoryInteraction] Player already has an open villager inventory window. playerUuid=%s, target=%s",
-          playerUuid, target);
+      Logger.logWarning("Player already has an open villager inventory window. playerUuid=%s, target=%s"
+        .formatted(playerUuid, target));
       return;
     }
 
     if (!player.getPageManager().setPageWithWindows(playerRef, store, Page.Bench, true, window)) {
-      ProjectCivicCore.LOGGER.atSevere().log(
-          "[VillagerOpenInventoryInteraction] Failed to open villager inventory page for player. playerUuid=%s, target=%s",
-          playerUuid, target);
+      Logger.logSevere("Failed to open villager inventory page for player. playerUuid=%s, target=%s"
+        .formatted(playerUuid, target));
       windows.remove(playerUuid, window);
       return;
     }

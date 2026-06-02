@@ -10,8 +10,8 @@ import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.VectorUtil;
 import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
@@ -44,16 +44,14 @@ public class Spawn extends VillageCommand {
 
     if (village != null) {
       sendVillageTooCloseMsg(exeContext.cmdContext(), village, playerTransform.getPosition());
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[SpawnVillage - spawnVillage] Trying to spawn a village inside another village");
+      Logger.logInfo("Trying to spawn a village inside another village");
       return;
     }
 
     village = CommandUtils.doesVillagePlacementCollide(playerTransform);
     if (village != null) {
       sendVillageTooCloseMsg(exeContext.cmdContext(), village, playerTransform.getPosition());
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[SpawnVillage - spawnVillage] Trying to spawn a village that would collide with another");
+      Logger.logInfo("Trying to spawn a village that would collide with another");
       return;
     }
 

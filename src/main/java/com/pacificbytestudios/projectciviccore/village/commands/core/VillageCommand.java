@@ -8,8 +8,8 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionContext;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionResult;
@@ -39,7 +39,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
     Ref<EntityStore> playerRef = context.senderAsPlayerRef();
 
     if (playerRef == null || !playerRef.isValid()) {
-      ProjectCivicCore.LOGGER.atSevere().log("[VillageCommand - executeSync] Could not get the player ref");
+      Logger.logSevere("Could not get the player ref");
       return;
     }
 
@@ -54,8 +54,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
 
       if (component == null) {
         CommandUtils.sendExecutionResultMessage(context, ExecutionResult.Err);
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[VillageCommand - executeSync] Could not fetch the player transform component");
+        Logger.logSevere("Could not fetch the player transform component");
         return;
       }
 
@@ -66,8 +65,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
             context,
             ExecutionResult.Err,
             "server.system.villagecommand.error.noValidVillage");
-        ProjectCivicCore.LOGGER.atSevere()
-            .log("[VillageCommand - executeSync] Could not fetch the village core block ref");
+        Logger.logSevere("Could not fetch the village core block ref");
         return;
       }
 
@@ -84,8 +82,7 @@ public abstract class VillageCommand extends CommandBase implements ExecutableVi
           ExecutionResult.Err,
           "server.system.villagecommand.error.noVillageHeartBlock");
 
-      ProjectCivicCore.LOGGER.atSevere()
-          .log("[VillageCommand - getVillageHeart] Could not fetch the village core component");
+      Logger.logSevere("Could not fetch the village core component");
       return null;
     }
 
