@@ -3,6 +3,7 @@ package com.pacificbytestudios.projectciviccore.villagers.core.work.scan;
 import java.util.ArrayDeque;
 import java.util.UUID;
 
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
@@ -87,19 +88,19 @@ public class StorageKeeperScan implements IWorkAreaScanner {
       case CLEAR_WORKPLACE_INVENTORY:
         putSnapshotTargets(snapshotInProgress,
             FETCH_ALL, this.resolveRequestStorageTargets(request, villageHeart),
-            DUMP_ALL, workplaceComponent.getStorage().getAllContainerAccessPositions());
+            DUMP_ALL, toBlockTargets(workplaceComponent.getStorage().getAllContainerAccessPositions()));
         break;
 
       case DELIVER_TO_WORKPLACE:
         putSnapshotTargets(snapshotInProgress,
-            FETCH_ITEM, workplaceComponent.getStorage().getAllContainerAccessPositions(),
+            FETCH_ITEM, toBlockTargets(workplaceComponent.getStorage().getAllContainerAccessPositions()),
             DUMP_ITEM, this.resolveRequestStorageTargets(request, villageHeart));
         break;
 
       case COLLECT_FROM_WORKPLACE:
         putSnapshotTargets(snapshotInProgress,
             FETCH_ITEM, this.resolveRequestStorageTargets(request, villageHeart),
-            DUMP_ITEM, workplaceComponent.getStorage().getAllContainerAccessPositions());
+            DUMP_ITEM, toBlockTargets(workplaceComponent.getStorage().getAllContainerAccessPositions()));
         break;
 
       default:
@@ -161,15 +162,31 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     }
 
     if (villageHeart == null || request.getRequesterWorkplaceId() == null) {
-      return request.getTargetsWorkplaceStorage();
+      return toBlockTargets(request.getTargetsWorkplaceStorage());
     }
 
     WorkplaceComponent requesterWorkplace = villageHeart.getWorkplaceFromId(request.getRequesterWorkplaceId());
     if (requesterWorkplace == null || requesterWorkplace.getStorage() == null) {
-      return request.getTargetsWorkplaceStorage();
+      return toBlockTargets(request.getTargetsWorkplaceStorage());
     }
 
-    return requesterWorkplace.getStorage().getAllContainerAccessPositions();
+    return toBlockTargets(requesterWorkplace.getStorage().getAllContainerAccessPositions());
+  }
+
+  private static Iterable<Vec3i> toBlockTargets(Iterable<Vec3f> positions) {
+    ArrayDeque<Vec3i> converted = new ArrayDeque<>();
+
+    if (positions == null) {
+      return converted;
+    }
+
+    for (Vec3f position : positions) {
+      if (position != null) {
+        converted.add(position.to3i());
+      }
+    }
+
+    return converted;
   }
 
 }

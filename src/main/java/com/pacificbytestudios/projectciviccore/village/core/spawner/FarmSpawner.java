@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
@@ -74,15 +75,15 @@ public class FarmSpawner {
       VillageHeartComponent heart,
       int targetLevel) {
     Logger.logInfo(
-        "Registering new staged Farm construction of level: " +
-            targetLevel + ", with id: " + structureId);
+        "Registering new staged Farm construction of level %d, with id: %s",
+        targetLevel, structureId);
 
     WorldChunk chunkToUse = chunk;
     World world = chunkToUse.getWorld();
     short stage = (short) 0;
     String prefab = StructureConfig.Farm.getPrefab(targetLevel, stage);
 
-    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: %s", prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -173,7 +174,7 @@ public class FarmSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vec3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vec3i prefabAnchor = workplace.getPrefabAnchor();
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -214,7 +215,7 @@ public class FarmSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        prefabAnchor,
         structureRotation,
         true);
 
@@ -473,7 +474,7 @@ public class FarmSpawner {
       return rollbackFailedSpawn(world, workplaceChunk, snapshotToUse, workplaceBlockPosition, containerPosition);
     }
 
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(prefabAnchor);
 
     container.setPosition(containerPosition);
     container.setAccessPosition(getContainerAccessPosition(containerPosition, targetLevel, rotation));
@@ -583,7 +584,7 @@ public class FarmSpawner {
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(), trackedPlacement);
     } else {
-      Vec3i prefabAnchor = component.getPrefabAnchor();
+      Vec3i prefabAnchor = component.getPrefabAnchor() == null ? null : component.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -604,7 +605,7 @@ public class FarmSpawner {
       return false;
     }
 
-    Vec3i prefabAnchor = component.getPrefabAnchor();
+    Vec3i prefabAnchor = component.getPrefabAnchor() == null ? null : component.getPrefabAnchor();
     if (prefabAnchor == null && trackedPlacement != null) {
       prefabAnchor = trackedPlacement.getOrigin();
     }
@@ -694,14 +695,14 @@ public class FarmSpawner {
         rotation);
   }
 
-  private static Vec3i getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3f getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
         StructureConfig.Farm.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vec3i getContainerAccessPosition(Vec3i containerPosition, int level, Rotation rotation) {
+  private static Vec3f getContainerAccessPosition(Vec3i containerPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         containerPosition,
         StructureConfig.Farm.getLevelLayout(level).container().accessOffset(),

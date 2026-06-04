@@ -38,6 +38,7 @@ import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.triggervolumeeffects.TeleportVillagerToTownHeartEffect;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -46,7 +47,6 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageHeartComponent implements Component<ChunkStore> {
 

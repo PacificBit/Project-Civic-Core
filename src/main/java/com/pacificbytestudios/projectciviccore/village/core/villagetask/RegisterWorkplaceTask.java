@@ -45,8 +45,8 @@ public class RegisterWorkplaceTask extends AVillageTask {
       Ref<ChunkStore> heartRef,
       Vec3i heartPos,
       VillageHeartComponent heart) {
-    Logger.logInfo("Registering workplace '" + this.workplace.getWorkplaceType() + "' with id: "
-            + this.workplace.getUuid());
+    Logger.logInfo("Registering workplace '%s' with id: %s",
+        this.workplace.getWorkplaceType(), this.workplace.getUuid());
     heart.registerWorkplace(this.workplace);
 
     VillageTopologyComponent topology = heartRef.getStore().getComponent(

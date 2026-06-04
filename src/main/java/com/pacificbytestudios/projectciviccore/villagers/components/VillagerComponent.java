@@ -21,6 +21,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
@@ -57,7 +58,7 @@ public class VillagerComponent implements Component<EntityStore> {
           (obj) -> obj.workerData)
       .add()
 
-      .append(new KeyedCodec<>("ReservedInteractable", Vec3i.CODEC),
+      .append(new KeyedCodec<>("ReservedInteractable", Vec3f.CODEC),
           (obj, value) -> obj.reservedInteractable = value,
           (obj) -> obj.reservedInteractable)
       .add()
@@ -87,7 +88,7 @@ public class VillagerComponent implements Component<EntityStore> {
   private EntityRef villageHeartLocation;
   private VillagerHousingComponent housingData;
   private VillagerWorkerComponent workerData;
-  private Vec3i reservedInteractable;
+  private Vec3f reservedInteractable;
   private EntityRef reservedTavernLocation;
   private Instant lastLunchMealTime;
   private Instant lastDinnerMealTime;
@@ -174,11 +175,11 @@ public class VillagerComponent implements Component<EntityStore> {
     return currentDate.equals(lastMealDateTime.toLocalDate());
   }
 
-  public Vec3i getReservedInteractable() {
+  public Vec3f getReservedInteractable() {
     return reservedInteractable;
   }
 
-  public void setReservedInteractable(Vec3i reservedInteractable) {
+  public void setReservedInteractable(Vec3f reservedInteractable) {
     this.reservedInteractable = reservedInteractable;
   }
 

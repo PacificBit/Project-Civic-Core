@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
@@ -65,7 +66,7 @@ public final class StructureConfig {
   public record BlockTransform(Vec3i position, Rotation rotation) {
   }
 
-  public record ContainerTransform(Vec3i position, Rotation rotation, Vec3i accessOffset) {
+  public record ContainerTransform(Vec3i position, Rotation rotation, Vec3f accessOffset) {
   }
 
   private StructureConfig() {
@@ -88,13 +89,13 @@ public final class StructureConfig {
 
     private static final int SPAWNING_SCALE = 6;
 
-    private static final List<Vec3i> VILLAGER_SPAWNING_OFFSETS = List.of(
-        Vec3i.NORTH.safeMul(SPAWNING_SCALE),
-        Vec3i.SOUTH.safeMul(SPAWNING_SCALE),
-        Vec3i.WEST.safeMul(SPAWNING_SCALE),
-        Vec3i.EAST.safeMul(SPAWNING_SCALE));
+    private static final List<Vec3f> VILLAGER_SPAWNING_OFFSETS = List.of(
+        Vec3f.NORTH.safeMul(SPAWNING_SCALE),
+        Vec3f.SOUTH.safeMul(SPAWNING_SCALE),
+        Vec3f.WEST.safeMul(SPAWNING_SCALE),
+        Vec3f.EAST.safeMul(SPAWNING_SCALE));
 
-    public static List<Vec3i> getVillagerSpawningOffsets() {
+    public static List<Vec3f> getVillagerSpawningOffsets() {
       return VILLAGER_SPAWNING_OFFSETS;
     }
   }
@@ -103,7 +104,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vec3i benchAccessOffset,
+        Vec3f benchAccessOffset,
         ContainerTransform container,
         AreaFootprint workingAreaOffset) {
     }
@@ -112,12 +113,12 @@ public final class StructureConfig {
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Farm_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
     public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(-5, 1, -5);
-    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(0, 0, 1);
+    public static final Vec3f BENCH_ACCESS_OFFSET = new Vec3f(0, 0, 1);
 
     public static final Vec3i CONTAINER_OFFSET = new Vec3i(0, 0, 8);
     public static final Rotation CONTAINER_ROTATION = Rotation.Ninety;
 
-    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(0, 0, -1);
+    public static final Vec3f CONTAINER_ACCESS_OFFSET = new Vec3f(0, 0, -1);
     public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
@@ -157,8 +158,8 @@ public final class StructureConfig {
         new LevelLayout(
             new BlockTransform(new Vec3i(-5, 1, -4), Rotation.None),
             new BlockTransform(new Vec3i(3, 1, 6), Rotation.None),
-            new Vec3i(0, 0, 1),
-            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.TwoSeventy, new Vec3i(0, 0, -1)),
+            new Vec3f(0, 0, 1),
+            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.TwoSeventy, new Vec3f(0, 0, -1)),
             new AreaFootprint(new Vec2i(-1, -4), new Vec2i(7, 4))),
 
         2,
@@ -166,8 +167,8 @@ public final class StructureConfig {
             // TODO: complete this
             new BlockTransform(new Vec3i(-5, 1, -5), Rotation.None),
             new BlockTransform(new Vec3i(3, 1, 6), Rotation.None),
-            new Vec3i(0, 0, 1),
-            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.Ninety, new Vec3i(0, 0, -1)),
+            new Vec3f(0, 0, 1),
+            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.Ninety, new Vec3f(0, 0, -1)),
             new AreaFootprint(new Vec2i(-1, -4), new Vec2i(7, 4))),
 
         3,
@@ -175,8 +176,8 @@ public final class StructureConfig {
             // TODO: complete this
             new BlockTransform(new Vec3i(-5, 1, -5), Rotation.None),
             new BlockTransform(new Vec3i(3, 1, 6), Rotation.None),
-            new Vec3i(0, 0, 1),
-            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.Ninety, new Vec3i(0, 0, -1)),
+            new Vec3f(0, 0, 1),
+            new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.Ninety, new Vec3f(0, 0, -1)),
             new AreaFootprint(new Vec2i(-1, -4), new Vec2i(7, 4))));
 
     private Farm() {
@@ -200,7 +201,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vec3i benchAccessOffset,
+        Vec3f benchAccessOffset,
         List<ContainerTransform> containers) {
     }
 
@@ -210,10 +211,10 @@ public final class StructureConfig {
     public static final Rotation LEFT_CONTAINER_YAW_OFFSET = Rotation.Ninety;
     public static final Rotation RIGHT_CONTAINER_YAW_OFFSET = Rotation.TwoSeventy;
     public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(0, 1, -3);
-    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(0, 0, 1);
-    public static final Vec3i LEFT_CONTAINER_ACCESS_OFFSET = new Vec3i(1,
+    public static final Vec3f BENCH_ACCESS_OFFSET = new Vec3f(0, 0, 1);
+    public static final Vec3f LEFT_CONTAINER_ACCESS_OFFSET = new Vec3f(1,
         0, 0);
-    public static final Vec3i RIGHT_CONTAINER_ACCESS_OFFSET = new Vec3i(-1,
+    public static final Vec3f RIGHT_CONTAINER_ACCESS_OFFSET = new Vec3f(-1,
         0, 0);
     public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
@@ -246,36 +247,36 @@ public final class StructureConfig {
         new LevelLayout(
             new BlockTransform(new Vec3i(0, 1, -3), Rotation.None),
             new BlockTransform(new Vec3i(0, 1, 7), Rotation.None),
-            new Vec3i(0, 0, 1),
+            new Vec3f(0, 0, 1),
             List.of(
-                new ContainerTransform(new Vec3i(-3, 1, 1), Rotation.Ninety, new Vec3i(1, 0, 0)),
-                new ContainerTransform(new Vec3i(-3, 1, -2), Rotation.Ninety, new Vec3i(1, 0, 0)),
-                new ContainerTransform(new Vec3i(3, 1, 2), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
-                new ContainerTransform(new Vec3i(3, 1, -1), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)))),
+                new ContainerTransform(new Vec3i(-3, 1, 1), Rotation.Ninety, new Vec3f(1, 0, 0)),
+                new ContainerTransform(new Vec3i(-3, 1, -2), Rotation.Ninety, new Vec3f(1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, 2), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, -1), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)))),
 
         2,
         new LevelLayout(
             new BlockTransform(new Vec3i(-1, 1, -4), Rotation.None),
             new BlockTransform(new Vec3i(0, 1, 7), Rotation.None),
-            new Vec3i(0, 0, 2),
+            new Vec3f(0, 0, 2),
             List.of(
-                new ContainerTransform(new Vec3i(2, 1, -2), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
-                new ContainerTransform(new Vec3i(2, 1, 1), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
-                new ContainerTransform(new Vec3i(2, 1, 4), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(2, 1, -2), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(2, 1, 1), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(2, 1, 4), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)),
 
-                new ContainerTransform(new Vec3i(-5, 5, -1), Rotation.OneEighty, new Vec3i(0, 0, -1)),
-                new ContainerTransform(new Vec3i(3, 5, 4), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
-                new ContainerTransform(new Vec3i(-1, 5, 1), Rotation.Ninety, new Vec3i(1, 0, 0)),
-                new ContainerTransform(new Vec3i(1, 5, 5), Rotation.OneEighty, new Vec3i(0, 0, -1)),
+                new ContainerTransform(new Vec3i(-5, 5, -1), Rotation.OneEighty, new Vec3f(0, 0, -1)),
+                new ContainerTransform(new Vec3i(3, 5, 4), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(-1, 5, 1), Rotation.Ninety, new Vec3f(1, 0, 0)),
+                new ContainerTransform(new Vec3i(1, 5, 5), Rotation.OneEighty, new Vec3f(0, 0, -1)),
 
-                new ContainerTransform(new Vec3i(-4, 5, -3), Rotation.None, new Vec3i(0, 0, 1)),
-                new ContainerTransform(new Vec3i(-5, 5, -4), Rotation.OneEighty, new Vec3i(0, 0, -1)),
+                new ContainerTransform(new Vec3i(-4, 5, -3), Rotation.None, new Vec3f(0, 0, 1)),
+                new ContainerTransform(new Vec3i(-5, 5, -4), Rotation.OneEighty, new Vec3f(0, 0, -1)),
 
-                new ContainerTransform(new Vec3i(-1, 5, -3), Rotation.None, new Vec3i(0, 0, 1)),
-                new ContainerTransform(new Vec3i(-2, 5, -4), Rotation.OneEighty, new Vec3i(0, 0, -1)),
+                new ContainerTransform(new Vec3i(-1, 5, -3), Rotation.None, new Vec3f(0, 0, 1)),
+                new ContainerTransform(new Vec3i(-2, 5, -4), Rotation.OneEighty, new Vec3f(0, 0, -1)),
 
-                new ContainerTransform(new Vec3i(2, 5, -3), Rotation.None, new Vec3i(0, 0, 1)),
-                new ContainerTransform(new Vec3i(1, 5, -4), Rotation.OneEighty, new Vec3i(0, 0, -1))
+                new ContainerTransform(new Vec3i(2, 5, -3), Rotation.None, new Vec3f(0, 0, 1)),
+                new ContainerTransform(new Vec3i(1, 5, -4), Rotation.OneEighty, new Vec3f(0, 0, -1))
 
             )),
 
@@ -284,12 +285,12 @@ public final class StructureConfig {
             // TODO: complete this
             new BlockTransform(new Vec3i(0, 1, -3), Rotation.None),
             new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
-            new Vec3i(0, 0, 1),
+            new Vec3f(0, 0, 1),
             List.of(
-                new ContainerTransform(new Vec3i(-3, 1, 1), Rotation.Ninety, new Vec3i(1, 0, 0)),
-                new ContainerTransform(new Vec3i(-3, 1, -2), Rotation.Ninety, new Vec3i(1, 0, 0)),
-                new ContainerTransform(new Vec3i(3, 1, 2), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)),
-                new ContainerTransform(new Vec3i(3, 1, -1), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)))));
+                new ContainerTransform(new Vec3i(-3, 1, 1), Rotation.Ninety, new Vec3f(1, 0, 0)),
+                new ContainerTransform(new Vec3i(-3, 1, -2), Rotation.Ninety, new Vec3f(1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, 2), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)),
+                new ContainerTransform(new Vec3i(3, 1, -1), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)))));
 
     private Storage() {
     }
@@ -388,7 +389,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vec3i benchAccessOffset,
+        Vec3f benchAccessOffset,
         List<ContainerTransform> containers) {
     }
 
@@ -396,8 +397,8 @@ public final class StructureConfig {
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Tavern_Core");
     public static final BlockType SINGLE_STORAGE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Chest_Small");
     public static final Rotation CONTAINER_BLOCK_YAW_OFFSET = Rotation.OneEighty;
-    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(0, 0, 1);
-    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(0, 0, -1);
+    public static final Vec3f BENCH_ACCESS_OFFSET = new Vec3f(0, 0, 1);
+    public static final Vec3f CONTAINER_ACCESS_OFFSET = new Vec3f(0, 0, -1);
     public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
     public static final Vec3i CONSTRUCTION_SIGN_OFFSET = new Vec3i(0, 1, 5);
@@ -431,86 +432,86 @@ public final class StructureConfig {
         new LevelLayout(
             new BlockTransform(new Vec3i(-4, 1, -3), Rotation.None),
             new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
-            new Vec3i(0, 0, 1),
-            List.of(new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.OneEighty, new Vec3i(0, 0, -1)))),
+            new Vec3f(0, 0, 1),
+            List.of(new ContainerTransform(new Vec3i(-5, 1, 3), Rotation.OneEighty, new Vec3f(0, 0, -1)))),
 
         2,
         new LevelLayout(
             new BlockTransform(new Vec3i(5, -3, 0), Rotation.TwoSeventy),
             new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
-            new Vec3i(-1, 0, 0),
-            List.of(new ContainerTransform(new Vec3i(5, -3, -3), Rotation.TwoSeventy, new Vec3i(-1, 0, 0)))),
+            new Vec3f(-1, 0, 0),
+            List.of(new ContainerTransform(new Vec3i(5, -3, -3), Rotation.TwoSeventy, new Vec3f(-1, 0, 0)))),
 
         3,
         new LevelLayout(
             // TODO: complete this
             new BlockTransform(new Vec3i(5, -3, 0), Rotation.TwoSeventy),
             new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
-            new Vec3i(0, 0, 1),
-            List.of(new ContainerTransform(new Vec3i(5, -3, -3), Rotation.OneEighty, new Vec3i(0, 0, -1)))));
+            new Vec3f(0, 0, 1),
+            List.of(new ContainerTransform(new Vec3i(5, -3, -3), Rotation.OneEighty, new Vec3f(0, 0, -1)))));
 
     private static final Map<Integer, List<Interactable>> INTERACTABLES = Map.of(
         1,
         List.of(
-            new Interactable(new Vec3i(0, 1, 0), new Vec3i(0, 2, -1), true),
-            new Interactable(new Vec3i(-1, 1, 0), new Vec3i(-1, 2, -1), true),
-            new Interactable(new Vec3i(0, 1, -3), new Vec3i(0, 2, -2), true),
-            new Interactable(new Vec3i(-1, 1, -3), new Vec3i(-1, 2, -2), true),
+            new Interactable(new Vec3f(0, 1, 0), new Vec3f(0, 2, -1), true),
+            new Interactable(new Vec3f(-1, 1, 0), new Vec3f(-1, 2, -1), true),
+            new Interactable(new Vec3f(0, 1, -3), new Vec3f(0, 2, -2), true),
+            new Interactable(new Vec3f(-1, 1, -3), new Vec3f(-1, 2, -2), true),
 
-            new Interactable(new Vec3i(2, 1, -1), new Vec3i(3, 2, -1), true),
-            new Interactable(new Vec3i(2, 1, -2), new Vec3i(3, 2, -2), true),
-            new Interactable(new Vec3i(5, 1, -1), new Vec3i(4, 2, -1), true),
-            new Interactable(new Vec3i(5, 1, -2), new Vec3i(4, 2, -2), true),
+            new Interactable(new Vec3f(2, 1, -1), new Vec3f(3, 2, -1), true),
+            new Interactable(new Vec3f(2, 1, -2), new Vec3f(3, 2, -2), true),
+            new Interactable(new Vec3f(5, 1, -1), new Vec3f(4, 2, -1), true),
+            new Interactable(new Vec3f(5, 1, -2), new Vec3f(4, 2, -2), true),
 
-            new Interactable(new Vec3i(2, 1, 1), new Vec3i(3, 2, 1), true),
-            new Interactable(new Vec3i(2, 1, 2), new Vec3i(3, 2, 2), true),
-            new Interactable(new Vec3i(5, 1, 1), new Vec3i(4, 2, 1), true),
-            new Interactable(new Vec3i(5, 1, 2), new Vec3i(4, 2, 2), true)),
+            new Interactable(new Vec3f(2, 1, 1), new Vec3f(3, 2, 1), true),
+            new Interactable(new Vec3f(2, 1, 2), new Vec3f(3, 2, 2), true),
+            new Interactable(new Vec3f(5, 1, 1), new Vec3f(4, 2, 1), true),
+            new Interactable(new Vec3f(5, 1, 2), new Vec3f(4, 2, 2), true)),
 
         2,
         List.of(
-            new Interactable(new Vec3i(-1, -3, 3), new Vec3i(0, -2, 3), true),
-            new Interactable(new Vec3i(-1, -3, 4), new Vec3i(0, -2, 4), true),
-            new Interactable(new Vec3i(2, -3, 3), new Vec3i(1, -2, 3), true),
-            new Interactable(new Vec3i(2, -3, 4), new Vec3i(1, -2, 4), true),
+            new Interactable(new Vec3f(-1, -3, 3), new Vec3f(0, -2, 3), true),
+            new Interactable(new Vec3f(-1, -3, 4), new Vec3f(0, -2, 4), true),
+            new Interactable(new Vec3f(2, -3, 3), new Vec3f(1, -2, 3), true),
+            new Interactable(new Vec3f(2, -3, 4), new Vec3f(1, -2, 4), true),
 
-            new Interactable(new Vec3i(-2, -3, 1), new Vec3i(-3, -2, 1), true),
-            new Interactable(new Vec3i(-2, -3, 2), new Vec3i(-3, -2, 2), true),
-            new Interactable(new Vec3i(-5, -3, 1), new Vec3i(-4, -2, 1), true),
-            new Interactable(new Vec3i(-5, -3, 2), new Vec3i(-4, -2, 2), true),
+            new Interactable(new Vec3f(-2, -3, 1), new Vec3f(-3, -2, 1), true),
+            new Interactable(new Vec3f(-2, -3, 2), new Vec3f(-3, -2, 2), true),
+            new Interactable(new Vec3f(-5, -3, 1), new Vec3f(-4, -2, 1), true),
+            new Interactable(new Vec3f(-5, -3, 2), new Vec3f(-4, -2, 2), true),
 
-            new Interactable(new Vec3i(-2, -3, 3), new Vec3i(-3, -2, 3), true),
-            new Interactable(new Vec3i(-2, -3, 4), new Vec3i(-3, -2, 4), true),
-            new Interactable(new Vec3i(-5, -3, 3), new Vec3i(-4, -2, 3), true),
-            new Interactable(new Vec3i(-5, -3, 4), new Vec3i(-4, -2, 4), true),
+            new Interactable(new Vec3f(-2, -3, 3), new Vec3f(-3, -2, 3), true),
+            new Interactable(new Vec3f(-2, -3, 4), new Vec3f(-3, -2, 4), true),
+            new Interactable(new Vec3f(-5, -3, 3), new Vec3f(-4, -2, 3), true),
+            new Interactable(new Vec3f(-5, -3, 4), new Vec3f(-4, -2, 4), true),
 
-            new Interactable(new Vec3i(0, 5, -1), new Vec3i(0, 6, 0), true),
-            new Interactable(new Vec3i(1, 5, -1), new Vec3i(1, 6, 0), true),
-            new Interactable(new Vec3i(0, 5, 2), new Vec3i(0, 6, 1), true),
-            new Interactable(new Vec3i(1, 5, 2), new Vec3i(1, 6, 1), true),
+            new Interactable(new Vec3f(0, 5, -1), new Vec3f(0, 6, 0), true),
+            new Interactable(new Vec3f(1, 5, -1), new Vec3f(1, 6, 0), true),
+            new Interactable(new Vec3f(0, 5, 2), new Vec3f(0, 6, 1), true),
+            new Interactable(new Vec3f(1, 5, 2), new Vec3f(1, 6, 1), true),
 
-            new Interactable(new Vec3i(-2, 5, -1), new Vec3i(-2, 6, 0), true),
-            new Interactable(new Vec3i(-3, 5, -1), new Vec3i(-3, 6, 0), true),
-            new Interactable(new Vec3i(-2, 5, 2), new Vec3i(-2, 6, 1), true),
-            new Interactable(new Vec3i(-3, 5, 2), new Vec3i(-3, 6, 1), true)),
+            new Interactable(new Vec3f(-2, 5, -1), new Vec3f(-2, 6, 0), true),
+            new Interactable(new Vec3f(-3, 5, -1), new Vec3f(-3, 6, 0), true),
+            new Interactable(new Vec3f(-2, 5, 2), new Vec3f(-2, 6, 1), true),
+            new Interactable(new Vec3f(-3, 5, 2), new Vec3f(-3, 6, 1), true)),
 
         3,
         List.of(
             // TODO: complete this
-            new Interactable(new Vec3i(-1, -3, 3), new Vec3i(0, -2, 3), true),
-            new Interactable(new Vec3i(-1, -3, 4), new Vec3i(0, -2, 4), true),
-            new Interactable(new Vec3i(2, -3, 3), new Vec3i(1, -2, 3), true),
-            new Interactable(new Vec3i(2, -3, 4), new Vec3i(1, -2, 4), true),
+            new Interactable(new Vec3f(-1, -3, 3), new Vec3f(0, -2, 3), true),
+            new Interactable(new Vec3f(-1, -3, 4), new Vec3f(0, -2, 4), true),
+            new Interactable(new Vec3f(2, -3, 3), new Vec3f(1, -2, 3), true),
+            new Interactable(new Vec3f(2, -3, 4), new Vec3f(1, -2, 4), true),
 
-            new Interactable(new Vec3i(-2, -3, 1), new Vec3i(-3, -2, 1), true),
-            new Interactable(new Vec3i(-2, -3, 2), new Vec3i(-3, -2, 2), true),
-            new Interactable(new Vec3i(-5, -3, 1), new Vec3i(-4, -2, 1), true),
-            new Interactable(new Vec3i(-5, -3, 2), new Vec3i(-4, -2, 2), true),
+            new Interactable(new Vec3f(-2, -3, 1), new Vec3f(-3, -2, 1), true),
+            new Interactable(new Vec3f(-2, -3, 2), new Vec3f(-3, -2, 2), true),
+            new Interactable(new Vec3f(-5, -3, 1), new Vec3f(-4, -2, 1), true),
+            new Interactable(new Vec3f(-5, -3, 2), new Vec3f(-4, -2, 2), true),
 
-            new Interactable(new Vec3i(-2, -3, 3), new Vec3i(-3, -2, 3), true),
-            new Interactable(new Vec3i(-2, -3, 4), new Vec3i(-3, -2, 4), true),
-            new Interactable(new Vec3i(-5, -3, 3), new Vec3i(-4, -2, 3), true),
-            new Interactable(new Vec3i(-5, -3, 4), new Vec3i(-4, -2, 4), true)));
+            new Interactable(new Vec3f(-2, -3, 3), new Vec3f(-3, -2, 3), true),
+            new Interactable(new Vec3f(-2, -3, 4), new Vec3f(-3, -2, 4), true),
+            new Interactable(new Vec3f(-5, -3, 3), new Vec3f(-4, -2, 3), true),
+            new Interactable(new Vec3f(-5, -3, 4), new Vec3f(-4, -2, 4), true)));
 
     private Tavern() {
     }
@@ -556,16 +557,16 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vec3i benchAccessOffset,
-        Vec3i heartContainerAccessOffset) {
+        Vec3f benchAccessOffset,
+        Vec3f heartContainerAccessOffset) {
     }
 
     public static final String PREFAB_JSON = "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json";
     public static final BlockType WORKPLACE_BLOCK = BlockType.getAssetMap().getAsset("Workplace_Town_Hall_Core");
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
     public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(-3, 1, -1);
-    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(1, 0, 1);
-    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(0, 0, 1);
+    public static final Vec3f BENCH_ACCESS_OFFSET = new Vec3f(1, 0, 1);
+    public static final Vec3f CONTAINER_ACCESS_OFFSET = new Vec3f(0, 0, 1);
     public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
 
@@ -597,23 +598,23 @@ public final class StructureConfig {
         new LevelLayout(
             new BlockTransform(new Vec3i(-2, 1, 0), Rotation.None),
             new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
-            new Vec3i(1, 0, 0),
-            new Vec3i(0, 0, 1)),
+            new Vec3f(1, 0, 0),
+            new Vec3f(0, 0, 1)),
 
         2,
         new LevelLayout(
             new BlockTransform(new Vec3i(-4, 2, 0), Rotation.OneEighty),
             new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
-            new Vec3i(-1, 0, 0),
-            new Vec3i(0, 0, 1)),
+            new Vec3f(-1, 0, 0),
+            new Vec3f(0, 0, 1)),
 
         3,
         new LevelLayout(
             // TODO: complete this
             new BlockTransform(new Vec3i(-3, 1, -1), Rotation.Ninety),
             new BlockTransform(new Vec3i(0, 1, 5), Rotation.None),
-            new Vec3i(1, 0, 1),
-            new Vec3i(0, 0, 1)));
+            new Vec3f(1, 0, 1),
+            new Vec3f(0, 0, 1)));
 
     private TownHall() {
     }
@@ -636,7 +637,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vec3i benchAccessOffset,
+        Vec3f benchAccessOffset,
         ContainerTransform container) {
     }
 
@@ -646,7 +647,7 @@ public final class StructureConfig {
 
     public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(-5, 1, 6);
     public static final Rotation WORKPLACE_BLOCK_YAW_OFFSET = Rotation.Ninety;
-    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(1, 0, 0);
+    public static final Vec3f BENCH_ACCESS_OFFSET = new Vec3f(1, 0, 0);
     public static final Vec3i CONTAINER_OFFSET = new Vec3i(-5, 1, 5);
 
     public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
@@ -655,7 +656,7 @@ public final class StructureConfig {
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
 
     public static final Rotation CONTAINER_BLOCK_YAW_OFFSET = Rotation.Ninety;
-    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(1, 0, 0);
+    public static final Vec3f CONTAINER_ACCESS_OFFSET = new Vec3f(1, 0, 0);
 
     private static final Map<Vec3i, Vec3i> MINESHAFT_GALLERIES_OFFSETS = Map.of(
         Vec3i.NORTH, new Vec3i(0, 0, -8),
@@ -695,24 +696,24 @@ public final class StructureConfig {
         new LevelLayout(
             new BlockTransform(new Vec3i(-5, 1, 6), Rotation.Ninety),
             new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
-            new Vec3i(1, 0, 0),
-            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3i(1, 0, 0))),
+            new Vec3f(1, 0, 0),
+            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3f(1, 0, 0))),
 
         2,
         new LevelLayout(
             // TODO: complete this
             new BlockTransform(new Vec3i(-5, 1, 6), Rotation.Ninety),
             new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
-            new Vec3i(1, 0, 0),
-            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3i(1, 0, 0))),
+            new Vec3f(1, 0, 0),
+            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3f(1, 0, 0))),
 
         3,
         new LevelLayout(
             // TODO: complete this
             new BlockTransform(new Vec3i(-5, 1, 6), Rotation.Ninety),
             new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
-            new Vec3i(1, 0, 0),
-            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3i(1, 0, 0))));
+            new Vec3f(1, 0, 0),
+            new ContainerTransform(new Vec3i(-5, 1, 5), Rotation.Ninety, new Vec3f(1, 0, 0))));
 
     public static String getPrefab(int mineLevel, short stage) {
       Map<Short, String> stagePrefabs = PREFAB_MAP.getOrDefault(mineLevel, PREFAB_MAP.get(1));
@@ -775,7 +776,7 @@ public final class StructureConfig {
     public record LevelLayout(
         BlockTransform workplace,
         BlockTransform constructionSign,
-        Vec3i benchAccessOffset,
+        Vec3f benchAccessOffset,
         ContainerTransform container,
         AreaFootprint workingAreaOffset) {
     }
@@ -786,7 +787,7 @@ public final class StructureConfig {
 
     public static final Vec3i WORKPLACE_BLOCK_OFFSET = new Vec3i(5, 1, 5);
     public static final Rotation WORKPLACE_BLOCK_ROTATION = Rotation.Ninety;
-    public static final Vec3i BENCH_ACCESS_OFFSET = new Vec3i(-1, 0, 1);
+    public static final Vec3f BENCH_ACCESS_OFFSET = new Vec3f(-1, 0, 1);
 
     public static final Vec2i SIZE_2I = PrefabManager.getPrefabWidthDepth(PREFAB_JSON);
     public static final Vec3i SIZE_3I = PrefabManager.getPrefabWidthHeightDepth(PREFAB_JSON);
@@ -794,7 +795,7 @@ public final class StructureConfig {
     public static final Rotation CONSTRUCTION_SIGN_ROTATION = Rotation.None;
     public static final Vec3i CONTAINER_OFFSET = new Vec3i(-4, 1, 6);
     public static final Rotation CONTAINER_ROTATION = Rotation.Ninety;
-    public static final Vec3i CONTAINER_ACCESS_OFFSET = new Vec3i(1, 0, 0);
+    public static final Vec3f CONTAINER_ACCESS_OFFSET = new Vec3f(1, 0, 0);
 
     public static final AreaFootprint WORKING_AREA_OFFSET = new AreaFootprint(
         new Vec2i(-4, -6),
@@ -832,16 +833,16 @@ public final class StructureConfig {
         new LevelLayout(
             new BlockTransform(new Vec3i(5, 1, 5), Rotation.Ninety),
             new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
-            new Vec3i(-1, 0, 1),
-            new ContainerTransform(new Vec3i(-3, 1, 6), Rotation.Ninety, new Vec3i(1, 0, 0)),
+            new Vec3f(-1, 0, 1),
+            new ContainerTransform(new Vec3i(-3, 1, 6), Rotation.Ninety, new Vec3f(1, 0, 0)),
             new AreaFootprint(new Vec2i(-4, -6), new Vec2i(4, 2))),
 
         2,
         new LevelLayout(
             // TODO: complete this
             new BlockTransform(new Vec3i(5, 1, 5), Rotation.Ninety),
-            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None), new Vec3i(-1, 0, 1),
-            new ContainerTransform(new Vec3i(-4, 1, 6), Rotation.Ninety, new Vec3i(1, 0, 0)),
+            new BlockTransform(new Vec3i(0, 1, 8), Rotation.None), new Vec3f(-1, 0, 1),
+            new ContainerTransform(new Vec3i(-4, 1, 6), Rotation.Ninety, new Vec3f(1, 0, 0)),
             new AreaFootprint(new Vec2i(-4, -6), new Vec2i(4, 2))),
 
         3,
@@ -849,8 +850,8 @@ public final class StructureConfig {
             // TODO: complete this
             new BlockTransform(new Vec3i(5, 1, 5), Rotation.Ninety),
             new BlockTransform(new Vec3i(0, 1, 8), Rotation.None),
-            new Vec3i(-1, 0, 1),
-            new ContainerTransform(new Vec3i(-4, 1, 6), Rotation.Ninety, new Vec3i(1, 0, 0)),
+            new Vec3f(-1, 0, 1),
+            new ContainerTransform(new Vec3i(-4, 1, 6), Rotation.Ninety, new Vec3f(1, 0, 0)),
             new AreaFootprint(new Vec2i(-4, -6), new Vec2i(4, 2))));
 
     public static String getPrefab(int sawmillLevel, short stage) {
@@ -988,7 +989,7 @@ public final class StructureConfig {
         for (BlockTransform bedOffset : bedOffsets) {
           VillageBedComponent bed = new VillageBedComponent();
           bed.setTaken(false);
-          bed.setPosition(toAbsolutePosition(prefabAnchor, bedOffset.position,
+          bed.setPosition(toAbsoluteBlockPosition(prefabAnchor, bedOffset.position,
               rotation));
           Rotation finalBedRotation = StructurePlacementUtils.addYaw(bedOffset.rotation(), rotation);
           bed.setRotation(finalBedRotation);
@@ -1018,13 +1019,13 @@ public final class StructureConfig {
       }
 
       Interactable copy = interactable.clone();
-      copy.setInteractablePosition(toAbsolutePosition(
+      copy.setInteractablePosition(toAbsolutePoint(
           prefabAnchor,
           interactable.getInteractablePosition(),
           rotation));
 
       if (interactable.getDependsOn() != null) {
-        copy.setDependsOn(toAbsolutePosition(
+        copy.setDependsOn(toAbsolutePoint(
             prefabAnchor,
             interactable.getDependsOn(),
             rotation));
@@ -1036,7 +1037,11 @@ public final class StructureConfig {
     return result;
   }
 
-  private static Vec3i toAbsolutePosition(Vec3i prefabAnchor, Vec3i offset, Rotation rotation) {
+  private static Vec3i toAbsoluteBlockPosition(Vec3i prefabAnchor, Vec3i offset, Rotation rotation) {
+    return StructurePlacementUtils.withOffset(prefabAnchor, offset, rotation);
+  }
+
+  private static Vec3f toAbsolutePoint(Vec3i prefabAnchor, Vec3f offset, Rotation rotation) {
     return StructurePlacementUtils.withOffset(prefabAnchor, offset, rotation);
   }
 

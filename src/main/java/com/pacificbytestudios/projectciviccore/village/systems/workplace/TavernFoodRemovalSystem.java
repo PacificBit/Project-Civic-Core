@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.Interactable;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
@@ -59,7 +60,7 @@ public class TavernFoodRemovalSystem extends RefSystem<ChunkStore> {
 
     Interactable interactable = interactables.getInteractableDependingOn(
         WorkplaceInteractibles.EATING_SPOT,
-        blockContext.position());
+        Vec3f.from(blockContext.position()));
     if (interactable == null || !interactable.isInvalidateOnUse()) {
       return;
     }

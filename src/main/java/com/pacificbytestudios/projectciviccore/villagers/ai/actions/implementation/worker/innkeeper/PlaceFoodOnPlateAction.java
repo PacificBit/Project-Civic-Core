@@ -65,7 +65,7 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
       return false;
     }
 
-    Vec3i platePosition = interactable.getDependsOn();
+    Vec3i platePosition = interactable.getDependsOn().to3i();
     World world = store.getExternalData().getWorld();
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(platePosition.x, platePosition.z));
 

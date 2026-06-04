@@ -36,8 +36,8 @@ public class RoadSpawner {
 
     if (prefab == null) {
       Logger.logWarning(
-          "Missing road prefab for villageLevel=%s, type=%s, length=%s"
-              .formatted(village.getLevel(), type, length));
+          "Missing road prefab for villageLevel=%d, type=%s, length=%s",
+          village.getLevel(), type, length);
       return false;
     }
 

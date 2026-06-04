@@ -74,15 +74,15 @@ public class HouseSpawner {
       VillageHeartComponent heart,
       int targetLevel) {
     Logger.logInfo(
-            "Registering new staged House construction of level: " +
-                targetLevel + ", with id: " + structureId);
+        "Registering new staged House construction of level %d, with id: %s",
+        targetLevel, structureId);
 
     WorldChunk chunkToUse = chunk;
     World world = chunkToUse.getWorld();
     short stage = (short) 0;
     String prefab = StructureConfig.House.getPrefab(targetLevel, stage);
 
-    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: %s", prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -173,7 +173,7 @@ public class HouseSpawner {
 
     UUID structureId = house.getUuid();
     int currentLevel = house.getLevel();
-    Vec3i prefabAnchor = house.getPrefabAnchor().clone();
+    Vec3i prefabAnchor = house.getPrefabAnchor();
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = house.getVillageRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -210,7 +210,7 @@ public class HouseSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        prefabAnchor,
         structureRotation,
         true);
 
@@ -444,7 +444,7 @@ public class HouseSpawner {
     house.setLevel((short) targetLevel);
     house.setUuid(structureId);
     house.setCoreBlockPosition(houseCoreBlockPosition);
-    house.setPrefabAnchor(prefabAnchor.clone());
+    house.setPrefabAnchor(prefabAnchor);
     house.setHouseRef(new EntityRef(chunk.getWorld().getName(),
         houseCoreBlockPosition));
     house.setAppartmentRegistry(StructureConfig.House.getAppartments(prefabAnchor,
@@ -567,7 +567,7 @@ public class HouseSpawner {
       despawn = PrefabManager.restoreTrackedPrefab(bedChunk.getWorld(),
           trackedPlacement);
     } else {
-      Vec3i prefabAnchor = component.getPrefabAnchor();
+      Vec3i prefabAnchor = component.getPrefabAnchor() == null ? null : component.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }

@@ -3,14 +3,61 @@ package com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D;
 import javax.annotation.Nonnull;
 
 import org.joml.Vector3fc;
+import org.joml.Vector3ic;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector3fUtil;
+import com.hypixel.hytale.math.vector.Vector3iUtil;
 
 public class Vec3f extends org.joml.Vector3f {
   public static BuilderCodec<Vec3f> CODEC = BuilderCodec
       .builder(Vec3f.class, Vec3f::new, Vector3fUtil.CODEC)
       .build();
+
+  public static Vec3f NORTH = Vec3f.from(Vector3iUtil.NORTH);
+  public static Vec3f SOUTH = Vec3f.from(Vector3iUtil.SOUTH);
+  public static Vec3f WEST = Vec3f.from(Vector3iUtil.WEST);
+  public static Vec3f EAST = Vec3f.from(Vector3iUtil.EAST);
+  public static Vec3f UP = Vec3f.from(Vector3iUtil.UP);
+  public static Vec3f DOWN = Vec3f.from(Vector3iUtil.DOWN);
+  public static Vec3f ZERO = Vec3f.from(Vector3iUtil.ZERO);
+
+  public static Vec3f safeNorth() {
+    return new Vec3f(Vector3iUtil.NORTH);
+  }
+
+  public static Vec3f safeSouth() {
+    return new Vec3f(Vector3iUtil.SOUTH);
+  }
+
+  public static Vec3f safeWest() {
+    return new Vec3f(Vector3iUtil.WEST);
+  }
+
+  public static Vec3f safeEast() {
+    return new Vec3f(Vector3iUtil.EAST);
+  }
+
+  public static Vec3f safeUp() {
+    return new Vec3f(Vector3iUtil.UP);
+  }
+
+  public static Vec3f safeDown() {
+    return new Vec3f(Vector3iUtil.DOWN);
+  }
+
+  public static Vec3f safeZero() {
+    return new Vec3f(Vector3iUtil.ZERO);
+  }
+
+  public static Vec3f[] cardinalDirections() {
+    return new Vec3f[] {
+        safeNorth(),
+        safeEast(),
+        safeSouth(),
+        safeWest()
+    };
+  }
 
   public Vec3f() {
   }
@@ -20,6 +67,10 @@ public class Vec3f extends org.joml.Vector3f {
   }
 
   public Vec3f(Vector3fc o) {
+    super(o);
+  }
+
+  public Vec3f(Vector3ic o) {
     super(o);
   }
 
@@ -106,11 +157,7 @@ public class Vec3f extends org.joml.Vector3f {
   }
 
   public Vec3i to3i() {
-    Vec3i result = new Vec3i();
-    result.x = (int) this.x;
-    result.y = (int) this.y;
-    result.z = (int) this.z;
-    return result;
+    return Vec3i.from(this);
   }
 
   public static Vec3f from(Vec3f vector) {

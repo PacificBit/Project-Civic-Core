@@ -6,18 +6,18 @@ import java.util.UUID;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 
 public class Interactable {
   public static final BuilderCodec<Interactable> CODEC = BuilderCodec
       .builder(Interactable.class, Interactable::new)
 
-      .append(new KeyedCodec<>("InteractablePosition", Vec3i.CODEC),
+      .append(new KeyedCodec<>("InteractablePosition", Vec3f.CODEC),
           (obj, value) -> obj.interactablePosition = value,
           obj -> obj.interactablePosition)
       .add()
 
-      .append(new KeyedCodec<>("DependsOn", Vec3i.CODEC),
+      .append(new KeyedCodec<>("DependsOn", Vec3f.CODEC),
           (obj, value) -> obj.dependsOn = value,
           obj -> obj.dependsOn)
       .add()
@@ -39,8 +39,8 @@ public class Interactable {
 
       .build();
 
-  private Vec3i interactablePosition;
-  private Vec3i dependsOn;
+  private Vec3f interactablePosition;
+  private Vec3f dependsOn;
   private UUID occupiedBy;
   private boolean invalidateOnUse;
   private boolean isReady = false;
@@ -48,11 +48,11 @@ public class Interactable {
   public Interactable() {
   }
 
-  public Interactable(Vec3i interactablePosition, boolean invalidateOnUse) {
+  public Interactable(Vec3f interactablePosition, boolean invalidateOnUse) {
     this(interactablePosition, null, invalidateOnUse);
   }
 
-  public Interactable(Vec3i interactablePosition, Vec3i dependsOn, boolean invalidateOnUse) {
+  public Interactable(Vec3f interactablePosition, Vec3f dependsOn, boolean invalidateOnUse) {
     this.interactablePosition = interactablePosition;
     this.invalidateOnUse = invalidateOnUse;
     this.dependsOn = dependsOn;
@@ -70,7 +70,7 @@ public class Interactable {
     return this.dependsOn != null;
   }
 
-  public boolean dependsOn(Vec3i position) {
+  public boolean dependsOn(Vec3f position) {
     return Objects.equals(this.dependsOn, position);
   }
 
@@ -86,19 +86,19 @@ public class Interactable {
     this.isReady = false;
   }
 
-  public Vec3i getInteractablePosition() {
+  public Vec3f getInteractablePosition() {
     return interactablePosition;
   }
 
-  public void setInteractablePosition(Vec3i interactablePosition) {
+  public void setInteractablePosition(Vec3f interactablePosition) {
     this.interactablePosition = interactablePosition;
   }
 
-  public Vec3i getDependsOn() {
+  public Vec3f getDependsOn() {
     return dependsOn;
   }
 
-  public void setDependsOn(Vec3i dependsOn) {
+  public void setDependsOn(Vec3f dependsOn) {
     this.dependsOn = dependsOn;
   }
 
@@ -129,8 +129,8 @@ public class Interactable {
   @Override
   public Interactable clone() {
     Interactable interactable = new Interactable();
-    interactable.interactablePosition = Vec3i.from(this.interactablePosition);
-    interactable.dependsOn = Vec3i.from(this.dependsOn);
+    interactable.interactablePosition = Vec3f.from(this.interactablePosition);
+    interactable.dependsOn = Vec3f.from(this.dependsOn);
     interactable.occupiedBy = this.occupiedBy;
     interactable.invalidateOnUse = this.invalidateOnUse;
     interactable.isReady = this.isReady;

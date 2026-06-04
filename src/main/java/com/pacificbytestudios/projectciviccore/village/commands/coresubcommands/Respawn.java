@@ -82,7 +82,7 @@ public class Respawn extends CommandBase {
       for (UUID villagerId : villageHeartComponent.getVillagersRegistry()) {
         VillagerComponent villager = villageHeartComponent.getVillager(villagerId);
         if (villager != null) {
-          Vec3i bed = villager.getBedPosition();
+          Vec3i bed = villager.getBedPosition() == null ? null : villager.getBedPosition();
           if (bed != null) {
             world.getChunk(ChunkUtil.indexChunkFromBlock(bed.x, bed.z)).breakBlock(bed.x, bed.y, bed.z);
           }

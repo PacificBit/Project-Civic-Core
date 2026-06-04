@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
@@ -111,14 +112,11 @@ public class SpawnVillagerTask extends AVillageTask {
   }
 
   private Vec3d newSpawnPos(Vec3i blockPos, int radius) {
-    List<Vec3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
+    List<Vec3f> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
 
     if (!spawningOffsets.isEmpty()) {
-      Vec3i selectedOffset = spawningOffsets.get(random.nextInt(spawningOffsets.size()));
-      Vec3i townHeartAnchor = Vec3i.from(blockPos);
-
-      return Vec3d.from(townHeartAnchor
-          .add(selectedOffset));
+      Vec3f selectedOffset = spawningOffsets.get(random.nextInt(spawningOffsets.size()));
+      return Vec3d.from(blockPos).add(Vec3d.from(selectedOffset));
     }
 
     double angle = random.nextDouble() * Math.PI * 2.0;

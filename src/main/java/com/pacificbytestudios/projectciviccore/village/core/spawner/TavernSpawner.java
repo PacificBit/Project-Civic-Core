@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
@@ -81,15 +82,15 @@ public class TavernSpawner {
       VillageHeartComponent heart,
       int targetLevel) {
     Logger.logInfo(
-            "Registering new staged Tavern construction of level: " +
-                targetLevel + ", with id: " + structureId);
+        "Registering new staged Tavern construction of level: %d, with id: %s",
+        targetLevel, structureId);
 
     WorldChunk chunkToUse = chunk;
     World world = chunkToUse.getWorld();
     short stage = (short) 0;
     String prefab = StructureConfig.Tavern.getPrefab(targetLevel, stage);
 
-    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: %s", prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -180,7 +181,7 @@ public class TavernSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vec3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vec3i prefabAnchor = workplace.getPrefabAnchor();
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -221,7 +222,7 @@ public class TavernSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        prefabAnchor,
         structureRotation,
         true);
 
@@ -379,7 +380,7 @@ public class TavernSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        snapshot.getPrefabAnchor().clone(),
+        snapshot.getPrefabAnchor(),
         snapshot.getRotation(),
         true);
 
@@ -404,7 +405,7 @@ public class TavernSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        prefabAnchor,
         rotation,
         true);
     if (newSnapshot == null) {
@@ -463,7 +464,7 @@ public class TavernSpawner {
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(prefabAnchor);
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.INN_KEEPER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
         workplaceBlockPosition));
@@ -506,7 +507,9 @@ public class TavernSpawner {
               structureRotation),
           Rotation.None,
           Rotation.None).index();
-      containerPosition = StructurePlacementUtils.withOffset(prefabAnchor, containerLayout.position(),
+      containerPosition = StructurePlacementUtils.withOffset(
+          prefabAnchor,
+          containerLayout.position(),
           structureRotation);
 
       usedChunk = Utils.setBlockChunkAware(
@@ -650,7 +653,7 @@ public class TavernSpawner {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(),
           trackedPlacement);
     } else {
-      Vec3i prefabAnchor = workplace.getPrefabAnchor();
+      Vec3i prefabAnchor = workplace.getPrefabAnchor() == null ? null : workplace.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -750,14 +753,14 @@ public class TavernSpawner {
     return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vec3i getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3f getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
         StructureConfig.Tavern.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vec3i getContainerAccessPosition(
+  private static Vec3f getContainerAccessPosition(
       Vec3i containerPosition,
       StructureConfig.ContainerTransform containerLayout,
       Rotation rotation) {

@@ -53,7 +53,7 @@ public class ReachEmptyTavernSeatSensor extends VillagerSensorBase {
         return false;
       }
 
-      this.target = Vec3d.from(Utils.centerOf(villagerComponent.getReservedInteractable()));
+      this.target = Vec3d.from(Utils.centerOf(villagerComponent.getReservedInteractable().to3i()));
       this.positionProvider.setTarget(this.target);
       return true;
     }

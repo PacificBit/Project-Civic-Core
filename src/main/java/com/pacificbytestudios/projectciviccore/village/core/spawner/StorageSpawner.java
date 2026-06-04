@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
@@ -96,15 +97,15 @@ public class StorageSpawner {
       VillageHeartComponent heart,
       int targetLevel) {
     Logger.logInfo(
-            "Registering new staged Storage construction of level: " +
-                targetLevel + ", with id: " + structureId);
+        "Registering new staged Storage construction of level %d, with id: %s",
+        targetLevel, structureId);
 
     WorldChunk chunkToUse = chunk;
     World world = chunkToUse.getWorld();
     short stage = (short) 0;
     String prefab = StructureConfig.Storage.getPrefab(targetLevel, stage);
 
-    Logger.logInfo("Spawning prefab at: " + prefabAnchor);
+    Logger.logInfo("Spawning prefab at: %s", prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -185,7 +186,7 @@ public class StorageSpawner {
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
       Logger.logWarning(
-              "Could not fetch the existing storage component or terrain snapshot");
+          "Could not fetch the existing storage component or terrain snapshot");
       return false;
     }
 
@@ -196,7 +197,7 @@ public class StorageSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vec3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vec3i prefabAnchor = workplace.getPrefabAnchor();
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -255,7 +256,7 @@ public class StorageSpawner {
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        prefabAnchor,
         structureRotation,
         true);
 
@@ -438,7 +439,7 @@ public class StorageSpawner {
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
         chunk.getWorld(),
         prefab,
-        snapshot.getPrefabAnchor().clone(),
+        snapshot.getPrefabAnchor(),
         snapshot.getRotation(),
         true);
 
@@ -463,7 +464,7 @@ public class StorageSpawner {
     TrackedPrefabPlacementComponent newSnapshot = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
-        prefabAnchor.clone(),
+        prefabAnchor,
         rotation,
         true);
     if (newSnapshot == null) {
@@ -505,7 +506,7 @@ public class StorageSpawner {
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.STORAGE_KEEPER });
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(prefabAnchor);
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
 
     chunkStore.putComponent(
@@ -658,7 +659,9 @@ public class StorageSpawner {
           structureRotation);
       int rotation = RotationTuple.of(containerRotation, Rotation.None, Rotation.None).index();
 
-      containerPosition = StructurePlacementUtils.withOffset(prefabAnchor, containerLayout.position(),
+      containerPosition = StructurePlacementUtils.withOffset(
+          prefabAnchor,
+          containerLayout.position(),
           structureRotation);
 
       usedChunk = Utils.setBlockChunkAware(
@@ -909,7 +912,7 @@ public class StorageSpawner {
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(), trackedPlacement);
     } else {
-      Vec3i prefabAnchor = workplace.getPrefabAnchor();
+      Vec3i prefabAnchor = workplace.getPrefabAnchor() == null ? null : workplace.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -1016,14 +1019,14 @@ public class StorageSpawner {
     return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vec3i getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3f getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
         StructureConfig.Storage.getLevelLayout(level).benchAccessOffset(),
         rotation);
   }
 
-  private static Vec3i getContainerAccessPosition(
+  private static Vec3f getContainerAccessPosition(
       Vec3i containerPosition,
       StructureConfig.ContainerTransform containerLayout,
       Rotation rotation) {

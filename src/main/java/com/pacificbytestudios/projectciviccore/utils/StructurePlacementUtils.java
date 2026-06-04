@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public final class StructurePlacementUtils {
@@ -53,6 +54,19 @@ public final class StructurePlacementUtils {
     return normalize(baseRotation).add(normalize(structureRotation));
   }
 
+  public static Vec3f rotateOffset(Vec3f offset, Rotation rotation) {
+    if (offset == null) {
+      return Vec3f.safeZero();
+    }
+
+    Rotation normalizedRotation = normalize(rotation);
+    if (normalizedRotation == Rotation.None) {
+      return Vec3f.from(offset);
+    }
+
+    return Vec3f.from(normalizedRotation.rotateY(offset, new Vec3f()));
+  }
+
   public static Vec3i rotateOffset(Vec3i offset, Rotation rotation) {
     if (offset == null) {
       return Vec3i.safeZero();
@@ -66,8 +80,30 @@ public final class StructurePlacementUtils {
     return Vec3i.from(normalizedRotation.rotateY(offset, new Vec3i()));
   }
 
+  /**
+   * Point-space origin plus point-space offset. Use when both values already represent precise world points.
+   */
+  public static Vec3f withOffset(Vec3f origin, Vec3f localOffset, Rotation rotation) {
+    return origin.clone().add(rotateOffset(localOffset, rotation));
+  }
+
+  /**
+   * Block-space origin plus point-space offset. Use for access/interactable targets derived from a block.
+   */
+  public static Vec3f withOffset(Vec3i origin, Vec3f localOffset, Rotation rotation) {
+    return Vec3f.from(origin).add(rotateOffset(localOffset, rotation));
+  }
+
+  /**
+   * Block-space origin plus block-space offset. Use for real block positions such as cores, signs, and containers.
+   */
   public static Vec3i withOffset(Vec3i origin, Vec3i localOffset, Rotation rotation) {
     return origin.clone().add(rotateOffset(localOffset, rotation));
+  }
+
+  public static Vec3f removeOffset(Vec3f position, Vec3f localOffset, Rotation rotation) {
+    Vec3f rotatedOffset = rotateOffset(localOffset, rotation);
+    return position.clone().add(new Vec3f(-rotatedOffset.x, -rotatedOffset.y, -rotatedOffset.z));
   }
 
   public static Vec3i removeOffset(Vec3i position, Vec3i localOffset, Rotation rotation) {

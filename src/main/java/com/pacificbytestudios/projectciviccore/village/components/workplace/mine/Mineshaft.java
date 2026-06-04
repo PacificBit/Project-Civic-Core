@@ -75,7 +75,7 @@ public class Mineshaft {
 
   public Mineshaft(Map<Vec3i, Vec3i> galleryOffsets, Vec3i anchorPoint, Rotation rotation) {
     this.galleryOffsets = galleryOffsets;
-    this.anchorPoint = anchorPoint;
+    this.anchorPoint = Vec3i.from(anchorPoint);
     this.rotation = rotation;
   }
 
@@ -140,7 +140,9 @@ public class Mineshaft {
     }
 
     Set<UUID> galleriesId = mineshaftLevel.buildGalleries(
-        StructureConfig.Mine.MineshaftLevelConf.getMineshaftGalleriesWithPrefabOffset(levelAnchorPoint, rotation));
+        StructureConfig.Mine.MineshaftLevelConf.getMineshaftGalleriesWithPrefabOffset(
+            levelAnchorPoint,
+            rotation));
     mineshaftLevel.setAnchorPoint(levelAnchorPoint);
 
     galleriesId.stream().forEach(galleryId -> galleryIdToMineshaftLevel.put(galleryId, this.latestLevel));

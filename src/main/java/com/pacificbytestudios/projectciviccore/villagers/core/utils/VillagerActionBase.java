@@ -3,8 +3,6 @@ package com.pacificbytestudios.projectciviccore.villagers.core.utils;
 import java.util.Set;
 import java.util.UUID;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -17,6 +15,8 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
@@ -24,7 +24,6 @@ import com.pacificbytestudios.projectciviccore.villagers.components.MayorCompone
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public abstract class VillagerActionBase extends ActionBase {
   protected boolean suppressWarnings = false;
@@ -121,7 +120,7 @@ public abstract class VillagerActionBase extends ActionBase {
       return reservedTavernRef;
     }
 
-    Vec3i reservedInteractable = villager.getReservedInteractable();
+    Vec3f reservedInteractable = villager.getReservedInteractable();
     if (reservedInteractable == null) {
       return null;
     }

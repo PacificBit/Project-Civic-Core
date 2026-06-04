@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
@@ -26,7 +27,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
           (obj) -> obj.position)
       .add()
 
-      .append(new KeyedCodec<>("AccessPosition", Vec3i.CODEC),
+      .append(new KeyedCodec<>("AccessPosition", Vec3f.CODEC),
           (obj, value) -> obj.accessPosition = value,
           (obj) -> obj.accessPosition)
       .add()
@@ -35,7 +36,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
 
   private UUID uuid;
   private Vec3i position;
-  private Vec3i accessPosition;
+  private Vec3f accessPosition;
 
   public UUID getUuid() {
     return uuid;
@@ -53,11 +54,11 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
     this.position = position;
   }
 
-  public Vec3i getAccessPosition() {
-    return this.accessPosition != null ? this.accessPosition : this.position;
+  public Vec3f getAccessPosition() {
+    return this.accessPosition != null ? this.accessPosition : Vec3f.from(this.position);
   }
 
-  public void setAccessPosition(Vec3i accessPosition) {
+  public void setAccessPosition(Vec3f accessPosition) {
     this.accessPosition = accessPosition;
   }
 
@@ -66,7 +67,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
     WorkplaceContainerEntryComponent container = new WorkplaceContainerEntryComponent();
     container.uuid = this.uuid;
     container.position = Vec3i.from(this.position);
-    container.accessPosition = this.accessPosition;
+    container.accessPosition = Vec3f.from(this.accessPosition);
     return container;
   }
 

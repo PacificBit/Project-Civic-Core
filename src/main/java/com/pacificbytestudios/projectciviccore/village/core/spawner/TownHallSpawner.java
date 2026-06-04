@@ -2,6 +2,7 @@ package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
 import java.util.UUID;
 
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
@@ -174,7 +175,7 @@ public class TownHallSpawner {
 
     UUID structureId = workplace.getUuid();
     int currentLevel = workplace.getLevel();
-    Vec3i prefabAnchor = workplace.getPrefabAnchor().clone();
+    Vec3i prefabAnchor = workplace.getPrefabAnchor();
     Rotation structureRotation = StructurePlacementUtils.normalize(trackedPlacement.getYaw());
     EntityRef villageRefSnapshot = heart.getEntityRef().clone();
     TrackedPrefabPlacementComponent oldTrackedPlacement = trackedPlacement.clone();
@@ -454,7 +455,7 @@ public class TownHallSpawner {
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessPos(getBenchAccessPosition(workplaceBlockPosition, targetLevel, rotation));
-    workplaceComponent.setPrefabAnchor(prefabAnchor.clone());
+    workplaceComponent.setPrefabAnchor(prefabAnchor);
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
         workplaceBlockPosition));
@@ -599,7 +600,7 @@ public class TownHallSpawner {
       despawn = PrefabManager.restoreTrackedPrefab(workplaceChunk.getWorld(),
           trackedPlacement);
     } else {
-      Vec3i prefabAnchor = workplace.getPrefabAnchor();
+      Vec3i prefabAnchor = workplace.getPrefabAnchor() == null ? null : workplace.getPrefabAnchor();
       if (prefabAnchor == null && trackedPlacement != null) {
         prefabAnchor = trackedPlacement.getOrigin();
       }
@@ -693,7 +694,7 @@ public class TownHallSpawner {
     return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
-  private static Vec3i getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
+  private static Vec3f getBenchAccessPosition(Vec3i workplaceBlockPosition, int level, Rotation rotation) {
     return StructurePlacementUtils.withOffset(
         workplaceBlockPosition,
         StructureConfig.TownHall.getLevelLayout(level).benchAccessOffset(),

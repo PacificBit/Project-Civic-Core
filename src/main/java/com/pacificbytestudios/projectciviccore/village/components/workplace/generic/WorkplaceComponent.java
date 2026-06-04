@@ -21,6 +21,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
@@ -54,7 +55,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.benchPos)
       .add()
 
-      .append(new KeyedCodec<>("BenchAccessPosition", Vec3i.CODEC),
+      .append(new KeyedCodec<>("BenchAccessPosition", Vec3f.CODEC),
           (obj, value) -> obj.benchAccessPos = value,
           (obj) -> obj.benchAccessPos)
       .add()
@@ -135,7 +136,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private StructureType workingPlaceType;
   private WorkType[] workerType;
   private Vec3i benchPos;
-  private Vec3i benchAccessPos;
+  private Vec3f benchAccessPos;
   private Vec3i prefabAnchor;
 
   private EntityRef villageRef;
@@ -181,11 +182,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.benchPos = benchPos;
   }
 
-  public Vec3i getBenchAccessPos() {
-    return this.benchAccessPos != null ? this.benchAccessPos : this.benchPos;
+  public Vec3f getBenchAccessPos() {
+    return this.benchAccessPos != null ? this.benchAccessPos : Vec3f.from(this.benchPos);
   }
 
-  public void setBenchAccessPos(Vec3i benchAccessPos) {
+  public void setBenchAccessPos(Vec3f benchAccessPos) {
     this.benchAccessPos = benchAccessPos;
   }
 
@@ -315,7 +316,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.level = this.level;
     component.workingPlaceType = this.workingPlaceType;
     component.benchPos = Vec3i.from(this.benchPos);
-    component.benchAccessPos = Vec3i.from(this.benchAccessPos);
+    component.benchAccessPos = Vec3f.from(this.benchAccessPos);
     component.villageRef = this.villageRef;
     component.workplaceRef = this.workplaceRef;
     component.workers = new HashSet<>(this.workers);

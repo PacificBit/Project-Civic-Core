@@ -64,7 +64,7 @@ public class EatTavernFoodAction extends VillagerActionBase {
       return false;
     }
 
-    Vec3i foodPosition = require(interactable.getDependsOn(), "tavern food position");
+    Vec3i foodPosition = require(interactable.getDependsOn(), "tavern food position").to3i();
     if (foodPosition == null) {
       return false;
     }

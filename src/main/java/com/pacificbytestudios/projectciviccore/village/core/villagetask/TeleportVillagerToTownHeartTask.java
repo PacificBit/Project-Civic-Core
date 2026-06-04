@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.codec.Codec;
@@ -67,18 +68,18 @@ public class TeleportVillagerToTownHeartTask extends AVillageTask {
         Teleport.createExact(resolveTargetPosition(heartPos), transform.getRotation().clone()));
     this.callOnSuccess(this.villagerId.toString());
 
-    Logger.logInfo("Teleporting villager %s to town heart"
-        .formatted(this.villagerId));
+    Logger.logInfo("Teleporting villager %s to town heart",
+        this.villagerId);
   }
 
   private static Vec3d resolveTargetPosition(Vec3i heartPos) {
-    List<Vec3i> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
+    List<Vec3f> spawningOffsets = StructureConfig.TownHeart.getVillagerSpawningOffsets();
     if (spawningOffsets == null || spawningOffsets.isEmpty()) {
       return Vec3d.from(heartPos);
     }
 
-    Vec3i target = Vec3i.from(heartPos).add(spawningOffsets.getFirst());
+    Vec3d target = Vec3d.from(heartPos).add(Vec3d.from(spawningOffsets.getFirst()));
 
-    return Vec3d.from(target);
+    return target;
   }
 }
