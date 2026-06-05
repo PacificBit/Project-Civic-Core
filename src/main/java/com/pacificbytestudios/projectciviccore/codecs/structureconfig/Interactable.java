@@ -1,4 +1,4 @@
-package com.pacificbytestudios.projectciviccore.codecs;
+package com.pacificbytestudios.projectciviccore.codecs.structureconfig;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -7,10 +7,16 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 
-public class Interactable {
+public class Interactable implements Copyable<Interactable> {
   public static final BuilderCodec<Interactable> CODEC = BuilderCodec
       .builder(Interactable.class, Interactable::new)
+
+      .append(new KeyedCodec<>("Id", Codec.UUID_BINARY),
+          (obj, value) -> obj.id = value,
+          (obj) -> obj.id)
+      .add()
 
       .append(new KeyedCodec<>("InteractablePosition", Vec3f.CODEC),
           (obj, value) -> obj.interactablePosition = value,
@@ -39,6 +45,7 @@ public class Interactable {
 
       .build();
 
+  private UUID id;
   private Vec3f interactablePosition;
   private Vec3f dependsOn;
   private UUID occupiedBy;
@@ -53,6 +60,11 @@ public class Interactable {
   }
 
   public Interactable(Vec3f interactablePosition, Vec3f dependsOn, boolean invalidateOnUse) {
+    this(UUID.randomUUID(), interactablePosition, dependsOn, invalidateOnUse);
+  }
+
+  public Interactable(UUID id, Vec3f interactablePosition, Vec3f dependsOn, boolean invalidateOnUse) {
+    this.id = id;
     this.interactablePosition = interactablePosition;
     this.invalidateOnUse = invalidateOnUse;
     this.dependsOn = dependsOn;
@@ -129,6 +141,7 @@ public class Interactable {
   @Override
   public Interactable clone() {
     Interactable interactable = new Interactable();
+    interactable.id = this.id;
     interactable.interactablePosition = Vec3f.from(this.interactablePosition);
     interactable.dependsOn = Vec3f.from(this.dependsOn);
     interactable.occupiedBy = this.occupiedBy;
@@ -139,9 +152,10 @@ public class Interactable {
 
   @Override
   public String toString() {
-    return ("Interactable: {\n\tInteractablePosition: %s,\n\tDependsOn: %s," +
+    return ("Interactable: {\n\tId: %s,\n\tInteractablePosition: %s,\n\tDependsOn: %s," +
         "\n\tOccupiedBy: %s,\n\tInvalidateOnUse: %b,\n\tIsReady: %b\n\t}")
         .formatted(
+            this.id,
             this.interactablePosition.toString(),
             this.dependsOn.toString(),
             this.occupiedBy.toString(),

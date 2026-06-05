@@ -49,7 +49,7 @@
         }
       }
     ],
-    "BlockSoundSetId": "Brazier",
+    "BlockSoundSetId": "Stone",
     "PhysicalMaterialId": "Stone",
     "Looping": true,
     "AmbientSoundEventId": "SFX_Campfire_Default_Loop",

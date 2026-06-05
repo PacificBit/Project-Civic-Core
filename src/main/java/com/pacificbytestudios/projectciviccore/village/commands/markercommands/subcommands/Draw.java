@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import org.joml.Matrix4d;
 
 import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
-import com.pacificbytestudios.projectciviccore.codecs.Interactable;
+import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
@@ -63,6 +63,7 @@ public class Draw extends VillageCommand {
   private void addWorkplaceMarkers(WorkplaceComponent workplace) {
     this.markers.get(MarkerType.BENCH).add(workplace.getBenchPos().to3d());
     this.markers.get(MarkerType.BENCH_ACCESS).add(workplace.getBenchAccessPos().to3d());
+    this.markers.get(MarkerType.ANCHOR).add(workplace.getPrefabAnchor().to3d());
 
     workplace.getStorage().getAllContainerPositions().forEach(containerPos -> {
       this.markers.get(MarkerType.STORAGE).add(containerPos.to3d());
@@ -104,6 +105,7 @@ public class Draw extends VillageCommand {
     if (houseComponent.getCoreBlockPosition() != null) {
       this.markers.get(MarkerType.BENCH).add(houseComponent.getCoreBlockPosition().to3d());
     }
+    this.markers.get(MarkerType.ANCHOR).add(houseComponent.getPrefabAnchor().to3d());
 
     for (AppartmentComponent appartment : houseComponent.getAppartmentRegistry().getAppartments().values()) {
       for (VillageBedComponent bed : appartment.getBeds().values()) {

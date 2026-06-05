@@ -8,6 +8,8 @@ import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 
 public enum MarkerType {
   NONE(DebugShape.Sphere, DrawUtils.COLOR_RED),
+  ANCHOR(DebugShape.Cone, DrawUtils.COLOR_CYAN),
+  ORIGIN(DebugShape.Frustum, DrawUtils.COLOR_MAGENTA),
   BENCH(DebugShape.Cube, DrawUtils.COLOR_OLIVE),
   BENCH_ACCESS(DebugShape.Sphere, DrawUtils.COLOR_GREEN),
   STORAGE(DebugShape.Cube, DrawUtils.COLOR_GRAY),

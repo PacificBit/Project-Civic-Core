@@ -62,6 +62,1854 @@
     ],
     "BlockEntity": {
       "Components": {
+        "VillageStructuresConfig": {
+          "StructureTypeLevelConfig": {
+            "TownHall": {
+              "CoreBlocks": {
+                "1": {
+                  "Id": "RrQIWMuwRci4++3kY7cp3w==",
+                  "Position": {
+                    "X": -2,
+                    "Y": 1,
+                    "Z": 0
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 1,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "X6XNYh3SQqmT2jgN/+eehA==",
+                  "Position": {
+                    "X": -4,
+                    "Y": 2,
+                    "Z": 0
+                  },
+                  "Rotation": "OneEighty",
+                  "AccessOffset": {
+                    "X": -1,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "oct2py9xQgKHL7aEFdYLpQ==",
+                  "Position": {
+                    "X": -3,
+                    "Y": 1,
+                    "Z": -1
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": 1,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                }
+              },
+              "ConstructionBlock": {
+                "1": {
+                  "Id": "Ds6a9zqNR1SQH4GD4mbCQg==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "NvetIkdPSsCpklFIhYlzaA==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "1WlkcTi9RjaznmtZRHEYXA==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              }
+            },
+            "Mine": {
+              "CoreBlocks": {
+                "1": {
+                  "Id": "MHwd4zPVQAKG71zN4UJqDA==",
+                  "Position": {
+                    "X": -5,
+                    "Y": 1,
+                    "Z": 6
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": 1,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "YwSQMcjpQiK6RPQFqdL1ow==",
+                  "Position": {
+                    "X": -5,
+                    "Y": 1,
+                    "Z": 6
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": 1,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "xHKx4wVRQduRIQZCSUzIBA==",
+                  "Position": {
+                    "X": -5,
+                    "Y": 1,
+                    "Z": 6
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": 1,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              },
+              "ConstructionBlock": {
+                "1": {
+                  "Id": "ZbbL36KFTcGUIab4w9w7Vw==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 8
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "PQG/nqMOQySpeNV/IfGyXg==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 8
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "i0j1l40DRa26a7VCoNVkFw==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 8
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              },
+              "Containers": {
+                "1": [
+                  {
+                    "Id": "6nRK93KwR5i7J48WyK3H5A==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 1,
+                      "Z": 5
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ],
+                "2": [
+                  {
+                    "Id": "O5tJBYzbSA2VVeEwUkzi6Q==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 1,
+                      "Z": 5
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ],
+                "3": [
+                  {
+                    "Id": "0d6Hz7rpRRyFMUVyyG7KDw==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 1,
+                      "Z": 5
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "Sawmill": {
+              "CoreBlocks": {
+                "1": {
+                  "Id": "jxpjxi01Ts+HG6lz9RGxww==",
+                  "Position": {
+                    "X": 5,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": -1,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                },
+                "2": {
+                  "Id": "DjLQR/WVRLiTsomJpxldOA==",
+                  "Position": {
+                    "X": 5,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": -1,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                },
+                "3": {
+                  "Id": "yQ4FbADNRUWwL1G5LBLEjQ==",
+                  "Position": {
+                    "X": 5,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": -1,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                }
+              },
+              "ConstructionBlock": {
+                "1": {
+                  "Id": "E/hvLyLsSA65whGlEY3WPw==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 8
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "+tATtGmmRcyyUDYtZCIwYQ==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 8
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "7poy1txrTMifqNtT/nOaxg==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 8
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              },
+              "Containers": {
+                "1": [
+                  {
+                    "Id": "/FCm/Fz7RQyBIIgFyCoQSw==",
+                    "Position": {
+                      "X": -3,
+                      "Y": 1,
+                      "Z": 6
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ],
+                "2": [
+                  {
+                    "Id": "3cZojKIkQqOudOMSZ+MZww==",
+                    "Position": {
+                      "X": -4,
+                      "Y": 1,
+                      "Z": 6
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ],
+                "3": [
+                  {
+                    "Id": "wE5O3pKoRmS0Vy7c92818w==",
+                    "Position": {
+                      "X": -4,
+                      "Y": 1,
+                      "Z": 6
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "Farm": {
+              "CoreBlocks": {
+                "1": {
+                  "Id": "Ns7lHaQPThy3p0VMVesiKQ==",
+                  "Position": {
+                    "X": -5,
+                    "Y": 1,
+                    "Z": -4
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                },
+                "2": {
+                  "Id": "Y7qKKQJrTA6ykX0D7VSFpg==",
+                  "Position": {
+                    "X": -5,
+                    "Y": 1,
+                    "Z": -5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                },
+                "3": {
+                  "Id": "2/vLQ/I0TtSP+MBlQxxd0A==",
+                  "Position": {
+                    "X": -5,
+                    "Y": 1,
+                    "Z": -5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                }
+              },
+              "ConstructionBlock": {
+                "1": {
+                  "Id": "Q4tvGOLlR4y6Fw4CRRxSLg==",
+                  "Position": {
+                    "X": 3,
+                    "Y": 1,
+                    "Z": 6
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "MYLE9FAESga7wnuhwI1a5Q==",
+                  "Position": {
+                    "X": 3,
+                    "Y": 1,
+                    "Z": 6
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "puALSit0T+Sfhgp0VvSiGg==",
+                  "Position": {
+                    "X": 3,
+                    "Y": 1,
+                    "Z": 6
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              },
+              "Containers": {
+                "1": [
+                  {
+                    "Id": "oWwXb2KKSZO/lTKE41tpHg==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 1,
+                      "Z": 3
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  }
+                ],
+                "2": [
+                  {
+                    "Id": "ZBncnXroQLehe/D9qsXaEQ==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 1,
+                      "Z": 3
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  }
+                ],
+                "3": [
+                  {
+                    "Id": "6zr2GFvtQKGxFlZ7Q+N8Hw==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 1,
+                      "Z": 3
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  }
+                ]
+              }
+            },
+            "Storage": {
+              "CoreBlocks": {
+                "1": {
+                  "Id": "tOM4OOLCSVGQUgvi77kZbw==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": -3
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                },
+                "2": {
+                  "Id": "GWBtr9YqQwG2VKDDIqIPXg==",
+                  "Position": {
+                    "X": -1,
+                    "Y": 1,
+                    "Z": -4
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 2
+                  }
+                },
+                "3": {
+                  "Id": "Qwi71K4YTe6Sa+Q8juTawA==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": -3
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                }
+              },
+              "ConstructionBlock": {
+                "1": {
+                  "Id": "Jpv4QyhVQMq/EXXOARmM/g==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 7
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "QyfyJJDKSfefg12oJYTQbA==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 7
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "1pET7IXOTxiNVrQUzfAV9w==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              },
+              "Containers": {
+                "1": [
+                  {
+                    "Id": "fo0MXHIKQR+ih0QSf+usvg==",
+                    "Position": {
+                      "X": -3,
+                      "Y": 1,
+                      "Z": 1
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "rEJ649E7QHiXmpQHrfdjIg==",
+                    "Position": {
+                      "X": -3,
+                      "Y": 1,
+                      "Z": -2
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "eHaLdlvUTVaydWYSRPQ7UQ==",
+                    "Position": {
+                      "X": 3,
+                      "Y": 1,
+                      "Z": 2
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "b9Y5esrLQxmEYzMdCAfBNg==",
+                    "Position": {
+                      "X": 3,
+                      "Y": 1,
+                      "Z": -1
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ],
+                "2": [
+                  {
+                    "Id": "HK+VqGYPQvKzwOGM1VfSWg==",
+                    "Position": {
+                      "X": 2,
+                      "Y": 1,
+                      "Z": -2
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "AIhj4NQjSuKDB/17QGI/UA==",
+                    "Position": {
+                      "X": 2,
+                      "Y": 1,
+                      "Z": 1
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "2/UD9bNVSgGmMKkG1u36RQ==",
+                    "Position": {
+                      "X": 2,
+                      "Y": 1,
+                      "Z": 4
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "Yd7tNTG1Q46D0iDiMVEnxQ==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 5,
+                      "Z": -1
+                    },
+                    "Rotation": "OneEighty",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  },
+                  {
+                    "Id": "W9yxiy7eTYG8ppK/alRUdg==",
+                    "Position": {
+                      "X": 3,
+                      "Y": 5,
+                      "Z": 4
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "25Gd/318SuydOIeI0+SiEg==",
+                    "Position": {
+                      "X": -1,
+                      "Y": 5,
+                      "Z": 1
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "bVNA2TMNRSKxVKQux9NrVw==",
+                    "Position": {
+                      "X": 1,
+                      "Y": 5,
+                      "Z": 5
+                    },
+                    "Rotation": "OneEighty",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  },
+                  {
+                    "Id": "OzIT5PGXQ3OiEwU6wcc0uw==",
+                    "Position": {
+                      "X": -4,
+                      "Y": 5,
+                      "Z": -3
+                    },
+                    "Rotation": "None",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": 1
+                    }
+                  },
+                  {
+                    "Id": "DdkPudnfQqaXK65DnkBYFA==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 5,
+                      "Z": -4
+                    },
+                    "Rotation": "OneEighty",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  },
+                  {
+                    "Id": "3uIAI20iTN6nwN5k+WIgkw==",
+                    "Position": {
+                      "X": -1,
+                      "Y": 5,
+                      "Z": -3
+                    },
+                    "Rotation": "None",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": 1
+                    }
+                  },
+                  {
+                    "Id": "HV7uyrjcSkuPLiv0Elf6Lg==",
+                    "Position": {
+                      "X": -2,
+                      "Y": 5,
+                      "Z": -4
+                    },
+                    "Rotation": "OneEighty",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  },
+                  {
+                    "Id": "W+GLL9yQQPKe27TBYf/r0A==",
+                    "Position": {
+                      "X": 2,
+                      "Y": 5,
+                      "Z": -3
+                    },
+                    "Rotation": "None",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": 1
+                    }
+                  },
+                  {
+                    "Id": "iSzS8rFUTGmWN8dnZEJWmw==",
+                    "Position": {
+                      "X": 1,
+                      "Y": 5,
+                      "Z": -4
+                    },
+                    "Rotation": "OneEighty",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  }
+                ],
+                "3": [
+                  {
+                    "Id": "79hkV1vjSdaKkP/WfBWQ0A==",
+                    "Position": {
+                      "X": -3,
+                      "Y": 1,
+                      "Z": 1
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "+kHQJeLqTQabakC6qJ/VJQ==",
+                    "Position": {
+                      "X": -3,
+                      "Y": 1,
+                      "Z": -2
+                    },
+                    "Rotation": "Ninety",
+                    "AccessOffset": {
+                      "X": 1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "Q1gy/EdvQ3yv4TQPY3NyjQ==",
+                    "Position": {
+                      "X": 3,
+                      "Y": 1,
+                      "Z": 2
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  },
+                  {
+                    "Id": "xdcJa7jXRnmtDBgYb7nJpg==",
+                    "Position": {
+                      "X": 3,
+                      "Y": 1,
+                      "Z": -1
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "House": {
+              "CoreBlocks": {
+                "1": {
+                  "Id": "qNTfbAizQ1CGCIyq01JnJA==",
+                  "Position": {
+                    "X": -4,
+                    "Y": 1,
+                    "Z": 2
+                  },
+                  "Rotation": "Ninety",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "KWtxcTXDQT+7z1TM4kd1UA==",
+                  "Position": {
+                    "X": 2,
+                    "Y": 1,
+                    "Z": -1
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "vAKjKzoLRX6vt34fg4Tkew==",
+                  "Position": {
+                    "X": 2,
+                    "Y": 1,
+                    "Z": -1
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              },
+              "ConstructionBlock": {
+                "1": {
+                  "Id": "37DTxPq/RXW/EI/VWWqt+A==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "E6bcpNBQTreDOvCa0ZCFxA==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "AaL6wta4T0KkT/sombvQxg==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              }
+            },
+            "Tavern": {
+              "CoreBlocks": {
+                "1": {
+                  "Id": "hlIRMl7CTvec/uhkYfw4og==",
+                  "Position": {
+                    "X": -4,
+                    "Y": 1,
+                    "Z": -3
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                },
+                "2": {
+                  "Id": "WBx3RE6RTNOf7y7fMOFy0A==",
+                  "Position": {
+                    "X": 5,
+                    "Y": -3,
+                    "Z": 0
+                  },
+                  "Rotation": "TwoSeventy",
+                  "AccessOffset": {
+                    "X": -1,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "k+17FVQ9QmyyuezEwrSQ0A==",
+                  "Position": {
+                    "X": 5,
+                    "Y": -3,
+                    "Z": 0
+                  },
+                  "Rotation": "TwoSeventy",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 1
+                  }
+                }
+              },
+              "ConstructionBlock": {
+                "1": {
+                  "Id": "fs1fzCz0RpSPrAw2CpHsEQ==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "2": {
+                  "Id": "yIpw+HpZR4ulEO5fuStrxg==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                },
+                "3": {
+                  "Id": "gV++Vnx2SEai5q/ATVD4fg==",
+                  "Position": {
+                    "X": 0,
+                    "Y": 1,
+                    "Z": 5
+                  },
+                  "Rotation": "None",
+                  "AccessOffset": {
+                    "X": 0,
+                    "Y": 0,
+                    "Z": 0
+                  }
+                }
+              },
+              "Containers": {
+                "1": [
+                  {
+                    "Id": "KI7eQfQdRIiOUqIMJy9aCg==",
+                    "Position": {
+                      "X": -5,
+                      "Y": 1,
+                      "Z": 3
+                    },
+                    "Rotation": "OneEighty",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  }
+                ],
+                "2": [
+                  {
+                    "Id": "InBjV2XLTXGFkburTaFvwA==",
+                    "Position": {
+                      "X": 5,
+                      "Y": -3,
+                      "Z": -3
+                    },
+                    "Rotation": "TwoSeventy",
+                    "AccessOffset": {
+                      "X": -1,
+                      "Y": 0,
+                      "Z": 0
+                    }
+                  }
+                ],
+                "3": [
+                  {
+                    "Id": "5xBsRy4HTi6g6zKlnSQpqQ==",
+                    "Position": {
+                      "X": 5,
+                      "Y": -3,
+                      "Z": -3
+                    },
+                    "Rotation": "OneEighty",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": -1
+                    }
+                  }
+                ]
+              },
+              "Interactables": {
+                "1": [
+                  {
+                    "Id": "3YWb+3U+RgaAogSXZcCd2A==",
+                    "InteractablePosition": {
+                      "X": 0,
+                      "Y": 1,
+                      "Z": 0
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": 2,
+                      "Z": -1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "BVOh4hB0RvqQ5x2lQmEDMQ==",
+                    "InteractablePosition": {
+                      "X": -1,
+                      "Y": 1,
+                      "Z": 0
+                    },
+                    "DependsOn": {
+                      "X": -1,
+                      "Y": 2,
+                      "Z": -1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "VKE8nHKATJ+8q8Sa8MtqQg==",
+                    "InteractablePosition": {
+                      "X": 0,
+                      "Y": 1,
+                      "Z": -3
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": 2,
+                      "Z": -2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "EetXwzLiQKuqAx4Pme64tg==",
+                    "InteractablePosition": {
+                      "X": -1,
+                      "Y": 1,
+                      "Z": -3
+                    },
+                    "DependsOn": {
+                      "X": -1,
+                      "Y": 2,
+                      "Z": -2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "s0V9Yl77TJeYJMQdfwEJtQ==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": 1,
+                      "Z": -1
+                    },
+                    "DependsOn": {
+                      "X": 3,
+                      "Y": 2,
+                      "Z": -1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "qH3NIMrNRxiBCxtLf6WVYg==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": 1,
+                      "Z": -2
+                    },
+                    "DependsOn": {
+                      "X": 3,
+                      "Y": 2,
+                      "Z": -2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "kx4MqIJyRpWqT/fWWjTgKA==",
+                    "InteractablePosition": {
+                      "X": 5,
+                      "Y": 1,
+                      "Z": -1
+                    },
+                    "DependsOn": {
+                      "X": 4,
+                      "Y": 2,
+                      "Z": -1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "uyT9bHgxTHOdpkcc/xring==",
+                    "InteractablePosition": {
+                      "X": 5,
+                      "Y": 1,
+                      "Z": -2
+                    },
+                    "DependsOn": {
+                      "X": 4,
+                      "Y": 2,
+                      "Z": -2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "Utg9H6n1QVm6xXlwKZe5WQ==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": 1,
+                      "Z": 1
+                    },
+                    "DependsOn": {
+                      "X": 3,
+                      "Y": 2,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "tpb5ZAa2TyyEbxjZ5XcY9g==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": 1,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": 3,
+                      "Y": 2,
+                      "Z": 2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "sLS3l0sNSK+LzS3REvPZNA==",
+                    "InteractablePosition": {
+                      "X": 5,
+                      "Y": 1,
+                      "Z": 1
+                    },
+                    "DependsOn": {
+                      "X": 4,
+                      "Y": 2,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "2+d88l6DRm6x9simuW8rPg==",
+                    "InteractablePosition": {
+                      "X": 5,
+                      "Y": 1,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": 4,
+                      "Y": 2,
+                      "Z": 2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  }
+                ],
+                "2": [
+                  {
+                    "Id": "uGhOafNcTcWBRIR7UQmDZQ==",
+                    "InteractablePosition": {
+                      "X": -1,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "iVDmXOzxRHWg2m4Q1J8IRQ==",
+                    "InteractablePosition": {
+                      "X": -1,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "p2lk//yhRZ62NB69hYBBjQ==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": 1,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "9a06suKfQsSHrLynPQtqkQ==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": 1,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "r0mAb8WcTkahWjyNnin0pQ==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 1
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "xdGYUPTzQNCKZAGmio7hiw==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "OcNlwLNrR/WTWEuUCLncUQ==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 1
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "nxi+BewCSEObwAxCtUrbDA==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "t0ZYyJvaRuKP9UeKK717aw==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "scB3hKhTSA+2w/sBgcyOGw==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "UwNb9kQRRnyyunAJqTqVsQ==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "Y4P2Phj8TMqZSYcxTboGiw==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "DE6i+N1IRF2ET1h6UacfBA==",
+                    "InteractablePosition": {
+                      "X": 0,
+                      "Y": 5,
+                      "Z": -1
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": 6,
+                      "Z": 0
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "SC4AYO12QIWAEiz/0KqKVw==",
+                    "InteractablePosition": {
+                      "X": 1,
+                      "Y": 5,
+                      "Z": -1
+                    },
+                    "DependsOn": {
+                      "X": 1,
+                      "Y": 6,
+                      "Z": 0
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "X6ZnPIhHRB+DE2yS634meg==",
+                    "InteractablePosition": {
+                      "X": 0,
+                      "Y": 5,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": 6,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "bs3X22G6RbOaDCutpl273w==",
+                    "InteractablePosition": {
+                      "X": 1,
+                      "Y": 5,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": 1,
+                      "Y": 6,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "dp9AGnf2SDGfxDgWETOOKg==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": 5,
+                      "Z": -1
+                    },
+                    "DependsOn": {
+                      "X": -2,
+                      "Y": 6,
+                      "Z": 0
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "WHjMna+dSrOl6oBUGsDupw==",
+                    "InteractablePosition": {
+                      "X": -3,
+                      "Y": 5,
+                      "Z": -1
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": 6,
+                      "Z": 0
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "mVPlZdX1S6Gl3Xq0vsHymQ==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": 5,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": -2,
+                      "Y": 6,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "VXKtT21tRfKrGD1fee4nvQ==",
+                    "InteractablePosition": {
+                      "X": -3,
+                      "Y": 5,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": 6,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  }
+                ],
+                "3": [
+                  {
+                    "Id": "bJJlnYVcShqut1R4Zou6/g==",
+                    "InteractablePosition": {
+                      "X": -1,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "eOqCTfnPSJifiHAi8VNWXQ==",
+                    "InteractablePosition": {
+                      "X": -1,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": 0,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "DcpedeGmSSCZ5o+34+zICA==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": 1,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "wjWkBbcbS4K/R7M/GFVoOw==",
+                    "InteractablePosition": {
+                      "X": 2,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": 1,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "3ybrYFYFQiSOlFJh/1xR5A==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 1
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "ysxapd50S5CvM4IJLtFzwQ==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "htFKo3gbTqm+ZL7u9vt26Q==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 1
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 1
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "DKBlPRs7RoqqH4nvMT2gNQ==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 2
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 2
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "qZBetvUCRPOOfv3cnDO39A==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "FOmxwmNZQ8qrLenvWNPKIw==",
+                    "InteractablePosition": {
+                      "X": -2,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": -3,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "xeWJj6FURI+TEXiL7GwKlQ==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 3
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 3
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  },
+                  {
+                    "Id": "issOZ9gwRV+nWl9njC7P1Q==",
+                    "InteractablePosition": {
+                      "X": -5,
+                      "Y": -3,
+                      "Z": 4
+                    },
+                    "DependsOn": {
+                      "X": -4,
+                      "Y": -2,
+                      "Z": 4
+                    },
+                    "OccupiedBy": null,
+                    "InvalidateOnUse": true,
+                    "IsReady": false
+                  }
+                ]
+              }
+            }
+          }
+        },
         "VillageHeartComponent": {
           "Level": 1,
           "Config": {

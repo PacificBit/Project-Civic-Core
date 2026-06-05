@@ -38,6 +38,7 @@ import com.pacificbytestudios.projectciviccore.village.components.house.HouseCom
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.simulation.SimulationComponent;
 import com.pacificbytestudios.projectciviccore.village.components.simulation.SimulationRunningComponent;
+import com.pacificbytestudios.projectciviccore.village.components.structures.VillageStructuresConfig;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.farm.FarmComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -135,6 +136,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, VillageHeartComponent> villageCoreComponentType;
   private ComponentType<ChunkStore, VillageHeartMarkerComponent> villageHeartMarkerComponentType;
   private ComponentType<ChunkStore, VillageSpawnComponent> villageSpawnComponentType;
+  private ComponentType<ChunkStore, VillageStructuresConfig> villageStructureConfigComponentType;
 
   private ComponentType<ChunkStore, VillageTaskQueueComponent> villageTaskQueueComponentType;
 
@@ -192,6 +194,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         VillageSpawnComponent.class,
         "VillageSpawnConfig",
         VillageSpawnComponent.CODEC);
+
+    this.villageStructureConfigComponentType = chunkRegistry.registerComponent(
+        VillageStructuresConfig.class,
+        "VillageStructuresConfig",
+        VillageStructuresConfig.CODEC);
 
     this.villageCoreComponentType = chunkRegistry.registerComponent(
         VillageHeartComponent.class,
@@ -622,6 +629,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
     return this.villageSpawnComponentType;
+  }
+
+  public ComponentType<ChunkStore, VillageStructuresConfig> getVillageStructureConfigComponentType() {
+    return this.villageStructureConfigComponentType;
   }
 
   public ComponentType<ChunkStore, VillageHeartComponent> getVillageCoreComponentType() {

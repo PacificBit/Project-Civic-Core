@@ -1,5 +1,8 @@
 package com.pacificbytestudios.projectciviccore.utils;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -22,6 +25,7 @@ import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.AdvanceConstructionStage;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginNewConstruction;
 import com.pacificbytestudios.projectciviccore.utils.SpawnerFunctions.BeginUpgradeConstruction;
@@ -429,5 +433,39 @@ public class Utils {
     return villagerRef.getStore().getComponent(
         villagerRef,
         MayorComponent.getComponentType());
+  }
+
+  public static <S, T extends Copyable<T>> Map<S, T> copyMap(Map<S, T> source) {
+    Map<S, T> copy = new HashMap<>();
+
+    if (source == null) {
+      return copy;
+    }
+
+    source.forEach((key, value) -> copy.put(key, value == null ? null : value.clone()));
+    return copy;
+  }
+
+  public static <S, T extends Copyable<T>> Map<S, T[]> copyMapArray(Map<S, T[]> source) {
+    Map<S, T[]> copy = new HashMap<>();
+
+    if (source == null) {
+      return copy;
+    }
+
+    source.forEach((key, values) -> {
+      if (values == null) {
+        copy.put(key, null);
+        return;
+      }
+
+      T[] clonedValues = Arrays.copyOf(values, values.length);
+      for (int i = 0; i < values.length; i++) {
+        clonedValues[i] = values[i] == null ? null : values[i].clone();
+      }
+
+      copy.put(key, clonedValues);
+    });
+    return copy;
   }
 }

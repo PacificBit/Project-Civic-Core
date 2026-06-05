@@ -1256,33 +1256,6 @@
     "Compute": "NameTranslationKey"
   },
   "StartState": "Normal",
-  "SleepTimeRange": {
-    "Compute": "SleepTimeRange"
-  },
-  "BreakfastTimeRange": {
-    "Compute": "BreakfastTimeRange"
-  },
-  "LunchTimeRange": {
-    "Compute": "LunchTimeRange"
-  },
-  "FirstWorkSessionTimeRange": {
-    "Compute": "FirstWorkSessionTimeRange"
-  },
-  "SecondWorkSessionTimeRange": {
-    "Compute": "SecondWorkSessionTimeRange"
-  },
-  "PreDinnerSocialTimeRange": {
-    "Compute": "PreDinnerSocialTimeRange"
-  },
-  "PostLunchSocialTimeRange": {
-    "Compute": "PostLunchSocialTimeRange"
-  },
-  "DinnerTimeRange": {
-    "Compute": "DinnerTimeRange"
-  },
-  "PreSleepRelaxTimeRange": {
-    "Compute": "PreSleepRelaxTimeRange"
-  },
   "Appearance": {
     "Compute": "Appearance"
   },

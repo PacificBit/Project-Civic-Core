@@ -1515,12 +1515,6 @@
     "Compute": "NameTranslationKey"
   },
   "StartState": "Working",
-  "FirstWorkSessionTimeRange": {
-    "Compute": "FirstWorkSessionTimeRange"
-  },
-  "SecondWorkSessionTimeRange": {
-    "Compute": "SecondWorkSessionTimeRange"
-  },
   "Appearance": {
     "Compute": "Appearance"
   },
