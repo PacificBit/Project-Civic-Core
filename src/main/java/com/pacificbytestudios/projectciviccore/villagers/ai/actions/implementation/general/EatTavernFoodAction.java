@@ -17,7 +17,7 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEatTavernFoodAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
@@ -57,7 +57,7 @@ public class EatTavernFoodAction extends VillagerActionBase {
     }
 
     Interactable interactable = interactables.getInteractableOccupiedBy(
-        WorkplaceInteractibles.EATING_SPOT,
+        InteractablesType.EATING_SPOT,
         uuidComponent.getUuid());
     if (interactable == null) {
       return false;

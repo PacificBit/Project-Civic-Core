@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
 public class ReserveNextPlateToFillSensor extends VillagerSensorBase {
@@ -47,7 +47,7 @@ public class ReserveNextPlateToFillSensor extends VillagerSensorBase {
       return false;
     }
 
-    WorkplaceInteractibles group = WorkplaceInteractibles.EATING_SPOT;
+    InteractablesType group = InteractablesType.EATING_SPOT;
     Interactable reservedInteractable = interactables.getInteractableOccupiedBy(group, uuidComponent.getUuid());
     if (reservedInteractable != null && !reservedInteractable.isReady()) {
       return true;

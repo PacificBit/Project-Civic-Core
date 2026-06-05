@@ -12,7 +12,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderReachPlateToFill;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
@@ -53,7 +53,7 @@ public class ReachPlateToFill extends VillagerSensorBase {
       this.triggered = true;
       UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
       Interactable interactable = interactables.getInteractableOccupiedBy(
-          WorkplaceInteractibles.EATING_SPOT,
+          InteractablesType.EATING_SPOT,
           uuidComponent.getUuid());
       if (interactable == null) {
         this.positionProvider.clear();

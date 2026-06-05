@@ -16,7 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 
 public class WorkplaceInteractablesMapComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceInteractablesMapComponent> CODEC = BuilderCodec
@@ -24,7 +24,7 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
 
       .append(
           new KeyedCodec<>("Interactables", new EnumMapCodec<>(
-              WorkplaceInteractibles.class,
+              InteractablesType.class,
               new ArrayCodec<>(
                   Interactable.CODEC,
                   Interactable[]::new))),
@@ -34,17 +34,17 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
 
       .build();
 
-  private Map<WorkplaceInteractibles, Interactable[]> interactable = new HashMap<>();
+  private Map<InteractablesType, Interactable[]> interactable = new HashMap<>();
 
-  public void setNewInteractables(WorkplaceInteractibles group, List<Interactable> interactables) {
-    this.interactable.putIfAbsent(group, new Interactable[0]);
-    this.interactable.put(group, interactables.toArray(new Interactable[0]));
+  public void setNewInteractables(InteractablesType type, List<Interactable> interactables) {
+    this.interactable.putIfAbsent(type, new Interactable[0]);
+    this.interactable.put(type, interactables.toArray(new Interactable[0]));
   }
 
-  public Interactable getFirstAvailableInteractable(WorkplaceInteractibles group) {
-    Interactable[] interactableGroup = this.interactable.get(group);
+  public Interactable getFirstAvailableInteractable(InteractablesType type) {
+    Interactable[] interactableGroup = this.interactable.get(type);
     if (interactableGroup == null) {
-      throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
+      throw new IllegalArgumentException("Interactable type '" + type + "' is not defined");
     }
 
     for (Interactable interactable : interactableGroup) {
@@ -55,10 +55,10 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return null;
   }
 
-  public Interactable getFirstNotReadyInteractable(WorkplaceInteractibles group, UUID villager) {
-    Interactable[] interactableGroup = this.interactable.get(group);
+  public Interactable getFirstNotReadyInteractable(InteractablesType type, UUID villager) {
+    Interactable[] interactableGroup = this.interactable.get(type);
     if (interactableGroup == null) {
-      throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
+      throw new IllegalArgumentException("Interactable type '" + type + "' is not defined");
     }
 
     for (Interactable interactable : interactableGroup) {
@@ -69,10 +69,10 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return null;
   }
 
-  public Interactable getInteractableOccupiedBy(WorkplaceInteractibles group, UUID occupantUuid) {
-    Interactable[] interactableGroup = this.interactable.get(group);
+  public Interactable getInteractableOccupiedBy(InteractablesType type, UUID occupantUuid) {
+    Interactable[] interactableGroup = this.interactable.get(type);
     if (interactableGroup == null) {
-      throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
+      throw new IllegalArgumentException("Interactable type '" + type + "' is not defined");
     }
 
     if (occupantUuid == null) {
@@ -90,10 +90,10 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return null;
   }
 
-  public Interactable getInteractableDependingOn(WorkplaceInteractibles group, Vec3f dependencyPosition) {
-    Interactable[] interactableGroup = this.interactable.get(group);
+  public Interactable getInteractableDependingOn(InteractablesType type, Vec3f dependencyPosition) {
+    Interactable[] interactableGroup = this.interactable.get(type);
     if (interactableGroup == null) {
-      throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
+      throw new IllegalArgumentException("Interactable type '" + type + "' is not defined");
     }
 
     if (dependencyPosition == null) {
@@ -109,10 +109,10 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return null;
   }
 
-  public Interactable getInteractableAtPosition(WorkplaceInteractibles group, Vec3f interactablePosition) {
-    Interactable[] interactableGroup = this.interactable.get(group);
+  public Interactable getInteractableAtPosition(InteractablesType type, Vec3f interactablePosition) {
+    Interactable[] interactableGroup = this.interactable.get(type);
     if (interactableGroup == null) {
-      throw new IllegalArgumentException("Interactable group '" + group + "' is not defined");
+      throw new IllegalArgumentException("Interactable type '" + type + "' is not defined");
     }
 
     if (interactablePosition == null) {
@@ -128,11 +128,11 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return null;
   }
 
-  public Interactable[] getAllInteractablesOfGroup(WorkplaceInteractibles group) {
-    return this.interactable.get(group);
+  public Interactable[] getAllInteractablesOfGroup(InteractablesType type) {
+    return this.interactable.get(type);
   }
 
-  public Map<WorkplaceInteractibles, Interactable[]> getAllInteractables() {
+  public Map<InteractablesType, Interactable[]> getAllInteractables() {
     return Collections.unmodifiableMap(this.interactable);
   }
 
@@ -170,16 +170,16 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     return component;
   }
 
-  private static Map<WorkplaceInteractibles, Interactable[]> deepCopy(
-      Map<WorkplaceInteractibles, Interactable[]> source) {
-    Map<WorkplaceInteractibles, Interactable[]> copy = new HashMap<>();
+  private static Map<InteractablesType, Interactable[]> deepCopy(
+      Map<InteractablesType, Interactable[]> source) {
+    Map<InteractablesType, Interactable[]> copy = new HashMap<>();
 
     if (source == null) {
       return copy;
     }
 
-    for (Map.Entry<WorkplaceInteractibles, Interactable[]> entry : source.entrySet()) {
-      WorkplaceInteractibles key = entry.getKey();
+    for (Map.Entry<InteractablesType, Interactable[]> entry : source.entrySet()) {
+      InteractablesType key = entry.getKey();
       Interactable[] value = entry.getValue();
 
       if (value == null) {
@@ -208,7 +208,7 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
     StringBuilder sb = new StringBuilder();
     sb.append("WorkplaceInteractablesMapComponent{\n");
 
-    for (Map.Entry<WorkplaceInteractibles, Interactable[]> entry : interactable.entrySet()) {
+    for (Map.Entry<InteractablesType, Interactable[]> entry : interactable.entrySet()) {
       sb.append("  ").append(entry.getKey()).append("={\n");
 
       Interactable[] values = entry.getValue();

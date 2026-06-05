@@ -22,7 +22,7 @@ import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodCo
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
@@ -54,7 +54,7 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
 
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
 
-    WorkplaceInteractibles group = WorkplaceInteractibles.EATING_SPOT;
+    InteractablesType group = InteractablesType.EATING_SPOT;
     Interactable interactable = interactables.getInteractableOccupiedBy(group, uuidComponent.getUuid());
     if (interactable == null) {
       return false;

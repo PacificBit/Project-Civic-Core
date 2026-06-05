@@ -32,7 +32,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
 import io.sentry.util.Pair;
@@ -551,7 +551,7 @@ public class TavernSpawner {
       int level) {
 
     interactables.setNewInteractables(
-        WorkplaceInteractibles.EATING_SPOT,
+        InteractablesType.EATING_SPOT,
         StructureConfig.Tavern.getInteractables(center, rotation, level));
   }
 

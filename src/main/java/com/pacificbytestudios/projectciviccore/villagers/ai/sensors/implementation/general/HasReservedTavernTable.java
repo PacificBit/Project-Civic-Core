@@ -13,7 +13,7 @@ import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactab
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 
@@ -62,7 +62,7 @@ public class HasReservedTavernTable extends VillagerSensorBase {
             workplaceRef,
             WorkplaceInteractablesMapComponent.getComponentType());
         this.reservedTable = interactables.getFirstAvailableInteractable(
-            WorkplaceInteractibles.EATING_SPOT);
+            InteractablesType.EATING_SPOT);
 
         if (this.reservedTable == null) {
           continue;

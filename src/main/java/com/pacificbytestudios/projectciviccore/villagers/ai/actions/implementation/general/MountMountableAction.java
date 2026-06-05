@@ -14,13 +14,13 @@ import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactab
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderMountMountableAction;
 import com.pacificbytestudios.projectciviccore.villagers.core.events.SitOnChairEvent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
 public class MountMountableAction extends VillagerActionBase {
-  private WorkplaceInteractibles interactibleGroup;
+  private InteractablesType interactibleGroup;
   private StructureType structureType;
 
   public MountMountableAction(

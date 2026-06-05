@@ -4,14 +4,14 @@ import java.util.function.Supplier;
 
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 
-public enum WorkplaceInteractibles implements Supplier<String> {
+public enum InteractablesType implements Supplier<String> {
   EATING_SPOT("Eating_Spot", MarkerType.TAVERN_CHAIR, MarkerType.TAVERN_PLATE);
 
   private String key;
   private MarkerType markerType;
   private MarkerType dependsOn;
 
-  private WorkplaceInteractibles(
+  private InteractablesType(
       String key,
       MarkerType markerType,
       MarkerType dependsOn) {

@@ -150,7 +150,7 @@ public abstract class VillagerActionBase extends ActionBase {
       }
 
       if (interactables.getInteractableAtPosition(
-          com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles.EATING_SPOT,
+          com.pacificbytestudios.projectciviccore.village.enums.InteractablesType.EATING_SPOT,
           reservedInteractable) == null) {
         continue;
       }

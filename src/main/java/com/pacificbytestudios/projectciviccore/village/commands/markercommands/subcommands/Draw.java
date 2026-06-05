@@ -22,7 +22,7 @@ import com.pacificbytestudios.projectciviccore.village.components.house.HouseCom
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 
 public class Draw extends VillageCommand {
 
@@ -84,10 +84,10 @@ public class Draw extends VillageCommand {
   }
 
   private void addInteractables(WorkplaceInteractablesMapComponent workplaceInteractables) {
-    Map<WorkplaceInteractibles, Interactable[]> interactableMap = workplaceInteractables.getAllInteractables();
+    Map<InteractablesType, Interactable[]> interactableMap = workplaceInteractables.getAllInteractables();
 
-    for (Entry<WorkplaceInteractibles, Interactable[]> interactableEntry : interactableMap.entrySet()) {
-      WorkplaceInteractibles key = interactableEntry.getKey();
+    for (Entry<InteractablesType, Interactable[]> interactableEntry : interactableMap.entrySet()) {
+      InteractablesType key = interactableEntry.getKey();
 
       for (Interactable interactable : interactableEntry.getValue()) {
         this.markers.get(key.getMarkerType()).add(interactable.getInteractablePosition().to3d());

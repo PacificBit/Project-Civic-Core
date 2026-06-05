@@ -14,7 +14,7 @@ import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodCo
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 
 public class TavernFoodRemovalSystem extends RefSystem<ChunkStore> {
 
@@ -59,7 +59,7 @@ public class TavernFoodRemovalSystem extends RefSystem<ChunkStore> {
     }
 
     Interactable interactable = interactables.getInteractableDependingOn(
-        WorkplaceInteractibles.EATING_SPOT,
+        InteractablesType.EATING_SPOT,
         Vec3f.from(blockContext.position()));
     if (interactable == null || !interactable.isInvalidateOnUse()) {
       return;

@@ -8,11 +8,11 @@ import com.hypixel.hytale.server.npc.asset.builder.holder.EnumHolder;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
-import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.MountMountableAction;
 
 public class BuilderMountMountableAction extends BuilderActionBase {
-  private EnumHolder<WorkplaceInteractibles> interactableType = new EnumHolder<>();
+  private EnumHolder<InteractablesType> interactableType = new EnumHolder<>();
   private EnumHolder<StructureType> structureType = new EnumHolder<>();
 
   @Override
@@ -40,13 +40,13 @@ public class BuilderMountMountableAction extends BuilderActionBase {
     this.requireEnum(data, "StructureType", this.structureType, StructureType.class,
         BuilderDescriptorState.Experimental, "Structure type", null);
 
-    this.requireEnum(data, "InteractableType", this.interactableType, WorkplaceInteractibles.class,
+    this.requireEnum(data, "InteractableType", this.interactableType, InteractablesType.class,
         BuilderDescriptorState.Experimental, "Workplace Ineractable type", null);
 
     return this;
   }
 
-  public WorkplaceInteractibles getInteractibleType(BuilderSupport support) {
+  public InteractablesType getInteractibleType(BuilderSupport support) {
     return this.interactableType.get(support.getExecutionContext());
   }
 
