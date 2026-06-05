@@ -48,8 +48,7 @@ public class UnregisterHouseTask extends AVillageTask {
 
     Logger.logInfo("Unregistering house with id: " + this.house);
 
-    VillageTopologyComponent topology = heartRef.getStore().getComponent(
-        heartRef,
+    VillageTopologyComponent topology = heart.getComponent(
         VillageTopologyComponent.getComponentType());
     if (topology == null) {
       Logger.logWarning(

@@ -57,8 +57,7 @@ public class UnregisterWorkplaceTask extends AVillageTask {
       }
     }
 
-    VillageTopologyComponent topology = heartRef.getStore().getComponent(
-        heartRef,
+    VillageTopologyComponent topology = heart.getComponent(
         VillageTopologyComponent.getComponentType());
     if (topology == null) {
       Logger.logWarning(

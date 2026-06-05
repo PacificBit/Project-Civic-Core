@@ -78,8 +78,7 @@ public class RegisterStructureTopologyTask extends AVillageTask {
       return;
     }
 
-    VillageTopologyComponent topology = heartRef.getStore().getComponent(
-        heartRef,
+    VillageTopologyComponent topology = heart.getComponent(
         VillageTopologyComponent.getComponentType());
     if (topology == null) {
       Logger.logWarning(

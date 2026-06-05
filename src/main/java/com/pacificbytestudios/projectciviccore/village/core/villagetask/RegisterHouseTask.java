@@ -54,8 +54,7 @@ public class RegisterHouseTask extends AVillageTask {
     Logger.logInfo("Registering house with id: " + this.house.getUuid());
     heart.registerHouse(this.house);
 
-    VillageTopologyComponent topology = heartRef.getStore().getComponent(
-        heartRef,
+    VillageTopologyComponent topology = heart.getComponent(
         VillageTopologyComponent.getComponentType());
     if (topology == null) {
       Logger.logWarning(

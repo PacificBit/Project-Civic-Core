@@ -35,11 +35,10 @@ public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
         commandBuffer);
 
     context.chunk().getWorld().execute(() -> {
-      VillageTaskQueueComponent tasksComponent = store.getComponent(villageHeartRef,
-          VillageTaskQueueComponent.getComponentType());
-
       VillageHeartComponent villageHeart = store.getComponent(villageHeartRef,
           VillageHeartComponent.getComponentType());
+      VillageTaskQueueComponent tasksComponent = villageHeart.getComponent(
+          VillageTaskQueueComponent.getComponentType());
 
       AVillageTask task = tasksComponent.pollTask();
 

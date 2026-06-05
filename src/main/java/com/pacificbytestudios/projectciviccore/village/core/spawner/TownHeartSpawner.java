@@ -128,8 +128,7 @@ public class TownHeartSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);
 
-    initializeVillageTopology(position, structureRotation, heartRef, store,
-        heartComponent);
+    initializeVillageTopology(position, structureRotation, heartComponent);
 
     return true;
   }
@@ -137,10 +136,8 @@ public class TownHeartSpawner {
   private static void initializeVillageTopology(
       Vec3i position,
       Rotation rotation,
-      Ref<ChunkStore> heartRef,
-      Store<ChunkStore> store,
       VillageHeartComponent heartComponent) {
-    VillageTopologyComponent topologyComponent = store.getComponent(heartRef,
+    VillageTopologyComponent topologyComponent = heartComponent.getComponent(
         VillageTopologyComponent.getComponentType());
     if (topologyComponent == null) {
       return;

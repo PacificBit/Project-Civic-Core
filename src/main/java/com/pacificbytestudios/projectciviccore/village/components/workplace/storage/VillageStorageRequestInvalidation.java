@@ -38,7 +38,7 @@ public final class VillageStorageRequestInvalidation {
     Set<UUID> affectedStorageWorkerIds = new HashSet<>();
     affectedRequesterIds.add(requesterWorkplaceId);
 
-    removePendingVillageTasks(villageHeartRef, requesterWorkplaceId);
+    removePendingVillageTasks(villageHeartRef, resolvedHeart, requesterWorkplaceId);
 
     purgeStorageRequests(
         resolvedHeart,
@@ -94,15 +94,18 @@ public final class VillageStorageRequestInvalidation {
 
   private static boolean removePendingVillageTasks(
       Ref<ChunkStore> villageHeartRef,
+      VillageHeartComponent villageHeart,
       UUID requesterWorkplaceId) {
     if (villageHeartRef == null || !villageHeartRef.isValid() || requesterWorkplaceId == null) {
       return false;
     }
 
     Store<ChunkStore> heartStore = villageHeartRef.getStore();
-    VillageTaskQueueComponent taskQueue = heartStore.getComponent(
-        villageHeartRef,
-        VillageTaskQueueComponent.getComponentType());
+    VillageTaskQueueComponent taskQueue = villageHeart != null
+        ? villageHeart.getComponent(VillageTaskQueueComponent.getComponentType())
+        : heartStore.getComponent(
+            villageHeartRef,
+            VillageTaskQueueComponent.getComponentType());
     if (taskQueue == null) {
       return false;
     }

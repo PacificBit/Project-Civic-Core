@@ -45,8 +45,10 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
       Store<ChunkStore> store,
       Ref<ChunkStore> villageRef,
       World world) {
-    SimulationComponent simulation = store.getComponent(
+    VillageHeartComponent village = store.getComponent(
         villageRef,
+        VillageHeartComponent.getComponentType());
+    SimulationComponent simulation = village.getComponent(
         SimulationComponent.getComponentType());
 
     if (simulation.getRemainingDays() <= 0) {
@@ -54,11 +56,7 @@ public class SimulationSystem extends EntityTickingSystem<ChunkStore> {
       return;
     }
 
-    VillageHeartComponent village = store.getComponent(
-        villageRef,
-        VillageHeartComponent.getComponentType());
-    VillageTopologyComponent topology = store.getComponent(
-        villageRef,
+    VillageTopologyComponent topology = village.getComponent(
         VillageTopologyComponent.getComponentType());
 
     WorkplaceComponent townHallWorkplace = village.getTownHall();

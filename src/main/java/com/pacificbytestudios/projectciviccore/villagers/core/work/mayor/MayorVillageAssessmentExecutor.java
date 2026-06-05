@@ -298,8 +298,7 @@ public class MayorVillageAssessmentExecutor {
     }
 
     Store<ChunkStore> chunkStore = villageHeartRef.getStore();
-    VillageBuilderComponent builder = chunkStore.getComponent(
-        villageHeartRef,
+    VillageBuilderComponent builder = village.getComponent(
         VillageBuilderComponent.getComponentType());
 
     boolean createdBuilder = false;

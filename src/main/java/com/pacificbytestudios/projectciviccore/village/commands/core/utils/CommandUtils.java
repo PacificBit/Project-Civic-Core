@@ -75,16 +75,8 @@ public class CommandUtils {
     return context.chunkStore().getComponent(context.village().getRef(), VillageHeartComponent.getComponentType());
   }
 
-  public static VillageTopologyComponent getVillageTopologyComponent(ExecutionContext context) {
-    return context.chunkStore().getComponent(context.village().getRef(), VillageTopologyComponent.getComponentType());
-  }
-
   public static TownHallComponent getTownHallComponent(ExecutionContext context, VillageHeartComponent heart) {
     return context.chunkStore().getComponent(heart.getTownHallRef(), TownHallComponent.getComponentType());
-  }
-
-  public static VillageBuilderComponent getBuilderComponent(ExecutionContext context) {
-    return context.chunkStore.getComponent(context.village().getRef(), VillageBuilderComponent.getComponentType());
   }
 
   public static void sendExecutionResultMessage(CommandContext context, ExecutionResult result) {

@@ -78,7 +78,7 @@ public class SpawnStructure extends VillageCommand {
     project.setTotalStages(objectiveType.getStages());
     project.setConstructionMode(constructionMode);
 
-    VillageBuilderComponent builder = CommandUtils.getBuilderComponent(exeContext);
+    VillageBuilderComponent builder = heart.getComponent(VillageBuilderComponent.getComponentType());
     if (builder == null) {
       builder = new VillageBuilderComponent();
     }

@@ -46,11 +46,9 @@ public class Start extends VillageCommand {
     }
 
     Ref<ChunkStore> heartRef = exeContext.village().getRef();
-    boolean wasRunning = exeContext.chunkStore().getComponent(
-        heartRef,
+    boolean wasRunning = heart.getComponent(
         SimulationRunningComponent.getComponentType()) != null;
-    SimulationComponent simulation = exeContext.chunkStore().getComponent(
-        heartRef,
+    SimulationComponent simulation = heart.getComponent(
         SimulationComponent.getComponentType());
     boolean hadSimulation = simulation != null;
     if (simulation == null) {

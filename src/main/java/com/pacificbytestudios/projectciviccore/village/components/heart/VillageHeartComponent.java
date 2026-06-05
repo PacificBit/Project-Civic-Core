@@ -769,6 +769,11 @@ public class VillageHeartComponent implements Component<ChunkStore> {
         .toList();
   }
 
+  public <T extends Component<ChunkStore>> T getComponent(ComponentType<ChunkStore, T> componentType) {
+    Ref<ChunkStore> ref = this.villageRef.getRef();
+    return ref.getStore().getComponent(ref, componentType);
+  }
+
   @Override
   public VillageHeartComponent clone() {
     VillageHeartComponent component = new VillageHeartComponent();

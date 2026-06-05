@@ -3,7 +3,6 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.role.Role;
@@ -40,7 +39,9 @@ public class MakeVillageAssessment extends VillagerActionBase {
 
     TownHallComponent townHall = this.getComponentFromWorkplace(store, ref, TownHallComponent.getComponentType());
     VillageHeartComponent village = this.getVillageHeartComponent(ref, store);
-    VillageTopologyComponent topology = this.getVillageTopologyComponent(ref, store);
+    VillageTopologyComponent topology = village != null
+        ? village.getComponent(VillageTopologyComponent.getComponentType())
+        : null;
     if (townHall == null || village == null || topology == null) {
       return false;
     }
@@ -57,17 +58,4 @@ public class MakeVillageAssessment extends VillagerActionBase {
 
     return true;
   }
-
-  private VillageTopologyComponent getVillageTopologyComponent(
-      Ref<EntityStore> ref,
-      Store<EntityStore> store) {
-    Ref<ChunkStore> villageRef = this.getVillageRef(ref, store);
-    if (!isRefValid(villageRef)) {
-      return null;
-    }
-
-    return villageRef.getStore().getComponent(villageRef,
-        VillageTopologyComponent.getComponentType());
-  }
-
 }

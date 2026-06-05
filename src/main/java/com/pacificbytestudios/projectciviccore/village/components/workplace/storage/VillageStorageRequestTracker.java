@@ -22,7 +22,7 @@ public final class VillageStorageRequestTracker {
       VillageHeartComponent villageHeart,
       UUID requesterWorkplaceId,
       VillageStorageRequestType requestType) {
-    if (hasPendingVillageTask(villageHeartRef, requesterWorkplaceId, requestType)) {
+    if (hasPendingVillageTask(villageHeartRef, villageHeart, requesterWorkplaceId, requestType)) {
       return true;
     }
 
@@ -72,15 +72,18 @@ public final class VillageStorageRequestTracker {
 
   private static boolean hasPendingVillageTask(
       Ref<ChunkStore> villageHeartRef,
+      VillageHeartComponent villageHeart,
       UUID requesterWorkplaceId,
       VillageStorageRequestType requestType) {
     if (villageHeartRef == null || !villageHeartRef.isValid() || requesterWorkplaceId == null) {
       return false;
     }
 
-    VillageTaskQueueComponent taskQueue = villageHeartRef.getStore().getComponent(
-        villageHeartRef,
-        VillageTaskQueueComponent.getComponentType());
+    VillageTaskQueueComponent taskQueue = villageHeart != null
+        ? villageHeart.getComponent(VillageTaskQueueComponent.getComponentType())
+        : villageHeartRef.getStore().getComponent(
+            villageHeartRef,
+            VillageTaskQueueComponent.getComponentType());
     if (taskQueue == null) {
       return false;
     }

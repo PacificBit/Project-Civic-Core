@@ -47,12 +47,12 @@ public class Despawn extends VillageCommand {
   public void execute(ExecutionContext exeContext) {
     this.currentStep = 1;
     VillageHeartComponent heart = this.getVillageHeart(exeContext);
-    VillageTopologyComponent topology = CommandUtils.getVillageTopologyComponent(exeContext);
     World world = exeContext.world();
 
     if (heart == null) {
       return;
     }
+    VillageTopologyComponent topology = heart.getComponent(VillageTopologyComponent.getComponentType());
 
     // ==============================================================
     // Step 1 - despawn houses

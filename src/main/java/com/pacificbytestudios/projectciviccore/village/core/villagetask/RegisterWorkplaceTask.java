@@ -49,8 +49,7 @@ public class RegisterWorkplaceTask extends AVillageTask {
         this.workplace.getWorkplaceType(), this.workplace.getUuid());
     heart.registerWorkplace(this.workplace);
 
-    VillageTopologyComponent topology = heartRef.getStore().getComponent(
-        heartRef,
+    VillageTopologyComponent topology = heart.getComponent(
         VillageTopologyComponent.getComponentType());
 
     TopologyStructure workplaceTopology = buildWorkplaceTopology(this.workplace);

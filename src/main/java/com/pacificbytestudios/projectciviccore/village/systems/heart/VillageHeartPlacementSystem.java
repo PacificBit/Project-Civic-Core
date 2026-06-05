@@ -59,13 +59,21 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     World world = chunk.getWorld();
     Vec3i villageHeartPos = context.position();
 
-    VillageSpawnComponent spawnComponent = store.getComponent(ref,
-        VillageSpawnComponent.getComponentType());
     VillageHeartComponent villageHeart = store.getComponent(ref,
         VillageHeartComponent.getComponentType());
-    VillageTopologyComponent topology = store.getComponent(ref,
+    if (villageHeart == null) {
+      return;
+    }
+
+    String worldName = world.getName();
+    villageHeart.setBlockContext(new BlockContext(worldName, chunk.getIndex(), Vec3i.from(villageHeartPos)));
+    villageHeart.setVillageRef(new EntityRef(worldName, Vec3i.from(villageHeartPos)));
+
+    VillageSpawnComponent spawnComponent = villageHeart.getComponent(
+        VillageSpawnComponent.getComponentType());
+    VillageTopologyComponent topology = villageHeart.getComponent(
         VillageTopologyComponent.getComponentType());
-    if (spawnComponent == null || villageHeart == null || topology == null) {
+    if (spawnComponent == null || topology == null) {
       return;
     }
 
@@ -81,15 +89,10 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       villageHeart.setUuid(UUID.randomUUID());
     }
 
-    String worldName = world.getName();
-    villageHeart.setBlockContext(new BlockContext(worldName, chunk.getIndex(), Vec3i.from(villageHeartPos)));
-    villageHeart.setVillageRef(new EntityRef(worldName, Vec3i.from(villageHeartPos)));
-
     Rotation topologyRotation = Rotation.None;
     Vec3i prefabAnchor = Vec3i.from(villageHeartPos).add(Vec3i.safeDown());
 
-    TrackedPrefabPlacementComponent trackedPlacement = store.getComponent(
-        ref,
+    TrackedPrefabPlacementComponent trackedPlacement = villageHeart.getComponent(
         TrackedPrefabPlacementComponent.getComponentType());
     if (trackedPlacement != null) {
       prefabAnchor = trackedPlacement.getOrigin();
