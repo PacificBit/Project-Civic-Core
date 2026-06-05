@@ -26,6 +26,7 @@ import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderBreakTreeBlockAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.WoodCutterTerrainRepair;
@@ -99,7 +100,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       }
     }
 
-    ItemStack itemStackInHand = npc.getInventory().getItemInHand();
+    ItemStack itemStackInHand = VillagerInventoryAccess.heldItem(store, ref);
     if (itemStackInHand == null || itemStackInHand.getItem() == null) {
       Logger.logInfo("NPC has no valid item in hand");
       return false;
@@ -145,8 +146,8 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     Ref<ChunkStore> chunkRef = chunkStoreObj.getChunkReference(chunkIndex);
 
     VillagerToolAnimationHelper.playHeldToolAnimation(ref, npc, store, "Chop");
-    boolean didBreak = BlockHarvestUtils.performBlockDamage(ref, target, itemStackInHand, tool, null,
-        false, 1.0f, 0, chunkRef, store, chunkStoreObj.getStore());
+    boolean didBreak = BlockHarvestUtils.performBlockDamage(ref, target, itemStackInHand, tool, null, false, 1, 0,
+        false, chunkRef, store, chunkStoreObj.getStore());
 
     if (didBreak) {
       this.consumeToolDurability(ref, store);

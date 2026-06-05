@@ -6,6 +6,8 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector2iUtil;
 
 public class Vec2i extends org.joml.Vector2i {
+  private static final long serialVersionUID = 1L;
+
   public static BuilderCodec<Vec2i> CODEC = BuilderCodec
       .builder(Vec2i.class, Vec2i::new, Vector2iUtil.CODEC)
       .build();

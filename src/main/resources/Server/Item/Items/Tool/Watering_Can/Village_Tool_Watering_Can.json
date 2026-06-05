@@ -8,8 +8,17 @@
     "TimeSeconds": 1,
     "Input": [
       {
-        "ItemId": "Ingredient_Life_Essence",
+        "ItemId": "Ingredient_Bar_Iron",
         "Quantity": 3
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Type": "Crafting",
+        "Categories": [
+          "Farming"
+        ],
+        "Id": "Farmingbench"
       }
     ]
   },
@@ -27,8 +36,6 @@
       -10.8
     ]
   },
-  "Texture": "Items/Tools/Watering_Can/Watering_Can_Texture.png",
-  "Model": "Items/Tools/Watering_Can/Watering_Can_Empty.blockymodel",
   "Icon": "Icons/ItemsGenerated/Tool_Watering_Can.png",
   "Scale": 2,
   "BlockType": {
@@ -53,7 +60,8 @@
       }
     },
     "CustomModelScale": 0.5,
-    "ParticleColor": "#8B7355"
+    "ParticleColor": "#8B7355",
+    "TextureComputedColor": "#8C8F8F"
   },
   "State": {
     "Filled_Water": {
@@ -83,7 +91,7 @@
       "Texture": "Items/Tools/Watering_Can/Watering_Can_Texture.png",
       "Model": "Items/Tools/Watering_Can/Watering_Can.blockymodel",
       "Icon": "Icons/ItemsGenerated/Tool_Watering_Can_Full.png",
-      "Scale": 2,
+      "Scale": 1,
       "BlockType": {
         "Material": "Solid",
         "DrawType": "Model",
@@ -112,7 +120,8 @@
         "Secondary": "Watering_Can_Filled_Use"
       },
       "MaxDurability": 50,
-      "DurabilityLossOnDeath": false
+      "DurabilityLossOnDeath": false,
+      "Repairable": false
     }
   }
 }

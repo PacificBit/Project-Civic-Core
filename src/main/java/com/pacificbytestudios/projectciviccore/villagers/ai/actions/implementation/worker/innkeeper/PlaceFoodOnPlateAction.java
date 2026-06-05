@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -22,6 +23,7 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.WorkplaceInteractibles;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 
 import io.sentry.util.Pair;
@@ -59,7 +61,16 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
     }
 
     NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
-    ItemStack item = npcEntity.getInventory().getActiveHotbarItem();
+    if (npcEntity == null) {
+      return false;
+    }
+
+    InventoryComponent.Hotbar hotbar = VillagerInventoryAccess.hotbar(store, ref);
+    if (hotbar == null) {
+      return false;
+    }
+
+    ItemStack item = hotbar.getActiveItem();
     if (item == null || item.getItemId() == null || !item.getItemId().startsWith("Village_Food")) {
       return false;
     }
@@ -92,12 +103,12 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
       chunkStore.putComponent(foodRef, VillageFoodComponent.getComponentType(), foodComponent);
     }
 
-    short activeSlot = npcEntity.getInventory().getActiveHotbarSlot();
+    short activeSlot = hotbar.getActiveSlot();
     if (activeSlot < 0) {
       return false;
     }
 
-    npcEntity.getInventory().getHotbar().setItemStackForSlot(
+    hotbar.getInventory().setItemStackForSlot(
         activeSlot,
         item.withQuantity(item.getQuantity() - 1));
 

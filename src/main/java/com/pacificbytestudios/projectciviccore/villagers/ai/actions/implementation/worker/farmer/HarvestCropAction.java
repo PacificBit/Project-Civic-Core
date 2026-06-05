@@ -63,7 +63,7 @@ public class HarvestCropAction extends VillagerActionBase {
       return 0;
     }
 
-    BlockSection section = (BlockSection) chunkStore.getComponent(
+    BlockSection section = chunkStore.getComponent(
         sectionRef,
         BlockSection.getComponentType());
     if (section == null) {

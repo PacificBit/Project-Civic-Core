@@ -10,6 +10,8 @@ import com.hypixel.hytale.math.vector.Vector3fUtil;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
 
 public class Vec3f extends org.joml.Vector3f {
+  private static final long serialVersionUID = 1L;
+
   public static BuilderCodec<Vec3f> CODEC = BuilderCodec
       .builder(Vec3f.class, Vec3f::new, Vector3fUtil.CODEC)
       .build();

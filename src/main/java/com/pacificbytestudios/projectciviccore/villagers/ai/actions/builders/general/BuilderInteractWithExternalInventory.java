@@ -18,9 +18,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
 public class BuilderInteractWithExternalInventory extends BuilderActionBase {
-  private final BuilderObjectListHelper<InventoryItemCriteria> itemCriteria = new BuilderObjectListHelper<>(
-      InventoryItemCriteria.class, this);
-
+  private BuilderObjectListHelper<InventoryItemCriteria> itemCriteria;
   private EnumHolder<ActionType> actionType = new EnumHolder<>();
   private Boolean consumeSnapshotTargetOnSuccess;
   private Boolean consumeSnapshotTargetOnFail;
@@ -64,7 +62,7 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
     this.getBoolean(data, "UseSnapshotItemCriteria", this::setUseSnapshotItemCriteria, false,
         BuilderDescriptorState.Experimental, "Whether or not to use the snapshot item filter criteria", null);
 
-    this.getArray(data, "ItemCriteria", this.itemCriteria, ArrayNotEmptyValidator.get(),
+    this.getArray(data, "ItemCriteria", this.getSafeItemCriteria(), ArrayNotEmptyValidator.get(),
         BuilderDescriptorState.Experimental, "List of item criteria used to match inventory items", null,
         this.validationHelper);
 
@@ -96,7 +94,7 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
   }
 
   public List<InventoryItemCriteria> getItemCriteria(BuilderSupport support) {
-    return this.itemCriteria.build(support);
+    return this.getSafeItemCriteria().build(support);
   }
 
   public boolean getConsumeSnapshotTargetOnSuccessFlag() {
@@ -109,5 +107,12 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
 
   public boolean getUseSnapshotItemCriteria() {
     return Boolean.TRUE.equals(this.useSnapshotItemCriteria);
+  }
+
+  private BuilderObjectListHelper<InventoryItemCriteria> getSafeItemCriteria() {
+    if (this.itemCriteria == null) {
+      this.itemCriteria = new BuilderObjectListHelper<>(InventoryItemCriteria.class, this);
+    }
+    return this.itemCriteria;
   }
 }

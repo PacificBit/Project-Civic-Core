@@ -93,7 +93,10 @@ public class InteractWithExternalInventory extends VillagerActionBase {
     }
 
     SimpleItemContainer chestContainer = resolvedContainer.containerBlock().getItemContainer();
-    ItemContainer npcStorage = npcEntity.getInventory().getStorage();
+    ItemContainer npcStorage = this.getVillagerStorage(ref, store);
+    if (npcStorage == null) {
+      return false;
+    }
 
     boolean done;
     if ((this.itemCriteria == null || this.itemCriteria.isEmpty()) && !this.useSnapshotItemCriteria) {

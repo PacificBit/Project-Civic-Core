@@ -422,7 +422,7 @@ public class MayorVillageAssessmentPlanner {
     for (MaterialQuantity material : totalQuantities) {
       singleStageMaterial
           .add(new MaterialQuantity(
-              material.getItemId(), null, null, (int) material.getQuantity() / stages, null));
+              material.getItemId(), null, null, material.getQuantity() / stages, null));
     }
 
     return singleStageMaterial.toArray(MaterialQuantity[]::new);

@@ -14,7 +14,7 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
-public class TopologyStructure extends AreaFootprint {
+public final class TopologyStructure extends AreaFootprint {
   public static final BuilderCodec<TopologyStructure> CODEC = BuilderCodec
       .builder(TopologyStructure.class, TopologyStructure::new,
           AreaFootprint.CODEC)
@@ -221,12 +221,6 @@ public class TopologyStructure extends AreaFootprint {
   @Override
   protected void setY(int y) {
     super.setY(y);
-    rebuildEdges();
-  }
-
-  @Override
-  protected void assignBounds(Vec2i topLeft, Vec2i botRight) {
-    super.assignBounds(topLeft, botRight);
     rebuildEdges();
   }
 

@@ -22,7 +22,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
@@ -35,6 +34,7 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
 
@@ -110,8 +110,11 @@ public class GatherNextMealMaterialFromContainerAction extends
 
     SimpleItemContainer workplaceStorage = container.containerBlock().getItemContainer();
 
-    NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
-    ItemContainer npcStorage = npcEntity.getInventory().getStorage();
+    ItemContainer npcStorage = VillagerInventoryAccess.storage(store, ref);
+    if (npcStorage == null) {
+      Logger.logWarning("Could not find villager storage");
+      return this.finish(role, false);
+    }
 
     Map<String, Integer> missingMaterials = new HashMap<>();
 

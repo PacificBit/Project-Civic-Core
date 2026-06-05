@@ -17,9 +17,9 @@ import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 
 public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
   public static final BuilderCodec<VillagerOpenInventoryInteraction> CODEC = BuilderCodec
@@ -60,28 +60,21 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
 
     if (!target.isValid()) {
       Logger.logWarning("Target entity is invalid. playerUuid=%s, target=%s"
-        .formatted(playerUuid, target));
+          .formatted(playerUuid, target));
       return;
     }
 
     VillagerComponent villager = store.getComponent(target, VillagerComponent.getComponentType());
     if (villager == null) {
       Logger.logWarning("Target entity is missing VillagerComponent. playerUuid=%s, target=%s"
-        .formatted(playerUuid, target));
+          .formatted(playerUuid, target));
       return;
     }
 
-    NPCEntity targetNpc = commandBuffer.getComponent(target, NPCEntity.getComponentType());
-    if (targetNpc == null) {
-      Logger.logWarning("Target entity is missing NPCEntity component. playerUuid=%s, target=%s"
-        .formatted(playerUuid, target));
-      return;
-    }
-
-    ItemContainer container = targetNpc.getInventory().getCombinedStorageFirst();
+    ItemContainer container = VillagerInventoryAccess.combinedStorageFirst(commandBuffer, target);
     if (container == null) {
       Logger.logWarning("Combined storage container is null after inventory setup. playerUuid=%s, target=%s"
-        .formatted(playerUuid, target));
+          .formatted(playerUuid, target));
       return;
     }
 
@@ -90,13 +83,13 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
 
     if (windows.putIfAbsent(playerUuid, window) != null) {
       Logger.logWarning("Player already has an open villager inventory window. playerUuid=%s, target=%s"
-        .formatted(playerUuid, target));
+          .formatted(playerUuid, target));
       return;
     }
 
     if (!player.getPageManager().setPageWithWindows(playerRef, store, Page.Bench, true, window)) {
       Logger.logWarning("Failed to open villager inventory page for player. playerUuid=%s, target=%s"
-        .formatted(playerUuid, target));
+          .formatted(playerUuid, target));
       windows.remove(playerUuid, window);
       return;
     }

@@ -44,7 +44,7 @@ public class EntityRef {
     if (this.entityRef == null) {
       World world = Universe.get().getWorld(worldName);
       Vec3i villageHeartPos = position;
-      WorldChunk chunk = world.getChunkIfInMemory(
+      WorldChunk chunk = world.getChunk(
           ChunkUtil.indexChunkFromBlock(villageHeartPos.x, villageHeartPos.z));
 
       if (chunk != null) {

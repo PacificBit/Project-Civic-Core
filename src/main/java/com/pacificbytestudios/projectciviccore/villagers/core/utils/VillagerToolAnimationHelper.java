@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.ActiveAnimationComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 
 public final class VillagerToolAnimationHelper {
   private VillagerToolAnimationHelper() {
@@ -23,7 +24,7 @@ public final class VillagerToolAnimationHelper {
       return;
     }
 
-    ItemStack itemStack = npc.getInventory().getItemInHand();
+    ItemStack itemStack = VillagerInventoryAccess.heldItem(store, ref);
     if (itemStack == null) {
       return;
     }

@@ -307,7 +307,7 @@ public class LateralVacancySegments {
     public Segment(Vec3i start, Vec3i end) {
       this.start = start;
       this.end = end;
-      recalculateSize();
+      this.size = calculateSize(start, end);
     }
 
     @Override
@@ -353,16 +353,19 @@ public class LateralVacancySegments {
     }
 
     public void recalculateSize() {
-      if (this.start == null || this.end == null) {
-        this.size = null;
-        return;
+      this.size = calculateSize(this.start, this.end);
+    }
+
+    private static Short calculateSize(Vec3i start, Vec3i end) {
+      if (start == null || end == null) {
+        return null;
       }
 
-      int size = this.end.x - this.start.x;
+      int size = end.x - start.x;
       if (size == 0) {
-        size = this.end.z - this.start.z;
+        size = end.z - start.z;
       }
-      this.size = (short) (Math.abs(size) + 1);
+      return (short) (Math.abs(size) + 1);
     }
 
     @Override

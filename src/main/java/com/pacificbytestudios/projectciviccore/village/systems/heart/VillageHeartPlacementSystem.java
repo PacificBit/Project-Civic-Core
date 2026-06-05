@@ -99,7 +99,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     topology.setSeed(new FastRandom().nextLong(Long.MIN_VALUE, Long.MAX_VALUE));
     topology.setVillageOrientation(topologyRotation);
 
-    short claimRadius = (short) villageHeart.getConfig().getClaimRadiusPerLevel((short) villageHeart.getLevel());
+    short claimRadius = villageHeart.getConfig().getClaimRadiusPerLevel((short) villageHeart.getLevel());
     TopologyStructure coreStructure = new TopologyStructure(
         Vec3i.from(prefabAnchor),
         StructureConfig.TownHeart.SIZE_2I,

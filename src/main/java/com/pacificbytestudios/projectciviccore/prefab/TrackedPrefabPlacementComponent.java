@@ -10,10 +10,10 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.BsonDocumentValueCodec;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
-
   public static final BuilderCodec<TrackedPrefabPlacementComponent> CODEC = BuilderCodec
       .builder(TrackedPrefabPlacementComponent.class, TrackedPrefabPlacementComponent::new)
 
@@ -32,7 +32,7 @@ public class TrackedPrefabPlacementComponent implements Component<ChunkStore> {
           TrackedPrefabPlacementComponent::getYaw)
       .add()
 
-      .append(new KeyedCodec<>("RestoreSnapshot", Codec.BSON_DOCUMENT),
+      .append(new KeyedCodec<>("RestoreSnapshot", new BsonDocumentValueCodec()),
           (obj, value) -> obj.restoreSnapshot = value,
           obj -> obj.restoreSnapshot)
       .add()

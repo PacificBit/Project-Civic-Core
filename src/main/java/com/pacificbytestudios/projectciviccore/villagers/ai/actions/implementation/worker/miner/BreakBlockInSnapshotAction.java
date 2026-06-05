@@ -35,6 +35,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.mine
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineshaftGallery;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderBreakBlockInSnapshotAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
@@ -128,7 +129,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return false;
     }
 
-    ItemStack itemStackInHand = npc.getInventory().getItemInHand();
+    ItemStack itemStackInHand = VillagerInventoryAccess.heldItem(store, ref);
     if (itemStackInHand == null || itemStackInHand.getItem() == null) {
       Logger.logInfo("NPC has no valid item in hand");
       return false;
@@ -146,8 +147,8 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     Ref<ChunkStore> chunkRef = chunkStoreObj.getChunkReference(chunkIndex);
 
     VillagerToolAnimationHelper.playHeldToolAnimation(ref, npc, store, "Mine");
-    boolean didBreak = BlockHarvestUtils.performBlockDamage(ref, target, itemStackInHand, tool, null,
-        false, 1.0f, 0, chunkRef, store, chunkStoreObj.getStore());
+    boolean didBreak = BlockHarvestUtils.performBlockDamage(ref, target, itemStackInHand, tool, null, false, 1, 0,
+        false, chunkRef, store, chunkStoreObj.getStore());
 
     if (didBreak) {
       this.consumeToolDurability(ref, store);

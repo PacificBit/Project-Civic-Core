@@ -57,7 +57,7 @@ public class VillageRepairer {
   }
 
   public static int calculateInvalidVillageRefCount(World world, VillageHeartComponent heart) {
-    return (int) getInvalidVillagerRef(world, heart).size();
+    return getInvalidVillagerRef(world, heart).size();
   }
 
   public static Set<UUID> getInvalidVillagerRef(World world, VillageHeartComponent heart) {

@@ -8,6 +8,8 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector3dUtil;
 
 public class Vec3d extends org.joml.Vector3d {
+  private static final long serialVersionUID = 1L;
+
   public static BuilderCodec<Vec3d> CODEC = BuilderCodec
       .builder(Vec3d.class, Vec3d::new, Vector3dUtil.CODEC)
       .build();

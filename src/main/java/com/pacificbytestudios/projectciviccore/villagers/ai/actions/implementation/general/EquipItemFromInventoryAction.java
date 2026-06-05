@@ -13,6 +13,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 
 public class EquipItemFromInventoryAction extends ActionBase {
   private String itemIdToEquip;
@@ -36,13 +37,16 @@ public class EquipItemFromInventoryAction extends ActionBase {
       return false;
     }
 
-    ItemContainer inventory = npcEntity.getInventory().getCombinedStorageFirst();
-    byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();
-    ItemContainer hotbar = npcEntity.getInventory().getHotbar();
-    ItemStack itemInHand = npcEntity.getInventory().getActiveHotbarItem();
+    ItemContainer inventory = VillagerInventoryAccess.combinedStorageFirst(store, ref);
+    byte activeHotbarSlot = VillagerInventoryAccess.activeHotbarSlot(store, ref);
+    ItemContainer hotbar = VillagerInventoryAccess.hotbarContainer(store, ref);
+    ItemStack itemInHand = VillagerInventoryAccess.activeHotbarItem(store, ref);
+    if (inventory == null || hotbar == null || activeHotbarSlot < 0) {
+      return false;
+    }
 
     if (this.itemIdToEquip.toLowerCase().equals("null")) {
-      return this.unequipItem(itemInHand, npcEntity, hotbar, activeHotbarSlot);
+      return this.unequipItem(itemInHand, store, ref, hotbar, activeHotbarSlot);
     }
 
     if (itemInHand != null && itemInHand.getItemId().startsWith(this.itemIdToEquip)) {
@@ -72,14 +76,18 @@ public class EquipItemFromInventoryAction extends ActionBase {
 
   private boolean unequipItem(
       ItemStack itemInHand,
-      NPCEntity npcEntity,
+      Store<EntityStore> store,
+      Ref<EntityStore> ref,
       ItemContainer hotbar,
       short activeHotbarSlot) {
     if (itemInHand == null) {
       return true;
     }
 
-    ItemContainer storage = npcEntity.getInventory().getStorage();
+    ItemContainer storage = VillagerInventoryAccess.storage(store, ref);
+    if (storage == null) {
+      return false;
+    }
     if (InventoryHelper.countFreeSlots(storage) < 1) {
       Logger.logInfo("Storage is full, cannot free the hand slot");
       return false;

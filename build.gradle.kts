@@ -24,12 +24,11 @@ val hytaleHome: Provider<String> =
                     ?: "${System.getProperty("user.home")}/.local/share/Hytale"
 
             if (file(flatpak).exists()) flatpak else xdg
-        },
+        }
     )
 
 val hytalePatchline: Provider<String> =
-    providers
-        .gradleProperty("hytale_patchline")
+    providers.gradleProperty("hytale_patchline")
         .orElse(System.getenv("HYTALE_CHANNEL") ?: "pre-release")
 
 val hytaleGameDir: Provider<String> =
@@ -86,10 +85,7 @@ val manifestProvider =
         JsonSlurper().parseText(text) as Map<String, Any?>
     }
 
-fun manifestString(
-    key: String,
-    default: String,
-): Provider<String> =
+fun manifestString(key: String, default: String): Provider<String> =
     manifestProvider.map { manifest ->
         (manifest[key] as? String)?.takeIf { it.isNotBlank() } ?: default
     }
@@ -104,8 +100,7 @@ val serverVersion =
     manifestString("ServerVersion", "unknown")
 
 val includeAssets: Provider<Boolean> =
-    providers
-        .gradleProperty("includeAssets")
+    providers.gradleProperty("includeAssets")
         .map { it.toBoolean() }
         .orElse(true)
 
@@ -157,7 +152,7 @@ tasks.register<JavaExec>("runHytaleServer") {
     javaLauncher.set(
         javaToolchains.launcherFor {
             languageVersion.set(JavaLanguageVersion.of(25))
-        },
+        }
     )
 
     mainClass.set(hytaleMainClass)
@@ -207,6 +202,6 @@ tasks.register<JavaExec>("runHytaleServer") {
         "--accept-early-plugins",
         "--disable-sentry",
         "--assets=${hytaleAssetsZip.get()}",
-        "--assets=${hytaleResourcesDir.asFile.absolutePath}",
+        "--assets=${hytaleResourcesDir.asFile.absolutePath}"
     )
 }

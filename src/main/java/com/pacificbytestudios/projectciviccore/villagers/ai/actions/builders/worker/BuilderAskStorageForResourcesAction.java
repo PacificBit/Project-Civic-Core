@@ -15,9 +15,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
 public class BuilderAskStorageForResourcesAction extends BuilderActionBase {
+  private BuilderObjectListHelper<InventoryItemCriteria> itemCriteria;
   private EnumHolder<SourceType> sourceType = new EnumHolder<>();
-  private final BuilderObjectListHelper<InventoryItemCriteria> itemCriteria = new BuilderObjectListHelper<>(
-      InventoryItemCriteria.class, this);
 
   @Override
   public Action build(BuilderSupport support) {
@@ -44,7 +43,7 @@ public class BuilderAskStorageForResourcesAction extends BuilderActionBase {
         BuilderDescriptorState.Experimental,
         "What item criteria to use", null);
 
-    this.getArray(data, "ItemCriteria", this.itemCriteria, null,
+    this.getArray(data, "ItemCriteria", this.getSafeItemCriteria(), null,
         BuilderDescriptorState.Experimental, "List of item criteria used to match inventory items", null,
         this.validationHelper);
     return this;
@@ -55,7 +54,13 @@ public class BuilderAskStorageForResourcesAction extends BuilderActionBase {
   }
 
   public List<InventoryItemCriteria> getItemCriteria(BuilderSupport support) {
-    return this.itemCriteria.build(support);
+    return this.getSafeItemCriteria().build(support);
   }
 
+  private BuilderObjectListHelper<InventoryItemCriteria> getSafeItemCriteria() {
+    if (this.itemCriteria == null) {
+      this.itemCriteria = new BuilderObjectListHelper<>(InventoryItemCriteria.class, this);
+    }
+    return this.itemCriteria;
+  }
 }

@@ -18,6 +18,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderPlantTreeAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.WoodCutterTerrainRepair;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
@@ -66,7 +67,7 @@ public class PlantTreeAction extends VillagerActionBase {
       return false;
     }
 
-    ItemStack sapling = npcEntity.getInventory().getActiveHotbarItem();
+    ItemStack sapling = VillagerInventoryAccess.activeHotbarItem(store, ref);
 
     if (sapling == null || sapling.getItemId() == null) {
       Logger.logWarning("Could not find a sapling at hand, this should be called when a sapling is held");

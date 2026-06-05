@@ -13,11 +13,11 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.role.Role;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 import com.pacificbytestudios.projectciviccore.villagers.enums.Crops;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
@@ -54,8 +54,7 @@ public class PlantSeedAction extends ActionBase {
       throw new IllegalStateException("[PlantSeed] No Plantable soil block available");
     }
 
-    NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
-    ItemStack seeds = npcEntity.getInventory().getActiveHotbarItem();
+    ItemStack seeds = VillagerInventoryAccess.activeHotbarItem(store, ref);
 
     if (seeds == null || seeds.getItemId() == null) {
       Logger.logWarning("Could not find a seed at hand, this should be called when a seed is held");

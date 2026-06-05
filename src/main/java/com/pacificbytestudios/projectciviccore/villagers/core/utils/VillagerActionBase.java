@@ -24,6 +24,7 @@ import com.pacificbytestudios.projectciviccore.villagers.components.MayorCompone
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 
 public abstract class VillagerActionBase extends ActionBase {
   protected boolean suppressWarnings = false;
@@ -183,8 +184,7 @@ public abstract class VillagerActionBase extends ActionBase {
   }
 
   protected ItemContainer getVillagerStorage(Ref<EntityStore> ref, Store<EntityStore> store) {
-    NPCEntity npcEntity = getNPCEntity(ref, store);
-    return npcEntity != null ? require(npcEntity.getInventory().getStorage(), "villager storage") : null;
+    return require(VillagerInventoryAccess.storage(store, ref), "villager storage");
   }
 
   protected Ref<ChunkStore> getVillageRef(Ref<EntityStore> ref, Store<EntityStore> store) {

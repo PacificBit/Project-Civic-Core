@@ -10,6 +10,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -23,6 +24,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
@@ -73,13 +75,20 @@ public class TillSoilAction extends ActionBase {
       Vec3f center = Utils.centerOf(blockPos);
       SoundUtil.playSoundEvent3d(ref, TILL_SOUND_EVENT_INDEX, center.x, center.y, center.z, store);
 
-      byte activeHotbarSlot = npcEntity.getInventory().getActiveHotbarSlot();
-      ItemStack holdingItem = npcEntity.getInventory().getActiveHotbarItem();
-      npcEntity.getInventory().getHotbar().setItemStackForSlot(
-          activeHotbarSlot,
-          holdingItem.withDurability(holdingItem.getDurability() - 1));
+      InventoryComponent.Hotbar hotbar = VillagerInventoryAccess.hotbar(store, ref);
+      if (hotbar == null || hotbar.getActiveSlot() < 0) {
+        return false;
+      }
 
-      if (npcEntity.getInventory().getActiveHotbarItem().isBroken()) {
+      ItemStack holdingItem = hotbar.getActiveItem();
+      if (holdingItem == null) {
+        return false;
+      }
+
+      ItemStack damagedItem = holdingItem.withDurability(holdingItem.getDurability() - 1);
+      hotbar.getInventory().setItemStackForSlot(hotbar.getActiveSlot(), damagedItem);
+
+      if (damagedItem.isBroken()) {
         InventoryHelper.removeItemInHand(ref, store, 1);
       }
       return true;

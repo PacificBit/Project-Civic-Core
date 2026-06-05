@@ -41,7 +41,8 @@ public class AreaFootprint implements Component<ChunkStore> {
   }
 
   public AreaFootprint(Vec2i topLeft, Vec2i botRight) {
-    assignBounds(topLeft, botRight);
+    this.topLeft = Vec2i.from(topLeft);
+    this.botRight = Vec2i.from(botRight);
   }
 
   public AreaFootprint(AreaFootprint offset, Vec3i center) {
@@ -70,11 +71,6 @@ public class AreaFootprint implements Component<ChunkStore> {
 
   protected void setY(int y) {
     this.y = y;
-  }
-
-  protected void assignBounds(Vec2i topLeft, Vec2i botRight) {
-    this.topLeft = Vec2i.from(topLeft);
-    this.botRight = Vec2i.from(botRight);
   }
 
   @Override

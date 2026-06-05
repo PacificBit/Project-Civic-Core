@@ -24,8 +24,6 @@ import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcomman
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 
-// NOTE: This will be removed when Noesis will come out
-@Deprecated
 public class VillageStatusPage extends BasicCustomUIPage {
   private static final String PAGE_DOCUMENT = "Pages/Village/VillageStatusPage.ui";
   private static final String REPAIR_ACTION = "repairVillage";
