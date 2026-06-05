@@ -14,8 +14,6 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
-import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
