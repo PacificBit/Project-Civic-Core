@@ -1,7 +1,10 @@
 package com.pacificbytestudios.projectciviccore.codecs.structureconfig;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -66,8 +69,8 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
 
       .build();
 
-  private Map<Short, BlockTransform> coreBlock;
-  private Map<Short, BlockTransform> constructionBlock;
+  private Map<Short, BlockTransform> coreBlock = new HashMap<>();
+  private Map<Short, BlockTransform> constructionBlock = new HashMap<>();
   private Map<Short, Map<Short, String>> prefabPathByLevelAndStage = new HashMap<>();
   private Map<Short, BlockTransform[]> containers = new HashMap<>();
   private Map<Short, Interactable[]> interactables = new HashMap<>();
@@ -91,6 +94,14 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
   public String getPrefabFor(short level, short stage) {
     Map<Short, String> prefabPathByStage = this.prefabPathByLevelAndStage.get(level);
     return prefabPathByStage == null ? null : prefabPathByStage.get(stage);
+  }
+
+  public Set<Short> getConfiguredLevels() {
+    Set<Short> levels = new HashSet<>();
+    levels.addAll(this.coreBlock.keySet());
+    levels.addAll(this.constructionBlock.keySet());
+    levels.addAll(this.prefabPathByLevelAndStage.keySet());
+    return Collections.unmodifiableSet(levels);
   }
 
   public StructureLevelConfig clone() {

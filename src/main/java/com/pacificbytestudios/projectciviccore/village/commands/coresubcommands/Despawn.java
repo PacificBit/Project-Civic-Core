@@ -123,7 +123,7 @@ public class Despawn extends VillageCommand {
         TopologyStructure structureTopology = topology.getTopologyStructureFromStructureId(project.getStructureId());
         Vec3i anchor = structureTopology.getPrefabAnchor();
         WorldChunk chunk = Utils.getWorldChunk(world, anchor);
-        despawn.apply(chunk, anchor, project.getTargetLevel(), structureTopology.getOrientation());
+        despawn.apply(chunk, anchor, project.getTargetLevel(), structureTopology.getOrientation(), heart);
       }
     }
 

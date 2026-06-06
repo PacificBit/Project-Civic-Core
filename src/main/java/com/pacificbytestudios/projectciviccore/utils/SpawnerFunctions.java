@@ -36,6 +36,7 @@ public class SpawnerFunctions {
     boolean apply(
         WorldChunk chunk,
         Vec3i prefabAnchor,
-        Rotation rotation);
+        Rotation rotation,
+        VillageHeartComponent village);
   }
 }

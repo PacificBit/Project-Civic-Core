@@ -7,11 +7,11 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.structureconfig.StructureLevelConfig;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
@@ -80,7 +80,8 @@ public class HouseSpawner {
     WorldChunk chunkToUse = chunk;
     World world = chunkToUse.getWorld();
     short stage = (short) 0;
-    String prefab = StructureConfig.House.getPrefab(targetLevel, stage);
+    StructureLevelConfig config = StructureSpawnConfig.get(heart, StructureType.HOUSE);
+    String prefab = StructureSpawnConfig.getPrefab(config, targetLevel, stage);
 
     Logger.logInfo("Spawning prefab at: %s", prefabAnchor);
     TrackedPrefabPlacementComponent trackedPlacement = PrefabManager.spawnTrackedPrefab(
@@ -94,8 +95,9 @@ public class HouseSpawner {
       return false;
     }
 
-    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
-    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(config, prefabAnchor, targetLevel,
+        structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(config, targetLevel, structureRotation);
     Utils.setBlockChunkAware(
         chunkToUse,
         constructionSignPosition,
@@ -170,6 +172,7 @@ public class HouseSpawner {
     VillageHeartComponent heart = heartRef.getStore().getComponent(
         heartRef,
         VillageHeartComponent.getComponentType());
+    StructureLevelConfig config = StructureSpawnConfig.get(heart, StructureType.HOUSE);
 
     UUID structureId = house.getUuid();
     int currentLevel = house.getLevel();
@@ -206,7 +209,7 @@ public class HouseSpawner {
     }
 
     short stage = (short) 0;
-    String prefab = StructureConfig.House.getPrefab(targetLevel, stage);
+    String prefab = StructureSpawnConfig.getPrefab(config, targetLevel, stage);
     TrackedPrefabPlacementComponent stagedPlacement = PrefabManager.spawnTrackedPrefab(
         world,
         prefab,
@@ -228,8 +231,9 @@ public class HouseSpawner {
       return false;
     }
 
-    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, targetLevel, structureRotation);
-    int constructionSignRotationIndex = getConstructionSignRotationIndex(targetLevel, structureRotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(config, prefabAnchor, targetLevel,
+        structureRotation);
+    int constructionSignRotationIndex = getConstructionSignRotationIndex(config, targetLevel, structureRotation);
 
     WorldChunk signChunk = Utils.setBlockChunkAware(
         chunkToUse,
@@ -268,27 +272,33 @@ public class HouseSpawner {
   public static boolean advanceConstruction(
       WorldChunk chunk,
       Vec3i prefabAnchor,
-      Rotation rotation) {
+      Rotation rotation,
+      VillageHeartComponent heart) {
 
     WorldChunk chunkToUse = chunk;
-    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, rotation);
-    Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
+    StructureLevelConfig config = StructureSpawnConfig.get(heart, StructureType.HOUSE);
+    Pair<WorldChunk, Ref<ChunkStore>> blockEntity = StructureSpawnConfig.findConstructionSign(
         chunkToUse,
-        constructionSignPosition);
+        prefabAnchor,
+        rotation,
+        config,
+        StructureType.HOUSE);
 
     if (blockEntity == null) {
       Logger.logWarning("Could not fetch the construction sign entity");
+      return false;
     }
 
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
     chunkToUse = blockEntity.getFirst();
     Store<ChunkStore> store = constructionSignRef.getStore();
+    Vec3i constructionSignPosition = Utils.getWorldBlockContext(constructionSignRef, store).position();
 
     BuildingSnapshotComponent snapshotComponent = store.getComponent(
         constructionSignRef,
         BuildingSnapshotComponent.getComponentType());
 
-    if (!removePreviousStagePrefab(chunk, store, constructionSignRef,
+    if (!removePreviousStagePrefab(chunk, store, constructionSignRef, config,
         constructionSignPosition, snapshotComponent)) {
       throw new IllegalStateException("[advanceConstruction - house] Could not despawn previous prefab");
     }
@@ -296,7 +306,7 @@ public class HouseSpawner {
     snapshotComponent.setCurrentStage((short) (snapshotComponent.getCurrentStage() + 1));
 
     if (snapshotComponent.getCurrentStage() == VillageObjectiveType.getStages(StructureType.HOUSE)) {
-      VillageHeartComponent heart = store.getComponent(
+      VillageHeartComponent snapshotHeart = store.getComponent(
           snapshotComponent.getVillageRef().getRef(),
           VillageHeartComponent.getComponentType());
 
@@ -311,12 +321,12 @@ public class HouseSpawner {
           chunkToUse,
           snapshotComponent.getPrefabAnchor(),
           snapshotComponent.getRotation(),
-          heart,
+          snapshotHeart,
           snapshotComponent.getTargetLevel(),
           trackedPlacement);
     }
 
-    return spawnMiddleStageBuilding(chunk, store, constructionSignRef,
+    return spawnMiddleStageBuilding(chunk, store, constructionSignRef, config,
         constructionSignPosition, snapshotComponent);
   }
 
@@ -324,6 +334,7 @@ public class HouseSpawner {
       WorldChunk chunk,
       Store<ChunkStore> store,
       Ref<ChunkStore> constructionSignRef,
+      StructureLevelConfig config,
       Vec3i constructionSignPosition,
       BuildingSnapshotComponent snapshot) {
     TrackedPrefabPlacementComponent trackedPlacement = store
@@ -332,7 +343,7 @@ public class HouseSpawner {
 
     Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawn = false;
-    String prefab = StructureConfig.House.getPrefab(snapshot.getTargetLevel(),
+    String prefab = StructureSpawnConfig.getPrefab(config, snapshot.getTargetLevel(),
         snapshot.getCurrentStage());
 
     if (trackedPlacement != null && trackedPlacement.hasRestoreSnapshot()) {
@@ -359,10 +370,11 @@ public class HouseSpawner {
       WorldChunk chunk,
       Store<ChunkStore> store,
       Ref<ChunkStore> constructionSignRef,
+      StructureLevelConfig config,
       Vec3i constructionSignPosition,
       BuildingSnapshotComponent snapshot) {
 
-    String prefab = StructureConfig.House.getPrefab(snapshot.getTargetLevel(),
+    String prefab = StructureSpawnConfig.getPrefab(config, snapshot.getTargetLevel(),
         snapshot.getCurrentStage());
 
     // NOTE: I'm not saving the new snapshot to keep the first ever snapshot
@@ -385,9 +397,11 @@ public class HouseSpawner {
       VillageHeartComponent heart,
       int targetLevel,
       TrackedPrefabPlacementComponent trackedPlacement) {
-    String prefab = StructureConfig.House.getPrefab(
-        targetLevel,
-        VillageObjectiveType.getStages(StructureType.HOUSE));
+    StructureLevelConfig config = StructureSpawnConfig.get(heart, StructureType.HOUSE);
+    String prefab = StructureSpawnConfig.getCompletedPrefab(
+        config,
+        StructureType.HOUSE,
+        targetLevel);
 
     TrackedPrefabPlacementComponent snapshotToUse = trackedPlacement;
 
@@ -405,14 +419,12 @@ public class HouseSpawner {
       snapshotToUse = newSnapshot;
     }
 
-    int blockRotation = RotationTuple.of(
-        StructurePlacementUtils.addYaw(
-            StructureConfig.House.getCoreBlockOffset(targetLevel).rotation(),
-            rotation),
-        Rotation.None,
-        Rotation.None).index();
+    int blockRotation = StructureSpawnConfig.blockRotationIndex(
+        StructureSpawnConfig.getCoreBlock(config, targetLevel),
+        rotation);
 
     Vec3i houseCoreBlockPosition = getWorkplaceBlockPosition(
+        config,
         prefabAnchor,
         targetLevel,
         rotation);
@@ -457,7 +469,7 @@ public class HouseSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         snapshotToUse);
 
-    removeConstructionSignIfPresent(chunk, prefabAnchor, targetLevel, rotation);
+    removeConstructionSignIfPresent(config, chunk, prefabAnchor, targetLevel, rotation);
     houseChunk.markNeedsSaving();
     return true;
   }
@@ -479,15 +491,17 @@ public class HouseSpawner {
       WorldChunk chunk,
       Vec3i prefabAnchor,
       int level,
-      Rotation rotation) {
+      Rotation rotation,
+      VillageHeartComponent heart) {
     if (chunk == null || prefabAnchor == null) {
       Logger.logWarning("Missing chunk or prefab anchor");
       return false;
     }
 
     Rotation structureRotation = StructurePlacementUtils.normalize(rotation);
+    StructureLevelConfig config = StructureSpawnConfig.get(heart, StructureType.HOUSE);
     WorldChunk chunkToUse = chunk;
-    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, structureRotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(config, prefabAnchor, level, structureRotation);
     Pair<WorldChunk, Ref<ChunkStore>> blockEntity = Utils.getBlockComponentEntityChunkAware(
         chunkToUse,
         constructionSignPosition);
@@ -525,7 +539,7 @@ public class HouseSpawner {
     } else if (targetAnchor != null) {
       despawn = PrefabManager.removePrefab(
           chunkToUse.getWorld(),
-          StructureConfig.House.getPrefab(targetLevel, currentStage),
+          StructureSpawnConfig.getPrefab(config, targetLevel, currentStage),
           targetAnchor,
           prefabRotation,
           true);
@@ -536,7 +550,7 @@ public class HouseSpawner {
       return false;
     }
 
-    removeConstructionSignIfPresent(chunkToUse, targetAnchor, targetLevel, structureRotation);
+    removeConstructionSignIfPresent(config, chunkToUse, targetAnchor, targetLevel, structureRotation);
     return true;
   }
 
@@ -560,6 +574,15 @@ public class HouseSpawner {
         HouseComponent.getComponentType());
     TrackedPrefabPlacementComponent trackedPlacement = store
         .getComponent(bedRef, TrackedPrefabPlacementComponent.getComponentType());
+    if (component == null) {
+      Logger.logWarning("Missing house component");
+      return false;
+    }
+
+    VillageHeartComponent heart = component.getVillageRef().getRef().getStore().getComponent(
+        component.getVillageRef().getRef(),
+        VillageHeartComponent.getComponentType());
+    StructureLevelConfig config = StructureSpawnConfig.get(heart, StructureType.HOUSE);
 
     Rotation prefabRotation = trackedPlacement != null ? trackedPlacement.getYaw() : Rotation.None;
     boolean despawn = false;
@@ -573,13 +596,14 @@ public class HouseSpawner {
       }
       if (prefabAnchor == null) {
         prefabAnchor = getPrefabAnchorFromWorkplace(bedBlockPosition,
+            config,
             component.getLevel(),
             prefabRotation);
       }
 
       despawn = PrefabManager.removePrefab(
           bedChunk.getWorld(),
-          StructureConfig.House.getCompletedPrefab(component.getLevel()),
+          StructureSpawnConfig.getCompletedPrefab(config, StructureType.HOUSE, component.getLevel()),
           prefabAnchor,
           prefabRotation,
           true);
@@ -595,11 +619,12 @@ public class HouseSpawner {
   }
 
   private static void removeConstructionSignIfPresent(
+      StructureLevelConfig config,
       WorldChunk chunk,
       Vec3i prefabAnchor,
       int level,
       Rotation rotation) {
-    Vec3i constructionSignPosition = getConstructionSignBlockPosition(prefabAnchor, level, rotation);
+    Vec3i constructionSignPosition = getConstructionSignBlockPosition(config, prefabAnchor, level, rotation);
     Pair<WorldChunk, Ref<ChunkStore>> signResult = Utils.getBlockComponentEntityChunkAware(
         chunk,
         constructionSignPosition);
@@ -631,41 +656,42 @@ public class HouseSpawner {
     Utils.breakBlockChunkAware(chunk, constructionPos.clone().add(new Vec3i(0, 1, 0)));
   }
 
-  private static int getConstructionSignRotationIndex(int level, Rotation rotation) {
-    Rotation signRotation = StructurePlacementUtils.addYaw(
-        StructureConfig.House.getLevelLayout(level).constructionSign().rotation(),
+  private static int getConstructionSignRotationIndex(StructureLevelConfig config, int level, Rotation rotation) {
+    return StructureSpawnConfig.constructionSignRotationIndex(
+        StructureSpawnConfig.getConstructionBlock(config, level),
         rotation);
-    return RotationTuple.of(signRotation, Rotation.None, Rotation.None).index();
   }
 
   private static Vec3i getWorkplaceBlockPosition(
+      StructureLevelConfig config,
       Vec3i prefabAnchor,
       int level,
       Rotation rotation) {
-    return StructurePlacementUtils.withOffset(
+    return StructureSpawnConfig.blockPosition(
         prefabAnchor,
-        StructureConfig.House.getCoreBlockOffset(level).position(),
+        StructureSpawnConfig.getCoreBlock(config, level),
         rotation);
   }
 
-  private static Vec3i getConstructionSignBlockPosition(Vec3i prefabAnchor, int level, Rotation rotation) {
-    return StructurePlacementUtils.withOffset(
+  private static Vec3i getConstructionSignBlockPosition(
+      StructureLevelConfig config,
+      Vec3i prefabAnchor,
+      int level,
+      Rotation rotation) {
+    return StructureSpawnConfig.blockPosition(
         prefabAnchor,
-        StructureConfig.House.getLevelLayout(level).constructionSign().position(),
+        StructureSpawnConfig.getConstructionBlock(config, level),
         rotation);
-  }
-
-  private static Vec3i getConstructionSignBlockPosition(Vec3i prefabAnchor, Rotation rotation) {
-    return getConstructionSignBlockPosition(prefabAnchor, 1, rotation);
   }
 
   private static Vec3i getPrefabAnchorFromWorkplace(
       Vec3i workplaceBlockPosition,
+      StructureLevelConfig config,
       int targetLevel,
       Rotation rotation) {
-    return StructurePlacementUtils.removeOffset(
+    return StructureSpawnConfig.prefabAnchorFromBlock(
         workplaceBlockPosition,
-        StructureConfig.House.getCoreBlockOffset(targetLevel).position(),
+        StructureSpawnConfig.getCoreBlock(config, targetLevel),
         rotation);
   }
 

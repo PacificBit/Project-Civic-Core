@@ -58,7 +58,7 @@ public class ContinueBuildingTask extends AVillageTask {
       VillageHeartComponent heart) {
     AdvanceConstructionStage function = Utils.getAdvanceConstructionStageFunction(this.structureType);
     try {
-      boolean advanced = function.apply(chunk, this.prefabAnchor, this.rotation);
+      boolean advanced = function.apply(chunk, this.prefabAnchor, this.rotation, heart);
       if (advanced) {
         this.callOnSuccess("CONTINUE_SUCCESS");
         return;
