@@ -249,20 +249,20 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   private Set<UUID> villageTavernWorkplaces = new HashSet<>();
   private UUID townHallId;
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public UUID getUuid() {
     return uuid;
   }
 
   public void setUuid(UUID uuid) {
     this.uuid = uuid;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public Ref<ChunkStore> getVillageRef() {

@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -272,6 +274,35 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
   public TopologyStructure getTopologyStructureFromStructureId(UUID structureId) {
     return this.structureIdToTopology.get(structureId);
+  }
+
+  public TopologyStructure getTopologyStructureAt(@Nonnull Vec3i absolutePosition) {
+    Pair<Byte, Byte> cell = getCellPairFromAbsolutePosition(absolutePosition);
+    if (cell == null) {
+      return null;
+    }
+
+    Set<UUID> structureIds = getRegisteredStructureIdsAt(cell.left(), cell.right());
+    if (structureIds.isEmpty()) {
+      return null;
+    }
+
+    Vec2i position2D = new Vec2i(absolutePosition.x, absolutePosition.z);
+    for (UUID structureId : structureIds) {
+      TopologyStructure structure = getTopologyStructureFromStructureId(structureId);
+      if (structure != null && structure.isInside(position2D)) {
+        return structure;
+      }
+    }
+
+    return null;
+  }
+
+  public Pair<Byte, Byte> getCellPairFromAbsolutePosition(Vec3i absolutePosition) {
+    Vec2i villageCenter = getCoreCenter2D();
+    int xCell = blockToCellIndex(absolutePosition.x - villageCenter.x);
+    int zCell = blockToCellIndex(absolutePosition.z - villageCenter.y);
+    return Pair.of((byte) xCell, (byte) zCell);
   }
 
   public Set<UUID> getRegisteredStructureIdsAt(byte xCell, byte zCell) {

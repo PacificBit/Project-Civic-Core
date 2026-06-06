@@ -12,6 +12,7 @@ import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartMarkerComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
@@ -24,7 +25,7 @@ public class VillageHeartMarkerPlacementSystem extends RefSystem<ChunkStore> {
       AddReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    Utils.BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
+    BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
     if (context == null) {
       context = Utils.getWorldBlockContext(ref, store);
     }
@@ -32,8 +33,11 @@ public class VillageHeartMarkerPlacementSystem extends RefSystem<ChunkStore> {
       return;
     }
 
-    WorldChunk chunk = context.chunk();
-    Vec3i markerPosition = context.position();
+    WorldChunk chunk = Utils.getWorldChunk(context);
+    if (chunk == null) {
+      return;
+    }
+    Vec3i markerPosition = context.getPosition();
     chunk.getWorld().execute(() -> Utils.setBlockChunkAware(
         chunk,
         markerPosition,

@@ -6,6 +6,7 @@ import org.joml.Vector3dc;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector3dUtil;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 
 public class Vec3d extends org.joml.Vector3d {
   private static final long serialVersionUID = 1L;
@@ -119,10 +120,14 @@ public class Vec3d extends org.joml.Vector3d {
 
   public Vec3i to3i() {
     Vec3i result = new Vec3i();
-    result.x = (int) this.x;
-    result.y = (int) this.y;
-    result.z = (int) this.z;
+    result.x = (int) Math.floor(this.x);
+    result.y = (int) Math.floor(this.y);
+    result.z = (int) Math.floor(this.z);
     return result;
+  }
+
+  public Vec2i to2i() {
+    return new Vec2i((int) Math.floor(this.x), (int) Math.floor(this.z));
   }
 
   public static Vec3d from(Vec3d vector) {

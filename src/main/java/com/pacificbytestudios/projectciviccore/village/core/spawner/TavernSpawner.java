@@ -304,7 +304,7 @@ public class TavernSpawner {
     Ref<ChunkStore> constructionSignRef = blockEntity.getSecond();
     chunkToUse = blockEntity.getFirst();
     Store<ChunkStore> store = constructionSignRef.getStore();
-    Vec3i constructionSignPosition = Utils.getWorldBlockContext(constructionSignRef, store).position();
+    Vec3i constructionSignPosition = Utils.getWorldBlockContext(constructionSignRef, store).getPosition();
 
     BuildingSnapshotComponent snapshotComponent = store.getComponent(
         constructionSignRef,

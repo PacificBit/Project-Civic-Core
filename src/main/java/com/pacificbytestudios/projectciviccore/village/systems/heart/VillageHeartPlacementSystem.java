@@ -3,8 +3,6 @@ package com.pacificbytestudios.projectciviccore.village.systems.heart;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -22,7 +20,9 @@ import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
@@ -35,7 +35,6 @@ import com.pacificbytestudios.projectciviccore.village.core.villagetask.SpawnVil
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
   private static final VillagerRole[] SPAWNABLE_NPC = VillagerRole.values();
@@ -47,7 +46,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       AddReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    Utils.BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
+    BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
     if (context == null) {
       context = Utils.getWorldBlockContext(ref, store);
     }
@@ -55,9 +54,12 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       return;
     }
 
-    WorldChunk chunk = context.chunk();
+    WorldChunk chunk = Utils.getWorldChunk(context);
+    if (chunk == null) {
+      return;
+    }
     World world = chunk.getWorld();
-    Vec3i villageHeartPos = context.position();
+    Vec3i villageHeartPos = context.getPosition();
 
     VillageHeartComponent villageHeart = store.getComponent(ref,
         VillageHeartComponent.getComponentType());

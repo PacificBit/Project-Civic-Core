@@ -3,6 +3,7 @@ package com.pacificbytestudios.projectciviccore;
 import com.hypixel.hytale.builtin.triggervolumes.effect.TriggerEffect;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.ResourceType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.command.system.CommandRegistry;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
@@ -25,6 +26,7 @@ import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuilding
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageBuildingUpgradeCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageLevelUpCostRegistry;
 import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVillagerCostRegistry;
+import com.pacificbytestudios.projectciviccore.resources.VillageRegistryResource;
 import com.pacificbytestudios.projectciviccore.triggervolumeeffects.TeleportVillagerToTownHeartEffect;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
@@ -51,6 +53,8 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.sawm
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointsEditingComponent;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.ToogleWaypointsEdit;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.StagedBuildingSpawnSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.VillageBuilderSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
@@ -168,8 +172,12 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<ChunkStore, SimulationComponent> simulationComponentType;
   private ComponentType<ChunkStore, SimulationRunningComponent> simulationRunningComponentType;
 
+  private ResourceType<ChunkStore, VillageRegistryResource> villageRegistryResourceType;
+
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
   private ComponentType<EntityStore, MayorComponent> mayorComponentType;
+
+  private ComponentType<EntityStore, WaypointsEditingComponent> waypointsEditingComponentType;
 
   public ProjectCivicCore(JavaPluginInit init) {
     super(init);
@@ -189,6 +197,10 @@ public final class ProjectCivicCore extends JavaPlugin {
     ComponentRegistryProxy<EntityStore> entityRegistry = this.getEntityStoreRegistry();
     CommandRegistry commandRegistry = this.getCommandRegistry();
     NPCPlugin npcPlugin = NPCPlugin.get();
+
+    // ===========================
+    // ChunkStore Components
+    // ===========================
 
     this.villageSpawnComponentType = chunkRegistry.registerComponent(
         VillageSpawnComponent.class,
@@ -325,6 +337,10 @@ public final class ProjectCivicCore extends JavaPlugin {
         "SimulationRunningComponent",
         SimulationRunningComponent.CODEC);
 
+    // ===========================
+    // ChunkStore Systems
+    // ===========================
+
     chunkRegistry.registerSystem(new VillageHeartPlacementSystem());
     chunkRegistry.registerSystem(new VillageHeartLoadUnloadSystem());
     chunkRegistry.registerSystem(new WorkplaceSpawnSystem());
@@ -336,7 +352,24 @@ public final class ProjectCivicCore extends JavaPlugin {
     chunkRegistry.registerSystem(new VillageHeartMarkerPlacementSystem());
     chunkRegistry.registerSystem(new SimulationSystem());
 
+    // ===========================
+    // ChunkStore Resources
+    // ===========================
+
+    this.villageRegistryResourceType = chunkRegistry.registerResource(
+        VillageRegistryResource.class,
+        "VillageRegistry",
+        VillageRegistryResource.CODEC);
+
+    // ===========================
+    // Commands
+    // ===========================
+
     commandRegistry.registerCommand(new VillageCommands());
+
+    // ===========================
+    // EntityStore Components
+    // ===========================
 
     this.villagerComponentType = entityRegistry.registerComponent(
         VillagerComponent.class,
@@ -347,6 +380,15 @@ public final class ProjectCivicCore extends JavaPlugin {
         MayorComponent.class,
         "MayorComponent",
         MayorComponent.CODEC);
+
+    this.waypointsEditingComponentType = entityRegistry.registerComponent(
+        WaypointsEditingComponent.class,
+        "WaypointsEditingComponent",
+        WaypointsEditingComponent.CODEC);
+
+    // ===========================
+    // EntityStore Systems
+    // ===========================
 
     entityRegistry.registerSystem(new EnsureVillagerComponents());
     entityRegistry.registerSystem(new VillagerInventoryPersistenceSystem());
@@ -594,6 +636,20 @@ public final class ProjectCivicCore extends JavaPlugin {
         BuilderBreakBlockInSnapshotAction::new);
 
     // ===========================
+    // Interactions
+    // ===========================
+
+    this.getCodecRegistry(Interaction.CODEC).register(
+        "VillagerOpenInventoryInteraction",
+        VillagerOpenInventoryInteraction.class,
+        VillagerOpenInventoryInteraction.CODEC);
+
+    this.getCodecRegistry(Interaction.CODEC).register(
+        "ToogleWaypointsEditInteraction",
+        ToogleWaypointsEdit.class,
+        ToogleWaypointsEdit.CODEC);
+
+    // ===========================
     // Extra
     // ===========================
 
@@ -602,11 +658,6 @@ public final class ProjectCivicCore extends JavaPlugin {
             InventoryItemCriteria.class,
             "Type",
             BuilderItemCriteria::new));
-
-    this.getCodecRegistry(Interaction.CODEC).register(
-        "VillagerOpenInventoryInteraction",
-        VillagerOpenInventoryInteraction.class,
-        VillagerOpenInventoryInteraction.CODEC);
 
     TriggerEffect.CODEC.register(
         "TeleportVillagerToTownHeart",
@@ -735,11 +786,19 @@ public final class ProjectCivicCore extends JavaPlugin {
     return this.simulationRunningComponentType;
   }
 
+  public ResourceType<ChunkStore, VillageRegistryResource> getVillageRegistryResourceType() {
+    return this.villageRegistryResourceType;
+  }
+
   public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {
     return this.villagerComponentType;
   }
 
   public ComponentType<EntityStore, MayorComponent> getMayorComponentType() {
     return this.mayorComponentType;
+  }
+
+  public ComponentType<EntityStore, WaypointsEditingComponent> getWaypointEditingComponentType() {
+    return this.waypointsEditingComponentType;
   }
 }

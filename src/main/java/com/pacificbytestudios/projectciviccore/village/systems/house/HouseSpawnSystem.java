@@ -13,9 +13,9 @@ import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
@@ -44,9 +44,13 @@ public class HouseSpawnSystem extends RefSystem<ChunkStore> {
       return;
     }
 
-    WorldChunk chunk = blockContext.chunk();
+    WorldChunk chunk = Utils.getWorldChunk(blockContext);
+    if (chunk == null) {
+      Logger.logWarning("Missing world chunk");
+      return;
+    }
     World world = chunk.getWorld();
-    Vec3i blockPos = blockContext.position();
+    Vec3i blockPos = blockContext.getPosition();
 
     EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vec2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {
@@ -99,9 +103,13 @@ public class HouseSpawnSystem extends RefSystem<ChunkStore> {
       return;
     }
 
-    WorldChunk chunk = blockContext.chunk();
+    WorldChunk chunk = Utils.getWorldChunk(blockContext);
+    if (chunk == null) {
+      Logger.logWarning("Missing world chunk");
+      return;
+    }
     World world = chunk.getWorld();
-    Vec3i blockPos = blockContext.position();
+    Vec3i blockPos = blockContext.getPosition();
 
     EntityRef villageHeartRef = villageStore.getVillageHeartIn(new Vec2i(blockPos.x, blockPos.z));
     if (villageHeartRef == null) {

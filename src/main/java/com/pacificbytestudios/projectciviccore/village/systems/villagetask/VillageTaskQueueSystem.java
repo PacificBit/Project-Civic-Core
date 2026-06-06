@@ -6,9 +6,10 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.AVillageTask;
@@ -33,8 +34,18 @@ public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
 
     BlockContext context = Utils.getWorldBlockContext(villageHeartRef,
         commandBuffer);
+    if (context == null) {
+      Logger.logInfo("No context found");
+      return;
+    }
 
-    context.chunk().getWorld().execute(() -> {
+    WorldChunk chunk = Utils.getWorldChunk(context);
+    if (chunk == null) {
+      Logger.logInfo("No chunk found");
+      return;
+    }
+
+    chunk.getWorld().execute(() -> {
       VillageHeartComponent villageHeart = store.getComponent(villageHeartRef,
           VillageHeartComponent.getComponentType());
       VillageTaskQueueComponent tasksComponent = villageHeart.getComponent(
@@ -46,9 +57,9 @@ public class VillageTaskQueueSystem extends EntityTickingSystem<ChunkStore> {
 
       while (task != null) {
         task.execute(
-            context.chunk(),
+            chunk,
             villageHeartRef,
-            context.position(),
+            context.getPosition(),
             villageHeart);
 
         if (System.nanoTime() - start >= MAX_TIME_NS) {

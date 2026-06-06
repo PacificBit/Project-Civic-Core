@@ -8,11 +8,11 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.registry.components.VillageFoodComponent;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 
@@ -60,7 +60,7 @@ public class TavernFoodRemovalSystem extends RefSystem<ChunkStore> {
 
     Interactable interactable = interactables.getInteractableDependingOn(
         InteractablesType.EATING_SPOT,
-        Vec3f.from(blockContext.position()));
+        Vec3f.from(blockContext.getPosition()));
     if (interactable == null || !interactable.isInvalidateOnUse()) {
       return;
     }
@@ -68,7 +68,7 @@ public class TavernFoodRemovalSystem extends RefSystem<ChunkStore> {
     commandBuffer.getExternalData().getWorld().execute(() -> {
       interactable.invalidate();
       store.putComponent(tavernRef, WorkplaceInteractablesMapComponent.getComponentType(), interactables);
-      Utils.markNeedSaving(blockContext.chunk().getWorld(), foodComponent.getTavernRef().getPosition());
+      Utils.markNeedSaving(blockContext.getWorld(), foodComponent.getTavernRef().getPosition());
     });
   }
 

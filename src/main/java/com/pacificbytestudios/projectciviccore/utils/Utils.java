@@ -22,6 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
@@ -46,9 +47,6 @@ import io.sentry.util.Pair;
 
 public class Utils {
 
-  public record BlockContext(WorldChunk chunk, Vec3i position) {
-  }
-
   public static BlockContext getWorldBlockContext(
       Ref<ChunkStore> ref,
       CommandBuffer<ChunkStore> commandBuffer) {
@@ -65,6 +63,14 @@ public class Utils {
         WorldChunk.getComponentType());
 
     return buildWorldBlockContext(info, worldChunk);
+  }
+
+  public static WorldChunk getWorldChunk(BlockContext context) {
+    if (context == null || context.getWorld() == null || context.getChunkIndex() == null) {
+      return null;
+    }
+
+    return context.getWorld().getChunk(context.getChunkIndex());
   }
 
   public static TriggerVolumeManager getTriggerVolumeManager(World world) {
@@ -107,7 +113,10 @@ public class Utils {
     int worldY = localY;
     int worldZ = ChunkUtil.worldCoordFromLocalCoord(worldChunk.getZ(), localZ);
 
-    return new BlockContext(worldChunk, new Vec3i(worldX, worldY, worldZ));
+    return new BlockContext(
+        worldChunk.getWorld().getName(),
+        worldChunk.getIndex(),
+        new Vec3i(worldX, worldY, worldZ));
   }
 
   public static AreaFootprint calculateAreaFootprint(Vec3i origin, int radius) {

@@ -284,7 +284,7 @@ public final class TopologyStructure extends AreaFootprint {
   @Override
   public String toString() {
     return ("TopologyStructure: {\n\tStructureId: %s,\n\tTopologyType: %s,\n\tTopLeft: %s," +
-        "\n\tBotRight: %s,\n\tY: %d,\n\tDistanceFromCenter: %d\n\t}")
+        "\n\tBotRight: %s,\n\tY: %d,\n\tDistanceFromCenter: %f\n\t}")
         .formatted(this.structureId, this.topologyType, getTopLeft(), getBotRight(), getY(),
             this.distanceFromCenter);
   }

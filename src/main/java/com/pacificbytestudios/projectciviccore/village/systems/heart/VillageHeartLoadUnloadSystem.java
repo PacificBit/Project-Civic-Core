@@ -12,8 +12,8 @@ import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.utils.Utils.BlockContext;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
@@ -43,9 +43,13 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       return;
     }
 
-    WorldChunk chunk = context.chunk();
+    WorldChunk chunk = Utils.getWorldChunk(context);
+    if (chunk == null) {
+      Logger.logInfo("No chunk found");
+      return;
+    }
 
-    EntityStore entityStore = context.chunk().getWorld().getEntityStore();
+    EntityStore entityStore = chunk.getWorld().getEntityStore();
     Store<EntityStore> storeEntityStore = entityStore.getStore();
     chunk.getWorld().execute(() -> {
       VillageHeartComponent heart = store.getComponent(ref,
@@ -73,13 +77,13 @@ public class VillageHeartLoadUnloadSystem extends RefSystem<ChunkStore> {
       }
 
       if (heart.getClaimedArea() == null) {
-        Utils.claimVillageArea(heart, context.position());
+        Utils.claimVillageArea(heart, context.getPosition());
       }
 
       villageStore.registerVillage(
           heart.getUuid(),
           chunk.getWorld().getName(),
-          context.position(),
+          context.getPosition(),
           heart.getClaimedArea());
     });
   }
