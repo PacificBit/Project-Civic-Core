@@ -3,6 +3,7 @@ package com.pacificbytestudios.projectciviccore.codecs.structureconfig;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
@@ -28,6 +29,17 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
           new Short2ObjectMapCodec<>(BlockTransform.CODEC, Short2ObjectOpenHashMap::new)),
           (obj, value) -> obj.constructionBlock = value,
           (obj) -> encodeMap(obj.constructionBlock))
+      .add()
+
+      .append(new KeyedCodec<>("PrefabMap",
+          new Short2ObjectMapCodec<>(
+              new Short2ObjectMapCodec<>(
+                  Codec.STRING,
+                  Short2ObjectOpenHashMap::new),
+              Short2ObjectOpenHashMap::new),
+          false),
+          (obj, value) -> obj.prefabPathByLevelAndStage = decodePrefabMap(value),
+          (obj) -> encodePrefabMap(obj.prefabPathByLevelAndStage))
       .add()
 
       .append(new KeyedCodec<>("Containers",
@@ -56,6 +68,7 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
 
   private Map<Short, BlockTransform> coreBlock;
   private Map<Short, BlockTransform> constructionBlock;
+  private Map<Short, Map<Short, String>> prefabPathByLevelAndStage = new HashMap<>();
   private Map<Short, BlockTransform[]> containers = new HashMap<>();
   private Map<Short, Interactable[]> interactables = new HashMap<>();
 
@@ -75,10 +88,16 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
     return this.interactables.getOrDefault(level, new Interactable[0]);
   }
 
+  public String getPrefabFor(short level, short stage) {
+    Map<Short, String> prefabPathByStage = this.prefabPathByLevelAndStage.get(level);
+    return prefabPathByStage == null ? null : prefabPathByStage.get(stage);
+  }
+
   public StructureLevelConfig clone() {
     StructureLevelConfig config = new StructureLevelConfig();
     config.coreBlock = Utils.copyMap(this.coreBlock);
     config.constructionBlock = Utils.copyMap(this.constructionBlock);
+    config.prefabPathByLevelAndStage = copyPrefabMap(this.prefabPathByLevelAndStage);
     config.containers = Utils.copyMapArray(this.containers);
     config.interactables = Utils.copyMapArray(this.interactables);
     return config;
@@ -111,6 +130,83 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
       }
     });
     return encoded;
+  }
+
+  private static Map<Short, Map<Short, String>> decodePrefabMap(
+      Short2ObjectMap<Short2ObjectMap<String>> encoded) {
+    Map<Short, Map<Short, String>> decoded = new HashMap<>();
+
+    if (encoded == null) {
+      return decoded;
+    }
+
+    for (Short2ObjectMap.Entry<Short2ObjectMap<String>> entry : encoded.short2ObjectEntrySet()) {
+      decoded.put(entry.getShortKey(), decodeStringMap(entry.getValue()));
+    }
+
+    return decoded;
+  }
+
+  private static Map<Short, String> decodeStringMap(Short2ObjectMap<String> encoded) {
+    Map<Short, String> decoded = new HashMap<>();
+
+    if (encoded == null) {
+      return decoded;
+    }
+
+    for (Short2ObjectMap.Entry<String> entry : encoded.short2ObjectEntrySet()) {
+      decoded.put(entry.getShortKey(), entry.getValue());
+    }
+
+    return decoded;
+  }
+
+  private static Short2ObjectMap<Short2ObjectMap<String>> encodePrefabMap(
+      Map<Short, Map<Short, String>> decoded) {
+    Short2ObjectMap<Short2ObjectMap<String>> encoded = new Short2ObjectOpenHashMap<>();
+
+    if (decoded == null) {
+      return encoded;
+    }
+
+    decoded.forEach((level, prefabPathByStage) -> {
+      if (level != null && prefabPathByStage != null) {
+        encoded.put(level.shortValue(), encodeStringMap(prefabPathByStage));
+      }
+    });
+
+    return encoded;
+  }
+
+  private static Short2ObjectMap<String> encodeStringMap(Map<Short, String> decoded) {
+    Short2ObjectMap<String> encoded = new Short2ObjectOpenHashMap<>();
+
+    if (decoded == null) {
+      return encoded;
+    }
+
+    decoded.forEach((stage, prefabPath) -> {
+      if (stage != null && prefabPath != null) {
+        encoded.put(stage.shortValue(), prefabPath);
+      }
+    });
+
+    return encoded;
+  }
+
+  private static Map<Short, Map<Short, String>> copyPrefabMap(
+      Map<Short, Map<Short, String>> source) {
+    Map<Short, Map<Short, String>> copy = new HashMap<>();
+
+    if (source == null) {
+      return copy;
+    }
+
+    source.forEach((level, prefabPathByStage) -> {
+      copy.put(level, prefabPathByStage == null ? null : new HashMap<>(prefabPathByStage));
+    });
+
+    return copy;
   }
 
   private static <T extends Copyable<T>> Short2ObjectMap<T> encodeMap(Map<Short, T> decoded) {

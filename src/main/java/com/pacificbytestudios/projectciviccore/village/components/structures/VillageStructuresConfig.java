@@ -37,6 +37,10 @@ public class VillageStructuresConfig implements Component<ChunkStore> {
     return config;
   }
 
+  public StructureLevelConfig getStructureLevelConfigsFor(StructureType type) {
+    return this.structureTypeLevelConfigMap.get(type);
+  }
+
   public static ComponentType<ChunkStore, VillageStructuresConfig> getComponetType() {
     return ProjectCivicCore.get().getVillageStructureConfigComponentType();
   }

@@ -152,6 +152,26 @@
                     "Z": 0
                   }
                 }
+              },
+              "PrefabMap": {
+                "1": {
+                  "0": "Structures/Workplace/TownHall/Level1/Stage0/Town_Hall.prefab.json",
+                  "1": "Structures/Workplace/TownHall/Level1/Stage1/Town_Hall.prefab.json",
+                  "2": "Structures/Workplace/TownHall/Level1/Stage2/Town_Hall.prefab.json",
+                  "3": "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json"
+                },
+                "2": {
+                  "0": "Structures/Workplace/TownHall/Level2/Stage0/Town_Hall.prefab.json",
+                  "1": "Structures/Workplace/TownHall/Level2/Stage1/Town_Hall.prefab.json",
+                  "2": "Structures/Workplace/TownHall/Level2/Stage2/Town_Hall.prefab.json",
+                  "3": "Structures/Workplace/TownHall/Level2/Stage3/Town_Hall.prefab.json"
+                },
+                "3": {
+                  "0": "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json",
+                  "1": "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json",
+                  "2": "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json",
+                  "3": "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json"
+                }
               }
             },
             "Mine": {
@@ -241,6 +261,26 @@
                     "Y": 0,
                     "Z": 0
                   }
+                }
+              },
+              "PrefabMap": {
+                "1": {
+                  "0": "Structures/Workplace/Mine/Level1/Stage0/Mine.prefab.json",
+                  "1": "Structures/Workplace/Mine/Level1/Stage1/Mine.prefab.json",
+                  "2": "Structures/Workplace/Mine/Level1/Stage2/Mine.prefab.json",
+                  "3": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json"
+                },
+                "2": {
+                  "0": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+                  "1": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+                  "2": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+                  "3": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json"
+                },
+                "3": {
+                  "0": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+                  "1": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+                  "2": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json",
+                  "3": "Structures/Workplace/Mine/Level1/Stage3/Mine.prefab.json"
                 }
               },
               "Containers": {
@@ -383,6 +423,26 @@
                   }
                 }
               },
+              "PrefabMap": {
+                "1": {
+                  "0": "Structures/Workplace/Sawmill/Level1/Stage0/Sawmill.prefab.json",
+                  "1": "Structures/Workplace/Sawmill/Level1/Stage1/Sawmill.prefab.json",
+                  "2": "Structures/Workplace/Sawmill/Level1/Stage2/Sawmill.prefab.json",
+                  "3": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json"
+                },
+                "2": {
+                  "0": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json",
+                  "1": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json",
+                  "2": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json",
+                  "3": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json"
+                },
+                "3": {
+                  "0": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json",
+                  "1": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json",
+                  "2": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json",
+                  "3": "Structures/Workplace/Sawmill/Level1/Stage3/Sawmill.prefab.json"
+                }
+              },
               "Containers": {
                 "1": [
                   {
@@ -523,6 +583,26 @@
                   }
                 }
               },
+              "PrefabMap": {
+                "1": {
+                  "0": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+                  "1": "Structures/Workplace/Farm/Level1/Stage1/Farm.prefab.json",
+                  "2": "Structures/Workplace/Farm/Level1/Stage2/Farm.prefab.json",
+                  "3": "Structures/Workplace/Farm/Level1/Stage3/Farm.prefab.json"
+                },
+                "2": {
+                  "0": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+                  "1": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+                  "2": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+                  "3": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json"
+                },
+                "3": {
+                  "0": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+                  "1": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+                  "2": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json",
+                  "3": "Structures/Workplace/Farm/Level1/Stage0/Farm.prefab.json"
+                }
+              },
               "Containers": {
                 "1": [
                   {
@@ -661,6 +741,26 @@
                     "Y": 0,
                     "Z": 0
                   }
+                }
+              },
+              "PrefabMap": {
+                "1": {
+                  "0": "Structures/Workplace/Storage/Level1/Stage0/Storage.prefab.json",
+                  "1": "Structures/Workplace/Storage/Level1/Stage1/Storage.prefab.json",
+                  "2": "Structures/Workplace/Storage/Level1/Stage2/Storage.prefab.json",
+                  "3": "Structures/Workplace/Storage/Level1/Stage3/Storage.prefab.json"
+                },
+                "2": {
+                  "0": "Structures/Workplace/Storage/Level2/Stage0/Storage.prefab.json",
+                  "1": "Structures/Workplace/Storage/Level2/Stage1/Storage.prefab.json",
+                  "2": "Structures/Workplace/Storage/Level2/Stage2/Storage.prefab.json",
+                  "3": "Structures/Workplace/Storage/Level2/Stage3/Storage.prefab.json"
+                },
+                "3": {
+                  "0": "Structures/Workplace/Storage/Level1/Stage0/Storage.prefab.json",
+                  "1": "Structures/Workplace/Storage/Level1/Stage1/Storage.prefab.json",
+                  "2": "Structures/Workplace/Storage/Level1/Stage2/Storage.prefab.json",
+                  "3": "Structures/Workplace/Storage/Level1/Stage3/Storage.prefab.json"
                 }
               },
               "Containers": {
@@ -1054,6 +1154,26 @@
                     "Z": 0
                   }
                 }
+              },
+              "PrefabMap": {
+                "1": {
+                  "0": "Structures/Housing/Level1/Stage0/House.prefab.json",
+                  "1": "Structures/Housing/Level1/Stage1/House.prefab.json",
+                  "2": "Structures/Housing/Level1/Stage2/House.prefab.json",
+                  "3": "Structures/Housing/Level1/Stage3/House.prefab.json"
+                },
+                "2": {
+                  "0": "Structures/Housing/Level2/Stage0/House.prefab.json",
+                  "1": "Structures/Housing/Level2/Stage1/House.prefab.json",
+                  "2": "Structures/Housing/Level2/Stage2/House.prefab.json",
+                  "3": "Structures/Housing/Level2/Stage3/House.prefab.json"
+                },
+                "3": {
+                  "0": "Structures/Housing/Level3/House.prefab.json",
+                  "1": "Structures/Housing/Level3/House.prefab.json",
+                  "2": "Structures/Housing/Level3/House.prefab.json",
+                  "3": "Structures/Housing/Level3/House.prefab.json"
+                }
               }
             },
             "Tavern": {
@@ -1143,6 +1263,26 @@
                     "Y": 0,
                     "Z": 0
                   }
+                }
+              },
+              "PrefabMap": {
+                "1": {
+                  "0": "Structures/Workplace/Tavern/Level1/Stage0/Tavern.prefab.json",
+                  "1": "Structures/Workplace/Tavern/Level1/Stage1/Tavern.prefab.json",
+                  "2": "Structures/Workplace/Tavern/Level1/Stage2/Tavern.prefab.json",
+                  "3": "Structures/Workplace/Tavern/Level1/Stage3/Tavern.prefab.json"
+                },
+                "2": {
+                  "0": "Structures/Workplace/Tavern/Level2/Stage0/Tavern.prefab.json",
+                  "1": "Structures/Workplace/Tavern/Level2/Stage1/Tavern.prefab.json",
+                  "2": "Structures/Workplace/Tavern/Level2/Stage2/Tavern.prefab.json",
+                  "3": "Structures/Workplace/Tavern/Level2/Stage3/Tavern.prefab.json"
+                },
+                "3": {
+                  "0": "Structures/Workplace/Tavern/Level2/Stage0/Tavern.prefab.json",
+                  "1": "Structures/Workplace/Tavern/Level2/Stage1/Tavern.prefab.json",
+                  "2": "Structures/Workplace/Tavern/Level2/Stage2/Tavern.prefab.json",
+                  "3": "Structures/Workplace/Tavern/Level2/Stage3/Tavern.prefab.json"
                 }
               },
               "Containers": {
