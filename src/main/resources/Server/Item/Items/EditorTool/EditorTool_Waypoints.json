@@ -28,6 +28,14 @@
           "ViewDistance": 100
         }
       ]
+    },
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "OpenWaypointEditorInteraction",
+          "PrecisionThreshold": 0.4
+        }
+      ]
     }
   }
 }

@@ -54,6 +54,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointsEditingComponent;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.OpenWaypointEditorInteraction;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.ToogleWaypointsEdit;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.StagedBuildingSpawnSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.VillageBuilderSystem;
@@ -648,6 +649,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         "ToogleWaypointsEditInteraction",
         ToogleWaypointsEdit.class,
         ToogleWaypointsEdit.CODEC);
+
+    this.getCodecRegistry(Interaction.CODEC).register(
+        "OpenWaypointEditorInteraction",
+        OpenWaypointEditorInteraction.class,
+        OpenWaypointEditorInteraction.CODEC);
 
     // ===========================
     // Extra

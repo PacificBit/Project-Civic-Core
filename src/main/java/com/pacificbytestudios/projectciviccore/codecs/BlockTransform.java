@@ -26,9 +26,9 @@ public class BlockTransform<T> implements Copyable<BlockTransform<T>> {
     return BuilderCodec
         .builder((Class<BlockTransform<T>>) (Class) BlockTransform.class, BlockTransform::new)
 
-        .append(new KeyedCodec<>("Id", Codec.UUID_BINARY, false),
-            (obj, value) -> obj.id = value,
-            (obj) -> obj.id)
+        .append(new KeyedCodec<>("PositionId", Codec.UUID_BINARY, false),
+            (obj, value) -> obj.positionId = value,
+            (obj) -> obj.positionId)
         .add()
 
         .append(new KeyedCodec<>("Position", positionCodec),
@@ -46,10 +46,16 @@ public class BlockTransform<T> implements Copyable<BlockTransform<T>> {
             (obj) -> obj.accessOffset)
         .add()
 
+        .append(new KeyedCodec<>("AccessId", Codec.UUID_BINARY, false),
+            (obj, value) -> obj.accessId = value,
+            (obj) -> obj.accessId)
+        .add()
+
         .build();
   }
 
-  private UUID id;
+  private UUID positionId;
+  private UUID accessId;
   private T position;
   private Rotation rotation;
   private Vec3f accessOffset;
@@ -58,46 +64,63 @@ public class BlockTransform<T> implements Copyable<BlockTransform<T>> {
   }
 
   public BlockTransform(@Nonnull T position) {
-    this(UUID.randomUUID(), position, null, null);
+    this(UUID.randomUUID(), null, position, null, null);
   }
 
   public BlockTransform(
       @Nonnull T position,
       Rotation rotation) {
-    this(UUID.randomUUID(), position, rotation, null);
+    this(UUID.randomUUID(), null, position, rotation, null);
   }
 
   public BlockTransform(
       @Nonnull T position,
       Rotation rotation,
       Vec3f accessOffset) {
-    this(UUID.randomUUID(), position, rotation, accessOffset);
+    this(UUID.randomUUID(), accessOffset == null ? null : UUID.randomUUID(), position, rotation, accessOffset);
   }
 
   public BlockTransform(
-      @Nonnull UUID id,
+      @Nonnull UUID positionId,
+      UUID accessId,
       @Nonnull T position,
       Rotation rotation,
       Vec3f accessOffset) {
-    this.id = id;
+    this.positionId = positionId;
+    this.accessId = accessId;
     this.position = position;
     this.rotation = rotation;
     this.accessOffset = accessOffset;
   }
 
-  public UUID getId() {
-    return id;
+  public UUID getPositionId() {
+    return positionId;
   }
 
-  public UUID ensureId() {
-    if (this.id == null) {
-      this.id = UUID.randomUUID();
+  public UUID ensurePositionId() {
+    if (this.positionId == null) {
+      this.positionId = UUID.randomUUID();
     }
-    return this.id;
+    return this.positionId;
   }
 
-  public void setId(UUID id) {
-    this.id = id;
+  public void setPositionId(UUID positionId) {
+    this.positionId = positionId;
+  }
+
+  public UUID getAccessId() {
+    return accessId;
+  }
+
+  public UUID ensureAccessId() {
+    if (this.accessId == null) {
+      this.accessId = UUID.randomUUID();
+    }
+    return this.accessId;
+  }
+
+  public void setAccessId(UUID accessId) {
+    this.accessId = accessId;
   }
 
   public T getPosition() {
@@ -121,6 +144,9 @@ public class BlockTransform<T> implements Copyable<BlockTransform<T>> {
   }
 
   public void setAccessOffset(Vec3f accessOffset) {
+    if (accessOffset != null && this.accessId == null) {
+      this.accessId = UUID.randomUUID();
+    }
     this.accessOffset = accessOffset;
   }
 
@@ -142,7 +168,8 @@ public class BlockTransform<T> implements Copyable<BlockTransform<T>> {
     }
 
     BlockTransform<T> transform = new BlockTransform<>();
-    transform.id = o.id;
+    transform.positionId = o.positionId;
+    transform.accessId = o.accessId;
     transform.position = copyPosition(o.position);
     transform.rotation = o.rotation;
     transform.accessOffset = Vec3f.from(o.accessOffset);
