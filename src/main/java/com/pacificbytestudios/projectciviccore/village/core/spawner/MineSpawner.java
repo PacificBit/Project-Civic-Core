@@ -471,7 +471,7 @@ public class MineSpawner {
     workplaceComponent.setUuid(structureId);
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(config, workplaceBlockPosition, targetLevel, rotation));
+    workplaceComponent.setBenchAccessOffset(getBenchAccessOffset(config, targetLevel, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MINER });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
     chunkStore.putComponent(
@@ -508,7 +508,7 @@ public class MineSpawner {
     }
 
     container.setPosition(containerPosition);
-    container.setAccessPosition(getContainerAccessPosition(config, containerPosition, targetLevel, rotation));
+    container.setAccessOffset(getContainerAccessOffset(config, targetLevel, rotation));
     container.setUuid(UUID.randomUUID());
 
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
@@ -799,24 +799,20 @@ public class MineSpawner {
         rotation);
   }
 
-  private static Vec3f getBenchAccessPosition(
+  private static Vec3f getBenchAccessOffset(
       StructureLevelConfig config,
-      Vec3i workplaceBlockPosition,
       int level,
       Rotation rotation) {
-    return StructureSpawnConfig.accessPosition(
-        workplaceBlockPosition,
+    return StructureSpawnConfig.accessOffset(
         StructureSpawnConfig.getCoreBlock(config, level),
         rotation);
   }
 
-  private static Vec3f getContainerAccessPosition(
+  private static Vec3f getContainerAccessOffset(
       StructureLevelConfig config,
-      Vec3i containerPosition,
       int level,
       Rotation rotation) {
-    return StructureSpawnConfig.accessPosition(
-        containerPosition,
+    return StructureSpawnConfig.accessOffset(
         StructureSpawnConfig.getFirstContainer(config, level),
         rotation);
   }

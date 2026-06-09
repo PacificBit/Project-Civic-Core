@@ -518,7 +518,7 @@ public class StorageSpawner {
     workplaceComponent.setUuid(structureId);
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(config, workplaceBlockPosition, targetLevel, rotation));
+    workplaceComponent.setBenchAccessOffset(getBenchAccessOffset(config, targetLevel, rotation));
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.STORAGE_KEEPER });
     workplaceComponent.setPrefabAnchor(prefabAnchor);
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(), workplaceBlockPosition));
@@ -664,11 +664,11 @@ public class StorageSpawner {
       Store<ChunkStore> chunkStore,
       Rotation structureRotation) {
     WorkplaceContainerRegistryComponent registry = new WorkplaceContainerRegistryComponent();
-    BlockTransform[] layouts = config.getContainersFor((short) level);
+    BlockTransform<Vec3i>[] layouts = config.getContainersFor((short) level);
     WorldChunk usedChunk = chunk;
     Vec3i containerPosition;
 
-    for (BlockTransform containerLayout : layouts) {
+    for (BlockTransform<Vec3i> containerLayout : layouts) {
       int rotation = StructureSpawnConfig.blockRotationIndex(containerLayout, structureRotation);
 
       containerPosition = StructureSpawnConfig.blockPosition(
@@ -700,7 +700,7 @@ public class StorageSpawner {
       }
 
       container.setPosition(containerPosition);
-      container.setAccessPosition(getContainerAccessPosition(containerPosition, containerLayout, structureRotation));
+      container.setAccessOffset(getContainerAccessOffset(containerLayout, structureRotation));
       container.setUuid(UUID.randomUUID());
       registry.registerContainer(container.getUuid(), container);
     }
@@ -1042,22 +1042,19 @@ public class StorageSpawner {
         rotation);
   }
 
-  private static Vec3f getBenchAccessPosition(
+  private static Vec3f getBenchAccessOffset(
       StructureLevelConfig config,
-      Vec3i workplaceBlockPosition,
       int level,
       Rotation rotation) {
-    return StructureSpawnConfig.accessPosition(
-        workplaceBlockPosition,
+    return StructureSpawnConfig.accessOffset(
         StructureSpawnConfig.getCoreBlock(config, level),
         rotation);
   }
 
-  private static Vec3f getContainerAccessPosition(
-      Vec3i containerPosition,
-      BlockTransform containerLayout,
+  private static Vec3f getContainerAccessOffset(
+      BlockTransform<Vec3i> containerLayout,
       Rotation rotation) {
-    return StructureSpawnConfig.accessPosition(containerPosition, containerLayout, rotation);
+    return StructureSpawnConfig.accessOffset(containerLayout, rotation);
   }
 
   private static Vec3i getPrefabAnchorFromWorkplace(

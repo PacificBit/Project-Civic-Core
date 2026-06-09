@@ -77,54 +77,60 @@ final class StructureSpawnConfig {
     return getPrefab(config, level, VillageObjectiveType.getStages(type));
   }
 
-  static BlockTransform getCoreBlock(StructureLevelConfig config, int level) {
-    BlockTransform block = config.getCoreBlockFor((short) level);
+  static BlockTransform<Vec3i> getCoreBlock(StructureLevelConfig config, int level) {
+    BlockTransform<Vec3i> block = config.getCoreBlockFor((short) level);
     if (block == null) {
       throw new IllegalStateException("Core block config is missing for level " + level);
     }
     return block;
   }
 
-  static BlockTransform getConstructionBlock(StructureLevelConfig config, int level) {
-    BlockTransform block = config.getConstructionBlock((short) level);
+  static BlockTransform<Vec3i> getConstructionBlock(StructureLevelConfig config, int level) {
+    BlockTransform<Vec3i> block = config.getConstructionBlock((short) level);
     if (block == null) {
       throw new IllegalStateException("Construction block config is missing for level " + level);
     }
     return block;
   }
 
-  static BlockTransform getFirstContainer(StructureLevelConfig config, int level) {
-    BlockTransform[] containers = config.getContainersFor((short) level);
+  static BlockTransform<Vec3i> getFirstContainer(StructureLevelConfig config, int level) {
+    BlockTransform<Vec3i>[] containers = config.getContainersFor((short) level);
     if (containers.length == 0 || containers[0] == null) {
       throw new IllegalStateException("Container config is missing for level " + level);
     }
     return containers[0];
   }
 
-  static int blockRotationIndex(BlockTransform block, Rotation structureRotation) {
+  static int blockRotationIndex(BlockTransform<Vec3i> block, Rotation structureRotation) {
     Rotation blockRotation = StructurePlacementUtils.addYaw(block.getRotation(), structureRotation);
     return RotationTuple.of(blockRotation, Rotation.None, Rotation.None).index();
   }
 
-  static int constructionSignRotationIndex(BlockTransform block, Rotation structureRotation) {
+  static int constructionSignRotationIndex(BlockTransform<Vec3i> block, Rotation structureRotation) {
     return blockRotationIndex(block, structureRotation);
   }
 
-  static Vec3i blockPosition(Vec3i prefabAnchor, BlockTransform block, Rotation structureRotation) {
+  static Vec3i blockPosition(Vec3i prefabAnchor, BlockTransform<Vec3i> block, Rotation structureRotation) {
     return StructurePlacementUtils.withOffset(
         prefabAnchor,
         block.getPosition(),
         structureRotation);
   }
 
-  static Vec3f accessPosition(Vec3i blockPosition, BlockTransform block, Rotation structureRotation) {
+  static Vec3f accessPosition(Vec3i blockPosition, BlockTransform<Vec3i> block, Rotation structureRotation) {
     return StructurePlacementUtils.withOffset(
         blockPosition,
         block.getAccessOffset(),
         structureRotation);
   }
 
-  static Vec3i prefabAnchorFromBlock(Vec3i blockPosition, BlockTransform block, Rotation structureRotation) {
+  static Vec3f accessOffset(BlockTransform<Vec3i> block, Rotation structureRotation) {
+    return StructurePlacementUtils.rotateOffset(
+        block.getAccessOffset(),
+        structureRotation);
+  }
+
+  static Vec3i prefabAnchorFromBlock(Vec3i blockPosition, BlockTransform<Vec3i> block, Rotation structureRotation) {
     return StructurePlacementUtils.removeOffset(
         blockPosition,
         block.getPosition(),
@@ -184,7 +190,7 @@ final class StructureSpawnConfig {
       StructureLevelConfig config,
       StructureType type,
       short level) {
-    BlockTransform constructionBlock = config.getConstructionBlock(level);
+    BlockTransform<Vec3i> constructionBlock = config.getConstructionBlock(level);
     if (constructionBlock == null) {
       return null;
     }

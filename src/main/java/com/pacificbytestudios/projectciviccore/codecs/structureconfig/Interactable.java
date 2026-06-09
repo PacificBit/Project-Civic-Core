@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 
@@ -18,14 +19,14 @@ public class Interactable implements Copyable<Interactable> {
           (obj) -> obj.id)
       .add()
 
-      .append(new KeyedCodec<>("InteractablePosition", Vec3f.CODEC),
-          (obj, value) -> obj.interactablePosition = value,
-          obj -> obj.interactablePosition)
+      .append(new KeyedCodec<>("InteractableTransform", BlockTransform.VEC3F_CODEC),
+          (obj, value) -> obj.interactableTransform = value,
+          obj -> obj.interactableTransform)
       .add()
 
-      .append(new KeyedCodec<>("DependsOn", Vec3f.CODEC),
-          (obj, value) -> obj.dependsOn = value,
-          obj -> obj.dependsOn)
+      .append(new KeyedCodec<>("DependsOnTransform", BlockTransform.VEC3F_CODEC, false),
+          (obj, value) -> obj.dependsOnTransform = value,
+          obj -> obj.dependsOnTransform)
       .add()
 
       .append(new KeyedCodec<>("OccupiedBy", Codec.UUID_BINARY),
@@ -46,8 +47,8 @@ public class Interactable implements Copyable<Interactable> {
       .build();
 
   private UUID id;
-  private Vec3f interactablePosition;
-  private Vec3f dependsOn;
+  private BlockTransform<Vec3f> interactableTransform;
+  private BlockTransform<Vec3f> dependsOnTransform;
   private UUID occupiedBy;
   private boolean invalidateOnUse;
   private boolean isReady = false;
@@ -65,9 +66,9 @@ public class Interactable implements Copyable<Interactable> {
 
   public Interactable(UUID id, Vec3f interactablePosition, Vec3f dependsOn, boolean invalidateOnUse) {
     this.id = id;
-    this.interactablePosition = interactablePosition;
+    this.interactableTransform = new BlockTransform<>(interactablePosition);
     this.invalidateOnUse = invalidateOnUse;
-    this.dependsOn = dependsOn;
+    this.dependsOnTransform = BlockTransform.from(dependsOn);
   }
 
   public boolean isOccupied() {
@@ -79,11 +80,11 @@ public class Interactable implements Copyable<Interactable> {
   }
 
   public boolean hasDependency() {
-    return this.dependsOn != null;
+    return getDependsOn() != null;
   }
 
   public boolean dependsOn(Vec3f position) {
-    return Objects.equals(this.dependsOn, position);
+    return Objects.equals(getDependsOn(), position);
   }
 
   public void occupy(UUID villagerId) {
@@ -99,19 +100,35 @@ public class Interactable implements Copyable<Interactable> {
   }
 
   public Vec3f getInteractablePosition() {
-    return interactablePosition;
+    return this.interactableTransform.getPosition();
   }
 
   public void setInteractablePosition(Vec3f interactablePosition) {
-    this.interactablePosition = interactablePosition;
+    this.interactableTransform.setPosition(interactablePosition);
+  }
+
+  public BlockTransform<Vec3f> getInteractableTransform() {
+    return this.interactableTransform;
+  }
+
+  public void setInteractableTransform(BlockTransform<Vec3f> interactableTransform) {
+    this.interactableTransform = interactableTransform;
   }
 
   public Vec3f getDependsOn() {
-    return dependsOn;
+    return this.dependsOnTransform == null ? null : this.dependsOnTransform.getPosition();
   }
 
   public void setDependsOn(Vec3f dependsOn) {
-    this.dependsOn = dependsOn;
+    this.dependsOnTransform.setPosition(dependsOn);
+  }
+
+  public BlockTransform<Vec3f> getDependsOnTransform() {
+    return this.dependsOnTransform;
+  }
+
+  public void setDependsOnTransform(BlockTransform<Vec3f> dependsOnTransform) {
+    this.dependsOnTransform = dependsOnTransform;
   }
 
   public UUID getOccupiedBy() {
@@ -142,8 +159,8 @@ public class Interactable implements Copyable<Interactable> {
   public Interactable clone() {
     Interactable interactable = new Interactable();
     interactable.id = this.id;
-    interactable.interactablePosition = Vec3f.from(this.interactablePosition);
-    interactable.dependsOn = Vec3f.from(this.dependsOn);
+    interactable.interactableTransform = BlockTransform.clone(this.interactableTransform);
+    interactable.dependsOnTransform = BlockTransform.clone(this.dependsOnTransform);
     interactable.occupiedBy = this.occupiedBy;
     interactable.invalidateOnUse = this.invalidateOnUse;
     interactable.isReady = this.isReady;
@@ -156,10 +173,11 @@ public class Interactable implements Copyable<Interactable> {
         "\n\tOccupiedBy: %s,\n\tInvalidateOnUse: %b,\n\tIsReady: %b\n\t}")
         .formatted(
             this.id,
-            this.interactablePosition.toString(),
-            this.dependsOn.toString(),
-            this.occupiedBy.toString(),
+            getInteractablePosition(),
+            getDependsOn(),
+            this.occupiedBy,
             this.invalidateOnUse,
             this.isReady);
   }
+
 }

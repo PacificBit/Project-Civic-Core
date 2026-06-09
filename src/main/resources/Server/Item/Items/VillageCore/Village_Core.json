@@ -1339,15 +1339,26 @@
                 "1": [
                   {
                     "Id": "3YWb+3U+RgaAogSXZcCd2A==",
-                    "InteractablePosition": {
-                      "X": 0,
-                      "Y": 1,
-                      "Z": 0
+                    "InteractableTransform": {
+                      "Id": "TVElJQmCijz79QTrOit2iA==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 1,
+                        "Z": 0
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": 2,
-                      "Z": -1
+                    "DependsOnTransform": {
+                      "Id": "9km7pecLQEHfPNe+Sk7lPg==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 2,
+                        "Z": -1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1355,15 +1366,26 @@
                   },
                   {
                     "Id": "BVOh4hB0RvqQ5x2lQmEDMQ==",
-                    "InteractablePosition": {
-                      "X": -1,
-                      "Y": 1,
-                      "Z": 0
+                    "InteractableTransform": {
+                      "Id": "P3jglNjsyidR9cfqgaolFA==",
+                      "Position": {
+                        "X": -1,
+                        "Y": 1,
+                        "Z": 0
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -1,
-                      "Y": 2,
-                      "Z": -1
+                    "DependsOnTransform": {
+                      "Id": "VXGSF3J9S9UKeSoKSH2z0A==",
+                      "Position": {
+                        "X": -1,
+                        "Y": 2,
+                        "Z": -1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1371,15 +1393,26 @@
                   },
                   {
                     "Id": "VKE8nHKATJ+8q8Sa8MtqQg==",
-                    "InteractablePosition": {
-                      "X": 0,
-                      "Y": 1,
-                      "Z": -3
+                    "InteractableTransform": {
+                      "Id": "UN2lciyGY8wzHFltd6g1eA==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 1,
+                        "Z": -3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": 2,
-                      "Z": -2
+                    "DependsOnTransform": {
+                      "Id": "2kZyPpTIHX9Km7gUTbNWhw==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 2,
+                        "Z": -2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1387,15 +1420,26 @@
                   },
                   {
                     "Id": "EetXwzLiQKuqAx4Pme64tg==",
-                    "InteractablePosition": {
-                      "X": -1,
-                      "Y": 1,
-                      "Z": -3
+                    "InteractableTransform": {
+                      "Id": "cd2XiZJoZa66mJcP5ausqg==",
+                      "Position": {
+                        "X": -1,
+                        "Y": 1,
+                        "Z": -3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -1,
-                      "Y": 2,
-                      "Z": -2
+                    "DependsOnTransform": {
+                      "Id": "Mb1jDRD5suctILvIRvj9Zg==",
+                      "Position": {
+                        "X": -1,
+                        "Y": 2,
+                        "Z": -2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1403,15 +1447,26 @@
                   },
                   {
                     "Id": "s0V9Yl77TJeYJMQdfwEJtQ==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": 1,
-                      "Z": -1
+                    "InteractableTransform": {
+                      "Id": "W2keCNUHhCCvDwUtmtQdmQ==",
+                      "Position": {
+                        "X": 2,
+                        "Y": 1,
+                        "Z": -1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 3,
-                      "Y": 2,
-                      "Z": -1
+                    "DependsOnTransform": {
+                      "Id": "DQ9gULkBbxqUWMUPhgSldg==",
+                      "Position": {
+                        "X": 3,
+                        "Y": 2,
+                        "Z": -1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1419,15 +1474,26 @@
                   },
                   {
                     "Id": "qH3NIMrNRxiBCxtLf6WVYg==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": 1,
-                      "Z": -2
+                    "InteractableTransform": {
+                      "Id": "GE3vD/X/BvNat9rk/jdbVQ==",
+                      "Position": {
+                        "X": 2,
+                        "Y": 1,
+                        "Z": -2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 3,
-                      "Y": 2,
-                      "Z": -2
+                    "DependsOnTransform": {
+                      "Id": "LozIU3MnvntNHdevdAwlXw==",
+                      "Position": {
+                        "X": 3,
+                        "Y": 2,
+                        "Z": -2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1435,15 +1501,26 @@
                   },
                   {
                     "Id": "kx4MqIJyRpWqT/fWWjTgKA==",
-                    "InteractablePosition": {
-                      "X": 5,
-                      "Y": 1,
-                      "Z": -1
+                    "InteractableTransform": {
+                      "Id": "+H3YKKjTwSBbaIPL/GlyLg==",
+                      "Position": {
+                        "X": 5,
+                        "Y": 1,
+                        "Z": -1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 4,
-                      "Y": 2,
-                      "Z": -1
+                    "DependsOnTransform": {
+                      "Id": "ZdvrD2l0Z2c/tolSpt8j/g==",
+                      "Position": {
+                        "X": 4,
+                        "Y": 2,
+                        "Z": -1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1451,15 +1528,26 @@
                   },
                   {
                     "Id": "uyT9bHgxTHOdpkcc/xring==",
-                    "InteractablePosition": {
-                      "X": 5,
-                      "Y": 1,
-                      "Z": -2
+                    "InteractableTransform": {
+                      "Id": "x7TdBpqnlIOtq5WFGq0VbA==",
+                      "Position": {
+                        "X": 5,
+                        "Y": 1,
+                        "Z": -2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 4,
-                      "Y": 2,
-                      "Z": -2
+                    "DependsOnTransform": {
+                      "Id": "vTVfl4WAopvRo0wv5fSQcg==",
+                      "Position": {
+                        "X": 4,
+                        "Y": 2,
+                        "Z": -2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1467,15 +1555,26 @@
                   },
                   {
                     "Id": "Utg9H6n1QVm6xXlwKZe5WQ==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": 1,
-                      "Z": 1
+                    "InteractableTransform": {
+                      "Id": "/KQ9tx4elxzQcLU+4jJpUA==",
+                      "Position": {
+                        "X": 2,
+                        "Y": 1,
+                        "Z": 1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 3,
-                      "Y": 2,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "WTuQgnzjsGajImIK4O4mDA==",
+                      "Position": {
+                        "X": 3,
+                        "Y": 2,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1483,15 +1582,26 @@
                   },
                   {
                     "Id": "tpb5ZAa2TyyEbxjZ5XcY9g==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": 1,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "GntZ64gPxCl4ZSszao3pIw==",
+                      "Position": {
+                        "X": 2,
+                        "Y": 1,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 3,
-                      "Y": 2,
-                      "Z": 2
+                    "DependsOnTransform": {
+                      "Id": "xjc0ycraEVoKOsvhZOPX7A==",
+                      "Position": {
+                        "X": 3,
+                        "Y": 2,
+                        "Z": 2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1499,15 +1609,26 @@
                   },
                   {
                     "Id": "sLS3l0sNSK+LzS3REvPZNA==",
-                    "InteractablePosition": {
-                      "X": 5,
-                      "Y": 1,
-                      "Z": 1
+                    "InteractableTransform": {
+                      "Id": "9rNclcBH/BPitmbtngWAXQ==",
+                      "Position": {
+                        "X": 5,
+                        "Y": 1,
+                        "Z": 1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 4,
-                      "Y": 2,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "vncMlKb+hbHq9U9dTK6zFQ==",
+                      "Position": {
+                        "X": 4,
+                        "Y": 2,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1515,15 +1636,26 @@
                   },
                   {
                     "Id": "2+d88l6DRm6x9simuW8rPg==",
-                    "InteractablePosition": {
-                      "X": 5,
-                      "Y": 1,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "Rz/pbdt/N5F4VzVi+uRIrg==",
+                      "Position": {
+                        "X": 5,
+                        "Y": 1,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 4,
-                      "Y": 2,
-                      "Z": 2
+                    "DependsOnTransform": {
+                      "Id": "spS/NeQYE2APTtDuBKCVVw==",
+                      "Position": {
+                        "X": 4,
+                        "Y": 2,
+                        "Z": 2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1533,15 +1665,26 @@
                 "2": [
                   {
                     "Id": "uGhOafNcTcWBRIR7UQmDZQ==",
-                    "InteractablePosition": {
-                      "X": -1,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "XVfbisyn/pJ3/qC+wEzvEw==",
+                      "Position": {
+                        "X": -1,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "Rp9tf6DTj9Mm02CjG+mnag==",
+                      "Position": {
+                        "X": 0,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1549,15 +1692,26 @@
                   },
                   {
                     "Id": "iVDmXOzxRHWg2m4Q1J8IRQ==",
-                    "InteractablePosition": {
-                      "X": -1,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "23WhfjvloKaVnes7W/a7FQ==",
+                      "Position": {
+                        "X": -1,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "RzuvbRQmxfYhnfNgnZTKqw==",
+                      "Position": {
+                        "X": 0,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1565,15 +1719,26 @@
                   },
                   {
                     "Id": "p2lk//yhRZ62NB69hYBBjQ==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "otUA3JteoN7C9f8hch/PXw==",
+                      "Position": {
+                        "X": 2,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 1,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "ZgtzLhWy7vB9MLPZdAYbZg==",
+                      "Position": {
+                        "X": 1,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1581,15 +1746,26 @@
                   },
                   {
                     "Id": "9a06suKfQsSHrLynPQtqkQ==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "/WH5FbvEM2gm1hznkvaNFg==",
+                      "Position": {
+                        "X": 2,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 1,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "O47NRWiJr7wdOGwGngJR7A==",
+                      "Position": {
+                        "X": 1,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1597,15 +1773,26 @@
                   },
                   {
                     "Id": "r0mAb8WcTkahWjyNnin0pQ==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 1
+                    "InteractableTransform": {
+                      "Id": "tSqmYZbKQl30YdksSF1QJA==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "+aw4rSNfRiF1yC/JNef+vg==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1613,15 +1800,26 @@
                   },
                   {
                     "Id": "xdGYUPTzQNCKZAGmio7hiw==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "T9xoESddyisKDUiFTnt6aw==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 2
+                    "DependsOnTransform": {
+                      "Id": "8jfKK89thS+mdKUjrIzDmg==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1629,15 +1827,26 @@
                   },
                   {
                     "Id": "OcNlwLNrR/WTWEuUCLncUQ==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 1
+                    "InteractableTransform": {
+                      "Id": "/JHijWXl3fOYphD+U+fqrQ==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "hsYMUwHDTF/etaacuPfYnA==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1645,15 +1854,26 @@
                   },
                   {
                     "Id": "nxi+BewCSEObwAxCtUrbDA==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "dPnvLHe5y7biSlryN8T60A==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 2
+                    "DependsOnTransform": {
+                      "Id": "i6BTny3j4iVj+bH8Om8A0A==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1661,15 +1881,26 @@
                   },
                   {
                     "Id": "t0ZYyJvaRuKP9UeKK717aw==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "f+6ndqE3tbYsWIzM2rJQww==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "wzd46Mva2el1R6Q3YMWI2w==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1677,15 +1908,26 @@
                   },
                   {
                     "Id": "scB3hKhTSA+2w/sBgcyOGw==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "VacIGI5DTN3kCWpRSAh7uA==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "BUMbuLYsFOmmPuy5CdiPVg==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1693,15 +1935,26 @@
                   },
                   {
                     "Id": "UwNb9kQRRnyyunAJqTqVsQ==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "wAkwr5Ndvj15XWDDZ8dcFg==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "C7A+DQViMgRF+wWyCpGCjA==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1709,15 +1962,26 @@
                   },
                   {
                     "Id": "Y4P2Phj8TMqZSYcxTboGiw==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "6qxnRhJXwJiuizJZtlIs5g==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "jmp3ftJbzOQrN0cAIUutKQ==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1725,15 +1989,26 @@
                   },
                   {
                     "Id": "DE6i+N1IRF2ET1h6UacfBA==",
-                    "InteractablePosition": {
-                      "X": 0,
-                      "Y": 5,
-                      "Z": -1
+                    "InteractableTransform": {
+                      "Id": "g11EmJv/6EeVgA10dkuwzw==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 5,
+                        "Z": -1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": 6,
-                      "Z": 0
+                    "DependsOnTransform": {
+                      "Id": "pn/2VL4ATNBy//8gsOPtYw==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 6,
+                        "Z": 0
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1741,15 +2016,26 @@
                   },
                   {
                     "Id": "SC4AYO12QIWAEiz/0KqKVw==",
-                    "InteractablePosition": {
-                      "X": 1,
-                      "Y": 5,
-                      "Z": -1
+                    "InteractableTransform": {
+                      "Id": "Vm7ZYfJvuHhlYeB2rK9OZQ==",
+                      "Position": {
+                        "X": 1,
+                        "Y": 5,
+                        "Z": -1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 1,
-                      "Y": 6,
-                      "Z": 0
+                    "DependsOnTransform": {
+                      "Id": "+8G2XszTo4sc4AjVJvex/g==",
+                      "Position": {
+                        "X": 1,
+                        "Y": 6,
+                        "Z": 0
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1757,15 +2043,26 @@
                   },
                   {
                     "Id": "X6ZnPIhHRB+DE2yS634meg==",
-                    "InteractablePosition": {
-                      "X": 0,
-                      "Y": 5,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "JTlDuWEq8Dj4Q9briKWDLQ==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 5,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": 6,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "hNitiSNQD7ezsFWHzxgLxQ==",
+                      "Position": {
+                        "X": 0,
+                        "Y": 6,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1773,15 +2070,26 @@
                   },
                   {
                     "Id": "bs3X22G6RbOaDCutpl273w==",
-                    "InteractablePosition": {
-                      "X": 1,
-                      "Y": 5,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "oRxBJnsprtWkOTmW565KdQ==",
+                      "Position": {
+                        "X": 1,
+                        "Y": 5,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 1,
-                      "Y": 6,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "kzsTsOx22C5Vgo9uqIG7TA==",
+                      "Position": {
+                        "X": 1,
+                        "Y": 6,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1789,15 +2097,26 @@
                   },
                   {
                     "Id": "dp9AGnf2SDGfxDgWETOOKg==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": 5,
-                      "Z": -1
+                    "InteractableTransform": {
+                      "Id": "ejv9W0EWeNdJAsweuvFmwQ==",
+                      "Position": {
+                        "X": -2,
+                        "Y": 5,
+                        "Z": -1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -2,
-                      "Y": 6,
-                      "Z": 0
+                    "DependsOnTransform": {
+                      "Id": "R8u0pwvONuSCYVAWAeFKZQ==",
+                      "Position": {
+                        "X": -2,
+                        "Y": 6,
+                        "Z": 0
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1805,15 +2124,26 @@
                   },
                   {
                     "Id": "WHjMna+dSrOl6oBUGsDupw==",
-                    "InteractablePosition": {
-                      "X": -3,
-                      "Y": 5,
-                      "Z": -1
+                    "InteractableTransform": {
+                      "Id": "iQdjd8xNjJhkIpt3H3+KbA==",
+                      "Position": {
+                        "X": -3,
+                        "Y": 5,
+                        "Z": -1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": 6,
-                      "Z": 0
+                    "DependsOnTransform": {
+                      "Id": "1sB7+kQGlQ/msjtG6iATZg==",
+                      "Position": {
+                        "X": -3,
+                        "Y": 6,
+                        "Z": 0
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1821,15 +2151,26 @@
                   },
                   {
                     "Id": "mVPlZdX1S6Gl3Xq0vsHymQ==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": 5,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "iT662cBkm0uoRW+5lus66w==",
+                      "Position": {
+                        "X": -2,
+                        "Y": 5,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -2,
-                      "Y": 6,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "pDhln54V/lqcqhyN4V51wg==",
+                      "Position": {
+                        "X": -2,
+                        "Y": 6,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1837,15 +2178,26 @@
                   },
                   {
                     "Id": "VXKtT21tRfKrGD1fee4nvQ==",
-                    "InteractablePosition": {
-                      "X": -3,
-                      "Y": 5,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "LtxIeDy+7pTWL41doKDSYw==",
+                      "Position": {
+                        "X": -3,
+                        "Y": 5,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": 6,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "aGiPR35IuoNw221CI0n/tQ==",
+                      "Position": {
+                        "X": -3,
+                        "Y": 6,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1855,15 +2207,26 @@
                 "3": [
                   {
                     "Id": "bJJlnYVcShqut1R4Zou6/g==",
-                    "InteractablePosition": {
-                      "X": -1,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "su043BPmdgQKiRjMGB+7sQ==",
+                      "Position": {
+                        "X": -1,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "xauusTMv8rOPeoPTd+6j0A==",
+                      "Position": {
+                        "X": 0,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1871,15 +2234,26 @@
                   },
                   {
                     "Id": "eOqCTfnPSJifiHAi8VNWXQ==",
-                    "InteractablePosition": {
-                      "X": -1,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "woIT3UQ/uDzgF3tjCSoVpA==",
+                      "Position": {
+                        "X": -1,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 0,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "sHu2vI5ug5VClTk4VSk/nw==",
+                      "Position": {
+                        "X": 0,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1887,15 +2261,26 @@
                   },
                   {
                     "Id": "DcpedeGmSSCZ5o+34+zICA==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "u6sx9j/kF/R2v3KfpWZowg==",
+                      "Position": {
+                        "X": 2,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 1,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "8xdJni8OMI5JH+XvDw3hWA==",
+                      "Position": {
+                        "X": 1,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1903,15 +2288,26 @@
                   },
                   {
                     "Id": "wjWkBbcbS4K/R7M/GFVoOw==",
-                    "InteractablePosition": {
-                      "X": 2,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "FCoKjhcaEgcV9TpUPJe1IA==",
+                      "Position": {
+                        "X": 2,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": 1,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "mp1vcCqZySWzqB2usDK10w==",
+                      "Position": {
+                        "X": 1,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1919,15 +2315,26 @@
                   },
                   {
                     "Id": "3ybrYFYFQiSOlFJh/1xR5A==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 1
+                    "InteractableTransform": {
+                      "Id": "kPEblBFNeJNoMDUW4X7yng==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "OBhEDQmOFph5EDgNCifprQ==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1935,15 +2342,26 @@
                   },
                   {
                     "Id": "ysxapd50S5CvM4IJLtFzwQ==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "jTjv4YVp64nmv5xalRvL0g==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 2
+                    "DependsOnTransform": {
+                      "Id": "UeK1cXhKzVfmGSYma2rhyg==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1951,15 +2369,26 @@
                   },
                   {
                     "Id": "htFKo3gbTqm+ZL7u9vt26Q==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 1
+                    "InteractableTransform": {
+                      "Id": "XlspVgGAs5dzgUscoO1y6w==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 1
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 1
+                    "DependsOnTransform": {
+                      "Id": "dmKCpSWdJBl5XCNM9j+D6Q==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 1
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1967,15 +2396,26 @@
                   },
                   {
                     "Id": "DKBlPRs7RoqqH4nvMT2gNQ==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 2
+                    "InteractableTransform": {
+                      "Id": "LLigWxtuEOjfejThhQJ7kg==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 2
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 2
+                    "DependsOnTransform": {
+                      "Id": "PAExsbBCS+V7ycF/zo5enw==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 2
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1983,15 +2423,26 @@
                   },
                   {
                     "Id": "qZBetvUCRPOOfv3cnDO39A==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "P/czuXuLVN3dJDeb+01drw==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "64weUKgFxaZ756aBUMznWg==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -1999,15 +2450,26 @@
                   },
                   {
                     "Id": "FOmxwmNZQ8qrLenvWNPKIw==",
-                    "InteractablePosition": {
-                      "X": -2,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "wlEDkjwY7ecOj6jY2F/dCQ==",
+                      "Position": {
+                        "X": -2,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -3,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "P5XnHj5sIp4UBN8Lgb6bHw==",
+                      "Position": {
+                        "X": -3,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -2015,15 +2477,26 @@
                   },
                   {
                     "Id": "xeWJj6FURI+TEXiL7GwKlQ==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 3
+                    "InteractableTransform": {
+                      "Id": "uvJJzKahsQWrTyS2ZsRmng==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 3
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 3
+                    "DependsOnTransform": {
+                      "Id": "wGd6cK6ny8ymGILn6Vwafw==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 3
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,
@@ -2031,15 +2504,26 @@
                   },
                   {
                     "Id": "issOZ9gwRV+nWl9njC7P1Q==",
-                    "InteractablePosition": {
-                      "X": -5,
-                      "Y": -3,
-                      "Z": 4
+                    "InteractableTransform": {
+                      "Id": "KUSDPNmLSvTK25fK988pDg==",
+                      "Position": {
+                        "X": -5,
+                        "Y": -3,
+                        "Z": 4
+                      },
+                      "AccessOffset": {
+                        "X": 0,
+                        "Y": 0,
+                        "Z": 0
+                      }
                     },
-                    "DependsOn": {
-                      "X": -4,
-                      "Y": -2,
-                      "Z": 4
+                    "DependsOnTransform": {
+                      "Id": "EpQzdADv6tqG5n6/QICtxg==",
+                      "Position": {
+                        "X": -4,
+                        "Y": -2,
+                        "Z": 4
+                      }
                     },
                     "OccupiedBy": null,
                     "InvalidateOnUse": true,

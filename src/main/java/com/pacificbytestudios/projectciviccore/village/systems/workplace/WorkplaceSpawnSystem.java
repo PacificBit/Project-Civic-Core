@@ -71,12 +71,11 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
         return;
       }
 
-      workplaceComponent.setBenchPos(blockPos);
       workplaceComponent.setVillageRef(villageHeartRef);
 
       if (workplaceComponent.getUuid() == null) {
-        Logger.logWarning("Workplace UUID is still null after spawn initialization at "
-                + blockPos);
+        Logger.logWarning(
+            "Workplace UUID is still null after spawn initialization at %s", blockPos);
         return;
       }
 

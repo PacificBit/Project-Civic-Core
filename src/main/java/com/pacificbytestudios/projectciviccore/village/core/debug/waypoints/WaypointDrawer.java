@@ -1,16 +1,19 @@
 package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
+import java.util.Set;
+import java.util.UUID;
 
 import org.joml.Matrix4d;
 
 import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
@@ -22,39 +25,33 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 
+@Deprecated
 public class WaypointDrawer {
   private static final double MARKER_SCALE = 0.2;
 
-  public static void draw(World world, WorkplaceComponent workplace, List<Vec3i> blacklist) {
-    Map<MarkerType, List<Vec3d>> markers = initMarkerMap();
-
-    addWorkplaceMarkers(workplace, markers, blacklist);
+  public static void draw(World world, WorkplaceComponent workplace, List<UUID> blacklist) {
+    Map<MarkerType, List<Vec3d>> markers = new EnumMap<>(MarkerType.class);
+    addWorkplaceMarkers(workplace, markers, toBlacklistSet(blacklist));
     drawMarkers(world, markers);
   }
 
-  private static Map<MarkerType, List<Vec3d>> initMarkerMap() {
-    Map<MarkerType, List<Vec3d>> markers = new HashMap<>();
-    Stream.of(MarkerType.values())
-        .forEach(markerType -> markers.put(markerType, new ArrayList<>()));
-    return markers;
+  private static Set<UUID> toBlacklistSet(List<UUID> blacklist) {
+    return new HashSet<>(blacklist);
   }
 
   private static void addWorkplaceMarkers(
       WorkplaceComponent workplace,
       Map<MarkerType, List<Vec3d>> markers,
-      List<Vec3i> blacklist) {
-    addMarker(markers, MarkerType.BENCH, workplace.getBenchPos(), blacklist);
-    addMarker(markers, MarkerType.BENCH_ACCESS, workplace.getBenchAccessPos(), blacklist);
-    addMarker(markers, MarkerType.ANCHOR, workplace.getPrefabAnchor(), blacklist);
+      Set<UUID> blacklist) {
+    addTransformMarker(markers, MarkerType.BENCH, workplace.getBenchTransform(), blacklist);
+    addAccessOffsetMarker(markers, MarkerType.BENCH_ACCESS, workplace.getBenchTransform(), blacklist);
+    addTransformMarker(markers, MarkerType.ANCHOR, workplace.getPrefabAnchorTransform(), blacklist);
 
     WorkplaceContainerRegistryComponent storage = workplace.getStorage();
-    if (storage != null) {
-      storage.getAllContainerPositions()
-          .forEach(containerPos -> addMarker(markers, MarkerType.STORAGE, containerPos, blacklist));
-
-      storage.getAllContainerAccessPositions()
-          .forEach(containerAccessPos -> addMarker(markers, MarkerType.STORAGE_ACCESS, containerAccessPos, blacklist));
-    }
+    storage.getContainers().values().forEach(container -> {
+      addTransformMarker(markers, MarkerType.STORAGE, container.getContainerTransform(), blacklist);
+      addAccessOffsetMarker(markers, MarkerType.STORAGE_ACCESS, container.getContainerTransform(), blacklist);
+    });
 
     WorkplaceInteractablesMapComponent interactables = workplace.getComponent(
         WorkplaceInteractablesMapComponent.getComponentType());
@@ -66,62 +63,67 @@ public class WaypointDrawer {
   private static void addInteractables(
       WorkplaceInteractablesMapComponent workplaceInteractables,
       Map<MarkerType, List<Vec3d>> markers,
-      List<Vec3i> blacklist) {
+      Set<UUID> blacklist) {
     Map<InteractablesType, Interactable[]> interactableMap = workplaceInteractables.getAllInteractables();
 
     for (Entry<InteractablesType, Interactable[]> interactableEntry : interactableMap.entrySet()) {
       InteractablesType key = interactableEntry.getKey();
       Interactable[] interactables = interactableEntry.getValue();
-      // if (key == null || interactables == null) {
-      // continue;
-      // }
 
       for (Interactable interactable : interactables) {
-        // if (interactable == null) {
-        // continue;
-        // }
+        addTransformMarker(markers, key.getMarkerType(), interactable.getInteractableTransform(), blacklist);
 
-        addMarker(markers, key.getMarkerType(), interactable.getInteractablePosition(), blacklist);
-
-        if (key.getDependsOn().equals(MarkerType.NONE)) {
+        if (key.getDependsOn() == MarkerType.NONE) {
           continue;
         }
 
-        addMarker(markers, key.getDependsOn(), interactable.getDependsOn(), blacklist);
+        addTransformMarker(markers, key.getDependsOn(), interactable.getDependsOnTransform(), blacklist);
       }
     }
   }
 
+  private static void addTransformMarker(
+      Map<MarkerType, List<Vec3d>> markers,
+      MarkerType markerType,
+      BlockTransform<?> transform,
+      Set<UUID> blacklist) {
+    addMarker(markers, markerType, transform.ensureId(), toMarkerPosition(transform.getPosition()), blacklist);
+  }
+
+  private static void addAccessOffsetMarker(
+      Map<MarkerType, List<Vec3d>> markers,
+      MarkerType markerType,
+      BlockTransform<Vec3i> transform,
+      Set<UUID> blacklist) {
+    Vec3f accessPosition = Vec3f.from(transform.getPosition()).add(transform.getAccessOffset());
+
+    addMarker(markers, markerType, transform.ensureId(), accessPosition.to3d(), blacklist);
+  }
+
   private static void addMarker(
       Map<MarkerType, List<Vec3d>> markers,
       MarkerType markerType,
-      Vec3i position,
-      List<Vec3i> blacklist) {
-    if (position == null || isBlacklisted(position, blacklist)) {
+      UUID waypointId,
+      Vec3d position,
+      Set<UUID> blacklist) {
+    if (blacklist.contains(waypointId)) {
       return;
     }
 
-    markers.get(markerType).add(position.to3d());
+    markers.computeIfAbsent(markerType, key -> new ArrayList<>()).add(position);
   }
 
-  private static void addMarker(
-      Map<MarkerType, List<Vec3d>> markers,
-      MarkerType markerType,
-      Vec3f position,
-      List<Vec3i> blacklist) {
-    if (position == null || isBlacklisted(position, blacklist)) {
-      return;
+  private static Vec3d toMarkerPosition(Object position) {
+    if (position instanceof Vec3d vec3d) {
+      return Vec3d.from(vec3d);
     }
-
-    markers.get(markerType).add(position.to3d());
-  }
-
-  private static boolean isBlacklisted(Vec3i position, List<Vec3i> blacklist) {
-    return blacklist.contains(position);
-  }
-
-  private static boolean isBlacklisted(Vec3f position, List<Vec3i> blacklist) {
-    return blacklist.contains(position.to3i());
+    if (position instanceof Vec3f vec3f) {
+      return vec3f.to3d();
+    }
+    if (position instanceof Vec3i vec3i) {
+      return vec3i.to3d();
+    }
+    throw new IllegalArgumentException("Unsupported marker position type: " + position.getClass().getName());
   }
 
   private static void drawMarkers(World world, Map<MarkerType, List<Vec3d>> markers) {

@@ -467,7 +467,7 @@ public class TownHallSpawner {
     workplaceComponent.setStorage(storage);
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
-    workplaceComponent.setBenchAccessPos(getBenchAccessPosition(config, workplaceBlockPosition, targetLevel, rotation));
+    workplaceComponent.setBenchAccessOffset(getBenchAccessOffset(config, targetLevel, rotation));
     workplaceComponent.setPrefabAnchor(prefabAnchor);
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
@@ -504,8 +504,7 @@ public class TownHallSpawner {
     }
 
     container.setPosition(containerPosition);
-    container.setAccessPosition(StructurePlacementUtils.withOffset(
-        containerPosition,
+    container.setAccessOffset(StructurePlacementUtils.rotateOffset(
         StructureConfig.TownHall.getHeartContainerAccessOffset(level),
         rotation));
     container.setUuid(UUID.randomUUID());
@@ -717,13 +716,11 @@ public class TownHallSpawner {
         rotation);
   }
 
-  private static Vec3f getBenchAccessPosition(
+  private static Vec3f getBenchAccessOffset(
       StructureLevelConfig config,
-      Vec3i workplaceBlockPosition,
       int level,
       Rotation rotation) {
-    return StructureSpawnConfig.accessPosition(
-        workplaceBlockPosition,
+    return StructureSpawnConfig.accessOffset(
         StructureSpawnConfig.getCoreBlock(config, level),
         rotation);
   }

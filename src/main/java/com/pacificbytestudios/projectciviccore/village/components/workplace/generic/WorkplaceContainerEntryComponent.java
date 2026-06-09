@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
@@ -22,21 +23,15 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
           (obj) -> obj.uuid)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
-          (obj, value) -> obj.position = value,
-          (obj) -> obj.position)
-      .add()
-
-      .append(new KeyedCodec<>("AccessPosition", Vec3f.CODEC),
-          (obj, value) -> obj.accessPosition = value,
-          (obj) -> obj.accessPosition)
+      .append(new KeyedCodec<>("ContainerTransform", BlockTransform.VEC3I_CODEC),
+          (obj, value) -> obj.containerTransform = value,
+          (obj) -> obj.containerTransform)
       .add()
 
       .build();
 
   private UUID uuid;
-  private Vec3i position;
-  private Vec3f accessPosition;
+  private BlockTransform<Vec3i> containerTransform = new BlockTransform<>();
 
   public UUID getUuid() {
     return uuid;
@@ -47,27 +42,34 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
   }
 
   public Vec3i getPosition() {
-    return position;
+    return this.containerTransform.getPosition();
   }
 
   public void setPosition(Vec3i position) {
-    this.position = position;
+    this.containerTransform.setPosition(position);
+  }
+
+  public BlockTransform<Vec3i> getContainerTransform() {
+    return this.containerTransform;
+  }
+
+  public void setContainerTransform(BlockTransform<Vec3i> containerTransform) {
+    this.containerTransform = containerTransform;
   }
 
   public Vec3f getAccessPosition() {
-    return this.accessPosition != null ? this.accessPosition : Vec3f.from(this.position);
+    return Vec3f.from(this.containerTransform.getPosition()).add(this.containerTransform.getAccessOffset());
   }
 
-  public void setAccessPosition(Vec3f accessPosition) {
-    this.accessPosition = accessPosition;
+  public void setAccessOffset(Vec3f accessOffset) {
+    this.containerTransform.setAccessOffset(Vec3f.from(accessOffset));
   }
 
   @Override
   public WorkplaceContainerEntryComponent clone() {
     WorkplaceContainerEntryComponent container = new WorkplaceContainerEntryComponent();
     container.uuid = this.uuid;
-    container.position = Vec3i.from(this.position);
-    container.accessPosition = Vec3f.from(this.accessPosition);
+    container.containerTransform = BlockTransform.clone(this.containerTransform);
     return container;
   }
 
@@ -78,6 +80,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
   @Override
   public String toString() {
     return "WorkplaceContainerEntryComponent: {\n\tUUID: %s,\n\tPosition: %s,\n\tAccessPosition: %s\n\t}"
-        .formatted(uuid, position, accessPosition);
+        .formatted(uuid, getPosition(), getAccessPosition());
   }
+
 }

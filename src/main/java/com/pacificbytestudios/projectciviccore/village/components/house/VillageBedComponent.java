@@ -8,6 +8,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public class VillageBedComponent implements Component<ChunkStore> {
@@ -24,30 +25,23 @@ public class VillageBedComponent implements Component<ChunkStore> {
           (obj) -> obj.owner)
       .add()
 
-      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
-          (obj, value) -> obj.position = value,
-          (obj) -> obj.position)
-      .add()
-
-      .append(new KeyedCodec<>("Rotation", Rotation.CODEC),
-          (obj, value) -> obj.rotation = value,
-          (obj) -> obj.rotation)
+      .append(new KeyedCodec<>("BedTransform", BlockTransform.VEC3I_CODEC),
+          (obj, value) -> obj.bedTransform = value,
+          (obj) -> obj.bedTransform)
       .add()
 
       .build();
 
   private boolean isTaken;
   private UUID owner;
-  private Vec3i position;
-  private Rotation rotation;
+  private BlockTransform<Vec3i> bedTransform;
 
   @Override
   public VillageBedComponent clone() {
     VillageBedComponent component = new VillageBedComponent();
     component.isTaken = this.isTaken;
     component.owner = this.owner;
-    component.position = Vec3i.from(this.position);
-    component.rotation = this.rotation;
+    component.bedTransform = BlockTransform.clone(this.bedTransform);
     return component;
   }
 
@@ -68,19 +62,27 @@ public class VillageBedComponent implements Component<ChunkStore> {
   }
 
   public Vec3i getPosition() {
-    return position;
+    return this.bedTransform.getPosition();
   }
 
   public void setPosition(Vec3i position) {
-    this.position = position;
+    this.bedTransform = new BlockTransform<>(position);
   }
 
   public Rotation getRotation() {
-    return rotation;
+    return this.bedTransform.getRotation();
   }
 
   public void setRotation(Rotation rotation) {
-    this.rotation = rotation;
+    this.bedTransform.setRotation(rotation);
+  }
+
+  public BlockTransform<Vec3i> getBedTransform() {
+    return this.bedTransform;
+  }
+
+  public void setBedTransform(BlockTransform<Vec3i> bedTransform) {
+    this.bedTransform = bedTransform;
   }
 
 }

@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions;
 
+import java.util.ArrayList;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -23,6 +25,7 @@ import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -53,9 +56,14 @@ public class ToogleWaypointsEdit extends SimpleBlockInteraction {
       @Nonnull Vector3i targetBlock,
       @Nonnull CooldownHandler cooldownHandler) {
     Ref<EntityStore> ref = context.getOwningEntity();
-    Store<EntityStore> entityStore = ref.getStore();
-    WaypointsEditingComponent editingComponent = entityStore.getComponent(ref,
+    WaypointsEditingComponent editingComponent = commandBuffer.getComponent(ref,
         WaypointsEditingComponent.getComponentType());
+
+    if (editingComponent != null) {
+      DrawUtils.clear(world);
+      // TODO: ask to save or rollback
+      return;
+    }
 
     Vec3d hit = Vec3d.from(TargetUtil.getTargetLocation(context.getEntity(), this.viewDistance, commandBuffer));
 
@@ -72,23 +80,33 @@ public class ToogleWaypointsEdit extends SimpleBlockInteraction {
 
     VillageTopologyComponent topology = village.getComponent(
         VillageTopologyComponent.getComponentType());
+    if (topology == null) {
+      context.getState().state = InteractionState.Failed;
+      return;
+    }
 
     TopologyStructure structure = topology.getTopologyStructureAt(hit.to3i());
     if (structure == null) {
       context.getState().state = InteractionState.Failed;
+      return;
     }
 
     WorkplaceComponent workplace = village.getWorkplaceFromId(structure.getStructureId());
-    WaypointDrawer.draw(world, workplace, null);
-    if (editingComponent == null) {
-      editingComponent = new WaypointsEditingComponent();
-    }
 
-    entityStore.putComponent(ref, WaypointsEditingComponent.getComponentType(), editingComponent);
+    editingComponent = new WaypointsEditingComponent();
+    editingComponent.setStructureId(structure.getStructureId());
+
+    DrawUtils.clear(world);
+    WaypointDrawer.draw(world, workplace, new ArrayList<>(editingComponent.getDirtyWaypoints()));
+    commandBuffer.putComponent(ref, WaypointsEditingComponent.getComponentType(), editingComponent);
   }
 
   private VillageHeartComponent getVillage(Vec3d hit) {
     EntityRef heartRef = villageStore.getVillageHeartIn(hit.to2i());
+    if (heartRef == null || heartRef.getRef() == null) {
+      return null;
+    }
+
     Store<ChunkStore> chunkStore = heartRef.getRef().getStore();
     return chunkStore.getComponent(heartRef.getRef(),
         VillageHeartComponent.getComponentType());
@@ -96,11 +114,11 @@ public class ToogleWaypointsEdit extends SimpleBlockInteraction {
 
   @Override
   protected void simulateInteractWithBlock(
-      InteractionType arg0,
-      InteractionContext arg1,
-      ItemStack arg2,
-      World arg3,
-      Vector3i arg4) {
+      InteractionType interactionType,
+      InteractionContext context,
+      ItemStack itemStack,
+      World world,
+      Vector3i block) {
     throw new UnsupportedOperationException("Unimplemented method 'simulateInteractWithBlock'");
   }
 

@@ -12,6 +12,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 
@@ -19,6 +20,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
 public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
+  @SuppressWarnings("unchecked")
   public static final BuilderCodec<StructureLevelConfig> CODEC = BuilderCodec
       .builder(StructureLevelConfig.class, StructureLevelConfig::new)
 
@@ -49,7 +51,7 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
           new Short2ObjectMapCodec<>(
               new ArrayCodec<>(
                   BlockTransform.CODEC,
-                  BlockTransform[]::new),
+                  size -> (BlockTransform<Vec3i>[]) new BlockTransform<?>[size]),
               Short2ObjectOpenHashMap::new),
           false),
           (obj, value) -> obj.containers = decodeMap(value),
@@ -69,22 +71,25 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
 
       .build();
 
-  private Map<Short, BlockTransform> coreBlock = new HashMap<>();
-  private Map<Short, BlockTransform> constructionBlock = new HashMap<>();
+  private Map<Short, BlockTransform<Vec3i>> coreBlock = new HashMap<>();
+  private Map<Short, BlockTransform<Vec3i>> constructionBlock = new HashMap<>();
   private Map<Short, Map<Short, String>> prefabPathByLevelAndStage = new HashMap<>();
-  private Map<Short, BlockTransform[]> containers = new HashMap<>();
+  private Map<Short, BlockTransform<Vec3i>[]> containers = new HashMap<>();
   private Map<Short, Interactable[]> interactables = new HashMap<>();
 
-  public BlockTransform getCoreBlockFor(short level) {
+  public BlockTransform<Vec3i> getCoreBlockFor(short level) {
     return this.coreBlock.get(level);
   }
 
-  public BlockTransform getConstructionBlock(short level) {
+  public BlockTransform<Vec3i> getConstructionBlock(short level) {
     return this.constructionBlock.get(level);
   }
 
-  public BlockTransform[] getContainersFor(short level) {
-    return this.containers.getOrDefault(level, new BlockTransform[0]);
+  @SuppressWarnings("unchecked")
+  public BlockTransform<Vec3i>[] getContainersFor(short level) {
+    return this.containers.getOrDefault(
+        level,
+        (BlockTransform<Vec3i>[]) new BlockTransform<?>[0]);
   }
 
   public Interactable[] getInteractablesFor(short level) {
@@ -104,6 +109,7 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
     return Collections.unmodifiableSet(levels);
   }
 
+  @Override
   public StructureLevelConfig clone() {
     StructureLevelConfig config = new StructureLevelConfig();
     config.coreBlock = Utils.copyMap(this.coreBlock);
@@ -140,6 +146,7 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
         encoded.put(level.shortValue(), values);
       }
     });
+
     return encoded;
   }
 
@@ -235,5 +242,4 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
 
     return encoded;
   }
-
 }

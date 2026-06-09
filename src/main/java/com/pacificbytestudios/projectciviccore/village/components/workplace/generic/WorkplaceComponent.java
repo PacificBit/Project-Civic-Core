@@ -20,6 +20,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
@@ -50,19 +51,14 @@ public class WorkplaceComponent implements Component<ChunkStore> {
           (obj) -> obj.workingPlaceType)
       .add()
 
-      .append(new KeyedCodec<>("BenchPosition", Vec3i.CODEC),
-          (obj, value) -> obj.benchPos = value,
-          (obj) -> obj.benchPos)
+      .append(new KeyedCodec<>("BenchTransform", BlockTransform.VEC3I_CODEC),
+          (obj, value) -> obj.benchTransform = value,
+          (obj) -> obj.benchTransform)
       .add()
 
-      .append(new KeyedCodec<>("BenchAccessPosition", Vec3f.CODEC),
-          (obj, value) -> obj.benchAccessPos = value,
-          (obj) -> obj.benchAccessPos)
-      .add()
-
-      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
-          (obj, value) -> obj.prefabAnchor = value,
-          (obj) -> obj.prefabAnchor)
+      .append(new KeyedCodec<>("PrefabAnchorTransform", BlockTransform.VEC3I_CODEC),
+          (obj, value) -> obj.prefabAnchorTransform = value,
+          (obj) -> obj.prefabAnchorTransform)
       .add()
 
       .append(new KeyedCodec<>("VillageRef", EntityRef.CODEC),
@@ -135,9 +131,8 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   private Short level = 1;
   private StructureType workingPlaceType;
   private WorkType[] workerType;
-  private Vec3i benchPos;
-  private Vec3f benchAccessPos;
-  private Vec3i prefabAnchor;
+  private BlockTransform<Vec3i> benchTransform;
+  private BlockTransform<Vec3i> prefabAnchorTransform;
 
   private EntityRef villageRef;
   private EntityRef workplaceRef;
@@ -175,27 +170,43 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   }
 
   public Vec3i getBenchPos() {
-    return benchPos;
+    return this.benchTransform.getPosition();
   }
 
   public void setBenchPos(Vec3i benchPos) {
-    this.benchPos = benchPos;
+    this.benchTransform = new BlockTransform<>(benchPos);
+  }
+
+  public BlockTransform<Vec3i> getBenchTransform() {
+    return this.benchTransform;
+  }
+
+  public void setBenchTransform(BlockTransform<Vec3i> benchTransform) {
+    this.benchTransform = benchTransform;
   }
 
   public Vec3f getBenchAccessPos() {
-    return this.benchAccessPos != null ? this.benchAccessPos : Vec3f.from(this.benchPos);
+    return Vec3f.from(this.benchTransform.getPosition()).add(this.benchTransform.getAccessOffset());
   }
 
-  public void setBenchAccessPos(Vec3f benchAccessPos) {
-    this.benchAccessPos = benchAccessPos;
+  public void setBenchAccessOffset(Vec3f benchAccessOffset) {
+    this.benchTransform.setAccessOffset(Vec3f.from(benchAccessOffset));
   }
 
   public Vec3i getPrefabAnchor() {
-    return prefabAnchor;
+    return this.prefabAnchorTransform.getPosition();
   }
 
   public void setPrefabAnchor(Vec3i prefabAnchor) {
-    this.prefabAnchor = prefabAnchor;
+    this.prefabAnchorTransform = new BlockTransform<>(prefabAnchor);
+  }
+
+  public BlockTransform<Vec3i> getPrefabAnchorTransform() {
+    return this.prefabAnchorTransform;
+  }
+
+  public void setPrefabAnchorTransform(BlockTransform<Vec3i> prefabAnchorTransform) {
+    this.prefabAnchorTransform = prefabAnchorTransform;
   }
 
   public void setVillageRef(EntityRef villageRef) {
@@ -315,14 +326,13 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     component.uuid = this.uuid;
     component.level = this.level;
     component.workingPlaceType = this.workingPlaceType;
-    component.benchPos = Vec3i.from(this.benchPos);
-    component.benchAccessPos = Vec3f.from(this.benchAccessPos);
+    component.benchTransform = BlockTransform.clone(this.benchTransform);
     component.villageRef = this.villageRef;
     component.workplaceRef = this.workplaceRef;
     component.workers = new HashSet<>(this.workers);
     component.bossId = this.bossId;
     component.storage = this.storage != null ? this.storage.clone() : null;
-    component.prefabAnchor = Vec3i.from(this.prefabAnchor);
+    component.prefabAnchorTransform = BlockTransform.clone(this.prefabAnchorTransform);
     component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
     component.workerType = this.workerType != null ? this.workerType.clone() : null;
     component.workersDesignatedArea = new HashMap<>(this.workersDesignatedArea);
@@ -336,9 +346,9 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         "\n\tuuid=" + uuid + "," +
         "\n\tlevel=" + level + "," +
         "\n\tworkingPlaceType=" + workingPlaceType + "," +
-        "\n\tbenchPos=" + benchPos + "," +
-        "\n\tbenchAccessPos=" + benchAccessPos + "," +
-        "\n\tprefabAnchor=" + prefabAnchor + "," +
+        "\n\tbenchPos=" + getBenchPos() + "," +
+        "\n\tbenchAccessPos=" + getBenchAccessPos() + "," +
+        "\n\tprefabAnchor=" + getPrefabAnchor() + "," +
         "\n\tvillageHeartLocation=" + villageRef + "," +
         "\n\tworkspaceLocation=" + workplaceRef + "," +
         "\n\tbossId=" + bossId + "," +
@@ -353,5 +363,4 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   public static ComponentType<ChunkStore, WorkplaceComponent> getComponentType() {
     return ProjectCivicCore.get().getWorkplaceComponentType();
   }
-
 }

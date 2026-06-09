@@ -8,67 +8,103 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 
-public class BlockTransform implements Copyable<BlockTransform> {
-  public static final BuilderCodec<BlockTransform> CODEC = BuilderCodec
-      .builder(BlockTransform.class, BlockTransform::new)
+public class BlockTransform<T> implements Copyable<BlockTransform<T>> {
+  public static final BuilderCodec<BlockTransform<Vec2i>> VEC2I_CODEC = codec(Vec2i.CODEC);
+  public static final BuilderCodec<BlockTransform<Vec3i>> VEC3I_CODEC = codec(Vec3i.CODEC);
+  public static final BuilderCodec<BlockTransform<Vec3f>> VEC3F_CODEC = codec(Vec3f.CODEC);
+  public static final BuilderCodec<BlockTransform<Vec3d>> VEC3D_CODEC = codec(Vec3d.CODEC);
+  public static final BuilderCodec<BlockTransform<Vec3i>> CODEC = VEC3I_CODEC;
 
-      .append(new KeyedCodec<>("Id", Codec.UUID_BINARY),
-          (obj, value) -> obj.id = value,
-          (obj) -> obj.id)
-      .add()
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  public static <T> BuilderCodec<BlockTransform<T>> codec(Codec<T> positionCodec) {
+    return BuilderCodec
+        .builder((Class<BlockTransform<T>>) (Class) BlockTransform.class, BlockTransform::new)
 
-      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
-          (obj, value) -> obj.position = value,
-          (obj) -> obj.position)
-      .add()
+        .append(new KeyedCodec<>("Id", Codec.UUID_BINARY, false),
+            (obj, value) -> obj.id = value,
+            (obj) -> obj.id)
+        .add()
 
-      .append(new KeyedCodec<>("Rotation", Rotation.CODEC),
-          (obj, value) -> obj.rotation = value,
-          (obj) -> obj.rotation)
-      .add()
+        .append(new KeyedCodec<>("Position", positionCodec),
+            (obj, value) -> obj.position = value,
+            (obj) -> obj.position)
+        .add()
 
-      .append(new KeyedCodec<>("AccessOffset", Vec3f.CODEC),
-          (obj, value) -> obj.accessOffset = value,
-          (obj) -> obj.accessOffset)
-      .add()
+        .append(new KeyedCodec<>("Rotation", Rotation.CODEC, false),
+            (obj, value) -> obj.rotation = value,
+            (obj) -> obj.rotation)
+        .add()
 
-      .build();
+        .append(new KeyedCodec<>("AccessOffset", Vec3f.CODEC, false),
+            (obj, value) -> obj.accessOffset = value,
+            (obj) -> obj.accessOffset)
+        .add()
+
+        .build();
+  }
 
   private UUID id;
-  private Vec3i position;
+  private T position;
   private Rotation rotation;
   private Vec3f accessOffset;
 
   public BlockTransform() {
   }
 
+  public BlockTransform(@Nonnull T position) {
+    this(UUID.randomUUID(), position, null, null);
+  }
+
   public BlockTransform(
-      @Nonnull Vec3i position,
-      @Nonnull Rotation rotation,
-      @Nonnull Vec3f accessOffset) {
+      @Nonnull T position,
+      Rotation rotation) {
+    this(UUID.randomUUID(), position, rotation, null);
+  }
+
+  public BlockTransform(
+      @Nonnull T position,
+      Rotation rotation,
+      Vec3f accessOffset) {
     this(UUID.randomUUID(), position, rotation, accessOffset);
   }
 
   public BlockTransform(
       @Nonnull UUID id,
-      @Nonnull Vec3i position,
-      @Nonnull Rotation rotation,
-      @Nonnull Vec3f accessOffset) {
+      @Nonnull T position,
+      Rotation rotation,
+      Vec3f accessOffset) {
     this.id = id;
     this.position = position;
     this.rotation = rotation;
     this.accessOffset = accessOffset;
   }
 
-  public Vec3i getPosition() {
+  public UUID getId() {
+    return id;
+  }
+
+  public UUID ensureId() {
+    if (this.id == null) {
+      this.id = UUID.randomUUID();
+    }
+    return this.id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public T getPosition() {
     return position;
   }
 
-  public void setPosition(Vec3i position) {
+  public void setPosition(T position) {
     this.position = position;
   }
 
@@ -88,12 +124,45 @@ public class BlockTransform implements Copyable<BlockTransform> {
     this.accessOffset = accessOffset;
   }
 
-  public BlockTransform clone() {
-    BlockTransform transform = new BlockTransform();
-    transform.id = this.id;
-    transform.position = this.position.clone();
-    transform.rotation = this.rotation;
-    transform.accessOffset = this.accessOffset.clone();
+  public static <T> BlockTransform<T> from(T position) {
+    if (position == null) {
+      return null;
+    }
+    return new BlockTransform<>(position);
+  }
+
+  @Override
+  public BlockTransform<T> clone() {
+    return BlockTransform.clone(this);
+  }
+
+  public static <T> BlockTransform<T> clone(BlockTransform<T> o) {
+    if (o == null) {
+      return null;
+    }
+
+    BlockTransform<T> transform = new BlockTransform<>();
+    transform.id = o.id;
+    transform.position = copyPosition(o.position);
+    transform.rotation = o.rotation;
+    transform.accessOffset = Vec3f.from(o.accessOffset);
     return transform;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static <T> T copyPosition(T position) {
+    if (position instanceof Vec2i vec2i) {
+      return (T) Vec2i.from(vec2i);
+    }
+    if (position instanceof Vec3i vec3i) {
+      return (T) Vec3i.from(vec3i);
+    }
+    if (position instanceof Vec3f vec3f) {
+      return (T) Vec3f.from(vec3f);
+    }
+    if (position instanceof Vec3d vec3d) {
+      return (T) Vec3d.from(vec3d);
+    }
+    return position;
   }
 }
