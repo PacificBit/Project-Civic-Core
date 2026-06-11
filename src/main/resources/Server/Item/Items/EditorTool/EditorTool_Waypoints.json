@@ -33,7 +33,7 @@
       "Interactions": [
         {
           "Type": "OpenWaypointEditorInteraction",
-          "PrecisionThreshold": 0.4
+          "PrecisionThreshold": 0.55
         }
       ]
     }

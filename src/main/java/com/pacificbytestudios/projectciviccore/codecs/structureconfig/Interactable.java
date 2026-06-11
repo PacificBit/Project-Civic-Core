@@ -131,6 +131,14 @@ public class Interactable implements Copyable<Interactable> {
     this.dependsOnTransform = dependsOnTransform;
   }
 
+  public UUID getId() {
+    return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
   public UUID getOccupiedBy() {
     return occupiedBy;
   }

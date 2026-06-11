@@ -1,11 +1,14 @@
 package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.Stack;
 import java.util.UUID;
 
 import com.hypixel.hytale.codec.Codec;
@@ -13,14 +16,12 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 
@@ -37,71 +38,305 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
       .append(new KeyedCodec<>("StructureWaypoints",
           new EnumMapCodec<>(
               MarkerType.class,
-              new ArrayCodec<BlockTransform<Vec3i>>(
-                  BlockTransform.VEC3I_CODEC,
+              new ArrayCodec<Waypoint>(
+                  Waypoint.CODEC,
                   WaypointsEditingComponent::createWaypointArray))),
           (obj, value) -> obj.structureWaypoints = value,
           (obj) -> obj.structureWaypoints)
       .add()
 
-      .append(
-          new KeyedCodec<>(
-              "DirtyPositionWaypoints",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false),
-              false),
-          (obj, value) -> obj.dirtyPositionWaypoints = value == null ? new HashSet<>() : value,
-          (obj) -> obj.dirtyPositionWaypoints)
+      .append(new KeyedCodec<>("CurrentOperation", WaypointOperation.CODEC, false),
+          (obj, value) -> obj.currentOperation = value,
+          (obj) -> obj.currentOperation)
+      .add()
+
+      .append(new KeyedCodec<>("Operations",
+          new ArrayCodec<WaypointOperation>(
+              WaypointOperation.CODEC,
+              WaypointOperation[]::new),
+          false),
+          (obj, value) -> obj.operations = toOperationStack(value),
+          (obj) -> toOperationArray(obj.operations))
       .add()
 
       .build();
 
   private UUID structureId;
-  private Map<MarkerType, BlockTransform<Vec3i>[]> structureWaypoints = new HashMap<>();
-  private Set<UUID> dirtyPositionWaypoints = new HashSet<>();
-
-  public record Waypoint(UUID waypointId, MarkerType type, BlockTransform<?> transform, boolean isAccess) {
-  }
+  private Map<MarkerType, Waypoint[]> structureWaypoints = new HashMap<>();
+  private WaypointOperation currentOperation;
+  private Stack<WaypointOperation> operations = new Stack<>();
 
   private record WaypointCandidate(Waypoint waypoint, double distanceSquared) {
   }
 
+  public record WaypointChange(
+      UUID waypointId,
+      MarkerType markerType,
+      WaypointOperation.Operation operation,
+      Waypoint original,
+      Waypoint current) {
+  }
+
   public UUID getStructureId() {
-    return structureId;
+    return this.structureId;
   }
 
   public void setStructureId(UUID structureId) {
     this.structureId = structureId;
   }
 
-  public Map<MarkerType, BlockTransform<Vec3i>[]> getStructureWaypoints() {
+  public Map<MarkerType, Waypoint[]> getStructureWaypoints() {
     return this.structureWaypoints;
   }
 
-  public void addStructureWaypoint(MarkerType markerType, BlockTransform<Vec3i> waypoint) {
-    this.structureWaypoints.compute(markerType, (key, waypoints) -> appendWaypoint(waypoints, waypoint));
+  public void setStructureWaypoints(Map<MarkerType, Waypoint[]> structureWaypoints) {
+    this.structureWaypoints = structureWaypoints;
+  }
+
+  public WaypointOperation getCurrentOperation() {
+    return this.currentOperation;
+  }
+
+  public void setCurrentOperation(WaypointOperation currentOperation) {
+    this.currentOperation = currentOperation;
+  }
+
+  public Stack<WaypointOperation> getOperations() {
+    return this.operations;
+  }
+
+  public void addOperation(WaypointOperation operations) {
+    this.operations.add(operations);
+  }
+
+  public void addStructureWaypoint(MarkerType markerType, BlockTransform<?> transform) {
+    this.addStructureWaypoint(Waypoint.from(markerType, transform, isAccessMarker(markerType)));
+  }
+
+  public void addStructureWaypoint(Waypoint waypoint) {
+    this.structureWaypoints.compute(waypoint.getType(), (key, waypoints) -> appendWaypoint(waypoints, waypoint));
+  }
+
+  public void updateStructureWaypoint(MarkerType markerType, UUID uuid, Waypoint updated) {
+    Waypoint[] waypoints = this.structureWaypoints.get(markerType);
+    if (waypoints == null || waypoints.length == 0) {
+      waypoints = createWaypointArray(1);
+      waypoints[0] = updated;
+    } else {
+      for (int i = 0; i < waypoints.length; i++) {
+        if (isTransformWithId(waypoints[i], uuid)) {
+          waypoints[i] = updated;
+          this.structureWaypoints.put(markerType, waypoints);
+          return;
+        }
+      }
+
+      waypoints = appendWaypoint(waypoints, updated);
+    }
+    this.structureWaypoints.put(markerType, waypoints);
+  }
+
+  public void removeStructureWaypoint(MarkerType markerType, UUID uuid) {
+    Waypoint[] waypoints = this.structureWaypoints.get(markerType);
+    if (waypoints == null || uuid == null) {
+      return;
+    }
+
+    Waypoint[] remaining = Arrays.stream(waypoints)
+        .filter(waypoint -> waypoint != null && !isTransformWithId(waypoint, uuid))
+        .toArray(WaypointsEditingComponent::createWaypointArray);
+
+    if (remaining.length == 0) {
+      this.structureWaypoints.remove(markerType);
+      return;
+    }
+    this.structureWaypoints.put(markerType, remaining);
+  }
+
+  public Waypoint findWaypoint(UUID uuid) {
+    if (uuid == null) {
+      return null;
+    }
+
+    for (Waypoint[] waypoints : this.structureWaypoints.values()) {
+      for (Waypoint waypoint : waypoints) {
+        if (waypoint != null && isTransformWithId(waypoint, uuid)) {
+          return waypoint;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  public boolean hasPendingChanges() {
+    if (!this.operations.isEmpty()) {
+      return true;
+    }
+    return this.currentOperation != null && this.currentOperation.getNewWaypoint() != null;
+  }
+
+  /**
+   * Moves a staged operation (selected waypoint that has actually been moved) into the
+   * operation history so it shows up as a pending change. Clears the staging slot.
+   */
+  public void commitCurrentOperation() {
+    WaypointOperation staged = this.currentOperation;
+    this.currentOperation = null;
+    if (staged == null || staged.getNewWaypoint() == null) {
+      return;
+    }
+
+    if (staged.getOperationType() == null) {
+      staged.setOperationType(WaypointOperation.Operation.MOVE);
+    }
+    if (staged.getWaypointId() == null && staged.getOldWaypoint() != null) {
+      staged.setWaypointId(staged.getOldWaypoint().getWaypointId());
+    }
+    this.operations.push(staged);
+  }
+
+  public void clearOperations() {
+    this.operations.clear();
+    this.currentOperation = null;
+  }
+
+  /**
+   * Collapses the operation history into one net change per waypoint, in the order the
+   * waypoints were first touched. Waypoints that were added and then deleted are omitted.
+   */
+  public List<WaypointChange> getNetChanges() {
+    Map<UUID, WaypointChange> changes = new LinkedHashMap<>();
+
+    List<WaypointOperation> allOperations = new ArrayList<>(this.operations);
+    if (this.currentOperation != null && this.currentOperation.getNewWaypoint() != null) {
+      allOperations.add(this.currentOperation);
+    }
+
+    for (WaypointOperation operation : allOperations) {
+      UUID waypointId = operationWaypointId(operation);
+      if (waypointId == null) {
+        continue;
+      }
+
+      WaypointChange previous = changes.get(waypointId);
+      Waypoint original = previous == null ? operation.getOldWaypoint() : previous.original();
+      Waypoint current = operation.getOperationType() == WaypointOperation.Operation.DELETE
+          ? null
+          : operation.getNewWaypoint();
+
+      if (original == null && current == null) {
+        changes.remove(waypointId);
+        continue;
+      }
+
+      MarkerType markerType = current != null ? current.getType() : original.getType();
+      changes.put(waypointId, new WaypointChange(
+          waypointId,
+          markerType,
+          netOperation(original, current),
+          original,
+          current));
+    }
+
+    return new ArrayList<>(changes.values());
+  }
+
+  public void rollbackAll() {
+    this.commitCurrentOperation();
+    while (!this.operations.isEmpty()) {
+      undoOperation(this.operations.pop());
+    }
+  }
+
+  public boolean rollbackWaypoint(UUID waypointId) {
+    if (waypointId == null) {
+      return false;
+    }
+    this.commitCurrentOperation();
+
+    List<WaypointOperation> affected = new ArrayList<>();
+    for (Iterator<WaypointOperation> iterator = this.operations.iterator(); iterator.hasNext();) {
+      WaypointOperation operation = iterator.next();
+      if (waypointId.equals(operationWaypointId(operation))) {
+        affected.add(operation);
+        iterator.remove();
+      }
+    }
+
+    for (int i = affected.size() - 1; i >= 0; i--) {
+      undoOperation(affected.get(i));
+    }
+
+    return !affected.isEmpty();
+  }
+
+  private void undoOperation(WaypointOperation operation) {
+    Waypoint oldWaypoint = operation.getOldWaypoint();
+    Waypoint newWaypoint = operation.getNewWaypoint();
+
+    if (operation.getOperationType() == WaypointOperation.Operation.ADD) {
+      if (newWaypoint != null) {
+        removeStructureWaypoint(newWaypoint.getType(), newWaypoint.getWaypointId());
+      }
+      return;
+    }
+
+    if (operation.getOperationType() == WaypointOperation.Operation.DELETE) {
+      if (oldWaypoint != null) {
+        addStructureWaypoint(oldWaypoint.clone());
+      }
+      return;
+    }
+
+    if (oldWaypoint != null) {
+      updateStructureWaypoint(oldWaypoint.getType(), operationWaypointId(operation), oldWaypoint.clone());
+    }
+  }
+
+  private static UUID operationWaypointId(WaypointOperation operation) {
+    if (operation.getWaypointId() != null) {
+      return operation.getWaypointId();
+    }
+    if (operation.getOldWaypoint() != null) {
+      return operation.getOldWaypoint().getWaypointId();
+    }
+    if (operation.getNewWaypoint() != null) {
+      return operation.getNewWaypoint().getWaypointId();
+    }
+    return null;
+  }
+
+  private static WaypointOperation.Operation netOperation(Waypoint original, Waypoint current) {
+    if (original == null) {
+      return WaypointOperation.Operation.ADD;
+    }
+    if (current == null) {
+      return WaypointOperation.Operation.DELETE;
+    }
+    return WaypointOperation.Operation.MOVE;
   }
 
   public Waypoint getNearestWaypoint(Vec3d target, double threshold) {
     double thresholdSquared = threshold * threshold;
     WaypointCandidate nearest = null;
 
-    for (Entry<MarkerType, BlockTransform<Vec3i>[]> entry : this.structureWaypoints.entrySet()) {
+    for (Entry<MarkerType, Waypoint[]> entry : this.structureWaypoints.entrySet()) {
       nearest = nearestOf(
           nearest,
-          getNearestWaypoint(entry.getKey(), entry.getValue(), target, thresholdSquared));
+          getNearestWaypoint(entry.getValue(), target, thresholdSquared));
     }
 
     return nearest == null ? null : nearest.waypoint();
   }
 
   private WaypointCandidate getNearestWaypoint(
-      MarkerType type,
-      BlockTransform<Vec3i>[] waypoints,
+      Waypoint[] waypoints,
       Vec3d target,
       double thresholdSquared) {
     WaypointCandidate nearest = null;
-    for (BlockTransform<Vec3i> waypoint : waypoints) {
-      nearest = nearestOf(nearest, waypointCandidate(type, waypoint, target, thresholdSquared, isAccessMarker(type)));
+    for (Waypoint waypoint : waypoints) {
+      nearest = nearestOf(nearest, waypointCandidate(waypoint, target, thresholdSquared));
     }
 
     return nearest;
@@ -118,31 +353,19 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
   }
 
   private static WaypointCandidate waypointCandidate(
-      MarkerType type,
-      BlockTransform<Vec3i> waypoint,
+      Waypoint waypoint,
       Vec3d target,
-      double thresholdSquared,
-      boolean isAccess) {
-    if (isAccess && waypoint.getAccessOffset() == null) {
-      return null;
-    }
-
-    double distanceSquared = target.distanceSquared(waypointPosition(waypoint, isAccess));
+      double thresholdSquared) {
+    double distanceSquared = target.distanceSquared(waypointPosition(waypoint));
     if (distanceSquared > thresholdSquared) {
       return null;
     }
 
-    UUID waypointId = isAccess ? waypoint.getAccessId() : waypoint.getPositionId();
-    return new WaypointCandidate(
-        new Waypoint(waypointId, type, waypoint, isAccess),
-        distanceSquared);
+    return new WaypointCandidate(waypoint, distanceSquared);
   }
 
-  public static Vec3d waypointPosition(BlockTransform<Vec3i> waypoint, boolean isAccess) {
-    if (!isAccess) {
-      return waypoint.getPosition().to3d();
-    }
-    return waypoint.getAccessOffset().to3d();
+  public static Vec3d waypointPosition(Waypoint waypoint) {
+    return waypoint.getWaypointPosition();
   }
 
   private static boolean isAccessMarker(MarkerType markerType) {
@@ -152,11 +375,11 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
     };
   }
 
-  private static BlockTransform<Vec3i>[] appendWaypoint(
-      BlockTransform<Vec3i>[] waypoints,
-      BlockTransform<Vec3i> waypoint) {
+  private static Waypoint[] appendWaypoint(
+      Waypoint[] waypoints,
+      Waypoint waypoint) {
     int waypointCount = waypoints == null ? 0 : waypoints.length;
-    BlockTransform<Vec3i>[] updatedWaypoints = waypoints == null
+    Waypoint[] updatedWaypoints = waypoints == null
         ? createWaypointArray(1)
         : Arrays.copyOf(waypoints, waypointCount + 1);
 
@@ -164,21 +387,52 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
     return updatedWaypoints;
   }
 
+  private static boolean isTransformWithId(Waypoint waypoint, UUID uuid) {
+    return uuid.equals(waypoint.getPositionId()) || uuid.equals(waypoint.getAccessId());
+  }
+
+  private static Stack<WaypointOperation> toOperationStack(WaypointOperation[] operations) {
+    Stack<WaypointOperation> stack = new Stack<>();
+    if (operations == null) {
+      return stack;
+    }
+
+    stack.addAll(Arrays.asList(operations));
+    return stack;
+  }
+
+  private static WaypointOperation[] toOperationArray(Stack<WaypointOperation> operations) {
+    if (operations == null) {
+      return new WaypointOperation[0];
+    }
+
+    return operations.toArray(WaypointOperation[]::new);
+  }
+
+  private static Stack<WaypointOperation> cloneOperations(Stack<WaypointOperation> operations) {
+    Stack<WaypointOperation> copy = new Stack<>();
+    for (WaypointOperation operation : operations) {
+      copy.add(operation == null ? null : operation.clone());
+    }
+
+    return copy;
+  }
+
   public static ComponentType<EntityStore, WaypointsEditingComponent> getComponentType() {
     return ProjectCivicCore.get().getWaypointEditingComponentType();
   }
 
-  @SuppressWarnings("unchecked")
-  private static BlockTransform<Vec3i>[] createWaypointArray(int size) {
-    return (BlockTransform<Vec3i>[]) new BlockTransform<?>[size];
+  private static Waypoint[] createWaypointArray(int size) {
+    return new Waypoint[size];
   }
 
   @Override
   public WaypointsEditingComponent clone() {
     WaypointsEditingComponent component = new WaypointsEditingComponent();
     component.structureId = this.structureId;
-    component.dirtyPositionWaypoints = new HashSet<>(this.dirtyPositionWaypoints);
     component.structureWaypoints = Utils.copyMapArray(this.structureWaypoints);
+    component.currentOperation = this.currentOperation == null ? null : this.currentOperation.clone();
+    component.operations = cloneOperations(this.operations);
     return component;
   }
 }

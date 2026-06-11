@@ -96,6 +96,27 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
     return this.interactables.getOrDefault(level, new Interactable[0]);
   }
 
+  // The codec may assign unmodifiable fastutil maps to these fields, so replace the
+  // map with a mutable copy before inserting.
+  public void putCoreBlock(short level, BlockTransform<Vec3i> transform) {
+    this.coreBlock = mutableCopy(this.coreBlock);
+    this.coreBlock.put(level, transform);
+  }
+
+  public void putContainers(short level, BlockTransform<Vec3i>[] containers) {
+    this.containers = mutableCopy(this.containers);
+    this.containers.put(level, containers);
+  }
+
+  public void putInteractables(short level, Interactable[] interactables) {
+    this.interactables = mutableCopy(this.interactables);
+    this.interactables.put(level, interactables);
+  }
+
+  private static <T> Map<Short, T> mutableCopy(Map<Short, T> source) {
+    return source == null ? new HashMap<>() : new HashMap<>(source);
+  }
+
   public String getPrefabFor(short level, short stage) {
     Map<Short, String> prefabPathByStage = this.prefabPathByLevelAndStage.get(level);
     return prefabPathByStage == null ? null : prefabPathByStage.get(stage);

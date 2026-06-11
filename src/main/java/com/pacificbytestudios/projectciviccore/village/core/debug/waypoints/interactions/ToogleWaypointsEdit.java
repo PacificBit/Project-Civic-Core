@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions;
 
+import java.util.UUID;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -8,40 +10,30 @@ import org.joml.Vector3i;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.SimpleBlockInteraction;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.TargetUtil;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
-import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
-import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
-import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
-import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
-import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
-import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.WaypointsDrawer;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.WaypointsSessionUtil;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.Waypoint;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointOperation;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointsEditingComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
-import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
-import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
-import com.pacificbytestudios.projectciviccore.village.registry.VillageHeartRegistry;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.ui.WaypointSessionPage;
 
 public class ToogleWaypointsEdit extends SimpleBlockInteraction {
-  private static final VillageHeartRegistry villageStore = VillageHeartRegistry.get();
 
   public static final BuilderCodec<ToogleWaypointsEdit> CODEC = BuilderCodec
       .builder(ToogleWaypointsEdit.class, ToogleWaypointsEdit::new, SimpleBlockInteraction.CODEC)
@@ -73,7 +65,7 @@ public class ToogleWaypointsEdit extends SimpleBlockInteraction {
       return;
     }
 
-    VillageHeartComponent village = getVillage(hit);
+    VillageHeartComponent village = WaypointsSessionUtil.getVillageAt(hit);
     if (village == null) {
       context.getState().state = InteractionState.Failed;
       return;
@@ -92,113 +84,130 @@ public class ToogleWaypointsEdit extends SimpleBlockInteraction {
       return;
     }
 
-    if (editingComponent != null &&
-        structure.getStructureId().equals(editingComponent.getStructureId())) {
-      DrawUtils.clear(world);
-      // TODO: ask to save or rollback
-      commandBuffer.tryRemoveComponent(ref, WaypointsEditingComponent.getComponentType());
+    // INFO: If not in an editing session
+    if (editingComponent == null) {
+      if (!handleNewEditingSession(world, structure, village, commandBuffer, ref)) {
+        context.getState().state = InteractionState.Failed;
+      }
       return;
     }
 
-    editingComponent = new WaypointsEditingComponent();
-    editingComponent.setStructureId(structure.getStructureId());
-    populateWaypoints(editingComponent, village, structure);
+    // INFO: If already in an editing session, but changed the structure
+    if (!structure.getStructureId().equals(editingComponent.getStructureId())) {
+      handleStructureSwitch(world, commandBuffer, ref, context, editingComponent, village, structure);
+      return;
+    }
 
-    DrawUtils.clear(world);
-    WaypointsDrawer.draw(world, editingComponent.getStructureWaypoints());
-    commandBuffer.putComponent(ref, WaypointsEditingComponent.getComponentType(), editingComponent);
+    // INFO: If already in an editing session, but same structure
+    WaypointOperation currentOperation = editingComponent.getCurrentOperation();
+    if (currentOperation == null || currentOperation.getOldWaypoint() == null) {
+      sendMessage(commandBuffer, ref,
+          "Select a waypoint with Use and press Move first");
+      context.getState().state = InteractionState.Failed;
+      return;
+    }
+
+    handleContinueEditingSession(world, hit, editingComponent);
   }
 
-  private static void populateWaypoints(
+  private boolean handleNewEditingSession(
+      World world,
+      TopologyStructure structure,
+      VillageHeartComponent village,
+      CommandBuffer<EntityStore> commandBuffer,
+      Ref<EntityStore> ref) {
+    WaypointsEditingComponent editingComponent = new WaypointsEditingComponent();
+    editingComponent.setStructureId(structure.getStructureId());
+    if (!WaypointsSessionUtil.populateWaypoints(editingComponent, village, structure)) {
+      return false;
+    }
+    WaypointsSessionUtil.redraw(world, editingComponent);
+    commandBuffer.putComponent(ref, WaypointsEditingComponent.getComponentType(), editingComponent);
+    return true;
+  }
+
+  /**
+   * The player clicked a different structure while a session is active. With no unsaved
+   * changes the session switches immediately; otherwise the session page asks to save,
+   * roll back (both switch afterwards) or cancel (keeps the current session).
+   */
+  private void handleStructureSwitch(
+      World world,
+      CommandBuffer<EntityStore> commandBuffer,
+      Ref<EntityStore> ref,
+      InteractionContext context,
       WaypointsEditingComponent editingComponent,
       VillageHeartComponent village,
       TopologyStructure structure) {
-    StructureType structureType = structure.getStructureType();
-    if (structureType == StructureType.HOUSE) {
-      populateHouseWaypoints(editingComponent, village.getHouseFromId(structure.getStructureId()));
+    editingComponent.commitCurrentOperation();
+
+    if (!editingComponent.hasPendingChanges()) {
+      if (!handleNewEditingSession(world, structure, village, commandBuffer, ref)) {
+        context.getState().state = InteractionState.Failed;
+      }
       return;
     }
-    populateWorkplaceWaypoints(editingComponent, village.getWorkplaceFromId(structure.getStructureId()));
-  }
 
-  private static void populateWorkplaceWaypoints(
-      WaypointsEditingComponent editingComponent,
-      WorkplaceComponent workplace) {
-    BlockTransform<Vec3i> bench = workplace.getBenchTransform();
-    editingComponent.addStructureWaypoint(MarkerType.BENCH, BlockTransform.clone(bench));
-    editingComponent.addStructureWaypoint(MarkerType.BENCH_ACCESS,
-        accessWaypoint(bench, workplace.getBenchAccessPos()));
-    editingComponent.addStructureWaypoint(MarkerType.ANCHOR,
-        BlockTransform.clone(workplace.getPrefabAnchorTransform()));
-
-    workplace.getStorage().getContainers().values().forEach(container -> {
-      BlockTransform<Vec3i> containerTransform = container.getContainerTransform();
-      editingComponent.addStructureWaypoint(MarkerType.STORAGE, BlockTransform.clone(containerTransform));
-      editingComponent.addStructureWaypoint(MarkerType.STORAGE_ACCESS, accessWaypoint(containerTransform,
-          container.getAccessPosition()));
-    });
-
-    WorkplaceInteractablesMapComponent interactables = workplace.getComponent(
-        WorkplaceInteractablesMapComponent.getComponentType());
-    if (interactables != null) {
-      populateInteractableWaypoints(editingComponent, interactables);
-    }
-  }
-
-  private static void populateInteractableWaypoints(
-      WaypointsEditingComponent editingComponent,
-      WorkplaceInteractablesMapComponent workplaceInteractables) {
-    workplaceInteractables.getAllInteractables().forEach((type, interactables) -> {
-      for (Interactable interactable : interactables) {
-        editingComponent.addStructureWaypoint(type.getMarkerType(), waypoint(interactable.getInteractableTransform()));
-
-        if (type.getDependsOn() == MarkerType.NONE) {
-          continue;
-        }
-
-        editingComponent.addStructureWaypoint(type.getDependsOn(), waypoint(interactable.getDependsOnTransform()));
-      }
-    });
-  }
-
-  private static void populateHouseWaypoints(
-      WaypointsEditingComponent editingComponent,
-      HouseComponent house) {
-    editingComponent.addStructureWaypoint(MarkerType.BENCH, new BlockTransform<>(house.getCoreBlockPosition()));
-    editingComponent.addStructureWaypoint(MarkerType.ANCHOR, new BlockTransform<>(house.getPrefabAnchor()));
-
-    house.getAppartmentRegistry().getAppartments().values().forEach(appartment -> {
-      for (VillageBedComponent bed : appartment.getBeds().values()) {
-        editingComponent.addStructureWaypoint(MarkerType.BED, BlockTransform.clone(bed.getBedTransform()));
-      }
-    });
-  }
-
-  private static BlockTransform<Vec3i> accessWaypoint(BlockTransform<Vec3i> source, Vec3f accessPosition) {
-    BlockTransform<Vec3i> waypoint = BlockTransform.clone(source);
-    waypoint.setAccessOffset(Vec3f.from(accessPosition));
-    return waypoint;
-  }
-
-  private static BlockTransform<Vec3i> waypoint(BlockTransform<Vec3f> source) {
-    BlockTransform<Vec3i> waypoint = new BlockTransform<>();
-    waypoint.setPosition(Vec3i.from(source.getPosition()));
-    waypoint.setPositionId(source.getPositionId());
-    waypoint.setRotation(source.getRotation());
-    waypoint.setAccessId(source.getAccessId());
-    waypoint.setAccessOffset(Vec3f.from(source.getAccessOffset()));
-    return waypoint;
-  }
-
-  private VillageHeartComponent getVillage(Vec3d hit) {
-    EntityRef heartRef = villageStore.getVillageHeartIn(hit.to2i());
-    if (heartRef == null || heartRef.getRef() == null) {
-      return null;
+    Player player = commandBuffer.getComponent(ref, Player.getComponentType());
+    PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
+    if (player == null || playerRef == null) {
+      context.getState().state = InteractionState.Failed;
+      return;
     }
 
-    Store<ChunkStore> chunkStore = heartRef.getRef().getStore();
-    return chunkStore.getComponent(heartRef.getRef(),
-        VillageHeartComponent.getComponentType());
+    WaypointsSessionUtil.SessionContext current = WaypointsSessionUtil.resolveContext(editingComponent);
+    if (current == null) {
+      playerRef.sendMessage(Message.raw(
+          "Unsaved changes, but the current structure could not be resolved; use Shift+Use to review them"));
+      context.getState().state = InteractionState.Failed;
+      return;
+    }
+
+    player.getPageManager().openCustomPage(
+        ref,
+        commandBuffer.getStore(),
+        new WaypointSessionPage(
+            playerRef,
+            world,
+            current.village(),
+            current.structure(),
+            editingComponent,
+            new WaypointSessionPage.SwitchTarget(village, structure)));
+  }
+
+  private void handleContinueEditingSession(
+      World world,
+      Vec3d target,
+      WaypointsEditingComponent editingComponent) {
+    WaypointOperation currentOperation = editingComponent.getCurrentOperation();
+    Waypoint oldWaypoint = currentOperation.getOldWaypoint();
+
+    Waypoint newWaypoint = currentOperation.getNewWaypoint();
+    newWaypoint = newWaypoint == null ? oldWaypoint.clone() : newWaypoint;
+
+    UUID changedWaypointId = null;
+    if (newWaypoint.isAccess()) {
+      newWaypoint.setAccessPosition(target);
+      changedWaypointId = newWaypoint.getAccessId();
+    } else {
+      newWaypoint.setPosition(target);
+      changedWaypointId = newWaypoint.getPositionId();
+    }
+
+    currentOperation.setNewWaypoint(newWaypoint);
+    editingComponent.updateStructureWaypoint(
+        newWaypoint.getType(),
+        changedWaypointId,
+        newWaypoint);
+
+    WaypointsSessionUtil.redraw(world, editingComponent);
+  }
+
+  private static void sendMessage(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> ref, String text) {
+    PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
+    if (playerRef != null) {
+      playerRef.sendMessage(Message.raw(text));
+    }
   }
 
   @Override

@@ -1,0 +1,191 @@
+$C = "../../Common.ui";
+
+@SectionTitleStyle = LabelStyle(
+  FontSize: 13,
+  RenderBold: true,
+  RenderUppercase: true,
+  TextColor: #878e9c
+);
+
+@FieldLabelStyle = LabelStyle(
+  FontSize: 13,
+  TextColor: #b8bdc7,
+  VerticalAlignment: Center
+);
+
+@FieldValueStyle = LabelStyle(
+  FontSize: 14,
+  RenderBold: true,
+  TextColor: #ffffff,
+  HorizontalAlignment: End,
+  VerticalAlignment: Center
+);
+
+@MonospaceValueStyle = LabelStyle(
+  FontSize: 12,
+  TextColor: #ffffff,
+  HorizontalAlignment: End,
+  VerticalAlignment: Center
+);
+
+$C.@PageOverlay {}
+
+$C.@DecoratedContainer {
+  Anchor: (Width: 720, Height: 600);
+
+  #Title {
+    Group {
+      LayoutMode: Center;
+      Anchor: (Full: 0);
+
+      $C.@Title {
+        @Text = "Waypoint Editor";
+      }
+    }
+  }
+
+  #Content {
+    LayoutMode: Full;
+
+    Label {
+      Anchor: (Left: 0, Top: 0, Width: 686, Height: 24);
+      Style: (
+        FontSize: 13,
+        TextColor: #aeb5c2,
+        HorizontalAlignment: Center,
+        VerticalAlignment: Center
+      );
+      Text: "Structure";
+    }
+
+    Label #StructureIdValue {
+      Anchor: (Left: 0, Top: 22, Width: 686, Height: 24);
+      Style: (
+        FontSize: 12,
+        TextColor: #ffffff,
+        HorizontalAlignment: Center,
+        VerticalAlignment: Center
+      );
+    }
+
+    $C.@Panel #SelectedPanel {
+      Anchor: (Left: 0, Top: 62, Width: 686, Height: 454);
+      LayoutMode: Full;
+
+      Label {
+        Anchor: (Left: 18, Top: 14, Width: 640, Height: 20);
+        Style: @SectionTitleStyle;
+        Text: "Selected waypoint";
+      }
+
+      Label { Anchor: (Left: 24, Top: 50, Width: 170, Height: 28); Style: @FieldLabelStyle; Text: "Id"; }
+      Label #SelectedIdValue { Anchor: (Left: 205, Top: 50, Width: 445, Height: 28); Style: @MonospaceValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 84, Width: 170, Height: 28); Style: @FieldLabelStyle; Text: "Type"; }
+      Label #SelectedTypeValue { Anchor: (Left: 205, Top: 84, Width: 445, Height: 28); Style: @FieldValueStyle; }
+
+      Label { Anchor: (Left: 24, Top: 118, Width: 170, Height: 28); Style: @FieldLabelStyle; Text: "Position"; }
+      Label #SelectedPositionValue { Anchor: (Left: 205, Top: 118, Width: 445, Height: 28); Style: @FieldValueStyle; }
+
+      Group #AccessDetails {
+        Anchor: (Left: 0, Top: 152, Width: 686, Height: 38);
+        LayoutMode: Full;
+
+        Label { Anchor: (Left: 24, Top: 0, Width: 170, Height: 28); Style: @FieldLabelStyle; Text: "Access position"; }
+        Label #AccessPositionValue { Anchor: (Left: 205, Top: 0, Width: 445, Height: 28); Style: @FieldValueStyle; }
+      }
+
+      Group #TransformDetails {
+        Anchor: (Left: 0, Top: 152, Width: 686, Height: 38);
+        LayoutMode: Full;
+
+        Label { Anchor: (Left: 24, Top: 0, Width: 170, Height: 28); Style: @FieldLabelStyle; Text: "Rotation"; }
+        Label #RotationValue { Anchor: (Left: 205, Top: 0, Width: 445, Height: 28); Style: @FieldValueStyle; }
+      }
+
+      Group #ReferenceGroup {
+        Anchor: (Left: 0, Top: 196, Width: 686, Height: 74);
+        LayoutMode: Full;
+
+        Label {
+          Anchor: (Left: 24, Top: 0, Width: 240, Height: 24);
+          Style: @FieldLabelStyle;
+          Text: "Referenced transform";
+        }
+
+        $C.@DropdownBox #ReferenceDropdown {
+          @Anchor = (Left: 24, Top: 30, Width: 626, Height: 34);
+        }
+      }
+
+      Label {
+        Anchor: (Left: 24, Top: 285, Width: 170, Height: 28);
+        Style: @FieldLabelStyle;
+        Text: "Set position";
+      }
+
+      $C.@NumberField #PosXInput {
+        @Anchor = (Left: 205, Top: 280, Width: 100);
+        Format: (MaxDecimalPlaces: 2, Step: 0.5);
+      }
+
+      $C.@NumberField #PosYInput {
+        @Anchor = (Left: 315, Top: 280, Width: 100);
+        Format: (MaxDecimalPlaces: 2, Step: 0.5);
+      }
+
+      $C.@NumberField #PosZInput {
+        @Anchor = (Left: 425, Top: 280, Width: 100);
+        Format: (MaxDecimalPlaces: 2, Step: 0.5);
+      }
+
+      $C.@SecondaryTextButton #ApplyPositionButton {
+        @Anchor = Anchor(Left: 535, Top: 277, Width: 115);
+        @Text = "Apply";
+      }
+
+      $C.@SecondaryTextButton #DeleteButton {
+        @Anchor = Anchor(Left: 24, Bottom: 18, Width: 130);
+        @Text = "Delete";
+      }
+
+      $C.@SecondaryTextButton #MoveButton {
+        @Anchor = Anchor(Left: 164, Bottom: 18, Width: 130);
+        @Text = "Move";
+      }
+
+      $C.@SecondaryTextButton #TpButton {
+        @Anchor = Anchor(Left: 304, Bottom: 18, Width: 130);
+        @Text = "TP";
+      }
+    }
+
+    $C.@Panel #AddPanel {
+      Anchor: (Left: 0, Top: 62, Width: 686, Height: 220);
+      LayoutMode: Full;
+
+      Label {
+        Anchor: (Left: 18, Top: 14, Width: 640, Height: 20);
+        Style: @SectionTitleStyle;
+        Text: "Add new waypoint";
+      }
+
+      Label {
+        Anchor: (Left: 24, Top: 54, Width: 180, Height: 28);
+        Style: @FieldLabelStyle;
+        Text: "Marker type";
+      }
+
+      $C.@DropdownBox #MarkerTypeDropdown {
+        @Anchor = (Left: 24, Top: 88, Width: 320, Height: 34);
+      }
+
+      $C.@SecondaryTextButton #AddButton {
+        @Anchor = Anchor(Left: 24, Bottom: 18, Width: 130);
+        @Text = "Add";
+      }
+    }
+  }
+}
+
+$C.@BackButton {}
