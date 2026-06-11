@@ -504,7 +504,7 @@ public class TownHallSpawner {
     }
 
     container.setPosition(containerPosition);
-    container.setAccessOffset(StructurePlacementUtils.rotateOffset(
+    container.setAccessOffset(StructurePlacementUtils.rotatePointOffset(
         StructureConfig.TownHall.getHeartContainerAccessOffset(level),
         rotation));
     container.setUuid(UUID.randomUUID());

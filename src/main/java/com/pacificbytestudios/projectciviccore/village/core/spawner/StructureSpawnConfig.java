@@ -125,7 +125,7 @@ final class StructureSpawnConfig {
   }
 
   static Vec3f accessOffset(BlockTransform<Vec3i> block, Rotation structureRotation) {
-    return StructurePlacementUtils.rotateOffset(
+    return StructurePlacementUtils.rotatePointOffset(
         block.getAccessOffset(),
         structureRotation);
   }

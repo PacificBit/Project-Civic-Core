@@ -328,12 +328,14 @@ public final class WaypointsConfigSaver {
     return StructurePlacementUtils.rotateOffset(delta, inverse(orientation));
   }
 
+  // Float points use the block-center rotation pivot (see rotatePointOffset); applying
+  // it with the inverse rotation is the exact inverse of the spawn-side conversion.
   private static Vec3f toLocalFloat(Vec3d world, Vec3i anchor, Rotation orientation) {
     Vec3f delta = new Vec3f(
         (float) (world.x - anchor.x),
         (float) (world.y - anchor.y),
         (float) (world.z - anchor.z));
-    return StructurePlacementUtils.rotateOffset(delta, inverse(orientation));
+    return StructurePlacementUtils.rotatePointOffset(delta, inverse(orientation));
   }
 
   private static Vec3f toLocalOffset(Vec3d accessWorld, Vec3i blockWorld, Rotation orientation) {
@@ -341,7 +343,7 @@ public final class WaypointsConfigSaver {
         (float) (accessWorld.x - blockWorld.x),
         (float) (accessWorld.y - blockWorld.y),
         (float) (accessWorld.z - blockWorld.z));
-    return StructurePlacementUtils.rotateOffset(delta, inverse(orientation));
+    return StructurePlacementUtils.rotatePointOffset(delta, inverse(orientation));
   }
 
   private static Rotation removeOrientation(Rotation worldRotation, Rotation orientation) {

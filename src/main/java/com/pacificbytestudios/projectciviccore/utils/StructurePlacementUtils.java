@@ -12,6 +12,7 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 public final class StructurePlacementUtils {
+  private static final float HALF_BLOCK = 0.5f;
 
   private StructurePlacementUtils() {
   }
@@ -81,21 +82,47 @@ public final class StructurePlacementUtils {
   }
 
   /**
-   * Point-space origin plus point-space offset. Use when both values already represent precise world points.
+   * Rotates a point offset around the block center instead of the min corner.
+   *
+   * Integer block offsets rotate around cell centers, so float offsets must use
+   * the same +0.5 X/Z pivot to avoid one-block shifts on some rotations.
+   */
+  public static Vec3f rotatePointOffset(Vec3f offset, Rotation rotation) {
+    if (offset == null) {
+      return Vec3f.safeZero();
+    }
+
+    Rotation normalizedRotation = normalize(rotation);
+    if (normalizedRotation == Rotation.None) {
+      return Vec3f.from(offset);
+    }
+
+    Vec3f centered = new Vec3f(offset.x - HALF_BLOCK, offset.y, offset.z - HALF_BLOCK);
+    Vec3f rotated = Vec3f.from(normalizedRotation.rotateY(centered, new Vec3f()));
+    return new Vec3f(rotated.x + HALF_BLOCK, rotated.y, rotated.z + HALF_BLOCK);
+  }
+
+  /**
+   * Point-space origin plus point-space offset. Use when both values already
+   * represent precise world points.
    */
   public static Vec3f withOffset(Vec3f origin, Vec3f localOffset, Rotation rotation) {
     return origin.clone().add(rotateOffset(localOffset, rotation));
   }
 
   /**
-   * Block-space origin plus point-space offset. Use for access/interactable targets derived from a block.
+   * Adds a rotated local point offset to a block-space origin.
+   *
+   * Use for block-derived interaction targets that must stay aligned with
+   * integer block rotation.
    */
   public static Vec3f withOffset(Vec3i origin, Vec3f localOffset, Rotation rotation) {
-    return Vec3f.from(origin).add(rotateOffset(localOffset, rotation));
+    return Vec3f.from(origin).add(rotatePointOffset(localOffset, rotation));
   }
 
   /**
-   * Block-space origin plus block-space offset. Use for real block positions such as cores, signs, and containers.
+   * Block-space origin plus block-space offset. Use for real block positions such
+   * as cores, signs, and containers.
    */
   public static Vec3i withOffset(Vec3i origin, Vec3i localOffset, Rotation rotation) {
     return origin.clone().add(rotateOffset(localOffset, rotation));
