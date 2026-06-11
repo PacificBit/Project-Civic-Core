@@ -5,7 +5,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
@@ -27,11 +27,11 @@ public class ReserveNextPlateToFillSensor extends VillagerSensorBase {
   @Override
   public boolean matches(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       double deltaTime,
       Store<EntityStore> store) {
 
-    if (!super.matches(ref, role, deltaTime, store)) {
+    if (!super.matches(ref, executionSupport, deltaTime, store)) {
       return false;
     }
 

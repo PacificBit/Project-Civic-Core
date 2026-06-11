@@ -13,7 +13,7 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
@@ -31,7 +31,7 @@ public class PlantSeedAction extends ActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {

@@ -6,7 +6,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.miner.BuilderUnregisterFromMineshaftGallery;
@@ -25,14 +25,14 @@ public class UnregisterFromMineshaftGallery extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-    if (!this.canExecute(ref, role, sensorInfo, deltaTime, store)) {
+    if (!this.canExecute(ref, executionSupport, sensorInfo, deltaTime, store)) {
       return false;
     }
-    super.execute(ref, role, sensorInfo, deltaTime, store);
+    super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
 
     MineComponent mineComponent = this.getComponentFromWorkplace(store, ref, MineComponent.getComponentType());
     UUID villagerId = this.getVillagerId(ref, store);

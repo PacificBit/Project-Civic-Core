@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
@@ -37,14 +37,14 @@ public class EatTavernFoodAction extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
-      double deltaTime,
+      double dt,
       Store<EntityStore> store) {
-    if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
+    if (!super.canExecute(ref, executionSupport, sensorInfo, dt, store)) {
       return false;
     }
-    super.execute(ref, role, sensorInfo, deltaTime, store);
+    super.execute(ref, executionSupport, sensorInfo, dt, store);
 
     WorkplaceInteractablesMapComponent interactables = this.getReservedTavernInteractibleComponent(ref, store);
     if (interactables == null) {

@@ -9,7 +9,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.innkeeper.BuilderHasNextMealInPlannedSensor;
@@ -34,10 +34,10 @@ public class HasNextMealInPlannedSensor extends VillagerSensorBase {
   @Override
   public boolean matches(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       double deltaTime,
       Store<EntityStore> store) {
-    if (!super.matches(ref, role, deltaTime, store)) {
+    if (!super.matches(ref, executionSupport, deltaTime, store)) {
       return false;
     }
 

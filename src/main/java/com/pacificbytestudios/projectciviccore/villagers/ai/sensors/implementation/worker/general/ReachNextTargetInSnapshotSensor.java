@@ -11,7 +11,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -45,8 +45,8 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   }
 
   @Override
-  public boolean matches(Ref<EntityStore> ref, Role role, double deltaTime, Store<EntityStore> store) {
-    if (!super.matches(ref, role, deltaTime, store)) {
+  public boolean matches(Ref<EntityStore> ref, ExecutionSupport executionSupport, double deltaTime, Store<EntityStore> store) {
+    if (!super.matches(ref, executionSupport, deltaTime, store)) {
       this.positionProvider.clear();
       return false;
     }
@@ -113,7 +113,7 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
 
     // TODO: find a solution for when they get stuck
     // Vec3d movementTarget = this.target;
-    // if (role.getActiveMotionController().isObstructed()) {
+    // if (executionSupport.getActiveMotionController().isObstructed()) {
     // Vec3d direction = new Vec3d(this.target).sub(transform.getPosition());
     // direction.y = 0.0;
     //

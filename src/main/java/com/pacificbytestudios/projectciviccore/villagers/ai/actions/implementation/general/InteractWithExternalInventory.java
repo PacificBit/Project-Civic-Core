@@ -20,7 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
@@ -63,7 +63,7 @@ public class InteractWithExternalInventory extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {

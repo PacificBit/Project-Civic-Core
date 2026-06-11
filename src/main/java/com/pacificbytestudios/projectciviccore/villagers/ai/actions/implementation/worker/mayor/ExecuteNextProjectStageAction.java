@@ -5,7 +5,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
@@ -24,7 +24,7 @@ public class ExecuteNextProjectStageAction extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {

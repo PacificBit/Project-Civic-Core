@@ -6,7 +6,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.systems.RoleChangeSystem;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
@@ -27,11 +27,11 @@ public class ChangeIntoWorkRoleAction extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-    super.execute(ref, role, sensorInfo, deltaTime, store);
+    super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
 
     VillagerWorkerComponent workerData = this.getWorkerDataComponent(ref, store);
     VillagerComponent villager = this.getVillagerComponent(ref, store);
@@ -44,8 +44,15 @@ public class ChangeIntoWorkRoleAction extends VillagerActionBase {
     String appearance = "%s_%s".formatted(gender, workType.getRoleId());
 
     int roleIndex = NPCPlugin.get().getIndex(workType.getRoleId());
-    RoleChangeSystem.requestRoleChange(ref, role, roleIndex, false, DEFAULT_STATE, DEFAULT_SUBSTATE, store);
-    role.setReachedTerminalAction(true);
+    RoleChangeSystem.requestRoleChange(
+        ref,
+        executionSupport.getRole(),
+        roleIndex,
+        false,
+        DEFAULT_STATE,
+        DEFAULT_SUBSTATE,
+        store);
+    executionSupport.getRole().setReachedTerminalAction(true);
 
     NPCEntity.setAppearance(ref, appearance, store);
 

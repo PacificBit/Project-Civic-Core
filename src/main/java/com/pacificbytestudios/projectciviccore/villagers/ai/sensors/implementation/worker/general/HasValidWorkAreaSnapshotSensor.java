@@ -4,7 +4,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderHasValidWorkAreaSnapshotSensor;
@@ -27,10 +27,10 @@ public class HasValidWorkAreaSnapshotSensor extends VillagerSensorBase {
   @Override
   public boolean matches(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       double deltaTime,
       Store<EntityStore> store) {
-    if (!super.matches(ref, role, deltaTime, store)) {
+    if (!super.matches(ref, executionSupport, deltaTime, store)) {
       return false;
     }
 

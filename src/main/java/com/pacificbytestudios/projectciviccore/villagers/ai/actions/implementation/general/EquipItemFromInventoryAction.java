@@ -8,11 +8,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderEquipItemFromInventoryAction;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 
 public class EquipItemFromInventoryAction extends ActionBase {
@@ -26,18 +26,19 @@ public class EquipItemFromInventoryAction extends ActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
-      double deltaTime,
+      double dt,
       Store<EntityStore> store) {
-    super.execute(ref, role, sensorInfo, deltaTime, store);
+    super.execute(ref, executionSupport, sensorInfo, dt, store);
 
     NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
     if (npcEntity == null) {
       return false;
     }
 
-    ItemContainer inventory = VillagerInventoryAccess.combinedStorageFirst(store, ref);
+    ItemContainer inventory = VillagerInventoryAccess.combinedStorageFirst(store,
+        ref);
     byte activeHotbarSlot = VillagerInventoryAccess.activeHotbarSlot(store, ref);
     ItemContainer hotbar = VillagerInventoryAccess.hotbarContainer(store, ref);
     ItemStack itemInHand = VillagerInventoryAccess.activeHotbarItem(store, ref);
@@ -49,11 +50,13 @@ public class EquipItemFromInventoryAction extends ActionBase {
       return this.unequipItem(itemInHand, store, ref, hotbar, activeHotbarSlot);
     }
 
-    if (itemInHand != null && itemInHand.getItemId().startsWith(this.itemIdToEquip)) {
+    if (itemInHand != null &&
+        itemInHand.getItemId().startsWith(this.itemIdToEquip)) {
       return false;
     }
 
-    return swapToItemFromInventory(inventory, activeHotbarSlot, hotbar, itemInHand);
+    return swapToItemFromInventory(inventory, activeHotbarSlot, hotbar,
+        itemInHand);
   }
 
   private boolean swapToItemFromInventory(ItemContainer inventory, byte activeHotbarSlot, ItemContainer hotbar,

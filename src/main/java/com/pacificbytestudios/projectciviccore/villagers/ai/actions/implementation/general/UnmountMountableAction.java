@@ -8,7 +8,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceInteractablesMapComponent;
@@ -24,14 +24,14 @@ public class UnmountMountableAction extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-    if (!super.canExecute(ref, role, sensorInfo, deltaTime, store)) {
+    if (!super.canExecute(ref, executionSupport, sensorInfo, deltaTime, store)) {
       return false;
     }
-    super.execute(ref, role, sensorInfo, deltaTime, store);
+    super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
 
     Ref<ChunkStore> reservedTavernRef = this.getReservedTavernRef(ref, store);
     VillagerComponent villagerComponent = this.getVillagerComponent(ref, store);

@@ -10,7 +10,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.general.BuilderQueryDirtyInventorySensor;
@@ -40,7 +40,7 @@ public class QueryDirtyInventorySensor extends VillagerSensorBase {
   @Override
   public boolean matches(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       double dt,
       Store<EntityStore> store) {
     ItemContainer container = this.getVillagerStorage(ref, store);

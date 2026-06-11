@@ -13,7 +13,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
@@ -37,14 +37,14 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-    if (!canExecute(ref, role, sensorInfo, deltaTime, store)) {
+    if (!canExecute(ref, executionSupport, sensorInfo, deltaTime, store)) {
       return false;
     }
-    super.execute(ref, role, sensorInfo, deltaTime, store);
+    super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
 
     WorkplaceInteractablesMapComponent interactables = this.getWorkplaceInteractibleComponent(ref, store);
     WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);

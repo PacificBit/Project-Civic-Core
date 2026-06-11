@@ -23,7 +23,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -51,20 +51,20 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider infoProvider,
       double deltaTime,
       Store<EntityStore> store) {
-    if (!super.canExecute(ref, role, infoProvider, deltaTime, store)) {
+    if (!super.canExecute(ref, executionSupport, infoProvider, deltaTime, store)) {
       return false;
     }
-    super.execute(ref, role, infoProvider, deltaTime, store);
+    super.execute(ref, executionSupport, infoProvider, deltaTime, store);
 
     Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
     VillageHeartComponent villageHeart = this.getVillageHeartComponent(ref, store);
     WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);
     if (workplaceRef == null || villageHeart == null || workplaceComponent == null) {
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     World world = store.getExternalData().getWorld();
@@ -73,7 +73,7 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
     TavernComponent tavernComponent = chunkStore.getComponent(workplaceRef, TavernComponent.getComponentType());
     if (tavernComponent == null) {
       Logger.logWarning("Could not fetch the tavern component");
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     int currentVillageLevel = villageHeart.getLevel();
@@ -84,7 +84,7 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
       ResolvedContainer resolvedStorage = ContainerResolver.resolveContainerAt(world, storagePosition);
       if (resolvedStorage == null) {
         Logger.logWarning("Dead reference of a container is present at " + storagePosition);
-        return this.finish(role, false);
+        return this.finish(executionSupport, false);
       }
 
       SimpleItemContainer containerSnapshot = resolvedStorage.containerBlock().getItemContainer().clone();
@@ -99,10 +99,10 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
     if (committedMealCount >= targetMealCount) {
       tavernComponent.resetMissingResources();
       Logger.logInfo("Workplace food target already satisfied: "
-              + committedMealCount
-              + "/"
-              + targetMealCount);
-      return this.finish(role, true);
+          + committedMealCount
+          + "/"
+          + targetMealCount);
+      return this.finish(executionSupport, true);
     }
 
     tavernComponent.setMealToPrepare(new HashMap<>());
@@ -125,15 +125,15 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
     int totalCommittedMeals = readyMealsInStorage
         + tavernComponent.getMealToPrepareCount()
         + tavernComponent.getAssignedRecipeCount();
-    return this.finish(role, totalCommittedMeals >= targetMealCount);
+    return this.finish(executionSupport, totalCommittedMeals >= targetMealCount);
   }
 
-  private boolean finish(Role role, boolean success) {
+  private boolean finish(ExecutionSupport executionSupport, boolean success) {
     if (this.successFlagSlot >= 0) {
-      role.setFlag(this.successFlagSlot, success);
+      executionSupport.getFlagsComponent().setFlag(this.successFlagSlot, success);
     }
     if (this.failureFlagSlot >= 0) {
-      role.setFlag(this.failureFlagSlot, !success);
+      executionSupport.getFlagsComponent().setFlag(this.failureFlagSlot, !success);
     }
     return success;
   }
@@ -213,9 +213,9 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
       String itemId = material.getItemId();
       if (itemId == null || itemId.isBlank()) {
         Logger.logWarning("Cannot buffer missing material for recipe "
-                + recipeId
-                + " because it has no item id: "
-                + material);
+            + recipeId
+            + " because it has no item id: "
+            + material);
         continue;
       }
 

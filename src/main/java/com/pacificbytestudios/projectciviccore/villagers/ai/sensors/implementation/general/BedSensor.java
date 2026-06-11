@@ -1,16 +1,15 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.general;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
@@ -29,7 +28,11 @@ public class BedSensor extends VillagerSensorBase {
   }
 
   @Override
-  public boolean matches(Ref<EntityStore> ref, Role role, double dt, Store<EntityStore> store) {
+  public boolean matches(
+      Ref<EntityStore> ref,
+      ExecutionSupport executionSupport,
+      double dt,
+      Store<EntityStore> store) {
     VillagerComponent villager = this.getVillagerComponent(ref, store);
     if (villager == null) {
       return false;

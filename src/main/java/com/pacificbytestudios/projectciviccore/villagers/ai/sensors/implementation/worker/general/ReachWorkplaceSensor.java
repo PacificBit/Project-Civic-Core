@@ -8,7 +8,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -35,8 +35,8 @@ public class ReachWorkplaceSensor extends VillagerSensorBase {
   }
 
   @Override
-  public boolean matches(Ref<EntityStore> ref, Role role, double deltaTime, Store<EntityStore> store) {
-    if (!super.matches(ref, role, deltaTime, store)) {
+  public boolean matches(Ref<EntityStore> ref, ExecutionSupport executionSupport, double deltaTime, Store<EntityStore> store) {
+    if (!super.matches(ref, executionSupport, deltaTime, store)) {
       return false;
     }
 

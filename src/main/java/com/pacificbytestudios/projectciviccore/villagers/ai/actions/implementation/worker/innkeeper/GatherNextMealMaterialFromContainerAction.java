@@ -22,7 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.role.Role;
+import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -54,19 +54,19 @@ public class GatherNextMealMaterialFromContainerAction extends
   @Override
   public boolean execute(
       Ref<EntityStore> ref,
-      Role role,
+      ExecutionSupport executionSupport,
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-    if (!canExecute(ref, role, sensorInfo, deltaTime, store)) {
+    if (!canExecute(ref, executionSupport, sensorInfo, deltaTime, store)) {
       return false;
     }
-    super.execute(ref, role, sensorInfo, deltaTime, store);
+    super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
     Ref<ChunkStore> workplaceRef = this.getWorkplaceRef(ref, store);
     WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
     WorkplaceComponent workplaceComponent = this.getWorkplaceComponent(ref, store);
     if (workplaceRef == null || snapshot == null || workplaceComponent == null) {
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     World world = store.getExternalData().getWorld();
@@ -76,7 +76,7 @@ public class GatherNextMealMaterialFromContainerAction extends
         TavernComponent.getComponentType());
     if (tavernComponent == null) {
       Logger.logWarning("Could not fetch the tavern component");
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     tavernComponent.resetMissingResources();
@@ -88,14 +88,14 @@ public class GatherNextMealMaterialFromContainerAction extends
 
     if (mealToPrepare == null) {
       Logger.logWarning("Got cook request but got no meal to prepare assigned");
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     Vec3i containerCoords = snapshot.getBlockTypePosition()
         .get(WorkplaceStorageTargetsSnapshotAction.WORKPLACE_STORAGE_KEY).pollFirst();
     if (containerCoords == null) {
       Logger.logWarning("No container coords found");
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     CraftingRecipe recipe = FoodRecipeRegistry.getRecipe(mealToPrepare);
@@ -105,7 +105,7 @@ public class GatherNextMealMaterialFromContainerAction extends
         containerCoords);
     if (container == null) {
       Logger.logWarning("No workplace container found in designated coords");
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     SimpleItemContainer workplaceStorage = container.containerBlock().getItemContainer();
@@ -113,7 +113,7 @@ public class GatherNextMealMaterialFromContainerAction extends
     ItemContainer npcStorage = VillagerInventoryAccess.storage(store, ref);
     if (npcStorage == null) {
       Logger.logWarning("Could not find villager storage");
-      return this.finish(role, false);
+      return this.finish(executionSupport, false);
     }
 
     Map<String, Integer> missingMaterials = new HashMap<>();
@@ -154,10 +154,10 @@ public class GatherNextMealMaterialFromContainerAction extends
             true);
         if (move == null || !move.succeeded()) {
           Logger.logWarning("Could not move "
-                  + quantityToMove
-                  + " of "
-                  + stack.getItemId()
-                  + " from workplace storage to NPC inventory");
+              + quantityToMove
+              + " of "
+              + stack.getItemId()
+              + " from workplace storage to NPC inventory");
           continue;
         }
 
@@ -175,7 +175,7 @@ public class GatherNextMealMaterialFromContainerAction extends
         String itemId = material.getItemId();
         if (itemId == null || itemId.isBlank()) {
           Logger.logWarning("Cannot buffer missing material without item id: "
-                  + material);
+              + material);
           continue;
         }
         missingMaterials.merge(itemId, missing, Integer::sum);
@@ -186,19 +186,19 @@ public class GatherNextMealMaterialFromContainerAction extends
       missingMaterials.forEach((itemId, amount) -> tavernComponent
           .addMissingResource(new ItemRequestCriterion(itemId, true, amount)));
       Logger.logFine("Missing materials: " +
-              missingMaterials);
-      return this.finish(role, false);
+          missingMaterials);
+      return this.finish(executionSupport, false);
     }
 
-    return this.finish(role, true);
+    return this.finish(executionSupport, true);
   }
 
-  private boolean finish(Role role, boolean success) {
+  private boolean finish(ExecutionSupport executionSupport, boolean success) {
     if (this.successFlagSlot >= 0) {
-      role.setFlag(this.successFlagSlot, success);
+      executionSupport.getFlagsComponent().setFlag(this.successFlagSlot, success);
     }
     if (this.failureFlagSlot >= 0) {
-      role.setFlag(this.failureFlagSlot, !success);
+      executionSupport.getFlagsComponent().setFlag(this.failureFlagSlot, !success);
     }
     return success;
   }
