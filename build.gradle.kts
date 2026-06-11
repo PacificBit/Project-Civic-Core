@@ -1,16 +1,57 @@
 import groovy.json.JsonSlurper
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.JavaExec
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.jvm.tasks.Jar
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.plugins.ide.eclipse.model.Classpath
+import org.gradle.plugins.ide.eclipse.model.SourceFolder
 import java.util.jar.JarFile
 
 plugins {
     `java-library`
+    eclipse
+    id("com.diffplug.eclipse.apt") version "4.4.1"
 }
 
 repositories {
     mavenCentral()
+}
+
+val generatedAnnotationProcessorSourcesDir =
+    layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main")
+
+tasks.withType<JavaCompile>().configureEach {
+    options.generatedSourceOutputDirectory.set(generatedAnnotationProcessorSourcesDir)
+}
+
+tasks.register("prepareGeneratedSourcesDir") {
+    group = "hytale"
+    description = "Create the annotation-processor generated source directory used by JDTLS/Eclipse."
+
+    doLast {
+        generatedAnnotationProcessorSourcesDir.get().asFile.mkdirs()
+    }
+}
+
+eclipse {
+    classpath {
+        file {
+            whenMerged {
+                val classpath = this as Classpath
+                val generatedPath =
+                    "build/generated/sources/annotationProcessor/java/main"
+
+                if (classpath.entries.filterIsInstance<SourceFolder>().none { it.path == generatedPath }) {
+                    classpath.entries.add(SourceFolder(generatedPath, null))
+                }
+            }
+        }
+    }
+}
+
+tasks.named("eclipseClasspath") {
+    dependsOn("prepareGeneratedSourcesDir")
 }
 
 val hytaleHome: Provider<String> =
@@ -59,15 +100,31 @@ val hytaleMainClass: Provider<String> =
 /*
  * Dev workflow:
  *
- * - plugin Java: Gradle runtimeClasspath
- * - source assets: src/main/resources
+ * - Hytale server jar: libs/HytaleServer.jar at compile time
+ * - CodecButler annotations/processor: libs/CodecButler.jar when present
+ * - generated codecs: build/generated/sources/annotationProcessor/java/main
+ * - live source assets: src/main/resources
  * - Hytale --assets: Assets.zip, then src/main/resources
  */
 val hytaleResourcesDir =
     layout.projectDirectory.dir("src/main/resources")
 
+val hytaleProjectServerJar =
+    layout.projectDirectory.file("libs/HytaleServer.jar")
+
+val codecButlerJar =
+    layout.projectDirectory.file("libs/CodecButler.jar")
+
+val bundledPluginDependencies by configurations.creating
+
 dependencies {
-    compileOnly(files("libs/HytaleServer.jar"))
+    compileOnly(files(hytaleProjectServerJar))
+
+    if (codecButlerJar.asFile.exists()) {
+        implementation(files(codecButlerJar))
+        annotationProcessor(files(codecButlerJar))
+        bundledPluginDependencies(files(codecButlerJar))
+    }
 }
 
 java {
@@ -119,6 +176,14 @@ tasks.processResources {
 tasks.withType<Jar>().configureEach {
     archiveVersion.set(modVersion)
     archiveClassifier.set(serverVersion.map { "server-$it" })
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from({
+        bundledPluginDependencies.map { dependency ->
+            if (dependency.isDirectory) dependency else zipTree(dependency)
+        }
+    })
 }
 
 tasks.register("printArtifactInfo") {
@@ -137,8 +202,17 @@ tasks.register("printArtifactInfo") {
         println("Main class     = ${hytaleMainClass.get()}")
         println("Include assets = ${includeAssets.get()}")
         println("Dev assets dir = ${hytaleResourcesDir.asFile.absolutePath}")
+        println("Generated src  = ${generatedAnnotationProcessorSourcesDir.get().asFile.absolutePath}")
         println("Manifest       = ${manifestFile.asFile.absolutePath}")
+        println("CodecButler    = ${codecButlerJar.asFile.absolutePath} exists=${codecButlerJar.asFile.exists()}")
     }
+}
+
+tasks.register("syncJdtls") {
+    group = "hytale"
+    description = "Refresh Eclipse/JDTLS metadata and ensure the generated source directory exists."
+
+    dependsOn("prepareGeneratedSourcesDir", "eclipse")
 }
 
 tasks.register<JavaExec>("runHytaleServer") {
@@ -195,6 +269,7 @@ tasks.register<JavaExec>("runHytaleServer") {
         println(" - base assets  = ${assetsFile.absolutePath}")
         println(" - dev assets   = ${hytaleResourcesDir.asFile.absolutePath}")
         println(" - manifest     = ${manifestFile.asFile.absolutePath}")
+        println(" - generated    = ${generatedAnnotationProcessorSourcesDir.get().asFile.absolutePath}")
     }
 
     args(
