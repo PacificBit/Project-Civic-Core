@@ -79,7 +79,7 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
     VillageStorageRequest request = buildClearRequest(workplaceComponent);
     if (request.getItemCriteria() == null || request.getItemCriteria().isEmpty()) {
       Logger.logWarning("Refusing to enqueue an empty deliver request for workplace "
-              + workplaceComponent.getUuid());
+          + workplaceComponent.getUuid());
       return false;
     }
 
@@ -117,7 +117,7 @@ public class AskStorageForResourcesAction extends VillagerActionBase {
       buildWorkplaceItemCriteria(request, workplace);
     }
 
-    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainerAccessPositions());
+    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainersTargets());
     return request;
   }
 

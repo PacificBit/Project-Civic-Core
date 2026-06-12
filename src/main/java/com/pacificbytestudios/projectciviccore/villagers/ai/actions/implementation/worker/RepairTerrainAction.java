@@ -55,9 +55,9 @@ public class RepairTerrainAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vec3i> terrainToFill = snapshot.getBlockTypePosition().get(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
+    ArrayDeque<Vec3i> terrainToFill = snapshot.getSnapshotTargets().get(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
     if (terrainToFill == null || terrainToFill.isEmpty()) {
-      snapshot.getBlockTypePosition().remove(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
+      snapshot.getSnapshotTargets().remove(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
       return false;
     }
 
@@ -69,7 +69,7 @@ public class RepairTerrainAction extends VillagerActionBase {
     }
 
     if (repairedAllBlocks) {
-      snapshot.getBlockTypePosition().remove(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
+      snapshot.getSnapshotTargets().remove(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
     }
 
     return repairedAllBlocks;

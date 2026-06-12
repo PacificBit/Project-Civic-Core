@@ -45,7 +45,8 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   }
 
   @Override
-  public boolean matches(Ref<EntityStore> ref, ExecutionSupport executionSupport, double deltaTime, Store<EntityStore> store) {
+  public boolean matches(Ref<EntityStore> ref, ExecutionSupport executionSupport, double deltaTime,
+      Store<EntityStore> store) {
     if (!super.matches(ref, executionSupport, deltaTime, store)) {
       this.positionProvider.clear();
       return false;
@@ -71,7 +72,7 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
       Map<String, ArrayDeque<Vec3i>> blockPositions = villager
           .getWorkerData()
           .getWorkareaSnapshot()
-          .getBlockTypePosition();
+          .getSnapshotTargets();
 
       Vec3i nextTarget = null;
       for (String blockId : this.blockIds) {

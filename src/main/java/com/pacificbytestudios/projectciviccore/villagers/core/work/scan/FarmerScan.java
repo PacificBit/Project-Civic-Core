@@ -1,11 +1,8 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.work.scan;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
@@ -21,11 +18,12 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.ScanUtils;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class FarmerScan implements IWorkAreaScanner {
   private static final String SOIL_GRASS_ID = "Soil_Grass";
@@ -153,7 +151,7 @@ public class FarmerScan implements IWorkAreaScanner {
     BlockType aboveType = soilChunk != null ? soilChunk.getBlockType(abovePosition) : null;
 
     if (ScanUtils.matchesBaseId(soilBlockId, SOIL_GRASS_ID) || ScanUtils.matchesBaseId(soilBlockId, SOIL_MUD_DRY_ID)) {
-      addTask(snapshotInProgress, TILLABLE_TERRAIN, soilPosition);
+      snapshotInProgress.addWorkplaceSnapshotTarget(TILLABLE_TERRAIN, soilPosition);
       return;
     }
 
@@ -162,16 +160,16 @@ public class FarmerScan implements IWorkAreaScanner {
     }
 
     if (isHarvestableCropBlock(aboveType)) {
-      addTask(snapshotInProgress, HARVESTABLE_CROP, abovePosition);
+      snapshotInProgress.addWorkplaceSnapshotTarget(HARVESTABLE_CROP, abovePosition);
       return;
     }
 
     if (!isTilledSoilWatered(soilChunk, soilPosition)) {
-      addTask(snapshotInProgress, WATERABLE_TERRAIN, soilPosition);
+      snapshotInProgress.addWorkplaceSnapshotTarget(WATERABLE_TERRAIN, soilPosition);
     }
 
     if (ScanUtils.isEmptyBlock(aboveType)) {
-      addTask(snapshotInProgress, PLANTABLE_TERRAIN, abovePosition);
+      snapshotInProgress.addWorkplaceSnapshotTarget(PLANTABLE_TERRAIN, abovePosition);
     }
   }
 
@@ -198,16 +196,6 @@ public class FarmerScan implements IWorkAreaScanner {
 
     HarvestingDropType harvest = gathering.getHarvest();
     return harvest != null;
-  }
-
-  private void addTask(
-      WorkplaceAreaSnapshot snapshotInProgress,
-      String taskId,
-      Vec3i position) {
-    ArrayDeque<Vec3i> found = snapshotInProgress.getBlockTypePosition()
-        .computeIfAbsent(taskId, key -> new ArrayDeque<>());
-
-    found.addLast(Vec3i.from(position));
   }
 
   private WorldChunk getCorrectChunkForBlock(Vec3i currentPoint, WorldChunk chunk) {

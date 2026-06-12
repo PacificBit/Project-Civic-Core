@@ -39,7 +39,10 @@ public class HarvestCropAction extends VillagerActionBase {
     }
 
     World world = store.getExternalData().getWorld();
-    Vec3i cropCoord = snapshot.getBlockTypePosition().get(FarmerScan.HARVESTABLE_CROP).pollFirst();
+    Vec3i cropCoord = snapshot
+        .pollNextSnapshotTargetFrom(FarmerScan.HARVESTABLE_CROP)
+        .getTargetBlock();
+
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(
         cropCoord.x,
         cropCoord.z));

@@ -1,28 +1,25 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.woodcutter;
 
-import java.util.ArrayDeque;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
-import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderPlantTreeAction;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.WoodCutterTerrainRepair;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.WoodCutterScan;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class PlantTreeAction extends VillagerActionBase {
   private final WoodCutterTerrainRepair terrainRepairer;
@@ -46,26 +43,14 @@ public class PlantTreeAction extends VillagerActionBase {
     }
     super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
 
-    VillagerComponent villager = this.getVillagerComponent(ref, store);
-    NPCEntity npcEntity = this.getNPCEntity(ref, store);
-    if (villager == null || npcEntity == null) {
+    WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
+    if (snapshot == null) {
       return false;
     }
 
-    ArrayDeque<Vec3i> blockPositions = villager
-        .getWorkerData()
-        .getWorkareaSnapshot()
-        .getBlockTypePosition().get(WoodCutterScan.PLANTABLE_TERRAIN);
-
-    if (blockPositions == null || blockPositions.isEmpty()) {
-      throw new IllegalStateException("[PlantTree] No Plantable soil block available");
-    }
-
-    Vec3i blockPos = blockPositions.peekFirst();
-    if (blockPos == null) {
-      Logger.logWarning("Snapshot returned a null plant target");
-      return false;
-    }
+    Vec3i blockPos = snapshot
+        .peekNextSnapshotTargetFrom(WoodCutterScan.PLANTABLE_TERRAIN)
+        .getTargetBlock();
 
     ItemStack sapling = VillagerInventoryAccess.activeHotbarItem(store, ref);
 
@@ -87,7 +72,7 @@ public class PlantTreeAction extends VillagerActionBase {
         BlockType.getAssetMap().getAsset(sapling.getItemId()));
 
     if (blockSpawned) {
-      blockPositions.pollFirst();
+      snapshot.removeFirstSnapshotTargetFrom(WoodCutterScan.PLANTABLE_TERRAIN);
       InventoryHelper.removeItemInHand(ref, store, 1);
       return true;
     }

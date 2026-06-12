@@ -115,7 +115,7 @@ public class MayorVillageAssessmentExecutor {
       }
     } catch (Exception e) {
       Logger.logWarning("Could not execute project "
-              + project.getProjectId() + ". REASON:\n" + e.getMessage());
+          + project.getProjectId() + ". REASON:\n" + e.getMessage());
       e.printStackTrace();
       mayorComponent.setCurrentProject(null);
       return false;
@@ -174,7 +174,7 @@ public class MayorVillageAssessmentExecutor {
     HouseComponent availableHouse = village.findHouseWithVacancy();
     if (availableHouse == null) {
       Logger.logWarning("Removing villager spawn project "
-              + project.getProjectId() + " because no house has a vacancy");
+          + project.getProjectId() + " because no house has a vacancy");
       townHall.removeProject(project);
       mayorComponent.setCurrentProject(null);
       return;
@@ -343,7 +343,7 @@ public class MayorVillageAssessmentExecutor {
 
     if (!InventoryTransferValidators.removeRequestedItems(container, requiredMaterials)) {
       Logger.logWarning("Could not consume requested materials for project "
-              + project.getProjectId());
+          + project.getProjectId());
       project.setObjectiveStatus(VillageObjectiveStatus.RESOURCE_GATHERING);
       return false;
     }
@@ -362,14 +362,14 @@ public class MayorVillageAssessmentExecutor {
     boolean synced = townHall.updateProjectPlan(project);
     if (synced) {
       Logger.logInfo("Synced project " + project.getProjectId()
-              + " status=" + project.getObjectiveStatus()
-              + " stage=" + project.getStage() + "/" + project.getTotalStages()
-              + " structureId=" + project.getStructureId());
+          + " status=" + project.getObjectiveStatus()
+          + " stage=" + project.getStage() + "/" + project.getTotalStages()
+          + " structureId=" + project.getStructureId());
       return;
     }
 
     Logger.logWarning("Could not sync project " + project.getProjectId()
-            + " back to the town hall plan");
+        + " back to the town hall plan");
   }
 
   private SimpleItemContainer getTownHallContainer(WorkplaceComponent townHallWorkplace) {
@@ -446,7 +446,7 @@ public class MayorVillageAssessmentExecutor {
     request.setType(VillageStorageRequestType.DELIVER_TO_WORKPLACE);
     request.setRequesterWorkplaceId(townHallWorkplace.getUuid());
     request.setTargetsWorkplaceStorage(
-        townHallWorkplace.getStorage().getAllContainerAccessPositions());
+        townHallWorkplace.getStorage().getAllContainersTargets());
 
     for (InventoryItemCriteria materialCriteria : missingMaterials) {
       if (!materialCriteria.isFilterIn() || materialCriteria.getCount() <= 0) {

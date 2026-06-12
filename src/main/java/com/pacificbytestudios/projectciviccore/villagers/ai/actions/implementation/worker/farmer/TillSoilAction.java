@@ -1,10 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.farmer;
 
-import java.util.ArrayDeque;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -16,20 +11,21 @@ import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerToolAnimationHelper;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
-public class TillSoilAction extends ActionBase {
+public class TillSoilAction extends VillagerActionBase {
   private static final BlockType TILL_BLOCK_TYPE = BlockType.getAssetMap().getAsset(FarmerScan.TILLED_SOIL_ID);
   private static final int TILL_SOUND_EVENT_INDEX = SoundEvent.getAssetMap().getIndex("SFX_Hoe_T1_Till");
 
@@ -44,25 +40,14 @@ public class TillSoilAction extends ActionBase {
       double deltaTime,
       Store<EntityStore> store) {
     super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
-
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villager == null) {
-      Logger.logWarning("Could not fetch villager component");
+    WorkplaceAreaSnapshot workplaceSnapshot = this.getAreaSnapshot(ref, store);
+    if (workplaceSnapshot == null) {
       return false;
     }
 
-    ArrayDeque<Vec3i> blockPositions = villager
-        .getWorkerData()
-        .getWorkareaSnapshot()
-        .getBlockTypePosition().get(FarmerScan.TILLABLE_TERRAIN);
-
-    Vec3i blockPos;
-
-    if (blockPositions != null && !blockPositions.isEmpty()) {
-      blockPos = blockPositions.pollFirst();
-    } else {
-      throw new IllegalStateException("No tillable soil block available");
-    }
+    Vec3i blockPos = workplaceSnapshot
+        .pollNextSnapshotTargetFrom(FarmerScan.TILLABLE_TERRAIN)
+        .getTargetBlock();
 
     World world = store.getExternalData().getWorld();
 

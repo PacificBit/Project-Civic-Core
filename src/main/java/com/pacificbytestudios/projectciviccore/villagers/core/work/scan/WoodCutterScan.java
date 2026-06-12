@@ -1,12 +1,9 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.work.scan;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.states.FarmingBlock;
 import com.hypixel.hytale.component.Ref;
@@ -19,11 +16,12 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.ScanUtils;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class WoodCutterScan implements IWorkAreaScanner {
   private static final long MAX_TIME_NS = 1_000_000;
@@ -284,9 +282,6 @@ public class WoodCutterScan implements IWorkAreaScanner {
       WorkplaceAreaSnapshot snapshotInProgress,
       String taskId,
       Vec3i position) {
-    ArrayDeque<Vec3i> found = snapshotInProgress.getBlockTypePosition()
-        .computeIfAbsent(taskId, key -> new ArrayDeque<>());
-
-    found.addLast(Vec3i.from(position));
+    snapshotInProgress.addWorkplaceSnapshotTarget(taskId, Vec3i.from(position));
   }
 }

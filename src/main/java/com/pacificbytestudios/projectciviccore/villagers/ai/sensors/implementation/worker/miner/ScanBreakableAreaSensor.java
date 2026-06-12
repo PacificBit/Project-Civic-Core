@@ -55,14 +55,14 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
       return false;
     }
 
-    ArrayDeque<Vec3i> breakableBlocks = snapshot.getBlockTypePosition().get(MinerScan.BREAKABLE_BLOCK);
+    ArrayDeque<Vec3i> breakableBlocks = snapshot.getSnapshotTargets().get(MinerScan.BREAKABLE_BLOCK);
     if (breakableBlocks != null && !breakableBlocks.isEmpty()) {
       return false;
     }
 
-    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(MinerScan.DIG_POSITIONS);
+    ArrayDeque<Vec3i> digPositions = snapshot.getSnapshotTargets().get(MinerScan.DIG_POSITIONS);
     if (digPositions == null || digPositions.isEmpty()) {
-      snapshot.getBlockTypePosition().remove(MinerScan.BREAKABLE_BLOCK);
+      snapshot.getSnapshotTargets().remove(MinerScan.BREAKABLE_BLOCK);
       Logger.logInfo("No more dig position are present");
       return false;
     }
@@ -80,7 +80,7 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
     }
 
     breakableBlocks = new ArrayDeque<>();
-    snapshot.getBlockTypePosition().put(MinerScan.BREAKABLE_BLOCK, breakableBlocks);
+    snapshot.getSnapshotTargets().put(MinerScan.BREAKABLE_BLOCK, breakableBlocks);
 
     Vec3i left = Utils.rotateNormalizedVector(cardinalDirection, Rotation.Ninety);
     Vec3i right = Utils.rotateNormalizedVector(cardinalDirection, Rotation.TwoSeventy);
@@ -101,7 +101,7 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
           if (blockType != null && blockType.getMaterial() == BlockMaterial.Solid) {
             BlockGathering gathering = blockType.getGathering();
             if (gathering != null) {
-            breakableBlocks.addLast(Vec3i.from(position));
+              breakableBlocks.addLast(Vec3i.from(position));
             }
           }
         }

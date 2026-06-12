@@ -65,7 +65,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
     MineshaftGallery mineshaftGallery = mineComponent.getWorkerAllocatedGallery(villagerId);
     if (mineshaftGallery == null) {
       Logger.logWarning("Could not fetch mineshaft gallery allocated to the villager: "
-              + villagerId);
+          + villagerId);
       return false;
     }
 
@@ -173,7 +173,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       WorkplaceAreaSnapshot snapshot,
       MineshaftGallery mineshaftGallery) {
     if (snapshot != null) {
-      ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(MinerScan.DIG_POSITIONS);
+      ArrayDeque<Vec3i> digPositions = snapshot.getSnapshotTargets().get(MinerScan.DIG_POSITIONS);
       if (digPositions != null && !digPositions.isEmpty()) {
         Vec3i nextDigPosition = digPositions.peekFirst();
         if (nextDigPosition != null) {
@@ -244,7 +244,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       return null;
     }
 
-    Map<String, ArrayDeque<Vec3i>> blockTypePositions = snapshot.getBlockTypePosition();
+    Map<String, ArrayDeque<Vec3i>> blockTypePositions = snapshot.getSnapshotTargets();
     ArrayDeque<Vec3i> positions = blockTypePositions.get(groupName);
     if (positions == null || positions.isEmpty()) {
       return null;
@@ -259,7 +259,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       return;
     }
 
-    snapshot.getBlockTypePosition().remove(groupName);
+    snapshot.getSnapshotTargets().remove(groupName);
   }
 
   private boolean hasValue(String value) {

@@ -3,22 +3,19 @@ package com.pacificbytestudios.projectciviccore.villagers.core.work.scan;
 import java.util.ArrayDeque;
 import java.util.UUID;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class StorageKeeperScan implements IWorkAreaScanner {
   public static final String FETCH_ALL = "Fetch_All";
@@ -49,7 +46,6 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     snapshotInProgress = new WorkplaceAreaSnapshot();
 
     WorkplaceComponent workplaceComponent = worker.getWorkplace();
-    VillageHeartComponent villageHeart = this.getVillageHeart(villager);
     Ref<ChunkStore> storageRef = workplaceComponent.getWorkplaceRef().getRef();
     if (storageRef == null || !storageRef.isValid()) {
       Logger.logWarning("Could not fetch storage reference");
@@ -87,20 +83,20 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     switch (request.getType()) {
       case CLEAR_WORKPLACE_INVENTORY:
         putSnapshotTargets(snapshotInProgress,
-            FETCH_ALL, this.resolveRequestStorageTargets(request, villageHeart),
-            DUMP_ALL, toBlockTargets(workplaceComponent.getStorage().getAllContainerAccessPositions()));
+            FETCH_ALL, request.getTargetsWorkplaceStorage(),
+            DUMP_ALL, workplaceComponent.getStorage().getAllContainersTargets());
         break;
 
       case DELIVER_TO_WORKPLACE:
         putSnapshotTargets(snapshotInProgress,
-            FETCH_ITEM, toBlockTargets(workplaceComponent.getStorage().getAllContainerAccessPositions()),
-            DUMP_ITEM, this.resolveRequestStorageTargets(request, villageHeart));
+            FETCH_ITEM, workplaceComponent.getStorage().getAllContainersTargets(),
+            DUMP_ITEM, request.getTargetsWorkplaceStorage());
         break;
 
       case COLLECT_FROM_WORKPLACE:
         putSnapshotTargets(snapshotInProgress,
-            FETCH_ITEM, this.resolveRequestStorageTargets(request, villageHeart),
-            DUMP_ITEM, toBlockTargets(workplaceComponent.getStorage().getAllContainerAccessPositions()));
+            FETCH_ITEM, request.getTargetsWorkplaceStorage(),
+            DUMP_ITEM, workplaceComponent.getStorage().getAllContainersTargets());
         break;
 
       default:
@@ -113,22 +109,19 @@ public class StorageKeeperScan implements IWorkAreaScanner {
 
   private void putSnapshotTargets(
       WorkplaceAreaSnapshot snapshot,
-      String fetchKey, Iterable<Vec3i> fetchTargets,
-      String dumpKey, Iterable<Vec3i> dumpTargets) {
+      String fetchKey, Iterable<BlockTarget> fetchTargets,
+      String dumpKey, Iterable<BlockTarget> dumpTargets) {
+    addTargets(snapshot, fetchKey, fetchTargets);
+    addTargets(snapshot, dumpKey, dumpTargets);
+  }
 
-    ArrayDeque<Vec3i> fetchFrom = new ArrayDeque<>();
-    ArrayDeque<Vec3i> dumpTo = new ArrayDeque<>();
-
-    for (Vec3i position : fetchTargets) {
-      fetchFrom.add(position);
+  private void addTargets(
+      WorkplaceAreaSnapshot snapshot,
+      String group,
+      Iterable<BlockTarget> targets) {
+    for (BlockTarget target : targets) {
+      snapshot.addWorkplaceSnapshotTarget(group, target);
     }
-
-    for (Vec3i position : dumpTargets) {
-      dumpTo.add(position);
-    }
-
-    snapshot.getBlockTypePosition().put(fetchKey, fetchFrom);
-    snapshot.getBlockTypePosition().put(dumpKey, dumpTo);
   }
 
   private WorkplaceAreaSnapshot signSnapshotAsCompleted(
@@ -138,55 +131,4 @@ public class StorageKeeperScan implements IWorkAreaScanner {
     snapshot.captureNow(worldTimeResource);
     return snapshot;
   }
-
-  private VillageHeartComponent getVillageHeart(VillagerComponent villager) {
-    if (villager == null) {
-      return null;
-    }
-
-    Ref<ChunkStore> villageHeartRef = villager.getVillageHeartRef();
-    if (villageHeartRef == null || !villageHeartRef.isValid()) {
-      return null;
-    }
-
-    return villageHeartRef.getStore().getComponent(
-        villageHeartRef,
-        VillageHeartComponent.getComponentType());
-  }
-
-  private Iterable<Vec3i> resolveRequestStorageTargets(
-      VillageStorageRequest request,
-      VillageHeartComponent villageHeart) {
-    if (request == null) {
-      return new ArrayDeque<>();
-    }
-
-    if (villageHeart == null || request.getRequesterWorkplaceId() == null) {
-      return toBlockTargets(request.getTargetsWorkplaceStorage());
-    }
-
-    WorkplaceComponent requesterWorkplace = villageHeart.getWorkplaceFromId(request.getRequesterWorkplaceId());
-    if (requesterWorkplace == null || requesterWorkplace.getStorage() == null) {
-      return toBlockTargets(request.getTargetsWorkplaceStorage());
-    }
-
-    return toBlockTargets(requesterWorkplace.getStorage().getAllContainerAccessPositions());
-  }
-
-  private static Iterable<Vec3i> toBlockTargets(Iterable<Vec3f> positions) {
-    ArrayDeque<Vec3i> converted = new ArrayDeque<>();
-
-    if (positions == null) {
-      return converted;
-    }
-
-    for (Vec3f position : positions) {
-      if (position != null) {
-        converted.add(position.to3i());
-      }
-    }
-
-    return converted;
-  }
-
 }

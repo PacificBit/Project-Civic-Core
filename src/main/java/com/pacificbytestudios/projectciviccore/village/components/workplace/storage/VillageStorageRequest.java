@@ -9,8 +9,8 @@ import java.util.UUID;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
 @SerializableClass
@@ -21,7 +21,7 @@ public class VillageStorageRequest {
   UUID requesterWorkplaceId;
   UUID storageWorkplaceId;
   VillageStorageRequestType type;
-  ArrayDeque<Vec3f> targetsWorkplaceStorage = new ArrayDeque<>();
+  ArrayDeque<BlockTarget> targetsWorkplaceStorage = new ArrayDeque<>();
 
   Set<ItemRequestCriterion> itemCriteria = new HashSet<>();
   Set<UUID> triedStorageIds = new HashSet<>();
@@ -103,11 +103,11 @@ public class VillageStorageRequest {
     this.registeredWithStorage = registeredWithStorage;
   }
 
-  public ArrayDeque<Vec3f> getTargetsWorkplaceStorage() {
+  public ArrayDeque<BlockTarget> getTargetsWorkplaceStorage() {
     return targetsWorkplaceStorage;
   }
 
-  public void setTargetsWorkplaceStorage(Collection<Vec3f> targetWorkplaceStorage) {
+  public void setTargetsWorkplaceStorage(Collection<BlockTarget> targetWorkplaceStorage) {
     this.targetsWorkplaceStorage = targetWorkplaceStorage != null
         ? new ArrayDeque<>(targetWorkplaceStorage)
         : new ArrayDeque<>();

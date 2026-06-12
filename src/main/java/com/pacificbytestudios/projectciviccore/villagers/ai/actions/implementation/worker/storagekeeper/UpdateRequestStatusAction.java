@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -21,6 +18,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
@@ -33,11 +31,11 @@ import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.storagekeeper.BuilderUpdateRequestStatusAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class UpdateRequestStatusAction extends VillagerActionBase {
 
@@ -76,7 +74,7 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
 
     if (storage == null) {
       Logger.logWarning("Could not fetch workplace storage request component for workplace ref "
-              + workplaceRef);
+          + workplaceRef);
       return false;
     }
 
@@ -223,16 +221,14 @@ public class UpdateRequestStatusAction extends VillagerActionBase {
 
   private List<ItemContainer> resolveTargetContainers(
       World world,
-      Iterable<Vec3f> targetPositions) {
+      Iterable<BlockTarget> targetPositions) {
     List<ItemContainer> containers = new ArrayList<>();
     HashSet<String> resolvedContainerKeys = new HashSet<>();
 
-    if (world == null || targetPositions == null) {
-      return containers;
-    }
-
-    for (Vec3f targetPosition : targetPositions) {
-      ContainerResolver.ResolvedContainer resolved = ContainerResolver.resolveContainerAt(world, targetPosition.to3i());
+    for (BlockTarget targetPosition : targetPositions) {
+      ContainerResolver.ResolvedContainer resolved = ContainerResolver.resolveContainerAt(
+          world,
+          targetPosition.getTargetBlock());
       if (resolved == null || resolved.containerBlock() == null || resolved.basePosition() == null) {
         continue;
       }

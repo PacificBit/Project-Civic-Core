@@ -1,9 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.farmer;
 
-import java.util.ArrayDeque;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -11,18 +7,19 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 import com.pacificbytestudios.projectciviccore.villagers.enums.Crops;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
-public class PlantSeedAction extends ActionBase {
+public class PlantSeedAction extends VillagerActionBase {
 
   public PlantSeedAction(BuilderActionBase builderActionBase) {
     super(builderActionBase);
@@ -35,24 +32,14 @@ public class PlantSeedAction extends ActionBase {
       InfoProvider sensorInfo,
       double deltaTime,
       Store<EntityStore> store) {
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villager == null) {
-      Logger.logWarning("Could not fetch villager component");
+    WorkplaceAreaSnapshot workplaceSnapshot = this.getAreaSnapshot(ref, store);
+    if (workplaceSnapshot == null) {
       return false;
     }
 
-    ArrayDeque<Vec3i> blockPositions = villager
-        .getWorkerData()
-        .getWorkareaSnapshot()
-        .getBlockTypePosition().get(FarmerScan.PLANTABLE_TERRAIN);
-
-    Vec3i blockPos;
-
-    if (blockPositions != null && !blockPositions.isEmpty()) {
-      blockPos = blockPositions.pollFirst();
-    } else {
-      throw new IllegalStateException("[PlantSeed] No Plantable soil block available");
-    }
+    Vec3i blockPos = workplaceSnapshot
+        .pollNextSnapshotTargetFrom(FarmerScan.PLANTABLE_TERRAIN)
+        .getTargetBlock();
 
     ItemStack seeds = VillagerInventoryAccess.activeHotbarItem(store, ref);
 

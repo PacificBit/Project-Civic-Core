@@ -61,9 +61,9 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
     if (!this.isTriggered()) {
       this.triggered = true;
       this.treeTrunkBottomBlocks = new LinkedHashSet<>();
-      snapshot.getBlockTypePosition().remove(WoodCutterScan.CUTTABLE_BLOCK);
+      snapshot.getSnapshotTargets().remove(WoodCutterScan.CUTTABLE_BLOCK);
 
-      ArrayDeque<Vec3i> treeTargets = snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE);
+      ArrayDeque<Vec3i> treeTargets = snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE);
       if (treeTargets == null || treeTargets.isEmpty()) {
         Logger.logFine("No cuttable tree target is available");
         return false;
@@ -96,7 +96,7 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
       Collections.reverse(orderedTargets);
 
       ArrayDeque<Vec3i> targets = new ArrayDeque<>(orderedTargets);
-      snapshot.getBlockTypePosition().put(WoodCutterScan.CUTTABLE_BLOCK, targets);
+      snapshot.getSnapshotTargets().put(WoodCutterScan.CUTTABLE_BLOCK, targets);
       return true;
     }
 

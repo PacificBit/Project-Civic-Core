@@ -45,7 +45,7 @@ public class HasTargetBlockInSnapshotSensor extends VillagerSensorBase {
       return false;
     }
 
-    Map<String, ArrayDeque<Vec3i>> blockPositions = snapshot.getBlockTypePosition();
+    Map<String, ArrayDeque<Vec3i>> blockPositions = snapshot.getSnapshotTargets();
 
     for (String targetBlockId : this.targetBlockIds) {
       ArrayDeque<Vec3i> queue = blockPositions.get(targetBlockId);

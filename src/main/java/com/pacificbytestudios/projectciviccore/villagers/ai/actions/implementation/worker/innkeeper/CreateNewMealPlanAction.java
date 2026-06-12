@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.builtin.crafting.component.CraftingManager;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -26,15 +24,16 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.registry.registry.FoodRecipeRegistry;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.innkeeper.BuilderCreateNewMealPlanAction;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class CreateNewMealPlanAction extends VillagerActionBase {
   private final int successFlagSlot;
@@ -80,8 +79,8 @@ public class CreateNewMealPlanAction extends VillagerActionBase {
     int targetMealCount = Math.max(0, villageHeart.getVillagerCount() + this.mealBuffer);
 
     List<ItemContainer> storageSnapshots = new ArrayList<>();
-    for (Vec3i storagePosition : workplaceComponent.getStorage().getAllContainerPositions()) {
-      ResolvedContainer resolvedStorage = ContainerResolver.resolveContainerAt(world, storagePosition);
+    for (BlockTarget storagePosition : workplaceComponent.getStorage().getAllContainersTargets()) {
+      ResolvedContainer resolvedStorage = ContainerResolver.resolveContainerAt(world, storagePosition.getTargetBlock());
       if (resolvedStorage == null) {
         Logger.logWarning("Dead reference of a container is present at " + storagePosition);
         return this.finish(executionSupport, false);

@@ -72,7 +72,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vec3i> targets = snapshot.getBlockTypePosition().get(this.snapshotGroup);
+    ArrayDeque<Vec3i> targets = snapshot.getSnapshotTargets().get(this.snapshotGroup);
     if (targets == null || targets.isEmpty()) {
       Logger.logInfo(
           "No targets available for snapshot group " + this.snapshotGroup);
@@ -130,7 +130,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       Logger.logInfo("The tool in hand cannot break the target block");
       targets.pollFirst();
       if (targets.isEmpty()) {
-        snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
+        snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
       }
       return false;
     }
@@ -138,7 +138,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     if (!this.alreadyClearedTerrain) {
       this.alreadyClearedTerrain = true;
       this.terrainRepairer.repairTerrainBelowSapling(world,
-          snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE).peekFirst());
+          snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE).peekFirst());
     }
 
     ChunkStore chunkStoreObj = world.getChunkStore();
@@ -153,7 +153,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       this.consumeToolDurability(ref, store);
       targets.pollFirst();
       if (targets.isEmpty()) {
-        snapshot.getBlockTypePosition().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
+        snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
         this.alreadyClearedTerrain = false;
       }
     }

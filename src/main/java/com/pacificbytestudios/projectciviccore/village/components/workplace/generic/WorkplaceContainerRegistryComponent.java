@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
@@ -12,8 +13,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 
 @SerializableClass
 public class WorkplaceContainerRegistryComponent implements Component<ChunkStore> {
@@ -26,17 +26,9 @@ public class WorkplaceContainerRegistryComponent implements Component<ChunkStore
     return Collections.unmodifiableMap(containers);
   }
 
-  public List<Vec3i> getAllContainerPositions() {
-    return containers.entrySet()
-        .stream()
-        .map(entry -> entry.getValue().getPosition())
-        .toList();
-  }
-
-  public List<Vec3f> getAllContainerAccessPositions() {
-    return containers.entrySet()
-        .stream()
-        .map(entry -> entry.getValue().getAccessPosition())
+  public List<BlockTarget> getAllContainersTargets() {
+    return containers.entrySet().stream().map(Entry::getValue)
+        .map(c -> new BlockTarget(c.getPosition(), c.getAccessPosition()))
         .toList();
   }
 

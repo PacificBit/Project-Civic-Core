@@ -51,9 +51,9 @@ public class WorkplaceStorageTargetsSnapshotAction extends VillagerActionBase {
       for (Vec3f accessPosition : workplace.getStorage().getAllContainerAccessPositions()) {
         storagePosition.add(accessPosition.to3i());
       }
-      snapshot.getBlockTypePosition().put(WORKPLACE_STORAGE_KEY, storagePosition);
-    } else if (snapshot.getBlockTypePosition().get(WORKPLACE_STORAGE_KEY) != null) {
-      snapshot.getBlockTypePosition().remove(WORKPLACE_STORAGE_KEY);
+      snapshot.getSnapshotTargets().put(WORKPLACE_STORAGE_KEY, storagePosition);
+    } else if (snapshot.getSnapshotTargets().get(WORKPLACE_STORAGE_KEY) != null) {
+      snapshot.getSnapshotTargets().remove(WORKPLACE_STORAGE_KEY);
     }
     return true;
   }

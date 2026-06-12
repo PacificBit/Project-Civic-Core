@@ -1,10 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.core.work.scan;
 
-import java.util.ArrayDeque;
-import java.util.Map;
 import java.util.UUID;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -19,6 +15,8 @@ import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.util.BlockPlacementHelper;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.mine.MineComponent;
@@ -29,7 +27,6 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class MinerScan implements IWorkAreaScanner {
   private static final long MAX_TIME_NS = 1_000_000;
@@ -58,7 +55,6 @@ public class MinerScan implements IWorkAreaScanner {
     }
 
     WorkplaceAreaSnapshot snapshotInProgress = worker.getWorkareaSnapshot();
-    this.sanitizeLegacySnapshot(snapshotInProgress);
     WorldTimeResource worldTimeResource = store.getResource(WorldTimeResource.getResourceType());
 
     Ref<ChunkStore> workplaceRef = worker.getWorkplace().getWorkplaceRef().getRef();
@@ -224,7 +220,7 @@ public class MinerScan implements IWorkAreaScanner {
     } else {
       this.resetScanProgress(snapshotInProgress);
       position = Vec3i.from(digStartPosition);
-      addTask(snapshotInProgress, DIG_POSITIONS, position);
+      snapshotInProgress.addWorkplaceSnapshotTarget(DIG_POSITIONS, position);
       this.queueSupportRepairs(snapshotInProgress, position, supportOffsets);
       snapshotInProgress.setLastVisited(Vec3i.from(position));
     }
@@ -266,32 +262,8 @@ public class MinerScan implements IWorkAreaScanner {
     return Vec3i.from(galleryStartPosition).add(Vec3i.from(galleryDirection).mul(sectionOffset));
   }
 
-  private void sanitizeLegacySnapshot(WorkplaceAreaSnapshot snapshotInProgress) {
-    if (snapshotInProgress == null) {
-      return;
-    }
-
-    Map<String, ArrayDeque<Vec3i>> blockTypePosition = snapshotInProgress.getBlockTypePosition();
-    blockTypePosition.remove("Start_Position");
-    blockTypePosition.remove("Gallery_Direction");
-    blockTypePosition.remove("End_Position");
-    blockTypePosition.remove("Current_Section_End_Dig_Position");
-  }
-
   private void resetScanProgress(WorkplaceAreaSnapshot snapshotInProgress) {
-    Map<String, ArrayDeque<Vec3i>> blockTypePosition = snapshotInProgress.getBlockTypePosition();
-    ArrayDeque<Vec3i> digPositions = blockTypePosition.get(DIG_POSITIONS);
-    if (digPositions != null) {
-      digPositions.clear();
-    }
-
-    ArrayDeque<Vec3i> terrainBlocks = blockTypePosition.get(TERRAIN_BLOCK_TO_FILL);
-    if (terrainBlocks != null) {
-      terrainBlocks.clear();
-    }
-
-    blockTypePosition.remove(CURRENT_SECTION_PREFAB_ANCHOR);
-
+    snapshotInProgress.clearSnapshotTargets();
     snapshotInProgress.setLastVisited(null);
   }
 
@@ -412,36 +384,24 @@ public class MinerScan implements IWorkAreaScanner {
       Vec3i galleryDirection) {
     Vec3i prefabAnchor = Vec3i.from(startPosition)
         .add(Vec3i.from(galleryDirection).mul(GALLERY_SECTION_DEPTH));
-    this.setSingletonTask(snapshotInProgress, CURRENT_SECTION_PREFAB_ANCHOR, prefabAnchor);
+    this.addTask(snapshotInProgress, CURRENT_SECTION_PREFAB_ANCHOR, prefabAnchor);
   }
 
   private void storeCurrentLevelShiftStartMetadata(
       WorkplaceAreaSnapshot snapshotInProgress,
       Vec3i shiftStartPosition) {
     if (shiftStartPosition == null) {
-      snapshotInProgress.getBlockTypePosition().remove(CURRENT_LEVEL_SHIFT_START_POSITION);
+      snapshotInProgress.removeSnapshotGroup(CURRENT_LEVEL_SHIFT_START_POSITION);
       return;
     }
 
-    this.setSingletonTask(snapshotInProgress, CURRENT_LEVEL_SHIFT_START_POSITION, shiftStartPosition);
-  }
-
-  private void setSingletonTask(
-      WorkplaceAreaSnapshot snapshotInProgress,
-      String taskId,
-      Vec3i position) {
-    ArrayDeque<Vec3i> singleton = new ArrayDeque<>(1);
-    singleton.add(Vec3i.from(position));
-    snapshotInProgress.getBlockTypePosition().put(taskId, singleton);
+    this.addTask(snapshotInProgress, CURRENT_LEVEL_SHIFT_START_POSITION, shiftStartPosition);
   }
 
   private void addTask(
       WorkplaceAreaSnapshot snapshotInProgress,
       String taskId,
       Vec3i position) {
-    ArrayDeque<Vec3i> found = snapshotInProgress.getBlockTypePosition()
-        .computeIfAbsent(taskId, key -> new ArrayDeque<>());
-
-    found.addLast(Vec3i.from(position));
+    snapshotInProgress.addWorkplaceSnapshotTarget(taskId, Vec3i.from(position));
   }
 }

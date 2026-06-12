@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.ToIntFunction;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -18,6 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
@@ -27,12 +26,12 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.EnqueueVillageStorageRequestTask;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderAskForClearWorkplaceStorageAction;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
 
@@ -79,8 +78,8 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
     World world = store.getExternalData().getWorld();
     ToIntFunction<ItemStack> validator = buildDirtyInventoryValidator();
 
-    for (Vec3i containerPos : workplaceComponent.getStorage().getAllContainerPositions()) {
-      ResolvedContainer resolvedContainer = ContainerResolver.resolveContainerAt(world, containerPos);
+    for (BlockTarget containerPos : workplaceComponent.getStorage().getAllContainersTargets()) {
+      ResolvedContainer resolvedContainer = ContainerResolver.resolveContainerAt(world, containerPos.getTargetBlock());
 
       if (resolvedContainer == null || resolvedContainer.containerBlock() == null) {
         continue;
@@ -93,7 +92,7 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
 
       if (hasDirtyInventory(container, validator)) {
         Logger.logInfo("Found dirty workplace storage at "
-                + containerPos);
+            + containerPos);
 
         VillageStorageRequest request = buildClearRequest(workplaceComponent);
         Logger.logInfo("Built request: " + request);
@@ -172,7 +171,7 @@ public class AskForClearWorkplaceStorageAction extends VillagerActionBase {
       request.addItemCriteria(criteria);
     }
 
-    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainerAccessPositions());
+    request.setTargetsWorkplaceStorage(workplace.getStorage().getAllContainersTargets());
 
     return request;
   }

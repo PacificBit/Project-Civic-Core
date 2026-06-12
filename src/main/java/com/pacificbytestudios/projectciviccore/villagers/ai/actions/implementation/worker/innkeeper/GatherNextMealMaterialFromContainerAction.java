@@ -91,12 +91,9 @@ public class GatherNextMealMaterialFromContainerAction extends
       return this.finish(executionSupport, false);
     }
 
-    Vec3i containerCoords = snapshot.getBlockTypePosition()
-        .get(WorkplaceStorageTargetsSnapshotAction.WORKPLACE_STORAGE_KEY).pollFirst();
-    if (containerCoords == null) {
-      Logger.logWarning("No container coords found");
-      return this.finish(executionSupport, false);
-    }
+    Vec3i containerCoords = snapshot.pollNextSnapshotTargetFrom(
+        WorkplaceStorageTargetsSnapshotAction.WORKPLACE_STORAGE_KEY)
+        .getTargetBlock();
 
     CraftingRecipe recipe = FoodRecipeRegistry.getRecipe(mealToPrepare);
     List<MaterialQuantity> neededMaterials = CraftingManager.getInputMaterials(recipe, 1);

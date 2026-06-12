@@ -3,79 +3,94 @@ package com.pacificbytestudios.projectciviccore.villagers.components.workplace;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.pacificbytestudio.codecbutler.annotations.SerialDescription;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
-import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
-import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
-
+@SerializableClass
 public class WorkplaceAreaSnapshot {
   public static final Duration EXPIRATION_AMOUNT = Duration.ofHours(1);
 
-  public static final BuilderCodec<WorkplaceAreaSnapshot> CODEC = BuilderCodec
-      .builder(WorkplaceAreaSnapshot.class, WorkplaceAreaSnapshot::new)
+  public static final BuilderCodec<WorkplaceAreaSnapshot> CODEC = WorkplaceAreaSnapshotCodec.CODEC;
 
-      .append(
-          new KeyedCodec<>(
-              "BlockTypePosition",
-              new MapCodec<ArrayDeque<Vec3i>, HashMap<String, ArrayDeque<Vec3i>>>(
-                  new ArrayDequeCodec<>(
-                      Vec3i.CODEC,
-                      "Vector3iDeque"),
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.blockTypePosition = new HashMap<>();
-            value.forEach((k, v) -> obj.blockTypePosition.put(
-                k,
-                v == null ? new ArrayDeque<>() : new ArrayDeque<>(v)));
-          },
-          obj -> {
-            HashMap<String, ArrayDeque<Vec3i>> encoded = new HashMap<>();
-            obj.blockTypePosition.forEach((k, v) -> encoded.put(
-                k,
-                v == null ? new ArrayDeque<>() : new ArrayDeque<>(v)));
-            return encoded;
-          })
-      .add()
+  @SerialName("Vector3iDeque")
+  Map<String, ArrayDeque<BlockTarget>> snapshotTargets = new HashMap<>();
 
-      .append(
-          new KeyedCodec<>("CapturedAt", Codec.INSTANT),
-          (obj, value) -> obj.capturedAt = value,
-          obj -> obj.capturedAt)
-      .add()
+  @SerialWithCodec("com.hypixel.hytale.codec.Codec.INSTANT")
+  Instant capturedAt;
 
-      // WARN: With complete i mean the scan is complete
-      .append(
-          new KeyedCodec<>("Completed", Codec.BOOLEAN),
-          (obj, value) -> obj.completed = value,
-          obj -> obj.completed)
-      .add()
+  @SerialDescription("Used to indicate whether or not the workplace area snapshot was comcluded")
+  boolean completed = false;
+  Vec3i lastVisited;
 
-      .append(
-          new KeyedCodec<>("LastVisited", Vec3i.CODEC),
-          (obj, value) -> obj.lastVisited = value,
-          obj -> obj.lastVisited)
-      .add()
-
-      .build();
-
-  private Map<String, ArrayDeque<Vec3i>> blockTypePosition = new HashMap<>();
-  private Instant capturedAt;
-  private boolean completed = false;
-  private Vec3i lastVisited;
-
-  public Map<String, ArrayDeque<Vec3i>> getBlockTypePosition() {
-    return this.blockTypePosition;
+  public void addWorkplaceSnapshotTarget(String group, Vec3i targetBlock) {
+    this.addWorkplaceSnapshotTarget(group, new BlockTarget(targetBlock));
   }
 
-  public void setBlockTypePosition(Map<String, ArrayDeque<Vec3i>> blockTypePosition) {
-    this.blockTypePosition = blockTypePosition;
+  public void addWorkplaceSnapshotTarget(String group, BlockTarget target) {
+    this.snapshotTargets.computeIfAbsent(group, ignored -> new ArrayDeque<>()).addLast(target);
+  }
+
+  public void addAllWorkplaceSnapshotTargets(String group, BlockTarget... targets) {
+    Collections.addAll(
+        this.snapshotTargets.computeIfAbsent(group, ignored -> new ArrayDeque<>()),
+        targets);
+  }
+
+  public void addAllWorkplaceSnapshotTargets(String group, ArrayDeque<BlockTarget> targets) {
+    this.snapshotTargets.put(group, targets);
+  }
+
+  public ArrayDeque<BlockTarget> getSnapshotFrom(String group) {
+    return this.snapshotTargets.get(group);
+  }
+
+  public BlockTarget peekNextSnapshotTargetFrom(String group) {
+    ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
+    return targets == null ? null : targets.peek();
+  }
+
+  public BlockTarget pollNextSnapshotTargetFrom(String group) {
+    ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
+    return targets == null ? null : targets.poll();
+  }
+
+  public void removeSnapshotGroup(String group) {
+    this.snapshotTargets.remove(group);
+  }
+
+  public void removeAllFromSnapshot(String... groups) {
+    Stream.of(groups).forEach(this.snapshotTargets::remove);
+  }
+
+  public boolean isGroupEmtpy(String group) {
+    ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
+    return targets == null ? true : targets.isEmpty();
+  }
+
+  public void removeFirstSnapshotTargetFrom(String group) {
+    this.pollNextSnapshotTargetFrom(group);
+  }
+
+  public void clearSnapshotTargets() {
+    this.snapshotTargets.clear();
+  }
+
+  public void clearSnapshotGroupTargets(String group) {
+    ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
+
+    if (targets != null) {
+      targets.clear();
+    }
   }
 
   public Instant getCapturedAt() {
@@ -118,12 +133,12 @@ public class WorkplaceAreaSnapshot {
   public boolean isValid(WorldTimeResource worldTimeResource) {
     boolean isExpired = isExpired(worldTimeResource);
     boolean isSnapshotTook = this.completed;
-    boolean hasGroupNotDoneOperatingOver = this.hasGroupToFinish();
+    boolean hasGroupNotDoneOperatingOver = this.hasNonEmptySnapshotTargetGroup();
     return !isExpired && isSnapshotTook && hasGroupNotDoneOperatingOver;
   }
 
-  public boolean hasGroupToFinish() {
-    for (Map.Entry<String, ArrayDeque<Vec3i>> group : this.blockTypePosition.entrySet()) {
+  public boolean hasNonEmptySnapshotTargetGroup() {
+    for (Map.Entry<String, ArrayDeque<BlockTarget>> group : this.snapshotTargets.entrySet()) {
       if (group.getValue().size() > 0) {
         return true;
       }
@@ -133,24 +148,13 @@ public class WorkplaceAreaSnapshot {
 
   @Override
   public WorkplaceAreaSnapshot clone() {
-    WorkplaceAreaSnapshot snapshot = new WorkplaceAreaSnapshot();
-
-    Map<String, ArrayDeque<Vec3i>> clonedMap = new HashMap<>();
-    this.blockTypePosition.forEach((key, value) -> clonedMap.put(
-        key,
-        value == null ? new ArrayDeque<>() : new ArrayDeque<>(value)));
-
-    snapshot.blockTypePosition = clonedMap;
-    snapshot.capturedAt = this.capturedAt;
-    snapshot.completed = this.completed;
-    snapshot.lastVisited = Vec3i.from(this.lastVisited);
-    return snapshot;
+    return WorkplaceAreaSnapshotCodec.clone(this);
   }
 
   @Override
   public String toString() {
     return "WorkplaceAreaSnapshot{"
-        + "\nblockTypePosition=" + this.blockTypePosition
+        + "\nblockTypePosition=" + this.snapshotTargets
         + ",\n capturedAt=" + this.capturedAt
         + ",\n completed=" + this.completed
         + ",\n lastVisited=" + this.lastVisited

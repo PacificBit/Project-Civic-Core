@@ -68,7 +68,7 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
       return false;
     }
 
-    this.findSnapshotTarget(snapshot.getBlockTypePosition());
+    this.findSnapshotTarget(snapshot.getSnapshotTargets());
     if (this.target == null) {
       this.positionProvider.clear();
       return false;

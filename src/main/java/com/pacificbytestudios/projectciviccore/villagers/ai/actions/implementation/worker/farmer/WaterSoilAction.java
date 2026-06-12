@@ -2,9 +2,6 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayDeque;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
@@ -15,15 +12,16 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
-import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
+import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
+import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
 
-public class WaterSoilAction extends ActionBase {
+public class WaterSoilAction extends VillagerActionBase {
   private static final long WATERED_DURATION = 86400;
 
   public WaterSoilAction(BuilderActionBase builderActionBase) {
@@ -38,24 +36,14 @@ public class WaterSoilAction extends ActionBase {
       Store<EntityStore> store) {
     super.execute(ref, executionSupport, sensorInfo, deltaTime, store);
 
-    VillagerComponent villager = store.getComponent(ref, VillagerComponent.getComponentType());
-    if (villager == null) {
-      Logger.logWarning("Could not fetch villager component");
+    WorkplaceAreaSnapshot workplaceSnapshot = this.getAreaSnapshot(ref, store);
+    if (workplaceSnapshot == null) {
       return false;
     }
 
-    ArrayDeque<Vec3i> blockPositions = villager
-        .getWorkerData()
-        .getWorkareaSnapshot()
-        .getBlockTypePosition().get(FarmerScan.WATERABLE_TERRAIN);
-
-    Vec3i blockPos;
-
-    if (blockPositions != null && !blockPositions.isEmpty()) {
-      blockPos = blockPositions.pollFirst();
-    } else {
-      throw new IllegalStateException("No waterable soil block available");
-    }
+    Vec3i blockPos = workplaceSnapshot
+        .pollNextSnapshotTargetFrom(FarmerScan.WATERABLE_TERRAIN)
+        .getTargetBlock();
 
     World world = store.getExternalData().getWorld();
     return waterTilledSoil(world, blockPos);

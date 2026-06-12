@@ -1,14 +1,11 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -23,6 +20,8 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -31,7 +30,6 @@ import com.pacificbytestudios.projectciviccore.villagers.core.inventory.Containe
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryTransferValidators;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class InteractWithExternalInventory extends VillagerActionBase {
   private final String snapshotKey;
@@ -77,13 +75,19 @@ public class InteractWithExternalInventory extends VillagerActionBase {
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
     this.workerId = uuidComponent.getUuid();
 
-    ArrayDeque<Vec3i> coords = snapshot.getBlockTypePosition().get(this.snapshotKey);
-    if (coords == null || coords.isEmpty()) {
-      Logger.logWarning("Could not find coords in snapshot for key: " + this.snapshotKey);
-      return false;
-    }
+    // ArrayDeque<Vec3i> coords =
+    // snapshot.getSnapshotTargets().get(this.snapshotKey);
+    // if (coords == null || coords.isEmpty()) {
+    // Logger.logWarning("Could not find coords in snapshot for key: " +
+    // this.snapshotKey);
+    // return false;
+    // }
+    //
+    // Vec3i containerPosition = coords.peek();
+    Vec3i containerPosition = snapshot
+        .peekNextSnapshotTargetFrom(this.snapshotKey)
+        .getTargetBlock();
 
-    Vec3i containerPosition = coords.peek();
     World world = store.getExternalData().getWorld();
     ResolvedContainer resolvedContainer = ContainerResolver.resolveContainerAt(world, containerPosition);
 
@@ -110,12 +114,12 @@ public class InteractWithExternalInventory extends VillagerActionBase {
 
     if (done) {
       if (shouldClearRemainingTargetsOnSuccess()) {
-        coords.clear();
+        snapshot.clearSnapshotGroupTargets(this.snapshotKey);
       } else if (this.consumeSnapshotTargetOnSuccess) {
-        coords.pollFirst();
+        snapshot.removeFirstSnapshotTargetFrom(this.snapshotKey);
       }
     } else if (this.consumeSnapshotTargetOnFail) {
-      coords.pollFirst();
+      snapshot.removeFirstSnapshotTargetFrom(this.snapshotKey);
     }
 
     return done;
