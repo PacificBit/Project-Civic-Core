@@ -90,11 +90,11 @@
                   },
                   "Rotation": "OneEighty",
                   "AccessOffset": {
-                    "X": -1,
+                    "X": -0.501255989074707,
                     "Y": 0,
-                    "Z": 0
+                    "Z": 0.5384759902954102
                   },
-                  "AccessId": "kXzmqwm5TQC9TJ6Bbovb2w=="
+                  "AccessId": "UfIwJj81QU2/RZ1YGYibBQ=="
                 },
                 "3": {
                   "PositionId": "oct2py9xQgKHL7aEFdYLpQ==",
@@ -195,6 +195,23 @@
                       "Z": 1
                     },
                     "AccessId": "sCZR0UfrQrizO2o7+dajHQ=="
+                  }
+                ],
+                "2": [
+                  {
+                    "PositionId": "EYzV4ks7SeOyR25VhLxLqw==",
+                    "Position": {
+                      "X": 0,
+                      "Y": 1,
+                      "Z": 14
+                    },
+                    "Rotation": "None",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": 1
+                    },
+                    "AccessId": "JZeORzuiQ2W0KulaNskrYw=="
                   }
                 ]
               }
@@ -548,11 +565,11 @@
                   },
                   "Rotation": "None",
                   "AccessOffset": {
-                    "X": 0,
+                    "X": -0.018968582153320312,
                     "Y": 0,
-                    "Z": 1
+                    "Z": 1.9008541107177734
                   },
-                  "AccessId": "Esmt88PTQ3m6UFM+E6FNsQ=="
+                  "AccessId": "U32PInWHTg2+ifyxvR+PKQ=="
                 },
                 "2": {
                   "PositionId": "Y7qKKQJrTA6ykX0D7VSFpg==",
@@ -655,19 +672,19 @@
               "Containers": {
                 "1": [
                   {
-                    "PositionId": "oWwXb2KKSZO/lTKE41tpHg==",
+                    "PositionId": "0RIHc2YDQdC/sHv611Ysxg==",
                     "Position": {
                       "X": -5,
                       "Y": 1,
                       "Z": 3
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": -0.7546043395996094,
                       "Y": 0,
-                      "Z": -1
+                      "Z": 0.4866323471069336
                     },
-                    "AccessId": "0FXDmgm0SWeGJf6hGDVfDA=="
+                    "AccessId": "jBohjIvFTuGaXwccbzpnPw=="
                   }
                 ],
                 "2": [
@@ -732,11 +749,11 @@
                   },
                   "Rotation": "None",
                   "AccessOffset": {
-                    "X": 0,
+                    "X": 0.5705966949462891,
                     "Y": 0,
-                    "Z": 2
+                    "Z": 2.183651924133301
                   },
-                  "AccessId": "kLIzDUS/QRyUIkl5kEyjRA=="
+                  "AccessId": "sTCh46hlRzWBMfXoMScPVw=="
                 },
                 "3": {
                   "PositionId": "Qwi71K4YTe6Sa+Q8juTawA==",
@@ -886,112 +903,112 @@
                 ],
                 "2": [
                   {
-                    "PositionId": "HK+VqGYPQvKzwOGM1VfSWg==",
+                    "PositionId": "Zn94XeFGTL+EIGr3HSBxwQ==",
                     "Position": {
                       "X": 2,
                       "Y": 1,
                       "Z": -2
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": -1,
+                      "X": -0.6980495452880859,
                       "Y": 0,
-                      "Z": 0
+                      "Z": 0.013083457946777344
                     },
-                    "AccessId": "7U+w+FkOQMe9UOJYueTKWw=="
+                    "AccessId": "/6s+CNEHR9+2hgfOe9TApg=="
                   },
                   {
-                    "PositionId": "AIhj4NQjSuKDB/17QGI/UA==",
+                    "PositionId": "cqjSOdsnQFSkgKaZcNamwg==",
                     "Position": {
                       "X": 2,
                       "Y": 1,
                       "Z": 1
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": -1,
+                      "X": -0.6764469146728516,
                       "Y": 0,
-                      "Z": 0
+                      "Z": -0.01785564422607422
                     },
-                    "AccessId": "gGfKk7LyQ5eml7eJPFfnVw=="
+                    "AccessId": "Qg/iXNRDS5Shvdl3XS/PcA=="
                   },
                   {
-                    "PositionId": "2/UD9bNVSgGmMKkG1u36RQ==",
+                    "PositionId": "zNUYxr74QfOGDR4rW4KY2Q==",
                     "Position": {
                       "X": 2,
                       "Y": 1,
                       "Z": 4
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": -1,
+                      "X": -0.6837139129638672,
                       "Y": 0,
-                      "Z": 0
+                      "Z": -0.006692409515380859
                     },
-                    "AccessId": "XH2ev1VaTamRFec5pUQtkg=="
+                    "AccessId": "4iv/u3f/RA2XfDN5u4li8Q=="
                   },
                   {
-                    "PositionId": "Yd7tNTG1Q46D0iDiMVEnxQ==",
+                    "PositionId": "S9wTWLnlTKWsvDJQk6eezQ==",
                     "Position": {
                       "X": -5,
                       "Y": 5,
                       "Z": -1
                     },
-                    "Rotation": "OneEighty",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": 0.9177951812744141,
                       "Y": 0,
-                      "Z": -1
+                      "Z": -0.45777130126953125
                     },
-                    "AccessId": "HE/Eg3NUTRyHG8Nqmnm1tA=="
+                    "AccessId": "VBf/uXG1Q++W5HRLt7pGBA=="
                   },
                   {
-                    "PositionId": "W9yxiy7eTYG8ppK/alRUdg==",
+                    "PositionId": "LbeS2+CmTnqUpB+ksP3WRw==",
                     "Position": {
                       "X": 3,
                       "Y": 5,
                       "Z": 4
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": -1,
+                      "X": -0.6557216644287109,
                       "Y": 0,
-                      "Z": 0
+                      "Z": 0.013018131256103516
                     },
-                    "AccessId": "PY5NRuMhRpStEVGMb2dmKw=="
+                    "AccessId": "zIZgQI8yQMyRqNfFCF5SOw=="
                   },
                   {
-                    "PositionId": "25Gd/318SuydOIeI0+SiEg==",
+                    "PositionId": "BhpS9Zp7QEOpOHfvoosytw==",
                     "Position": {
                       "X": -1,
                       "Y": 5,
                       "Z": 1
                     },
-                    "Rotation": "Ninety",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 1,
+                      "X": 1.6984329223632812,
                       "Y": 0,
-                      "Z": 0
+                      "Z": 0.9917316436767578
                     },
-                    "AccessId": "D45cDAt9StymMXc2N4r9Uw=="
+                    "AccessId": "oAofczTMSoKaKrH007eeRg=="
                   },
                   {
-                    "PositionId": "bVNA2TMNRSKxVKQux9NrVw==",
+                    "PositionId": "1/gNOHj8Qf6Ue1LD6yeUIA==",
                     "Position": {
                       "X": 1,
                       "Y": 5,
                       "Z": 5
                     },
-                    "Rotation": "OneEighty",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": 1.0208873748779297,
                       "Y": 0,
-                      "Z": -1
+                      "Z": -0.6452045440673828
                     },
-                    "AccessId": "xca2o6TUSkel0hRNNRfFfQ=="
+                    "AccessId": "fythDEl3SKCk+tjzEalhHg=="
                   },
                   {
-                    "PositionId": "OzIT5PGXQ3OiEwU6wcc0uw==",
+                    "PositionId": "97CsaP6VQ26hWOKbHL3EkA==",
                     "Position": {
                       "X": -4,
                       "Y": 5,
@@ -999,29 +1016,29 @@
                     },
                     "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": -0.09044933319091797,
                       "Y": 0,
-                      "Z": 1
+                      "Z": 1.5374507904052734
                     },
-                    "AccessId": "5Ketm3jTSmSbjzHl3wtO5Q=="
+                    "AccessId": "K3u3npfCT0GNzFPBBuWYKQ=="
                   },
                   {
-                    "PositionId": "DdkPudnfQqaXK65DnkBYFA==",
+                    "PositionId": "AVttVyekQpCGBFLNL+2ZFg==",
                     "Position": {
                       "X": -5,
                       "Y": 5,
                       "Z": -4
                     },
-                    "Rotation": "OneEighty",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": 1.00848388671875,
                       "Y": 0,
-                      "Z": -1
+                      "Z": -0.5113639831542969
                     },
-                    "AccessId": "/Qej2/Q2TmGpP/DNFFdRnA=="
+                    "AccessId": "qmXx5aYiQh2U/5THMnYWJQ=="
                   },
                   {
-                    "PositionId": "3uIAI20iTN6nwN5k+WIgkw==",
+                    "PositionId": "+IWTHIYFQOKgPahvzZgmeA==",
                     "Position": {
                       "X": -1,
                       "Y": 5,
@@ -1029,29 +1046,29 @@
                     },
                     "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": -0.0070896148681640625,
                       "Y": 0,
-                      "Z": 1
+                      "Z": 1.6109256744384766
                     },
-                    "AccessId": "1UO7OuKLR1y9qxeRIPoJpw=="
+                    "AccessId": "Nfb65wjfQmivRVc2nGTM0w=="
                   },
                   {
-                    "PositionId": "HV7uyrjcSkuPLiv0Elf6Lg==",
+                    "PositionId": "oIXYHUeDSVGOYuPUlotMLQ==",
                     "Position": {
                       "X": -2,
                       "Y": 5,
                       "Z": -4
                     },
-                    "Rotation": "OneEighty",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": 1.010533332824707,
                       "Y": 0,
-                      "Z": -1
+                      "Z": -0.4538698196411133
                     },
-                    "AccessId": "5Q8O+U6nSTeiBthnh3L47g=="
+                    "AccessId": "ThOETMwyRUmI4q0dHRsSFA=="
                   },
                   {
-                    "PositionId": "W+GLL9yQQPKe27TBYf/r0A==",
+                    "PositionId": "RezsJTU9TFWa6wXvxYYITg==",
                     "Position": {
                       "X": 2,
                       "Y": 5,
@@ -1059,26 +1076,26 @@
                     },
                     "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": -0.01114654541015625,
                       "Y": 0,
-                      "Z": 1
+                      "Z": 1.6208620071411133
                     },
-                    "AccessId": "fHnz/tvVQNStfaEDmlmT0w=="
+                    "AccessId": "8T25Avo/QXeqPVqiMci1hg=="
                   },
                   {
-                    "PositionId": "iSzS8rFUTGmWN8dnZEJWmw==",
+                    "PositionId": "CWAe+ErHQsKj10ROPuDXUw==",
                     "Position": {
                       "X": 1,
                       "Y": 5,
                       "Z": -4
                     },
-                    "Rotation": "OneEighty",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": 0.9817733764648438,
                       "Y": 0,
-                      "Z": -1
+                      "Z": -0.43485546112060547
                     },
-                    "AccessId": "0bCuzRiOQsuXpKLJeBKxuw=="
+                    "AccessId": "6byojeC9SDq0bfmvVZ4ZaA=="
                   }
                 ],
                 "3": [
@@ -1291,7 +1308,7 @@
                     "Y": 0,
                     "Z": 0
                   },
-                  "AccessId": "IFMNTr+0RYG5q4yd5hQfJw=="
+                  "AccessId": "eaLbK/niQiyJVMIphSPbSw=="
                 },
                 "3": {
                   "PositionId": "k+17FVQ9QmyyuezEwrSQ0A==",
@@ -1396,19 +1413,19 @@
                 ],
                 "2": [
                   {
-                    "PositionId": "InBjV2XLTXGFkburTaFvwA==",
+                    "PositionId": "X7riNA/lSp+c/sYgfdhe9Q==",
                     "Position": {
                       "X": 5,
                       "Y": -3,
                       "Z": -3
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
                       "X": -1,
                       "Y": 0,
                       "Z": 0
                     },
-                    "AccessId": "rAZsn7MrTHqFSGVEAU5hPQ=="
+                    "AccessId": "eme8tvvfS+WRUy3XFrKRPg=="
                   }
                 ],
                 "3": [
@@ -2110,9 +2127,9 @@
                     "InteractableTransform": {
                       "PositionId": "g11EmJv/6EeVgA10dkuwzw==",
                       "Position": {
-                        "X": 0,
-                        "Y": 5,
-                        "Z": -1
+                        "X": 0.5074462890625,
+                        "Y": 5.5,
+                        "Z": -0.49799537658691406
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2124,9 +2141,9 @@
                     "DependsOnTransform": {
                       "PositionId": "pn/2VL4ATNBy//8gsOPtYw==",
                       "Position": {
-                        "X": 0,
+                        "X": 0.6120758056640625,
                         "Y": 6,
-                        "Z": 0
+                        "Z": 0.5100603103637695
                       }
                     },
                     "OccupiedBy": null,
@@ -2138,9 +2155,9 @@
                     "InteractableTransform": {
                       "PositionId": "Vm7ZYfJvuHhlYeB2rK9OZQ==",
                       "Position": {
-                        "X": 1,
-                        "Y": 5,
-                        "Z": -1
+                        "X": 1.4972152709960938,
+                        "Y": 5.5,
+                        "Z": -0.4661445617675781
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2152,9 +2169,9 @@
                     "DependsOnTransform": {
                       "PositionId": "+8G2XszTo4sc4AjVJvex/g==",
                       "Position": {
-                        "X": 1,
+                        "X": 1.5672683715820312,
                         "Y": 6,
-                        "Z": 0
+                        "Z": 0.5423727035522461
                       }
                     },
                     "OccupiedBy": null,
@@ -2166,9 +2183,9 @@
                     "InteractableTransform": {
                       "PositionId": "JTlDuWEq8Dj4Q9briKWDLQ==",
                       "Position": {
-                        "X": 0,
-                        "Y": 5,
-                        "Z": 2
+                        "X": 0.5248794555664062,
+                        "Y": 5.5,
+                        "Z": 2.451038360595703
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2180,9 +2197,9 @@
                     "DependsOnTransform": {
                       "PositionId": "hNitiSNQD7ezsFWHzxgLxQ==",
                       "Position": {
-                        "X": 0,
+                        "X": 0.5957717895507812,
                         "Y": 6,
-                        "Z": 1
+                        "Z": 1.513336181640625
                       }
                     },
                     "OccupiedBy": null,
@@ -2194,9 +2211,9 @@
                     "InteractableTransform": {
                       "PositionId": "oRxBJnsprtWkOTmW565KdQ==",
                       "Position": {
-                        "X": 1,
-                        "Y": 5,
-                        "Z": 2
+                        "X": 1.4917144775390625,
+                        "Y": 5.5,
+                        "Z": 2.4857654571533203
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2208,9 +2225,9 @@
                     "DependsOnTransform": {
                       "PositionId": "kzsTsOx22C5Vgo9uqIG7TA==",
                       "Position": {
-                        "X": 1,
+                        "X": 1.550537109375,
                         "Y": 6,
-                        "Z": 1
+                        "Z": 1.5523266792297363
                       }
                     },
                     "OccupiedBy": null,
@@ -2222,9 +2239,9 @@
                     "InteractableTransform": {
                       "PositionId": "ejv9W0EWeNdJAsweuvFmwQ==",
                       "Position": {
-                        "X": -2,
-                        "Y": 5,
-                        "Z": -1
+                        "X": -1.4933242797851562,
+                        "Y": 5.5,
+                        "Z": -0.4620513916015625
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2236,9 +2253,9 @@
                     "DependsOnTransform": {
                       "PositionId": "R8u0pwvONuSCYVAWAeFKZQ==",
                       "Position": {
-                        "X": -2,
+                        "X": -1.543121337890625,
                         "Y": 6,
-                        "Z": 0
+                        "Z": 0.4203624725341797
                       }
                     },
                     "OccupiedBy": null,
@@ -2250,9 +2267,9 @@
                     "InteractableTransform": {
                       "PositionId": "iQdjd8xNjJhkIpt3H3+KbA==",
                       "Position": {
-                        "X": -3,
-                        "Y": 5,
-                        "Z": -1
+                        "X": -2.4980545043945312,
+                        "Y": 5.5,
+                        "Z": -0.4722328186035156
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2264,9 +2281,9 @@
                     "DependsOnTransform": {
                       "PositionId": "1sB7+kQGlQ/msjtG6iATZg==",
                       "Position": {
-                        "X": -3,
+                        "X": -2.4511489868164062,
                         "Y": 6,
-                        "Z": 0
+                        "Z": 0.48681640625
                       }
                     },
                     "OccupiedBy": null,
@@ -2278,9 +2295,9 @@
                     "InteractableTransform": {
                       "PositionId": "iT662cBkm0uoRW+5lus66w==",
                       "Position": {
-                        "X": -2,
-                        "Y": 5,
-                        "Z": 2
+                        "X": -1.5153732299804688,
+                        "Y": 5.5,
+                        "Z": 2.470691204071045
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2292,9 +2309,9 @@
                     "DependsOnTransform": {
                       "PositionId": "pDhln54V/lqcqhyN4V51wg==",
                       "Position": {
-                        "X": -2,
+                        "X": -1.5769195556640625,
                         "Y": 6,
-                        "Z": 1
+                        "Z": 1.463916301727295
                       }
                     },
                     "OccupiedBy": null,
@@ -2306,9 +2323,9 @@
                     "InteractableTransform": {
                       "PositionId": "LtxIeDy+7pTWL41doKDSYw==",
                       "Position": {
-                        "X": -3,
-                        "Y": 5,
-                        "Z": 2
+                        "X": -2.4953155517578125,
+                        "Y": 5.5,
+                        "Z": 2.425504684448242
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -2320,9 +2337,9 @@
                     "DependsOnTransform": {
                       "PositionId": "aGiPR35IuoNw221CI0n/tQ==",
                       "Position": {
-                        "X": -3,
+                        "X": -2.4762725830078125,
                         "Y": 6,
-                        "Z": 1
+                        "Z": 1.4367036819458008
                       }
                     },
                     "OccupiedBy": null,

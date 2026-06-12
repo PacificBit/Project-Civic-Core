@@ -1,25 +1,18 @@
 package com.pacificbytestudios.projectciviccore.village.components.builder;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 
+@SerializableClass
 public class BufferedConstructionStorageComponent implements Component<ChunkStore> {
-  public static final BuilderCodec<BufferedConstructionStorageComponent> CODEC = BuilderCodec
-      .builder(BufferedConstructionStorageComponent.class, BufferedConstructionStorageComponent::new)
+  public static final BuilderCodec<BufferedConstructionStorageComponent> CODEC = BufferedConstructionStorageComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>("ItemContainer", SimpleItemContainer.CODEC),
-          (obj, value) -> obj.itemContainer = value,
-          BufferedConstructionStorageComponent::getItemContainer)
-      .add()
-
-      .build();
-
-  private SimpleItemContainer itemContainer;
+  SimpleItemContainer itemContainer;
 
   public SimpleItemContainer getItemContainer() {
     return itemContainer;
@@ -31,9 +24,7 @@ public class BufferedConstructionStorageComponent implements Component<ChunkStor
 
   @Override
   public BufferedConstructionStorageComponent clone() {
-    BufferedConstructionStorageComponent component = new BufferedConstructionStorageComponent();
-    component.itemContainer = this.itemContainer == null ? null : this.itemContainer.clone();
-    return component;
+    return BufferedConstructionStorageComponentCodec.clone(this);
   }
 
   public static ComponentType<ChunkStore, BufferedConstructionStorageComponent> getComponentType() {

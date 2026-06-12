@@ -1,39 +1,25 @@
 package com.pacificbytestudios.projectciviccore.village.components.builder;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 
+@SerializableClass
 public class VillageBuilderComponent implements Component<ChunkStore> {
-  public static final BuilderCodec<VillageBuilderComponent> CODEC = BuilderCodec
-      .builder(VillageBuilderComponent.class, VillageBuilderComponent::new)
+  public static final BuilderCodec<VillageBuilderComponent> CODEC = VillageBuilderComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>("ProjectQueue", VillageProjectPlan.CODEC),
-          (obj, value) -> obj.projectPlan = value,
-          obj -> obj.projectPlan)
-      .add()
+  @SerialName("ProjectQueue")
+  VillageProjectPlan projectPlan;
 
-      .append(new KeyedCodec<>("IsFirstVillageBuildProject", Codec.BOOLEAN),
-          (obj, value) -> obj.firstVillageBuildProject = value,
-          (obj) -> obj.firstVillageBuildProject)
-      .add()
-
-      .append(new KeyedCodec<>("HaveFirstRoadsBeenBuilt", Codec.BOOLEAN),
-          (obj, value) -> obj.haveFirstRoadsBeenBuilt = value,
-          (obj) -> obj.haveFirstRoadsBeenBuilt)
-      .add()
-
-      .build();
-
-  private VillageProjectPlan projectPlan;
-  private Boolean firstVillageBuildProject = false;
-  private Boolean haveFirstRoadsBeenBuilt = false;
+  @SerialName("IsFirstVillageBuildProject")
+  Boolean firstVillageBuildProject = false;
+  Boolean haveFirstRoadsBeenBuilt = false;
 
   public boolean hasProject() {
     return this.projectPlan != null && this.projectPlan.hasProjects();
@@ -85,11 +71,7 @@ public class VillageBuilderComponent implements Component<ChunkStore> {
 
   @Override
   public VillageBuilderComponent clone() {
-    VillageBuilderComponent component = new VillageBuilderComponent();
-    component.projectPlan = this.projectPlan == null ? null : this.projectPlan.clone();
-    component.firstVillageBuildProject = this.firstVillageBuildProject;
-    component.haveFirstRoadsBeenBuilt = this.haveFirstRoadsBeenBuilt;
-    return component;
+    return VillageBuilderComponentCodec.clone(this);
   }
 
   public static ComponentType<ChunkStore, VillageBuilderComponent> getComponentType() {
