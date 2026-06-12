@@ -20,3 +20,6 @@ bin/
 run/
 
 .vscode/
+/.classpath
+/.factorypath
+/.project

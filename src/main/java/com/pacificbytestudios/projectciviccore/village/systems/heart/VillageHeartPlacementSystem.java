@@ -86,7 +86,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     villageHeart.setName(villageName);
     Logger.logInfo("Generated Village name: " + villageHeart.getName());
 
-    int radius = spawnComponent.getSpawnNpcRange();
+    int radius = spawnComponent.getNpcSpawnRange();
     if (villageHeart.getUuid() == null) {
       villageHeart.setUuid(UUID.randomUUID());
     }

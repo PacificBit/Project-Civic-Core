@@ -7,17 +7,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
-import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
@@ -29,121 +25,29 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
+@SerializableClass
 public class WorkplaceComponent implements Component<ChunkStore> {
-  public static final BuilderCodec<WorkplaceComponent> CODEC = BuilderCodec
-      .builder(WorkplaceComponent.class, WorkplaceComponent::new)
+  public static final BuilderCodec<WorkplaceComponent> CODEC = WorkplaceComponentCodec.CODEC;
 
-      .append(
-          new KeyedCodec<>("Uuid", Codec.UUID_BINARY),
-          (obj, value) -> obj.uuid = value,
-          (obj) -> obj.uuid)
-      .add()
+  @SerialName("Type")
+  StructureType workingPlaceType;
+  @SerialName("WorkerTypes")
+  WorkType[] workerType;
 
-      .append(
-          new KeyedCodec<>("Level", Codec.SHORT),
-          (obj, value) -> obj.level = value,
-          (obj) -> obj.level)
-      .add()
+  UUID uuid;
+  Short level = 1;
+  EntityRef villageRef;
+  EntityRef workplaceRef;
+  AreaFootprint workingArea;
 
-      .append(
-          new KeyedCodec<>("Type", new EnumCodec<StructureType>(StructureType.class)),
-          (obj, value) -> obj.workingPlaceType = value,
-          (obj) -> obj.workingPlaceType)
-      .add()
+  BlockTransform<Vec3i> benchTransform;
+  BlockTransform<Vec3i> prefabAnchorTransform;
 
-      .append(new KeyedCodec<>("BenchTransform", BlockTransform.VEC3I_CODEC),
-          (obj, value) -> obj.benchTransform = value,
-          (obj) -> obj.benchTransform)
-      .add()
-
-      .append(new KeyedCodec<>("PrefabAnchorTransform", BlockTransform.VEC3I_CODEC),
-          (obj, value) -> obj.prefabAnchorTransform = value,
-          (obj) -> obj.prefabAnchorTransform)
-      .add()
-
-      .append(new KeyedCodec<>("VillageRef", EntityRef.CODEC),
-          (obj, value) -> obj.villageRef = value,
-          (obj) -> obj.villageRef)
-      .add()
-
-      .append(new KeyedCodec<>("WorkplaceRef", EntityRef.CODEC),
-          (obj, value) -> obj.workplaceRef = value,
-          (obj) -> obj.workplaceRef)
-      .add()
-
-      .append(new KeyedCodec<Set<UUID>>(
-          "Workers",
-          new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.workers = value,
-          obj -> obj.workers)
-      .add()
-
-      .append(new KeyedCodec<>("BossId", Codec.UUID_BINARY),
-          (obj, value) -> obj.bossId = value,
-          (obj) -> obj.bossId)
-      .add()
-
-      .append(new KeyedCodec<>("Storage", WorkplaceContainerRegistryComponent.CODEC),
-          (obj, value) -> obj.storage = value,
-          (obj) -> obj.storage)
-      .add()
-
-      .append(
-          new KeyedCodec<>("WorkingArea", AreaFootprint.CODEC),
-          (obj, value) -> obj.workingArea = value,
-          (obj) -> obj.workingArea)
-      .add()
-
-      .append(
-          new KeyedCodec<>("WorkerTypes",
-              new ArrayCodec<WorkType>(new EnumCodec<WorkType>(WorkType.class),
-                  WorkType[]::new)),
-          (obj, value) -> obj.workerType = value,
-          (obj) -> obj.workerType)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "WorkersDesignatedArea",
-              new MapCodec<AreaFootprint, HashMap<String, AreaFootprint>>(
-                  AreaFootprint.CODEC,
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.workersDesignatedArea = new HashMap<>();
-            value.forEach((k, v) -> obj.workersDesignatedArea.put(UUID.fromString(k), v));
-          },
-          obj -> {
-            HashMap<String, AreaFootprint> encoded = new HashMap<>();
-            obj.workersDesignatedArea.forEach((k, v) -> encoded.put(k.toString(), v));
-            return encoded;
-          })
-      .add()
-
-      .append(
-          new KeyedCodec<>("LastStorageRequest", VillageStorageRequest.CODEC),
-          (obj, value) -> obj.lastStorageRequest = value,
-          (obj) -> obj.lastStorageRequest)
-      .add()
-
-      .build();
-
-  private UUID uuid;
-  private Short level = 1;
-  private StructureType workingPlaceType;
-  private WorkType[] workerType;
-  private BlockTransform<Vec3i> benchTransform;
-  private BlockTransform<Vec3i> prefabAnchorTransform;
-
-  private EntityRef villageRef;
-  private EntityRef workplaceRef;
-
-  private AreaFootprint workingArea;
-
-  private Set<UUID> workers = new HashSet<>();
-  private UUID bossId;
-  private Map<UUID, AreaFootprint> workersDesignatedArea = new HashMap<>();
-  private WorkplaceContainerRegistryComponent storage;
-  private VillageStorageRequest lastStorageRequest;
+  UUID bossId;
+  Set<UUID> workers = new HashSet<>();
+  Map<UUID, AreaFootprint> workersDesignatedArea = new HashMap<>();
+  WorkplaceContainerRegistryComponent storage;
+  VillageStorageRequest lastStorageRequest;
 
   public UUID getUuid() {
     return uuid;
@@ -322,22 +226,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
   @Override
   public WorkplaceComponent clone() {
-    WorkplaceComponent component = new WorkplaceComponent();
-    component.uuid = this.uuid;
-    component.level = this.level;
-    component.workingPlaceType = this.workingPlaceType;
-    component.benchTransform = BlockTransform.clone(this.benchTransform);
-    component.villageRef = this.villageRef;
-    component.workplaceRef = this.workplaceRef;
-    component.workers = new HashSet<>(this.workers);
-    component.bossId = this.bossId;
-    component.storage = this.storage != null ? this.storage.clone() : null;
-    component.prefabAnchorTransform = BlockTransform.clone(this.prefabAnchorTransform);
-    component.workingArea = this.workingArea != null ? this.workingArea.clone() : null;
-    component.workerType = this.workerType != null ? this.workerType.clone() : null;
-    component.workersDesignatedArea = new HashMap<>(this.workersDesignatedArea);
-    component.lastStorageRequest = this.lastStorageRequest != null ? this.lastStorageRequest.clone() : null;
-    return component;
+    return WorkplaceComponentCodec.clone(this);
   }
 
   @Override

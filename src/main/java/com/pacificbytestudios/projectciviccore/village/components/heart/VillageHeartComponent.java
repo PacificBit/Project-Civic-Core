@@ -21,16 +21,14 @@ import com.hypixel.hytale.builtin.triggervolumes.effect.builtin.conditions.Coold
 import com.hypixel.hytale.builtin.triggervolumes.manager.TriggerVolumeManager;
 import com.hypixel.hytale.builtin.triggervolumes.manager.VolumeEntry;
 import com.hypixel.hytale.builtin.triggervolumes.shape.BoxShape;
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.BlockContext;
@@ -48,206 +46,38 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
+@SerializableClass
 public class VillageHeartComponent implements Component<ChunkStore> {
+  public static final BuilderCodec<VillageHeartComponent> CODEC = VillageHeartComponentCodec.CODEC;
 
-  public static final BuilderCodec<VillageHeartComponent> CODEC = BuilderCodec
-      .builder(VillageHeartComponent.class, VillageHeartComponent::new)
+  @SerialName("VillageId")
+  UUID uuid;
+  @SerialName("VillageHeartBlockContext")
+  BlockContext blockContext;
+  @SerialName("VillagerToWorkplaceMap")
+  Map<UUID, UUID> villagerToWorkplace = new HashMap<>();
+  @SerialName("VillagerToHouseMap")
+  Map<UUID, UUID> villagerToHouse = new HashMap<>();
 
-      .append(new KeyedCodec<>("VillageId", Codec.UUID_BINARY),
-          (obj, value) -> obj.uuid = value,
-          (obj) -> obj.uuid)
-      .add()
+  String name;
+  EntityRef villageRef;
+  VillageHeartConfigComponent config;
+  VillageHeartState state = VillageHeartState.NORMAL;
+  int level = 1;
+  AreaFootprint claimedArea;
+  VolumeEntry volumeEntry;
 
-      .append(new KeyedCodec<>("VillageRef", EntityRef.CODEC),
-          (obj, value) -> obj.villageRef = value,
-          (obj) -> obj.villageRef)
-      .add()
+  Set<UUID> villagersRegistry = new HashSet<>();
+  Set<UUID> unemployedRegistry = new HashSet<>();
+  Set<UUID> homelessRegistry = new HashSet<>();
 
-      .append(new KeyedCodec<>("Config", VillageHeartConfigComponent.CODEC),
-          (obj, value) -> obj.config = value,
-          (obj) -> obj.config)
-      .add()
+  Map<UUID, VillagerComponent> villagerIdToComponent = new HashMap<>();
+  Map<UUID, WorkplaceComponent> workplaceIdToWorkplace = new HashMap<>();
+  Map<UUID, HouseComponent> houseIdToHouse = new HashMap<>();
 
-      .append(new KeyedCodec<>("State", Codec.STRING),
-          (obj, value) -> obj.state = VillageHeartState.valueOf(value.toUpperCase()),
-          (obj) -> obj.state.getState())
-      .add()
-
-      .append(new KeyedCodec<>("Level", Codec.INTEGER),
-          (obj, value) -> obj.level = value,
-          (obj) -> obj.level)
-      .add()
-
-      .append(
-          new KeyedCodec<>("ClaimedArea", AreaFootprint.CODEC),
-          (obj, value) -> obj.claimedArea = value,
-          (obj) -> obj.claimedArea)
-      .add()
-
-      .append(
-          new KeyedCodec<>("VillageHeartBlockContext", BlockContext.CODEC),
-          (obj, value) -> obj.blockContext = value,
-          (obj) -> obj.blockContext)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "VillagersRegistry",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.villagersRegistry = value,
-          obj -> obj.villagersRegistry)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "UnemployedRegistry",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.unemployedRegistry = value,
-          obj -> obj.unemployedRegistry)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "HomelessRegistry",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.homelessRegistry = value,
-          obj -> obj.homelessRegistry)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "VillagerIdToComponent",
-              new MapCodec<VillagerComponent, HashMap<String, VillagerComponent>>(
-                  VillagerComponent.CODEC,
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.villagerIdToComponent = new HashMap<>();
-            value.forEach((k, v) -> obj.villagerIdToComponent.put(UUID.fromString(k), v));
-          },
-          obj -> {
-            HashMap<String, VillagerComponent> encoded = new HashMap<>();
-            obj.villagerIdToComponent.forEach((k, v) -> encoded.put(k.toString(), v));
-            return encoded;
-          })
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "WorkplaceIdToWorkplace",
-              new MapCodec<WorkplaceComponent, HashMap<String, WorkplaceComponent>>(
-                  WorkplaceComponent.CODEC,
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.workplaceIdToWorkplace = new HashMap<>();
-            value.forEach((k, v) -> obj.workplaceIdToWorkplace.put(UUID.fromString(k), v));
-          },
-          obj -> {
-            HashMap<String, WorkplaceComponent> encoded = new HashMap<>();
-            obj.workplaceIdToWorkplace.forEach((k, v) -> encoded.put(k.toString(), v));
-            return encoded;
-          })
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "VillagerToWorkplaceMap",
-              new MapCodec<UUID, HashMap<String, UUID>>(
-                  Codec.UUID_BINARY,
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.villagerToWorkplace = new HashMap<>();
-            value.forEach((k, v) -> obj.villagerToWorkplace.put(UUID.fromString(k), v));
-          },
-          obj -> {
-            HashMap<String, UUID> encoded = new HashMap<>();
-            obj.villagerToWorkplace.forEach((k, v) -> encoded.put(k.toString(), v));
-            return encoded;
-          })
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "HouseIdToHouse",
-              new MapCodec<HouseComponent, HashMap<String, HouseComponent>>(
-                  HouseComponent.CODEC,
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.houseIdToHouse = new HashMap<>();
-            value.forEach((k, v) -> obj.houseIdToHouse.put(UUID.fromString(k), v));
-          },
-          obj -> {
-            HashMap<String, HouseComponent> encoded = new HashMap<>();
-            obj.houseIdToHouse.forEach((k, v) -> encoded.put(k.toString(), v));
-            return encoded;
-          })
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "VillagerToHouseMap",
-              new MapCodec<UUID, HashMap<String, UUID>>(
-                  Codec.UUID_BINARY,
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.villagerToHouse = new HashMap<>();
-            value.forEach((k, v) -> obj.villagerToHouse.put(UUID.fromString(k), v));
-          },
-          obj -> {
-            HashMap<String, UUID> encoded = new HashMap<>();
-            obj.villagerToHouse.forEach((k, v) -> encoded.put(k.toString(), v));
-            return encoded;
-          })
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "VillageStorageWorkplaces",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.villageStorageWorkplaces = value,
-          obj -> obj.villageStorageWorkplaces)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "VillageTavernWorkplaces",
-              new SetCodec<UUID, HashSet<UUID>>(Codec.UUID_BINARY, HashSet::new, false)),
-          (obj, value) -> obj.villageTavernWorkplaces = value,
-          obj -> obj.villageTavernWorkplaces)
-      .add()
-
-      .append(
-          new KeyedCodec<>("TownHallId", Codec.UUID_BINARY),
-          (obj, value) -> obj.townHallId = value,
-          (obj) -> obj.townHallId)
-      .add()
-
-      .build();
-
-  private UUID uuid;
-  private String name;
-  private EntityRef villageRef;
-  private VillageHeartConfigComponent config;
-  private VillageHeartState state = VillageHeartState.NORMAL;
-  private int level = 1;
-  private AreaFootprint claimedArea;
-  private VolumeEntry volumeEntry;
-  private BlockContext blockContext;
-
-  private Set<UUID> villagersRegistry = new HashSet<>();
-  private Set<UUID> unemployedRegistry = new HashSet<>();
-  private Set<UUID> homelessRegistry = new HashSet<>();
-
-  private Map<UUID, VillagerComponent> villagerIdToComponent = new HashMap<>();
-
-  private Map<UUID, WorkplaceComponent> workplaceIdToWorkplace = new HashMap<>();
-  private Map<UUID, UUID> villagerToWorkplace = new HashMap<>();
-
-  private Map<UUID, HouseComponent> houseIdToHouse = new HashMap<>();
-  private Map<UUID, UUID> villagerToHouse = new HashMap<>();
-
-  private Set<UUID> villageStorageWorkplaces = new HashSet<>();
-  private Set<UUID> villageTavernWorkplaces = new HashSet<>();
-  private UUID townHallId;
+  Set<UUID> villageStorageWorkplaces = new HashSet<>();
+  Set<UUID> villageTavernWorkplaces = new HashSet<>();
+  UUID townHallId;
 
   public UUID getUuid() {
     return uuid;
@@ -776,80 +606,7 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   @Override
   public VillageHeartComponent clone() {
-    VillageHeartComponent component = new VillageHeartComponent();
-
-    component.uuid = this.uuid;
-    component.villageRef = this.villageRef == null ? null : this.villageRef.clone();
-
-    component.state = this.state;
-    component.level = this.level;
-
-    component.config = this.config != null ? this.config.clone() : null;
-    component.claimedArea = this.claimedArea != null ? this.claimedArea.clone() : null;
-    component.blockContext = this.blockContext != null ? this.blockContext.clone() : null;
-    component.townHallId = this.townHallId;
-
-    component.villagersRegistry = new HashSet<>(this.villagersRegistry);
-    component.unemployedRegistry = new HashSet<>(this.unemployedRegistry);
-    component.homelessRegistry = new HashSet<>(this.homelessRegistry);
-    component.villagerToWorkplace = new HashMap<>(this.villagerToWorkplace);
-    component.villagerToHouse = new HashMap<>(this.villagerToHouse);
-    component.villageStorageWorkplaces = new HashSet<>(this.villageStorageWorkplaces);
-    component.villageTavernWorkplaces = new HashSet<>(this.villageTavernWorkplaces);
-
-    component.workplaceIdToWorkplace = new HashMap<>();
-    for (Map.Entry<UUID, WorkplaceComponent> entry : this.workplaceIdToWorkplace.entrySet()) {
-      WorkplaceComponent clonedWorkplace = entry.getValue() != null ? entry.getValue().clone() : null;
-      component.workplaceIdToWorkplace.put(entry.getKey(), clonedWorkplace);
-    }
-
-    component.houseIdToHouse = new HashMap<>();
-    for (Map.Entry<UUID, HouseComponent> entry : this.houseIdToHouse.entrySet()) {
-      HouseComponent clonedHouse = entry.getValue() != null ? entry.getValue().clone() : null;
-      component.houseIdToHouse.put(entry.getKey(), clonedHouse);
-    }
-
-    component.villagerIdToComponent = new HashMap<>();
-    for (Map.Entry<UUID, VillagerComponent> entry : this.villagerIdToComponent.entrySet()) {
-      VillagerComponent clonedVillager = entry.getValue() != null ? entry.getValue().clone() : null;
-      component.villagerIdToComponent.put(entry.getKey(), clonedVillager);
-    }
-
-    for (Map.Entry<UUID, UUID> entry : component.villagerToWorkplace.entrySet()) {
-      UUID villagerId = entry.getKey();
-      VillagerComponent villager = component.villagerIdToComponent.get(villagerId);
-      WorkplaceComponent workplace = component.workplaceIdToWorkplace.get(entry.getValue());
-
-      if (villager != null && villager.getWorkerData() != null) {
-        villager.getWorkerData().setWorkplace(workplace);
-      }
-    }
-
-    for (UUID unemployedVillagerId : component.unemployedRegistry) {
-      VillagerComponent villager = component.villagerIdToComponent.get(unemployedVillagerId);
-      if (villager != null) {
-        villager.setWorkerData(null);
-      }
-    }
-
-    for (Map.Entry<UUID, UUID> entry : component.villagerToHouse.entrySet()) {
-      UUID villagerId = entry.getKey();
-      VillagerComponent villager = component.villagerIdToComponent.get(villagerId);
-      HouseComponent house = component.houseIdToHouse.get(entry.getValue());
-
-      if (villager != null && villager.getHousingData() != null) {
-        villager.getHousingData().setHouse(house);
-      }
-    }
-
-    for (UUID homelessVillagerId : component.homelessRegistry) {
-      VillagerComponent villager = component.villagerIdToComponent.get(homelessVillagerId);
-      if (villager != null) {
-        villager.setHousingData(null);
-      }
-    }
-
-    return component;
+    return VillageHeartComponentCodec.clone(this);
   }
 
   @Override

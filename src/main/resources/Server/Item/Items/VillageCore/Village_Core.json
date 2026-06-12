@@ -75,11 +75,11 @@
                   },
                   "Rotation": "None",
                   "AccessOffset": {
-                    "X": 1,
+                    "X": 1.9633688926696777,
                     "Y": 0,
-                    "Z": 0
+                    "Z": 0.527012825012207
                   },
-                  "AccessId": "YJiafel0QQyIAWL9ZcNQbQ=="
+                  "AccessId": "Rxw0T+esS/O1RwVA93kIrg=="
                 },
                 "2": {
                   "PositionId": "X6XNYh3SQqmT2jgN/+eehA==",
@@ -178,6 +178,25 @@
                   "2": "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json",
                   "3": "Structures/Workplace/TownHall/Level1/Stage3/Town_Hall.prefab.json"
                 }
+              },
+              "Containers": {
+                "1": [
+                  {
+                    "PositionId": "bhmW3deIQj2BS7E/gpPmlA==",
+                    "Position": {
+                      "X": 0,
+                      "Y": 1,
+                      "Z": 14
+                    },
+                    "Rotation": "None",
+                    "AccessOffset": {
+                      "X": 0,
+                      "Y": 0,
+                      "Z": 1
+                    },
+                    "AccessId": "sCZR0UfrQrizO2o7+dajHQ=="
+                  }
+                ]
               }
             },
             "Mine": {
@@ -191,11 +210,11 @@
                   },
                   "Rotation": "Ninety",
                   "AccessOffset": {
-                    "X": 1,
+                    "X": 1.7752456665039062,
                     "Y": 0,
-                    "Z": 0
+                    "Z": 1.0365495681762695
                   },
-                  "AccessId": "jk0TYPigReWaRnpAIgPjiQ=="
+                  "AccessId": "zzSyrnT+SrC9yBEGMkxPhg=="
                 },
                 "2": {
                   "PositionId": "YwSQMcjpQiK6RPQFqdL1ow==",
@@ -298,19 +317,19 @@
               "Containers": {
                 "1": [
                   {
-                    "PositionId": "6nRK93KwR5i7J48WyK3H5A==",
+                    "PositionId": "GfsAcDJkSRe+auJ//mM+rg==",
                     "Position": {
                       "X": -5,
                       "Y": 1,
                       "Z": 5
                     },
-                    "Rotation": "Ninety",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 1,
+                      "X": 1.8035812377929688,
                       "Y": 0,
-                      "Z": 0
+                      "Z": 0.4981565475463867
                     },
-                    "AccessId": "+wpqeU/FS1O1ZvDRL/bPvQ=="
+                    "AccessId": "ksetwRDtQbuj6nqBg0/R0g=="
                   }
                 ],
                 "2": [
@@ -364,7 +383,7 @@
                     "Y": 0,
                     "Z": 1
                   },
-                  "AccessId": "JpyX4RfZQCCJyrN29t7oEQ=="
+                  "AccessId": "foERP6l7TcKL0X02MDURKg=="
                 },
                 "2": {
                   "PositionId": "DjLQR/WVRLiTsomJpxldOA==",
@@ -467,19 +486,19 @@
               "Containers": {
                 "1": [
                   {
-                    "PositionId": "/FCm/Fz7RQyBIIgFyCoQSw==",
+                    "PositionId": "2DyriMRQQ+eO6+gnwkAbLA==",
                     "Position": {
                       "X": -3,
                       "Y": 1,
                       "Z": 6
                     },
-                    "Rotation": "Ninety",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 1,
+                      "X": 1.9918537139892578,
                       "Y": 0,
-                      "Z": 0
+                      "Z": 0.5053844451904297
                     },
-                    "AccessId": "zmpwFIhHSdSzHHm98Vx4Jw=="
+                    "AccessId": "cWUqBi1dRCyQVNqNMMuNug=="
                   }
                 ],
                 "2": [
@@ -698,11 +717,11 @@
                   },
                   "Rotation": "None",
                   "AccessOffset": {
-                    "X": 0,
+                    "X": 0.4950675964355469,
                     "Y": 0,
-                    "Z": 1
+                    "Z": 1.8136177062988281
                   },
-                  "AccessId": "WWB/c1QUQjmNVcr46Ob9mg=="
+                  "AccessId": "f0wTM7o0R4S9apaofCZOhA=="
                 },
                 "2": {
                   "PositionId": "GWBtr9YqQwG2VKDDIqIPXg==",
@@ -805,64 +824,64 @@
               "Containers": {
                 "1": [
                   {
-                    "PositionId": "fo0MXHIKQR+ih0QSf+usvg==",
+                    "PositionId": "wgC6ZwqLSLah23QWoecJgQ==",
                     "Position": {
                       "X": -3,
                       "Y": 1,
                       "Z": 1
                     },
-                    "Rotation": "Ninety",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 1,
+                      "X": 1.6692848205566406,
                       "Y": 0,
-                      "Z": 0
+                      "Z": 1.004368782043457
                     },
-                    "AccessId": "Tw+gLgApTFeV2YlvxyzlKg=="
+                    "AccessId": "8TQgcVjyRXCLOPHcQubfjw=="
                   },
                   {
-                    "PositionId": "rEJ649E7QHiXmpQHrfdjIg==",
+                    "PositionId": "qwa/MrKXRNKQhvQmTjIb3w==",
                     "Position": {
                       "X": -3,
                       "Y": 1,
                       "Z": -2
                     },
-                    "Rotation": "Ninety",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": 1,
+                      "X": 1.6844100952148438,
                       "Y": 0,
-                      "Z": 0
+                      "Z": 1.0323877334594727
                     },
-                    "AccessId": "CjtmoEXsTqWSAeKnoveuSw=="
+                    "AccessId": "E1ZIhRAQR66ZIoK9i2KqQg=="
                   },
                   {
-                    "PositionId": "eHaLdlvUTVaydWYSRPQ7UQ==",
+                    "PositionId": "AqvMtkfbRLOsOM/xpF1ajA==",
                     "Position": {
                       "X": 3,
                       "Y": 1,
                       "Z": 2
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": -1,
+                      "X": -0.5104598999023438,
                       "Y": 0,
-                      "Z": 0
+                      "Z": -0.050492286682128906
                     },
-                    "AccessId": "eIpY2SNpQ4iWEFRUm3HqVA=="
+                    "AccessId": "q27zycKiSgesEWeK0BhzsA=="
                   },
                   {
-                    "PositionId": "b9Y5esrLQxmEYzMdCAfBNg==",
+                    "PositionId": "1X1D1VU2QOyvB+v+pBAooQ==",
                     "Position": {
                       "X": 3,
                       "Y": 1,
                       "Z": -1
                     },
-                    "Rotation": "TwoSeventy",
+                    "Rotation": "None",
                     "AccessOffset": {
-                      "X": -1,
+                      "X": -0.6062564849853516,
                       "Y": 0,
-                      "Z": 0
+                      "Z": -0.009603500366210938
                     },
-                    "AccessId": "B6vIhk5OSmGOQVzy3gvE3A=="
+                    "AccessId": "FFQfCycdSJ6cHnx/Grgexw=="
                   }
                 ],
                 "2": [
@@ -1253,11 +1272,11 @@
                   },
                   "Rotation": "None",
                   "AccessOffset": {
-                    "X": 0,
+                    "X": 0.6059141159057617,
                     "Y": 0,
-                    "Z": 1
+                    "Z": 2.091899871826172
                   },
-                  "AccessId": "FIiyVDDYREm8mh9MeJ3Qcg=="
+                  "AccessId": "Ur8Q0/+vRnSvGMoVqX7VOw=="
                 },
                 "2": {
                   "PositionId": "WBx3RE6RTNOf7y7fMOFy0A==",
@@ -1360,7 +1379,7 @@
               "Containers": {
                 "1": [
                   {
-                    "PositionId": "npg9L05aSkWpjOb8FAxELg==",
+                    "PositionId": "npnge+nTQxGTpkdprrjdCQ==",
                     "Position": {
                       "X": -5,
                       "Y": 1,
@@ -1368,11 +1387,11 @@
                     },
                     "Rotation": "None",
                     "AccessOffset": {
-                      "X": 0,
+                      "X": 0.8788862228393555,
                       "Y": 0,
-                      "Z": -1
+                      "Z": -0.8817181587219238
                     },
-                    "AccessId": "Mgcp+Lr3R9+TC9YJ2xuKtw=="
+                    "AccessId": "1bXWNCKzReuDnk7CEryDiA=="
                   }
                 ],
                 "2": [
@@ -1417,9 +1436,9 @@
                     "InteractableTransform": {
                       "PositionId": "TVElJQmCijz79QTrOit2iA==",
                       "Position": {
-                        "X": -0.4392681121826172,
-                        "Y": 1.5999984741210938,
-                        "Z": 0.4407024383544922
+                        "X": 0.5541343688964844,
+                        "Y": 1.5,
+                        "Z": 0.5154838562011719
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1431,9 +1450,9 @@
                     "DependsOnTransform": {
                       "PositionId": "9km7pecLQEHfPNe+Sk7lPg==",
                       "Position": {
-                        "X": 0,
+                        "X": 0.4633054733276367,
                         "Y": 2,
-                        "Z": -1
+                        "Z": -0.5474700927734375
                       }
                     },
                     "OccupiedBy": null,
@@ -1445,9 +1464,9 @@
                     "InteractableTransform": {
                       "PositionId": "P3jglNjsyidR9cfqgaolFA==",
                       "Position": {
-                        "X": -1,
-                        "Y": 1,
-                        "Z": 0
+                        "X": -0.4932727813720703,
+                        "Y": 1.5,
+                        "Z": 0.4789118766784668
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1459,9 +1478,9 @@
                     "DependsOnTransform": {
                       "PositionId": "VXGSF3J9S9UKeSoKSH2z0A==",
                       "Position": {
-                        "X": -1,
+                        "X": -0.5815773010253906,
                         "Y": 2,
-                        "Z": -1
+                        "Z": -0.5479631423950195
                       }
                     },
                     "OccupiedBy": null,
@@ -1473,9 +1492,9 @@
                     "InteractableTransform": {
                       "PositionId": "UN2lciyGY8wzHFltd6g1eA==",
                       "Position": {
-                        "X": 0,
-                        "Y": 1,
-                        "Z": -3
+                        "X": 0.48412227630615234,
+                        "Y": 1.5999984741210938,
+                        "Z": -2.401163101196289
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1487,9 +1506,9 @@
                     "DependsOnTransform": {
                       "PositionId": "2kZyPpTIHX9Km7gUTbNWhw==",
                       "Position": {
-                        "X": 0,
+                        "X": 0.4576272964477539,
                         "Y": 2,
-                        "Z": -2
+                        "Z": -1.5647268295288086
                       }
                     },
                     "OccupiedBy": null,
@@ -1501,9 +1520,9 @@
                     "InteractableTransform": {
                       "PositionId": "cd2XiZJoZa66mJcP5ausqg==",
                       "Position": {
-                        "X": -1,
-                        "Y": 1,
-                        "Z": -3
+                        "X": -0.47454166412353516,
+                        "Y": 1.5,
+                        "Z": -2.482630729675293
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1515,9 +1534,9 @@
                     "DependsOnTransform": {
                       "PositionId": "Mb1jDRD5suctILvIRvj9Zg==",
                       "Position": {
-                        "X": -1,
+                        "X": -0.4921226501464844,
                         "Y": 2,
-                        "Z": -2
+                        "Z": -1.5612545013427734
                       }
                     },
                     "OccupiedBy": null,
@@ -1529,9 +1548,9 @@
                     "InteractableTransform": {
                       "PositionId": "W2keCNUHhCCvDwUtmtQdmQ==",
                       "Position": {
-                        "X": 2,
-                        "Y": 1,
-                        "Z": -1
+                        "X": 2.4740943908691406,
+                        "Y": 1.5,
+                        "Z": -0.5124397277832031
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1543,9 +1562,9 @@
                     "DependsOnTransform": {
                       "PositionId": "DQ9gULkBbxqUWMUPhgSldg==",
                       "Position": {
-                        "X": 3,
+                        "X": 3.4920730590820312,
                         "Y": 2,
-                        "Z": -1
+                        "Z": -0.5057744979858398
                       }
                     },
                     "OccupiedBy": null,
@@ -1557,9 +1576,9 @@
                     "InteractableTransform": {
                       "PositionId": "GE3vD/X/BvNat9rk/jdbVQ==",
                       "Position": {
-                        "X": 2,
-                        "Y": 1,
-                        "Z": -2
+                        "X": 2.5268287658691406,
+                        "Y": 1.5,
+                        "Z": -1.5170049667358398
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1571,9 +1590,9 @@
                     "DependsOnTransform": {
                       "PositionId": "LozIU3MnvntNHdevdAwlXw==",
                       "Position": {
-                        "X": 3,
+                        "X": 3.4003639221191406,
                         "Y": 2,
-                        "Z": -2
+                        "Z": -1.4562740325927734
                       }
                     },
                     "OccupiedBy": null,
@@ -1585,9 +1604,9 @@
                     "InteractableTransform": {
                       "PositionId": "+H3YKKjTwSBbaIPL/GlyLg==",
                       "Position": {
-                        "X": 5,
-                        "Y": 1,
-                        "Z": -1
+                        "X": 5.498331069946289,
+                        "Y": 1.5,
+                        "Z": -0.4685211181640625
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1599,9 +1618,9 @@
                     "DependsOnTransform": {
                       "PositionId": "ZdvrD2l0Z2c/tolSpt8j/g==",
                       "Position": {
-                        "X": 4,
+                        "X": 4.495697021484375,
                         "Y": 2,
-                        "Z": -1
+                        "Z": -0.5192832946777344
                       }
                     },
                     "OccupiedBy": null,
@@ -1613,9 +1632,9 @@
                     "InteractableTransform": {
                       "PositionId": "x7TdBpqnlIOtq5WFGq0VbA==",
                       "Position": {
-                        "X": 5,
-                        "Y": 1,
-                        "Z": -2
+                        "X": 5.518587112426758,
+                        "Y": 1.5,
+                        "Z": -1.4919977188110352
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1627,9 +1646,9 @@
                     "DependsOnTransform": {
                       "PositionId": "vTVfl4WAopvRo0wv5fSQcg==",
                       "Position": {
-                        "X": 4,
+                        "X": 4.510271072387695,
                         "Y": 2,
-                        "Z": -2
+                        "Z": -1.5019302368164062
                       }
                     },
                     "OccupiedBy": null,
@@ -1641,9 +1660,9 @@
                     "InteractableTransform": {
                       "PositionId": "/KQ9tx4elxzQcLU+4jJpUA==",
                       "Position": {
-                        "X": 2,
-                        "Y": 1,
-                        "Z": 1
+                        "X": 2.511178970336914,
+                        "Y": 1.5,
+                        "Z": 1.4713091850280762
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1655,9 +1674,9 @@
                     "DependsOnTransform": {
                       "PositionId": "WTuQgnzjsGajImIK4O4mDA==",
                       "Position": {
-                        "X": 3,
+                        "X": 3.4536190032958984,
                         "Y": 2,
-                        "Z": 1
+                        "Z": 1.4846744537353516
                       }
                     },
                     "OccupiedBy": null,
@@ -1669,9 +1688,9 @@
                     "InteractableTransform": {
                       "PositionId": "GntZ64gPxCl4ZSszao3pIw==",
                       "Position": {
-                        "X": 2,
-                        "Y": 1,
-                        "Z": 2
+                        "X": 2.4954681396484375,
+                        "Y": 1.5,
+                        "Z": 2.4535489082336426
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1683,9 +1702,9 @@
                     "DependsOnTransform": {
                       "PositionId": "xjc0ycraEVoKOsvhZOPX7A==",
                       "Position": {
-                        "X": 3,
+                        "X": 3.4288997650146484,
                         "Y": 2,
-                        "Z": 2
+                        "Z": 2.5199995040893555
                       }
                     },
                     "OccupiedBy": null,
@@ -1697,9 +1716,9 @@
                     "InteractableTransform": {
                       "PositionId": "9rNclcBH/BPitmbtngWAXQ==",
                       "Position": {
-                        "X": 5,
-                        "Y": 1,
-                        "Z": 1
+                        "X": 5.466579437255859,
+                        "Y": 1.5,
+                        "Z": 1.5017375946044922
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1711,9 +1730,9 @@
                     "DependsOnTransform": {
                       "PositionId": "vncMlKb+hbHq9U9dTK6zFQ==",
                       "Position": {
-                        "X": 4,
+                        "X": 4.449945449829102,
                         "Y": 2,
-                        "Z": 1
+                        "Z": 1.4764609336853027
                       }
                     },
                     "OccupiedBy": null,
@@ -1725,9 +1744,9 @@
                     "InteractableTransform": {
                       "PositionId": "Rz/pbdt/N5F4VzVi+uRIrg==",
                       "Position": {
-                        "X": 5,
-                        "Y": 1,
-                        "Z": 2
+                        "X": 5.46885871887207,
+                        "Y": 1.5,
+                        "Z": 2.5299811363220215
                       },
                       "AccessOffset": {
                         "X": 0,
@@ -1739,9 +1758,9 @@
                     "DependsOnTransform": {
                       "PositionId": "spS/NeQYE2APTtDuBKCVVw==",
                       "Position": {
-                        "X": 4,
+                        "X": 4.4259796142578125,
                         "Y": 2,
-                        "Z": 2
+                        "Z": 2.572249412536621
                       }
                     },
                     "OccupiedBy": null,

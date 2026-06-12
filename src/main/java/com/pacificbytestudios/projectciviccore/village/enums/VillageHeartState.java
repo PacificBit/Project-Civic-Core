@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum VillageHeartState {
-  NORMAL("normal"), PANIC("panic");
+  NORMAL("Normal"), PANIC("Panic");
 
   private String state;
   private static String AVAILABLE_STATES;
