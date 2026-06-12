@@ -5,71 +5,28 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
 
-public class TavernComponent implements Component<ChunkStore>,
-    IWorkplaceMissingResource {
-  public static final BuilderCodec<TavernComponent> CODEC = BuilderCodec
-      .builder(TavernComponent.class, TavernComponent::new)
+@SerializableClass
+public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissingResource {
+  public static final BuilderCodec<TavernComponent> CODEC = TavernComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>(
-          "MealToPrepareMap",
-          new MapCodec<Integer, HashMap<String, Integer>>(
-              Codec.INTEGER,
-              HashMap::new,
-              false)),
-          (obj, value) -> obj.mealToPrepare = value,
-          obj -> obj.mealToPrepare)
-      .add()
-
-      .append(new KeyedCodec<>("MealToPrepareCount", Codec.INTEGER),
-          (obj, value) -> obj.mealToPrepareCount = value,
-          (obj) -> obj.mealToPrepareCount)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "AssignedRecipesToWorker",
-              new MapCodec<String, HashMap<String, String>>(
-                  Codec.STRING,
-                  HashMap::new)),
-          (obj, value) -> obj.assignedRecipesToWorker = decode(value),
-          obj -> encode(obj.assignedRecipesToWorker))
-      .add()
-
-      .append(new KeyedCodec<Set<ItemRequestCriterion>>(
-          "MissingResources",
-          new SetCodec<ItemRequestCriterion, HashSet<ItemRequestCriterion>>(
-              ItemRequestCriterion.CODEC,
-              HashSet::new,
-              false)),
-          (obj, value) -> obj.missingResources = value,
-          obj -> obj.missingResources)
-      .add()
-
-      .build();
-
-  public TavernComponent() {
-  }
-
-  private Map<String, Integer> mealToPrepare = new HashMap<>();
-  private Integer mealToPrepareCount = 0;
-  private Map<UUID, String> assignedRecipesToWorker = new HashMap<>();
-  private Set<ItemRequestCriterion> missingResources = new HashSet<>();
+  @SerialName("MealToPrepareMap")
+  Map<String, Integer> mealToPrepare = new HashMap<>();
+  Integer mealToPrepareCount = 0;
+  Map<UUID, String> assignedRecipesToWorker = new HashMap<>();
+  Set<ItemRequestCriterion> missingResources = new HashSet<>();
 
   public Map<String, Integer> getMealToPrepare() {
     return mealToPrepare;
@@ -161,22 +118,7 @@ public class TavernComponent implements Component<ChunkStore>,
 
   @Override
   public TavernComponent clone() {
-    TavernComponent component = new TavernComponent();
-    component.mealToPrepare = new HashMap<>();
-    component.mealToPrepareCount = this.mealToPrepareCount;
-
-    for (Entry<String, Integer> meal : this.mealToPrepare.entrySet()) {
-      component.mealToPrepare.put(meal.getKey(), meal.getValue());
-    }
-
-    component.missingResources = new HashSet<>();
-
-    for (ItemRequestCriterion criterion : this.missingResources) {
-      component.missingResources.add(criterion != null ? criterion.clone() : null);
-    }
-
-    component.assignedRecipesToWorker = deepCopy(this.assignedRecipesToWorker);
-    return component;
+    return TavernComponentCodec.clone(this);
   }
 
   public static ComponentType<ChunkStore, TavernComponent> getComponentType() {
@@ -193,40 +135,4 @@ public class TavernComponent implements Component<ChunkStore>,
         "\n}";
   }
 
-  private static HashMap<String, String> encode(Map<UUID, String> value) {
-    HashMap<String, String> encoded = new HashMap<>();
-
-    if (value == null) {
-      return encoded;
-    }
-
-    value.forEach((k, v) -> {
-      if (k != null && v != null) {
-        encoded.put(k.toString(), v);
-      }
-    });
-    return encoded;
-  }
-
-  private static Map<UUID, String> decode(Map<String, String> value) {
-    Map<UUID, String> decoded = new HashMap<>();
-
-    if (value == null) {
-      return decoded;
-    }
-
-    value.forEach((k, v) -> decoded.put(UUID.fromString(k), v));
-    return decoded;
-  }
-
-  private static Map<UUID, String> deepCopy(Map<UUID, String> source) {
-    Map<UUID, String> copy = new HashMap<>();
-
-    if (source == null) {
-      return copy;
-    }
-
-    source.forEach((k, v) -> copy.put(k, v));
-    return copy;
-  }
 }

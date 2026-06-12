@@ -6,38 +6,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
+@SerializableClass
 public class HouseAppartmentRegistry implements Component<ChunkStore> {
+  public static final BuilderCodec<HouseAppartmentRegistry> CODEC = HouseAppartmentRegistryCodec.CODEC;
 
-  public static final BuilderCodec<HouseAppartmentRegistry> CODEC = BuilderCodec
-      .builder(HouseAppartmentRegistry.class, HouseAppartmentRegistry::new)
-
-      .append(
-          new KeyedCodec<>(
-              "Appartments",
-              new MapCodec<AppartmentComponent, HashMap<String, AppartmentComponent>>(
-                  AppartmentComponent.CODEC,
-                  HashMap::new)),
-          (obj, value) -> {
-            obj.appartments = new HashMap<>();
-            value.forEach((k, v) -> obj.appartments.put(UUID.fromString(k), v));
-          },
-          (obj) -> {
-            HashMap<String, AppartmentComponent> encoded = new HashMap<>();
-            obj.appartments.forEach((k, v) -> encoded.put(k.toString(), v));
-            return encoded;
-          })
-      .add()
-
-      .build();
-
-  private Map<UUID, AppartmentComponent> appartments = new HashMap<>();
+  Map<UUID, AppartmentComponent> appartments = new HashMap<>();
 
   public Map<UUID, AppartmentComponent> getAppartments() {
     return appartments;
@@ -120,15 +99,7 @@ public class HouseAppartmentRegistry implements Component<ChunkStore> {
 
   @Override
   public HouseAppartmentRegistry clone() {
-    HouseAppartmentRegistry component = new HouseAppartmentRegistry();
-    component.appartments = new HashMap<>();
-
-    for (Map.Entry<UUID, AppartmentComponent> entry : this.appartments.entrySet()) {
-      AppartmentComponent clonedContainer = entry.getValue() != null ? entry.getValue().clone() : null;
-      component.appartments.put(entry.getKey(), clonedContainer);
-    }
-
-    return component;
+    return HouseAppartmentRegistryCodec.clone(this);
   }
 
   @Override

@@ -12,6 +12,7 @@ import org.bson.json.JsonParseException;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Rotation3f;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
@@ -46,6 +47,7 @@ public class WaypointEditorPage extends BasicCustomUIPage {
   private static final String ADD_ACTION = "add";
   private static final String CHANGE_REFERENCE_ACTION = "changeReference";
   private static final String SET_POSITION_ACTION = "setPosition";
+  private static final String ROTATE_ACTION = "rotate";
 
   private final World world;
   private final WaypointsEditingComponent editingComponent;
@@ -112,8 +114,40 @@ public class WaypointEditorPage extends BasicCustomUIPage {
       case ADD_ACTION -> handleAddEvent(player, store, event);
       case CHANGE_REFERENCE_ACTION -> handleChangeReferenceEvent(player, store, event);
       case SET_POSITION_ACTION -> handleSetPositionEvent(player, store, event);
+      case ROTATE_ACTION -> handleRotateEvent(player, store, event);
       default -> this.sendUpdate();
     }
+  }
+
+  private void handleRotateEvent(Ref<EntityStore> player, Store<EntityStore> store, Document event) {
+    WaypointsEditingComponent editingComponent = liveComponent(player, store);
+    if (editingComponent == null
+        || this.selectedWaypoint == null
+        || this.selectedWaypoint.isAccess()
+        || this.selectedWaypoint.isFloatTransform()) {
+      this.sendUpdate();
+      return;
+    }
+
+    Rotation rotation = parseRotation(eventValue(event));
+    if (rotation == null || rotation == this.selectedWaypoint.getTransform().getRotation()) {
+      this.sendUpdate();
+      return;
+    }
+
+    Waypoint old = this.selectedWaypoint.clone();
+    Waypoint updated = this.selectedWaypoint.clone();
+    updated.getTransform().setRotation(rotation);
+
+    editingComponent.updateStructureWaypoint(updated.getType(), updated.getPositionId(), updated);
+    editingComponent.addOperation(new WaypointOperation(
+        old.getWaypointId(), Operation.MOVE, old, updated.clone()));
+    // Re-stage the selection on the updated instance so a follow-up Move keeps working.
+    editingComponent.setCurrentOperation(new WaypointOperation(null, updated, null));
+    this.selectedWaypoint = updated;
+
+    WaypointsSessionUtil.redraw(this.world, editingComponent);
+    this.rebuild();
   }
 
   private void handleSetPositionEvent(Ref<EntityStore> player, Store<EntityStore> store, Document event) {
@@ -409,6 +443,18 @@ public class WaypointEditorPage extends BasicCustomUIPage {
     return accessType == MarkerType.BENCH_ACCESS ? MarkerType.BENCH : MarkerType.STORAGE;
   }
 
+  private static Rotation parseRotation(String value) {
+    if (value == null) {
+      return null;
+    }
+
+    try {
+      return Rotation.valueOf(value);
+    } catch (IllegalArgumentException exception) {
+      return null;
+    }
+  }
+
   private static MarkerType parseMarkerType(String value) {
     if (value == null) {
       return null;
@@ -496,6 +542,11 @@ public class WaypointEditorPage extends BasicCustomUIPage {
         "#ReferenceDropdown",
         EventData.of("action", CHANGE_REFERENCE_ACTION)
             .append("@ParamValue", "#ReferenceDropdown.Value"));
+    eventBuilder.addEventBinding(
+        CustomUIEventBindingType.ValueChanged,
+        "#RotationDropdown",
+        EventData.of("action", ROTATE_ACTION)
+            .append("@ParamValue", "#RotationDropdown.Value"));
   }
 
   private void buildSelectedWaypoint(UICommandBuilder builder) {
@@ -524,6 +575,22 @@ public class WaypointEditorPage extends BasicCustomUIPage {
     }
 
     this.setText(builder, "RotationValue", transform.getRotation() == null ? "none" : transform.getRotation().name());
+
+    boolean isBlock = !this.selectedWaypoint.isFloatTransform();
+    builder.set("#RotationDropdown.Visible", isBlock);
+    if (isBlock) {
+      builder.set("#RotationDropdown.Entries", rotationEntries());
+      builder.set("#RotationDropdown.Value",
+          transform.getRotation() == null ? Rotation.None.name() : transform.getRotation().name());
+    }
+  }
+
+  private static List<DropdownEntryInfo> rotationEntries() {
+    List<DropdownEntryInfo> entries = new ArrayList<>();
+    for (Rotation rotation : Rotation.values()) {
+      entries.add(option(rotation.name(), rotation.name()));
+    }
+    return entries;
   }
 
   private void buildAddWaypoint(UICommandBuilder builder) {

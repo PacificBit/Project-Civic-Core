@@ -6,35 +6,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.village.enums.InteractablesType;
 
+@SerializableClass
 public class WorkplaceInteractablesMapComponent implements Component<ChunkStore> {
-  public static final BuilderCodec<WorkplaceInteractablesMapComponent> CODEC = BuilderCodec
-      .builder(WorkplaceInteractablesMapComponent.class, WorkplaceInteractablesMapComponent::new)
+  public static final BuilderCodec<WorkplaceInteractablesMapComponent> CODEC = WorkplaceInteractablesMapComponentCodec.CODEC;
 
-      .append(
-          new KeyedCodec<>("Interactables", new EnumMapCodec<>(
-              InteractablesType.class,
-              new ArrayCodec<>(
-                  Interactable.CODEC,
-                  Interactable[]::new))),
-          (obj, value) -> obj.interactable = value,
-          obj -> obj.interactable)
-      .add()
-
-      .build();
-
-  private Map<InteractablesType, Interactable[]> interactable = new HashMap<>();
+  @SerialName("Interactables")
+  Map<InteractablesType, Interactable[]> interactable = new HashMap<>();
 
   public void setNewInteractables(InteractablesType type, List<Interactable> interactables) {
     this.interactable.putIfAbsent(type, new Interactable[0]);
@@ -165,38 +153,7 @@ public class WorkplaceInteractablesMapComponent implements Component<ChunkStore>
 
   @Override
   public WorkplaceInteractablesMapComponent clone() {
-    WorkplaceInteractablesMapComponent component = new WorkplaceInteractablesMapComponent();
-    component.interactable = deepCopy(this.interactable);
-    return component;
-  }
-
-  private static Map<InteractablesType, Interactable[]> deepCopy(
-      Map<InteractablesType, Interactable[]> source) {
-    Map<InteractablesType, Interactable[]> copy = new HashMap<>();
-
-    if (source == null) {
-      return copy;
-    }
-
-    for (Map.Entry<InteractablesType, Interactable[]> entry : source.entrySet()) {
-      InteractablesType key = entry.getKey();
-      Interactable[] value = entry.getValue();
-
-      if (value == null) {
-        copy.put(key, null);
-        continue;
-      }
-
-      Interactable[] clonedArray = new Interactable[value.length];
-      for (int i = 0; i < value.length; i++) {
-        Interactable interactable = value[i];
-        clonedArray[i] = interactable != null ? interactable.clone() : null;
-      }
-
-      copy.put(key, clonedArray);
-    }
-
-    return copy;
+    return WorkplaceInteractablesMapComponentCodec.clone(this);
   }
 
   public static ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> getComponentType() {

@@ -444,6 +444,7 @@ public class Utils {
         MayorComponent.getComponentType());
   }
 
+  @Deprecated(forRemoval = true)
   public static <S, T extends Copyable<T>> Map<S, T> copyMap(Map<S, T> source) {
     Map<S, T> copy = new HashMap<>();
 
@@ -455,6 +456,7 @@ public class Utils {
     return copy;
   }
 
+  @Deprecated(forRemoval = true)
   public static <S, T extends Copyable<T>> Map<S, T[]> copyMapArray(Map<S, T[]> source) {
     Map<S, T[]> copy = new HashMap<>();
 

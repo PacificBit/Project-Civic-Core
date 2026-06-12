@@ -1,35 +1,20 @@
 package com.pacificbytestudios.projectciviccore.village.components.workplace.townhall;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 
+@SerializableClass
 public class TownHallComponent implements Component<ChunkStore> {
 
-  public static final BuilderCodec<TownHallComponent> CODEC = BuilderCodec
-      .builder(TownHallComponent.class, TownHallComponent::new)
+  public static final BuilderCodec<TownHallComponent> CODEC = TownHallComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>("LastDayVillageAssessment", Codec.INTEGER),
-          (obj, value) -> obj.lastDayVillageAssessment = value,
-          (obj) -> obj.lastDayVillageAssessment)
-      .add()
-
-      .append(new KeyedCodec<>(
-          "VillageProjectPlan",
-          VillageProjectPlan.CODEC),
-          (obj, value) -> obj.villageProjectPlan = value,
-          (obj) -> obj.villageProjectPlan)
-      .add()
-
-      .build();
-
-  private Integer lastDayVillageAssessment = -1;
-  private VillageProjectPlan villageProjectPlan;
+  Integer lastDayVillageAssessment = -1;
+  VillageProjectPlan villageProjectPlan;
 
   public Integer getLastDayVillageAssessment() {
     return lastDayVillageAssessment;
@@ -62,10 +47,7 @@ public class TownHallComponent implements Component<ChunkStore> {
   }
 
   public TownHallComponent clone() {
-    TownHallComponent component = new TownHallComponent();
-    component.lastDayVillageAssessment = this.lastDayVillageAssessment;
-    component.villageProjectPlan = this.villageProjectPlan == null ? null : this.villageProjectPlan.clone();
-    return component;
+    return TownHallComponentCodec.clone(this);
   }
 
   public static ComponentType<ChunkStore, TownHallComponent> getComponentType() {

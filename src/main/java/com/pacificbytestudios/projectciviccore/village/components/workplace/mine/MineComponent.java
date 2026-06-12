@@ -7,49 +7,27 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
 
+@SerializableClass
 public class MineComponent implements Component<ChunkStore>, IWorkplaceMissingResource {
-  public static final BuilderCodec<MineComponent> CODEC = BuilderCodec
-      .builder(MineComponent.class, MineComponent::new)
+  public static final BuilderCodec<MineComponent> CODEC = MineComponentCodec.CODEC;
 
-      .append(new KeyedCodec<Set<ItemRequestCriterion>>(
-          "MissingResources",
-          new SetCodec<ItemRequestCriterion, HashSet<ItemRequestCriterion>>(
-              ItemRequestCriterion.CODEC,
-              HashSet::new,
-              false)),
-          (obj, value) -> obj.missingResources = value,
-          obj -> obj.missingResources)
-      .add()
+  Set<ItemRequestCriterion> missingResources = new HashSet<>();
 
-      .append(new KeyedCodec<>("MineshaftData", Mineshaft.CODEC),
-          (obj, value) -> obj.mineshaft = value,
-          (obj) -> obj.mineshaft)
-      .add()
+  @SerialName("MineshaftData")
+  Mineshaft mineshaft;
 
-      .append(new KeyedCodec<>(
-          "WorkerGalleryReservations",
-          new MapCodec<UUID, HashMap<String, UUID>>(Codec.UUID_BINARY, HashMap::new)),
-          (obj, value) -> obj.workerIdToGalleryId = decodeWorkerGalleryReservations(value),
-          obj -> encodeWorkerGalleryReservations(obj.workerIdToGalleryId))
-      .add()
-
-      .build();
-
-  private Set<ItemRequestCriterion> missingResources = new HashSet<>();
-  private Mineshaft mineshaft;
-  private Map<UUID, UUID> workerIdToGalleryId = new HashMap<>();
+  @SerialName("WorkerGalleryReservations")
+  Map<UUID, UUID> workerIdToGalleryId = new HashMap<>();
 
   public Mineshaft getMineshaft() {
     return mineshaft;
@@ -128,42 +106,11 @@ public class MineComponent implements Component<ChunkStore>, IWorkplaceMissingRe
 
   @Override
   public MineComponent clone() {
-    MineComponent component = new MineComponent();
-    component.missingResources = new HashSet<>();
-
-    for (ItemRequestCriterion criterion : this.missingResources) {
-      component.missingResources.add(criterion != null ? criterion.clone() : null);
-    }
-
-    component.mineshaft = this.mineshaft == null ? null : this.mineshaft.clone();
-    component.workerIdToGalleryId = new HashMap<>(this.workerIdToGalleryId);
-    return component;
+    return MineComponentCodec.clone(this);
   }
 
   public static ComponentType<ChunkStore, MineComponent> getComponentType() {
     return ProjectCivicCore.get().getMineComponentType();
-  }
-
-  private static Map<UUID, UUID> decodeWorkerGalleryReservations(Map<String, UUID> encoded) {
-    Map<UUID, UUID> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    encoded.forEach((workerId, galleryId) -> decoded.put(UUID.fromString(workerId), galleryId));
-    return decoded;
-  }
-
-  private static HashMap<String, UUID> encodeWorkerGalleryReservations(Map<UUID, UUID> decoded) {
-    HashMap<String, UUID> encoded = new HashMap<>();
-
-    if (decoded == null) {
-      return encoded;
-    }
-
-    decoded.forEach((workerId, galleryId) -> encoded.put(workerId.toString(), galleryId));
-    return encoded;
   }
 
 }

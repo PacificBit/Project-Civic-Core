@@ -73,14 +73,8 @@ $C.@DecoratedContainer {
       Text: "Save or roll back before switching structure. Cancel keeps the current session.";
     }
 
-    Label #NoChangesLabel {
-      Anchor: (Left: 0, Top: 180, Width: 686, Height: 24);
-      Style: @MutedLabelStyle;
-      Text: "No pending changes";
-    }
-
     $C.@Panel #ChangesPanel {
-      Anchor: (Left: 0, Top: 72, Width: 686, Height: 380);
+      Anchor: (Left: 0, Top: 72, Width: 686, Height: 296);
       LayoutMode: Full;
 
       Label {
@@ -89,65 +83,105 @@ $C.@DecoratedContainer {
         Text: "Pending changes";
       }
 
-      Group #ChangeRow0 {
-        Anchor: (Left: 0, Top: 40, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel0 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton0 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
+      Label #NoChangesLabel {
+        Anchor: (Left: 0, Top: 130, Width: 686, Height: 24);
+        Style: @MutedLabelStyle;
+        Text: "No pending changes";
       }
 
-      Group #ChangeRow1 {
-        Anchor: (Left: 0, Top: 82, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel1 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton1 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
-      }
+      Group #ChangesList {
+        Anchor: (Left: 12, Top: 40, Width: 662, Height: 240);
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
 
-      Group #ChangeRow2 {
-        Anchor: (Left: 0, Top: 124, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel2 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton2 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
-      }
+        Group #ChangeRow0 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel0 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton0 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
 
-      Group #ChangeRow3 {
-        Anchor: (Left: 0, Top: 166, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel3 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton3 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
-      }
+        Group #ChangeRow1 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel1 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton1 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
 
-      Group #ChangeRow4 {
-        Anchor: (Left: 0, Top: 208, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel4 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton4 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
-      }
+        Group #ChangeRow2 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel2 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton2 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
 
-      Group #ChangeRow5 {
-        Anchor: (Left: 0, Top: 250, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel5 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton5 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
-      }
+        Group #ChangeRow3 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel3 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton3 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
 
-      Group #ChangeRow6 {
-        Anchor: (Left: 0, Top: 292, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel6 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton6 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
-      }
+        Group #ChangeRow4 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel4 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton4 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
 
-      Group #ChangeRow7 {
-        Anchor: (Left: 0, Top: 334, Width: 686, Height: 40);
-        LayoutMode: Full;
-        Label #ChangeLabel7 { Anchor: (Left: 24, Top: 0, Width: 510, Height: 40); Style: @ChangeLabelStyle; }
-        $C.@SecondaryTextButton #UndoButton7 { @Anchor = Anchor(Left: 552, Top: 0, Width: 110); @Text = "Undo"; }
+        Group #ChangeRow5 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel5 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton5 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
+
+        Group #ChangeRow6 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel6 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton6 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
+
+        Group #ChangeRow7 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel7 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton7 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
+
+        Group #ChangeRow8 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel8 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton8 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
+
+        Group #ChangeRow9 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel9 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton9 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
+
+        Group #ChangeRow10 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel10 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton10 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
+
+        Group #ChangeRow11 {
+          Anchor: (Top: 6, Height: 44);
+          LayoutMode: Full;
+          Label #ChangeLabel11 { Anchor: (Left: 12, Top: 0, Width: 480, Height: 44); Style: @ChangeLabelStyle; }
+          $C.@SecondaryTextButton #UndoButton11 { @Anchor = Anchor(Left: 510, Top: 0, Width: 110); @Text = "Undo"; }
+        }
       }
     }
 
     Label #MoreChangesLabel {
-      Anchor: (Left: 0, Top: 456, Width: 686, Height: 20);
+      Anchor: (Left: 0, Top: 374, Width: 686, Height: 20);
       Style: @MutedLabelStyle;
     }
 

@@ -11,60 +11,24 @@ import java.util.Map.Entry;
 import java.util.Stack;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.codec.codecs.map.EnumMapCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
-import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 
+@SerializableClass
 public class WaypointsEditingComponent implements Component<EntityStore> {
-  public static final BuilderCodec<WaypointsEditingComponent> CODEC = BuilderCodec
-      .builder(WaypointsEditingComponent.class, WaypointsEditingComponent::new)
+  public static final BuilderCodec<WaypointsEditingComponent> CODEC = WaypointsEditingComponentCodec.CODEC;
 
-      .append(
-          new KeyedCodec<>("StructureId", Codec.UUID_BINARY),
-          (obj, value) -> obj.structureId = value,
-          (obj) -> obj.structureId)
-      .add()
-
-      .append(new KeyedCodec<>("StructureWaypoints",
-          new EnumMapCodec<>(
-              MarkerType.class,
-              new ArrayCodec<Waypoint>(
-                  Waypoint.CODEC,
-                  WaypointsEditingComponent::createWaypointArray))),
-          (obj, value) -> obj.structureWaypoints = value,
-          (obj) -> obj.structureWaypoints)
-      .add()
-
-      .append(new KeyedCodec<>("CurrentOperation", WaypointOperation.CODEC, false),
-          (obj, value) -> obj.currentOperation = value,
-          (obj) -> obj.currentOperation)
-      .add()
-
-      .append(new KeyedCodec<>("Operations",
-          new ArrayCodec<WaypointOperation>(
-              WaypointOperation.CODEC,
-              WaypointOperation[]::new),
-          false),
-          (obj, value) -> obj.operations = toOperationStack(value),
-          (obj) -> toOperationArray(obj.operations))
-      .add()
-
-      .build();
-
-  private UUID structureId;
-  private Map<MarkerType, Waypoint[]> structureWaypoints = new HashMap<>();
-  private WaypointOperation currentOperation;
-  private Stack<WaypointOperation> operations = new Stack<>();
+  UUID structureId;
+  Map<MarkerType, Waypoint[]> structureWaypoints = new HashMap<>();
+  WaypointOperation currentOperation;
+  Stack<WaypointOperation> operations = new Stack<>();
 
   private record WaypointCandidate(Waypoint waypoint, double distanceSquared) {
   }
@@ -177,8 +141,10 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
   }
 
   /**
-   * Moves a staged operation (selected waypoint that has actually been moved) into the
-   * operation history so it shows up as a pending change. Clears the staging slot.
+   * Moves a staged operation (selected waypoint that has actually been moved)
+   * into the
+   * operation history so it shows up as a pending change. Clears the staging
+   * slot.
    */
   public void commitCurrentOperation() {
     WaypointOperation staged = this.currentOperation;
@@ -202,8 +168,10 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
   }
 
   /**
-   * Collapses the operation history into one net change per waypoint, in the order the
-   * waypoints were first touched. Waypoints that were added and then deleted are omitted.
+   * Collapses the operation history into one net change per waypoint, in the
+   * order the
+   * waypoints were first touched. Waypoints that were added and then deleted are
+   * omitted.
    */
   public List<WaypointChange> getNetChanges() {
     Map<UUID, WaypointChange> changes = new LinkedHashMap<>();
@@ -391,33 +359,6 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
     return uuid.equals(waypoint.getPositionId()) || uuid.equals(waypoint.getAccessId());
   }
 
-  private static Stack<WaypointOperation> toOperationStack(WaypointOperation[] operations) {
-    Stack<WaypointOperation> stack = new Stack<>();
-    if (operations == null) {
-      return stack;
-    }
-
-    stack.addAll(Arrays.asList(operations));
-    return stack;
-  }
-
-  private static WaypointOperation[] toOperationArray(Stack<WaypointOperation> operations) {
-    if (operations == null) {
-      return new WaypointOperation[0];
-    }
-
-    return operations.toArray(WaypointOperation[]::new);
-  }
-
-  private static Stack<WaypointOperation> cloneOperations(Stack<WaypointOperation> operations) {
-    Stack<WaypointOperation> copy = new Stack<>();
-    for (WaypointOperation operation : operations) {
-      copy.add(operation == null ? null : operation.clone());
-    }
-
-    return copy;
-  }
-
   public static ComponentType<EntityStore, WaypointsEditingComponent> getComponentType() {
     return ProjectCivicCore.get().getWaypointEditingComponentType();
   }
@@ -428,11 +369,6 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
 
   @Override
   public WaypointsEditingComponent clone() {
-    WaypointsEditingComponent component = new WaypointsEditingComponent();
-    component.structureId = this.structureId;
-    component.structureWaypoints = Utils.copyMapArray(this.structureWaypoints);
-    component.currentOperation = this.currentOperation == null ? null : this.currentOperation.clone();
-    component.operations = cloneOperations(this.operations);
-    return component;
+    return WaypointsEditingComponentCodec.clone(this);
   }
 }

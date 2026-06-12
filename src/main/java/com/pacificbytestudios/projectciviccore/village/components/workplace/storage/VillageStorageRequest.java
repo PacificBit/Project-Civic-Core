@@ -10,80 +10,24 @@ import java.util.UUID;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
-import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
+@SerializableClass
 public class VillageStorageRequest {
-  public static final BuilderCodec<VillageStorageRequest> CODEC = BuilderCodec
-      .builder(VillageStorageRequest.class, VillageStorageRequest::new)
+  public static final BuilderCodec<VillageStorageRequest> CODEC = VillageStorageRequestCodec.CODEC;
 
-      .append(new KeyedCodec<>("RequestId", Codec.UUID_BINARY),
-          (obj, value) -> obj.requestId = value,
-          obj -> obj.requestId)
-      .add()
+  UUID requestId;
+  UUID requesterWorkplaceId;
+  UUID storageWorkplaceId;
+  VillageStorageRequestType type;
+  ArrayDeque<Vec3f> targetsWorkplaceStorage = new ArrayDeque<>();
 
-      .append(new KeyedCodec<>("RequesterWorkplaceId", Codec.UUID_BINARY),
-          (obj, value) -> obj.requesterWorkplaceId = value,
-          obj -> obj.requesterWorkplaceId)
-      .add()
-
-      .append(new KeyedCodec<>("StorageWorkplaceId", Codec.UUID_BINARY, false),
-          (obj, value) -> obj.storageWorkplaceId = value,
-          obj -> obj.storageWorkplaceId)
-      .add()
-
-      .append(new KeyedCodec<>("Type", new EnumCodec<>(VillageStorageRequestType.class)),
-          (obj, value) -> obj.type = value,
-          obj -> obj.type)
-      .add()
-
-      .append(new KeyedCodec<>("TargetsWorkplaceStorage", new ArrayDequeCodec<Vec3f>(
-          Vec3f.CODEC,
-          "Target")),
-          (obj, value) -> obj.targetsWorkplaceStorage = value,
-          obj -> obj.targetsWorkplaceStorage)
-      .add()
-
-      .append(new KeyedCodec<Set<ItemRequestCriterion>>(
-          "ItemCriteria",
-          new SetCodec<ItemRequestCriterion, HashSet<ItemRequestCriterion>>(
-              ItemRequestCriterion.CODEC,
-              HashSet::new,
-              false)),
-          (obj, value) -> obj.itemCriteria = value,
-          obj -> obj.itemCriteria)
-      .add()
-
-      .append(new KeyedCodec<>(
-          "TriedStorageIds",
-          new SetCodec<UUID, HashSet<UUID>>(
-              Codec.UUID_BINARY,
-              HashSet::new,
-              false)),
-          (obj, value) -> obj.triedStorageIds = value,
-          obj -> obj.triedStorageIds)
-      .add()
-
-      .append(new KeyedCodec<>("RegisteredWithStorage", Codec.BOOLEAN, false),
-          (obj, value) -> obj.registeredWithStorage = value,
-          obj -> obj.registeredWithStorage)
-      .add()
-
-      .build();
-
-  private UUID requestId;
-  private UUID requesterWorkplaceId;
-  private UUID storageWorkplaceId;
-  private VillageStorageRequestType type;
-  private ArrayDeque<Vec3f> targetsWorkplaceStorage = new ArrayDeque<>();
-
-  private Set<ItemRequestCriterion> itemCriteria = new HashSet<>();
-  private Set<UUID> triedStorageIds = new HashSet<>();
-  private boolean registeredWithStorage;
+  Set<ItemRequestCriterion> itemCriteria = new HashSet<>();
+  Set<UUID> triedStorageIds = new HashSet<>();
+  boolean registeredWithStorage;
 
   public VillageStorageRequest() {
     this.requestId = UUID.randomUUID();
@@ -188,22 +132,7 @@ public class VillageStorageRequest {
 
   @Override
   public VillageStorageRequest clone() {
-    VillageStorageRequest request = new VillageStorageRequest();
-    request.requestId = this.requestId;
-    request.requesterWorkplaceId = this.requesterWorkplaceId;
-    request.storageWorkplaceId = this.storageWorkplaceId;
-    request.type = this.type;
-    request.targetsWorkplaceStorage = this.targetsWorkplaceStorage != null ? this.targetsWorkplaceStorage.clone()
-        : null;
-    request.itemCriteria = new HashSet<>();
-    request.triedStorageIds = new HashSet<>(this.triedStorageIds);
-    request.registeredWithStorage = this.registeredWithStorage;
-
-    for (ItemRequestCriterion criterion : this.itemCriteria) {
-      request.itemCriteria.add(criterion != null ? criterion.clone() : null);
-    }
-
-    return request;
+    return VillageStorageRequestCodec.clone(this);
   }
 
   @Override

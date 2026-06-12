@@ -96,11 +96,15 @@ $C.@DecoratedContainer {
       }
 
       Group #TransformDetails {
-        Anchor: (Left: 0, Top: 152, Width: 686, Height: 38);
+        Anchor: (Left: 0, Top: 152, Width: 686, Height: 80);
         LayoutMode: Full;
 
         Label { Anchor: (Left: 24, Top: 0, Width: 170, Height: 28); Style: @FieldLabelStyle; Text: "Rotation"; }
         Label #RotationValue { Anchor: (Left: 205, Top: 0, Width: 445, Height: 28); Style: @FieldValueStyle; }
+
+        $C.@DropdownBox #RotationDropdown {
+          @Anchor = (Left: 24, Top: 36, Width: 320, Height: 34);
+        }
       }
 
       Group #ReferenceGroup {

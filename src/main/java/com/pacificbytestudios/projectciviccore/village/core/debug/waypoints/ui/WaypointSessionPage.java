@@ -39,7 +39,7 @@ import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.comp
  */
 public class WaypointSessionPage extends BasicCustomUIPage {
   private static final String PAGE_DOCUMENT = "Pages/Debug/WaypointSessionPage.ui";
-  private static final int MAX_ROWS = 8;
+  private static final int MAX_ROWS = 12;
 
   private static final String SAVE_ACTION = "save";
   private static final String ROLLBACK_ALL_ACTION = "rollbackAll";
@@ -247,9 +247,36 @@ public class WaypointSessionPage extends BasicCustomUIPage {
     return switch (change.operation()) {
       case ADD -> "[ADDED] " + change.markerType() + " at " + position(change.current());
       case DELETE -> "[DELETED] " + change.markerType() + " was " + position(change.original());
-      case MOVE -> "[MOVED] " + change.markerType() + " " + position(change.original())
-          + " -> " + position(change.current());
+      case MOVE -> describeMove(change);
     };
+  }
+
+  private static String describeMove(WaypointChange change) {
+    String from = position(change.original());
+    String to = position(change.current());
+    String rotationChange = rotationChange(change.original(), change.current());
+
+    if (from.equals(to) && rotationChange != null) {
+      return "[ROTATED] " + change.markerType() + " " + rotationChange;
+    }
+
+    String description = "[MOVED] " + change.markerType() + " " + from + " -> " + to;
+    return rotationChange == null ? description : description + " (" + rotationChange + ")";
+  }
+
+  private static String rotationChange(Waypoint original, Waypoint current) {
+    if (original == null || current == null) {
+      return null;
+    }
+
+    var oldRotation = original.getTransform() == null ? null : original.getTransform().getRotation();
+    var newRotation = current.getTransform() == null ? null : current.getTransform().getRotation();
+    if (oldRotation == newRotation) {
+      return null;
+    }
+
+    return (oldRotation == null ? "none" : oldRotation.name())
+        + " -> " + (newRotation == null ? "none" : newRotation.name());
   }
 
   private static String position(Waypoint waypoint) {

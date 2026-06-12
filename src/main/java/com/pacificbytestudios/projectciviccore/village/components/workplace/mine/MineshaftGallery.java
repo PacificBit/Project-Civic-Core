@@ -4,62 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
 
+@SerializableClass
 public class MineshaftGallery {
   public static final short MAX_GLALLERY_SECTION_COUNT = 5;
+  public static final BuilderCodec<MineshaftGallery> CODEC = MineshaftGalleryCodec.CODEC;
 
-  public static final BuilderCodec<MineshaftGallery> CODEC = BuilderCodec
-      .builder(MineshaftGallery.class, MineshaftGallery::new)
+  UUID galleryId;
+  Vec3i cardinalDirection;
+  Vec3i startPosition;
+  Vec3i lastDiggedPosition;
 
-      .append(new KeyedCodec<>("GalleryId", Codec.UUID_BINARY),
-          (obj, value) -> obj.setGalleryId(value),
-          obj -> obj.getGalleryId())
-      .add()
+  @SerialName("TrackedPrefabs")
+  List<TrackedPrefabPlacementComponent> restoreSnapshot = new ArrayList<>();
 
-      .append(new KeyedCodec<>("CardinalDirection", Vec3i.CODEC, false),
-          (obj, value) -> obj.cardinalDirection = value,
-          obj -> obj.cardinalDirection)
-      .add()
-
-      .append(new KeyedCodec<>("StartPosition", Vec3i.CODEC),
-          (obj, value) -> obj.startPosition = value,
-          obj -> obj.startPosition)
-      .add()
-
-      .append(new KeyedCodec<>("LastDiggedPosition", Vec3i.CODEC, false),
-          (obj, value) -> obj.lastDiggedPosition = value,
-          obj -> obj.lastDiggedPosition)
-      .add()
-
-      .append(new KeyedCodec<>(
-          "TrackedPrefabs",
-          new ArrayCodec<>(TrackedPrefabPlacementComponent.CODEC, TrackedPrefabPlacementComponent[]::new),
-          false),
-          (obj, value) -> obj.restoreSnapshot = dedupeRestoreSnapshots(value),
-          obj -> obj.restoreSnapshot == null
-              ? new TrackedPrefabPlacementComponent[0]
-              : obj.restoreSnapshot.toArray(TrackedPrefabPlacementComponent[]::new))
-      .add()
-
-      .append(new KeyedCodec<>("Completed", Codec.BOOLEAN),
-          (obj, value) -> obj.completed = value,
-          obj -> obj.completed)
-      .add()
-
-      .build();
-
-  private UUID galleryId;
-  private Vec3i cardinalDirection;
-  private Vec3i startPosition;
-  private Vec3i lastDiggedPosition;
-  private List<TrackedPrefabPlacementComponent> restoreSnapshot = new ArrayList<>();
-  private boolean completed = false;
+  boolean completed = false;
 
   public MineshaftGallery() {
     this.galleryId = UUID.randomUUID();
@@ -169,37 +133,7 @@ public class MineshaftGallery {
   }
 
   public MineshaftGallery clone() {
-    MineshaftGallery component = new MineshaftGallery();
-    component.galleryId = this.getGalleryId();
-    component.cardinalDirection = Vec3i.from(this.cardinalDirection);
-    component.startPosition = Vec3i.from(this.startPosition);
-    component.lastDiggedPosition = Vec3i.from(this.lastDiggedPosition);
-
-    component.restoreSnapshot = new ArrayList<>();
-    for (TrackedPrefabPlacementComponent trackedPrefab : this.restoreSnapshot) {
-      component.restoreSnapshot.add(trackedPrefab == null ? null : trackedPrefab.clone());
-    }
-
-    component.completed = this.completed;
-    return component;
-  }
-
-  private static ArrayList<TrackedPrefabPlacementComponent> dedupeRestoreSnapshots(
-      TrackedPrefabPlacementComponent[] trackedPrefabs) {
-    ArrayList<TrackedPrefabPlacementComponent> deduped = new ArrayList<>();
-    if (trackedPrefabs == null) {
-      return deduped;
-    }
-
-    for (TrackedPrefabPlacementComponent trackedPrefab : trackedPrefabs) {
-      if (trackedPrefab == null || containsRestoreSnapshotAt(deduped, trackedPrefab.getOrigin())) {
-        continue;
-      }
-
-      deduped.add(trackedPrefab);
-    }
-
-    return deduped;
+    return MineshaftGalleryCodec.clone(this);
   }
 
   private static boolean containsRestoreSnapshotAt(

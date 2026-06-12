@@ -5,70 +5,22 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
-
+@SerializableClass
 public class Mineshaft {
-  public static final BuilderCodec<Mineshaft> CODEC = BuilderCodec
-      .builder(Mineshaft.class, Mineshaft::new)
+  public static final BuilderCodec<Mineshaft> CODEC = MineshaftCodec.CODEC;
 
-      .append(new KeyedCodec<>(
-          "MineshaftLevels",
-          new Short2ObjectMapCodec<>(
-              MineshaftLevel.CODEC,
-              Short2ObjectOpenHashMap::new),
-          false),
-          (obj, value) -> {
-            obj.mineshaftLevels = decodeMineshaftLevels(value);
-            obj.galleryIdToMineshaftLevel = rebuildGalleryIdIndex(obj.mineshaftLevels);
-          },
-          obj -> encodeMineshaftLevels(obj.mineshaftLevels))
-      .add()
-
-      .append(new KeyedCodec<>(
-          "GalleryOffsets",
-          new Vector3iMapCodec<Vec3i, HashMap<Vec3i, Vec3i>>(
-              Vec3i.CODEC,
-              HashMap::new,
-              false),
-          false),
-          (obj, value) -> obj.galleryOffsets = value == null ? new HashMap<>() : value,
-          obj -> obj.galleryOffsets)
-      .add()
-
-      .append(new KeyedCodec<>("AnchorPoint", Vec3i.CODEC),
-          (obj, value) -> obj.anchorPoint = value,
-          obj -> obj.anchorPoint)
-      .add()
-
-      .append(new KeyedCodec<>("Rotation", Rotation.CODEC),
-          (obj, value) -> obj.rotation = value,
-          obj -> obj.rotation)
-      .add()
-
-      .append(new KeyedCodec<>("LatestLevel", Codec.SHORT),
-          (obj, value) -> obj.latestLevel = value,
-          obj -> obj.latestLevel)
-      .add()
-
-      .build();
-
-  private Map<Short, MineshaftLevel> mineshaftLevels = new HashMap<>();
-  private Map<Vec3i, Vec3i> galleryOffsets = new HashMap<>();
-  private Map<UUID, Short> galleryIdToMineshaftLevel = new HashMap<>();
-  private Vec3i anchorPoint;
-  private Rotation rotation;
-
-  private Short latestLevel = 0;
+  Map<Short, MineshaftLevel> mineshaftLevels = new HashMap<>();
+  Map<Vec3i, Vec3i> galleryOffsets = new HashMap<>();
+  Map<UUID, Short> galleryIdToMineshaftLevel = new HashMap<>();
+  Vec3i anchorPoint;
+  Rotation rotation;
+  Short latestLevel = 0;
 
   public Mineshaft() {
   }
@@ -162,71 +114,7 @@ public class Mineshaft {
   }
 
   public Mineshaft clone() {
-    Mineshaft component = new Mineshaft();
-    component.mineshaftLevels = new HashMap<>();
-
-    for (Map.Entry<Short, MineshaftLevel> entry : this.mineshaftLevels.entrySet()) {
-      Short key = entry.getKey();
-      MineshaftLevel value = entry.getValue();
-
-      if (key == null || value == null) {
-        continue;
-      }
-
-      component.mineshaftLevels.put(key, value.clone());
-    }
-
-    component.galleryIdToMineshaftLevel = rebuildGalleryIdIndex(component.mineshaftLevels);
-
-    component.galleryOffsets = new HashMap<>();
-    for (Map.Entry<Vec3i, Vec3i> entry : this.galleryOffsets.entrySet()) {
-      Vec3i key = entry.getKey();
-      Vec3i value = entry.getValue();
-
-      if (key == null || value == null) {
-        continue;
-      }
-
-      component.galleryOffsets.put(key.clone(), value.clone());
-    }
-
-    component.anchorPoint = Vec3i.from(this.anchorPoint);
-    component.rotation = this.rotation;
-    component.latestLevel = this.latestLevel;
-
-    return component;
-  }
-
-  private static Map<Short, MineshaftLevel> decodeMineshaftLevels(Short2ObjectMap<MineshaftLevel> encoded) {
-    Map<Short, MineshaftLevel> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    for (Short2ObjectMap.Entry<MineshaftLevel> entry : encoded.short2ObjectEntrySet()) {
-      decoded.put(entry.getShortKey(), entry.getValue());
-    }
-
-    return decoded;
-  }
-
-  private static Short2ObjectMap<MineshaftLevel> encodeMineshaftLevels(Map<Short, MineshaftLevel> decoded) {
-    Short2ObjectMap<MineshaftLevel> encoded = new Short2ObjectOpenHashMap<>();
-
-    if (decoded == null) {
-      return encoded;
-    }
-
-    for (Map.Entry<Short, MineshaftLevel> entry : decoded.entrySet()) {
-      Short key = entry.getKey();
-      if (key == null) {
-        continue;
-      }
-      encoded.put(key.shortValue(), entry.getValue());
-    }
-
-    return encoded;
+    return MineshaftCodec.clone(this);
   }
 
   private static Map<UUID, Short> rebuildGalleryIdIndex(Map<Short, MineshaftLevel> mineshaftLevels) {

@@ -3,64 +3,28 @@ package com.pacificbytestudios.projectciviccore.village.components.house;
 import java.util.Set;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
+@SerializableClass
 public class HouseComponent implements Component<ChunkStore> {
-  public static final BuilderCodec<HouseComponent> CODEC = BuilderCodec
-      .builder(HouseComponent.class, HouseComponent::new)
+  public static final BuilderCodec<HouseComponent> CODEC = HouseComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>("HouseId", Codec.UUID_BINARY),
-          (obj, value) -> obj.uuid = value,
-          (obj) -> obj.uuid)
-      .add()
-
-      .append(
-          new KeyedCodec<>("Level", Codec.SHORT),
-          (obj, value) -> obj.level = value,
-          (obj) -> obj.level)
-      .add()
-
-      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
-          (obj, value) -> obj.prefabAnchor = value,
-          (obj) -> obj.prefabAnchor)
-      .add()
-
-      .append(new KeyedCodec<>("CoreBlockPosition", Vec3i.CODEC),
-          (obj, value) -> obj.coreBlockPosition = value,
-          (obj) -> obj.coreBlockPosition)
-      .add()
-
-      .append(new KeyedCodec<>("VillageRef", EntityRef.CODEC),
-          (obj, value) -> obj.villageRef = value,
-          (obj) -> obj.villageRef)
-      .add()
-
-      .append(new KeyedCodec<>("HouseRef", EntityRef.CODEC),
-          (obj, value) -> obj.houseRef = value,
-          (obj) -> obj.houseRef)
-      .add()
-
-      .append(new KeyedCodec<>("AppartmentRegistry", HouseAppartmentRegistry.CODEC),
-          (obj, value) -> obj.appartmentRegistry = value,
-          (obj) -> obj.appartmentRegistry)
-      .add()
-      .build();
-
-  private UUID uuid;
-  private Short level = 1;
-  private EntityRef villageRef;
-  private Vec3i coreBlockPosition;
-  private Vec3i prefabAnchor;
-  private EntityRef houseRef;
-  private HouseAppartmentRegistry appartmentRegistry;
+  @SerialName("HouseId")
+  UUID uuid;
+  Short level = 1;
+  EntityRef villageRef;
+  Vec3i coreBlockPosition;
+  Vec3i prefabAnchor;
+  EntityRef houseRef;
+  HouseAppartmentRegistry appartmentRegistry;
 
   public UUID getUuid() {
     return uuid;
@@ -144,14 +108,7 @@ public class HouseComponent implements Component<ChunkStore> {
 
   @Override
   public HouseComponent clone() {
-    HouseComponent component = new HouseComponent();
-    component.uuid = this.uuid;
-    component.prefabAnchor = Vec3i.from(this.prefabAnchor);
-    component.coreBlockPosition = Vec3i.from(this.coreBlockPosition);
-    component.villageRef = this.villageRef == null ? null : this.villageRef.clone();
-    component.houseRef = this.houseRef == null ? null : this.houseRef.clone();
-    component.appartmentRegistry = this.appartmentRegistry == null ? null : this.appartmentRegistry.clone();
-    return component;
+    return HouseComponentCodec.clone(this);
   }
 
   public static ComponentType<ChunkStore, HouseComponent> getComponentType() {
