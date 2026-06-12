@@ -55,14 +55,13 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
       return false;
     }
 
-    ArrayDeque<Vec3i> breakableBlocks = snapshot.getSnapshotTargets().get(MinerScan.BREAKABLE_BLOCK);
-    if (breakableBlocks != null && !breakableBlocks.isEmpty()) {
+    if (!snapshot.isGroupEmtpy(MinerScan.BREAKABLE_BLOCK)) {
       return false;
     }
 
-    ArrayDeque<Vec3i> digPositions = snapshot.getSnapshotTargets().get(MinerScan.DIG_POSITIONS);
-    if (digPositions == null || digPositions.isEmpty()) {
-      snapshot.getSnapshotTargets().remove(MinerScan.BREAKABLE_BLOCK);
+    Vec3i nextPosition = snapshot.peekNextSnapshotTargetBlockFrom(MinerScan.DIG_POSITIONS);
+    if (nextPosition == null) {
+      snapshot.removeSnapshotGroup(MinerScan.BREAKABLE_BLOCK);
       Logger.logInfo("No more dig position are present");
       return false;
     }
@@ -73,14 +72,12 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
       return false;
     }
 
-    Vec3i nextPosition = digPositions.peekFirst();
     Vec3i cardinalDirection = mineshaftGallery.getCardinalDirection();
-    if (nextPosition == null || cardinalDirection == null) {
+    if (cardinalDirection == null) {
       return false;
     }
 
-    breakableBlocks = new ArrayDeque<>();
-    snapshot.getSnapshotTargets().put(MinerScan.BREAKABLE_BLOCK, breakableBlocks);
+    ArrayDeque<Vec3i> breakableBlocks = new ArrayDeque<>();
 
     Vec3i left = Utils.rotateNormalizedVector(cardinalDirection, Rotation.Ninety);
     Vec3i right = Utils.rotateNormalizedVector(cardinalDirection, Rotation.TwoSeventy);
@@ -111,6 +108,8 @@ public class ScanBreakableAreaSensor extends VillagerSensorBase {
       position.sub(Vec3i.from(right).mul(size3i.x)).add(Vec3i.safeUp());
     }
 
+    snapshot.removeSnapshotGroup(MinerScan.BREAKABLE_BLOCK);
+    snapshot.addAllBlockSnapshotTargets(MinerScan.BREAKABLE_BLOCK, breakableBlocks);
     return !breakableBlocks.isEmpty();
   }
 }

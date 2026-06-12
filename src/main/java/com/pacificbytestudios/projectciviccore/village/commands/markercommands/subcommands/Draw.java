@@ -65,12 +65,11 @@ public class Draw extends VillageCommand {
     this.markers.get(MarkerType.BENCH_ACCESS).add(workplace.getBenchAccessPos().to3d());
     this.markers.get(MarkerType.ANCHOR).add(workplace.getPrefabAnchor().to3d());
 
-    workplace.getStorage().getAllContainerPositions().forEach(containerPos -> {
-      this.markers.get(MarkerType.STORAGE).add(containerPos.to3d());
-    });
-
-    workplace.getStorage().getAllContainerAccessPositions().forEach(containerAccPos -> {
-      this.markers.get(MarkerType.STORAGE_ACCESS).add(containerAccPos.to3d());
+    workplace.getStorage().getAllContainersTargets().forEach(containerTarget -> {
+      this.markers.get(MarkerType.STORAGE).add(containerTarget.getTargetBlock().to3d());
+      if (containerTarget.getAccessPosition() != null) {
+        this.markers.get(MarkerType.STORAGE_ACCESS).add(containerTarget.getAccessPosition().to3d());
+      }
     });
 
     WorkplaceInteractablesMapComponent interactables = workplace

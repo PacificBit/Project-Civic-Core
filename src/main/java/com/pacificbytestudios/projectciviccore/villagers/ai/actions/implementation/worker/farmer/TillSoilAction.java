@@ -45,10 +45,7 @@ public class TillSoilAction extends VillagerActionBase {
       return false;
     }
 
-    Vec3i blockPos = workplaceSnapshot
-        .pollNextSnapshotTargetFrom(FarmerScan.TILLABLE_TERRAIN)
-        .getTargetBlock();
-
+    Vec3i blockPos = workplaceSnapshot.pollNextSnapshotTargetBlockFrom(FarmerScan.TILLABLE_TERRAIN);
     World world = store.getExternalData().getWorld();
 
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));

@@ -1,8 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.general;
 
-import java.util.ArrayDeque;
-import java.util.Map;
-
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
@@ -16,6 +13,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachWalkableSpaceNearSnapshotTargetSensor;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
@@ -25,7 +23,7 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
   private final String[] blockIds;
   private final double stoppingRangeSquared;
   private final boolean useCenterOfBlock;
-  private Vec3i target = null;
+  private BlockTarget target = null;
 
   public ReachWalkableSpaceNearSnapshotTargetSensor(
       BuilderReachWalkableSpaceNearSnapshotTargetSensor builderSensorBase,
@@ -68,26 +66,17 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
       return false;
     }
 
-    this.findSnapshotTarget(snapshot.getSnapshotTargets());
+    this.findSnapshotTarget(snapshot);
     if (this.target == null) {
       this.positionProvider.clear();
       return false;
     }
 
-    SnapshotTargetStandabilityInspector.Inspection standabilityInspection = SnapshotTargetStandabilityInspector.inspect(
-        store.getExternalData().getWorld(),
-        this.target,
-        Vec3d.from(transform.getPosition()),
-        this.useCenterOfBlock);
-    Vec3i walkableTarget = standabilityInspection.getBestStandableCandidate();
-    if (walkableTarget == null) {
+    Vec3d targetPosition = getTargetPosition(store, transform);
+    if (targetPosition == null) {
       this.positionProvider.clear();
       return false;
     }
-
-    Vec3d targetPosition = this.useCenterOfBlock
-        ? Vec3d.from(Utils.centerOf(walkableTarget))
-        : Vec3d.from(walkableTarget);
 
     double distanceFromTarget = transform.getPosition().distanceSquared(targetPosition);
     if (distanceFromTarget <= this.stoppingRangeSquared) {
@@ -99,18 +88,40 @@ public class ReachWalkableSpaceNearSnapshotTargetSensor extends VillagerSensorBa
     return true;
   }
 
-  private void findSnapshotTarget(Map<String, ArrayDeque<Vec3i>> blockPositions) {
+  private Vec3d getTargetPosition(Store<EntityStore> store, TransformComponent transform) {
+    if (this.target.getAccessPosition() != null) {
+      return Vec3d.from(this.target.getAccessPosition());
+    }
+
+    Vec3i blockTarget = this.target.getTargetBlock();
+    if (blockTarget == null) {
+      return null;
+    }
+
+    SnapshotTargetStandabilityInspector.Inspection standabilityInspection = SnapshotTargetStandabilityInspector.inspect(
+        store.getExternalData().getWorld(),
+        blockTarget,
+        Vec3d.from(transform.getPosition()),
+        this.useCenterOfBlock);
+    Vec3i walkableTarget = standabilityInspection.getBestStandableCandidate();
+    if (walkableTarget == null) {
+      return null;
+    }
+
+    return this.useCenterOfBlock
+        ? Vec3d.from(Utils.centerOf(walkableTarget))
+        : Vec3d.from(walkableTarget);
+  }
+
+  private void findSnapshotTarget(WorkplaceAreaSnapshot snapshot) {
+    this.target = null;
     for (String blockId : this.blockIds) {
-      ArrayDeque<Vec3i> queue = blockPositions.get(blockId);
-      if (queue != null && !queue.isEmpty()) {
-        Vec3i target = queue.peekFirst();
-        if (target != null) {
-          this.target = target;
-          return;
-        }
+      BlockTarget target = snapshot.peekNextSnapshotTargetFrom(blockId);
+      if (target != null) {
+        this.target = target;
+        return;
       }
     }
-    return;
   }
 
 }

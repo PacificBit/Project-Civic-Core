@@ -1,6 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker;
 
-import java.util.ArrayDeque;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
@@ -55,21 +54,14 @@ public class RepairTerrainAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vec3i> terrainToFill = snapshot.getSnapshotTargets().get(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
-    if (terrainToFill == null || terrainToFill.isEmpty()) {
-      snapshot.getSnapshotTargets().remove(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
-      return false;
-    }
-
     World world = this.getWorld(store);
-    boolean repairedAllBlocks = true;
-
-    for (Vec3i blockPos : terrainToFill) {
-      repairedAllBlocks &= this.repairTerrainBlock(world, blockPos);
-    }
+    boolean repairedAllBlocks = snapshot
+        .streamSnapshotTargetBlocksFrom(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL)
+        .map(blockPos -> this.repairTerrainBlock(world, blockPos))
+        .reduce(true, Boolean::logicalAnd);
 
     if (repairedAllBlocks) {
-      snapshot.getSnapshotTargets().remove(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
+      snapshot.removeSnapshotGroup(IWorkAreaScanner.TERRAIN_BLOCK_TO_FILL);
     }
 
     return repairedAllBlocks;

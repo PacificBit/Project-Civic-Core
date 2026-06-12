@@ -1,11 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.general;
 
-import java.util.ArrayDeque;
-import java.util.Map;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -14,11 +8,13 @@ import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.sensorinfo.PositionProvider;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.builders.worker.general.BuilderReachNextTargetInSnapshotSensor;
-import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerSensorBase;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
   // private static final double NUDGE_DISTANCE = 0.75;
@@ -62,36 +58,34 @@ public class ReachNextTargetInSnapshotSensor extends VillagerSensorBase {
     if (!this.isTriggered()) {
       this.triggered = true;
 
-      VillagerComponent villager = this.getVillagerComponent(ref, store);
-      if (villager == null) {
+      WorkplaceAreaSnapshot snapshot = this.getAreaSnapshot(ref, store);
+      if (snapshot == null) {
         this.positionProvider.clear();
         this.triggered = false;
         return false;
       }
 
-      Map<String, ArrayDeque<Vec3i>> blockPositions = villager
-          .getWorkerData()
-          .getWorkareaSnapshot()
-          .getSnapshotTargets();
-
-      Vec3i nextTarget = null;
+      BlockTarget nextTarget = null;
       for (String blockId : this.blockIds) {
-        ArrayDeque<Vec3i> queue = blockPositions.get(blockId);
-        if (queue != null && !queue.isEmpty()) {
-          nextTarget = queue.peekFirst();
+        nextTarget = snapshot.peekNextSnapshotTargetFrom(blockId);
+        if (nextTarget != null) {
           break;
         }
       }
 
-      if (nextTarget == null) {
+      if (nextTarget == null || nextTarget.getTargetBlock() == null) {
         this.positionProvider.clear();
         this.triggered = false;
         return false;
       }
 
-      this.target = this.useCenterOfBlock
-          ? Vec3d.from(Utils.centerOf(nextTarget))
-          : Vec3d.from(nextTarget);
+      if (nextTarget.getAccessPosition() != null) {
+        this.target = Vec3d.from(nextTarget.getAccessPosition());
+      } else {
+        this.target = this.useCenterOfBlock
+            ? Vec3d.from(Utils.centerOf(nextTarget.getTargetBlock()))
+            : Vec3d.from(nextTarget.getTargetBlock());
+      }
 
       this.positionProvider.setTarget(this.target);
       return true;

@@ -37,10 +37,7 @@ public class PlantSeedAction extends VillagerActionBase {
       return false;
     }
 
-    Vec3i blockPos = workplaceSnapshot
-        .pollNextSnapshotTargetFrom(FarmerScan.PLANTABLE_TERRAIN)
-        .getTargetBlock();
-
+    Vec3i blockPos = workplaceSnapshot.pollNextSnapshotTargetBlockFrom(FarmerScan.PLANTABLE_TERRAIN);
     ItemStack seeds = VillagerInventoryAccess.activeHotbarItem(store, ref);
 
     if (seeds == null || seeds.getItemId() == null) {

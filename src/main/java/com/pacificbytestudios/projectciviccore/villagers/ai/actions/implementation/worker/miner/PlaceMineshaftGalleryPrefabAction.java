@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.miner;
 
-import java.util.ArrayDeque;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -173,12 +171,9 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       WorkplaceAreaSnapshot snapshot,
       MineshaftGallery mineshaftGallery) {
     if (snapshot != null) {
-      ArrayDeque<Vec3i> digPositions = snapshot.getSnapshotTargets().get(MinerScan.DIG_POSITIONS);
-      if (digPositions != null && !digPositions.isEmpty()) {
-        Vec3i nextDigPosition = digPositions.peekFirst();
-        if (nextDigPosition != null) {
-          return Vec3i.from(nextDigPosition);
-        }
+      Vec3i nextDigPosition = snapshot.peekNextSnapshotTargetBlockFrom(MinerScan.DIG_POSITIONS);
+      if (nextDigPosition != null) {
+        return Vec3i.from(nextDigPosition);
       }
     }
 
@@ -244,13 +239,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       return null;
     }
 
-    Map<String, ArrayDeque<Vec3i>> blockTypePositions = snapshot.getSnapshotTargets();
-    ArrayDeque<Vec3i> positions = blockTypePositions.get(groupName);
-    if (positions == null || positions.isEmpty()) {
-      return null;
-    }
-
-    Vec3i position = positions.peekFirst();
+    Vec3i position = snapshot.peekNextSnapshotTargetBlockFrom(groupName);
     return position == null ? null : Vec3i.from(position);
   }
 
@@ -259,7 +248,7 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
       return;
     }
 
-    snapshot.getSnapshotTargets().remove(groupName);
+    snapshot.removeSnapshotGroup(groupName);
   }
 
   private boolean hasValue(String value) {

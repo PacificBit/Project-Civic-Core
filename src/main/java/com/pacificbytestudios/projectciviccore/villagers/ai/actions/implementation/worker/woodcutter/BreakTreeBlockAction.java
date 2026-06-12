@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.woodcutter;
 
-import java.util.ArrayDeque;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -72,19 +70,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vec3i> targets = snapshot.getSnapshotTargets().get(this.snapshotGroup);
-    if (targets == null || targets.isEmpty()) {
-      Logger.logInfo(
-          "No targets available for snapshot group " + this.snapshotGroup);
-      return false;
-    }
-
-    Vec3i target = targets.peekFirst();
-    if (target == null) {
-      Logger.logInfo(
-          "Snapshot group " + this.snapshotGroup + " returned a null target");
-      return false;
-    }
+    Vec3i target = snapshot.peekNextSnapshotTargetBlockFrom(this.snapshotGroup);
 
     if (this.requiredStoppingRangeSquared >= 0.0) {
       TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
@@ -128,9 +114,9 @@ public class BreakTreeBlockAction extends VillagerActionBase {
 
     if (BlockHarvestUtils.getSpecPowerDamageBlock(itemInHand, blockType, tool) == null) {
       Logger.logInfo("The tool in hand cannot break the target block");
-      targets.pollFirst();
-      if (targets.isEmpty()) {
-        snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
+      snapshot.removeFirstSnapshotTargetFrom(this.snapshotGroup);
+      if (snapshot.isGroupEmtpy(this.snapshotGroup)) {
+        snapshot.removeFirstSnapshotTargetFrom(WoodCutterScan.CUTTABLE_TREE);
       }
       return false;
     }
@@ -138,7 +124,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     if (!this.alreadyClearedTerrain) {
       this.alreadyClearedTerrain = true;
       this.terrainRepairer.repairTerrainBelowSapling(world,
-          snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE).peekFirst());
+          snapshot.peekNextSnapshotTargetBlockFrom(WoodCutterScan.CUTTABLE_TREE));
     }
 
     ChunkStore chunkStoreObj = world.getChunkStore();
@@ -151,9 +137,9 @@ public class BreakTreeBlockAction extends VillagerActionBase {
 
     if (didBreak) {
       this.consumeToolDurability(ref, store);
-      targets.pollFirst();
-      if (targets.isEmpty()) {
-        snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE).pollFirst();
+      snapshot.removeFirstSnapshotTargetFrom(this.snapshotGroup);
+      if (snapshot.isGroupEmtpy(this.snapshotGroup)) {
+        snapshot.removeFirstSnapshotTargetFrom(WoodCutterScan.CUTTABLE_TREE);
         this.alreadyClearedTerrain = false;
       }
     }

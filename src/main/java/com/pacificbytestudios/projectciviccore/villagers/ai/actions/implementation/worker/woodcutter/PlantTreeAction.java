@@ -49,8 +49,7 @@ public class PlantTreeAction extends VillagerActionBase {
     }
 
     Vec3i blockPos = snapshot
-        .peekNextSnapshotTargetFrom(WoodCutterScan.PLANTABLE_TERRAIN)
-        .getTargetBlock();
+        .peekNextSnapshotTargetBlockFrom(WoodCutterScan.PLANTABLE_TERRAIN);
 
     ItemStack sapling = VillagerInventoryAccess.activeHotbarItem(store, ref);
 

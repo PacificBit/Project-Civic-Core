@@ -77,7 +77,10 @@ public class Vec3i extends org.joml.Vector3i {
     if (vector == null) {
       return null;
     }
-    return new Vec3i((int) vector.x(), (int) vector.y(), (int) vector.z());
+    return new Vec3i(
+        (int) Math.floor(vector.x()),
+        (int) Math.floor(vector.y()),
+        (int) Math.floor(vector.z()));
   }
 
   public static Vec3i from(org.joml.Vector3d vector3d) {
@@ -85,9 +88,9 @@ public class Vec3i extends org.joml.Vector3i {
       return null;
     }
     Vec3i result = new Vec3i();
-    result.x = (int) vector3d.x;
-    result.y = (int) vector3d.y;
-    result.z = (int) vector3d.z;
+    result.x = (int) Math.floor(vector3d.x);
+    result.y = (int) Math.floor(vector3d.y);
+    result.z = (int) Math.floor(vector3d.z);
     return result;
   }
 
@@ -95,7 +98,10 @@ public class Vec3i extends org.joml.Vector3i {
     if (vector == null) {
       return null;
     }
-    return new Vec3i((int) vector.x(), (int) vector.y(), (int) vector.z());
+    return new Vec3i(
+        (int) Math.floor(vector.x()),
+        (int) Math.floor(vector.y()),
+        (int) Math.floor(vector.z()));
   }
 
   public static Vec3i from(Vec3i vector) {

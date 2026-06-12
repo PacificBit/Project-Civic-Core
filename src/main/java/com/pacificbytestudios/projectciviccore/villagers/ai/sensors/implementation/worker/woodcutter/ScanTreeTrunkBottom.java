@@ -1,6 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.woodcutter;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -61,20 +60,9 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
     if (!this.isTriggered()) {
       this.triggered = true;
       this.treeTrunkBottomBlocks = new LinkedHashSet<>();
-      snapshot.getSnapshotTargets().remove(WoodCutterScan.CUTTABLE_BLOCK);
+      snapshot.removeSnapshotGroup(WoodCutterScan.CUTTABLE_BLOCK);
 
-      ArrayDeque<Vec3i> treeTargets = snapshot.getSnapshotTargets().get(WoodCutterScan.CUTTABLE_TREE);
-      if (treeTargets == null || treeTargets.isEmpty()) {
-        Logger.logFine("No cuttable tree target is available");
-        return false;
-      }
-
-      this.centerTreeBlock = treeTargets.peekFirst();
-      if (this.centerTreeBlock == null) {
-        Logger.logFine("Cuttable tree target was null");
-        return false;
-      }
-
+      this.centerTreeBlock = snapshot.peekNextSnapshotTargetBlockFrom(WoodCutterScan.CUTTABLE_TREE);
       this.world = store.getExternalData().getWorld();
       this.chunk = Utils.getWorldChunk(this.world, this.centerTreeBlock);
       if (this.chunk == null) {
@@ -86,7 +74,7 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
       this.scanTreeTrunk(this.centerTreeBlock);
 
       if (treeTrunkBottomBlocks.isEmpty()) {
-        treeTargets.pollFirst();
+        snapshot.removeFirstSnapshotTargetFrom(WoodCutterScan.CUTTABLE_TREE);
         Logger.logFine("Started cutting tree at: " +
             this.centerTreeBlock + ", but no tree was found");
         return false;
@@ -95,8 +83,7 @@ public class ScanTreeTrunkBottom extends VillagerSensorBase {
       List<Vec3i> orderedTargets = new ArrayList<>(this.treeTrunkBottomBlocks);
       Collections.reverse(orderedTargets);
 
-      ArrayDeque<Vec3i> targets = new ArrayDeque<>(orderedTargets);
-      snapshot.getSnapshotTargets().put(WoodCutterScan.CUTTABLE_BLOCK, targets);
+      snapshot.addAllBlockSnapshotTargets(WoodCutterScan.CUTTABLE_BLOCK, orderedTargets);
       return true;
     }
 

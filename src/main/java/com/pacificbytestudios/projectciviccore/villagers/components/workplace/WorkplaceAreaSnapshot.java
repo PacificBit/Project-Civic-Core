@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -40,6 +41,16 @@ public class WorkplaceAreaSnapshot {
     this.snapshotTargets.computeIfAbsent(group, ignored -> new ArrayDeque<>()).addLast(target);
   }
 
+  public void addAllBlockSnapshotTargets(String group, Iterable<Vec3i> targetBlocks) {
+    if (targetBlocks == null) {
+      return;
+    }
+
+    for (Vec3i targetBlock : targetBlocks) {
+      this.addWorkplaceSnapshotTarget(group, targetBlock);
+    }
+  }
+
   public void addAllWorkplaceSnapshotTargets(String group, BlockTarget... targets) {
     Collections.addAll(
         this.snapshotTargets.computeIfAbsent(group, ignored -> new ArrayDeque<>()),
@@ -59,7 +70,29 @@ public class WorkplaceAreaSnapshot {
     return targets == null ? null : targets.peek();
   }
 
-  public BlockTarget pollNextSnapshotTargetFrom(String group) {
+  public Stream<Vec3i> streamSnapshotTargetBlocksFrom(String group) {
+    ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
+    if (targets == null) {
+      return Stream.empty();
+    }
+
+    return targets.stream()
+        .filter(Objects::nonNull)
+        .map(BlockTarget::getTargetBlock)
+        .filter(Objects::nonNull);
+  }
+
+  public Vec3i peekNextSnapshotTargetBlockFrom(String group) {
+    BlockTarget target = this.peekNextSnapshotTargetFrom(group);
+    return target == null ? null : target.getTargetBlock();
+  }
+
+  public Vec3i pollNextSnapshotTargetBlockFrom(String group) {
+    BlockTarget target = this.pollNextSnapshotTargetFrom(group);
+    return target == null ? null : target.getTargetBlock();
+  }
+
+  private BlockTarget pollNextSnapshotTargetFrom(String group) {
     ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
     return targets == null ? null : targets.poll();
   }
@@ -70,6 +103,10 @@ public class WorkplaceAreaSnapshot {
 
   public void removeAllFromSnapshot(String... groups) {
     Stream.of(groups).forEach(this.snapshotTargets::remove);
+  }
+
+  public boolean hasSnapshotGroup(String group) {
+    return this.snapshotTargets.containsKey(group);
   }
 
   public boolean isGroupEmtpy(String group) {

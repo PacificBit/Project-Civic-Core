@@ -41,10 +41,7 @@ public class WaterSoilAction extends VillagerActionBase {
       return false;
     }
 
-    Vec3i blockPos = workplaceSnapshot
-        .pollNextSnapshotTargetFrom(FarmerScan.WATERABLE_TERRAIN)
-        .getTargetBlock();
-
+    Vec3i blockPos = workplaceSnapshot.pollNextSnapshotTargetBlockFrom(FarmerScan.WATERABLE_TERRAIN);
     World world = store.getExternalData().getWorld();
     return waterTilledSoil(world, blockPos);
   }

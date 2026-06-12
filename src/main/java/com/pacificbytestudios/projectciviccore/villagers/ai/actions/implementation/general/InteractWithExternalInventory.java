@@ -24,6 +24,7 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.general.BuilderInteractWithExternalInventory;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
+import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.ContainerResolver.ResolvedContainer;
@@ -75,18 +76,13 @@ public class InteractWithExternalInventory extends VillagerActionBase {
     UUIDComponent uuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
     this.workerId = uuidComponent.getUuid();
 
-    // ArrayDeque<Vec3i> coords =
-    // snapshot.getSnapshotTargets().get(this.snapshotKey);
-    // if (coords == null || coords.isEmpty()) {
-    // Logger.logWarning("Could not find coords in snapshot for key: " +
-    // this.snapshotKey);
-    // return false;
-    // }
-    //
-    // Vec3i containerPosition = coords.peek();
-    Vec3i containerPosition = snapshot
-        .peekNextSnapshotTargetFrom(this.snapshotKey)
-        .getTargetBlock();
+    BlockTarget target = snapshot.peekNextSnapshotTargetFrom(this.snapshotKey);
+    if (target == null || target.getTargetBlock() == null) {
+      Logger.logWarning("Could not find coords in snapshot for key: " + this.snapshotKey);
+      return false;
+    }
+
+    Vec3i containerPosition = target.getTargetBlock();
 
     World world = store.getExternalData().getWorld();
     ResolvedContainer resolvedContainer = ContainerResolver.resolveContainerAt(world, containerPosition);

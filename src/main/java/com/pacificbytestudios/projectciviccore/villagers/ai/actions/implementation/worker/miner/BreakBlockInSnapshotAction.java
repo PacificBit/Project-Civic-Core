@@ -1,6 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.miner;
 
-import java.util.ArrayDeque;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
@@ -82,20 +81,19 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       return false;
     }
 
-    ArrayDeque<Vec3i> targets = snapshot.getBlockTypePosition().get(this.primarySnapshotGroup);
-    if (targets == null) {
+    if (!snapshot.hasSnapshotGroup(this.primarySnapshotGroup)) {
       return false;
     }
 
-    if (targets.isEmpty()) {
+    if (snapshot.isGroupEmtpy(this.primarySnapshotGroup)) {
       this.finishCurrentDigPosition(snapshot, mineComponent, villagerId);
       return false;
     }
 
-    Vec3i target = targets.peekFirst();
+    Vec3i target = snapshot.peekNextSnapshotTargetBlockFrom(this.primarySnapshotGroup);
     if (target == null) {
-      targets.pollFirst();
-      if (targets.isEmpty()) {
+      snapshot.removeFirstSnapshotTargetFrom(this.primarySnapshotGroup);
+      if (snapshot.isGroupEmtpy(this.primarySnapshotGroup)) {
         this.finishCurrentDigPosition(snapshot, mineComponent, villagerId);
       }
       return false;
@@ -153,8 +151,8 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     if (didBreak) {
       this.consumeToolDurability(ref, store);
       this.generateDropIfNeeded(ref, store);
-      targets.pollFirst();
-      if (targets.isEmpty()) {
+      snapshot.removeFirstSnapshotTargetFrom(this.primarySnapshotGroup);
+      if (snapshot.isGroupEmtpy(this.primarySnapshotGroup)) {
         this.finishCurrentDigPosition(snapshot, mineComponent, villagerId);
       }
     }
@@ -186,12 +184,7 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
   }
 
   private Vec3i resolveRangeAnchor(WorkplaceAreaSnapshot snapshot, Vec3i fallbackTarget) {
-    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
-    if (digPositions == null || digPositions.isEmpty()) {
-      return fallbackTarget;
-    }
-
-    Vec3i digPosition = digPositions.peekFirst();
+    Vec3i digPosition = snapshot.peekNextSnapshotTargetBlockFrom(this.secondarySnapshotGroup);
     return digPosition == null ? fallbackTarget : digPosition;
   }
 
@@ -199,17 +192,13 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
       WorkplaceAreaSnapshot snapshot,
       MineComponent mineComponent,
       UUID villagerId) {
-    snapshot.getBlockTypePosition().remove(this.primarySnapshotGroup);
+    snapshot.removeSnapshotGroup(this.primarySnapshotGroup);
 
-    ArrayDeque<Vec3i> digPositions = snapshot.getBlockTypePosition().get(this.secondarySnapshotGroup);
-    if (digPositions == null || digPositions.isEmpty()) {
-      return;
-    }
-
-    digPositions.pollFirst();
-    this.persistNextDigPosition(mineComponent, villagerId, digPositions.peekFirst());
-    if (digPositions.isEmpty()) {
-      snapshot.getBlockTypePosition().remove(this.secondarySnapshotGroup);
+    snapshot.removeFirstSnapshotTargetFrom(this.secondarySnapshotGroup);
+    this.persistNextDigPosition(mineComponent, villagerId,
+        snapshot.peekNextSnapshotTargetBlockFrom(this.secondarySnapshotGroup));
+    if (snapshot.isGroupEmtpy(this.secondarySnapshotGroup)) {
+      snapshot.removeSnapshotGroup(this.secondarySnapshotGroup);
     }
   }
 

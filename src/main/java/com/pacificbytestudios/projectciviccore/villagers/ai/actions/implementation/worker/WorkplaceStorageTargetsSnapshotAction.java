@@ -1,10 +1,6 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker;
 
-import java.util.ArrayDeque;
 import java.util.function.Supplier;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -47,13 +43,11 @@ public class WorkplaceStorageTargetsSnapshotAction extends VillagerActionBase {
     }
 
     if (this.actionType.equals(ActionType.ADD)) {
-      ArrayDeque<Vec3i> storagePosition = new ArrayDeque<>();
-      for (Vec3f accessPosition : workplace.getStorage().getAllContainerAccessPositions()) {
-        storagePosition.add(accessPosition.to3i());
+      for (var target : workplace.getStorage().getAllContainersTargets()) {
+        snapshot.addWorkplaceSnapshotTarget(WORKPLACE_STORAGE_KEY, target);
       }
-      snapshot.getSnapshotTargets().put(WORKPLACE_STORAGE_KEY, storagePosition);
-    } else if (snapshot.getSnapshotTargets().get(WORKPLACE_STORAGE_KEY) != null) {
-      snapshot.getSnapshotTargets().remove(WORKPLACE_STORAGE_KEY);
+    } else {
+      snapshot.removeSnapshotGroup(WORKPLACE_STORAGE_KEY);
     }
     return true;
   }

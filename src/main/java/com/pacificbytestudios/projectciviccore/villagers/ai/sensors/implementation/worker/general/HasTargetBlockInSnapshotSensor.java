@@ -1,10 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.general;
 
-import java.util.ArrayDeque;
-import java.util.Map;
-
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -45,11 +40,8 @@ public class HasTargetBlockInSnapshotSensor extends VillagerSensorBase {
       return false;
     }
 
-    Map<String, ArrayDeque<Vec3i>> blockPositions = snapshot.getSnapshotTargets();
-
     for (String targetBlockId : this.targetBlockIds) {
-      ArrayDeque<Vec3i> queue = blockPositions.get(targetBlockId);
-      if (queue != null && queue.size() > 0) {
+      if (!snapshot.isGroupEmtpy(targetBlockId)) {
         return true;
       }
     }
