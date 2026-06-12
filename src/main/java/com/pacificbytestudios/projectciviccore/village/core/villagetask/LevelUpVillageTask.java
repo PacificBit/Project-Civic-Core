@@ -2,8 +2,6 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -15,19 +13,13 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class LevelUpVillageTask extends AVillageTask {
-  public static final BuilderCodec<LevelUpVillageTask> CODEC = BuilderCodec
-      .builder(LevelUpVillageTask.class, LevelUpVillageTask::new)
+  public static final BuilderCodec<LevelUpVillageTask> CODEC = LevelUpVillageTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("Level", Codec.SHORT),
-          (obj, value) -> obj.level = value,
-          (obj) -> obj.level)
-      .add()
-
-      .build();
-
-  private Short level;
+  Short level;
 
   public LevelUpVillageTask() {
   }

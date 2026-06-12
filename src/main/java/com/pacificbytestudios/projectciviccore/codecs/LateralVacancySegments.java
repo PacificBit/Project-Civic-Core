@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
 public class LateralVacancySegments {
   public static final BuilderCodec<LateralVacancySegments> CODEC = BuilderCodec
@@ -276,26 +276,9 @@ public class LateralVacancySegments {
     return adjacentSegments;
   }
 
+  @SerializableClass
   public static class Segment {
-    public static final BuilderCodec<Segment> CODEC = BuilderCodec
-        .builder(Segment.class, Segment::new)
-
-        .append(new KeyedCodec<>("Start", Vec3i.CODEC),
-            (obj, value) -> obj.start = value,
-            (obj) -> obj.start)
-        .add()
-
-        .append(new KeyedCodec<>("End", Vec3i.CODEC),
-            (obj, value) -> obj.end = value,
-            (obj) -> obj.end)
-        .add()
-
-        .append(new KeyedCodec<>("Size", Codec.SHORT),
-            (obj, value) -> obj.size = value,
-            (obj) -> obj.size)
-        .add()
-
-        .build();
+    public static final BuilderCodec<Segment> CODEC = SegmentCodec.CODEC;
 
     protected Vec3i start;
     protected Vec3i end;
@@ -312,11 +295,7 @@ public class LateralVacancySegments {
 
     @Override
     public Segment clone() {
-      Segment segment = new Segment();
-      segment.start = Vec3i.from(this.start);
-      segment.end = Vec3i.from(this.end);
-      segment.size = this.size;
-      return segment;
+      return SegmentCodec.clone(this);
     }
 
     public Vec3i getStart() {

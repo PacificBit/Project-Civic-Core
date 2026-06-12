@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -10,32 +8,16 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class AreaFootprint implements Component<ChunkStore> {
 
-  public static final BuilderCodec<AreaFootprint> CODEC = BuilderCodec
-      .builder(AreaFootprint.class, AreaFootprint::new)
+  public static final BuilderCodec<AreaFootprint> CODEC = AreaFootprintCodec.CODEC;
 
-      .append(new KeyedCodec<>("TopLeft", Vec2i.CODEC),
-          AreaFootprint::setTopLeft,
-          (obj) -> obj.topLeft)
-      .add()
-
-      .append(new KeyedCodec<>("BotRight", Vec2i.CODEC),
-          AreaFootprint::setBotRight,
-          (obj) -> obj.botRight)
-      .add()
-
-      .append(new KeyedCodec<>("Y", Codec.INTEGER),
-          (obj, value) -> obj.y = value,
-          (obj) -> obj.y)
-      .add()
-
-      .build();
-
-  private Vec2i topLeft;
-  private Vec2i botRight;
-  private int y;
+  Vec2i topLeft;
+  Vec2i botRight;
+  int y;
 
   public AreaFootprint() {
   }
@@ -75,11 +57,7 @@ public class AreaFootprint implements Component<ChunkStore> {
 
   @Override
   public AreaFootprint clone() {
-    AreaFootprint claimArea = new AreaFootprint();
-    claimArea.topLeft = Vec2i.from(this.topLeft);
-    claimArea.botRight = Vec2i.from(this.botRight);
-    claimArea.y = this.y;
-    return claimArea;
+    return AreaFootprintCodec.clone(this);
   }
 
   public Vec2i getTopLeft() {

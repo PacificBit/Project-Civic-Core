@@ -55,7 +55,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.tave
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointsEditingComponent;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.OpenWaypointEditorInteraction;
-import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.ToogleWaypointsEdit;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.ToggleWaypointsEdit;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.StagedBuildingSpawnSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.VillageBuilderSystem;
 import com.pacificbytestudios.projectciviccore.village.systems.heart.VillageHeartLoadUnloadSystem;
@@ -646,9 +646,9 @@ public final class ProjectCivicCore extends JavaPlugin {
         VillagerOpenInventoryInteraction.CODEC);
 
     this.getCodecRegistry(Interaction.CODEC).register(
-        "ToogleWaypointsEditInteraction",
-        ToogleWaypointsEdit.class,
-        ToogleWaypointsEdit.CODEC);
+        "ToggleWaypointsEditInteraction",
+        ToggleWaypointsEdit.class,
+        ToggleWaypointsEdit.CODEC);
 
     this.getCodecRegistry(Interaction.CODEC).register(
         "OpenWaypointEditorInteraction",

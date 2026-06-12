@@ -5,8 +5,6 @@ import javax.annotation.Nullable;
 
 import org.joml.Vector3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -31,19 +29,13 @@ import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.comp
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointsEditingComponent;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.ui.WaypointEditorPage;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.ui.WaypointSessionPage;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class OpenWaypointEditorInteraction extends SimpleBlockInteraction {
-  public static final BuilderCodec<OpenWaypointEditorInteraction> CODEC = BuilderCodec
-      .builder(OpenWaypointEditorInteraction.class, OpenWaypointEditorInteraction::new, SimpleBlockInteraction.CODEC)
+  public static final BuilderCodec<OpenWaypointEditorInteraction> CODEC = OpenWaypointEditorInteractionCodec.CODEC;
 
-      .append(new KeyedCodec<>("PrecisionThreshold", Codec.DOUBLE),
-          (obj, value) -> obj.precisionThreshold = value,
-          (obj) -> obj.precisionThreshold)
-      .add()
-
-      .build();
-
-  private double precisionThreshold;
+  double precisionThreshold;
 
   @Override
   @Nonnull

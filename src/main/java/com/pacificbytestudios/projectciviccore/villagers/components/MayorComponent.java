@@ -1,6 +1,5 @@
 package com.pacificbytestudios.projectciviccore.villagers.components;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
@@ -8,29 +7,17 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
 
+@SerializableClass
 public class MayorComponent implements Component<EntityStore> {
-  public static final BuilderCodec<MayorComponent> CODEC = BuilderCodec
-      .builder(MayorComponent.class, MayorComponent::new)
+  public static final BuilderCodec<MayorComponent> CODEC = MayorComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>(
-          "ExecutingProjectPlan",
-          VillageProjectPlan.CODEC),
-          (obj, value) -> obj.executingVillagePlan = value,
-          (obj) -> obj.executingVillagePlan)
-      .add()
-
-      .append(new KeyedCodec<>(
-          "CurrentlProject",
-          VillageProject.CODEC),
-          (obj, value) -> obj.currentProject = value,
-          (obj) -> obj.currentProject)
-      .add()
-
-      .build();
-
-  private VillageProjectPlan executingVillagePlan;
-  private VillageProject currentProject;
+  @SerialName("ExecutingProjectPlan")
+  VillageProjectPlan executingVillagePlan;
+  @SerialName("CurrentlProject")
+  VillageProject currentProject;
 
   public VillageProjectPlan getExecutingVillagePlan() {
     return executingVillagePlan;
@@ -56,10 +43,7 @@ public class MayorComponent implements Component<EntityStore> {
 
   @Override
   public MayorComponent clone() {
-    MayorComponent component = new MayorComponent();
-    component.executingVillagePlan = this.executingVillagePlan == null ? null : this.executingVillagePlan.clone();
-    component.currentProject = this.currentProject == null ? null : this.currentProject.clone();
-    return component;
+    return MayorComponentCodec.clone(this);
   }
 
   public static ComponentType<EntityStore, MayorComponent> getComponentType() {

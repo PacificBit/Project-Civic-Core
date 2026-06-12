@@ -2,53 +2,27 @@ package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.com
 
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
 
+@SerializableClass
 public class Waypoint implements Copyable<Waypoint> {
-  public static final BuilderCodec<Waypoint> CODEC = BuilderCodec
-      .builder(Waypoint.class, Waypoint::new)
+  public static final BuilderCodec<Waypoint> CODEC = WaypointCodec.CODEC;
 
-      .append(new KeyedCodec<>("WaypointId", Codec.UUID_BINARY),
-          (obj, value) -> obj.waypointId = value,
-          (obj) -> obj.waypointId)
-      .add()
-
-      .append(new KeyedCodec<>("Type", new EnumCodec<>(MarkerType.class)),
-          (obj, value) -> obj.type = value,
-          (obj) -> obj.type)
-      .add()
-
-      .append(new KeyedCodec<>("IntTransform", BlockTransform.VEC3I_CODEC, false),
-          (obj, value) -> obj.intTransform = value,
-          (obj) -> obj.intTransform)
-      .add()
-
-      .append(new KeyedCodec<>("FloatTransform", BlockTransform.VEC3F_CODEC, false),
-          (obj, value) -> obj.floatTransform = value,
-          (obj) -> obj.floatTransform)
-      .add()
-
-      .append(new KeyedCodec<>("IsAccess", Codec.BOOLEAN),
-          (obj, value) -> obj.isAccess = value,
-          (obj) -> obj.isAccess)
-      .add()
-
-      .build();
-
-  private UUID waypointId;
-  private MarkerType type;
-  private BlockTransform<Vec3i> intTransform;
-  private BlockTransform<Vec3f> floatTransform;
-  private boolean isAccess;
+  UUID waypointId;
+  MarkerType type;
+  @SerialWithCodec("com.pacificbytestudios.projectciviccore.codecs.BlockTransform.VEC3I_CODEC")
+  BlockTransform<Vec3i> intTransform;
+  @SerialWithCodec("com.pacificbytestudios.projectciviccore.codecs.BlockTransform.VEC3F_CODEC")
+  BlockTransform<Vec3f> floatTransform;
+  boolean isAccess;
 
   public Waypoint() {
   }
@@ -168,13 +142,7 @@ public class Waypoint implements Copyable<Waypoint> {
 
   @Override
   public Waypoint clone() {
-    Waypoint waypoint = new Waypoint();
-    waypoint.waypointId = this.waypointId;
-    waypoint.type = this.type;
-    waypoint.intTransform = BlockTransform.clone(this.intTransform);
-    waypoint.floatTransform = BlockTransform.clone(this.floatTransform);
-    waypoint.isAccess = this.isAccess;
-    return waypoint;
+    return WaypointCodec.clone(this);
   }
 
   private static Vec3d positionTo3d(Object position) {

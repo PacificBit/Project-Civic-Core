@@ -1,31 +1,19 @@
 package com.pacificbytestudios.projectciviccore.villagers.components;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class VillagerHousingComponent implements Component<EntityStore> {
-  public static final BuilderCodec<VillagerHousingComponent> CODEC = BuilderCodec
-      .builder(VillagerHousingComponent.class, VillagerHousingComponent::new)
+  public static final BuilderCodec<VillagerHousingComponent> CODEC = VillagerHousingComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>("House", HouseComponent.CODEC),
-          (obj, value) -> obj.house = value,
-          (obj) -> obj.house)
-      .add()
-
-      .append(new KeyedCodec<>("BedPosition", Vec3i.CODEC),
-          (obj, value) -> obj.bedPosition = value,
-          (obj) -> obj.bedPosition)
-      .add()
-
-      .build();
-
-  private HouseComponent house;
-  private Vec3i bedPosition;
+  HouseComponent house;
+  Vec3i bedPosition;
 
   public HouseComponent getHouse() {
     return house;
@@ -45,10 +33,7 @@ public class VillagerHousingComponent implements Component<EntityStore> {
 
   @Override
   public VillagerHousingComponent clone() {
-    VillagerHousingComponent component = new VillagerHousingComponent();
-    component.house = this.house == null ? null : this.house.clone();
-    component.bedPosition = this.bedPosition == null ? null : this.bedPosition.clone();
-    return component;
+    return VillagerHousingComponentCodec.clone(this);
   }
 
   @Override

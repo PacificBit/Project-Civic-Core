@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
@@ -162,30 +160,13 @@ public class VillageStorageRequest {
     return sb.toString().trim();
   }
 
+  @SerializableClass
   public static class ItemRequestCriterion {
-    public static final BuilderCodec<ItemRequestCriterion> CODEC = BuilderCodec
-        .builder(ItemRequestCriterion.class, ItemRequestCriterion::new)
+    public static final BuilderCodec<ItemRequestCriterion> CODEC = ItemRequestCriterionCodec.CODEC;
 
-        .append(new KeyedCodec<>("AttributeKey", Codec.STRING),
-            (obj, value) -> obj.attributeKey = value,
-            obj -> obj.attributeKey)
-        .add()
-
-        .append(new KeyedCodec<>("FilterIn", Codec.BOOLEAN, false),
-            (obj, value) -> obj.filterIn = value,
-            obj -> obj.filterIn)
-        .add()
-
-        .append(new KeyedCodec<>("RequiredAmount", Codec.INTEGER),
-            (obj, value) -> obj.requiredAmount = value,
-            obj -> obj.requiredAmount)
-        .add()
-
-        .build();
-
-    private String attributeKey;
-    private boolean filterIn = true;
-    private int requiredAmount;
+    String attributeKey;
+    boolean filterIn = true;
+    int requiredAmount;
 
     public ItemRequestCriterion() {
     }
@@ -221,11 +202,7 @@ public class VillageStorageRequest {
     }
 
     public ItemRequestCriterion clone() {
-      ItemRequestCriterion criterion = new ItemRequestCriterion();
-      criterion.attributeKey = this.attributeKey;
-      criterion.filterIn = this.filterIn;
-      criterion.requiredAmount = this.requiredAmount;
-      return criterion;
+      return ItemRequestCriterionCodec.clone(this);
     }
 
     public InventoryItemCriteria toCriteria() {

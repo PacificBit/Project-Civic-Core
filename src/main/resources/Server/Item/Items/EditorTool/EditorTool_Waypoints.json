@@ -23,7 +23,7 @@
     "Primary": {
       "Interactions": [
         {
-          "Type": "ToogleWaypointsEditInteraction",
+          "Type": "ToggleWaypointsEditInteraction",
           "CancelOnItemChange": true,
           "ViewDistance": 100
         }

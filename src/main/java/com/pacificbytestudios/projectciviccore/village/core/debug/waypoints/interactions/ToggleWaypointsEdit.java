@@ -23,6 +23,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.TargetUtil;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
@@ -33,11 +34,9 @@ import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.comp
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointsEditingComponent;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.ui.WaypointSessionPage;
 
-public class ToogleWaypointsEdit extends SimpleBlockInteraction {
-
-  public static final BuilderCodec<ToogleWaypointsEdit> CODEC = BuilderCodec
-      .builder(ToogleWaypointsEdit.class, ToogleWaypointsEdit::new, SimpleBlockInteraction.CODEC)
-      .build();
+@SerializableClass
+public class ToggleWaypointsEdit extends SimpleBlockInteraction {
+  public static final BuilderCodec<ToggleWaypointsEdit> CODEC = ToggleWaypointsEditCodec.CODEC;
 
   @Override
   @Nonnull
@@ -127,8 +126,10 @@ public class ToogleWaypointsEdit extends SimpleBlockInteraction {
   }
 
   /**
-   * The player clicked a different structure while a session is active. With no unsaved
-   * changes the session switches immediately; otherwise the session page asks to save,
+   * The player clicked a different structure while a session is active. With no
+   * unsaved
+   * changes the session switches immediately; otherwise the session page asks to
+   * save,
    * roll back (both switch afterwards) or cancel (keeps the current session).
    */
   private void handleStructureSwitch(

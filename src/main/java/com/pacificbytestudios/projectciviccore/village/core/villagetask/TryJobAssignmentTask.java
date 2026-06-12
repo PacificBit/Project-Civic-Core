@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -21,17 +19,11 @@ import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.components.MayorComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class TryJobAssignmentTask extends AVillageTask {
-  public static final BuilderCodec<TryJobAssignmentTask> CODEC = BuilderCodec
-      .builder(TryJobAssignmentTask.class, TryJobAssignmentTask::new)
-
-      .append(new KeyedCodec<>("Workplace", Codec.UUID_BINARY),
-          (obj, value) -> obj.workplace = value,
-          (obj) -> obj.workplace)
-      .add()
-
-      .build();
+  public static final BuilderCodec<TryJobAssignmentTask> CODEC = TryJobAssignmentTaskCodec.CODEC;
 
   public TryJobAssignmentTask() {
   }
@@ -40,7 +32,7 @@ public class TryJobAssignmentTask extends AVillageTask {
     this.workplace = workplace;
   }
 
-  private UUID workplace;
+  UUID workplace;
 
   @Override
   public void execute(

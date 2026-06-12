@@ -5,10 +5,7 @@ import java.util.UUID;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -20,37 +17,16 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class RegisterStructureTopologyTask extends AVillageTask {
-  public static final BuilderCodec<RegisterStructureTopologyTask> CODEC = BuilderCodec
-      .builder(RegisterStructureTopologyTask.class, RegisterStructureTopologyTask::new)
+  public static final BuilderCodec<RegisterStructureTopologyTask> CODEC = RegisterStructureTopologyTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("StructureId", Codec.UUID_BINARY),
-          (obj, value) -> obj.structureId = value,
-          obj -> obj.structureId)
-      .add()
-
-      .append(new KeyedCodec<>("StructureType", new EnumCodec<StructureType>(StructureType.class)),
-          (obj, value) -> obj.structureType = value,
-          obj -> obj.structureType)
-      .add()
-
-      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
-          (obj, value) -> obj.prefabAnchor = value,
-          obj -> obj.prefabAnchor)
-      .add()
-
-      .append(new KeyedCodec<>("Rotation", Rotation.CODEC, false),
-          (obj, value) -> obj.rotation = value,
-          obj -> obj.rotation)
-      .add()
-
-      .build();
-
-  private UUID structureId;
-  private StructureType structureType;
-  private Vec3i prefabAnchor;
-  private Rotation rotation = Rotation.None;
+  UUID structureId;
+  StructureType structureType;
+  Vec3i prefabAnchor;
+  Rotation rotation = Rotation.None;
 
   public RegisterStructureTopologyTask() {
   }

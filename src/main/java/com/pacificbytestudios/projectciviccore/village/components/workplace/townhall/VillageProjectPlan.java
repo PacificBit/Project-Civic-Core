@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.codecs.map.Int2ObjectMapCodec;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
@@ -19,6 +17,8 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveTyp
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
 
 public class VillageProjectPlan {
   public static final BuilderCodec<VillageProjectPlan> CODEC = BuilderCodec
@@ -234,85 +234,22 @@ public class VillageProjectPlan {
     return "VillageProjectPlan{projectList=" + projectList + "}";
   }
 
+  @SerializableClass
   public static class VillageProject implements Comparable<VillageProject> {
-    public static final BuilderCodec<VillageProject> CODEC = BuilderCodec
-        .builder(VillageProject.class, VillageProject::new)
+    public static final BuilderCodec<VillageProject> CODEC = VillageProjectCodec.CODEC;
 
-        .append(new KeyedCodec<>("ProjectId", Codec.UUID_BINARY),
-            (obj, value) -> obj.projectId = value,
-            obj -> obj.projectId)
-        .add()
-
-        .append(new KeyedCodec<>(
-            "ObjectiveType",
-            new EnumCodec<>(VillageObjectiveType.class)),
-            (obj, value) -> obj.objectiveType = value,
-            obj -> obj.objectiveType)
-        .add()
-
-        .append(new KeyedCodec<>(
-            "ObjectiveStatus",
-            new EnumCodec<>(VillageObjectiveStatus.class),
-            false),
-            (obj, value) -> obj.objectiveStatus = value,
-            obj -> obj.objectiveStatus)
-        .add()
-
-        .append(new KeyedCodec<>("Weight", new EnumCodec<>(Weight.class), false),
-            (obj, value) -> obj.weight = value,
-            obj -> obj.weight)
-        .add()
-
-        .append(new KeyedCodec<>("StructureType", new EnumCodec<>(StructureType.class), false),
-            (obj, value) -> obj.structureType = value,
-            obj -> obj.structureType)
-        .add()
-
-        .append(new KeyedCodec<>("StructureId", Codec.UUID_BINARY, false),
-            (obj, value) -> obj.structureId = value,
-            obj -> obj.structureId)
-        .add()
-
-        .append(new KeyedCodec<>("TargetLevel", Codec.INTEGER, false),
-            (obj, value) -> obj.targetLevel = value,
-            obj -> obj.targetLevel)
-        .add()
-
-        .append(new KeyedCodec<>("Stage", Codec.SHORT, false),
-            (obj, value) -> obj.stage = value,
-            obj -> obj.stage)
-        .add()
-
-        .append(new KeyedCodec<>("TotalStages", Codec.SHORT, false),
-            (obj, value) -> obj.totalStages = value,
-            obj -> obj.totalStages)
-        .add()
-
-        .append(new KeyedCodec<>("RequiredMaterials", new ArrayCodec<>(
-            MaterialQuantity.CODEC,
-            MaterialQuantity[]::new), false),
-            (obj, value) -> obj.requiredMaterialPerStage = value,
-            obj -> obj.requiredMaterialPerStage)
-        .add()
-
-        .append(new KeyedCodec<>("ConstructionMode", new EnumCodec<>(ConstructionMode.class), false),
-            (obj, value) -> obj.constructionMode = value,
-            obj -> obj.constructionMode)
-        .add()
-
-        .build();
-
-    private UUID projectId;
-    private VillageObjectiveType objectiveType;
-    private VillageObjectiveStatus objectiveStatus = VillageObjectiveStatus.RESOURCE_GATHERING;
-    private Weight weight = Weight.LOW;
-    private StructureType structureType;
-    private UUID structureId;
-    private int targetLevel = 1;
-    private short stage = 0;
-    private short totalStages = 1;
-    private MaterialQuantity[] requiredMaterialPerStage = new MaterialQuantity[0];
-    private ConstructionMode constructionMode;
+    UUID projectId;
+    VillageObjectiveType objectiveType;
+    VillageObjectiveStatus objectiveStatus = VillageObjectiveStatus.RESOURCE_GATHERING;
+    Weight weight = Weight.LOW;
+    StructureType structureType;
+    UUID structureId;
+    int targetLevel = 1;
+    short stage = 0;
+    short totalStages = 1;
+    @SerialName("RequiredMaterials")
+    MaterialQuantity[] requiredMaterialPerStage = new MaterialQuantity[0];
+    ConstructionMode constructionMode;
 
     public UUID getProjectId() {
       return projectId;
@@ -411,26 +348,7 @@ public class VillageProjectPlan {
     }
 
     public VillageProject clone() {
-      VillageProject component = new VillageProject();
-      component.projectId = this.projectId;
-      component.objectiveType = this.objectiveType;
-      component.objectiveStatus = this.objectiveStatus;
-      component.structureType = this.structureType;
-      component.structureId = this.structureId;
-      component.weight = this.weight;
-      component.stage = this.stage;
-      component.totalStages = this.totalStages;
-      component.targetLevel = this.targetLevel;
-      component.constructionMode = this.constructionMode;
-
-      component.requiredMaterialPerStage = new MaterialQuantity[this.requiredMaterialPerStage.length];
-      for (int i = 0; i < this.requiredMaterialPerStage.length; i++) {
-        MaterialQuantity material = this.requiredMaterialPerStage[i];
-        component.requiredMaterialPerStage[i] = material != null
-            ? material.clone(material.getQuantity())
-            : null;
-      }
-      return component;
+      return VillageProjectCodec.clone(this);
     }
 
     @Override

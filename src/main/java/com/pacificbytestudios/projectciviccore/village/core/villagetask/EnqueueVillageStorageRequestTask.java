@@ -1,7 +1,6 @@
 package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -11,10 +10,7 @@ import javax.annotation.Nullable;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.set.SetCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
@@ -24,34 +20,17 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class EnqueueVillageStorageRequestTask extends AVillageTask {
   public static final String NO_STORAGE_FOUND = "NO_STORAGE_FOUND";
   public static final String REQUEST_REGISTERED = "REQUEST_REGISTERED";
 
-  public static final BuilderCodec<EnqueueVillageStorageRequestTask> CODEC = BuilderCodec
-      .builder(EnqueueVillageStorageRequestTask.class, EnqueueVillageStorageRequestTask::new)
+  public static final BuilderCodec<EnqueueVillageStorageRequestTask> CODEC = EnqueueVillageStorageRequestTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("Request", VillageStorageRequest.CODEC),
-          (obj, value) -> obj.request = value,
-          obj -> obj.request)
-      .add()
-
-      .append(
-          new KeyedCodec<>(
-              "TriedStorageIds",
-              new SetCodec<UUID, HashSet<UUID>>(
-                  Codec.UUID_BINARY,
-                  HashSet::new,
-                  false)),
-          (obj, value) -> obj.triedStorageIds = value,
-          obj -> obj.triedStorageIds)
-      .add()
-
-      .build();
-
-  private VillageStorageRequest request;
-  private Set<UUID> triedStorageIds;
+  VillageStorageRequest request;
+  Set<UUID> triedStorageIds;
 
   public EnqueueVillageStorageRequestTask() {
   }

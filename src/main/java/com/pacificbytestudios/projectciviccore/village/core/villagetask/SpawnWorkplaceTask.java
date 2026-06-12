@@ -4,10 +4,7 @@ import java.util.UUID;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -18,52 +15,19 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class SpawnWorkplaceTask extends AVillageTask {
 
-  public static final BuilderCodec<SpawnWorkplaceTask> CODEC = BuilderCodec
-      .builder(SpawnWorkplaceTask.class, SpawnWorkplaceTask::new)
+  public static final BuilderCodec<SpawnWorkplaceTask> CODEC = SpawnWorkplaceTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("StructureId", Codec.UUID_BINARY, false),
-          (obj, value) -> obj.structureId = value,
-          obj -> obj.structureId)
-      .add()
-
-      .append(
-          new KeyedCodec<>("WorkplaceType", new EnumCodec<StructureType>(StructureType.class)),
-          (obj, value) -> obj.workplaceType = value,
-          (obj) -> obj.workplaceType)
-      .add()
-
-      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
-          (obj, value) -> obj.position = value,
-          obj -> obj.position)
-      .add()
-
-      .append(new KeyedCodec<>("Rotation", Rotation.CODEC, false),
-          (obj, value) -> obj.rotation = value,
-          obj -> obj.rotation)
-      .add()
-
-      .append(new KeyedCodec<>("Level", Codec.INTEGER, false),
-          (obj, value) -> obj.level = value,
-          obj -> obj.level)
-      .add()
-
-      .append(
-          new KeyedCodec<>("ConstructionMode", new EnumCodec<ConstructionMode>(ConstructionMode.class)),
-          (obj, value) -> obj.constructionMode = value,
-          (obj) -> obj.constructionMode)
-      .add()
-
-      .build();
-
-  private UUID structureId;
-  private StructureType workplaceType;
-  private Vec3i position;
-  private Rotation rotation = Rotation.None;
-  private Integer level = 1;
-  private ConstructionMode constructionMode;
+  UUID structureId;
+  StructureType workplaceType;
+  Vec3i position;
+  Rotation rotation = Rotation.None;
+  Integer level = 1;
+  ConstructionMode constructionMode;
 
   public SpawnWorkplaceTask() {
   }

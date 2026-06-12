@@ -2,41 +2,17 @@ package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.com
 
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class WaypointOperation {
-  public static final BuilderCodec<WaypointOperation> CODEC = BuilderCodec
-      .builder(WaypointOperation.class, WaypointOperation::new)
+  public static final BuilderCodec<WaypointOperation> CODEC = WaypointOperationCodec.CODEC;
 
-      .append(new KeyedCodec<>("WaypointId", Codec.UUID_BINARY),
-          (obj, value) -> obj.waypointId = value,
-          (obj) -> obj.waypointId)
-      .add()
-
-      .append(new KeyedCodec<>("OperationType", new EnumCodec<>(Operation.class), false),
-          (obj, value) -> obj.operationType = value,
-          (obj) -> obj.operationType)
-      .add()
-
-      .append(new KeyedCodec<>("OldWaypoint", Waypoint.CODEC, false),
-          (obj, value) -> obj.oldWaypoint = value,
-          (obj) -> obj.oldWaypoint)
-      .add()
-
-      .append(new KeyedCodec<>("NewWaypoint", Waypoint.CODEC, false),
-          (obj, value) -> obj.newWaypoint = value,
-          (obj) -> obj.newWaypoint)
-      .add()
-
-      .build();
-
-  private UUID waypointId;
-  private Operation operationType;
-  private Waypoint oldWaypoint;
-  private Waypoint newWaypoint;
+  UUID waypointId;
+  Operation operationType;
+  Waypoint oldWaypoint;
+  Waypoint newWaypoint;
 
   public enum Operation {
     ADD, MOVE, DELETE
@@ -94,11 +70,6 @@ public class WaypointOperation {
 
   @Override
   public WaypointOperation clone() {
-    WaypointOperation operation = new WaypointOperation();
-    operation.waypointId = this.waypointId;
-    operation.operationType = this.operationType;
-    operation.oldWaypoint = this.oldWaypoint == null ? null : this.oldWaypoint.clone();
-    operation.newWaypoint = this.newWaypoint == null ? null : this.newWaypoint.clone();
-    return operation;
+    return WaypointOperationCodec.clone(this);
   }
 }

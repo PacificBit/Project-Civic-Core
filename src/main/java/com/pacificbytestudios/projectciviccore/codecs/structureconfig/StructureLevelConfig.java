@@ -6,76 +6,26 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
-import com.pacificbytestudios.projectciviccore.utils.Utils;
 
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
-
+@SerializableClass
 public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
-  @SuppressWarnings("unchecked")
-  public static final BuilderCodec<StructureLevelConfig> CODEC = BuilderCodec
-      .builder(StructureLevelConfig.class, StructureLevelConfig::new)
+  public static final BuilderCodec<StructureLevelConfig> CODEC = StructureLevelConfigCodec.CODEC;
 
-      .append(new KeyedCodec<>("CoreBlocks",
-          new Short2ObjectMapCodec<>(BlockTransform.CODEC, Short2ObjectOpenHashMap::new)),
-          (obj, value) -> obj.coreBlock = value,
-          (obj) -> encodeMap(obj.coreBlock))
-      .add()
+  @SerialName("CoreBlocks")
+  Map<Short, BlockTransform<Vec3i>> coreBlock = new HashMap<>();
 
-      .append(new KeyedCodec<>("ConstructionBlock",
-          new Short2ObjectMapCodec<>(BlockTransform.CODEC, Short2ObjectOpenHashMap::new)),
-          (obj, value) -> obj.constructionBlock = value,
-          (obj) -> encodeMap(obj.constructionBlock))
-      .add()
+  @SerialName("PrefabMap")
+  Map<Short, Map<Short, String>> prefabPathByLevelAndStage = new HashMap<>();
 
-      .append(new KeyedCodec<>("PrefabMap",
-          new Short2ObjectMapCodec<>(
-              new Short2ObjectMapCodec<>(
-                  Codec.STRING,
-                  Short2ObjectOpenHashMap::new),
-              Short2ObjectOpenHashMap::new),
-          false),
-          (obj, value) -> obj.prefabPathByLevelAndStage = decodePrefabMap(value),
-          (obj) -> encodePrefabMap(obj.prefabPathByLevelAndStage))
-      .add()
-
-      .append(new KeyedCodec<>("Containers",
-          new Short2ObjectMapCodec<>(
-              new ArrayCodec<>(
-                  BlockTransform.CODEC,
-                  size -> (BlockTransform<Vec3i>[]) new BlockTransform<?>[size]),
-              Short2ObjectOpenHashMap::new),
-          false),
-          (obj, value) -> obj.containers = decodeMap(value),
-          (obj) -> encodeMapArray(obj.containers))
-      .add()
-
-      .append(new KeyedCodec<>("Interactables",
-          new Short2ObjectMapCodec<>(
-              new ArrayCodec<>(
-                  Interactable.CODEC,
-                  Interactable[]::new),
-              Short2ObjectOpenHashMap::new),
-          false),
-          (obj, value) -> obj.interactables = decodeMap(value),
-          (obj) -> encodeMapArray(obj.interactables))
-      .add()
-
-      .build();
-
-  private Map<Short, BlockTransform<Vec3i>> coreBlock = new HashMap<>();
-  private Map<Short, BlockTransform<Vec3i>> constructionBlock = new HashMap<>();
-  private Map<Short, Map<Short, String>> prefabPathByLevelAndStage = new HashMap<>();
-  private Map<Short, BlockTransform<Vec3i>[]> containers = new HashMap<>();
-  private Map<Short, Interactable[]> interactables = new HashMap<>();
+  Map<Short, BlockTransform<Vec3i>> constructionBlock = new HashMap<>();
+  Map<Short, BlockTransform<Vec3i>[]> containers = new HashMap<>();
+  Map<Short, Interactable[]> interactables = new HashMap<>();
 
   public BlockTransform<Vec3i> getCoreBlockFor(short level) {
     return this.coreBlock.get(level);
@@ -96,7 +46,8 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
     return this.interactables.getOrDefault(level, new Interactable[0]);
   }
 
-  // The codec may assign unmodifiable fastutil maps to these fields, so replace the
+  // The codec may assign unmodifiable fastutil maps to these fields, so replace
+  // the
   // map with a mutable copy before inserting.
   public void putCoreBlock(short level, BlockTransform<Vec3i> transform) {
     this.coreBlock = mutableCopy(this.coreBlock);
@@ -132,135 +83,7 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
 
   @Override
   public StructureLevelConfig clone() {
-    StructureLevelConfig config = new StructureLevelConfig();
-    config.coreBlock = Utils.copyMap(this.coreBlock);
-    config.constructionBlock = Utils.copyMap(this.constructionBlock);
-    config.prefabPathByLevelAndStage = copyPrefabMap(this.prefabPathByLevelAndStage);
-    config.containers = Utils.copyMapArray(this.containers);
-    config.interactables = Utils.copyMapArray(this.interactables);
-    return config;
+    return StructureLevelConfigCodec.clone(this);
   }
 
-  private static <T> Map<Short, T[]> decodeMap(Short2ObjectMap<T[]> encoded) {
-    Map<Short, T[]> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    for (Short2ObjectMap.Entry<T[]> entry : encoded.short2ObjectEntrySet()) {
-      decoded.put(entry.getShortKey(), entry.getValue());
-    }
-
-    return decoded;
-  }
-
-  private static <T> Short2ObjectMap<T[]> encodeMapArray(Map<Short, T[]> decoded) {
-    Short2ObjectMap<T[]> encoded = new Short2ObjectOpenHashMap<>();
-
-    if (decoded == null) {
-      return encoded;
-    }
-
-    decoded.forEach((level, values) -> {
-      if (level != null && values != null) {
-        encoded.put(level.shortValue(), values);
-      }
-    });
-
-    return encoded;
-  }
-
-  private static Map<Short, Map<Short, String>> decodePrefabMap(
-      Short2ObjectMap<Short2ObjectMap<String>> encoded) {
-    Map<Short, Map<Short, String>> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    for (Short2ObjectMap.Entry<Short2ObjectMap<String>> entry : encoded.short2ObjectEntrySet()) {
-      decoded.put(entry.getShortKey(), decodeStringMap(entry.getValue()));
-    }
-
-    return decoded;
-  }
-
-  private static Map<Short, String> decodeStringMap(Short2ObjectMap<String> encoded) {
-    Map<Short, String> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    for (Short2ObjectMap.Entry<String> entry : encoded.short2ObjectEntrySet()) {
-      decoded.put(entry.getShortKey(), entry.getValue());
-    }
-
-    return decoded;
-  }
-
-  private static Short2ObjectMap<Short2ObjectMap<String>> encodePrefabMap(
-      Map<Short, Map<Short, String>> decoded) {
-    Short2ObjectMap<Short2ObjectMap<String>> encoded = new Short2ObjectOpenHashMap<>();
-
-    if (decoded == null) {
-      return encoded;
-    }
-
-    decoded.forEach((level, prefabPathByStage) -> {
-      if (level != null && prefabPathByStage != null) {
-        encoded.put(level.shortValue(), encodeStringMap(prefabPathByStage));
-      }
-    });
-
-    return encoded;
-  }
-
-  private static Short2ObjectMap<String> encodeStringMap(Map<Short, String> decoded) {
-    Short2ObjectMap<String> encoded = new Short2ObjectOpenHashMap<>();
-
-    if (decoded == null) {
-      return encoded;
-    }
-
-    decoded.forEach((stage, prefabPath) -> {
-      if (stage != null && prefabPath != null) {
-        encoded.put(stage.shortValue(), prefabPath);
-      }
-    });
-
-    return encoded;
-  }
-
-  private static Map<Short, Map<Short, String>> copyPrefabMap(
-      Map<Short, Map<Short, String>> source) {
-    Map<Short, Map<Short, String>> copy = new HashMap<>();
-
-    if (source == null) {
-      return copy;
-    }
-
-    source.forEach((level, prefabPathByStage) -> {
-      copy.put(level, prefabPathByStage == null ? null : new HashMap<>(prefabPathByStage));
-    });
-
-    return copy;
-  }
-
-  private static <T extends Copyable<T>> Short2ObjectMap<T> encodeMap(Map<Short, T> decoded) {
-    Short2ObjectMap<T> encoded = new Short2ObjectOpenHashMap<>();
-
-    if (decoded == null) {
-      return encoded;
-    }
-
-    decoded.forEach((level, value) -> {
-      if (level != null && value != null) {
-        encoded.put(level.shortValue(), value.clone());
-      }
-    });
-
-    return encoded;
-  }
 }

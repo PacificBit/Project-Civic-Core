@@ -2,10 +2,7 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -15,38 +12,19 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.enums.ConstructionMode;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
 
+@SerializableClass
 public class UpgradeBuildingTask extends AVillageTask {
 
-  public static final BuilderCodec<UpgradeBuildingTask> CODEC = BuilderCodec
-      .builder(UpgradeBuildingTask.class, UpgradeBuildingTask::new)
+  public static final BuilderCodec<UpgradeBuildingTask> CODEC = UpgradeBuildingTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("StructureType", new EnumCodec<StructureType>(StructureType.class)),
-          (obj, value) -> obj.structureType = value,
-          obj -> obj.structureType)
-      .add()
-
-      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
-          (obj, value) -> obj.prefabAnchor = value,
-          obj -> obj.prefabAnchor)
-      .add()
-
-      .append(new KeyedCodec<>("TargetLevel", Codec.INTEGER),
-          (obj, value) -> obj.targetLevel = value,
-          obj -> obj.targetLevel)
-      .add()
-
-      .append(new KeyedCodec<>("ConstructionMode", new EnumCodec<ConstructionMode>(ConstructionMode.class)),
-          (obj, value) -> obj.mode = value,
-          obj -> obj.mode)
-      .add()
-
-      .build();
-
-  private StructureType structureType;
-  private Vec3i prefabAnchor;
-  private int targetLevel;
-  private ConstructionMode mode;
+  StructureType structureType;
+  Vec3i prefabAnchor;
+  int targetLevel;
+  @SerialName("ConstructionMode")
+  ConstructionMode mode;
 
   public UpgradeBuildingTask() {
   }

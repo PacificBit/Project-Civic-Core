@@ -3,7 +3,6 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -18,19 +17,13 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class RegisterWorkplaceTask extends AVillageTask {
-  public static final BuilderCodec<RegisterWorkplaceTask> CODEC = BuilderCodec
-      .builder(RegisterWorkplaceTask.class, RegisterWorkplaceTask::new)
+  public static final BuilderCodec<RegisterWorkplaceTask> CODEC = RegisterWorkplaceTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("Workplace", WorkplaceComponent.CODEC),
-          (obj, value) -> obj.workplace = value,
-          (obj) -> obj.workplace)
-      .add()
-
-      .build();
-
-  private WorkplaceComponent workplace;
+  WorkplaceComponent workplace;
 
   public RegisterWorkplaceTask() {
   }

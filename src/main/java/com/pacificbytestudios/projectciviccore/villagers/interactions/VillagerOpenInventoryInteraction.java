@@ -20,14 +20,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
-  public static final BuilderCodec<VillagerOpenInventoryInteraction> CODEC = BuilderCodec
-      .builder(
-          VillagerOpenInventoryInteraction.class,
-          VillagerOpenInventoryInteraction::new,
-          SimpleInstantInteraction.CODEC)
-      .build();
+  public static final BuilderCodec<VillagerOpenInventoryInteraction> CODEC = VillagerOpenInventoryInteractionCodec.CODEC;
 
   @Override
   protected void firstRun(

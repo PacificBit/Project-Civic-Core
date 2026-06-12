@@ -3,7 +3,6 @@ package com.pacificbytestudios.projectciviccore.village.core.villagetask;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -18,19 +17,13 @@ import com.pacificbytestudios.projectciviccore.village.components.house.HouseCom
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class RegisterHouseTask extends AVillageTask {
-  public static final BuilderCodec<RegisterHouseTask> CODEC = BuilderCodec
-      .builder(RegisterHouseTask.class, RegisterHouseTask::new)
+  public static final BuilderCodec<RegisterHouseTask> CODEC = RegisterHouseTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("House", HouseComponent.CODEC),
-          (obj, value) -> obj.house = value,
-          obj -> obj.house)
-      .add()
-
-      .build();
-
-  private HouseComponent house;
+  HouseComponent house;
 
   public RegisterHouseTask() {
   }

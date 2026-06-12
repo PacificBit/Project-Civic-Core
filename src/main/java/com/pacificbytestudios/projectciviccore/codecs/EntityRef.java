@@ -1,7 +1,5 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -10,25 +8,16 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudio.codecbutler.annotations.SerialIgnore;
 
+@SerializableClass
 public class EntityRef {
-  public static final BuilderCodec<EntityRef> CODEC = BuilderCodec
-      .builder(EntityRef.class, EntityRef::new)
+  public static final BuilderCodec<EntityRef> CODEC = EntityRefCodec.CODEC;
 
-      .append(new KeyedCodec<>("WorldName", Codec.STRING),
-          (obj, value) -> obj.worldName = value,
-          (obj) -> obj.worldName)
-      .add()
-
-      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
-          (obj, value) -> obj.position = value,
-          (obj) -> obj.position)
-      .add()
-
-      .build();
-
-  private String worldName;
-  private Vec3i position;
+  String worldName;
+  Vec3i position;
+  @SerialIgnore
   private Ref<ChunkStore> entityRef;
 
   public EntityRef() {
@@ -41,7 +30,7 @@ public class EntityRef {
   }
 
   public Ref<ChunkStore> getRef() {
-    if (this.entityRef == null) {
+    if (this.entityRef == null || !this.entityRef.isValid()) {
       World world = Universe.get().getWorld(worldName);
       Vec3i villageHeartPos = position;
       WorldChunk chunk = world.getChunk(
@@ -63,11 +52,7 @@ public class EntityRef {
   }
 
   public EntityRef clone() {
-    EntityRef newLocation = new EntityRef();
-    newLocation.worldName = this.worldName;
-    newLocation.position = this.position;
-    newLocation.entityRef = this.entityRef;
-    return newLocation;
+    return EntityRefCodec.clone(this);
   }
 
   @Override

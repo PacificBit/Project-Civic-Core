@@ -3,55 +3,25 @@ package com.pacificbytestudios.projectciviccore.codecs.structureconfig;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
 
+@SerializableClass
 public class Interactable implements Copyable<Interactable> {
-  public static final BuilderCodec<Interactable> CODEC = BuilderCodec
-      .builder(Interactable.class, Interactable::new)
+  public static final BuilderCodec<Interactable> CODEC = InteractableCodec.CODEC;
 
-      .append(new KeyedCodec<>("Id", Codec.UUID_BINARY),
-          (obj, value) -> obj.id = value,
-          (obj) -> obj.id)
-      .add()
-
-      .append(new KeyedCodec<>("InteractableTransform", BlockTransform.VEC3F_CODEC),
-          (obj, value) -> obj.interactableTransform = value,
-          obj -> obj.interactableTransform)
-      .add()
-
-      .append(new KeyedCodec<>("DependsOnTransform", BlockTransform.VEC3F_CODEC, false),
-          (obj, value) -> obj.dependsOnTransform = value,
-          obj -> obj.dependsOnTransform)
-      .add()
-
-      .append(new KeyedCodec<>("OccupiedBy", Codec.UUID_BINARY),
-          (obj, value) -> obj.occupiedBy = value,
-          obj -> obj.occupiedBy)
-      .add()
-
-      .append(new KeyedCodec<>("InvalidateOnUse", Codec.BOOLEAN),
-          (obj, value) -> obj.invalidateOnUse = value,
-          obj -> obj.invalidateOnUse)
-      .add()
-
-      .append(new KeyedCodec<>("IsReady", Codec.BOOLEAN),
-          (obj, value) -> obj.isReady = value,
-          obj -> obj.isReady)
-      .add()
-
-      .build();
-
-  private UUID id;
-  private BlockTransform<Vec3f> interactableTransform;
-  private BlockTransform<Vec3f> dependsOnTransform;
-  private UUID occupiedBy;
-  private boolean invalidateOnUse;
-  private boolean isReady = false;
+  UUID id;
+  @SerialWithCodec("com.pacificbytestudios.projectciviccore.codecs.BlockTransform.VEC3F_CODEC")
+  BlockTransform<Vec3f> interactableTransform;
+  @SerialWithCodec("com.pacificbytestudios.projectciviccore.codecs.BlockTransform.VEC3F_CODEC")
+  BlockTransform<Vec3f> dependsOnTransform;
+  UUID occupiedBy;
+  boolean invalidateOnUse;
+  boolean isReady = false;
 
   public Interactable() {
   }
@@ -165,14 +135,7 @@ public class Interactable implements Copyable<Interactable> {
 
   @Override
   public Interactable clone() {
-    Interactable interactable = new Interactable();
-    interactable.id = this.id;
-    interactable.interactableTransform = BlockTransform.clone(this.interactableTransform);
-    interactable.dependsOnTransform = BlockTransform.clone(this.dependsOnTransform);
-    interactable.occupiedBy = this.occupiedBy;
-    interactable.invalidateOnUse = this.invalidateOnUse;
-    interactable.isReady = this.isReady;
-    return interactable;
+    return InteractableCodec.clone(this);
   }
 
   @Override

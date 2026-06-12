@@ -7,8 +7,6 @@ import java.util.UUID;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -19,19 +17,13 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class UnregisterWorkplaceTask extends AVillageTask {
-  public static final BuilderCodec<UnregisterWorkplaceTask> CODEC = BuilderCodec
-      .builder(UnregisterWorkplaceTask.class, UnregisterWorkplaceTask::new)
+  public static final BuilderCodec<UnregisterWorkplaceTask> CODEC = UnregisterWorkplaceTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("Workplace", Codec.UUID_BINARY),
-          (obj, value) -> obj.workplace = value,
-          (obj) -> obj.workplace)
-      .add()
-
-      .build();
-
-  private UUID workplace;
+  UUID workplace;
 
   public UnregisterWorkplaceTask() {
   }

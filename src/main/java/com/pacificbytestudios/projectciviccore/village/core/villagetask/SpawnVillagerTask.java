@@ -10,8 +10,6 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -41,27 +39,18 @@ import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
 import it.unimi.dsi.fastutil.Pair;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
 
+@SerializableClass
 public class SpawnVillagerTask extends AVillageTask {
-  public static final BuilderCodec<SpawnVillagerTask> CODEC = BuilderCodec
-      .builder(SpawnVillagerTask.class, SpawnVillagerTask::new)
-
-      .append(new KeyedCodec<>("NpcRole", Codec.STRING),
-          (obj, value) -> obj.npcRole = value,
-          (obj) -> obj.npcRole)
-      .add()
-
-      .append(new KeyedCodec<>("Position", Codec.INTEGER),
-          (obj, value) -> obj.spawnRadius = value,
-          obj -> obj.spawnRadius)
-      .add()
-
-      .build();
+  public static final BuilderCodec<SpawnVillagerTask> CODEC = SpawnVillagerTaskCodec.CODEC;
 
   private static final FastRandom random = new FastRandom();
 
-  private String npcRole;
-  private int spawnRadius;
+  String npcRole;
+  @SerialName("Position")
+  int spawnRadius;
 
   public SpawnVillagerTask() {
   }

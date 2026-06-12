@@ -7,8 +7,6 @@ import java.util.UUID;
 
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -18,19 +16,13 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class TryHouseAssignmentTask extends AVillageTask {
-  public static final BuilderCodec<TryHouseAssignmentTask> CODEC = BuilderCodec
-      .builder(TryHouseAssignmentTask.class, TryHouseAssignmentTask::new)
+  public static final BuilderCodec<TryHouseAssignmentTask> CODEC = TryHouseAssignmentTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("House", Codec.UUID_BINARY),
-          (obj, value) -> obj.house = value,
-          obj -> obj.house)
-      .add()
-
-      .build();
-
-  private UUID house;
+  UUID house;
 
   public TryHouseAssignmentTask() {
   }

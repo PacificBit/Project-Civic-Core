@@ -7,8 +7,6 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -20,19 +18,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class TeleportVillagerToTownHeartTask extends AVillageTask {
-  public static final BuilderCodec<TeleportVillagerToTownHeartTask> CODEC = BuilderCodec
-      .builder(TeleportVillagerToTownHeartTask.class, TeleportVillagerToTownHeartTask::new)
+  public static final BuilderCodec<TeleportVillagerToTownHeartTask> CODEC = TeleportVillagerToTownHeartTaskCodec.CODEC;
 
-      .append(new KeyedCodec<>("VillagerId", Codec.UUID_BINARY),
-          (obj, value) -> obj.villagerId = value,
-          obj -> obj.villagerId)
-      .add()
-
-      .build();
-
-  private UUID villagerId;
+  UUID villagerId;
 
   public TeleportVillagerToTownHeartTask() {
   }

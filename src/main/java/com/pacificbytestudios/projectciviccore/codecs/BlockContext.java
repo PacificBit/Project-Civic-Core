@@ -1,36 +1,18 @@
 package com.pacificbytestudios.projectciviccore.codecs;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass
 public class BlockContext {
-  public static final BuilderCodec<BlockContext> CODEC = BuilderCodec
-      .builder(BlockContext.class, BlockContext::new)
+  public static final BuilderCodec<BlockContext> CODEC = BlockContextCodec.CODEC;
 
-      .append(new KeyedCodec<>("WorldName", Codec.STRING),
-          (obj, value) -> obj.worldName = value,
-          (obj) -> obj.worldName)
-      .add()
-
-      .append(new KeyedCodec<>("ChunkIndex", Codec.LONG),
-          (obj, value) -> obj.chunkIndex = value,
-          (obj) -> obj.chunkIndex)
-      .add()
-
-      .append(new KeyedCodec<>("Position", Vec3i.CODEC),
-          (obj, value) -> obj.position = value,
-          (obj) -> obj.position)
-      .add()
-
-      .build();
-
-  private String worldName;
-  private Long chunkIndex;
-  private Vec3i position;
+  String worldName;
+  Long chunkIndex;
+  Vec3i position;
 
   public BlockContext() {
     this(null, null, null);
@@ -59,11 +41,7 @@ public class BlockContext {
   }
 
   public BlockContext clone() {
-    BlockContext newLocation = new BlockContext();
-    newLocation.worldName = this.worldName;
-    newLocation.chunkIndex = this.chunkIndex;
-    newLocation.position = Vec3i.from(this.position);
-    return newLocation;
+    return BlockContextCodec.clone(this);
   }
 
   @Override
