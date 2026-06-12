@@ -16,7 +16,7 @@ import com.pacificbytestudio.codecbutler.annotations.SerialName;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
@@ -40,8 +40,8 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   EntityRef workplaceRef;
   AreaFootprint workingArea;
 
-  BlockTransform<Vec3i> benchTransform;
-  BlockTransform<Vec3i> prefabAnchorTransform;
+  BlockTransform3D benchTransform;
+  BlockTransform3D prefabAnchorTransform;
 
   UUID bossId;
   Set<UUID> workers = new HashSet<>();
@@ -74,23 +74,23 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   }
 
   public Vec3i getBenchPos() {
-    return this.benchTransform.getPosition();
+    return this.benchTransform.getPosition3i();
   }
 
   public void setBenchPos(Vec3i benchPos) {
-    this.benchTransform = new BlockTransform<>(benchPos);
+    this.benchTransform = new BlockTransform3D(benchPos);
   }
 
-  public BlockTransform<Vec3i> getBenchTransform() {
+  public BlockTransform3D getBenchTransform() {
     return this.benchTransform;
   }
 
-  public void setBenchTransform(BlockTransform<Vec3i> benchTransform) {
+  public void setBenchTransform(BlockTransform3D benchTransform) {
     this.benchTransform = benchTransform;
   }
 
   public Vec3f getBenchAccessPos() {
-    return Vec3f.from(this.benchTransform.getPosition()).add(this.benchTransform.getAccessOffset());
+    return this.benchTransform.getPosition3f().add(this.benchTransform.getAccessOffset3f());
   }
 
   public void setBenchAccessOffset(Vec3f benchAccessOffset) {
@@ -98,18 +98,18 @@ public class WorkplaceComponent implements Component<ChunkStore> {
   }
 
   public Vec3i getPrefabAnchor() {
-    return this.prefabAnchorTransform.getPosition();
+    return this.prefabAnchorTransform.getPosition3i();
   }
 
   public void setPrefabAnchor(Vec3i prefabAnchor) {
-    this.prefabAnchorTransform = new BlockTransform<>(prefabAnchor);
+    this.prefabAnchorTransform = new BlockTransform3D(prefabAnchor);
   }
 
-  public BlockTransform<Vec3i> getPrefabAnchorTransform() {
+  public BlockTransform3D getPrefabAnchorTransform() {
     return this.prefabAnchorTransform;
   }
 
-  public void setPrefabAnchorTransform(BlockTransform<Vec3i> prefabAnchorTransform) {
+  public void setPrefabAnchorTransform(BlockTransform3D prefabAnchorTransform) {
     this.prefabAnchorTransform = prefabAnchorTransform;
   }
 

@@ -17,7 +17,7 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 
@@ -73,7 +73,7 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
     this.operations.add(operations);
   }
 
-  public void addStructureWaypoint(MarkerType markerType, BlockTransform<?> transform) {
+  public void addStructureWaypoint(MarkerType markerType, BlockTransform3D transform) {
     this.addStructureWaypoint(Waypoint.from(markerType, transform, isAccessMarker(markerType)));
   }
 

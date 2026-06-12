@@ -9,7 +9,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerialName;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
@@ -19,7 +19,7 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
 
   @SerialName("ContainerId")
   UUID uuid;
-  BlockTransform<Vec3i> containerTransform = new BlockTransform<>();
+  BlockTransform3D containerTransform = new BlockTransform3D();
 
   public UUID getUuid() {
     return uuid;
@@ -30,23 +30,23 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
   }
 
   public Vec3i getPosition() {
-    return this.containerTransform.getPosition();
+    return this.containerTransform.getPosition3i();
   }
 
   public void setPosition(Vec3i position) {
     this.containerTransform.setPosition(position);
   }
 
-  public BlockTransform<Vec3i> getContainerTransform() {
+  public BlockTransform3D getContainerTransform() {
     return this.containerTransform;
   }
 
-  public void setContainerTransform(BlockTransform<Vec3i> containerTransform) {
+  public void setContainerTransform(BlockTransform3D containerTransform) {
     this.containerTransform = containerTransform;
   }
 
   public Vec3f getAccessPosition() {
-    return Vec3f.from(this.containerTransform.getPosition()).add(this.containerTransform.getAccessOffset());
+    return this.containerTransform.getPosition3f().add(this.containerTransform.getAccessOffset3f());
   }
 
   public void setAccessOffset(Vec3f accessOffset) {

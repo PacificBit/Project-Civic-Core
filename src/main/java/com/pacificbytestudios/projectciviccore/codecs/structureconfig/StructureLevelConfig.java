@@ -9,8 +9,7 @@ import java.util.Set;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.pacificbytestudio.codecbutler.annotations.SerialName;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 
 @SerializableClass
@@ -18,28 +17,28 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
   public static final BuilderCodec<StructureLevelConfig> CODEC = StructureLevelConfigCodec.CODEC;
 
   @SerialName("CoreBlocks")
-  Map<Short, BlockTransform<Vec3i>> coreBlock = new HashMap<>();
+  Map<Short, BlockTransform3D> coreBlock = new HashMap<>();
 
   @SerialName("PrefabMap")
   Map<Short, Map<Short, String>> prefabPathByLevelAndStage = new HashMap<>();
 
-  Map<Short, BlockTransform<Vec3i>> constructionBlock = new HashMap<>();
-  Map<Short, BlockTransform<Vec3i>[]> containers = new HashMap<>();
+  Map<Short, BlockTransform3D> constructionBlock = new HashMap<>();
+  Map<Short, BlockTransform3D[]> containers = new HashMap<>();
   Map<Short, Interactable[]> interactables = new HashMap<>();
 
-  public BlockTransform<Vec3i> getCoreBlockFor(short level) {
+  public BlockTransform3D getCoreBlockFor(short level) {
     return this.coreBlock.get(level);
   }
 
-  public BlockTransform<Vec3i> getConstructionBlock(short level) {
+  public BlockTransform3D getConstructionBlock(short level) {
     return this.constructionBlock.get(level);
   }
 
   @SuppressWarnings("unchecked")
-  public BlockTransform<Vec3i>[] getContainersFor(short level) {
+  public BlockTransform3D[] getContainersFor(short level) {
     return this.containers.getOrDefault(
         level,
-        (BlockTransform<Vec3i>[]) new BlockTransform<?>[0]);
+        new BlockTransform3D[0]);
   }
 
   public Interactable[] getInteractablesFor(short level) {
@@ -49,12 +48,12 @@ public class StructureLevelConfig implements Copyable<StructureLevelConfig> {
   // The codec may assign unmodifiable fastutil maps to these fields, so replace
   // the
   // map with a mutable copy before inserting.
-  public void putCoreBlock(short level, BlockTransform<Vec3i> transform) {
+  public void putCoreBlock(short level, BlockTransform3D transform) {
     this.coreBlock = mutableCopy(this.coreBlock);
     this.coreBlock.put(level, transform);
   }
 
-  public void putContainers(short level, BlockTransform<Vec3i>[] containers) {
+  public void putContainers(short level, BlockTransform3D[] containers) {
     this.containers = mutableCopy(this.containers);
     this.containers.put(level, containers);
   }

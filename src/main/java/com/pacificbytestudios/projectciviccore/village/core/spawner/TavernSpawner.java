@@ -15,7 +15,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.StructureLevelConfig;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
@@ -507,11 +507,11 @@ public class TavernSpawner {
       Store<ChunkStore> chunkStore,
       Rotation structureRotation) {
     WorkplaceContainerRegistryComponent registry = new WorkplaceContainerRegistryComponent();
-    BlockTransform<Vec3i>[] layouts = config.getContainersFor((short) level);
+    BlockTransform3D[] layouts = config.getContainersFor((short) level);
     WorldChunk usedChunk = chunk;
     Vec3i containerPosition;
 
-    for (BlockTransform<Vec3i> containerLayout : layouts) {
+    for (BlockTransform3D containerLayout : layouts) {
       int rotation = StructureSpawnConfig.blockRotationIndex(containerLayout, structureRotation);
       containerPosition = StructureSpawnConfig.blockPosition(
           prefabAnchor,
@@ -781,7 +781,7 @@ public class TavernSpawner {
   }
 
   private static Vec3f getContainerAccessOffset(
-      BlockTransform<Vec3i> containerLayout,
+      BlockTransform3D containerLayout,
       Rotation rotation) {
     return StructureSpawnConfig.accessOffset(containerLayout, rotation);
   }

@@ -6,7 +6,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
@@ -130,21 +130,21 @@ public final class WaypointsSessionUtil {
 
     Rotation orientation = StructurePlacementUtils.normalize(structure.getOrientation());
 
-    BlockTransform<Vec3i> coreBlock = levelConfig.getCoreBlockFor(level);
+    BlockTransform3D coreBlock = levelConfig.getCoreBlockFor(level);
     if (coreBlock != null && coreBlock.getRotation() != null) {
       applyRotation(
           firstWaypointOf(editingComponent, MarkerType.BENCH),
           StructurePlacementUtils.addYaw(coreBlock.getRotation(), orientation));
     }
 
-    for (BlockTransform<Vec3i> container : levelConfig.getContainersFor(level)) {
+    for (BlockTransform3D container : levelConfig.getContainersFor(level)) {
       if (container == null || container.getRotation() == null) {
         continue;
       }
 
       Vec3i worldPosition = StructurePlacementUtils.withOffset(
           structure.getPrefabAnchor(),
-          container.getPosition(),
+          container.getPosition3i(),
           orientation);
       applyRotation(
           waypointAt(editingComponent, MarkerType.STORAGE, worldPosition),
@@ -212,18 +212,18 @@ public final class WaypointsSessionUtil {
   private static void populateWorkplaceWaypoints(
       WaypointsEditingComponent editingComponent,
       WorkplaceComponent workplace) {
-    BlockTransform<Vec3i> bench = workplace.getBenchTransform();
+    BlockTransform3D bench = workplace.getBenchTransform();
     bench.ensurePositionId();
-    editingComponent.addStructureWaypoint(MarkerType.BENCH, BlockTransform.clone(bench));
+    editingComponent.addStructureWaypoint(MarkerType.BENCH, BlockTransform3D.clone(bench));
     editingComponent.addStructureWaypoint(MarkerType.BENCH_ACCESS,
         accessWaypoint(bench, workplace.getBenchAccessPos()));
     editingComponent.addStructureWaypoint(MarkerType.ANCHOR,
-        BlockTransform.clone(workplace.getPrefabAnchorTransform()));
+        BlockTransform3D.clone(workplace.getPrefabAnchorTransform()));
 
     workplace.getStorage().getContainers().values().forEach(container -> {
-      BlockTransform<Vec3i> containerTransform = container.getContainerTransform();
+      BlockTransform3D containerTransform = container.getContainerTransform();
       containerTransform.ensurePositionId();
-      editingComponent.addStructureWaypoint(MarkerType.STORAGE, BlockTransform.clone(containerTransform));
+      editingComponent.addStructureWaypoint(MarkerType.STORAGE, BlockTransform3D.clone(containerTransform));
       editingComponent.addStructureWaypoint(MarkerType.STORAGE_ACCESS, accessWaypoint(containerTransform,
           container.getAccessPosition()));
     });
@@ -254,18 +254,18 @@ public final class WaypointsSessionUtil {
   private static void populateHouseWaypoints(
       WaypointsEditingComponent editingComponent,
       HouseComponent house) {
-    editingComponent.addStructureWaypoint(MarkerType.BENCH, new BlockTransform<>(house.getCoreBlockPosition()));
-    editingComponent.addStructureWaypoint(MarkerType.ANCHOR, new BlockTransform<>(house.getPrefabAnchor()));
+    editingComponent.addStructureWaypoint(MarkerType.BENCH, new BlockTransform3D(house.getCoreBlockPosition()));
+    editingComponent.addStructureWaypoint(MarkerType.ANCHOR, new BlockTransform3D(house.getPrefabAnchor()));
 
     house.getAppartmentRegistry().getAppartments().values().forEach(appartment -> {
       for (VillageBedComponent bed : appartment.getBeds().values()) {
-        editingComponent.addStructureWaypoint(MarkerType.BED, BlockTransform.clone(bed.getBedTransform()));
+        editingComponent.addStructureWaypoint(MarkerType.BED, BlockTransform3D.clone(bed.getBedTransform()));
       }
     });
   }
 
-  private static BlockTransform<Vec3i> accessWaypoint(BlockTransform<Vec3i> source, Vec3f accessPosition) {
-    BlockTransform<Vec3i> waypoint = BlockTransform.clone(source);
+  private static BlockTransform3D accessWaypoint(BlockTransform3D source, Vec3f accessPosition) {
+    BlockTransform3D waypoint = BlockTransform3D.clone(source);
     waypoint.setAccessOffset(Vec3f.from(accessPosition));
     return waypoint;
   }

@@ -27,7 +27,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
@@ -312,8 +312,8 @@ public class WaypointEditorPage extends BasicCustomUIPage {
     Waypoint old = this.selectedWaypoint.clone();
 
     @SuppressWarnings("unchecked")
-    BlockTransform<Vec3i> parentTransform = (BlockTransform<Vec3i>) parent.getTransform();
-    BlockTransform<Vec3i> updatedTransform = BlockTransform.clone(parentTransform);
+    BlockTransform3D parentTransform = (BlockTransform3D) parent.getTransform();
+    BlockTransform3D updatedTransform = BlockTransform3D.clone(parentTransform);
     updatedTransform.setAccessOffset(Vec3f.from(this.selectedWaypoint.getTransform().getAccessOffset()));
     updatedTransform.setAccessId(this.selectedWaypoint.getAccessId());
 
@@ -351,7 +351,7 @@ public class WaypointEditorPage extends BasicCustomUIPage {
         return null;
       }
 
-      BlockTransform<Vec3i> transform = BlockTransform.clone((BlockTransform<Vec3i>) parent.getTransform());
+      BlockTransform3D transform = BlockTransform3D.clone((BlockTransform3D) parent.getTransform());
       transform.setAccessId(null);
       transform.ensureAccessId();
       transform.setAccessOffset(at.to3f());
@@ -359,10 +359,10 @@ public class WaypointEditorPage extends BasicCustomUIPage {
     }
 
     if (isFloatMarker(type)) {
-      return Waypoint.from(type, new BlockTransform<>(at.to3f()), false);
+      return Waypoint.from(type, new BlockTransform3D(at.to3f()), false);
     }
 
-    return Waypoint.from(type, new BlockTransform<>(at.to3i()), false);
+    return Waypoint.from(type, new BlockTransform3D(at.to3i()), false);
   }
 
   private static Waypoint nearestOfType(
@@ -550,7 +550,7 @@ public class WaypointEditorPage extends BasicCustomUIPage {
   }
 
   private void buildSelectedWaypoint(UICommandBuilder builder) {
-    BlockTransform<?> transform = this.selectedWaypoint.transform();
+    BlockTransform3D transform = this.selectedWaypoint.transform();
 
     this.setText(builder, "SelectedIdValue", this.selectedWaypoint.waypointId().toString());
     this.setText(builder, "SelectedTypeValue", this.selectedWaypoint.type().name());
@@ -658,7 +658,7 @@ public class WaypointEditorPage extends BasicCustomUIPage {
   }
 
   private static String referenceLabel(MarkerType markerType, Waypoint waypoint) {
-    BlockTransform<?> transform = waypoint.getTransform();
+    BlockTransform3D transform = waypoint.getTransform();
     return markerType.name() + " " + shortId(waypoint.getPositionId().toString()) + " "
         + formatVector(transform.getPosition());
   }

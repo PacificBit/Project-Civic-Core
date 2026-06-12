@@ -7,7 +7,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
 @SerializableClass
@@ -16,7 +16,7 @@ public class VillageBedComponent implements Component<ChunkStore> {
 
   boolean isTaken;
   UUID owner;
-  BlockTransform<Vec3i> bedTransform;
+  BlockTransform3D bedTransform;
 
   public boolean isTaken() {
     return isTaken;
@@ -35,11 +35,11 @@ public class VillageBedComponent implements Component<ChunkStore> {
   }
 
   public Vec3i getPosition() {
-    return this.bedTransform.getPosition();
+    return this.bedTransform.getPosition3i();
   }
 
   public void setPosition(Vec3i position) {
-    this.bedTransform = new BlockTransform<>(position);
+    this.bedTransform = new BlockTransform3D(position);
   }
 
   public Rotation getRotation() {
@@ -50,11 +50,11 @@ public class VillageBedComponent implements Component<ChunkStore> {
     this.bedTransform.setRotation(rotation);
   }
 
-  public BlockTransform<Vec3i> getBedTransform() {
+  public BlockTransform3D getBedTransform() {
     return this.bedTransform;
   }
 
-  public void setBedTransform(BlockTransform<Vec3i> bedTransform) {
+  public void setBedTransform(BlockTransform3D bedTransform) {
     this.bedTransform = bedTransform;
   }
 

@@ -17,7 +17,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.assetstore.AssetPack;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.StructureLevelConfig;
@@ -78,8 +78,8 @@ public final class WaypointsConfigSaver {
     }
 
     // Build the local-space model from the session waypoints.
-    BlockTransform<Vec3i> coreBlock = buildCoreBlock(session, assetConfig, level, anchor, orientation);
-    BlockTransform<Vec3i>[] containers = buildContainers(session, anchor, orientation);
+    BlockTransform3D coreBlock = buildCoreBlock(session, assetConfig, level, anchor, orientation);
+    BlockTransform3D[] containers = buildContainers(session, anchor, orientation);
     Interactable[] interactables = buildInteractables(session, assetConfig, level, anchor, orientation);
 
     // Apply to the in-memory asset, then push it onto the village heart like
@@ -114,7 +114,7 @@ public final class WaypointsConfigSaver {
       }
       if (containers.length > 0 || levelConfig.containsKey("Containers")) {
         List<Document> containerDocs = new ArrayList<>();
-        for (BlockTransform<Vec3i> container : containers) {
+        for (BlockTransform3D container : containers) {
           containerDocs.add(transformToJson(container));
         }
         getOrCreate(levelConfig, "Containers").put(levelKey, containerDocs);
@@ -161,7 +161,7 @@ public final class WaypointsConfigSaver {
     return structure.getPrefabAnchor();
   }
 
-  private static BlockTransform<Vec3i> buildCoreBlock(
+  private static BlockTransform3D buildCoreBlock(
       WaypointsEditingComponent session,
       StructureLevelConfig assetConfig,
       short level,
@@ -172,12 +172,12 @@ public final class WaypointsConfigSaver {
       return null;
     }
 
-    BlockTransform<Vec3i> existing = assetConfig.getCoreBlockFor(level);
-    BlockTransform<Vec3i> result = existing == null ? new BlockTransform<>() : BlockTransform.clone(existing);
+    BlockTransform3D existing = assetConfig.getCoreBlockFor(level);
+    BlockTransform3D result = existing == null ? new BlockTransform3D() : BlockTransform3D.clone(existing);
 
     result.setPosition(toLocal(bench.getWaypointPosition().to3i(), anchor, orientation));
 
-    BlockTransform<?> benchTransform = bench.getTransform();
+    BlockTransform3D benchTransform = bench.getTransform();
     if (benchTransform.getRotation() != null) {
       result.setRotation(removeOrientation(benchTransform.getRotation(), orientation));
     }
@@ -199,20 +199,20 @@ public final class WaypointsConfigSaver {
   }
 
   @SuppressWarnings("unchecked")
-  private static BlockTransform<Vec3i>[] buildContainers(
+  private static BlockTransform3D[] buildContainers(
       WaypointsEditingComponent session,
       Vec3i anchor,
       Rotation orientation) {
-    List<BlockTransform<Vec3i>> containers = new ArrayList<>();
+    List<BlockTransform3D> containers = new ArrayList<>();
 
     for (Waypoint storage : waypointsOf(session, MarkerType.STORAGE)) {
-      BlockTransform<Vec3i> container = new BlockTransform<>();
+      BlockTransform3D container = new BlockTransform3D();
       Vec3i storageWorld = storage.getWaypointPosition().to3i();
 
       container.setPositionId(storage.getPositionId());
       container.setPosition(toLocal(storageWorld, anchor, orientation));
 
-      BlockTransform<?> storageTransform = storage.getTransform();
+      BlockTransform3D storageTransform = storage.getTransform();
       if (storageTransform.getRotation() != null) {
         container.setRotation(removeOrientation(storageTransform.getRotation(), orientation));
       }
@@ -230,7 +230,7 @@ public final class WaypointsConfigSaver {
       containers.add(container);
     }
 
-    return containers.toArray((BlockTransform<Vec3i>[]) new BlockTransform<?>[0]);
+    return containers.toArray(new BlockTransform3D[0]);
   }
 
   /**
@@ -262,7 +262,7 @@ public final class WaypointsConfigSaver {
       entry.setOccupiedBy(null);
       entry.setReady(false);
 
-      BlockTransform<Vec3f> interactableTransform = entry.getInteractableTransform();
+      BlockTransform3D interactableTransform = entry.getInteractableTransform();
       interactableTransform.setPositionId(chair.getPositionId());
       interactableTransform.setPosition(toLocalFloat(chair.getWaypointPosition(), anchor, orientation));
       interactableTransform.ensurePositionId();
@@ -270,8 +270,8 @@ public final class WaypointsConfigSaver {
 
       Waypoint plate = takeDependsOnPlate(plates, entry, chair);
       if (plate != null) {
-        BlockTransform<Vec3f> dependsOn = entry.getDependsOnTransform() == null
-            ? new BlockTransform<>(Vec3f.safeZero())
+        BlockTransform3D dependsOn = entry.getDependsOnTransform() == null
+            ? new BlockTransform3D(Vec3f.safeZero())
             : entry.getDependsOnTransform();
         dependsOn.setPositionId(plate.getPositionId());
         dependsOn.setPosition(toLocalFloat(plate.getWaypointPosition(), anchor, orientation));
@@ -470,7 +470,7 @@ public final class WaypointsConfigSaver {
     return child;
   }
 
-  private static Document transformToJson(BlockTransform<Vec3i> transform) {
+  private static Document transformToJson(BlockTransform3D transform) {
     Document document = new Document();
     document.put("PositionId", toBase64(transform.ensurePositionId()));
     document.put("Position", vectorToJson(transform.getPosition()));
@@ -484,7 +484,7 @@ public final class WaypointsConfigSaver {
     Document document = new Document();
     document.put("Id", toBase64(interactable.getId() == null ? UUID.randomUUID() : interactable.getId()));
 
-    BlockTransform<Vec3f> transform = interactable.getInteractableTransform();
+    BlockTransform3D transform = interactable.getInteractableTransform();
     Document transformDoc = new Document();
     transformDoc.put("PositionId", toBase64(transform.ensurePositionId()));
     transformDoc.put("Position", vectorToJson(transform.getPosition()));
@@ -492,7 +492,7 @@ public final class WaypointsConfigSaver {
     transformDoc.put("AccessId", toBase64(transform.ensureAccessId()));
     document.put("InteractableTransform", transformDoc);
 
-    BlockTransform<Vec3f> dependsOn = interactable.getDependsOnTransform();
+    BlockTransform3D dependsOn = interactable.getDependsOnTransform();
     if (dependsOn != null && dependsOn.getPosition() != null) {
       Document dependsOnDoc = new Document();
       dependsOnDoc.put("PositionId", toBase64(dependsOn.ensurePositionId()));
@@ -606,10 +606,10 @@ public final class WaypointsConfigSaver {
   }
 
   @SuppressWarnings("unchecked")
-  private static BlockTransform<Vec3i>[] cloneTransforms(BlockTransform<Vec3i>[] transforms) {
-    BlockTransform<Vec3i>[] clones = (BlockTransform<Vec3i>[]) new BlockTransform<?>[transforms.length];
+  private static BlockTransform3D[] cloneTransforms(BlockTransform3D[] transforms) {
+    BlockTransform3D[] clones = new BlockTransform3D[transforms.length];
     for (int i = 0; i < transforms.length; i++) {
-      clones[i] = BlockTransform.clone(transforms[i]);
+      clones[i] = BlockTransform3D.clone(transforms[i]);
     }
     return clones;
   }

@@ -4,21 +4,18 @@ import java.util.Objects;
 import java.util.UUID;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.pacificbytestudios.projectciviccore.codecs.BlockTransform;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
-import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
 
 @SerializableClass
 public class Interactable implements Copyable<Interactable> {
   public static final BuilderCodec<Interactable> CODEC = InteractableCodec.CODEC;
 
   UUID id;
-  @SerialWithCodec("com.pacificbytestudios.projectciviccore.codecs.BlockTransform.VEC3F_CODEC")
-  BlockTransform<Vec3f> interactableTransform;
-  @SerialWithCodec("com.pacificbytestudios.projectciviccore.codecs.BlockTransform.VEC3F_CODEC")
-  BlockTransform<Vec3f> dependsOnTransform;
+  BlockTransform3D interactableTransform;
+  BlockTransform3D dependsOnTransform;
   UUID occupiedBy;
   boolean invalidateOnUse;
   boolean isReady = false;
@@ -36,9 +33,9 @@ public class Interactable implements Copyable<Interactable> {
 
   public Interactable(UUID id, Vec3f interactablePosition, Vec3f dependsOn, boolean invalidateOnUse) {
     this.id = id;
-    this.interactableTransform = new BlockTransform<>(interactablePosition);
+    this.interactableTransform = new BlockTransform3D(interactablePosition);
     this.invalidateOnUse = invalidateOnUse;
-    this.dependsOnTransform = BlockTransform.from(dependsOn);
+    this.dependsOnTransform = BlockTransform3D.from(dependsOn);
   }
 
   public boolean isOccupied() {
@@ -70,34 +67,34 @@ public class Interactable implements Copyable<Interactable> {
   }
 
   public Vec3f getInteractablePosition() {
-    return this.interactableTransform.getPosition();
+    return this.interactableTransform.getPosition3f();
   }
 
   public void setInteractablePosition(Vec3f interactablePosition) {
     this.interactableTransform.setPosition(interactablePosition);
   }
 
-  public BlockTransform<Vec3f> getInteractableTransform() {
+  public BlockTransform3D getInteractableTransform() {
     return this.interactableTransform;
   }
 
-  public void setInteractableTransform(BlockTransform<Vec3f> interactableTransform) {
+  public void setInteractableTransform(BlockTransform3D interactableTransform) {
     this.interactableTransform = interactableTransform;
   }
 
   public Vec3f getDependsOn() {
-    return this.dependsOnTransform == null ? null : this.dependsOnTransform.getPosition();
+    return this.dependsOnTransform == null ? null : this.dependsOnTransform.getPosition3f();
   }
 
   public void setDependsOn(Vec3f dependsOn) {
     this.dependsOnTransform.setPosition(dependsOn);
   }
 
-  public BlockTransform<Vec3f> getDependsOnTransform() {
+  public BlockTransform3D getDependsOnTransform() {
     return this.dependsOnTransform;
   }
 
-  public void setDependsOnTransform(BlockTransform<Vec3f> dependsOnTransform) {
+  public void setDependsOnTransform(BlockTransform3D dependsOnTransform) {
     this.dependsOnTransform = dependsOnTransform;
   }
 
