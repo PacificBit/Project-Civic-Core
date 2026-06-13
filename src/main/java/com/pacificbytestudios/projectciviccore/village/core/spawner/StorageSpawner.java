@@ -537,6 +537,7 @@ public class StorageSpawner {
     }
 
     workplaceComponent.setStorage(registry);
+    StructureSpawnConfig.applyConfigIds(workplaceComponent, config, targetLevel);
     moveConstructionSignItemsToStorage(config, chunk, prefabAnchor, targetLevel, rotation, registry);
     seedStarterStorageIfNeeded(chunk, registry, heart, targetLevel);
     removeConstructionSignIfPresent(config, chunk, prefabAnchor, targetLevel, rotation);

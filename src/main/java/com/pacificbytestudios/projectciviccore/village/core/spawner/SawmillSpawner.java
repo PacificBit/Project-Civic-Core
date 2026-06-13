@@ -500,6 +500,7 @@ public class SawmillSpawner {
     WorkplaceContainerRegistryComponent storage = new WorkplaceContainerRegistryComponent();
     storage.registerContainer(container.getUuid(), container);
     workplaceComponent.setStorage(storage);
+    StructureSpawnConfig.applyConfigIds(workplaceComponent, config, targetLevel);
 
     removeConstructionSignIfPresent(config, chunk, prefabAnchor, targetLevel, rotation);
     workplaceChunk.markNeedsSaving();

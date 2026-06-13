@@ -21,6 +21,8 @@ import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.structures.VillageStructuresConfig;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
+import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceContainerEntryComponent;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageObjectiveType;
 
@@ -99,6 +101,35 @@ final class StructureSpawnConfig {
       throw new IllegalStateException("Container config is missing for level " + level);
     }
     return containers[0];
+  }
+
+  /**
+   * Copies the config's stable identity (core block + containers) onto the
+   * freshly spawned
+   * live transforms so the waypoint editor reuses the same PositionId/AccessId on
+   * save
+   * instead of minting new random ones, which would otherwise make the IDs churn
+   * on every
+   * edit. Containers are paired by order; the registry is a LinkedHashMap
+   * populated in
+   * config order, so index pairing matches the config layout.
+   */
+  static void applyConfigIds(WorkplaceComponent workplace, StructureLevelConfig config, int level) {
+    applyConfigIds(workplace.getBenchTransform(), config.getCoreBlockFor((short) level));
+
+    BlockTransform3D[] configContainers = config.getContainersFor((short) level);
+    int index = 0;
+    for (WorkplaceContainerEntryComponent container : workplace.getStorage().getContainers().values()) {
+      if (index >= configContainers.length) {
+        break;
+      }
+      applyConfigIds(container.getContainerTransform(), configContainers[index++]);
+    }
+  }
+
+  private static void applyConfigIds(BlockTransform3D live, BlockTransform3D config) {
+    live.setPositionId(config.getPositionId());
+    live.setAccessId(config.getAccessId());
   }
 
   static int blockRotationIndex(BlockTransform3D block, Rotation structureRotation) {

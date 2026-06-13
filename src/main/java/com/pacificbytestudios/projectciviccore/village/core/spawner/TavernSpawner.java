@@ -494,6 +494,7 @@ public class TavernSpawner {
     }
 
     workplaceComponent.setStorage(registry);
+    StructureSpawnConfig.applyConfigIds(workplaceComponent, config, targetLevel);
     removeConstructionSignIfPresent(config, chunk, prefabAnchor, targetLevel, rotation);
     workplaceChunk.markNeedsSaving();
     return true;

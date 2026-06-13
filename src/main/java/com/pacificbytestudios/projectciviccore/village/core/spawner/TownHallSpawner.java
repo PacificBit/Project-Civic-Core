@@ -470,6 +470,7 @@ public class TownHallSpawner {
     workplaceComponent.setLevel((short) targetLevel);
     workplaceComponent.setBenchPos(workplaceBlockPosition);
     workplaceComponent.setBenchAccessOffset(getBenchAccessOffset(config, targetLevel, rotation));
+    StructureSpawnConfig.applyConfigIds(workplaceComponent, config, targetLevel);
     workplaceComponent.setPrefabAnchor(prefabAnchor);
     workplaceComponent.setWorkerType(new WorkType[] { WorkType.MAYOR });
     workplaceComponent.setWorkplaceRef(new EntityRef(chunk.getWorld().getName(),
@@ -506,9 +507,10 @@ public class TownHallSpawner {
       return null;
     }
 
+    BlockTransform3D configContainer = firstConfiguredContainer(config, level);
     container.setPosition(containerPosition);
     container.setAccessOffset(StructurePlacementUtils.rotatePointOffset(
-        getHeartContainerAccessOffset(config, level),
+        heartContainerAccessOffset(configContainer, level),
         rotation));
     container.setUuid(UUID.randomUUID());
 
@@ -749,10 +751,14 @@ public class TownHallSpawner {
    * the config. Read it from the level's container entry, falling back to the
    * hardcoded default when a level has no container configured.
    */
-  private static Vec3f getHeartContainerAccessOffset(StructureLevelConfig config, int level) {
+  private static BlockTransform3D firstConfiguredContainer(StructureLevelConfig config, int level) {
     BlockTransform3D[] containers = config.getContainersFor((short) level);
-    if (containers.length > 0 && containers[0] != null && containers[0].getAccessOffset() != null) {
-      return containers[0].getAccessOffset3f();
+    return containers.length > 0 ? containers[0] : null;
+  }
+
+  private static Vec3f heartContainerAccessOffset(BlockTransform3D configContainer, int level) {
+    if (configContainer != null && configContainer.getAccessOffset() != null) {
+      return configContainer.getAccessOffset3f();
     }
     return StructureConfig.TownHall.getHeartContainerAccessOffset(level);
   }
