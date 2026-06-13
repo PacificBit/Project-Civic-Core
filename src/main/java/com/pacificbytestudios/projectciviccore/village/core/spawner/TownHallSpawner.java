@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.StructureLevelConfig;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
@@ -75,8 +76,8 @@ public class TownHallSpawner {
       VillageHeartComponent heart,
       int targetLevel) {
     Logger.logInfo(
-            "Registering new staged Town Hall construction of level: " +
-                targetLevel + ", with id: " + structureId);
+        "Registering new staged Town Hall construction of level: " +
+            targetLevel + ", with id: " + structureId);
 
     WorldChunk chunkToUse = chunk;
     World world = chunkToUse.getWorld();
@@ -165,7 +166,7 @@ public class TownHallSpawner {
         TrackedPrefabPlacementComponent.getComponentType());
     if (workplace == null || trackedPlacement == null) {
       Logger.logWarning(
-              "Could not fetch the existing town hall component or terrain snapshot");
+          "Could not fetch the existing town hall component or terrain snapshot");
       return false;
     }
 
@@ -455,6 +456,7 @@ public class TownHallSpawner {
         chunk,
         chunkStore,
         heart,
+        config,
         targetLevel,
         rotation);
     if (storage == null) {
@@ -487,6 +489,7 @@ public class TownHallSpawner {
       WorldChunk chunk,
       Store<ChunkStore> chunkStore,
       VillageHeartComponent village,
+      StructureLevelConfig config,
       int level,
       Rotation rotation) {
     Vec3i containerPosition = getContainerPosition(village);
@@ -505,7 +508,7 @@ public class TownHallSpawner {
 
     container.setPosition(containerPosition);
     container.setAccessOffset(StructurePlacementUtils.rotatePointOffset(
-        StructureConfig.TownHall.getHeartContainerAccessOffset(level),
+        getHeartContainerAccessOffset(config, level),
         rotation));
     container.setUuid(UUID.randomUUID());
 
@@ -738,6 +741,20 @@ public class TownHallSpawner {
 
   private static Vec3i getContainerPosition(VillageHeartComponent village) {
     return village.getBlockContext().getPosition().clone();
+  }
+
+  /**
+   * The town hall storage is the village core block, so its position is fixed,
+   * but the access point is authored through the waypoint editor and stored in
+   * the config. Read it from the level's container entry, falling back to the
+   * hardcoded default when a level has no container configured.
+   */
+  private static Vec3f getHeartContainerAccessOffset(StructureLevelConfig config, int level) {
+    BlockTransform3D[] containers = config.getContainersFor((short) level);
+    if (containers.length > 0 && containers[0] != null && containers[0].getAccessOffset() != null) {
+      return containers[0].getAccessOffset3f();
+    }
+    return StructureConfig.TownHall.getHeartContainerAccessOffset(level);
   }
 
   private static boolean rollbackFailedSpawn(
