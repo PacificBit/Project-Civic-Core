@@ -159,7 +159,8 @@
       "x": -6,
       "y": 3,
       "z": -3,
-      "name": "Barrier"
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 3
     },
     {
       "x": -6,
@@ -791,7 +792,8 @@
       "x": -6,
       "y": 3,
       "z": 3,
-      "name": "Barrier"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 3
     },
     {
       "x": -6,
@@ -896,7 +898,7 @@
       "x": -6,
       "y": 3,
       "z": 4,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -1208,14 +1210,14 @@
       "x": -5,
       "y": 3,
       "z": -3,
-      "name": "*Cloth_Roof_Yellow_State_Definitions_Corner_Left",
-      "rotation": 2
+      "name": "Cloth_Roof_Yellow_Vertical"
     },
     {
       "x": -5,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "*Cloth_Roof_Yellow_State_Definitions_Corner_Left",
+      "rotation": 2
     },
     {
       "x": -5,
@@ -1312,14 +1314,15 @@
       "x": -5,
       "y": 3,
       "z": -2,
-      "name": "Cloth_Roof_Green",
-      "rotation": 3
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
     },
     {
       "x": -5,
       "y": 4,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 3
     },
     {
       "x": -5,
@@ -1416,18 +1419,19 @@
     {
       "x": -5,
       "y": 3,
+      "z": -1,
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 1
+    },
+    {
+      "x": -5,
+      "y": 4,
       "z": -1,
       "name": "Cloth_Roof_Yellow",
       "rotation": 3
     },
     {
       "x": -5,
-      "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -5,
       "y": 5,
       "z": -1,
       "name": "Empty"
@@ -1522,14 +1526,15 @@
       "x": -5,
       "y": 3,
       "z": 0,
-      "name": "Cloth_Roof_Green",
-      "rotation": 3
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
     },
     {
       "x": -5,
       "y": 4,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 3
     },
     {
       "x": -5,
@@ -1629,14 +1634,15 @@
       "x": -5,
       "y": 3,
       "z": 1,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 3
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 1
     },
     {
       "x": -5,
       "y": 4,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 3
     },
     {
       "x": -5,
@@ -1733,14 +1739,15 @@
       "x": -5,
       "y": 3,
       "z": 2,
-      "name": "Cloth_Roof_Green",
-      "rotation": 3
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
     },
     {
       "x": -5,
       "y": 4,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 3
     },
     {
       "x": -5,
@@ -1838,13 +1845,14 @@
       "x": -5,
       "y": 3,
       "z": 3,
-      "name": "*Cloth_Roof_Yellow_State_Definitions_Corner_Right"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 2
     },
     {
       "x": -5,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "*Cloth_Roof_Yellow_State_Definitions_Corner_Right"
     },
     {
       "x": -5,
@@ -1943,7 +1951,7 @@
       "x": -5,
       "y": 3,
       "z": 4,
-      "name": "Barrier"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -2033,7 +2041,8 @@
       "x": -5,
       "y": 1,
       "z": 5,
-      "name": "Empty"
+      "name": "Plant_Grass_Sharp",
+      "support": 15
     },
     {
       "x": -5,
@@ -2268,14 +2277,14 @@
       "x": -4,
       "y": 3,
       "z": -3,
-      "name": "Cloth_Roof_Green",
-      "rotation": 2
+      "name": "Cloth_Roof_Green_Vertical"
     },
     {
       "x": -4,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 2
     },
     {
       "x": -4,
@@ -2377,13 +2386,13 @@
       "x": -4,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": -4,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -4,
@@ -2480,13 +2489,13 @@
       "x": -4,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -4,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -4,
@@ -2576,19 +2585,19 @@
       "x": -4,
       "y": 3,
       "z": 0,
-      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
+      "name": "Empty"
     },
     {
       "x": -4,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
     },
     {
       "x": -4,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -4,
@@ -2684,13 +2693,13 @@
       "x": -4,
       "y": 4,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -4,
       "y": 5,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -4,
@@ -2787,13 +2796,13 @@
       "x": -4,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": -4,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -4,
@@ -2885,13 +2894,14 @@
       "x": -4,
       "y": 3,
       "z": 3,
-      "name": "Cloth_Roof_Green"
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 2
     },
     {
       "x": -4,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green"
     },
     {
       "x": -4,
@@ -3299,14 +3309,14 @@
       "x": -3,
       "y": 3,
       "z": -3,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 2
+      "name": "Cloth_Roof_Yellow_Vertical"
     },
     {
       "x": -3,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 2
     },
     {
       "x": -3,
@@ -3410,13 +3420,13 @@
       "x": -3,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -3,
@@ -3514,13 +3524,13 @@
       "x": -3,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -3,
@@ -3619,13 +3629,13 @@
       "x": -3,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -3,
@@ -3723,13 +3733,13 @@
       "x": -3,
       "y": 4,
       "z": 1,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 5,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -3,
@@ -3825,13 +3835,13 @@
       "x": -3,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -3,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -3,
@@ -3922,13 +3932,14 @@
       "x": -3,
       "y": 3,
       "z": 3,
-      "name": "Cloth_Roof_Yellow"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 2
     },
     {
       "x": -3,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow"
     },
     {
       "x": -3,
@@ -4235,7 +4246,8 @@
       "x": -2,
       "y": 3,
       "z": -4,
-      "name": "Barrier"
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 2
     },
     {
       "x": -2,
@@ -4338,18 +4350,19 @@
     {
       "x": -2,
       "y": 3,
+      "z": -3,
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 4,
       "z": -3,
       "name": "Cloth_Roof_Green",
       "rotation": 2
     },
     {
       "x": -2,
-      "y": 4,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 5,
       "z": -3,
       "name": "Empty"
@@ -4452,13 +4465,14 @@
       "x": -2,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 1
     },
     {
       "x": -2,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -2,
@@ -4558,17 +4572,18 @@
     {
       "x": -2,
       "y": 4,
+      "z": -1,
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 5,
       "z": -1,
       "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -2,
-      "y": 5,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": -2,
       "y": 6,
       "z": -1,
       "name": "Empty"
@@ -4666,13 +4681,14 @@
       "x": -2,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 1
     },
     {
       "x": -2,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -2,
@@ -4757,27 +4773,27 @@
       "x": -2,
       "y": 2,
       "z": 1,
-      "name": "Cloth_Roof_Green_Flap",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -2,
       "y": 3,
       "z": 1,
-      "name": "Cloth_Roof_Green_Vertical",
+      "name": "Cloth_Roof_Green_Flap",
       "rotation": 1
     },
     {
       "x": -2,
       "y": 4,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
     },
     {
       "x": -2,
       "y": 5,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -2,
@@ -4877,13 +4893,14 @@
       "x": -2,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 1
     },
     {
       "x": -2,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -2,
@@ -4976,13 +4993,14 @@
       "x": -2,
       "y": 3,
       "z": 3,
-      "name": "Cloth_Roof_Green"
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
     },
     {
       "x": -2,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green"
     },
     {
       "x": -2,
@@ -5082,7 +5100,7 @@
       "x": -2,
       "y": 3,
       "z": 4,
-      "name": "Barrier"
+      "name": "Cloth_Roof_Green_Vertical"
     },
     {
       "x": -2,
@@ -5396,14 +5414,14 @@
       "x": -1,
       "y": 3,
       "z": -3,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 2
+      "name": "Cloth_Roof_Yellow_Vertical"
     },
     {
       "x": -1,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 2
     },
     {
       "x": -1,
@@ -5505,13 +5523,13 @@
       "x": -1,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -1,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -1,
@@ -5608,13 +5626,13 @@
       "x": -1,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": -1,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -1,
@@ -5714,13 +5732,13 @@
       "x": -1,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -1,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -1,
@@ -5815,17 +5833,17 @@
     {
       "x": -1,
       "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 5,
       "z": 1,
       "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": -1,
-      "y": 5,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": -1,
       "y": 6,
       "z": 1,
       "name": "Empty"
@@ -5918,13 +5936,13 @@
       "x": -1,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": -1,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": -1,
@@ -6015,14 +6033,14 @@
       "x": -1,
       "y": 3,
       "z": 3,
-      "name": "*Cloth_Roof_Yellow_State_Definitions_Inverted_Corner_Left",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -1,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "*Cloth_Roof_Yellow_State_Definitions_Inverted_Corner_Left",
+      "rotation": 3
     },
     {
       "x": -1,
@@ -6119,14 +6137,15 @@
       "x": -1,
       "y": 3,
       "z": 4,
-      "name": "Cloth_Roof_Green",
-      "rotation": 3
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 1
     },
     {
       "x": -1,
       "y": 4,
       "z": 4,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 3
     },
     {
       "x": -1,
@@ -6224,14 +6243,15 @@
       "x": -1,
       "y": 3,
       "z": 5,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 3
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 1
     },
     {
       "x": -1,
       "y": 4,
       "z": 5,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 3
     },
     {
       "x": -1,
@@ -6436,14 +6456,14 @@
       "x": 0,
       "y": 3,
       "z": -3,
-      "name": "Cloth_Roof_Green",
-      "rotation": 2
+      "name": "Cloth_Roof_Green_Vertical"
     },
     {
       "x": 0,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 2
     },
     {
       "x": 0,
@@ -6546,13 +6566,13 @@
       "x": 0,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 0,
@@ -6643,19 +6663,19 @@
       "x": 0,
       "y": 3,
       "z": -1,
-      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
+      "name": "Empty"
     },
     {
       "x": 0,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
     },
     {
       "x": 0,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 0,
@@ -6753,13 +6773,13 @@
       "x": 0,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 0,
@@ -6854,17 +6874,17 @@
     {
       "x": 0,
       "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 5,
       "z": 1,
       "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 0,
-      "y": 5,
-      "z": 1,
-      "name": "Empty"
-    },
-    {
-      "x": 0,
       "y": 6,
       "z": 1,
       "name": "Empty"
@@ -6957,13 +6977,13 @@
       "x": 0,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 0,
@@ -7059,13 +7079,13 @@
       "x": 0,
       "y": 4,
       "z": 3,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
       "y": 5,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 0,
@@ -7163,13 +7183,13 @@
       "x": 0,
       "y": 4,
       "z": 4,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
       "y": 5,
       "z": 4,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 0,
@@ -7254,13 +7274,13 @@
       "x": 0,
       "y": 4,
       "z": 5,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 0,
       "y": 5,
       "z": 5,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 0,
@@ -7456,17 +7476,17 @@
       "x": 1,
       "y": 3,
       "z": -3,
+      "name": "Cloth_Roof_Yellow_Vertical"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -3,
       "name": "Cloth_Roof_Yellow",
       "rotation": 2
     },
     {
       "x": 1,
-      "y": 4,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 5,
       "z": -3,
       "name": "Empty"
@@ -7565,13 +7585,13 @@
       "x": 1,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 1,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 1,
@@ -7668,13 +7688,13 @@
       "x": 1,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 1,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 1,
@@ -7769,17 +7789,17 @@
     {
       "x": 1,
       "y": 4,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 5,
       "z": 0,
       "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 1,
-      "y": 5,
-      "z": 0,
-      "name": "Empty"
-    },
-    {
-      "x": 1,
       "y": 6,
       "z": 0,
       "name": "Empty"
@@ -7872,13 +7892,13 @@
       "x": 1,
       "y": 4,
       "z": 1,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 1,
       "y": 5,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 1,
@@ -7975,13 +7995,13 @@
       "x": 1,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 1,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 1,
@@ -8071,14 +8091,14 @@
       "x": 1,
       "y": 3,
       "z": 3,
-      "name": "*Cloth_Roof_Yellow_State_Definitions_Inverted_Corner_Right",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 1,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "*Cloth_Roof_Yellow_State_Definitions_Inverted_Corner_Right",
+      "rotation": 1
     },
     {
       "x": 1,
@@ -8175,14 +8195,15 @@
       "x": 1,
       "y": 3,
       "z": 4,
-      "name": "Cloth_Roof_Green",
-      "rotation": 1
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 4,
       "z": 4,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 1
     },
     {
       "x": 1,
@@ -8278,14 +8299,15 @@
       "x": 1,
       "y": 3,
       "z": 5,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 1
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 4,
       "z": 5,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 1
     },
     {
       "x": 1,
@@ -8487,17 +8509,17 @@
       "x": 2,
       "y": 3,
       "z": -3,
+      "name": "Cloth_Roof_Green_Vertical"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -3,
       "name": "Cloth_Roof_Green",
       "rotation": 2
     },
     {
       "x": 2,
-      "y": 4,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
       "y": 5,
       "z": -3,
       "name": "Empty"
@@ -8601,13 +8623,13 @@
       "x": 2,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 2,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 2,
@@ -8706,13 +8728,13 @@
       "x": 2,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 2,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 2,
@@ -8809,13 +8831,13 @@
       "x": 2,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 2,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 2,
@@ -8915,13 +8937,13 @@
       "x": 2,
       "y": 4,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 2,
       "y": 5,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 2,
@@ -9019,13 +9041,13 @@
       "x": 2,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 2,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 2,
@@ -9115,13 +9137,14 @@
       "x": 2,
       "y": 3,
       "z": 3,
-      "name": "Cloth_Roof_Green"
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 2
     },
     {
       "x": 2,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green"
     },
     {
       "x": 2,
@@ -9534,14 +9557,14 @@
       "x": 3,
       "y": 3,
       "z": -3,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 2
+      "name": "Cloth_Roof_Yellow_Vertical"
     },
     {
       "x": 3,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 2
     },
     {
       "x": 3,
@@ -9645,13 +9668,13 @@
       "x": 3,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 3,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 3,
@@ -9743,19 +9766,19 @@
       "x": 3,
       "y": 3,
       "z": -1,
-      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
+      "name": "Empty"
     },
     {
       "x": 3,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
     },
     {
       "x": 3,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 3,
@@ -9851,13 +9874,13 @@
       "x": 3,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 3,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 3,
@@ -9956,13 +9979,13 @@
       "x": 3,
       "y": 4,
       "z": 1,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 3,
       "y": 5,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 3,
@@ -10054,19 +10077,19 @@
       "x": 3,
       "y": 3,
       "z": 2,
-      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
+      "name": "Empty"
     },
     {
       "x": 3,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Village_Furniture_Tavern_Lvl1_Chandelier"
     },
     {
       "x": 3,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 3,
@@ -10157,13 +10180,14 @@
       "x": 3,
       "y": 3,
       "z": 3,
-      "name": "Cloth_Roof_Yellow"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 2
     },
     {
       "x": 3,
       "y": 4,
       "z": 3,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow"
     },
     {
       "x": 3,
@@ -10572,17 +10596,17 @@
       "x": 4,
       "y": 3,
       "z": -3,
+      "name": "Cloth_Roof_Green_Vertical"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "z": -3,
       "name": "Cloth_Roof_Green",
       "rotation": 2
     },
     {
       "x": 4,
-      "y": 4,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
       "y": 5,
       "z": -3,
       "name": "Empty"
@@ -10683,13 +10707,13 @@
       "x": 4,
       "y": 4,
       "z": -2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 4,
       "y": 5,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 4,
@@ -10788,13 +10812,13 @@
       "x": 4,
       "y": 4,
       "z": -1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 4,
       "y": 5,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 4,
@@ -10891,13 +10915,13 @@
       "x": 4,
       "y": 4,
       "z": 0,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 4,
       "y": 5,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 4,
@@ -10995,13 +11019,13 @@
       "x": 4,
       "y": 4,
       "z": 1,
-      "name": "Cloth_Roof_Yellow_Flat"
+      "name": "Empty"
     },
     {
       "x": 4,
       "y": 5,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow_Flat"
     },
     {
       "x": 4,
@@ -11100,13 +11124,13 @@
       "x": 4,
       "y": 4,
       "z": 2,
-      "name": "Cloth_Roof_Green_Flat"
+      "name": "Empty"
     },
     {
       "x": 4,
       "y": 5,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green_Flat"
     },
     {
       "x": 4,
@@ -11196,14 +11220,15 @@
     {
       "x": 4,
       "y": 3,
+      "z": 3,
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 2
+    },
+    {
+      "x": 4,
+      "y": 4,
       "z": 3,
       "name": "Cloth_Roof_Green"
-    },
-    {
-      "x": 4,
-      "y": 4,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 4,
@@ -11392,7 +11417,8 @@
       "x": 4,
       "y": 1,
       "z": 5,
-      "name": "Empty"
+      "name": "Plant_Grass_Sharp",
+      "support": 15
     },
     {
       "x": 4,
@@ -11509,7 +11535,8 @@
       "x": 5,
       "y": 3,
       "z": -4,
-      "name": "Barrier"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 2
     },
     {
       "x": 5,
@@ -11611,18 +11638,19 @@
     {
       "x": 5,
       "y": 3,
+      "z": -3,
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 3
+    },
+    {
+      "x": 5,
+      "y": 4,
       "z": -3,
       "name": "*Cloth_Roof_Yellow_State_Definitions_Corner_Left",
       "rotation": 1
     },
     {
       "x": 5,
-      "y": 4,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
       "y": 5,
       "z": -3,
       "name": "Empty"
@@ -11719,14 +11747,15 @@
       "x": 5,
       "y": 3,
       "z": -2,
-      "name": "Cloth_Roof_Green",
-      "rotation": 1
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 3
     },
     {
       "x": 5,
       "y": 4,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 1
     },
     {
       "x": 5,
@@ -11827,14 +11856,15 @@
       "x": 5,
       "y": 3,
       "z": -1,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 1
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 3
     },
     {
       "x": 5,
       "y": 4,
       "z": -1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 1
     },
     {
       "x": 5,
@@ -11931,14 +11961,15 @@
       "x": 5,
       "y": 3,
       "z": 0,
-      "name": "Cloth_Roof_Green",
-      "rotation": 1
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 3
     },
     {
       "x": 5,
       "y": 4,
       "z": 0,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 1
     },
     {
       "x": 5,
@@ -12036,14 +12067,15 @@
       "x": 5,
       "y": 3,
       "z": 1,
-      "name": "Cloth_Roof_Yellow",
-      "rotation": 1
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 3
     },
     {
       "x": 5,
       "y": 4,
       "z": 1,
-      "name": "Empty"
+      "name": "Cloth_Roof_Yellow",
+      "rotation": 1
     },
     {
       "x": 5,
@@ -12144,14 +12176,15 @@
       "x": 5,
       "y": 3,
       "z": 2,
-      "name": "Cloth_Roof_Green",
-      "rotation": 1
+      "name": "Cloth_Roof_Green_Vertical",
+      "rotation": 3
     },
     {
       "x": 5,
       "y": 4,
       "z": 2,
-      "name": "Empty"
+      "name": "Cloth_Roof_Green",
+      "rotation": 1
     },
     {
       "x": 5,
@@ -12248,15 +12281,16 @@
     {
       "x": 5,
       "y": 3,
+      "z": 3,
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 2
+    },
+    {
+      "x": 5,
+      "y": 4,
       "z": 3,
       "name": "*Cloth_Roof_Yellow_State_Definitions_Corner_Right",
       "rotation": 1
-    },
-    {
-      "x": 5,
-      "y": 4,
-      "z": 3,
-      "name": "Empty"
     },
     {
       "x": 5,
@@ -13297,7 +13331,8 @@
       "x": 6,
       "y": 3,
       "z": 3,
-      "name": "Barrier"
+      "name": "Cloth_Roof_Yellow_Vertical",
+      "rotation": 1
     },
     {
       "x": 6,
@@ -13492,7 +13527,8 @@
       "x": 6,
       "y": 1,
       "z": 5,
-      "name": "Empty"
+      "name": "Plant_Grass_Sharp",
+      "support": 15
     },
     {
       "x": 6,

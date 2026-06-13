@@ -54,7 +54,7 @@
       "x": -6,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -159,7 +159,7 @@
       "x": -6,
       "y": 3,
       "z": -3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -264,7 +264,7 @@
       "x": -6,
       "y": 3,
       "z": -2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -370,7 +370,7 @@
       "x": -6,
       "y": 3,
       "z": -1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -475,7 +475,7 @@
       "x": -6,
       "y": 3,
       "z": 0,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -580,7 +580,7 @@
       "x": -6,
       "y": 3,
       "z": 1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -686,7 +686,7 @@
       "x": -6,
       "y": 3,
       "z": 2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -791,7 +791,7 @@
       "x": -6,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -896,7 +896,7 @@
       "x": -6,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -6,
@@ -986,7 +986,7 @@
       "x": -6,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -6,
@@ -1103,7 +1103,7 @@
       "x": -5,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -1941,7 +1941,7 @@
       "x": -5,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -5,
@@ -2031,7 +2031,7 @@
       "x": -5,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -2148,7 +2148,7 @@
       "x": -4,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -4,
@@ -2973,7 +2973,7 @@
       "x": -4,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -4,
@@ -3063,7 +3063,7 @@
       "x": -4,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -3180,7 +3180,7 @@
       "x": -3,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -3,
@@ -4010,7 +4010,7 @@
       "x": -3,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -3,
@@ -4100,7 +4100,7 @@
       "x": -3,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -4217,7 +4217,7 @@
       "x": -2,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -2,
@@ -5046,7 +5046,7 @@
       "x": -2,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -2,
@@ -5253,7 +5253,7 @@
       "x": -1,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -1,
@@ -6080,7 +6080,7 @@
       "x": -1,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": -1,
@@ -6289,7 +6289,7 @@
       "x": 0,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 0,
@@ -7117,7 +7117,7 @@
       "x": 0,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 0,
@@ -7313,7 +7313,7 @@
       "x": 1,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 1,
@@ -8136,7 +8136,7 @@
       "x": 1,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 1,
@@ -8343,7 +8343,7 @@
       "x": 2,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 2,
@@ -9179,7 +9179,7 @@
       "x": 2,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 2,
@@ -9386,7 +9386,7 @@
       "x": 3,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 3,
@@ -10215,7 +10215,7 @@
       "x": 3,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 3,
@@ -10305,7 +10305,7 @@
       "x": 3,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -10422,7 +10422,7 @@
       "x": 4,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 4,
@@ -11254,7 +11254,7 @@
       "x": 4,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 4,
@@ -11345,7 +11345,7 @@
       "x": 4,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -11462,7 +11462,7 @@
       "x": 5,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 5,
@@ -12309,7 +12309,7 @@
       "x": 5,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 5,
@@ -12399,7 +12399,7 @@
       "x": 5,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -12516,7 +12516,7 @@
       "x": 6,
       "y": 3,
       "z": -4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -12621,7 +12621,7 @@
       "x": 6,
       "y": 3,
       "z": -3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -12727,7 +12727,7 @@
       "x": 6,
       "y": 3,
       "z": -2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -12832,7 +12832,7 @@
       "x": 6,
       "y": 3,
       "z": -1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -12937,7 +12937,7 @@
       "x": 6,
       "y": 3,
       "z": 0,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -13042,7 +13042,7 @@
       "x": 6,
       "y": 3,
       "z": 1,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -13147,7 +13147,7 @@
       "x": 6,
       "y": 3,
       "z": 2,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -13252,7 +13252,7 @@
       "x": 6,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -13357,7 +13357,7 @@
       "x": 6,
       "y": 3,
       "z": 4,
-      "name": "Empty"
+      "name": "Barrier"
     },
     {
       "x": 6,
@@ -13447,7 +13447,7 @@
       "x": 6,
       "y": 1,
       "z": 5,
-      "name": "Wood_Hardwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 6,
