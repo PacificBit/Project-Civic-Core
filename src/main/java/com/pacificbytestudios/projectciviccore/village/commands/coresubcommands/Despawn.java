@@ -14,6 +14,7 @@ import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;
 import com.pacificbytestudios.projectciviccore.utils.DespawnIncompleteConstructionFunction;
+import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
@@ -88,6 +89,11 @@ public class Despawn extends VillageCommand {
     // Step 7 - despawn trigger volume
     // ==============================================================
     despawnTriggerVolume(exeContext, heart, world);
+
+    // ==============================================================
+    // Step 8 - clear any debug shape draw
+    // ==============================================================
+    DrawUtils.clear(world);
   }
 
   private void despawnHouses(ExecutionContext exeContext, VillageHeartComponent heart, World world) {

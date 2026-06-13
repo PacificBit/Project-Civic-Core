@@ -1,21 +1,21 @@
 {
   "Type": "Abstract",
   "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Template.name",
+      "Description": "Translation key for NPC name display"
+    },
     "Appearance": {
       "Value": "Player",
       "Description": "Model to be used"
-    },
-    "DropList": {
-      "Value": "Empty",
-      "Description": "Drop Items"
     },
     "MaxHealth": {
       "Value": 100,
       "Description": "Max health for the NPC"
     },
-    "NameTranslationKey": {
-      "Value": "server.npcRoles.Template.name",
-      "Description": "Translation key for NPC name display"
+    "DropList": {
+      "Value": "Empty",
+      "Description": "Drop Items"
     },
     "FirstWorkSessionTimeRange": {
       "Value": [
@@ -31,9 +31,6 @@
       ],
       "Description": "Time range of the second session"
     }
-  },
-  "DropList": {
-    "Compute": "DropList"
   },
   "MotionControllerList": [
     {
@@ -205,7 +202,7 @@
             {
               "Sensor": {
                 "Type": "ReachWorkplace",
-                "StoppingRange": 1
+                "StoppingRange": 0.4
               },
               "Actions": [
                 {
@@ -217,8 +214,8 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 1,
-                "StopDistance": 0.8,
+                "SlowDownDistance": 0.1,
+                "StopDistance": 0.1,
                 "RelativeSpeed": 1
               },
               "Continue": false,
@@ -432,13 +429,13 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1
+                "StoppingRange": 0.4
               },
               "$Comment": "Reach workplace storage container",
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 1.5,
-                "StopDistance": 0.8,
+                "SlowDownDistance": 0.1,
+                "StopDistance": 0.1,
                 "RelativeSpeed": 0.6
               }
             },
@@ -551,14 +548,14 @@
                 "BlockIds": [
                   "Worker_Workplace_Storage"
                 ],
-                "StoppingRange": 1,
+                "StoppingRange": 0.4,
                 "UseCenterOfBlock": true
               },
               "$Comment": "Reach workplace storage",
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 1,
-                "StopDistance": 0.8,
+                "SlowDownDistance": 0.1,
+                "StopDistance": 0.1,
                 "RelativeSpeed": 0.5
               }
             },
@@ -661,7 +658,7 @@
             {
               "Sensor": {
                 "Type": "ReachWorkplace",
-                "StoppingRange": 1
+                "StoppingRange": 0.4
               },
               "Actions": [
                 {
@@ -673,8 +670,8 @@
               ],
               "BodyMotion": {
                 "Type": "Seek",
-                "SlowDownDistance": 1,
-                "StopDistance": 0.8,
+                "SlowDownDistance": 0.1,
+                "StopDistance": 0.1,
                 "RelativeSpeed": 1
               },
               "Continue": false,
