@@ -520,6 +520,12 @@ public final class WaypointsConfigSaver {
       document.put("Z", numberValue(vec3f.z));
       return document;
     }
+    if (vector instanceof Vec3d vec3d) {
+      document.put("X", numberValue(vec3d.x));
+      document.put("Y", numberValue(vec3d.y));
+      document.put("Z", numberValue(vec3d.z));
+      return document;
+    }
 
     document.put("X", 0);
     document.put("Y", 0);
@@ -529,10 +535,15 @@ public final class WaypointsConfigSaver {
 
   /** Writes whole floats as integers to keep the JSON file diff-friendly. */
   private static Object numberValue(float value) {
-    if (value == Math.floor(value) && !Float.isInfinite(value)) {
+    return numberValue((double) value);
+  }
+
+  /** Writes whole values as integers to keep the JSON file diff-friendly. */
+  private static Object numberValue(double value) {
+    if (value == Math.floor(value) && !Double.isInfinite(value)) {
       return (int) value;
     }
-    return (double) value;
+    return value;
   }
 
   private static String toBase64(UUID uuid) {
