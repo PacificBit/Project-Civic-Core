@@ -70,6 +70,13 @@ public class ToggleWaypointsEdit extends SimpleBlockInteraction {
       return;
     }
 
+    if (!village.getConfig().isDebugActive()) {
+      sendMessage(commandBuffer, ref,
+          "Village debug is not active");
+      context.getState().state = InteractionState.Failed;
+      return;
+    }
+
     VillageTopologyComponent topology = village.getComponent(
         VillageTopologyComponent.getComponentType());
     if (topology == null) {

@@ -20,6 +20,9 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
   @SerialDescription("The maximum village reachable level")
   short maxLevel;
 
+  @SerialDescription("Enables debug functionalities")
+  Boolean debug = false;
+
   @SerialName("StructureLimitsPerLevel")
   @SerialDescription("Defines for each village level the max structure count")
   Map<Short, Map<StructureType, Short>> structureCountLimitPerLevel = new HashMap<>();
@@ -56,6 +59,10 @@ public class VillageHeartConfigComponent implements Component<ChunkStore> {
 
   public short getMaxLevel() {
     return maxLevel;
+  }
+
+  public Boolean isDebugActive() {
+    return debug;
   }
 
   public String[] getFirstVillageNameComponents() {

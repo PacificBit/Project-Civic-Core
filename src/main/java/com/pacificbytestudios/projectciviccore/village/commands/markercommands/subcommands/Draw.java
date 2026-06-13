@@ -9,12 +9,15 @@ import java.util.stream.Stream;
 
 import org.joml.Matrix4d;
 
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
 import com.pacificbytestudios.projectciviccore.codecs.structureconfig.Interactable;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionContext;
+import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils.ExecutionResult;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
@@ -30,13 +33,21 @@ public class Draw extends VillageCommand {
   private Map<MarkerType, List<Vec3d>> markers;
 
   public Draw() {
-    super("draw", "server.system.markers.display.desc");
+    super("show-wp", "server.system.debug.draw.desc");
   }
 
   @Override
   public void execute(ExecutionContext exeContext) {
     VillageHeartComponent heart = this.getVillageHeart(exeContext);
     if (heart == null) {
+      return;
+    }
+
+    if (!heart.getConfig().isDebugActive()) {
+      CommandUtils.sendExecutionResultMessage(
+          exeContext.cmdContext(),
+          ExecutionResult.Err,
+          Message.translation("server.system.debug.err.debugNotEnable"));
       return;
     }
 

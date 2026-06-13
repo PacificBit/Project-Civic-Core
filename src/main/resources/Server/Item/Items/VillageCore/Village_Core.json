@@ -2791,7 +2791,8 @@
               "Sweep",
               "Dash",
               "Vault"
-            ]
+            ],
+            "Debug": true
           }
         },
         "VillageSpawnConfig": {

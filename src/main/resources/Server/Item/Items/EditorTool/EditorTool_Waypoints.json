@@ -1,9 +1,9 @@
 {
   "TranslationProperties": {
-    "Name": "server.builderTools.tools.Entity.name",
-    "Description": "server.builderTools.tools.Entity.description"
+    "Name": "server.tools.debug.waypointEditor.name",
+    "Description": "server.tools.debug.waypointEditor.desc"
   },
-  "Icon": "Icons/Items/EditorTools/Entity.png",
+  "Icon": "Icons/Items/EditorTools/TriggerVolume.png",
   "Categories": [
     "Tool.BuilderTool"
   ],

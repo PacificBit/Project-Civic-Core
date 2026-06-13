@@ -4,7 +4,7 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Despawn;
 import com.pacificbytestudios.projectciviccore.village.commands.coresubcommands.Spawn;
 import com.pacificbytestudios.projectciviccore.village.commands.diagnosticcommands.Diagnostic;
-import com.pacificbytestudios.projectciviccore.village.commands.markercommands.Markers;
+import com.pacificbytestudios.projectciviccore.village.commands.markercommands.Debug;
 import com.pacificbytestudios.projectciviccore.village.commands.simulationcommands.Simulation;
 import com.pacificbytestudios.projectciviccore.village.commands.structurecommands.Structure;
 
@@ -26,7 +26,7 @@ public class VillageCommands extends AbstractCommandCollection {
     this.addSubCommand(new Structure());
 
     // Markers sub commands
-    this.addSubCommand(new Markers());
+    this.addSubCommand(new Debug());
   }
 
 }
