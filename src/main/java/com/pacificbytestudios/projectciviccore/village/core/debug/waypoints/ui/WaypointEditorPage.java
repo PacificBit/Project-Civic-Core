@@ -433,10 +433,7 @@ public class WaypointEditorPage extends BasicCustomUIPage {
   }
 
   private static boolean isFloatMarker(MarkerType type) {
-    return switch (type) {
-      case TAVERN_CHAIR, TAVERN_PLATE -> true;
-      default -> false;
-    };
+    return type.isFloatMarker();
   }
 
   private static MarkerType accessParentType(MarkerType accessType) {

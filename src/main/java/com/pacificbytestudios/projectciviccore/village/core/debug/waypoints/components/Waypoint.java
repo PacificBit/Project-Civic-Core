@@ -32,7 +32,7 @@ public class Waypoint implements Copyable<Waypoint> {
   public static Waypoint from(MarkerType type, BlockTransform3D transform, boolean isAccess) {
     transform.ensurePositionId();
     UUID waypointId = isAccess ? transform.ensureAccessId() : transform.getPositionId();
-    if (isIntegral(transform.getPosition())) {
+    if (!type.isFloatMarker() && isIntegral(transform.getPosition())) {
       return new Waypoint(waypointId, type, BlockTransform3D.clone(transform), isAccess);
     }
 

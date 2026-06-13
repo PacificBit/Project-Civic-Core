@@ -32,6 +32,15 @@ public enum MarkerType {
     return shape;
   }
 
+  /**
+   * Point markers carry sub-block precision and are drawn with their own shape rather than
+   * as a block-aligned cube. The classification must come from the marker type, not from
+   * whether the position happens to land on whole-block coordinates.
+   */
+  public boolean isFloatMarker() {
+    return this == TAVERN_CHAIR || this == TAVERN_PLATE;
+  }
+
   public Vec3f getColor() {
     return color;
   }
