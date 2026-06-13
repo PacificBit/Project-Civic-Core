@@ -1,0 +1,45 @@
+$C = "../../Common.ui";
+
+$C.@PageOverlay {}
+
+$C.@DecoratedContainer {
+  Anchor: (Width: 460, Height: 240);
+
+  #Title {
+    Group {
+      LayoutMode: Center;
+      Anchor: (Full: 0);
+
+      $C.@Title {
+        @Text = "End Editing Session";
+      }
+    }
+  }
+
+  #Content {
+    LayoutMode: Full;
+
+    Label {
+      Anchor: (Left: 0, Top: 40, Width: 426, Height: 48);
+      Style: (
+        FontSize: 14,
+        TextColor: #ffffff,
+        HorizontalAlignment: Center,
+        VerticalAlignment: Center
+      );
+      Text: "No pending changes. Exit the waypoint editing session?";
+    }
+
+    $C.@SecondaryTextButton #ExitButton {
+      @Anchor = Anchor(Left: 24, Bottom: 18, Width: 190);
+      @Text = "Exit";
+    }
+
+    $C.@SecondaryTextButton #CancelButton {
+      @Anchor = Anchor(Left: 232, Bottom: 18, Width: 190);
+      @Text = "Cancel";
+    }
+  }
+}
+
+$C.@BackButton {}

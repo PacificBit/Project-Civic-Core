@@ -28,6 +28,7 @@ import com.pacificbytestudios.projectciviccore.village.components.builder.Villag
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartConfigComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartDebugComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.villagetask.VillageTaskQueueComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
@@ -46,10 +47,7 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       AddReason reason,
       Store<ChunkStore> store,
       CommandBuffer<ChunkStore> commandBuffer) {
-    BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
-    if (context == null) {
-      context = Utils.getWorldBlockContext(ref, store);
-    }
+    BlockContext context = this.getPlacementContext(ref, store, commandBuffer);
     if (context == null) {
       return;
     }
@@ -61,15 +59,13 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
     World world = chunk.getWorld();
     Vec3i villageHeartPos = context.getPosition();
 
-    VillageHeartComponent villageHeart = store.getComponent(ref,
-        VillageHeartComponent.getComponentType());
+    VillageHeartComponent villageHeart = this.getVillageHeart(ref, store);
     if (villageHeart == null) {
       return;
     }
 
     String worldName = world.getName();
-    villageHeart.setBlockContext(new BlockContext(worldName, chunk.getIndex(), Vec3i.from(villageHeartPos)));
-    villageHeart.setVillageRef(new EntityRef(worldName, Vec3i.from(villageHeartPos)));
+    this.setVillagePlacementIdentity(villageHeart, worldName, chunk, villageHeartPos);
 
     VillageSpawnComponent spawnComponent = villageHeart.getComponent(
         VillageSpawnComponent.getComponentType());
@@ -79,46 +75,122 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       return;
     }
 
-    // Generate and set random Village name
     VillageHeartConfigComponent heartConfig = villageHeart.getConfig();
+    this.generateAndSetVillageName(villageHeart, heartConfig);
+    this.addDebugComponentIfConfigured(ref, commandBuffer, heartConfig);
+    this.ensureVillageUuid(villageHeart);
+
+    VillageHeartPlacement placement = this.getHeartPlacement(villageHeart, villageHeartPos);
+    this.initializeVillageTopology(villageHeart, topology, placement);
+
+    this.prepareFirstBuildProject(ref, commandBuffer, spawnComponent);
+    this.queueInitialVillagers(ref, commandBuffer, spawnComponent);
+    this.registerClaimedArea(villageHeart, worldName, villageHeartPos);
+
+    commandBuffer.removeComponent(ref, VillageSpawnComponent.getComponentType());
+  }
+
+  private BlockContext getPlacementContext(
+      Ref<ChunkStore> ref,
+      Store<ChunkStore> store,
+      CommandBuffer<ChunkStore> commandBuffer) {
+    BlockContext context = Utils.getWorldBlockContext(ref, commandBuffer);
+    if (context == null) {
+      context = Utils.getWorldBlockContext(ref, store);
+    }
+    return context;
+  }
+
+  private VillageHeartComponent getVillageHeart(Ref<ChunkStore> ref, Store<ChunkStore> store) {
+    return store.getComponent(ref, VillageHeartComponent.getComponentType());
+  }
+
+  private void setVillagePlacementIdentity(
+      VillageHeartComponent villageHeart,
+      String worldName,
+      WorldChunk chunk,
+      Vec3i villageHeartPos) {
+    villageHeart.setBlockContext(new BlockContext(
+        worldName,
+        chunk.getIndex(),
+        Vec3i.from(villageHeartPos)));
+    villageHeart.setVillageRef(new EntityRef(worldName, Vec3i.from(villageHeartPos)));
+  }
+
+  private void generateAndSetVillageName(
+      VillageHeartComponent villageHeart,
+      VillageHeartConfigComponent heartConfig) {
     String villageName = this.generateRandomVillageName(
         heartConfig.getFirstVillageNameComponents(), heartConfig.getSecondVillageNameComponents());
     villageHeart.setName(villageName);
     Logger.logInfo("Generated Village name: " + villageHeart.getName());
+  }
 
-    int radius = spawnComponent.getNpcSpawnRange();
+  private void addDebugComponentIfConfigured(
+      Ref<ChunkStore> ref,
+      CommandBuffer<ChunkStore> commandBuffer,
+      VillageHeartConfigComponent heartConfig) {
+    if (!heartConfig.isDebugActive()) {
+      return;
+    }
+
+    commandBuffer.ensureComponent(ref, VillageHeartDebugComponent.getComponentType());
+  }
+
+  private void ensureVillageUuid(VillageHeartComponent villageHeart) {
     if (villageHeart.getUuid() == null) {
       villageHeart.setUuid(UUID.randomUUID());
     }
+  }
 
-    Rotation topologyRotation = Rotation.None;
-    Vec3i prefabAnchor = Vec3i.from(villageHeartPos).add(Vec3i.safeDown());
-
+  private VillageHeartPlacement getHeartPlacement(
+      VillageHeartComponent villageHeart,
+      Vec3i villageHeartPos) {
     TrackedPrefabPlacementComponent trackedPlacement = villageHeart.getComponent(
         TrackedPrefabPlacementComponent.getComponentType());
     if (trackedPlacement != null) {
-      prefabAnchor = trackedPlacement.getOrigin();
-      topologyRotation = trackedPlacement.getYaw();
+      return new VillageHeartPlacement(trackedPlacement.getOrigin(), trackedPlacement.getYaw());
     }
 
-    topology.setSeed(new FastRandom().nextLong(Long.MIN_VALUE, Long.MAX_VALUE));
-    topology.setVillageOrientation(topologyRotation);
+    Vec3i prefabAnchor = Vec3i.from(villageHeartPos).add(Vec3i.safeDown());
+    return new VillageHeartPlacement(prefabAnchor, Rotation.None);
+  }
 
-    short claimRadius = villageHeart.getConfig().getClaimRadiusPerLevel((short) villageHeart.getLevel());
+  private void initializeVillageTopology(
+      VillageHeartComponent villageHeart,
+      VillageTopologyComponent topology,
+      VillageHeartPlacement placement) {
+    topology.setSeed(new FastRandom().nextLong(Long.MIN_VALUE, Long.MAX_VALUE));
+    topology.setVillageOrientation(placement.getTopologyRotation());
+
+    short claimRadius = villageHeart.getConfig().getClaimRadiusPerLevel(
+        (short) villageHeart.getLevel());
     TopologyStructure coreStructure = new TopologyStructure(
-        Vec3i.from(prefabAnchor),
+        Vec3i.from(placement.getPrefabAnchor()),
         StructureConfig.TownHeart.SIZE_2I,
         VillageTopologyStructureType.CITY_CENTER,
-        topologyRotation);
-    coreStructure.setPrefabAnchor(Vec3i.from(prefabAnchor));
+        placement.getTopologyRotation());
+    coreStructure.setPrefabAnchor(Vec3i.from(placement.getPrefabAnchor()));
     coreStructure.setStructureId(villageHeart.getUuid());
     topology.initializeVillageTopology(coreStructure, claimRadius);
+  }
 
+  private void prepareFirstBuildProject(
+      Ref<ChunkStore> ref,
+      CommandBuffer<ChunkStore> commandBuffer,
+      VillageSpawnComponent spawnComponent) {
     VillageBuilderComponent builderComponent = commandBuffer.ensureAndGetComponent(
         ref,
         VillageBuilderComponent.getComponentType());
     builderComponent.setProjectPlan(spawnComponent.getStructureToSpawn());
     builderComponent.setFirstVillageBuildProject(true);
+  }
+
+  private void queueInitialVillagers(
+      Ref<ChunkStore> ref,
+      CommandBuffer<ChunkStore> commandBuffer,
+      VillageSpawnComponent spawnComponent) {
+    int radius = spawnComponent.getNpcSpawnRange();
 
     VillageTaskQueueComponent taskComponent = commandBuffer.ensureAndGetComponent(
         ref,
@@ -127,7 +199,12 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
       String npcRole = SPAWNABLE_NPC[npcCount % SPAWNABLE_NPC.length].getRole();
       taskComponent.registerTask(new SpawnVillagerTask(npcRole, radius));
     }
+  }
 
+  private void registerClaimedArea(
+      VillageHeartComponent villageHeart,
+      String worldName,
+      Vec3i villageHeartPos) {
     AreaFootprint area = villageHeart.getClaimedArea();
     if (area == null) {
       area = Utils.claimVillageArea(villageHeart, villageHeartPos);
@@ -138,8 +215,24 @@ public class VillageHeartPlacementSystem extends RefSystem<ChunkStore> {
         worldName,
         villageHeartPos,
         area);
+  }
 
-    commandBuffer.removeComponent(ref, VillageSpawnComponent.getComponentType());
+  private static final class VillageHeartPlacement {
+    private final Vec3i prefabAnchor;
+    private final Rotation topologyRotation;
+
+    private VillageHeartPlacement(Vec3i prefabAnchor, Rotation topologyRotation) {
+      this.prefabAnchor = prefabAnchor;
+      this.topologyRotation = topologyRotation;
+    }
+
+    private Vec3i getPrefabAnchor() {
+      return this.prefabAnchor;
+    }
+
+    private Rotation getTopologyRotation() {
+      return this.topologyRotation;
+    }
   }
 
   @Override

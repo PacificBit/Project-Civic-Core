@@ -1,8 +1,14 @@
 package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -19,6 +25,7 @@ import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartDebugComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.components.structures.VillageStructuresConfig;
@@ -203,10 +210,84 @@ public final class WaypointsSessionUtil {
   }
 
   public static void redraw(World world, WaypointsEditingComponent editingComponent) {
-    DrawUtils.clear(world);
-    if (editingComponent != null) {
-      WaypointsDrawer.draw(world, editingComponent.getStructureWaypoints());
+    if (editingComponent == null) {
+      DrawUtils.clear(world);
+      return;
     }
+
+    SessionContext context = resolveContext(editingComponent);
+    if (context == null) {
+      DrawUtils.clear(world);
+      return;
+    }
+
+    VillageHeartDebugComponent debug = context.village().getComponent(
+        VillageHeartDebugComponent.getComponentType());
+    if (debug == null) {
+      DrawUtils.clear(world);
+      return;
+    }
+
+    debug.setEditingSession(
+        editingComponent.getStructureId(),
+        debug.getWaypointEditorPlayerId(),
+        toMarkerListMap(editingComponent.getStructureWaypoints()));
+    debug.drawAll(world);
+  }
+
+  /**
+   * Ends an editing session: removes the editing component from the player, drops the live
+   * session markers from the debug component, and refreshes the world view. When the debug
+   * command is also showing structure markers, the edited structure's entry is updated with
+   * the session's final waypoints and everything is redrawn; otherwise the world is cleared.
+   */
+  public static void exitSession(
+      World world,
+      Store<EntityStore> store,
+      Ref<EntityStore> playerRef,
+      WaypointsEditingComponent editingComponent) {
+    if (editingComponent != null) {
+      editingComponent.commitCurrentOperation();
+
+      SessionContext context = resolveContext(editingComponent);
+      VillageHeartDebugComponent debug = context == null
+          ? null
+          : context.village().getComponent(VillageHeartDebugComponent.getComponentType());
+
+      if (debug != null) {
+        debug.clearEditingSession();
+        if (debug.hasStructureMarkers()) {
+          debug.setStructureWaypoints(
+              editingComponent.getStructureId(),
+              toMarkerListMap(editingComponent.getStructureWaypoints()));
+          debug.drawAll(world);
+        } else {
+          DrawUtils.clear(world);
+        }
+      } else {
+        DrawUtils.clear(world);
+      }
+    } else {
+      DrawUtils.clear(world);
+    }
+
+    store.tryRemoveComponent(playerRef, WaypointsEditingComponent.getComponentType());
+  }
+
+  /** Converts the editing component's array-backed marker map into the list form the debug
+   * component stores, dropping any null slots. */
+  public static Map<MarkerType, List<Waypoint>> toMarkerListMap(Map<MarkerType, Waypoint[]> source) {
+    Map<MarkerType, List<Waypoint>> result = new HashMap<>();
+    for (Entry<MarkerType, Waypoint[]> entry : source.entrySet()) {
+      List<Waypoint> waypoints = new ArrayList<>();
+      for (Waypoint waypoint : entry.getValue()) {
+        if (waypoint != null) {
+          waypoints.add(waypoint);
+        }
+      }
+      result.put(entry.getKey(), waypoints);
+    }
+    return result;
   }
 
   private static void populateWorkplaceWaypoints(

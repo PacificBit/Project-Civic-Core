@@ -29,6 +29,13 @@
         }
       ]
     },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "EndWaypointsEditInteraction"
+        }
+      ]
+    },
     "Use": {
       "Interactions": [
         {

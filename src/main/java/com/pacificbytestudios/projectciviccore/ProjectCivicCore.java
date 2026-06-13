@@ -34,6 +34,7 @@ import com.pacificbytestudios.projectciviccore.village.components.builder.Buffer
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartDebugComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartMarkerComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageSpawnComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
@@ -54,6 +55,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.village.components.workplace.tavern.TavernComponent;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.TownHallComponent;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.WaypointsEditingComponent;
+import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.EndWaypointsEditInteraction;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.OpenWaypointEditorInteraction;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.interactions.ToggleWaypointsEdit;
 import com.pacificbytestudios.projectciviccore.village.systems.builder.StagedBuildingSpawnSystem;
@@ -140,6 +142,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private static ProjectCivicCore INSTANCE;
   private ComponentType<ChunkStore, VillageHeartComponent> villageCoreComponentType;
   private ComponentType<ChunkStore, VillageHeartMarkerComponent> villageHeartMarkerComponentType;
+  private ComponentType<ChunkStore, VillageHeartDebugComponent> villageHeartDebugComponentType;
   private ComponentType<ChunkStore, VillageSpawnComponent> villageSpawnComponentType;
   private ComponentType<ChunkStore, VillageStructuresConfig> villageStructureConfigComponentType;
 
@@ -327,6 +330,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         VillageHeartMarkerComponent.class,
         "VillageHeartMarkerComponent",
         VillageHeartMarkerComponent.CODEC);
+
+    this.villageHeartDebugComponentType = chunkRegistry.registerComponent(
+        VillageHeartDebugComponent.class,
+        "VillageHeartDebugComponent",
+        VillageHeartDebugComponent.CODEC);
 
     this.simulationComponentType = chunkRegistry.registerComponent(
         SimulationComponent.class,
@@ -655,6 +663,11 @@ public final class ProjectCivicCore extends JavaPlugin {
         OpenWaypointEditorInteraction.class,
         OpenWaypointEditorInteraction.CODEC);
 
+    this.getCodecRegistry(Interaction.CODEC).register(
+        "EndWaypointsEditInteraction",
+        EndWaypointsEditInteraction.class,
+        EndWaypointsEditInteraction.CODEC);
+
     // ===========================
     // Extra
     // ===========================
@@ -766,6 +779,10 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   public ComponentType<ChunkStore, VillageHeartMarkerComponent> getVillageHeartMarkerComponentType() {
     return this.villageHeartMarkerComponentType;
+  }
+
+  public ComponentType<ChunkStore, VillageHeartDebugComponent> getVillageHeartDebugComponentType() {
+    return this.villageHeartDebugComponentType;
   }
 
   public ComponentType<ChunkStore, VillageBuilderComponent> getVillageBuilderComponentType() {

@@ -199,6 +199,11 @@ $C.@DecoratedContainer {
       @Anchor = Anchor(Left: 358, Bottom: 18, Width: 130);
       @Text = "Cancel";
     }
+
+    $C.@SecondaryTextButton #SaveExitButton {
+      @Anchor = Anchor(Left: 500, Bottom: 18, Width: 186);
+      @Text = "Save & Exit";
+    }
   }
 }
 

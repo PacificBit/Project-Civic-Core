@@ -122,5 +122,5 @@ system.structure.spawn.success=Correctly queued the structure to build
 system.debug.desc=Village debug commands (only enabled if the village is in debug state)
 system.debug.err.debugNotEnable=Cannot execute debug command (debug flag is false)
 
-# === COMMANDS - MARKERS.DRAW ===
-system.debug.draw.desc=Draw all the markers
+# === COMMANDS - MARKERS.TOGGLE_WAYPOINTS ===
+system.debug.toggleWp.desc=Toggle wapoints display: Draw/Hides all the waypoints
