@@ -547,10 +547,10 @@ public class WaypointEditorPage extends BasicCustomUIPage {
   }
 
   private void buildSelectedWaypoint(UICommandBuilder builder) {
-    BlockTransform3D transform = this.selectedWaypoint.transform();
+    BlockTransform3D transform = this.selectedWaypoint.getTransform();
 
-    this.setText(builder, "SelectedIdValue", this.selectedWaypoint.waypointId().toString());
-    this.setText(builder, "SelectedTypeValue", this.selectedWaypoint.type().name());
+    this.setText(builder, "SelectedIdValue", this.selectedWaypoint.getWaypointId().toString());
+    this.setText(builder, "SelectedTypeValue", this.selectedWaypoint.getType().name());
     this.setText(builder, "SelectedPositionValue", formatVector(transform.getPosition()));
 
     boolean isAccess = this.selectedWaypoint.isAccess();

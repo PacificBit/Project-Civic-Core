@@ -210,19 +210,7 @@ public final class WaypointsSessionUtil {
   }
 
   public static void redraw(World world, WaypointsEditingComponent editingComponent) {
-    if (editingComponent == null) {
-      DrawUtils.clear(world);
-      return;
-    }
-
-    SessionContext context = resolveContext(editingComponent);
-    if (context == null) {
-      DrawUtils.clear(world);
-      return;
-    }
-
-    VillageHeartDebugComponent debug = context.village().getComponent(
-        VillageHeartDebugComponent.getComponentType());
+    VillageHeartDebugComponent debug = editingComponent == null ? null : resolveDebug(editingComponent);
     if (debug == null) {
       DrawUtils.clear(world);
       return;
@@ -230,7 +218,6 @@ public final class WaypointsSessionUtil {
 
     debug.setEditingSession(
         editingComponent.getStructureId(),
-        debug.getWaypointEditorPlayerId(),
         toMarkerListMap(editingComponent.getStructureWaypoints()));
     debug.drawAll(world);
   }
@@ -246,32 +233,33 @@ public final class WaypointsSessionUtil {
       Store<EntityStore> store,
       Ref<EntityStore> playerRef,
       WaypointsEditingComponent editingComponent) {
+    VillageHeartDebugComponent debug = null;
     if (editingComponent != null) {
       editingComponent.commitCurrentOperation();
+      debug = resolveDebug(editingComponent);
+    }
 
-      SessionContext context = resolveContext(editingComponent);
-      VillageHeartDebugComponent debug = context == null
-          ? null
-          : context.village().getComponent(VillageHeartDebugComponent.getComponentType());
-
+    if (debug != null && debug.hasStructureMarkers()) {
+      debug.clearEditingSession();
+      debug.setStructureWaypoints(
+          editingComponent.getStructureId(),
+          toMarkerListMap(editingComponent.getStructureWaypoints()));
+      debug.drawAll(world);
+    } else {
       if (debug != null) {
         debug.clearEditingSession();
-        if (debug.hasStructureMarkers()) {
-          debug.setStructureWaypoints(
-              editingComponent.getStructureId(),
-              toMarkerListMap(editingComponent.getStructureWaypoints()));
-          debug.drawAll(world);
-        } else {
-          DrawUtils.clear(world);
-        }
-      } else {
-        DrawUtils.clear(world);
       }
-    } else {
       DrawUtils.clear(world);
     }
 
     store.tryRemoveComponent(playerRef, WaypointsEditingComponent.getComponentType());
+  }
+
+  private static VillageHeartDebugComponent resolveDebug(WaypointsEditingComponent editingComponent) {
+    SessionContext context = resolveContext(editingComponent);
+    return context == null
+        ? null
+        : context.village().getComponent(VillageHeartDebugComponent.getComponentType());
   }
 
   /** Converts the editing component's array-backed marker map into the list form the debug

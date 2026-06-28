@@ -1,5 +1,7 @@
 package com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -18,6 +20,15 @@ public class Waypoint implements Copyable<Waypoint> {
   BlockTransform3D intTransform;
   BlockTransform3D floatTransform;
   boolean isAccess;
+  Map<String, String> metadata = new HashMap<>();
+
+  public void putMetadata(String key, String value) {
+    this.metadata.put(key, value);
+  }
+
+  public String getMetadata(String key) {
+    return this.metadata.get(key);
+  }
 
   public Waypoint() {
   }
@@ -48,24 +59,8 @@ public class Waypoint implements Copyable<Waypoint> {
     return this.waypointId;
   }
 
-  public UUID waypointId() {
-    return this.waypointId;
-  }
-
-  public void setWaypointId(UUID waypointId) {
-    this.waypointId = waypointId;
-  }
-
   public MarkerType getType() {
     return this.type;
-  }
-
-  public MarkerType type() {
-    return this.type;
-  }
-
-  public void setType(MarkerType type) {
-    this.type = type;
   }
 
   public BlockTransform3D getTransform() {
@@ -75,18 +70,9 @@ public class Waypoint implements Copyable<Waypoint> {
     return this.floatTransform;
   }
 
-  public BlockTransform3D transform() {
-    return this.getTransform();
-  }
-
   public void setTransform(BlockTransform3D transform) {
     this.intTransform = transform;
     this.floatTransform = null;
-  }
-
-  public void setFloatTransform(BlockTransform3D transform) {
-    this.intTransform = null;
-    this.floatTransform = transform;
   }
 
   public boolean isFloatTransform() {
@@ -95,10 +81,6 @@ public class Waypoint implements Copyable<Waypoint> {
 
   public boolean isAccess() {
     return this.isAccess;
-  }
-
-  public void setAccess(boolean isAccess) {
-    this.isAccess = isAccess;
   }
 
   public UUID getPositionId() {
@@ -111,7 +93,8 @@ public class Waypoint implements Copyable<Waypoint> {
 
   public void setPosition(Vec3d position) {
     if (this.intTransform != null) {
-      this.intTransform.setPosition(position);
+      // A block waypoint represents a whole block, so snap its position to the grid.
+      this.intTransform.setPosition(Vec3d.from(position.to3i()));
       return;
     }
 

@@ -8,6 +8,6 @@
       "Name": "PacificByte"
     }
   ],
-  "ServerVersion": "0.6.0-pre.3",
+  "ServerVersion": "^0.6.0-pre.3",
   "IncludesAssetPack": true
 }

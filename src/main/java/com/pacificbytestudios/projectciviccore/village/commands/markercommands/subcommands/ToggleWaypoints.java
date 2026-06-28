@@ -3,6 +3,7 @@ package com.pacificbytestudios.projectciviccore.village.commands.markercommands.
 import java.util.UUID;
 
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.command.system.arguments.system.FlagArg;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.village.commands.core.VillageCommand;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.CommandUtils;
@@ -16,8 +17,13 @@ import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.comp
 
 public class ToggleWaypoints extends VillageCommand {
 
+  private final FlagArg showWorkerWaypoints;
+
   public ToggleWaypoints() {
     super("toggle-wp", "server.system.debug.toggleWp.desc");
+    this.showWorkerWaypoints = this.withFlagArg(
+        "show-worker-waypoints",
+        "server.system.debug.toggleWp.showWorkerWaypoints.desc");
   }
 
   @Override
@@ -40,21 +46,23 @@ public class ToggleWaypoints extends VillageCommand {
       return;
     }
 
-    if (debug.hasStructureMarkers()) {
+    // A real toggle: if anything is currently shown, hide everything; otherwise show.
+    if (debug.hasStructureMarkers() || debug.isDisplayWorkerSnapshots()) {
       debug.clearStructureWaypoints();
-      debug.drawAll(exeContext.world());
-      return;
-    }
+      debug.clearSnapshotWaypoints();
+      debug.setDisplayWorkerSnapshots(false);
+    } else {
+      VillageTopologyComponent topology = heart.getComponent(VillageTopologyComponent.getComponentType());
+      if (topology == null) {
+        return;
+      }
 
-    VillageTopologyComponent topology = heart.getComponent(VillageTopologyComponent.getComponentType());
-    if (topology == null) {
-      return;
+      debug.setDisplayWorkerSnapshots(exeContext.cmdContext().get(this.showWorkerWaypoints));
+      heart.getWorkplaceIdToWorkplace().keySet()
+          .forEach(structureId -> registerStructure(debug, heart, topology, structureId));
+      heart.getHouseIdToHouse().keySet()
+          .forEach(structureId -> registerStructure(debug, heart, topology, structureId));
     }
-
-    heart.getWorkplaceIdToWorkplace().keySet()
-        .forEach(structureId -> registerStructure(debug, heart, topology, structureId));
-    heart.getHouseIdToHouse().keySet()
-        .forEach(structureId -> registerStructure(debug, heart, topology, structureId));
 
     debug.drawAll(exeContext.world());
   }

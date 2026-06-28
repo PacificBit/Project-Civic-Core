@@ -1833,7 +1833,7 @@
       "x": -5,
       "y": 1,
       "z": 3,
-      "name": "Empty"
+      "name": "Furniture_Tavern_Barrel"
     },
     {
       "x": -5,
@@ -2778,7 +2778,7 @@
       "x": -4,
       "y": 1,
       "z": 2,
-      "name": "Furniture_Village_Pot"
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -2882,13 +2882,13 @@
       "x": -4,
       "y": 1,
       "z": 3,
-      "name": "Furniture_Village_Crate"
+      "name": "Empty"
     },
     {
       "x": -4,
       "y": 2,
       "z": 3,
-      "name": "Furniture_Village_Crate"
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -3823,7 +3823,7 @@
       "x": -3,
       "y": 2,
       "z": 2,
-      "name": "Furniture_Tavern_Barrel"
+      "name": "Furniture_Village_Pot"
     },
     {
       "x": -3,

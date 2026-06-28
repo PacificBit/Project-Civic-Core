@@ -1,21 +1,21 @@
 {
   "Type": "Abstract",
   "Parameters": {
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Template.name",
+      "Description": "Translation key for NPC name display"
+    },
     "Appearance": {
       "Value": "Player",
       "Description": "Model to be used"
-    },
-    "DropList": {
-      "Value": "Empty",
-      "Description": "Drop Items"
     },
     "MaxHealth": {
       "Value": 100,
       "Description": "Max health for the NPC"
     },
-    "NameTranslationKey": {
-      "Value": "server.npcRoles.Template.name",
-      "Description": "Translation key for NPC name display"
+    "DropList": {
+      "Value": "Empty",
+      "Description": "Drop Items"
     },
     "FirstWorkSessionTimeRange": {
       "Value": [
@@ -31,9 +31,6 @@
       ],
       "Description": "Time range of the second session"
     }
-  },
-  "DropList": {
-    "Compute": "DropList"
   },
   "MotionControllerList": [
     {
@@ -1085,7 +1082,7 @@
                   "ConsumeTargetOnFail": true,
                   "ItemCriteria": [
                     {
-                      "ItemId": "Tool_Watering_Can*",
+                      "ItemId": "Village_Tool_Watering_Can*",
                       "FilterIn": true,
                       "Count": -1
                     },
@@ -1105,7 +1102,7 @@
                   {
                     "Type": "Inventory",
                     "Items": [
-                      "Tool_Watering_Can*"
+                      "Village_Tool_Watering_Can*"
                     ]
                   }
                 ],
@@ -1149,7 +1146,7 @@
                   "Type": "SetMissingResources",
                   "ItemCriteria": [
                     {
-                      "ItemId": "Tool_Watering_Can*",
+                      "ItemId": "Village_Tool_Watering_Can*",
                       "FilterIn": true,
                       "Count": 1
                     },
@@ -1268,7 +1265,7 @@
           "Actions": [
             {
               "Type": "Log",
-              "Message": "CRAFTING HOE"
+              "Message": "CRAFTING WATERING CAN"
             },
             {
               "Type": "CraftTool",

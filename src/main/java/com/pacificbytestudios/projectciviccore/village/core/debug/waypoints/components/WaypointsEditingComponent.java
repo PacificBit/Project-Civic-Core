@@ -53,20 +53,12 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
     return this.structureWaypoints;
   }
 
-  public void setStructureWaypoints(Map<MarkerType, Waypoint[]> structureWaypoints) {
-    this.structureWaypoints = structureWaypoints;
-  }
-
   public WaypointOperation getCurrentOperation() {
     return this.currentOperation;
   }
 
   public void setCurrentOperation(WaypointOperation currentOperation) {
     this.currentOperation = currentOperation;
-  }
-
-  public Stack<WaypointOperation> getOperations() {
-    return this.operations;
   }
 
   public void addOperation(WaypointOperation operations) {
@@ -115,22 +107,6 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
       return;
     }
     this.structureWaypoints.put(markerType, remaining);
-  }
-
-  public Waypoint findWaypoint(UUID uuid) {
-    if (uuid == null) {
-      return null;
-    }
-
-    for (Waypoint[] waypoints : this.structureWaypoints.values()) {
-      for (Waypoint waypoint : waypoints) {
-        if (waypoint != null && isTransformWithId(waypoint, uuid)) {
-          return waypoint;
-        }
-      }
-    }
-
-    return null;
   }
 
   public boolean hasPendingChanges() {
@@ -324,16 +300,12 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
       Waypoint waypoint,
       Vec3d target,
       double thresholdSquared) {
-    double distanceSquared = target.distanceSquared(waypointPosition(waypoint));
+    double distanceSquared = target.distanceSquared(waypoint.getWaypointPosition());
     if (distanceSquared > thresholdSquared) {
       return null;
     }
 
     return new WaypointCandidate(waypoint, distanceSquared);
-  }
-
-  public static Vec3d waypointPosition(Waypoint waypoint) {
-    return waypoint.getWaypointPosition();
   }
 
   private static boolean isAccessMarker(MarkerType markerType) {

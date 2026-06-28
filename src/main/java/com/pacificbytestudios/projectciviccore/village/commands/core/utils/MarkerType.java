@@ -16,12 +16,24 @@ public enum MarkerType {
   STORAGE_ACCESS(DebugShape.Sphere, DrawUtils.COLOR_BLACK),
   TAVERN_CHAIR(DebugShape.Sphere, DrawUtils.COLOR_LIME),
   TAVERN_PLATE(DebugShape.Cylinder, DrawUtils.COLOR_GREEN),
-  BED(DebugShape.Sphere, DrawUtils.COLOR_RED);
+  BED(DebugShape.Sphere, DrawUtils.COLOR_RED),
+  SNAPSHOT_WP_1(DebugShape.Sphere, DrawUtils.COLOR_MAGENTA),
+  SNAPSHOT_WP_2(DebugShape.Sphere, DrawUtils.COLOR_YELLOW),
+  SNAPSHOT_WP_3(DebugShape.Sphere, DrawUtils.COLOR_CYAN),
+  SNAPSHOT_WP_4(DebugShape.Sphere, DrawUtils.COLOR_WHITE);
 
   private DebugShape shape;
   private Vec3f color;
 
   public static MarkerType[] DEFAULTS = new MarkerType[] { BENCH, BENCH_ACCESS, STORAGE, STORAGE_ACCESS };
+
+  private static final MarkerType[] SNAPSHOTS = {
+      SNAPSHOT_WP_1, SNAPSHOT_WP_2, SNAPSHOT_WP_3, SNAPSHOT_WP_4 };
+
+  /** Cycles through the snapshot marker types so an unbounded number of targets stays colored. */
+  public static MarkerType snapshotMarker(int index) {
+    return SNAPSHOTS[Math.floorMod(index, SNAPSHOTS.length)];
+  }
 
   private MarkerType(DebugShape shape, Vec3f color) {
     this.shape = shape;
@@ -38,7 +50,10 @@ public enum MarkerType {
    * whether the position happens to land on whole-block coordinates.
    */
   public boolean isFloatMarker() {
-    return this == TAVERN_CHAIR || this == TAVERN_PLATE;
+    return switch (this) {
+      case TAVERN_CHAIR, TAVERN_PLATE, SNAPSHOT_WP_1, SNAPSHOT_WP_2, SNAPSHOT_WP_3, SNAPSHOT_WP_4 -> true;
+      default -> false;
+    };
   }
 
   public Vec3f getColor() {

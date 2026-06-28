@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.pacificbytestudio.codecbutler.annotations.SerialDescription;
+import com.pacificbytestudio.codecbutler.annotations.SerialIgnore;
 import com.pacificbytestudio.codecbutler.annotations.SerialName;
 import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
@@ -32,6 +33,21 @@ public class WorkplaceAreaSnapshot {
   @SerialDescription("Used to indicate whether or not the workplace area snapshot was comcluded")
   boolean completed = false;
   Vec3i lastVisited;
+
+  // Optional debug hook fired when targets are consumed, so the snapshot debug view can be
+  // refreshed. Null (and therefore free) unless snapshot debugging is active.
+  @SerialIgnore
+  Runnable changeListener;
+
+  public void setChangeListener(Runnable changeListener) {
+    this.changeListener = changeListener;
+  }
+
+  private void notifyChanged() {
+    if (this.changeListener != null) {
+      this.changeListener.run();
+    }
+  }
 
   public void addWorkplaceSnapshotTarget(String group, Vec3i targetBlock) {
     this.addWorkplaceSnapshotTarget(group, new BlockTarget(targetBlock));
@@ -70,6 +86,10 @@ public class WorkplaceAreaSnapshot {
     return targets == null ? null : targets.peek();
   }
 
+  public Map<String, ArrayDeque<BlockTarget>> getSnapshotTargets() {
+    return this.snapshotTargets;
+  }
+
   public Stream<Vec3i> streamSnapshotTargetBlocksFrom(String group) {
     ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
     if (targets == null) {
@@ -94,15 +114,22 @@ public class WorkplaceAreaSnapshot {
 
   private BlockTarget pollNextSnapshotTargetFrom(String group) {
     ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
-    return targets == null ? null : targets.poll();
+    BlockTarget polled = targets == null ? null : targets.poll();
+    if (polled != null) {
+      notifyChanged();
+    }
+    return polled;
   }
 
   public void removeSnapshotGroup(String group) {
-    this.snapshotTargets.remove(group);
+    if (this.snapshotTargets.remove(group) != null) {
+      notifyChanged();
+    }
   }
 
   public void removeAllFromSnapshot(String... groups) {
     Stream.of(groups).forEach(this.snapshotTargets::remove);
+    notifyChanged();
   }
 
   public boolean hasSnapshotGroup(String group) {
@@ -120,6 +147,7 @@ public class WorkplaceAreaSnapshot {
 
   public void clearSnapshotTargets() {
     this.snapshotTargets.clear();
+    notifyChanged();
   }
 
   public void clearSnapshotGroupTargets(String group) {
@@ -127,6 +155,7 @@ public class WorkplaceAreaSnapshot {
 
     if (targets != null) {
       targets.clear();
+      notifyChanged();
     }
   }
 

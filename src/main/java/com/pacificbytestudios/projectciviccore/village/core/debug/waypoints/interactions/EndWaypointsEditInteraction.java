@@ -21,8 +21,10 @@ import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.ui.W
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.ui.WaypointSessionPage;
 
 /**
- * Ends the active waypoint editing session. With pending changes it opens the review page
- * (which offers Save &amp; Exit); with no changes it opens a small confirmation popup.
+ * Ends the active waypoint editing session. With pending changes it opens the
+ * review page
+ * (which offers Save &amp; Exit); with no changes it opens a small confirmation
+ * popup.
  */
 @SerializableClass
 public class EndWaypointsEditInteraction extends SimpleInstantInteraction {

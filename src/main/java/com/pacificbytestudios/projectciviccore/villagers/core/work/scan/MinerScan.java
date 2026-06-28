@@ -220,7 +220,7 @@ public class MinerScan implements IWorkAreaScanner {
     } else {
       this.resetScanProgress(snapshotInProgress);
       position = Vec3i.from(digStartPosition);
-      snapshotInProgress.addWorkplaceSnapshotTarget(DIG_POSITIONS, position);
+      addTask(snapshotInProgress, DIG_POSITIONS, position);
       this.queueSupportRepairs(snapshotInProgress, position, supportOffsets);
       snapshotInProgress.setLastVisited(Vec3i.from(position));
     }

@@ -120,6 +120,9 @@ val bundledPluginDependencies by configurations.creating
 dependencies {
     compileOnly(files(hytaleProjectServerJar))
 
+    compileOnly("org.projectlombok:lombok:1.18.46")
+    annotationProcessor("org.projectlombok:lombok:1.18.46")
+
     if (codecButlerJar.asFile.exists()) {
         implementation(files(codecButlerJar))
         annotationProcessor(files(codecButlerJar))
@@ -156,6 +159,11 @@ val modVersion =
 val serverVersion =
     manifestString("ServerVersion", "unknown")
 
+// The manifest carries a semver *range* (e.g. "^0.5.5") because Hytale parses
+// ServerVersion as a range. Only the jar file name uses a stripped tag.
+val serverVersionTag =
+    serverVersion.map { it.trimStart('=', '^', '~', '<', '>') }
+
 val includeAssets: Provider<Boolean> =
     providers.gradleProperty("includeAssets")
         .map { it.toBoolean() }
@@ -175,7 +183,7 @@ tasks.processResources {
 
 tasks.withType<Jar>().configureEach {
     archiveVersion.set(modVersion)
-    archiveClassifier.set(serverVersion.map { "server-$it" })
+    archiveClassifier.set(serverVersionTag.map { "server-$it" })
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 

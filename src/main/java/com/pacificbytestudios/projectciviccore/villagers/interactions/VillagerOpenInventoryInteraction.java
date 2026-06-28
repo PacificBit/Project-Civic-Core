@@ -93,4 +93,8 @@ public class VillagerOpenInventoryInteraction extends SimpleInstantInteraction {
 
     window.registerCloseEvent(_ -> windows.remove(playerUuid, window));
   }
+
+  public VillagerOpenInventoryInteraction clone() {
+    return VillagerOpenInventoryInteractionCodec.clone(this);
+  }
 }

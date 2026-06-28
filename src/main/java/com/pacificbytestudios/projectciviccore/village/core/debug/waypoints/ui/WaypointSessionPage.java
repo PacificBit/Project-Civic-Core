@@ -163,38 +163,29 @@ public class WaypointSessionPage extends BasicCustomUIPage {
 
   private void handleSave(Ref<EntityStore> player, Store<EntityStore> store) {
     WaypointsEditingComponent component = liveComponent(player, store);
-    if (component == null) {
-      this.close();
+    if (component != null && save(component)) {
+      this.finish(player, store);
       return;
     }
-
-    component.commitCurrentOperation();
-    WaypointsConfigSaver.SaveResult result = WaypointsConfigSaver.save(
-        this.world,
-        this.village,
-        this.structure,
-        component);
-    this.playerRef.sendMessage(Message.raw(result.message()));
-
-    if (!result.success()) {
-      // Keep the session (and its pending changes) so nothing gets lost.
-      this.close();
-      return;
-    }
-
-    component.clearOperations();
-    this.finish(player, store);
+    this.close();
   }
 
   /** Saves any pending changes and then ends the editing session entirely. */
   private void handleSaveExit(Ref<EntityStore> player, Store<EntityStore> store) {
     WaypointsEditingComponent component = liveComponent(player, store);
-    if (component == null) {
-      WaypointsSessionUtil.exitSession(this.world, store, player, null);
+    if (component != null && !save(component)) {
+      // Save failed; keep the session (and its pending changes) so nothing gets lost.
       this.close();
       return;
     }
 
+    WaypointsSessionUtil.exitSession(this.world, store, player, component);
+    this.playerRef.sendMessage(Message.raw("Waypoint editing session ended"));
+    this.close();
+  }
+
+  /** Commits and persists the session; returns whether the save succeeded. */
+  private boolean save(WaypointsEditingComponent component) {
     component.commitCurrentOperation();
     WaypointsConfigSaver.SaveResult result = WaypointsConfigSaver.save(
         this.world,
@@ -203,16 +194,10 @@ public class WaypointSessionPage extends BasicCustomUIPage {
         component);
     this.playerRef.sendMessage(Message.raw(result.message()));
 
-    if (!result.success()) {
-      // Keep the session (and its pending changes) so nothing gets lost.
-      this.close();
-      return;
+    if (result.success()) {
+      component.clearOperations();
     }
-
-    component.clearOperations();
-    WaypointsSessionUtil.exitSession(this.world, store, player, component);
-    this.playerRef.sendMessage(Message.raw("Waypoint editing session ended"));
-    this.close();
+    return result.success();
   }
 
   private void handleRollbackAll(Ref<EntityStore> player, Store<EntityStore> store) {

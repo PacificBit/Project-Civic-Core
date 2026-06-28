@@ -1,13 +1,18 @@
 package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.woodcutter;
 
+import java.util.Objects;
+
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.item.config.ItemTool;
+import com.hypixel.hytale.server.core.asset.type.item.config.ItemToolSpec;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -112,7 +117,7 @@ public class BreakTreeBlockAction extends VillagerActionBase {
       return false;
     }
 
-    if (BlockHarvestUtils.getSpecPowerDamageBlock(itemInHand, blockType, tool) == null) {
+    if (!canBreakBlockWithTool(itemInHand, blockType, tool)) {
       Logger.logInfo("The tool in hand cannot break the target block");
       snapshot.removeFirstSnapshotTargetFrom(this.snapshotGroup);
       if (snapshot.isGroupEmtpy(this.snapshotGroup)) {
@@ -145,6 +150,48 @@ public class BreakTreeBlockAction extends VillagerActionBase {
     }
 
     return didBreak;
+  }
+
+  private static boolean canBreakBlockWithTool(
+      Item item,
+      BlockType blockType,
+      ItemTool tool) {
+    if (blockType == null || tool == null) {
+      return false;
+    }
+
+    BlockGathering gathering = blockType.getGathering();
+    if (gathering == null) {
+      return false;
+    }
+
+    BlockBreakingDropType breaking = gathering.getBreaking();
+    if (breaking == null) {
+      return false;
+    }
+
+    String gatherType = breaking.getGatherType();
+    if (gatherType == null) {
+      return false;
+    }
+
+    if (item != null && (item.getWeapon() != null || item.getBuilderTool() != null)) {
+      return false;
+    }
+
+    ItemToolSpec[] specs = tool.getSpecs();
+    if (specs == null) {
+      return false;
+    }
+
+    int requiredQuality = breaking.getQuality();
+    for (ItemToolSpec spec : specs) {
+      if (spec != null && Objects.equals(spec.getGatherType(), gatherType)) {
+        return spec.getQuality() >= requiredQuality;
+      }
+    }
+
+    return false;
   }
 
   private void consumeToolDurability(

@@ -44,20 +44,12 @@ public class WaypointOperation {
     return this.operationType;
   }
 
-  public Operation operationType() {
-    return this.operationType;
-  }
-
   public void setOperationType(Operation operationType) {
     this.operationType = operationType;
   }
 
   public Waypoint getOldWaypoint() {
     return this.oldWaypoint;
-  }
-
-  public void setOldWaypoint(Waypoint oldWaypoint) {
-    this.oldWaypoint = oldWaypoint;
   }
 
   public Waypoint getNewWaypoint() {
