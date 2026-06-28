@@ -13,6 +13,8 @@ import com.hypixel.hytale.codec.schema.config.Schema;
 import com.hypixel.hytale.codec.util.RawJsonReader;
 
 public final class BsonDocumentValueCodec implements Codec<BsonDocument> {
+  public static final BsonDocumentValueCodec INSTANCE = new BsonDocumentValueCodec();
+
   @Override
   public BsonDocument decode(BsonValue value, ExtraInfo extraInfo) {
     return value.asDocument();

@@ -12,7 +12,11 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class BuildingSnapshotComponent implements Component<ChunkStore> {
   public static final BuilderCodec<BuildingSnapshotComponent> CODEC = BuildingSnapshotComponentCodec.CODEC;
@@ -24,62 +28,6 @@ public class BuildingSnapshotComponent implements Component<ChunkStore> {
   EntityRef villageRef;
   short targetLevel;
   short currentStage;
-
-  public UUID getStructureId() {
-    return structureId;
-  }
-
-  public void setStructureId(UUID structureId) {
-    this.structureId = structureId;
-  }
-
-  public Vec3i getPrefabAnchor() {
-    return prefabAnchor;
-  }
-
-  public void setPrefabAnchor(Vec3i prefabAnchor) {
-    this.prefabAnchor = prefabAnchor;
-  }
-
-  public Rotation getRotation() {
-    return rotation;
-  }
-
-  public void setRotation(Rotation rotation) {
-    this.rotation = rotation;
-  }
-
-  public StructureType getStructureType() {
-    return structureType;
-  }
-
-  public void setStructureType(StructureType structureType) {
-    this.structureType = structureType;
-  }
-
-  public EntityRef getVillageRef() {
-    return villageRef;
-  }
-
-  public void setVillageRef(EntityRef villageRef) {
-    this.villageRef = villageRef;
-  }
-
-  public short getTargetLevel() {
-    return targetLevel;
-  }
-
-  public void setTargetLevel(short targetLevel) {
-    this.targetLevel = targetLevel;
-  }
-
-  public short getCurrentStage() {
-    return currentStage;
-  }
-
-  public void setCurrentStage(short currentStage) {
-    this.currentStage = currentStage;
-  }
 
   public BuildingSnapshotComponent clone() {
     return BuildingSnapshotComponentCodec.clone(this);

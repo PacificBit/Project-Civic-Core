@@ -10,18 +10,21 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import lombok.Getter;
+import lombok.Setter;
 
 @SerializableClass
 public class MineshaftLevel {
   public static final BuilderCodec<MineshaftLevel> CODEC = MineshaftLevelCodec.CODEC;
 
+  @Getter
   Map<UUID, MineshaftGallery> galleries = new HashMap<>();
+  @Getter
+  @Setter
   TrackedPrefabPlacementComponent trackedPrefab;
+  @Getter
+  @Setter
   Vec3i anchorPoint;
-
-  public Map<UUID, MineshaftGallery> getGalleries() {
-    return galleries;
-  }
 
   public Set<UUID> buildGalleries(Map<Vec3i, Vec3i> galleryStartPosition) {
     Set<UUID> galleriesIds = new HashSet<>();
@@ -53,22 +56,6 @@ public class MineshaftLevel {
 
   public MineshaftGallery getGalleryFromId(UUID galleryId) {
     return this.galleries.get(galleryId);
-  }
-
-  public TrackedPrefabPlacementComponent getTrackedPrefab() {
-    return trackedPrefab;
-  }
-
-  public void setTrackedPrefab(TrackedPrefabPlacementComponent trackedPrefab) {
-    this.trackedPrefab = trackedPrefab;
-  }
-
-  public Vec3i getAnchorPoint() {
-    return anchorPoint;
-  }
-
-  public void setAnchorPoint(Vec3i anchorPoint) {
-    this.anchorPoint = anchorPoint;
   }
 
   public MineshaftLevel clone() {

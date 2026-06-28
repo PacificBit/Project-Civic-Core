@@ -3,6 +3,8 @@ package com.pacificbytestudios.projectciviccore.village.enums;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import lombok.Getter;
+
 public enum VillageObjectiveType {
   ASSIGN_HOUSE((short) 1),
   ASSIGN_WORKER((short) 1),
@@ -15,6 +17,7 @@ public enum VillageObjectiveType {
   // NOTE: take the demolish stages from the type you are destroying
   DEMOLISH((short) -1);
 
+  @Getter
   private short stages;
   private static final Map<StructureType, VillageObjectiveType> STRUCTURE_TYPE_TO_OBJECTIVE;
 
@@ -33,10 +36,6 @@ public enum VillageObjectiveType {
 
   private VillageObjectiveType(short stages) {
     this.stages = stages;
-  }
-
-  public short getStages() {
-    return this.stages;
   }
 
   public static short getStages(StructureType structureType) {

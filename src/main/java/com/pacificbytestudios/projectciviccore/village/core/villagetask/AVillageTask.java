@@ -9,10 +9,12 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
+import lombok.Setter;
 
 public abstract class AVillageTask {
 
   protected BiConsumer<String, String> onErrorCallback;
+  @Setter
   protected Consumer<String> onSuccessCallback;
 
   public abstract void execute(WorldChunk chunk, Ref<ChunkStore> heartRef, Vec3i heartPos,
@@ -20,10 +22,6 @@ public abstract class AVillageTask {
 
   public void setOnError(BiConsumer<String, String> callback) {
     this.onErrorCallback = callback;
-  }
-
-  public void setOnSuccessCallback(Consumer<String> callback) {
-    this.onSuccessCallback = callback;
   }
 
   protected void callOnError(String status, String msg) {

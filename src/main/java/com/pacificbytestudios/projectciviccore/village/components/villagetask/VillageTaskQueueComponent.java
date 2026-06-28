@@ -15,6 +15,8 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.ArrayDequeCodec;
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.AVillageTask;
 
+import lombok.Getter;
+
 public class VillageTaskQueueComponent implements Component<ChunkStore> {
   private static final CodecMapCodec<AVillageTask> TASK_CODEC = new CodecMapCodec<>("Type");
   private static final ArrayDequeCodec<AVillageTask> TASK_DEQUE_CODEC = new ArrayDequeCodec<>(
@@ -38,6 +40,7 @@ public class VillageTaskQueueComponent implements Component<ChunkStore> {
     TASK_CODEC.register(id, taskClass, codec);
   }
 
+  @Getter
   private ArrayDeque<AVillageTask> tasks = new ArrayDeque<>();
 
   public void registerTask(AVillageTask task) {
@@ -50,10 +53,6 @@ public class VillageTaskQueueComponent implements Component<ChunkStore> {
 
   public boolean hasAny() {
     return this.tasks.size() > 0;
-  }
-
-  public Iterable<AVillageTask> getTasks() {
-    return this.tasks;
   }
 
   public int removeTasksIf(Predicate<AVillageTask> predicate) {

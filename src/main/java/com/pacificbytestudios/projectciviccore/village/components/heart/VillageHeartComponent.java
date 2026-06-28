@@ -45,13 +45,19 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
+import lombok.Getter;
+import lombok.Setter;
 
 @SerializableClass
 public class VillageHeartComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageHeartComponent> CODEC = VillageHeartComponentCodec.CODEC;
 
+  @Getter
+  @Setter
   @SerialName("VillageId")
   UUID uuid;
+  @Getter
+  @Setter
   @SerialName("VillageHeartBlockContext")
   BlockContext blockContext;
   @SerialName("VillagerToWorkplaceMap")
@@ -59,13 +65,24 @@ public class VillageHeartComponent implements Component<ChunkStore> {
   @SerialName("VillagerToHouseMap")
   Map<UUID, UUID> villagerToHouse = new HashMap<>();
 
+  @Getter
+  @Setter
   String name;
+  @Setter
   EntityRef villageRef;
   VillageHeartConfigComponent config;
+  @Getter
+  @Setter
   VillageHeartState state = VillageHeartState.NORMAL;
+  @Getter
+  @Setter
   int level = 1;
+  @Getter
   AreaFootprint claimedArea;
-  VolumeEntry volumeEntry;
+  @Getter
+  @Setter
+  @SerialName("VolumeEntry")
+  VolumeEntry triggerVolumeEntry;
 
   Set<UUID> villagersRegistry = new HashSet<>();
   Set<UUID> unemployedRegistry = new HashSet<>();
@@ -77,23 +94,8 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   Set<UUID> villageStorageWorkplaces = new HashSet<>();
   Set<UUID> villageTavernWorkplaces = new HashSet<>();
+  @Getter
   UUID townHallId;
-
-  public UUID getUuid() {
-    return uuid;
-  }
-
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 
   public Ref<ChunkStore> getVillageRef() {
     return villageRef.getRef();
@@ -101,10 +103,6 @@ public class VillageHeartComponent implements Component<ChunkStore> {
 
   public EntityRef getEntityRef() {
     return this.villageRef;
-  }
-
-  public void setVillageRef(EntityRef ref) {
-    this.villageRef = ref;
   }
 
   public WorkplaceComponent getTownHall() {
@@ -117,10 +115,6 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     }
 
     return workplace;
-  }
-
-  public UUID getTownHallId() {
-    return this.townHallId;
   }
 
   public Ref<ChunkStore> getTownHallRef() {
@@ -256,44 +250,24 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return this.villagerIdToComponent.get(uuid);
   }
 
-  public VillageHeartState getState() {
-    return this.state;
-  }
-
-  public void setState(VillageHeartState state) {
-    this.state = state;
-  }
-
-  public AreaFootprint getClaimedArea() {
-    return claimedArea;
-  }
-
   public void setClaimedArea(AreaFootprint claimedChunks) {
     this.claimedArea = claimedChunks;
     setTriggerVolumeArea(this.claimedArea);
   }
 
-  public VolumeEntry getTriggerVolumeEntry() {
-    return volumeEntry;
-  }
-
-  public void setTriggerVolumeEntry(VolumeEntry volumeEntry) {
-    this.volumeEntry = volumeEntry;
-  }
-
   private void setTriggerVolumeArea(AreaFootprint area) {
-    if (volumeEntry == null) {
+    if (triggerVolumeEntry == null) {
       // If the village is being spawned for the first time
       // Generate a trigger volume to register enter/exit village events
-      volumeEntry = generateTriggerVolumeEntry(getBlockContext().getWorld(), area);
+      triggerVolumeEntry = generateTriggerVolumeEntry(getBlockContext().getWorld(), area);
 
       // Add condition for cooldown to not always show the welcome message
-      volumeEntry.getConditions().add(
+      triggerVolumeEntry.getConditions().add(
           CooldownCondition.create(TriggerEventType.ENTER, config.getWelcomeMessageCooldown()));
 
       // Add effects
       Logger.logInfo("Registering village events for volume: " + name);
-      List<TriggerEffect> triggerEffects = volumeEntry.getEffects();
+      List<TriggerEffect> triggerEffects = triggerVolumeEntry.getEffects();
       String welcomeMessage = "server.system.villageheartplacementsystem.welcomeToVillage";
       triggerEffects.add(ShowEventTitleEffect.create(TriggerEventType.ENTER, name, welcomeMessage, false));
       triggerEffects.add(PlaySoundEffect.create(TriggerEventType.ENTER, "SFX_AVATAR_POWERS_ENABLE"));
@@ -303,10 +277,10 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     } else {
       // Trigger volume already exist, so change its shape according to the area
       BoxShape newShape = generateVolumeEntryShapeFromArea(area);
-      volumeEntry.setShape(newShape);
+      triggerVolumeEntry.setShape(newShape);
       TriggerVolumeManager manager = Utils.getTriggerVolumeManager(getBlockContext().getWorld());
       manager.markSpatialDirty();
-      manager.notifyViewersAdd(volumeEntry);
+      manager.notifyViewersAdd(triggerVolumeEntry);
     }
   }
 
@@ -346,14 +320,6 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     manager.notifyViewersAdd(entry);
 
     return entry;
-  }
-
-  public int getLevel() {
-    return level;
-  }
-
-  public void setLevel(int level) {
-    this.level = level;
   }
 
   public VillagerRole getNextRequiredRole() {
@@ -562,14 +528,6 @@ public class VillageHeartComponent implements Component<ChunkStore> {
     return (short) this.houseIdToHouse.values().stream()
         .mapToInt(HouseComponent::getTotalBedsCount)
         .sum();
-  }
-
-  public BlockContext getBlockContext() {
-    return blockContext;
-  }
-
-  public void setBlockContext(BlockContext blockContext) {
-    this.blockContext = blockContext;
   }
 
   public UUID getFirstWorkplaceWithMissingEmployee() {

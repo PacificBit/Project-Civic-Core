@@ -25,10 +25,16 @@ import com.pacificbytestudios.projectciviccore.village.commands.core.utils.Marke
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.DebugDrawUtils;
 import com.pacificbytestudios.projectciviccore.village.core.debug.waypoints.components.Waypoint;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * Central registry for every waypoint visualization in a village. The debug draw command
- * and the live editing session both publish their markers here so they can be drawn
- * together without colliding: each structure keeps its own marker set, and the structure
+ * Central registry for every waypoint visualization in a village. The debug
+ * draw command
+ * and the live editing session both publish their markers here so they can be
+ * drawn
+ * together without colliding: each structure keeps its own marker set, and the
+ * structure
  * currently being edited is replaced by the live editing-session markers.
  */
 @SerializableClass
@@ -36,28 +42,27 @@ public class VillageHeartDebugComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageHeartDebugComponent> CODEC = VillageHeartDebugComponentCodec.CODEC;
 
   UUID waypointEditingStructureId;
+  @Getter
+  @Setter
   boolean displayWorkerSnapshots;
   Map<MarkerType, List<Waypoint>> waypointEditinSessionMarkers = new HashMap<>();
   Map<UUID, Map<MarkerType, List<Waypoint>>> structureIdToMarkersMap = new HashMap<>();
   Map<String, Map<MarkerType, List<Waypoint>>> snapshotMarkersByOwner = new HashMap<>();
 
-  // Holograms are entities (not debug shapes); recreating them every redraw makes them
-  // flicker, so they are tracked by content and only the delta is spawned/despawned.
+  // Holograms are entities (not debug shapes); recreating them every redraw makes
+  // them
+  // flicker, so they are tracked by content and only the delta is
+  // spawned/despawned.
   @SerialIgnore
   Map<HologramKey, Ref<EntityStore>> snapshotHolograms = new HashMap<>();
 
   private record HologramKey(String text, double x, double y, double z) {
   }
 
-  public void setDisplayWorkerSnapshots(boolean displayWorkerSnapshots) {
-    this.displayWorkerSnapshots = displayWorkerSnapshots;
-  }
-
-  public boolean isDisplayWorkerSnapshots() {
-    return this.displayWorkerSnapshots;
-  }
-
-  /** Replaces the snapshot marker batch produced by one villager scanning one structure. */
+  /**
+   * Replaces the snapshot marker batch produced by one villager scanning one
+   * structure.
+   */
   public void setSnapshotWaypoints(UUID structureId, UUID villagerId, Map<MarkerType, List<Waypoint>> markers) {
     this.snapshotMarkersByOwner.put(structureId + "|" + villagerId, markers);
   }
@@ -80,7 +85,8 @@ public class VillageHeartDebugComponent implements Component<ChunkStore> {
   }
 
   /**
-   * Publishes the live markers of an editing session. While set, the matching structure's
+   * Publishes the live markers of an editing session. While set, the matching
+   * structure's
    * static markers are skipped in favor of these.
    */
   public void setEditingSession(UUID structureId, Map<MarkerType, List<Waypoint>> markers) {
@@ -118,8 +124,10 @@ public class VillageHeartDebugComponent implements Component<ChunkStore> {
   }
 
   /**
-   * Reconciles the spawned title holograms with the snapshot markers that carry a group name:
-   * unchanged holograms are left in place (so they don't flicker), and only removed or new
+   * Reconciles the spawned title holograms with the snapshot markers that carry a
+   * group name:
+   * unchanged holograms are left in place (so they don't flicker), and only
+   * removed or new
    * ones are despawned/spawned.
    */
   private void syncSnapshotHolograms(World world) {

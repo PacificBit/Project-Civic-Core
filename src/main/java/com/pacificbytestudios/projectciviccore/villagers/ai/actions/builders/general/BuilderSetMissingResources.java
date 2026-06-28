@@ -12,8 +12,12 @@ import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.SetMissingResources;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+
 public class BuilderSetMissingResources extends BuilderActionBase {
   private BuilderObjectListHelper<InventoryItemCriteria> itemCriteria;
+  @Setter(AccessLevel.PRIVATE)
   private Boolean resetFlag;
 
   @Override
@@ -46,10 +50,6 @@ public class BuilderSetMissingResources extends BuilderActionBase {
         this.validationHelper);
 
     return this;
-  }
-
-  private void setResetFlag(boolean flag) {
-    this.resetFlag = flag;
   }
 
   public List<InventoryItemCriteria> getItemCriteria(BuilderSupport support) {

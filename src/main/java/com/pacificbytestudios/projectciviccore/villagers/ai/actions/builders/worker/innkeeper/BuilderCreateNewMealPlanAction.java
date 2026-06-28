@@ -10,8 +10,13 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.innkeeper.CreateNewMealPlanAction;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+
 public class BuilderCreateNewMealPlanAction extends BuilderActionBase {
+  @Setter(AccessLevel.PRIVATE)
   private String successFlag;
+  @Setter(AccessLevel.PRIVATE)
   private String failureFlag;
   private final IntHolder mealBuffer = new IntHolder();
 
@@ -51,14 +56,6 @@ public class BuilderCreateNewMealPlanAction extends BuilderActionBase {
         "Extra meals to keep ready in workplace storage in addition to villager count", null);
 
     return this;
-  }
-
-  private void setSuccessFlag(String flag) {
-    this.successFlag = flag;
-  }
-
-  private void setFailureFlag(String flag) {
-    this.failureFlag = flag;
   }
 
   public int getSuccessFlagSlot(BuilderSupport support) {

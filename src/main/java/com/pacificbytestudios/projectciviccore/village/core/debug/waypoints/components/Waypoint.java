@@ -10,15 +10,19 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import lombok.Getter;
 
 @SerializableClass
 public class Waypoint implements Copyable<Waypoint> {
   public static final BuilderCodec<Waypoint> CODEC = WaypointCodec.CODEC;
 
+  @Getter
   UUID waypointId;
+  @Getter
   MarkerType type;
   BlockTransform3D intTransform;
   BlockTransform3D floatTransform;
+  @Getter
   boolean isAccess;
   Map<String, String> metadata = new HashMap<>();
 
@@ -55,14 +59,6 @@ public class Waypoint implements Copyable<Waypoint> {
     return waypoint;
   }
 
-  public UUID getWaypointId() {
-    return this.waypointId;
-  }
-
-  public MarkerType getType() {
-    return this.type;
-  }
-
   public BlockTransform3D getTransform() {
     if (this.intTransform != null) {
       return this.intTransform;
@@ -77,10 +73,6 @@ public class Waypoint implements Copyable<Waypoint> {
 
   public boolean isFloatTransform() {
     return this.floatTransform != null;
-  }
-
-  public boolean isAccess() {
-    return this.isAccess;
   }
 
   public UUID getPositionId() {

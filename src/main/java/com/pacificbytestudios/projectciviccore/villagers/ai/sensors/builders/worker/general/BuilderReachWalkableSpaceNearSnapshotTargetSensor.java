@@ -16,9 +16,13 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.instructions.Sensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.general.ReachWalkableSpaceNearSnapshotTargetSensor;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+
 public class BuilderReachWalkableSpaceNearSnapshotTargetSensor extends BuilderSensorBase {
   private final StringArrayHolder blockIds = new StringArrayHolder();
   private final DoubleHolder stoppingRange = new DoubleHolder();
+  @Setter(AccessLevel.PRIVATE)
   private Boolean useCenterOfBlock;
 
   @Override
@@ -83,10 +87,6 @@ public class BuilderReachWalkableSpaceNearSnapshotTargetSensor extends BuilderSe
 
   public double getStoppingRange(BuilderSupport support) {
     return this.stoppingRange.get(support.getExecutionContext());
-  }
-
-  private void setUseCenterOfBlock(boolean useCenterOfBlock) {
-    this.useCenterOfBlock = useCenterOfBlock;
   }
 
   public boolean getUseCenterOfBlock(BuilderSupport support) {

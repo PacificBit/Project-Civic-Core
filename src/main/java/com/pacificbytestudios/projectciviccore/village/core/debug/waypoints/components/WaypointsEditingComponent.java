@@ -20,13 +20,20 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
+import lombok.Getter;
+import lombok.Setter;
 
 @SerializableClass
 public class WaypointsEditingComponent implements Component<EntityStore> {
   public static final BuilderCodec<WaypointsEditingComponent> CODEC = WaypointsEditingComponentCodec.CODEC;
 
+  @Getter
+  @Setter
   UUID structureId;
+  @Getter
   Map<MarkerType, Waypoint[]> structureWaypoints = new HashMap<>();
+  @Getter
+  @Setter
   WaypointOperation currentOperation;
   Stack<WaypointOperation> operations = new Stack<>();
 
@@ -39,26 +46,6 @@ public class WaypointsEditingComponent implements Component<EntityStore> {
       WaypointOperation.Operation operation,
       Waypoint original,
       Waypoint current) {
-  }
-
-  public UUID getStructureId() {
-    return this.structureId;
-  }
-
-  public void setStructureId(UUID structureId) {
-    this.structureId = structureId;
-  }
-
-  public Map<MarkerType, Waypoint[]> getStructureWaypoints() {
-    return this.structureWaypoints;
-  }
-
-  public WaypointOperation getCurrentOperation() {
-    return this.currentOperation;
-  }
-
-  public void setCurrentOperation(WaypointOperation currentOperation) {
-    this.currentOperation = currentOperation;
   }
 
   public void addOperation(WaypointOperation operations) {

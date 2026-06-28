@@ -2,6 +2,8 @@ package com.pacificbytestudios.projectciviccore.village.enums;
 
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
 
+import lombok.Getter;
+
 public enum VillageTopologyStructureType {
   CITY_CENTER(VillageTopologyStructureCategory.CORE),
 
@@ -17,14 +19,11 @@ public enum VillageTopologyStructureType {
   MAIN_ROAD(VillageTopologyStructureCategory.STREET),
   SIDE_ROAD(VillageTopologyStructureCategory.STREET);
 
+  @Getter
   private final VillageTopologyStructureCategory category;
 
   VillageTopologyStructureType(VillageTopologyStructureCategory category) {
     this.category = category;
-  }
-
-  public VillageTopologyStructureCategory getCategory() {
-    return this.category;
   }
 
   public boolean isRoad() {

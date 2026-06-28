@@ -3,6 +3,8 @@ package com.pacificbytestudios.projectciviccore.villagers.core.inventory;
 import com.hypixel.hytale.server.core.inventory.MaterialQuantity;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 
+import lombok.Getter;
+
 public final class InventoryItemCriteria {
   private enum MatchMode {
     EXACT,
@@ -13,8 +15,11 @@ public final class InventoryItemCriteria {
     ANY
   }
 
+  @Getter
   private final String itemId;
+  @Getter
   private final boolean filterIn;
+  @Getter
   private final int count;
 
   private final MatchMode matchMode;
@@ -71,18 +76,6 @@ public final class InventoryItemCriteria {
 
   public ItemRequestCriterion toVillageRequestCriterion() {
     return new ItemRequestCriterion(this.itemId, this.filterIn, this.count);
-  }
-
-  public String getItemId() {
-    return this.itemId;
-  }
-
-  public boolean isFilterIn() {
-    return this.filterIn;
-  }
-
-  public int getCount() {
-    return this.count;
   }
 
   public boolean matches(String itemName) {

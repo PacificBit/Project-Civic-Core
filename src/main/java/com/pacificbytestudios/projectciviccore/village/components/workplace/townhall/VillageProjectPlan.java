@@ -19,6 +19,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import lombok.Getter;
+import lombok.Setter;
 
 public class VillageProjectPlan {
   public static final BuilderCodec<VillageProjectPlan> CODEC = BuilderCodec
@@ -33,11 +35,8 @@ public class VillageProjectPlan {
       .add()
       .build();
 
+  @Getter
   private PriorityQueue<VillageProject> projectList = new PriorityQueue<>();
-
-  public PriorityQueue<VillageProject> getProjectList() {
-    return this.projectList;
-  }
 
   public void setProjectList(PriorityQueue<VillageProject> projectList) {
     this.projectList = new PriorityQueue<>();
@@ -238,113 +237,54 @@ public class VillageProjectPlan {
   public static class VillageProject implements Comparable<VillageProject> {
     public static final BuilderCodec<VillageProject> CODEC = VillageProjectCodec.CODEC;
 
+    @Getter
+    @Setter
     UUID projectId;
+    @Getter
+    @Setter
     VillageObjectiveType objectiveType;
+    @Getter
+    @Setter
     VillageObjectiveStatus objectiveStatus = VillageObjectiveStatus.RESOURCE_GATHERING;
-    Weight weight = Weight.LOW;
+    @Getter
+    @SerialName("Weight")
+    Weight weightType = Weight.LOW;
+    @Getter
+    @Setter
     StructureType structureType;
+    @Getter
+    @Setter
     UUID structureId;
+    @Getter
+    @Setter
     int targetLevel = 1;
+    @Getter
+    @Setter
     short stage = 0;
+    @Getter
+    @Setter
     short totalStages = 1;
+    @Getter
     @SerialName("RequiredMaterials")
     MaterialQuantity[] requiredMaterialPerStage = new MaterialQuantity[0];
+    @Getter
+    @Setter
     ConstructionMode constructionMode;
 
-    public UUID getProjectId() {
-      return projectId;
-    }
-
-    public void setProjectId(UUID projectId) {
-      this.projectId = projectId;
-    }
-
-    public VillageObjectiveType getObjectiveType() {
-      return this.objectiveType;
-    }
-
-    public void setObjectiveType(VillageObjectiveType objectiveType) {
-      this.objectiveType = objectiveType;
-    }
-
-    public VillageObjectiveStatus getObjectiveStatus() {
-      return this.objectiveStatus;
-    }
-
-    public void setObjectiveStatus(VillageObjectiveStatus objectiveStatus) {
-      this.objectiveStatus = objectiveStatus;
-    }
-
     public int getWeight() {
-      return this.weight.getValue();
-    }
-
-    public Weight getWeightType() {
-      return this.weight;
+      return this.weightType.getValue();
     }
 
     public void setWeight(int weight) {
-      this.weight = Weight.fromValue(weight);
+      this.weightType = Weight.fromValue(weight);
     }
 
     public void setWeight(Weight weight) {
-      this.weight = weight != null ? weight : Weight.LOW;
-    }
-
-    public short getStage() {
-      return this.stage;
-    }
-
-    public void setStage(short stage) {
-      this.stage = stage;
-    }
-
-    public short getTotalStages() {
-      return this.totalStages;
-    }
-
-    public void setTotalStages(short totalStages) {
-      this.totalStages = totalStages;
-    }
-
-    public MaterialQuantity[] getRequiredMaterialPerStage() {
-      return this.requiredMaterialPerStage;
+      this.weightType = weight != null ? weight : Weight.LOW;
     }
 
     public void setRequiredMaterialPerStage(MaterialQuantity[] requiredMaterials) {
       this.requiredMaterialPerStage = requiredMaterials != null ? requiredMaterials : new MaterialQuantity[0];
-    }
-
-    public StructureType getStructureType() {
-      return structureType;
-    }
-
-    public void setStructureType(StructureType structureType) {
-      this.structureType = structureType;
-    }
-
-    public UUID getStructureId() {
-      return structureId;
-    }
-
-    public void setStructureId(UUID structureId) {
-      this.structureId = structureId;
-    }
-
-    public int getTargetLevel() {
-      return targetLevel;
-    }
-
-    public void setTargetLevel(int targetLevel) {
-      this.targetLevel = targetLevel;
-    }
-
-    public ConstructionMode getConstructionMode() {
-      return constructionMode;
-    }
-
-    public void setConstructionMode(ConstructionMode constructionMode) {
-      this.constructionMode = constructionMode;
     }
 
     public VillageProject clone() {
@@ -365,7 +305,7 @@ public class VillageProjectPlan {
           "\n projectId=" + projectId +
           ",\n objectiveType=" + objectiveType +
           ",\n objectiveStatus=" + objectiveStatus +
-          ",\n weight=" + weight +
+          ",\n weight=" + weightType +
           ",\n structureType=" + structureType +
           ",\n structureId=" + structureId +
           ",\n targetLevel=" + targetLevel +
@@ -380,14 +320,11 @@ public class VillageProjectPlan {
       MID(2),
       LOW(1);
 
+      @Getter
       private final int value;
 
       Weight(int value) {
         this.value = value;
-      }
-
-      public int getValue() {
-        return this.value;
       }
 
       public static Weight fromValue(int value) {

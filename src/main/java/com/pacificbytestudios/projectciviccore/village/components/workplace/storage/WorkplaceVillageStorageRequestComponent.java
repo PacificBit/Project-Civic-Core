@@ -13,14 +13,20 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import lombok.Getter;
 
+@Getter
 @SerializableClass
 public class WorkplaceVillageStorageRequestComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceVillageStorageRequestComponent> CODEC = WorkplaceVillageStorageRequestComponentCodec.CODEC;
-  ArrayDeque<VillageStorageRequest> requestDeque = new ArrayDeque<>();
-  Map<UUID, ArrayDeque<VillageStorageRequest>> onGoingRequests = new HashMap<>();
+
+  @SerialName("RequestDeque")
+  ArrayDeque<VillageStorageRequest> requests = new ArrayDeque<>();
+  @SerialName("OnGoingRequests")
+  Map<UUID, ArrayDeque<VillageStorageRequest>> onGoingRequest = new HashMap<>();
 
   public static final class PurgeResult {
     private final Set<UUID> requesterWorkplaceIds = new HashSet<>();
@@ -53,42 +59,34 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
   }
 
   public UUID addRequest(VillageStorageRequest workplaceRequest) {
-    for (VillageStorageRequest request : this.requestDeque) {
+    for (VillageStorageRequest request : this.requests) {
       if (request.getRequesterWorkplaceId().equals(workplaceRequest.getRequesterWorkplaceId()) &&
           request.getType().equals(workplaceRequest.getType())) {
         request.getItemCriteria().addAll(workplaceRequest.getItemCriteria());
         return request.getRequestId();
       }
     }
-    this.requestDeque.add(workplaceRequest);
+    this.requests.add(workplaceRequest);
     return workplaceRequest.getRequestId();
   }
 
-  public ArrayDeque<VillageStorageRequest> getRequests() {
-    return this.requestDeque;
-  }
-
-  public Map<UUID, ArrayDeque<VillageStorageRequest>> getOnGoingRequest() {
-    return this.onGoingRequests;
-  }
-
   public boolean assignRequest(UUID workerId, UUID requestId) {
-    VillageStorageRequest firstRequest = this.requestDeque.peek();
+    VillageStorageRequest firstRequest = this.requests.peek();
 
     if (firstRequest != null && firstRequest.getRequestId().equals(requestId)) {
-      this.onGoingRequests.computeIfAbsent(workerId, id -> new ArrayDeque<>())
-          .add(this.requestDeque.pollFirst());
+      this.onGoingRequest.computeIfAbsent(workerId, id -> new ArrayDeque<>())
+          .add(this.requests.pollFirst());
       return true;
     }
 
     ArrayDeque<VillageStorageRequest> remainingRequests = new ArrayDeque<>();
     boolean assigned = false;
 
-    while (!this.requestDeque.isEmpty()) {
-      VillageStorageRequest request = this.requestDeque.pollFirst();
+    while (!this.requests.isEmpty()) {
+      VillageStorageRequest request = this.requests.pollFirst();
 
       if (!assigned && request.getRequestId().equals(requestId)) {
-        this.onGoingRequests.computeIfAbsent(workerId, id -> new ArrayDeque<>())
+        this.onGoingRequest.computeIfAbsent(workerId, id -> new ArrayDeque<>())
             .add(request);
         assigned = true;
         continue;
@@ -97,30 +95,30 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
       remainingRequests.add(request);
     }
 
-    this.requestDeque = remainingRequests;
+    this.requests = remainingRequests;
     return assigned;
   }
 
   public ArrayDeque<VillageStorageRequest> getAssignedRequest(UUID workerId) {
-    return this.onGoingRequests.getOrDefault(workerId, new ArrayDeque<>());
+    return this.onGoingRequest.getOrDefault(workerId, new ArrayDeque<>());
   }
 
   public boolean removeCompletedRequest(UUID workerId) {
-    if (this.onGoingRequests.containsKey(workerId)) {
-      this.onGoingRequests.remove(workerId);
+    if (this.onGoingRequest.containsKey(workerId)) {
+      this.onGoingRequest.remove(workerId);
     }
 
     return true;
   }
 
   public boolean unassignRequest(UUID workerId) {
-    ArrayDeque<VillageStorageRequest> requests = this.onGoingRequests.remove(workerId);
+    ArrayDeque<VillageStorageRequest> requests = this.onGoingRequest.remove(workerId);
 
     if (requests == null || requests.isEmpty()) {
       return false;
     }
 
-    this.requestDeque.addAll(requests);
+    this.requests.addAll(requests);
     return true;
   }
 
@@ -130,10 +128,10 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
       return result;
     }
 
-    this.requestDeque = purgeRequestDeque(this.requestDeque, null, predicate, result);
+    this.requests = purgeRequestDeque(this.requests, null, predicate, result);
 
     Map<UUID, ArrayDeque<VillageStorageRequest>> remainingOnGoingRequests = new HashMap<>();
-    for (Map.Entry<UUID, ArrayDeque<VillageStorageRequest>> entry : this.onGoingRequests.entrySet()) {
+    for (Map.Entry<UUID, ArrayDeque<VillageStorageRequest>> entry : this.onGoingRequest.entrySet()) {
       ArrayDeque<VillageStorageRequest> remainingRequests = purgeRequestDeque(
           entry.getValue(),
           entry.getKey(),
@@ -145,13 +143,13 @@ public class WorkplaceVillageStorageRequestComponent implements Component<ChunkS
       }
     }
 
-    this.onGoingRequests = remainingOnGoingRequests;
+    this.onGoingRequest = remainingOnGoingRequests;
     return result;
   }
 
   public void clearAll() {
-    this.requestDeque = new ArrayDeque<>();
-    this.onGoingRequests = new HashMap<>();
+    this.requests = new ArrayDeque<>();
+    this.onGoingRequest = new HashMap<>();
   }
 
   @Override

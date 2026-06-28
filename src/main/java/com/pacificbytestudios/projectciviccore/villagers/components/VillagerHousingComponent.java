@@ -7,29 +7,17 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseComponent;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class VillagerHousingComponent implements Component<EntityStore> {
   public static final BuilderCodec<VillagerHousingComponent> CODEC = VillagerHousingComponentCodec.CODEC;
 
   HouseComponent house;
   Vec3i bedPosition;
-
-  public HouseComponent getHouse() {
-    return house;
-  }
-
-  public void setHouse(HouseComponent house) {
-    this.house = house;
-  }
-
-  public Vec3i getBedPosition() {
-    return bedPosition;
-  }
-
-  public void setBedPosition(Vec3i bedPosition) {
-    this.bedPosition = bedPosition;
-  }
 
   @Override
   public VillagerHousingComponent clone() {

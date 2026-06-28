@@ -8,6 +8,8 @@ import java.util.stream.Stream;
 
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
 
+import lombok.Getter;
+
 public enum StructureType implements Supplier<String> {
   TOWN_HALL("Town_Hall", MarkerType.DEFAULTS),
   MINE("Mine", MarkerType.DEFAULTS),
@@ -22,6 +24,7 @@ public enum StructureType implements Supplier<String> {
           MarkerType.TAVERN_PLATE));
 
   private String type;
+  @Getter
   private MarkerType[] markerTypes;
 
   private StructureType(String type, MarkerType[] markerTypes) {
@@ -32,10 +35,6 @@ public enum StructureType implements Supplier<String> {
   @Override
   public String get() {
     return this.type;
-  }
-
-  public MarkerType[] getMarkerTypes() {
-    return markerTypes;
   }
 
   public static String getTypes() {

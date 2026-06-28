@@ -9,9 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -26,8 +23,11 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.LateralVacancySegments;
 import com.pacificbytestudios.projectciviccore.codecs.LateralVacancySegments.Segment;
-import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
+import com.pacificbytestudios.projectciviccore.codecs.RoadNode;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
@@ -55,7 +55,6 @@ import com.pacificbytestudios.projectciviccore.village.enums.VillageRoadState;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
 import it.unimi.dsi.fastutil.Pair;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
   private VillageTopologyComponent topology;
@@ -141,7 +140,7 @@ public class VillageBuilderSystem extends EntityTickingSystem<ChunkStore> {
     final Rotation queuedRotation = placement.rotation;
     final VillageProject queuedProject = this.project.clone();
     final ConstructionMode constructionMode = Optional.ofNullable(
-      this.project.getConstructionMode()).orElse(ConstructionMode.STAGED);
+        this.project.getConstructionMode()).orElse(ConstructionMode.STAGED);
     this.world.execute(() -> enqueueBuildingSpawn(
         villageRef,
         queuedProject,

@@ -16,6 +16,8 @@ import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
+import lombok.Getter;
+import lombok.Setter;
 
 @SerializableClass
 public class MineComponent implements Component<ChunkStore>, IWorkplaceMissingResource {
@@ -23,19 +25,13 @@ public class MineComponent implements Component<ChunkStore>, IWorkplaceMissingRe
 
   Set<ItemRequestCriterion> missingResources = new HashSet<>();
 
+  @Getter
+  @Setter
   @SerialName("MineshaftData")
   Mineshaft mineshaft;
 
   @SerialName("WorkerGalleryReservations")
   Map<UUID, UUID> workerIdToGalleryId = new HashMap<>();
-
-  public Mineshaft getMineshaft() {
-    return mineshaft;
-  }
-
-  public void setMineshaft(Mineshaft mineshaftData) {
-    this.mineshaft = mineshaftData;
-  }
 
   public boolean hasGalleryReservedTo(UUID workerId) {
     return workerIdToGalleryId.containsKey(workerId);

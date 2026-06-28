@@ -16,10 +16,14 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderSensorBase;
 import com.hypixel.hytale.server.npc.instructions.Sensor;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.worker.general.ReachNextTargetInSnapshotSensor;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+
 public class BuilderReachNextTargetInSnapshotSensor extends BuilderSensorBase {
 
   private StringArrayHolder blockIds = new StringArrayHolder();
   private DoubleHolder stoppingRange = new DoubleHolder();
+  @Setter(AccessLevel.PRIVATE)
   private Boolean useCenterOfBlock;
 
   @Override
@@ -64,10 +68,6 @@ public class BuilderReachNextTargetInSnapshotSensor extends BuilderSensorBase {
 
   public double getStoppingRange(BuilderSupport support) {
     return this.stoppingRange.get(support.getExecutionContext());
-  }
-
-  private void setUseCenterOfBlock(boolean useCenterOfBlock) {
-    this.useCenterOfBlock = useCenterOfBlock;
   }
 
   public boolean getUseCenterOfBlock(BuilderSupport support) {

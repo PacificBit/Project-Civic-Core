@@ -18,6 +18,11 @@ import com.pacificbytestudios.projectciviccore.village.components.villagetask.Vi
 import com.pacificbytestudios.projectciviccore.village.core.villagetask.TeleportVillagerToTownHeartTask;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class TeleportVillagerToTownHeartEffect extends TriggerEffect {
   @Nonnull
   public static final BuilderCodec<TeleportVillagerToTownHeartEffect> CODEC = BuilderCodec
@@ -32,14 +37,6 @@ public class TeleportVillagerToTownHeartEffect extends TriggerEffect {
       .build();
 
   private EntityRef villageRef;
-
-  public EntityRef getVillageRef() {
-    return villageRef;
-  }
-
-  public void setVillageRef(EntityRef villageRef) {
-    this.villageRef = villageRef;
-  }
 
   @Nonnull
   public static TeleportVillagerToTownHeartEffect create(@Nonnull TriggerEventType eventType,

@@ -9,7 +9,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
+import com.pacificbytestudios.projectciviccore.codecs.RoadNode;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.DespawnFunction;

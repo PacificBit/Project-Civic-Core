@@ -12,7 +12,11 @@ import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class HouseComponent implements Component<ChunkStore> {
   public static final BuilderCodec<HouseComponent> CODEC = HouseComponentCodec.CODEC;
@@ -26,64 +30,8 @@ public class HouseComponent implements Component<ChunkStore> {
   EntityRef houseRef;
   HouseAppartmentRegistry appartmentRegistry;
 
-  public UUID getUuid() {
-    return uuid;
-  }
-
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
-  }
-
-  public Short getLevel() {
-    return level;
-  }
-
-  public void setLevel(Short level) {
-    this.level = level;
-  }
-
-  public EntityRef getVillageRef() {
-    return villageRef;
-  }
-
-  public void setVillageRef(EntityRef villageRef) {
-    this.villageRef = villageRef;
-  }
-
-  public Vec3i getCoreBlockPosition() {
-    return coreBlockPosition;
-  }
-
-  public void setCoreBlockPosition(Vec3i coreBlockPosition) {
-    this.coreBlockPosition = coreBlockPosition;
-  }
-
-  public Vec3i getPrefabAnchor() {
-    return prefabAnchor;
-  }
-
-  public void setPrefabAnchor(Vec3i prefabAnchor) {
-    this.prefabAnchor = prefabAnchor;
-  }
-
-  public EntityRef getHouseRef() {
-    return houseRef;
-  }
-
-  public void setHouseRef(EntityRef houseRef) {
-    this.houseRef = houseRef;
-  }
-
-  public HouseAppartmentRegistry getAppartmentRegistry() {
-    return appartmentRegistry;
-  }
-
   public Set<UUID> getOccupants() {
     return this.getAppartmentRegistry().getOccupants();
-  }
-
-  public void setAppartmentRegistry(HouseAppartmentRegistry appartmentRegistry) {
-    this.appartmentRegistry = appartmentRegistry;
   }
 
   public UUID assignAppartment(UUID villager) {

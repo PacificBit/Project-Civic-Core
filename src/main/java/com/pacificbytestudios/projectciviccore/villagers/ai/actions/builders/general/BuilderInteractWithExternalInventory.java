@@ -17,12 +17,22 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementati
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.InteractWithExternalInventory.ActionType;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 public class BuilderInteractWithExternalInventory extends BuilderActionBase {
   private BuilderObjectListHelper<InventoryItemCriteria> itemCriteria;
   private EnumHolder<ActionType> actionType = new EnumHolder<>();
+
+  @Setter(AccessLevel.PRIVATE)
   private Boolean consumeSnapshotTargetOnSuccess;
+  @Setter(AccessLevel.PRIVATE)
   private Boolean consumeSnapshotTargetOnFail;
+  @Setter(AccessLevel.PRIVATE)
   private Boolean useSnapshotItemCriteria;
+  @Getter
+  @Setter(AccessLevel.PRIVATE)
   private String snapshotKey;
 
   @Override
@@ -69,28 +79,8 @@ public class BuilderInteractWithExternalInventory extends BuilderActionBase {
     return this;
   }
 
-  private void setSnapshotKey(String key) {
-    this.snapshotKey = key;
-  }
-
-  private void setConsumeSnapshotTargetOnSuccess(boolean flag) {
-    this.consumeSnapshotTargetOnSuccess = flag;
-  }
-
-  private void setConsumeSnapshotTargetOnFail(boolean flag) {
-    this.consumeSnapshotTargetOnFail = flag;
-  }
-
-  private void setUseSnapshotItemCriteria(boolean flag) {
-    this.useSnapshotItemCriteria = flag;
-  }
-
   public InteractWithExternalInventory.ActionType getActionType(BuilderSupport support) {
     return this.actionType.get(support.getExecutionContext());
-  }
-
-  public String getSnapshotKey() {
-    return this.snapshotKey;
   }
 
   public List<InventoryItemCriteria> getItemCriteria(BuilderSupport support) {

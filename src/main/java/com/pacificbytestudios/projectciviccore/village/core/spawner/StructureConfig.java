@@ -18,6 +18,7 @@ import com.pacificbytestudios.projectciviccore.village.components.heart.VillageH
 import com.pacificbytestudios.projectciviccore.village.components.house.AppartmentComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.HouseAppartmentRegistry;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
+import lombok.Getter;
 
 public final class StructureConfig {
   public static final BlockType CONSTRUCTION_SIGN = BlockType.getAssetMap()
@@ -157,14 +158,11 @@ public final class StructureConfig {
     public enum RoadLength {
       SMALL((short) 1), MEDIUM((short) 2), LARGE((short) 4);
 
+      @Getter
       private final short length;
 
       private RoadLength(short length) {
         this.length = length;
-      }
-
-      public short getLength() {
-        return length;
       }
     }
 

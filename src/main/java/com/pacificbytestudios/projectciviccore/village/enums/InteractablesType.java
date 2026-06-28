@@ -3,12 +3,15 @@ package com.pacificbytestudios.projectciviccore.village.enums;
 import java.util.function.Supplier;
 
 import com.pacificbytestudios.projectciviccore.village.commands.core.utils.MarkerType;
+import lombok.Getter;
 
 public enum InteractablesType implements Supplier<String> {
   EATING_SPOT("Eating_Spot", MarkerType.TAVERN_CHAIR, MarkerType.TAVERN_PLATE);
 
   private String key;
+  @Getter
   private MarkerType markerType;
+  @Getter
   private MarkerType dependsOn;
 
   private InteractablesType(
@@ -23,13 +26,5 @@ public enum InteractablesType implements Supplier<String> {
   @Override
   public String get() {
     return this.key;
-  }
-
-  public MarkerType getMarkerType() {
-    return markerType;
-  }
-
-  public MarkerType getDependsOn() {
-    return dependsOn;
   }
 }

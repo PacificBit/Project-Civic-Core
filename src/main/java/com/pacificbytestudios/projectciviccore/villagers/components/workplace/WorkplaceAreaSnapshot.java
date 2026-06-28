@@ -18,30 +18,34 @@ import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @SerializableClass
 public class WorkplaceAreaSnapshot {
   public static final Duration EXPIRATION_AMOUNT = Duration.ofHours(1);
 
   public static final BuilderCodec<WorkplaceAreaSnapshot> CODEC = WorkplaceAreaSnapshotCodec.CODEC;
 
+  @Getter
   @SerialName("Vector3iDeque")
   Map<String, ArrayDeque<BlockTarget>> snapshotTargets = new HashMap<>();
 
+  @Getter
   @SerialWithCodec("com.hypixel.hytale.codec.Codec.INSTANT")
   Instant capturedAt;
 
+  @Getter
+  @Setter
   @SerialDescription("Used to indicate whether or not the workplace area snapshot was comcluded")
   boolean completed = false;
+  @Getter
+  @Setter
   Vec3i lastVisited;
 
-  // Optional debug hook fired when targets are consumed, so the snapshot debug view can be
-  // refreshed. Null (and therefore free) unless snapshot debugging is active.
+  @Setter
   @SerialIgnore
   Runnable changeListener;
-
-  public void setChangeListener(Runnable changeListener) {
-    this.changeListener = changeListener;
-  }
 
   private void notifyChanged() {
     if (this.changeListener != null) {
@@ -84,10 +88,6 @@ public class WorkplaceAreaSnapshot {
   public BlockTarget peekNextSnapshotTargetFrom(String group) {
     ArrayDeque<BlockTarget> targets = this.snapshotTargets.get(group);
     return targets == null ? null : targets.peek();
-  }
-
-  public Map<String, ArrayDeque<BlockTarget>> getSnapshotTargets() {
-    return this.snapshotTargets;
   }
 
   public Stream<Vec3i> streamSnapshotTargetBlocksFrom(String group) {
@@ -159,10 +159,6 @@ public class WorkplaceAreaSnapshot {
     }
   }
 
-  public Instant getCapturedAt() {
-    return this.capturedAt;
-  }
-
   public void captureNow(WorldTimeResource worldTimeResource) {
     this.capturedAt = worldTimeResource.getGameTime();
   }
@@ -178,22 +174,6 @@ public class WorkplaceAreaSnapshot {
 
     Instant currentGameTime = worldTimeResource.getGameTime();
     return this.capturedAt.plus(EXPIRATION_AMOUNT).isBefore(currentGameTime);
-  }
-
-  public boolean isCompleted() {
-    return this.completed;
-  }
-
-  public void setCompleted(boolean completed) {
-    this.completed = completed;
-  }
-
-  public Vec3i getLastVisited() {
-    return this.lastVisited;
-  }
-
-  public void setLastVisited(Vec3i lastVisited) {
-    this.lastVisited = lastVisited;
   }
 
   public boolean isValid(WorldTimeResource worldTimeResource) {

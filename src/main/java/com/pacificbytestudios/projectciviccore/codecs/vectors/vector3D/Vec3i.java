@@ -6,13 +6,13 @@ import org.joml.Vector3ic;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass(Vector3iUtil.class)
 public class Vec3i extends org.joml.Vector3i {
   private static final long serialVersionUID = 1L;
 
-  public static BuilderCodec<Vec3i> CODEC = BuilderCodec
-      .builder(Vec3i.class, Vec3i::new, Vector3iUtil.CODEC)
-      .build();
+  public static BuilderCodec<Vec3i> CODEC = Vec3iCodec.CODEC;
 
   public static Vec3i NORTH = Vec3i.from(Vector3iUtil.NORTH);
   public static Vec3i SOUTH = Vec3i.from(Vector3iUtil.SOUTH);

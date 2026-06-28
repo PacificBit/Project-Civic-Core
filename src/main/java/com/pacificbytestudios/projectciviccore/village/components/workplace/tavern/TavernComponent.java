@@ -17,20 +17,19 @@ import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest.ItemRequestCriterion;
 import com.pacificbytestudios.projectciviccore.village.core.interfaces.IWorkplaceMissingResource;
+import lombok.Getter;
 
 @SerializableClass
 public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissingResource {
   public static final BuilderCodec<TavernComponent> CODEC = TavernComponentCodec.CODEC;
 
+  @Getter
   @SerialName("MealToPrepareMap")
   Map<String, Integer> mealToPrepare = new HashMap<>();
+  @Getter
   Integer mealToPrepareCount = 0;
   Map<UUID, String> assignedRecipesToWorker = new HashMap<>();
   Set<ItemRequestCriterion> missingResources = new HashSet<>();
-
-  public Map<String, Integer> getMealToPrepare() {
-    return mealToPrepare;
-  }
 
   public String getNextMealToPrepare() {
     Iterator<String> iterator = this.mealToPrepare.keySet().iterator();
@@ -110,10 +109,6 @@ public class TavernComponent implements Component<ChunkStore>, IWorkplaceMissing
 
   public void markWorkerAsFree(UUID workerId) {
     this.assignedRecipesToWorker.remove(workerId);
-  }
-
-  public Integer getMealToPrepareCount() {
-    return this.mealToPrepareCount;
   }
 
   @Override

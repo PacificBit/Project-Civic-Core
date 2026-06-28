@@ -13,7 +13,10 @@ import com.hypixel.hytale.server.npc.instructions.Sensor;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageHeartState;
 import com.pacificbytestudios.projectciviccore.villagers.ai.sensors.implementation.general.WatchVillageStateSensor;
 
+import lombok.Getter;
+
 public class BuilderWatchVillageStateSensor extends BuilderSensorBase {
+  @Getter
   private VillageHeartState state;
 
   @Override
@@ -30,10 +33,6 @@ public class BuilderWatchVillageStateSensor extends BuilderSensorBase {
 
   private void setState(String state) {
     this.state = VillageHeartState.valueOf(state.toUpperCase());
-  }
-
-  public VillageHeartState getState() {
-    return this.state;
   }
 
   @Override

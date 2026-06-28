@@ -13,18 +13,19 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.hypixel.hytale.codec.codecs.map.MapCodec;
-import com.hypixel.hytale.codec.codecs.map.Short2ObjectMapCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialAfterDecode;
+import com.pacificbytestudio.codecbutler.annotations.SerialIgnore;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
-import com.pacificbytestudios.projectciviccore.codecs.RoadsGraph.RoadNode;
+import com.pacificbytestudios.projectciviccore.codecs.RoadNode;
 import com.pacificbytestudios.projectciviccore.codecs.TopologyStructure;
 import com.pacificbytestudios.projectciviccore.codecs.Vector3iMapCodec;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
@@ -32,97 +33,53 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+import lombok.Getter;
+import lombok.Setter;
 
+@SerializableClass
 public class VillageTopologyComponent implements Component<ChunkStore> {
   public static final Byte CELL_SIZE = 7;
-  public static final BuilderCodec<VillageTopologyComponent> CODEC = BuilderCodec
-      .builder(VillageTopologyComponent.class, VillageTopologyComponent::new)
 
-      .append(new KeyedCodec<>("VillageRadius", Codec.SHORT, false),
-          (obj, value) -> obj.villageRadius = value,
-          obj -> obj.villageRadius)
-      .add()
+  static final Vector3iMapCodec<UUID, HashMap<Vec3i, UUID>> ROADS_CODEC = new Vector3iMapCodec<>(
+      Codec.UUID_BINARY,
+      HashMap::new,
+      false);
 
-      .append(new KeyedCodec<>("VillageOrientation", Rotation.CODEC, false),
-          (obj, value) -> obj.villageOrientation = value,
-          obj -> obj.villageOrientation)
-      .add()
+  public static final BuilderCodec<VillageTopologyComponent> CODEC = VillageTopologyComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>("Seed", Codec.LONG, false),
-          (obj, value) -> obj.seed = value,
-          obj -> obj.seed)
-      .add()
+  @Getter
+  Short villageRadius;
 
-      .append(new KeyedCodec<>(
-          "RegisteredTopologyStructures",
-          new MapCodec<TopologyStructure, HashMap<String, TopologyStructure>>(
-              TopologyStructure.CODEC,
-              HashMap::new),
-          false),
-          (obj, value) -> obj.setRegisteredTopologyStructures(decodeTopologyStructures(value)),
-          obj -> encodeTopologyStructures(obj.structureIdToTopology))
-      .add()
+  @SerialName("RegisteredTopologyStructures")
+  Map<UUID, TopologyStructure> structureIdToTopology = new HashMap<>();
 
-      .append(new KeyedCodec<>("Roads",
-          new Vector3iMapCodec<UUID, HashMap<Vec3i, UUID>>(
-              Codec.UUID_BINARY,
-              HashMap::new,
-              false)),
-          (obj, value) -> obj.roads = value,
-          (obj) -> obj.roads)
-      .add()
-
-      .append(new KeyedCodec<>(
-          "RoadLevelPerDepth",
-          new Short2ObjectMapCodec<>(
-              new ArrayCodec<>(Codec.UUID_BINARY, UUID[]::new),
-              Short2ObjectOpenHashMap::new),
-          false),
-          (obj, value) -> obj.roadGroupPerDepth = decodeRoadLevelPerDepth(value),
-          obj -> encodeRoadLevelPerDepth(obj.roadGroupPerDepth))
-      .add()
-
-      .append(new KeyedCodec<>(
-          "RegisteredRoads",
-          new MapCodec<RoadNode, HashMap<String, RoadNode>>(
-              RoadNode.CODEC,
-              HashMap::new),
-          false),
-          (obj, value) -> obj.setRegisteredRoads(decodeRegisteredRoads(value)),
-          obj -> encodeRegisteredRoads(obj.roadIdToRoad))
-      .add()
-
-      .append(new KeyedCodec<>("HighestLevel", Codec.BYTE, false),
-          (obj, value) -> obj.highestRoadLevel = value,
-          obj -> obj.highestRoadLevel)
-      .add()
-
-      .build();
-
-  private Short villageRadius;
-  private Map<UUID, TopologyStructure> structureIdToTopology = new HashMap<>();
+  @SerialIgnore
   private Map<Pair<Byte, Byte>, Set<UUID>> villageGrid = new HashMap<>();
 
-  private Map<Vec3i, UUID> roads = new HashMap<>();
-  private Map<Byte, List<UUID>> roadGroupPerDepth = new HashMap<>();
-  private Map<UUID, RoadNode> roadIdToRoad = new HashMap<>();
+  @SerialName("Roads")
+  @SerialWithCodec("VillageTopologyComponent.ROADS_CODEC")
+  Map<Vec3i, UUID> roads = new HashMap<>();
 
-  private Rotation villageOrientation;
-  private Long seed;
-  private byte highestRoadLevel = -1;
+  @SerialName("RoadLevelPerDepth")
+  Map<Byte, List<UUID>> roadGroupPerDepth = new HashMap<>();
+
+  @Getter
+  @SerialName("RegisteredRoads")
+  Map<UUID, RoadNode> roadIdToRoad = new HashMap<>();
+
+  @Setter
+  @SerialName("VillageOrientation")
+  @SerialWithCodec("com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation.CODEC")
+  Rotation villageOrientation;
+  @Getter
+  @Setter
+  Long seed;
+  @Getter
+  @SerialName("HighestLevel")
+  byte highestRoadLevel = -1;
 
   public VillageTopologyComponent() {
     this.seed = new FastRandom().nextLong();
-  }
-
-  public Long getSeed() {
-    return seed;
-  }
-
-  public void setSeed(Long seed) {
-    this.seed = seed;
   }
 
   public Rotation getVillageOrientation() {
@@ -131,10 +88,6 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       this.villageOrientation = Rotation.values()[new FastRandom(this.seed).nextInt(0, size)];
     }
     return villageOrientation;
-  }
-
-  public void setVillageOrientation(Rotation villageOrientation) {
-    this.villageOrientation = villageOrientation;
   }
 
   public void addRoad(RoadNode node) {
@@ -175,10 +128,6 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return this.roadIdToRoad.get(roadId);
   }
 
-  public Map<UUID, RoadNode> getRoadIdToRoad() {
-    return this.roadIdToRoad;
-  }
-
   public UUID getRoadIdAtDirection(Vec3i directionKey) {
     return this.roads.get(directionKey);
   }
@@ -198,10 +147,6 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     }
 
     return Collections.unmodifiableList(new ArrayList<>(roadIds));
-  }
-
-  public byte getHighestRoadLevel() {
-    return this.highestRoadLevel;
   }
 
   public List<UUID> getRegisteredRoadIdsByDepthDescending() {
@@ -262,10 +207,6 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
 
     this.structureIdToTopology.put(clonedStructure.getStructureId(), clonedStructure);
     rebuildVillageGrid();
-  }
-
-  public Short getVillageRadius() {
-    return this.villageRadius;
   }
 
   public Map<UUID, TopologyStructure> getRegisteredTopologyStructures() {
@@ -358,31 +299,10 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return Math.floorDiv(blockOffset + (CELL_SIZE / 2), CELL_SIZE);
   }
 
-  private void setRegisteredTopologyStructures(Map<UUID, TopologyStructure> structures) {
-    this.structureIdToTopology = new HashMap<>();
-    if (structures != null) {
-      structures.forEach((structureId, structure) -> {
-        if (structureId != null && structure != null) {
-          this.structureIdToTopology.put(structureId, structure);
-        }
-      });
-    }
-
-    rebuildVillageGrid();
-  }
-
-  private void setRegisteredRoads(Map<UUID, RoadNode> roads) {
-    this.roadIdToRoad = new HashMap<>();
-    if (roads != null) {
-      roads.forEach((roadId, road) -> {
-        if (roadId != null && road != null) {
-          this.roadIdToRoad.put(roadId, road);
-        }
-      });
-    }
-  }
-
-  private void rebuildVillageGrid() {
+  // villageGrid is @SerialIgnore (spatial index, not persisted); rebuild it from
+  // the decoded structures so spatial lookups work right after deserialization.
+  @SerialAfterDecode
+  void rebuildVillageGrid() {
     this.villageGrid = new HashMap<>();
     Vec2i villageCenter = getCoreCenter2D();
 
@@ -519,115 +439,6 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
     return getCellMinBlock(cellIndex) + CELL_SIZE - 1;
   }
 
-  private static Map<Byte, List<UUID>> decodeRoadLevelPerDepth(Short2ObjectMap<UUID[]> encoded) {
-    Map<Byte, List<UUID>> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    encoded.forEach((depth, roadIds) -> decoded.put(depth.byteValue(), decodeRoadIds(roadIds)));
-    return decoded;
-  }
-
-  private static Short2ObjectMap<UUID[]> encodeRoadLevelPerDepth(Map<Byte, List<UUID>> roadLevelPerDepth) {
-    Short2ObjectOpenHashMap<UUID[]> encoded = new Short2ObjectOpenHashMap<>();
-
-    if (roadLevelPerDepth == null) {
-      return encoded;
-    }
-
-    roadLevelPerDepth.forEach((depth, roadIds) -> {
-      if (depth == null || roadIds == null) {
-        return;
-      }
-      encoded.put(depth.shortValue(), encodeRoadIds(roadIds));
-    });
-    return encoded;
-  }
-
-  private static Map<UUID, TopologyStructure> decodeTopologyStructures(Map<String, TopologyStructure> encoded) {
-    Map<UUID, TopologyStructure> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    encoded.forEach((structureId, structure) -> {
-      if (structureId == null || structure == null) {
-        return;
-      }
-
-      UUID uuid = UUID.fromString(structureId);
-      TopologyStructure storedStructure = structure.clone();
-      storedStructure.setStructureId(uuid);
-      decoded.put(uuid, storedStructure);
-    });
-
-    return decoded;
-  }
-
-  private static HashMap<String, TopologyStructure> encodeTopologyStructures(Map<UUID, TopologyStructure> structures) {
-    HashMap<String, TopologyStructure> encoded = new HashMap<>();
-
-    if (structures == null) {
-      return encoded;
-    }
-
-    structures.forEach((structureId, structure) -> {
-      if (structureId == null || structure == null) {
-        return;
-      }
-
-      TopologyStructure storedStructure = structure.clone();
-      storedStructure.setStructureId(structureId);
-      encoded.put(structureId.toString(), storedStructure);
-    });
-
-    return encoded;
-  }
-
-  private static Map<UUID, RoadNode> decodeRegisteredRoads(Map<String, RoadNode> encoded) {
-    Map<UUID, RoadNode> decoded = new HashMap<>();
-
-    if (encoded == null) {
-      return decoded;
-    }
-
-    encoded.forEach((roadId, road) -> {
-      if (roadId == null || road == null) {
-        return;
-      }
-
-      UUID uuid = UUID.fromString(roadId);
-      RoadNode storedRoad = road.clone();
-      storedRoad.setRoadId(uuid);
-      decoded.put(uuid, storedRoad);
-    });
-
-    return decoded;
-  }
-
-  private static HashMap<String, RoadNode> encodeRegisteredRoads(Map<UUID, RoadNode> roads) {
-    HashMap<String, RoadNode> encoded = new HashMap<>();
-
-    if (roads == null) {
-      return encoded;
-    }
-
-    roads.forEach((roadId, road) -> {
-      if (roadId == null || road == null) {
-        return;
-      }
-
-      RoadNode storedRoad = road.clone();
-      storedRoad.setRoadId(roadId);
-      encoded.put(roadId.toString(), storedRoad);
-    });
-
-    return encoded;
-  }
-
   private static Map<UUID, TopologyStructure> copyTopologyStructures(Map<UUID, TopologyStructure> structures) {
     Map<UUID, TopologyStructure> copy = new HashMap<>();
 
@@ -675,27 +486,6 @@ public class VillageTopologyComponent implements Component<ChunkStore> {
       }
     });
     return copy;
-  }
-
-  private static List<UUID> decodeRoadIds(UUID[] roadIds) {
-    List<UUID> decoded = new ArrayList<>();
-
-    if (roadIds == null) {
-      return decoded;
-    }
-
-    for (UUID roadId : roadIds) {
-      decoded.add(roadId);
-    }
-    return decoded;
-  }
-
-  private static UUID[] encodeRoadIds(List<UUID> roadIds) {
-    if (roadIds == null) {
-      return new UUID[0];
-    }
-
-    return roadIds.toArray(UUID[]::new);
   }
 
   private static List<UUID> copyRoadIds(List<UUID> roadIds) {

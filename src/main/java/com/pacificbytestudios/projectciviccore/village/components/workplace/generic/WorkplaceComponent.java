@@ -25,53 +25,42 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.stor
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.WorkType;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @SerializableClass
 public class WorkplaceComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceComponent> CODEC = WorkplaceComponentCodec.CODEC;
 
   @SerialName("Type")
-  StructureType workingPlaceType;
+  StructureType workplaceType;
   @SerialName("WorkerTypes")
   WorkType[] workerType;
 
   UUID uuid;
   Short level = 1;
+
+  @Getter(lombok.AccessLevel.NONE)
   EntityRef villageRef;
   EntityRef workplaceRef;
   AreaFootprint workingArea;
-
   BlockTransform3D benchTransform;
   BlockTransform3D prefabAnchorTransform;
 
+  @Setter(lombok.AccessLevel.NONE)
   UUID bossId;
+
+  @Getter(lombok.AccessLevel.NONE)
+  @Setter(lombok.AccessLevel.NONE)
   Set<UUID> workers = new HashSet<>();
+  @Getter(lombok.AccessLevel.NONE)
+  @Setter(lombok.AccessLevel.NONE)
   Map<UUID, AreaFootprint> workersDesignatedArea = new HashMap<>();
+
   WorkplaceContainerRegistryComponent storage;
   VillageStorageRequest lastStorageRequest;
-
-  public UUID getUuid() {
-    return uuid;
-  }
-
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
-  }
-
-  public Short getLevel() {
-    return level;
-  }
-
-  public void setLevel(Short level) {
-    this.level = level;
-  }
-
-  public StructureType getWorkplaceType() {
-    return workingPlaceType;
-  }
-
-  public void setWorkingPlaceType(StructureType workingPlaceType) {
-    this.workingPlaceType = workingPlaceType;
-  }
 
   public Vec3i getBenchPos() {
     return this.benchTransform.getPosition3i();
@@ -79,14 +68,6 @@ public class WorkplaceComponent implements Component<ChunkStore> {
 
   public void setBenchPos(Vec3i benchPos) {
     this.benchTransform = new BlockTransform3D(benchPos);
-  }
-
-  public BlockTransform3D getBenchTransform() {
-    return this.benchTransform;
-  }
-
-  public void setBenchTransform(BlockTransform3D benchTransform) {
-    this.benchTransform = benchTransform;
   }
 
   public Vec3f getBenchAccessPos() {
@@ -105,28 +86,8 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     this.prefabAnchorTransform = new BlockTransform3D(prefabAnchor);
   }
 
-  public BlockTransform3D getPrefabAnchorTransform() {
-    return this.prefabAnchorTransform;
-  }
-
-  public void setPrefabAnchorTransform(BlockTransform3D prefabAnchorTransform) {
-    this.prefabAnchorTransform = prefabAnchorTransform;
-  }
-
-  public void setVillageRef(EntityRef villageRef) {
-    this.villageRef = villageRef;
-  }
-
   public Ref<ChunkStore> getVillageHeartRef() {
     return this.villageRef.getRef();
-  }
-
-  public EntityRef getWorkplaceRef() {
-    return workplaceRef;
-  }
-
-  public void setWorkplaceRef(EntityRef workplaceRef) {
-    this.workplaceRef = workplaceRef;
   }
 
   public Set<UUID> getWorkers() {
@@ -156,15 +117,11 @@ public class WorkplaceComponent implements Component<ChunkStore> {
         ? 1
         : this.workerType.length;
 
-    if (this.workingPlaceType == StructureType.STORAGE && this.level == 2) {
+    if (this.workplaceType == StructureType.STORAGE && this.level == 2) {
       return Math.max(configuredCount, 4);
     }
 
     return configuredCount;
-  }
-
-  public UUID getBossId() {
-    return bossId;
   }
 
   public void registerAsBoss(UUID bossId) {
@@ -183,40 +140,8 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     }
   }
 
-  public void setStorage(WorkplaceContainerRegistryComponent storage) {
-    this.storage = storage;
-  }
-
-  public WorkplaceContainerRegistryComponent getStorage() {
-    return this.storage;
-  }
-
-  public AreaFootprint getWorkingArea() {
-    return workingArea;
-  }
-
-  public void setWorkingArea(AreaFootprint claimedArea) {
-    this.workingArea = claimedArea;
-  }
-
-  public WorkType[] getWorkerType() {
-    return workerType;
-  }
-
-  public void setWorkerType(WorkType[] workerType) {
-    this.workerType = workerType;
-  }
-
   public AreaFootprint getWorkerDesignatedArea(UUID uuid) {
     return this.workersDesignatedArea.get(uuid);
-  }
-
-  public VillageStorageRequest getLastStorageRequest() {
-    return lastStorageRequest;
-  }
-
-  public void setLastStorageRequest(VillageStorageRequest lastStorageRequest) {
-    this.lastStorageRequest = lastStorageRequest;
   }
 
   public <T extends Component<ChunkStore>> T getComponent(ComponentType<ChunkStore, T> componentType) {
@@ -234,7 +159,7 @@ public class WorkplaceComponent implements Component<ChunkStore> {
     return "WorkplaceComponent{" +
         "\n\tuuid=" + uuid + "," +
         "\n\tlevel=" + level + "," +
-        "\n\tworkingPlaceType=" + workingPlaceType + "," +
+        "\n\tworkplaceType=" + workplaceType + "," +
         "\n\tbenchPos=" + getBenchPos() + "," +
         "\n\tbenchAccessPos=" + getBenchAccessPos() + "," +
         "\n\tprefabAnchor=" + getPrefabAnchor() + "," +

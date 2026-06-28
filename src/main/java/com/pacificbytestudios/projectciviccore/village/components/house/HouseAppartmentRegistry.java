@@ -12,15 +12,14 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
+import lombok.Getter;
+
+@Getter
 @SerializableClass
 public class HouseAppartmentRegistry implements Component<ChunkStore> {
   public static final BuilderCodec<HouseAppartmentRegistry> CODEC = HouseAppartmentRegistryCodec.CODEC;
 
   Map<UUID, AppartmentComponent> appartments = new HashMap<>();
-
-  public Map<UUID, AppartmentComponent> getAppartments() {
-    return appartments;
-  }
 
   public void registerAppartment(UUID uuid, AppartmentComponent appartment) {
     this.appartments.put(uuid, appartment);

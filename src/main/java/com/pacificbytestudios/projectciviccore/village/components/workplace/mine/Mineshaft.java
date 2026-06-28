@@ -10,6 +10,8 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
+import lombok.Getter;
+import lombok.Setter;
 
 @SerializableClass
 public class Mineshaft {
@@ -19,6 +21,8 @@ public class Mineshaft {
   Map<Vec3i, Vec3i> galleryOffsets = new HashMap<>();
   Map<UUID, Short> galleryIdToMineshaftLevel = new HashMap<>();
   Vec3i anchorPoint;
+  @Getter
+  @Setter
   Rotation rotation;
   Short latestLevel = 0;
 
@@ -28,14 +32,6 @@ public class Mineshaft {
   public Mineshaft(Map<Vec3i, Vec3i> galleryOffsets, Vec3i anchorPoint, Rotation rotation) {
     this.galleryOffsets = galleryOffsets;
     this.anchorPoint = Vec3i.from(anchorPoint);
-    this.rotation = rotation;
-  }
-
-  public Rotation getRotation() {
-    return rotation;
-  }
-
-  public void setRotation(Rotation rotation) {
     this.rotation = rotation;
   }
 

@@ -10,15 +10,14 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
+import lombok.Getter;
+
+@Getter
 @SerializableClass
 public class AppartmentComponent implements Component<ChunkStore> {
   public static final BuilderCodec<AppartmentComponent> CODEC = AppartmentComponentCodec.CODEC;
 
   Map<UUID, VillageBedComponent> beds = new HashMap<>();
-
-  public Map<UUID, VillageBedComponent> getBeds() {
-    return this.beds;
-  }
 
   public void setBeds(Map<UUID, VillageBedComponent> beds) {
     this.beds = beds;

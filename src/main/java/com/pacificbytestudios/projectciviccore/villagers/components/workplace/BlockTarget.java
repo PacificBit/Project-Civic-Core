@@ -6,6 +6,9 @@ import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
+import lombok.Getter;
+
+@Getter
 @SerializableClass
 public class BlockTarget {
   public static final BuilderCodec<BlockTarget> CODEC = BlockTargetCodec.CODEC;
@@ -28,14 +31,6 @@ public class BlockTarget {
   public BlockTarget(BlockTransform3D transform3d) {
     targetBlock = transform3d.getPosition3i();
     accessPosition = transform3d.getAccessOffset3f();
-  }
-
-  public Vec3i getTargetBlock() {
-    return targetBlock;
-  }
-
-  public Vec3f getAccessPosition() {
-    return accessPosition;
   }
 
   @Override

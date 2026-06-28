@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.Getter;
+
 public enum Crops {
   SUNFLOWER(
       "Plant_Seeds_Sunflower", "Plant_Sunflower_Block",
@@ -69,6 +71,7 @@ public enum Crops {
     SEED_TO_BLOCK = Collections.unmodifiableMap(map);
   }
 
+  @Getter
   private final String seedId;
   private final String blockId;
   private final String eternalSeedId;
@@ -83,9 +86,5 @@ public enum Crops {
 
   public static String getBlockFromSeed(String seedId) {
     return SEED_TO_BLOCK.get(seedId);
-  }
-
-  public String getSeedId() {
-    return this.seedId;
   }
 }

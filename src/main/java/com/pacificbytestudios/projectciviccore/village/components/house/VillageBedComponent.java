@@ -9,7 +9,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class VillageBedComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageBedComponent> CODEC = VillageBedComponentCodec.CODEC;
@@ -17,22 +21,6 @@ public class VillageBedComponent implements Component<ChunkStore> {
   boolean isTaken;
   UUID owner;
   BlockTransform3D bedTransform;
-
-  public boolean isTaken() {
-    return isTaken;
-  }
-
-  public void setTaken(boolean isTaken) {
-    this.isTaken = isTaken;
-  }
-
-  public UUID getOwner() {
-    return owner;
-  }
-
-  public void setOwner(UUID owner) {
-    this.owner = owner;
-  }
 
   public Vec3i getPosition() {
     return this.bedTransform.getPosition3i();
@@ -48,14 +36,6 @@ public class VillageBedComponent implements Component<ChunkStore> {
 
   public void setRotation(Rotation rotation) {
     this.bedTransform.setRotation(rotation);
-  }
-
-  public BlockTransform3D getBedTransform() {
-    return this.bedTransform;
-  }
-
-  public void setBedTransform(BlockTransform3D bedTransform) {
-    this.bedTransform = bedTransform;
   }
 
   @Override

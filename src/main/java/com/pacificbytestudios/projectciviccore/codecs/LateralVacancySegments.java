@@ -4,44 +4,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@SerializableClass
 public class LateralVacancySegments {
-  public static final BuilderCodec<LateralVacancySegments> CODEC = BuilderCodec
-      .builder(LateralVacancySegments.class, LateralVacancySegments::new)
+  public static final BuilderCodec<LateralVacancySegments> CODEC = LateralVacancySegmentsCodec.CODEC;
 
-      .append(new KeyedCodec<>("ValidSegments",
-          new ArrayCodec<>(
-              Segment.CODEC,
-              Segment[]::new)),
-          (obj, value) -> {
-            obj.validSegments = new ArrayList<>();
-            if (value != null) {
-              for (Segment segment : value) {
-                obj.validSegments.add(segment);
-              }
-            }
-          },
-          (obj) -> obj.validSegments == null ? new Segment[0] : obj.validSegments.toArray(new Segment[0]))
-      .add()
-
-      .append(new KeyedCodec<>("OrientationVec", Vec3i.CODEC),
-          (obj, value) -> obj.roadDirectionVec = value,
-          (obj) -> obj.roadDirectionVec)
-      .add()
-
-      .build();
-
-  private List<Segment> validSegments = new ArrayList<>();
-  private Vec3i roadDirectionVec;
-
-  public List<Segment> getValidSegments() {
-    return validSegments;
-  }
+  @Setter(lombok.AccessLevel.NONE)
+  List<Segment> validSegments = new ArrayList<>();
+  Vec3i roadDirectionVec;
 
   public void appendSegment(Segment segment) {
     if (this.validSegments == null) {
@@ -254,28 +232,12 @@ public class LateralVacancySegments {
     return result;
   }
 
-  public Vec3i getRoadDirectionVec() {
-    return roadDirectionVec;
-  }
-
-  public void setRoadDirectionVec(Vec3i roadDirectionVec) {
-    this.roadDirectionVec = roadDirectionVec;
-  }
-
   @Override
   public LateralVacancySegments clone() {
-    LateralVacancySegments adjacentSegments = new LateralVacancySegments();
-    adjacentSegments.validSegments = new ArrayList<>();
-    if (this.validSegments != null) {
-      for (Segment segment : this.validSegments) {
-        adjacentSegments.validSegments.add(segment == null ? null : segment.clone());
-      }
-    }
-
-    adjacentSegments.roadDirectionVec = Vec3i.from(this.roadDirectionVec);
-    return adjacentSegments;
+    return LateralVacancySegmentsCodec.clone(this);
   }
 
+  @Getter
   @SerializableClass
   public static class Segment {
     public static final BuilderCodec<Segment> CODEC = SegmentCodec.CODEC;
@@ -298,17 +260,9 @@ public class LateralVacancySegments {
       return SegmentCodec.clone(this);
     }
 
-    public Vec3i getStart() {
-      return start;
-    }
-
     public void setStart(Vec3i start) {
       this.start = start;
       recalculateSize();
-    }
-
-    public Vec3i getEnd() {
-      return end;
     }
 
     public void setEnd(Vec3i end) {
@@ -325,10 +279,6 @@ public class LateralVacancySegments {
           minZ <= dot.z &&
           maxX >= dot.x &&
           maxZ >= dot.z;
-    }
-
-    public Short getSize() {
-      return size;
     }
 
     public void recalculateSize() {

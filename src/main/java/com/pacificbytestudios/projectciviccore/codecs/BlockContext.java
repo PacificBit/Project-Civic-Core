@@ -5,7 +5,9 @@ import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import lombok.Getter;
 
+@Getter
 @SerializableClass
 public class BlockContext {
   public static final BuilderCodec<BlockContext> CODEC = BlockContextCodec.CODEC;
@@ -24,20 +26,8 @@ public class BlockContext {
     this.chunkIndex = chunkIndex;
   }
 
-  public String getWorldName() {
-    return worldName;
-  }
-
   public World getWorld() {
     return Universe.get().getWorld(worldName);
-  }
-
-  public Vec3i getPosition() {
-    return this.position;
-  }
-
-  public Long getChunkIndex() {
-    return chunkIndex;
   }
 
   public BlockContext clone() {

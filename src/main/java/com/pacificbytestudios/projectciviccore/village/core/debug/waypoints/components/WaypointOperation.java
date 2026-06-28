@@ -4,13 +4,18 @@ import java.util.UUID;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class WaypointOperation {
   public static final BuilderCodec<WaypointOperation> CODEC = WaypointOperationCodec.CODEC;
 
   UUID waypointId;
   Operation operationType;
+  @Setter(lombok.AccessLevel.NONE)
   Waypoint oldWaypoint;
   Waypoint newWaypoint;
 
@@ -30,34 +35,6 @@ public class WaypointOperation {
 
   public WaypointOperation(Operation operationType, Waypoint oldWaypoint, Waypoint newWaypoint) {
     this(oldWaypoint == null ? null : oldWaypoint.getWaypointId(), operationType, oldWaypoint, newWaypoint);
-  }
-
-  public UUID getWaypointId() {
-    return this.waypointId;
-  }
-
-  public void setWaypointId(UUID waypointId) {
-    this.waypointId = waypointId;
-  }
-
-  public Operation getOperationType() {
-    return this.operationType;
-  }
-
-  public void setOperationType(Operation operationType) {
-    this.operationType = operationType;
-  }
-
-  public Waypoint getOldWaypoint() {
-    return this.oldWaypoint;
-  }
-
-  public Waypoint getNewWaypoint() {
-    return this.newWaypoint;
-  }
-
-  public void setNewWaypoint(Waypoint newWaypoint) {
-    this.newWaypoint = newWaypoint;
   }
 
   @Override

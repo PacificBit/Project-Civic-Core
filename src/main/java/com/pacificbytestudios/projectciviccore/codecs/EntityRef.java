@@ -10,14 +10,18 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudio.codecbutler.annotations.SerialIgnore;
+import lombok.Getter;
 
+@Getter
 @SerializableClass
 public class EntityRef {
   public static final BuilderCodec<EntityRef> CODEC = EntityRefCodec.CODEC;
 
   String worldName;
   Vec3i position;
+
   @SerialIgnore
+  @Getter(lombok.AccessLevel.NONE)
   private Ref<ChunkStore> entityRef;
 
   public EntityRef() {
@@ -41,14 +45,6 @@ public class EntityRef {
       }
     }
     return this.entityRef;
-  }
-
-  public Vec3i getPosition() {
-    return this.position;
-  }
-
-  public String getWorldName() {
-    return this.worldName;
   }
 
   public EntityRef clone() {

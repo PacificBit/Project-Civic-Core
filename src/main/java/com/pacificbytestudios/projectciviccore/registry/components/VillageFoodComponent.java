@@ -7,21 +7,17 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class VillageFoodComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageFoodComponent> CODEC = VillageFoodComponentCodec.CODEC;
 
   Short saturation;
   EntityRef tavernRef;
-
-  public EntityRef getTavernRef() {
-    return this.tavernRef;
-  }
-
-  public void setTavernRef(EntityRef tavernRef) {
-    this.tavernRef = tavernRef;
-  }
 
   public boolean hasValidTavernRef() {
     return this.tavernRef != null

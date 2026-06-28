@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.hypixel.hytale.protocol.DebugShape;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.utils.DrawUtils;
+import lombok.Getter;
 
 public enum MarkerType {
   NONE(DebugShape.Sphere, DrawUtils.COLOR_RED),
@@ -22,7 +23,9 @@ public enum MarkerType {
   SNAPSHOT_WP_3(DebugShape.Sphere, DrawUtils.COLOR_CYAN),
   SNAPSHOT_WP_4(DebugShape.Sphere, DrawUtils.COLOR_WHITE);
 
+  @Getter
   private DebugShape shape;
+  @Getter
   private Vec3f color;
 
   public static MarkerType[] DEFAULTS = new MarkerType[] { BENCH, BENCH_ACCESS, STORAGE, STORAGE_ACCESS };
@@ -30,7 +33,10 @@ public enum MarkerType {
   private static final MarkerType[] SNAPSHOTS = {
       SNAPSHOT_WP_1, SNAPSHOT_WP_2, SNAPSHOT_WP_3, SNAPSHOT_WP_4 };
 
-  /** Cycles through the snapshot marker types so an unbounded number of targets stays colored. */
+  /**
+   * Cycles through the snapshot marker types so an unbounded number of targets
+   * stays colored.
+   */
   public static MarkerType snapshotMarker(int index) {
     return SNAPSHOTS[Math.floorMod(index, SNAPSHOTS.length)];
   }
@@ -40,13 +46,11 @@ public enum MarkerType {
     this.color = color;
   }
 
-  public DebugShape getShape() {
-    return shape;
-  }
-
   /**
-   * Point markers carry sub-block precision and are drawn with their own shape rather than
-   * as a block-aligned cube. The classification must come from the marker type, not from
+   * Point markers carry sub-block precision and are drawn with their own shape
+   * rather than
+   * as a block-aligned cube. The classification must come from the marker type,
+   * not from
    * whether the position happens to land on whole-block coordinates.
    */
   public boolean isFloatMarker() {
@@ -54,10 +58,6 @@ public enum MarkerType {
       case TAVERN_CHAIR, TAVERN_PLATE, SNAPSHOT_WP_1, SNAPSHOT_WP_2, SNAPSHOT_WP_3, SNAPSHOT_WP_4 -> true;
       default -> false;
     };
-  }
-
-  public Vec3f getColor() {
-    return color;
   }
 
   public static MarkerType[] markersTypeBuilder(MarkerType[] base, MarkerType... extra) {

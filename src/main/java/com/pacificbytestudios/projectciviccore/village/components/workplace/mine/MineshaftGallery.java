@@ -9,6 +9,8 @@ import com.pacificbytestudio.codecbutler.annotations.SerialName;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import lombok.Setter;
+import lombok.Getter;
 
 @SerializableClass
 public class MineshaftGallery {
@@ -16,13 +18,21 @@ public class MineshaftGallery {
   public static final BuilderCodec<MineshaftGallery> CODEC = MineshaftGalleryCodec.CODEC;
 
   UUID galleryId;
+  @Getter
+  @Setter
   Vec3i cardinalDirection;
+  @Getter
+  @Setter
   Vec3i startPosition;
+  @Setter
   Vec3i lastDiggedPosition;
 
+  @Getter
   @SerialName("TrackedPrefabs")
   List<TrackedPrefabPlacementComponent> restoreSnapshot = new ArrayList<>();
 
+  @Getter
+  @Setter
   boolean completed = false;
 
   public MineshaftGallery() {
@@ -43,24 +53,8 @@ public class MineshaftGallery {
     return galleryId;
   }
 
-  public Vec3i getCardinalDirection() {
-    return cardinalDirection;
-  }
-
-  public void setCardinalDirection(Vec3i cardinalDirection) {
-    this.cardinalDirection = cardinalDirection;
-  }
-
   public void setGalleryId(UUID galleryId) {
     this.galleryId = galleryId == null ? UUID.randomUUID() : galleryId;
-  }
-
-  public boolean isCompleted() {
-    return completed;
-  }
-
-  public void setCompleted(boolean completed) {
-    this.completed = completed;
   }
 
   public Vec3i getLastDiggedPosition() {
@@ -68,22 +62,6 @@ public class MineshaftGallery {
       this.lastDiggedPosition = this.startPosition.clone();
     }
     return this.lastDiggedPosition;
-  }
-
-  public Vec3i getStartPosition() {
-    return startPosition;
-  }
-
-  public void setStartPosition(Vec3i startPosition) {
-    this.startPosition = startPosition;
-  }
-
-  public void setLastDiggedPosition(Vec3i lastDiggedPosition) {
-    this.lastDiggedPosition = lastDiggedPosition;
-  }
-
-  public List<TrackedPrefabPlacementComponent> getRestoreSnapshot() {
-    return restoreSnapshot;
   }
 
   public boolean hasRestoreSnapshotAt(Vec3i sectionOrigin) {

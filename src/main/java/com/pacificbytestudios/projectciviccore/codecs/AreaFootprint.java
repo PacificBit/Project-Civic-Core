@@ -8,8 +8,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@Getter
 @SerializableClass
 public class AreaFootprint implements Component<ChunkStore> {
 
@@ -17,6 +22,7 @@ public class AreaFootprint implements Component<ChunkStore> {
 
   Vec2i topLeft;
   Vec2i botRight;
+  @Setter
   int y;
 
   public AreaFootprint() {
@@ -51,41 +57,17 @@ public class AreaFootprint implements Component<ChunkStore> {
     this.y = center.y;
   }
 
-  protected void setY(int y) {
-    this.y = y;
-  }
-
   @Override
   public AreaFootprint clone() {
     return AreaFootprintCodec.clone(this);
-  }
-
-  public Vec2i getTopLeft() {
-    return topLeft;
-  }
-
-  public Vec3i getTopLeft3i() {
-    return new Vec3i(this.topLeft.x, this.y, this.topLeft.y);
   }
 
   public void setTopLeft(Vec2i topLeft) {
     this.topLeft = Vec2i.from(topLeft);
   }
 
-  public Vec2i getBotRight() {
-    return botRight;
-  }
-
-  public Vec3i getBotRight3i() {
-    return new Vec3i(this.botRight.x, this.y, this.botRight.y);
-  }
-
   public void setBotRight(Vec2i botRight) {
     this.botRight = Vec2i.from(botRight);
-  }
-
-  public int getY() {
-    return this.y;
   }
 
   public int getMinX() {

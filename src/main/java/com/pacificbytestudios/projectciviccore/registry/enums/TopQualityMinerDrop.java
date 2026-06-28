@@ -1,6 +1,7 @@
 package com.pacificbytestudios.projectciviccore.registry.enums;
 
 import java.util.function.Supplier;
+import lombok.Getter;
 
 public enum TopQualityMinerDrop implements Supplier<String> {
   ADAMANTITE("Ore_Adamantite", 20),
@@ -12,6 +13,7 @@ public enum TopQualityMinerDrop implements Supplier<String> {
   IRON("Ore_Iron", 10);
 
   private String id;
+  @Getter
   private Byte probability;
 
   private TopQualityMinerDrop(String id, int probability) {
@@ -22,9 +24,5 @@ public enum TopQualityMinerDrop implements Supplier<String> {
   @Override
   public String get() {
     return this.id;
-  }
-
-  public Byte getProbability() {
-    return this.probability;
   }
 }

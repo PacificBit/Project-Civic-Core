@@ -12,18 +12,25 @@ import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageStorageRequestType;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.BlockTarget;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.InventoryItemCriteria;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class VillageStorageRequest {
   public static final BuilderCodec<VillageStorageRequest> CODEC = VillageStorageRequestCodec.CODEC;
 
+  @Setter(lombok.AccessLevel.NONE)
   UUID requestId;
   UUID requesterWorkplaceId;
   UUID storageWorkplaceId;
   VillageStorageRequestType type;
+  @Setter(lombok.AccessLevel.NONE)
   ArrayDeque<BlockTarget> targetsWorkplaceStorage = new ArrayDeque<>();
 
   Set<ItemRequestCriterion> itemCriteria = new HashSet<>();
+  @Setter(lombok.AccessLevel.NONE)
   Set<UUID> triedStorageIds = new HashSet<>();
   boolean registeredWithStorage;
 
@@ -35,48 +42,8 @@ public class VillageStorageRequest {
     this.requestId = requestId;
   }
 
-  public UUID getRequestId() {
-    return this.requestId;
-  }
-
-  public UUID getRequesterWorkplaceId() {
-    return this.requesterWorkplaceId;
-  }
-
-  public void setRequesterWorkplaceId(UUID requesterWorkplaceId) {
-    this.requesterWorkplaceId = requesterWorkplaceId;
-  }
-
-  public UUID getStorageWorkplaceId() {
-    return this.storageWorkplaceId;
-  }
-
-  public void setStorageWorkplaceId(UUID storageWorkplaceId) {
-    this.storageWorkplaceId = storageWorkplaceId;
-  }
-
-  public VillageStorageRequestType getType() {
-    return this.type;
-  }
-
-  public void setType(VillageStorageRequestType type) {
-    this.type = type;
-  }
-
-  public Set<ItemRequestCriterion> getItemCriteria() {
-    return itemCriteria;
-  }
-
-  public void setItemCriteria(Set<ItemRequestCriterion> itemCriteria) {
-    this.itemCriteria = itemCriteria;
-  }
-
   public void addItemCriteria(ItemRequestCriterion itemCriteria) {
     this.itemCriteria.add(itemCriteria);
-  }
-
-  public Set<UUID> getTriedStorageIds() {
-    return this.triedStorageIds;
   }
 
   public void setTriedStorageIds(Set<UUID> triedStorageIds) {
@@ -93,18 +60,6 @@ public class VillageStorageRequest {
 
   public void clearTriedStorageIds() {
     this.triedStorageIds.clear();
-  }
-
-  public boolean isRegisteredWithStorage() {
-    return this.registeredWithStorage;
-  }
-
-  public void setRegisteredWithStorage(boolean registeredWithStorage) {
-    this.registeredWithStorage = registeredWithStorage;
-  }
-
-  public ArrayDeque<BlockTarget> getTargetsWorkplaceStorage() {
-    return targetsWorkplaceStorage;
   }
 
   public void setTargetsWorkplaceStorage(Collection<BlockTarget> targetWorkplaceStorage) {
@@ -164,8 +119,14 @@ public class VillageStorageRequest {
   public static class ItemRequestCriterion {
     public static final BuilderCodec<ItemRequestCriterion> CODEC = ItemRequestCriterionCodec.CODEC;
 
+    @Getter
+    @Setter
     String attributeKey;
+    @Getter
+    @Setter
     boolean filterIn = true;
+    @Getter
+    @Setter
     int requiredAmount;
 
     public ItemRequestCriterion() {
@@ -174,30 +135,6 @@ public class VillageStorageRequest {
     public ItemRequestCriterion(String attributeKey, boolean filterIn, int requiredAmount) {
       this.attributeKey = attributeKey;
       this.filterIn = filterIn;
-      this.requiredAmount = requiredAmount;
-    }
-
-    public String getAttributeKey() {
-      return attributeKey;
-    }
-
-    public void setAttributeKey(String attributeKey) {
-      this.attributeKey = attributeKey;
-    }
-
-    public boolean isFilterIn() {
-      return filterIn;
-    }
-
-    public void setFilterIn(boolean filterIn) {
-      this.filterIn = filterIn;
-    }
-
-    public int getRequiredAmount() {
-      return requiredAmount;
-    }
-
-    public void setRequiredAmount(int requiredAmount) {
       this.requiredAmount = requiredAmount;
     }
 

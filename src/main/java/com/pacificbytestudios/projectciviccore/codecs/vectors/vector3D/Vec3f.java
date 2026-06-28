@@ -8,14 +8,13 @@ import org.joml.Vector3ic;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector3fUtil;
 import com.hypixel.hytale.math.vector.Vector3iUtil;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 
+@SerializableClass(Vector3fUtil.class)
 public class Vec3f extends org.joml.Vector3f {
   private static final long serialVersionUID = 1L;
 
-  public static BuilderCodec<Vec3f> CODEC = BuilderCodec
-      .builder(Vec3f.class, Vec3f::new, Vector3fUtil.CODEC)
-      .build();
-
+  public static BuilderCodec<Vec3f> CODEC = Vec3fCodec.CODEC;
   public static Vec3f NORTH = Vec3f.from(Vector3iUtil.NORTH);
   public static Vec3f SOUTH = Vec3f.from(Vector3iUtil.SOUTH);
   public static Vec3f WEST = Vec3f.from(Vector3iUtil.WEST);

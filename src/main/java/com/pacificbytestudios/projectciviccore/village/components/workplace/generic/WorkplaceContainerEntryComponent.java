@@ -12,7 +12,11 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
   public static final BuilderCodec<WorkplaceContainerEntryComponent> CODEC = WorkplaceContainerEntryComponentCodec.CODEC;
@@ -21,28 +25,12 @@ public class WorkplaceContainerEntryComponent implements Component<ChunkStore> {
   UUID uuid;
   BlockTransform3D containerTransform = new BlockTransform3D();
 
-  public UUID getUuid() {
-    return uuid;
-  }
-
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
-  }
-
   public Vec3i getPosition() {
     return this.containerTransform.getPosition3i();
   }
 
   public void setPosition(Vec3i position) {
     this.containerTransform.setPosition(position);
-  }
-
-  public BlockTransform3D getContainerTransform() {
-    return this.containerTransform;
-  }
-
-  public void setContainerTransform(BlockTransform3D containerTransform) {
-    this.containerTransform = containerTransform;
   }
 
   public Vec3f getAccessPosition() {

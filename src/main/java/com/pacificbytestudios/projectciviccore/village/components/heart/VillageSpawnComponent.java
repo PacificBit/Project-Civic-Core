@@ -8,6 +8,9 @@ import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan;
 
+import lombok.Getter;
+
+@Getter
 @SerializableClass
 public class VillageSpawnComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageSpawnComponent> CODEC = VillageSpawnComponentCodec.CODEC;
@@ -15,18 +18,6 @@ public class VillageSpawnComponent implements Component<ChunkStore> {
   int initialNpcCount;
   int npcSpawnRange;
   VillageProjectPlan structureToSpawn;
-
-  public int getInitialNpcCount() {
-    return initialNpcCount;
-  }
-
-  public int getNpcSpawnRange() {
-    return npcSpawnRange;
-  }
-
-  public VillageProjectPlan getStructureToSpawn() {
-    return this.structureToSpawn;
-  }
 
   @Override
   public VillageSpawnComponent clone() {

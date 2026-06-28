@@ -9,7 +9,13 @@ import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.general.EatTavernFoodAction;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerMealType;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 public class BuilderEatTavernFoodAction extends BuilderActionBase {
+  @Getter
+  @Setter(AccessLevel.PRIVATE)
   private VillagerMealType mealType;
 
   @Override
@@ -44,14 +50,6 @@ public class BuilderEatTavernFoodAction extends BuilderActionBase {
         "Meal slot to mark as consumed",
         null);
     return this;
-  }
-
-  public VillagerMealType getMealType() {
-    return this.mealType;
-  }
-
-  private void setMealType(VillagerMealType mealType) {
-    this.mealType = mealType;
   }
 
 }

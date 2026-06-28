@@ -7,10 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -18,6 +15,9 @@ import com.hypixel.hytale.server.core.entity.entities.player.windows.ContainerWi
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.pacificbytestudio.codecbutler.annotations.SerialIgnore;
+import com.pacificbytestudio.codecbutler.annotations.SerialWithCodec;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
@@ -28,71 +28,40 @@ import com.pacificbytestudios.projectciviccore.village.components.house.HouseCom
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerMealType;
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@SerializableClass
 public class VillagerComponent implements Component<EntityStore> {
   public static final short STORAGE_CAPACITY = 18;
   public static final short HOTBAR_CAPACITY = 1;
   public static final short OFFHAND_CAPACITY = 1;
 
-  public static final BuilderCodec<VillagerComponent> CODEC = BuilderCodec
-      .builder(VillagerComponent.class, VillagerComponent::new)
+  public static final BuilderCodec<VillagerComponent> CODEC = VillagerComponentCodec.CODEC;
 
-      .append(new KeyedCodec<>("VillageHeartLocation", EntityRef.CODEC),
-          (obj, value) -> obj.setVillageHeartLocation(value),
-          (obj) -> obj.villageHeartLocation)
-      .add()
-
-      .append(new KeyedCodec<>("BedPosition", Vec3i.CODEC),
-          (obj, value) -> obj.setBedPosition(value),
-          (obj) -> obj.getBedPosition())
-      .add()
-
-      .append(new KeyedCodec<>("HousingData",
-          VillagerHousingComponent.CODEC),
-          (obj, value) -> obj.housingData = value,
-          (obj) -> obj.housingData)
-      .add()
-
-      .append(new KeyedCodec<>("WorkerData",
-          VillagerWorkerComponent.CODEC),
-          (obj, value) -> obj.workerData = value,
-          (obj) -> obj.workerData)
-      .add()
-
-      .append(new KeyedCodec<>("ReservedInteractable", Vec3f.CODEC),
-          (obj, value) -> obj.reservedInteractable = value,
-          (obj) -> obj.reservedInteractable)
-      .add()
-
-      .append(new KeyedCodec<>("ReservedTavernLocation", EntityRef.CODEC, false),
-          (obj, value) -> obj.reservedTavernLocation = value,
-          (obj) -> obj.reservedTavernLocation)
-      .add()
-
-      .append(new KeyedCodec<Instant>("LastLunchMealTime", Codec.INSTANT),
-          (obj, value) -> obj.lastLunchMealTime = value,
-          (obj) -> obj.lastLunchMealTime)
-      .add()
-
-      .append(new KeyedCodec<Instant>("LastDinnerMealTime", Codec.INSTANT),
-          (obj, value) -> obj.lastDinnerMealTime = value,
-          (obj) -> obj.lastDinnerMealTime)
-      .add()
-
-      .append(new KeyedCodec<>("Role", new EnumCodec<>(VillagerRole.class)),
-          (obj, value) -> obj.role = value,
-          (obj) -> obj.role)
-      .add()
-
-      .build();
-
-  private EntityRef villageHeartLocation;
-  private VillagerHousingComponent housingData;
-  private VillagerWorkerComponent workerData;
-  private Vec3f reservedInteractable;
-  private EntityRef reservedTavernLocation;
-  private Instant lastLunchMealTime;
-  private Instant lastDinnerMealTime;
-  private VillagerRole role;
+  @Setter
+  EntityRef villageHeartLocation;
+  @Getter
+  @Setter
+  VillagerHousingComponent housingData;
+  @Getter
+  @Setter
+  VillagerWorkerComponent workerData;
+  @Getter
+  @Setter
+  Vec3f reservedInteractable;
+  @Getter
+  @Setter
+  EntityRef reservedTavernLocation;
+  @SerialWithCodec("com.hypixel.hytale.codec.Codec.INSTANT")
+  Instant lastLunchMealTime;
+  @SerialWithCodec("com.hypixel.hytale.codec.Codec.INSTANT")
+  Instant lastDinnerMealTime;
+  @Getter
+  @Setter
+  VillagerRole role;
+  @Getter
+  @SerialIgnore
   private final Map<UUID, ContainerWindow> windows = new ConcurrentHashMap<>();
 
   public Vec3i getBedPosition() {
@@ -107,24 +76,8 @@ public class VillagerComponent implements Component<EntityStore> {
     this.ensureHousingData().setBedPosition(bedPosition);
   }
 
-  public void setVillageHeartLocation(EntityRef location) {
-    this.villageHeartLocation = location;
-  }
-
   public Ref<ChunkStore> getVillageHeartRef() {
     return this.villageHeartLocation.getRef();
-  }
-
-  public VillagerWorkerComponent getWorkerData() {
-    return workerData;
-  }
-
-  public VillagerHousingComponent getHousingData() {
-    return this.housingData;
-  }
-
-  public void setHousingData(VillagerHousingComponent housingData) {
-    this.housingData = housingData;
   }
 
   public HouseComponent getHouse() {
@@ -133,14 +86,6 @@ public class VillagerComponent implements Component<EntityStore> {
 
   public void setHouse(HouseComponent house) {
     this.ensureHousingData().setHouse(house);
-  }
-
-  public void setWorkerData(VillagerWorkerComponent workerData) {
-    this.workerData = workerData;
-  }
-
-  public Map<UUID, ContainerWindow> getWindows() {
-    return this.windows;
   }
 
   public Instant getLastMealTime(VillagerMealType mealType) {
@@ -175,24 +120,8 @@ public class VillagerComponent implements Component<EntityStore> {
     return currentDate.equals(lastMealDateTime.toLocalDate());
   }
 
-  public Vec3f getReservedInteractable() {
-    return reservedInteractable;
-  }
-
-  public void setReservedInteractable(Vec3f reservedInteractable) {
-    this.reservedInteractable = reservedInteractable;
-  }
-
-  public EntityRef getReservedTavernLocation() {
-    return this.reservedTavernLocation;
-  }
-
   public Ref<ChunkStore> getReservedTavernRef() {
     return this.reservedTavernLocation == null ? null : this.reservedTavernLocation.getRef();
-  }
-
-  public void setReservedTavernLocation(EntityRef reservedTavernLocation) {
-    this.reservedTavernLocation = reservedTavernLocation;
   }
 
   public void clearReservedTavernReservation() {
@@ -204,26 +133,9 @@ public class VillagerComponent implements Component<EntityStore> {
     return this.getWorkerData().getWorkplace().getWorkerDesignatedArea(uuid);
   }
 
-  public VillagerRole getRole() {
-    return role;
-  }
-
-  public void setRole(VillagerRole role) {
-    this.role = role;
-  }
-
   @Override
   public VillagerComponent clone() {
-    VillagerComponent component = new VillagerComponent();
-    component.villageHeartLocation = this.villageHeartLocation == null ? null : this.villageHeartLocation.clone();
-    component.housingData = this.housingData == null ? null : this.housingData.clone();
-    component.workerData = this.workerData == null ? null : this.workerData.clone();
-    component.reservedInteractable = this.reservedInteractable == null ? null : this.reservedInteractable.clone();
-    component.reservedTavernLocation = this.reservedTavernLocation == null ? null : this.reservedTavernLocation.clone();
-    component.lastLunchMealTime = this.lastLunchMealTime;
-    component.lastDinnerMealTime = this.lastDinnerMealTime;
-    component.role = this.role;
-    return component;
+    return VillagerComponentCodec.clone(this);
   }
 
   @Override

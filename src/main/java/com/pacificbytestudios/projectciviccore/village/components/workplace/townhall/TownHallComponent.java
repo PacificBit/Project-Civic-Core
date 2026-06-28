@@ -7,7 +7,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class TownHallComponent implements Component<ChunkStore> {
 
@@ -15,22 +19,6 @@ public class TownHallComponent implements Component<ChunkStore> {
 
   Integer lastDayVillageAssessment = -1;
   VillageProjectPlan villageProjectPlan;
-
-  public Integer getLastDayVillageAssessment() {
-    return lastDayVillageAssessment;
-  }
-
-  public void setLastDayVillageAssessment(Integer lastDayVillageAssessment) {
-    this.lastDayVillageAssessment = lastDayVillageAssessment;
-  }
-
-  public VillageProjectPlan getVillageProjectPlan() {
-    return villageProjectPlan;
-  }
-
-  public void setVillageProjectPlan(VillageProjectPlan villageProjectPlan) {
-    this.villageProjectPlan = villageProjectPlan;
-  }
 
   public boolean updateProjectPlan(VillageProject project) {
     if (this.villageProjectPlan == null) {

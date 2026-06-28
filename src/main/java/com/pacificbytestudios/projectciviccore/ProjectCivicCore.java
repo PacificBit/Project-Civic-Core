@@ -29,8 +29,8 @@ import com.pacificbytestudios.projectciviccore.registry.registry.VillageNewVilla
 import com.pacificbytestudios.projectciviccore.resources.VillageRegistryResource;
 import com.pacificbytestudios.projectciviccore.triggervolumeeffects.TeleportVillagerToTownHeartEffect;
 import com.pacificbytestudios.projectciviccore.village.commands.VillageCommands;
-import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.BufferedConstructionStorageComponent;
+import com.pacificbytestudios.projectciviccore.village.components.builder.BuildingSnapshotComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageBuilderComponent;
 import com.pacificbytestudios.projectciviccore.village.components.builder.VillageTopologyComponent;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
@@ -136,9 +136,13 @@ import com.pacificbytestudios.projectciviccore.villagers.systems.SitOnChairSyste
 import com.pacificbytestudios.projectciviccore.villagers.systems.VillagerDeathCleanupSystem;
 import com.pacificbytestudios.projectciviccore.villagers.systems.VillagerInventoryPersistenceSystem;
 
+import lombok.Getter;
+
+@Getter
 public final class ProjectCivicCore extends JavaPlugin {
   public static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
+  @Getter(lombok.AccessLevel.NONE)
   private static ProjectCivicCore INSTANCE;
   private ComponentType<ChunkStore, VillageHeartComponent> villageCoreComponentType;
   private ComponentType<ChunkStore, VillageHeartMarkerComponent> villageHeartMarkerComponentType;
@@ -148,12 +152,12 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private ComponentType<ChunkStore, VillageTaskQueueComponent> villageTaskQueueComponentType;
 
-  private ComponentType<ChunkStore, AreaFootprint> claimedAreaComponentType;
+  private ComponentType<ChunkStore, AreaFootprint> claimedAreaComponent;
   private ComponentType<ChunkStore, TrackedPrefabPlacementComponent> trackedPrefabPlacementComponentType;
 
   private ComponentType<ChunkStore, WorkplaceComponent> workplaceComponentType;
   private ComponentType<ChunkStore, WorkplaceSpawnComponent> workplaceSpawnComponentType;
-  private ComponentType<ChunkStore, WorkplaceContainerRegistryComponent> workplaceContainerRegistryComponentType;
+  private ComponentType<ChunkStore, WorkplaceContainerRegistryComponent> workplaceStorageComponentType;
   private ComponentType<ChunkStore, WorkplaceContainerEntryComponent> workplaceContainerEntryComponentType;
   private ComponentType<ChunkStore, WorkplaceVillageStorageRequestComponent> workplaceVillageStorageComponentType;
   private ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> workplaceInteractablesMapComponentType;
@@ -170,7 +174,7 @@ public final class ProjectCivicCore extends JavaPlugin {
 
   private ComponentType<ChunkStore, VillageBuilderComponent> villageBuilderComponentType;
   private ComponentType<ChunkStore, VillageTopologyComponent> villageTopologyComponentType;
-  private ComponentType<ChunkStore, BuildingSnapshotComponent> buildingSnapshotComponentType;
+  private ComponentType<ChunkStore, BuildingSnapshotComponent> buildingSnapshotComponent;
   private ComponentType<ChunkStore, BufferedConstructionStorageComponent> bufferedConstructionStorageComponentType;
 
   private ComponentType<ChunkStore, SimulationComponent> simulationComponentType;
@@ -181,7 +185,7 @@ public final class ProjectCivicCore extends JavaPlugin {
   private ComponentType<EntityStore, VillagerComponent> villagerComponentType;
   private ComponentType<EntityStore, MayorComponent> mayorComponentType;
 
-  private ComponentType<EntityStore, WaypointsEditingComponent> waypointsEditingComponentType;
+  private ComponentType<EntityStore, WaypointsEditingComponent> waypointEditingComponentType;
 
   public ProjectCivicCore(JavaPluginInit init) {
     super(init);
@@ -231,7 +235,7 @@ public final class ProjectCivicCore extends JavaPlugin {
         "WorkplaceSpawnComponent",
         WorkplaceSpawnComponent.CODEC);
 
-    this.claimedAreaComponentType = chunkRegistry.registerComponent(
+    this.claimedAreaComponent = chunkRegistry.registerComponent(
         AreaFootprint.class,
         "ClaimedAreaComponent",
         AreaFootprint.CODEC);
@@ -241,7 +245,7 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillageTaskQueueComponent",
         VillageTaskQueueComponent.CODEC);
 
-    this.workplaceContainerRegistryComponentType = chunkRegistry.registerComponent(
+    this.workplaceStorageComponentType = chunkRegistry.registerComponent(
         WorkplaceContainerRegistryComponent.class,
         "WorkplaceContainerRegistryComponent",
         WorkplaceContainerRegistryComponent.CODEC);
@@ -316,7 +320,7 @@ public final class ProjectCivicCore extends JavaPlugin {
         "VillageTopologyComponent",
         VillageTopologyComponent.CODEC);
 
-    this.buildingSnapshotComponentType = chunkRegistry.registerComponent(
+    this.buildingSnapshotComponent = chunkRegistry.registerComponent(
         BuildingSnapshotComponent.class,
         "BuildingSnapshotComponent",
         BuildingSnapshotComponent.CODEC);
@@ -390,7 +394,7 @@ public final class ProjectCivicCore extends JavaPlugin {
         "MayorComponent",
         MayorComponent.CODEC);
 
-    this.waypointsEditingComponentType = entityRegistry.registerComponent(
+    this.waypointEditingComponentType = entityRegistry.registerComponent(
         WaypointsEditingComponent.class,
         "WaypointsEditingComponent",
         WaypointsEditingComponent.CODEC);
@@ -697,131 +701,4 @@ public final class ProjectCivicCore extends JavaPlugin {
     MinerDropRegistry.initizalize();
   }
 
-  public ComponentType<ChunkStore, VillageSpawnComponent> getVillageSpawnComponentType() {
-    return this.villageSpawnComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageStructuresConfig> getVillageStructureConfigComponentType() {
-    return this.villageStructureConfigComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageHeartComponent> getVillageCoreComponentType() {
-    return this.villageCoreComponentType;
-  }
-
-  public ComponentType<ChunkStore, WorkplaceComponent> getWorkplaceComponentType() {
-    return this.workplaceComponentType;
-  }
-
-  public ComponentType<ChunkStore, WorkplaceSpawnComponent> getWorkplaceSpawnComponentType() {
-    return this.workplaceSpawnComponentType;
-  }
-
-  public ComponentType<ChunkStore, AreaFootprint> getClaimedAreaComponent() {
-    return this.claimedAreaComponentType;
-  }
-
-  public ComponentType<ChunkStore, TrackedPrefabPlacementComponent> getTrackedPrefabPlacementComponentType() {
-    return this.trackedPrefabPlacementComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageTaskQueueComponent> getVillageTaskQueueComponentType() {
-    return this.villageTaskQueueComponentType;
-  }
-
-  public ComponentType<ChunkStore, WorkplaceContainerRegistryComponent> getWorkplaceStorageComponentType() {
-    return this.workplaceContainerRegistryComponentType;
-  }
-
-  public ComponentType<ChunkStore, WorkplaceContainerEntryComponent> getWorkplaceContainerEntryComponentType() {
-    return this.workplaceContainerEntryComponentType;
-  }
-
-  public ComponentType<ChunkStore, WorkplaceVillageStorageRequestComponent> getWorkplaceVillageStorageComponentType() {
-    return this.workplaceVillageStorageComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageFoodComponent> getVillageFoodComponentType() {
-    return this.villageFoodComponentType;
-  }
-
-  public ComponentType<ChunkStore, TavernComponent> getTavernComponentType() {
-    return this.tavernComponentType;
-  }
-
-  public ComponentType<ChunkStore, FarmComponent> getFarmComponentType() {
-    return this.farmComponentType;
-  }
-
-  public ComponentType<ChunkStore, TownHallComponent> getTownHallComponentType() {
-    return this.townHallComponentType;
-  }
-
-  public ComponentType<ChunkStore, SawmillComponent> getSawmillComponentType() {
-    return this.sawmillComponentType;
-  }
-
-  public ComponentType<ChunkStore, MineComponent> getMineComponentType() {
-    return this.mineComponentType;
-  }
-
-  public ComponentType<ChunkStore, WorkplaceInteractablesMapComponent> getWorkplaceInteractablesMapComponentType() {
-    return this.workplaceInteractablesMapComponentType;
-  }
-
-  public ComponentType<ChunkStore, HouseComponent> getHouseComponentType() {
-    return this.houseComponentType;
-  }
-
-  public ComponentType<ChunkStore, HouseSpawnComponent> getHouseSpawnComponentType() {
-    return this.houseSpawnComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageHeartMarkerComponent> getVillageHeartMarkerComponentType() {
-    return this.villageHeartMarkerComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageHeartDebugComponent> getVillageHeartDebugComponentType() {
-    return this.villageHeartDebugComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageBuilderComponent> getVillageBuilderComponentType() {
-    return this.villageBuilderComponentType;
-  }
-
-  public ComponentType<ChunkStore, VillageTopologyComponent> getVillageTopologyComponentType() {
-    return this.villageTopologyComponentType;
-  }
-
-  public ComponentType<ChunkStore, BuildingSnapshotComponent> getBuildingSnapshotComponent() {
-    return this.buildingSnapshotComponentType;
-  }
-
-  public ComponentType<ChunkStore, BufferedConstructionStorageComponent> getBufferedConstructionStorageComponentType() {
-    return this.bufferedConstructionStorageComponentType;
-  }
-
-  public ComponentType<ChunkStore, SimulationComponent> getSimulationComponentType() {
-    return this.simulationComponentType;
-  }
-
-  public ComponentType<ChunkStore, SimulationRunningComponent> getSimulationRunningComponentType() {
-    return this.simulationRunningComponentType;
-  }
-
-  public ResourceType<ChunkStore, VillageRegistryResource> getVillageRegistryResourceType() {
-    return this.villageRegistryResourceType;
-  }
-
-  public ComponentType<EntityStore, VillagerComponent> getVillagerComponentType() {
-    return this.villagerComponentType;
-  }
-
-  public ComponentType<EntityStore, MayorComponent> getMayorComponentType() {
-    return this.mayorComponentType;
-  }
-
-  public ComponentType<EntityStore, WaypointsEditingComponent> getWaypointEditingComponentType() {
-    return this.waypointsEditingComponentType;
-  }
 }

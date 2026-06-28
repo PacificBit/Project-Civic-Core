@@ -10,6 +10,11 @@ import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.townhall.VillageProjectPlan.VillageProject;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @SerializableClass
 public class VillageBuilderComponent implements Component<ChunkStore> {
   public static final BuilderCodec<VillageBuilderComponent> CODEC = VillageBuilderComponentCodec.CODEC;
@@ -17,6 +22,7 @@ public class VillageBuilderComponent implements Component<ChunkStore> {
   @SerialName("ProjectQueue")
   VillageProjectPlan projectPlan;
 
+  @Getter(lombok.AccessLevel.NONE)
   @SerialName("IsFirstVillageBuildProject")
   Boolean firstVillageBuildProject = false;
   Boolean haveFirstRoadsBeenBuilt = false;
@@ -33,14 +39,6 @@ public class VillageBuilderComponent implements Component<ChunkStore> {
     return this.projectPlan == null ? null : this.projectPlan.pollNextProject();
   }
 
-  public VillageProjectPlan getProjectPlan() {
-    return this.projectPlan;
-  }
-
-  public void setProjectPlan(VillageProjectPlan plan) {
-    this.projectPlan = plan;
-  }
-
   public void addProject(VillageProject project) {
     if (project == null) {
       return;
@@ -55,18 +53,6 @@ public class VillageBuilderComponent implements Component<ChunkStore> {
 
   public Boolean isFirstVillageBuildProject() {
     return firstVillageBuildProject;
-  }
-
-  public void setFirstVillageBuildProject(Boolean firstVillageBuildProject) {
-    this.firstVillageBuildProject = firstVillageBuildProject;
-  }
-
-  public Boolean getHaveFirstRoadsBeenBuilt() {
-    return haveFirstRoadsBeenBuilt;
-  }
-
-  public void setHaveFirstRoadsBeenBuilt(Boolean haveFirstRoadsBeenBuilt) {
-    this.haveFirstRoadsBeenBuilt = haveFirstRoadsBeenBuilt;
   }
 
   @Override

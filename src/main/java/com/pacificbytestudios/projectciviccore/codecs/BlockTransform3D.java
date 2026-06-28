@@ -11,15 +11,23 @@ import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class BlockTransform3D implements Copyable<BlockTransform3D> {
   public static final BuilderCodec<BlockTransform3D> CODEC = BlockTransform3DCodec.CODEC;
 
   UUID positionId;
   UUID accessId;
+
+  @Setter(lombok.AccessLevel.NONE)
   Vec3d position;
   Rotation rotation;
+
+  @Setter(lombok.AccessLevel.NONE)
   Vec3d accessOffset;
 
   public BlockTransform3D() {
@@ -107,10 +115,6 @@ public class BlockTransform3D implements Copyable<BlockTransform3D> {
     this.accessOffset = accessOffset;
   }
 
-  public UUID getPositionId() {
-    return positionId;
-  }
-
   public UUID ensurePositionId() {
     if (this.positionId == null) {
       this.positionId = UUID.randomUUID();
@@ -118,27 +122,11 @@ public class BlockTransform3D implements Copyable<BlockTransform3D> {
     return this.positionId;
   }
 
-  public void setPositionId(UUID positionId) {
-    this.positionId = positionId;
-  }
-
-  public UUID getAccessId() {
-    return accessId;
-  }
-
   public UUID ensureAccessId() {
     if (this.accessId == null) {
       this.accessId = UUID.randomUUID();
     }
     return this.accessId;
-  }
-
-  public void setAccessId(UUID accessId) {
-    this.accessId = accessId;
-  }
-
-  public Vec3d getPosition() {
-    return position;
   }
 
   public Vec3i getPosition3i() {
@@ -149,10 +137,6 @@ public class BlockTransform3D implements Copyable<BlockTransform3D> {
     return Vec3f.from(this.position);
   }
 
-  public void setPosition(Vec3d position) {
-    this.position = position;
-  }
-
   public void setPosition(Vec3i position) {
     this.position = Vec3d.from(position);
   }
@@ -161,16 +145,8 @@ public class BlockTransform3D implements Copyable<BlockTransform3D> {
     this.position = Vec3d.from(position);
   }
 
-  public Rotation getRotation() {
-    return rotation;
-  }
-
-  public void setRotation(Rotation rotation) {
-    this.rotation = rotation;
-  }
-
-  public Vec3d getAccessOffset() {
-    return accessOffset;
+  public void setPosition(Vec3d position) {
+    this.position = position;
   }
 
   public Vec3f getAccessOffset3f() {

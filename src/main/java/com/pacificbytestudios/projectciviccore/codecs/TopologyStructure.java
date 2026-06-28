@@ -4,77 +4,33 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.hypixel.hytale.codec.Codec;
-import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
-import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.village.enums.StructureType;
 import com.pacificbytestudios.projectciviccore.village.enums.VillageTopologyStructureType;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@SerializableClass
 public final class TopologyStructure extends AreaFootprint {
-  public static final BuilderCodec<TopologyStructure> CODEC = BuilderCodec
-      .builder(TopologyStructure.class, TopologyStructure::new,
-          AreaFootprint.CODEC)
+  public static final BuilderCodec<TopologyStructure> CODEC = TopologyStructureCodec.CODEC; // BuilderCodec
 
-      .append(new KeyedCodec<>("StructureId", Codec.UUID_BINARY),
-          (obj, value) -> obj.structureId = value,
-          (obj) -> obj.structureId)
-      .add()
+  UUID structureId;
+  StructureType structureType;
+  VillageTopologyStructureType topologyType;
+  double distanceFromCenter;
+  Vec3i prefabAnchor;
+  Rotation orientation;
 
-      .append(new KeyedCodec<>("StructureType", new EnumCodec<>(
-          StructureType.class), false),
-          (obj, value) -> obj.structureType = value,
-          (obj) -> obj.structureType)
-      .add()
-
-      .append(new KeyedCodec<>("PrefabAnchor", Vec3i.CODEC),
-          (obj, value) -> obj.prefabAnchor = value,
-          obj -> obj.prefabAnchor)
-      .add()
-
-      .append(new KeyedCodec<>("Orientation", Rotation.CODEC, false),
-          (obj, value) -> obj.orientation = value,
-          obj -> obj.orientation)
-      .add()
-
-      .append(new KeyedCodec<>("TopologyType", new EnumCodec<>(
-          VillageTopologyStructureType.class), false),
-          (obj, value) -> obj.topologyType = value,
-          (obj) -> obj.topologyType)
-      .add()
-
-      .append(new KeyedCodec<>("DistanceFromCenter", Codec.DOUBLE),
-          (obj, value) -> obj.distanceFromCenter = value,
-          (obj) -> obj.distanceFromCenter)
-      .add()
-
-      .append(new KeyedCodec<>("Edges",
-          new Vector3iMapCodec<Vec3i, HashMap<Vec3i, Vec3i>>(
-              Vec3i.CODEC,
-              HashMap::new,
-              false),
-          false),
-          (obj, value) -> {
-            obj.edges = decodeEdges(value);
-            if (obj.edges.isEmpty()) {
-              obj.rebuildEdges();
-            }
-          },
-          obj -> encodeEdges(obj.edges))
-      .add()
-
-      .build();
-
-  private UUID structureId;
-  private StructureType structureType;
-  private VillageTopologyStructureType topologyType;
-  private double distanceFromCenter;
-  private Vec3i prefabAnchor;
-  private Rotation orientation;
-  private Map<Vec3i, Vec3i> edges = new HashMap<>();
+  @Getter(lombok.AccessLevel.NONE)
+  @Setter(lombok.AccessLevel.NONE)
+  Map<Vec3i, Vec3i> edges = new HashMap<>();
 
   public TopologyStructure() {
   }
@@ -98,46 +54,6 @@ public final class TopologyStructure extends AreaFootprint {
     this.distanceFromCenter = distanceFromCenter;
     this.orientation = rotation == null ? Rotation.None : rotation;
     rebuildEdges();
-  }
-
-  public UUID getStructureId() {
-    return structureId;
-  }
-
-  public void setStructureId(UUID structureId) {
-    this.structureId = structureId;
-  }
-
-  public StructureType getStructureType() {
-    return structureType;
-  }
-
-  public void setStructureType(StructureType structureType) {
-    this.structureType = structureType;
-  }
-
-  public double getDistanceFromCenter() {
-    return distanceFromCenter;
-  }
-
-  public void setDistanceFromCenter(double distanceFromCenter) {
-    this.distanceFromCenter = distanceFromCenter;
-  }
-
-  public VillageTopologyStructureType getTopologyType() {
-    return this.topologyType;
-  }
-
-  public void setTopologyType(VillageTopologyStructureType topologyType) {
-    this.topologyType = topologyType;
-  }
-
-  public Vec3i getPrefabAnchor() {
-    return prefabAnchor;
-  }
-
-  public void setPrefabAnchor(Vec3i prefabAnchor) {
-    this.prefabAnchor = prefabAnchor;
   }
 
   public Rotation getOrientation() {
@@ -219,7 +135,7 @@ public final class TopologyStructure extends AreaFootprint {
   }
 
   @Override
-  protected void setY(int y) {
+  public void setY(int y) {
     super.setY(y);
     rebuildEdges();
   }
@@ -265,20 +181,12 @@ public final class TopologyStructure extends AreaFootprint {
 
   @Override
   public TopologyStructure clone() {
-    TopologyStructure component = new TopologyStructure();
-    component.setTopLeft(Vec2i.from(getTopLeft()));
-    component.setBotRight(Vec2i.from(getBotRight()));
-
-    component.setY(this.getY());
-    component.orientation = this.orientation;
-    component.topologyType = this.topologyType;
-    component.structureId = this.structureId;
-    component.distanceFromCenter = this.distanceFromCenter;
-    component.structureType = this.structureType;
-    component.edges = encodeEdges(this.edges);
-    component.prefabAnchor = Vec3i.from(this.prefabAnchor);
-
-    return component;
+    TopologyStructure cloned = TopologyStructureCodec.clone(this);
+    cloned.setY(this.getY());
+    cloned.setTopLeft(Vec2i.from(this.getTopLeft()));
+    cloned.setBotRight(Vec2i.from(this.getBotRight()));
+    cloned.setPrefabAnchor(Vec3i.from(this.prefabAnchor));
+    return cloned;
   }
 
   @Override
@@ -326,26 +234,4 @@ public final class TopologyStructure extends AreaFootprint {
   private void rebuildEdges() {
     this.edges = buildEdges();
   }
-
-  private static HashMap<Vec3i, Vec3i> decodeEdges(Map<Vec3i, Vec3i> encoded) {
-    return encodeEdges(encoded);
-  }
-
-  private static HashMap<Vec3i, Vec3i> encodeEdges(Map<Vec3i, Vec3i> edges) {
-    HashMap<Vec3i, Vec3i> copy = new HashMap<>();
-
-    if (edges == null) {
-      return copy;
-    }
-
-    edges.forEach((direction, edge) -> {
-      if (direction == null || edge == null) {
-        return;
-      }
-
-      copy.put(Vec3i.from(direction), Vec3i.from(edge));
-    });
-    return copy;
-  }
-
 }

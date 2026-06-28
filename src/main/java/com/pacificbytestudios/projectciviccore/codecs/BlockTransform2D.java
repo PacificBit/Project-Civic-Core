@@ -9,15 +9,23 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class BlockTransform2D implements Copyable<BlockTransform2D> {
   public static final BuilderCodec<BlockTransform2D> CODEC = BlockTransform2DCodec.CODEC;
 
   UUID positionId;
   UUID accessId;
+
+  @Setter(lombok.AccessLevel.NONE)
   Vec2i position;
   Rotation rotation;
+
+  @Setter(lombok.AccessLevel.NONE)
   Vec2i accessOffset;
 
   public BlockTransform2D() {
@@ -53,23 +61,11 @@ public class BlockTransform2D implements Copyable<BlockTransform2D> {
     this.accessOffset = Vec2i.from(accessOffset);
   }
 
-  public UUID getPositionId() {
-    return positionId;
-  }
-
   public UUID ensurePositionId() {
     if (this.positionId == null) {
       this.positionId = UUID.randomUUID();
     }
     return this.positionId;
-  }
-
-  public void setPositionId(UUID positionId) {
-    this.positionId = positionId;
-  }
-
-  public UUID getAccessId() {
-    return accessId;
   }
 
   public UUID ensureAccessId() {
@@ -79,28 +75,8 @@ public class BlockTransform2D implements Copyable<BlockTransform2D> {
     return this.accessId;
   }
 
-  public void setAccessId(UUID accessId) {
-    this.accessId = accessId;
-  }
-
-  public Vec2i getPosition() {
-    return position;
-  }
-
   public void setPosition(Vec2i position) {
     this.position = Vec2i.from(position);
-  }
-
-  public Rotation getRotation() {
-    return rotation;
-  }
-
-  public void setRotation(Rotation rotation) {
-    this.rotation = rotation;
-  }
-
-  public Vec2i getAccessOffset() {
-    return accessOffset;
   }
 
   public void setAccessOffset(Vec2i accessOffset) {

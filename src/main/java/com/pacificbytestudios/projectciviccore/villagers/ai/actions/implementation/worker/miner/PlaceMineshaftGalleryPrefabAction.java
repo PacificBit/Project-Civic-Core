@@ -3,8 +3,6 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
@@ -13,7 +11,9 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.generic.WorkplaceComponent;
@@ -24,7 +24,8 @@ import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.wor
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.MinerScan;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
+
+import lombok.Getter;
 
 public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
   private final PrefabType prefabType;
@@ -260,15 +261,12 @@ public class PlaceMineshaftGalleryPrefabAction extends VillagerActionBase {
     BEAM("Beam", StructureConfig.Mine.MineshaftGalleryConf.PREFAB_JSON);
 
     private final String type;
+    @Getter
     private final String prefab;
 
     private PrefabType(String type, String prefab) {
       this.type = type;
       this.prefab = prefab;
-    }
-
-    public String getPrefab() {
-      return this.prefab;
     }
 
     @Override

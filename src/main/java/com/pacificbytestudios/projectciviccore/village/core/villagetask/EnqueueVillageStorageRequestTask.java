@@ -21,6 +21,7 @@ import com.pacificbytestudios.projectciviccore.village.components.workplace.gene
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.VillageStorageRequest;
 import com.pacificbytestudios.projectciviccore.village.components.workplace.storage.WorkplaceVillageStorageRequestComponent;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import lombok.Getter;
 
 @SerializableClass
 public class EnqueueVillageStorageRequestTask extends AVillageTask {
@@ -29,6 +30,7 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
 
   public static final BuilderCodec<EnqueueVillageStorageRequestTask> CODEC = EnqueueVillageStorageRequestTaskCodec.CODEC;
 
+  @Getter
   VillageStorageRequest request;
   Set<UUID> triedStorageIds;
 
@@ -45,10 +47,6 @@ public class EnqueueVillageStorageRequestTask extends AVillageTask {
       @Nullable Set<UUID> triedStorageIds) {
     this.request = request;
     this.triedStorageIds = triedStorageIds;
-  }
-
-  public VillageStorageRequest getRequest() {
-    return this.request;
   }
 
   @Override

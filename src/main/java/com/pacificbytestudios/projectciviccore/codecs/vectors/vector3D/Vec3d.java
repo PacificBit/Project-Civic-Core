@@ -6,15 +6,14 @@ import org.joml.Vector3dc;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.math.vector.Vector3dUtil;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector2D.Vec2i;
 
+@SerializableClass(Vector3dUtil.class)
 public class Vec3d extends org.joml.Vector3d {
   private static final long serialVersionUID = 1L;
 
-  public static BuilderCodec<Vec3d> CODEC = BuilderCodec
-      .builder(Vec3d.class, Vec3d::new, Vector3dUtil.CODEC)
-      .build();
-
+  public static BuilderCodec<Vec3d> CODEC = Vec3dCodec.CODEC;
   public static Vec3d LEFT = new Vec3d(Vector3dUtil.LEFT);
 
   public static Vec3d safeLeft() {

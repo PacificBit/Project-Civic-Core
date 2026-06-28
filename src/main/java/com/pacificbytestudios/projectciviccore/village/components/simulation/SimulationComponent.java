@@ -6,7 +6,9 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.ProjectCivicCore;
+import lombok.Getter;
 
+@Getter
 @SerializableClass
 public class SimulationComponent implements Component<ChunkStore> {
   public static final BuilderCodec<SimulationComponent> CODEC = SimulationComponentCodec.CODEC;
@@ -14,20 +16,12 @@ public class SimulationComponent implements Component<ChunkStore> {
   int remainingDays;
   int processedDays;
 
-  public int getRemainingDays() {
-    return remainingDays;
-  }
-
   public void setRemainingDays(int remainingDays) {
     this.remainingDays = Math.max(0, remainingDays);
   }
 
   public void addRemainingDays(int days) {
     this.remainingDays += days;
-  }
-
-  public int getProcessedDays() {
-    return processedDays;
   }
 
   public void incrementProcessedDays() {

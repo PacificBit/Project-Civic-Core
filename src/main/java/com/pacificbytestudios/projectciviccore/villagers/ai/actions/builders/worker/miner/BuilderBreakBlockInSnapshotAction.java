@@ -15,11 +15,15 @@ import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.miner.BreakBlockInSnapshotAction;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.miner.BreakBlockInSnapshotAction.DropType;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+
 public class BuilderBreakBlockInSnapshotAction extends BuilderActionBase {
   private final StringHolder primarySnapshotGroup = new StringHolder();
   private final StringHolder secondarySnapshotGroup = new StringHolder();
   private final DoubleHolder requiredStoppingRange = new DoubleHolder();
   private final DoubleHolder dropGenerationChance = new DoubleHolder();
+  @Setter(AccessLevel.PRIVATE)
   private DropType dropType = DropType.MINER;
 
   @Override
@@ -90,10 +94,6 @@ public class BuilderBreakBlockInSnapshotAction extends BuilderActionBase {
 
   public double getDropGenerationChance(BuilderSupport support) {
     return this.dropGenerationChance.get(support.getExecutionContext());
-  }
-
-  private void setDropType(DropType dropType) {
-    this.dropType = dropType;
   }
 
 }

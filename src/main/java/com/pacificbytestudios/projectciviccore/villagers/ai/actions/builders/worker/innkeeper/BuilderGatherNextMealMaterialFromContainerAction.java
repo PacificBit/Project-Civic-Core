@@ -8,8 +8,13 @@ import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.Action;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementation.worker.innkeeper.GatherNextMealMaterialFromContainerAction;
 
+import lombok.AccessLevel;
+import lombok.Setter;
+
 public class BuilderGatherNextMealMaterialFromContainerAction extends BuilderActionBase {
+  @Setter(AccessLevel.PRIVATE)
   private String successFlag;
+  @Setter(AccessLevel.PRIVATE)
   private String failureFlag;
 
   @Override
@@ -41,14 +46,6 @@ public class BuilderGatherNextMealMaterialFromContainerAction extends BuilderAct
         BuilderDescriptorState.Experimental,
         "Optional flag set to true when the meal plan could not be created", null);
     return this;
-  }
-
-  private void setSuccessFlag(String flag) {
-    this.successFlag = flag;
-  }
-
-  private void setFailureFlag(String flag) {
-    this.failureFlag = flag;
   }
 
   public int getSuccessFlagSlot(BuilderSupport support) {

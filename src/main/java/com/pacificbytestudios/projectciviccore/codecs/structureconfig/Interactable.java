@@ -8,7 +8,11 @@ import com.pacificbytestudios.projectciviccore.codecs.BlockTransform3D;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
 import com.pacificbytestudios.projectciviccore.interfaces.Copyable;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @SerializableClass
 public class Interactable implements Copyable<Interactable> {
   public static final BuilderCodec<Interactable> CODEC = InteractableCodec.CODEC;
@@ -74,60 +78,12 @@ public class Interactable implements Copyable<Interactable> {
     this.interactableTransform.setPosition(interactablePosition);
   }
 
-  public BlockTransform3D getInteractableTransform() {
-    return this.interactableTransform;
-  }
-
-  public void setInteractableTransform(BlockTransform3D interactableTransform) {
-    this.interactableTransform = interactableTransform;
-  }
-
   public Vec3f getDependsOn() {
     return this.dependsOnTransform == null ? null : this.dependsOnTransform.getPosition3f();
   }
 
   public void setDependsOn(Vec3f dependsOn) {
     this.dependsOnTransform.setPosition(dependsOn);
-  }
-
-  public BlockTransform3D getDependsOnTransform() {
-    return this.dependsOnTransform;
-  }
-
-  public void setDependsOnTransform(BlockTransform3D dependsOnTransform) {
-    this.dependsOnTransform = dependsOnTransform;
-  }
-
-  public UUID getId() {
-    return id;
-  }
-
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  public UUID getOccupiedBy() {
-    return occupiedBy;
-  }
-
-  public void setOccupiedBy(UUID occupiedBy) {
-    this.occupiedBy = occupiedBy;
-  }
-
-  public boolean isInvalidateOnUse() {
-    return invalidateOnUse;
-  }
-
-  public void setInvalidateOnUse(boolean invalidateOnUse) {
-    this.invalidateOnUse = invalidateOnUse;
-  }
-
-  public boolean isReady() {
-    return isReady;
-  }
-
-  public void setReady(boolean isReady) {
-    this.isReady = isReady;
   }
 
   @Override
