@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.prefab.config.SelectionPrefabSerializer;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
+import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -152,7 +153,15 @@ public class PrefabManager {
     }
 
     IPrefabBuffer prefab = PrefabBufferUtil.getCached(prefabPath);
-    PrefabUtil.remove(prefab, world, target, yaw, force, new FastRandom(), 0, 1.0);
+    PrefabUtil.remove(
+        prefab,
+        world,
+        target,
+        yaw,
+        new FastRandom(),
+        force ? PrefabUtil.Flags.FORCE : PrefabUtil.Flags.NONE,
+        SetBlockSettings.NONE,
+        1.0);
     return true;
   }
 

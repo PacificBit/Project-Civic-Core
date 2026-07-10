@@ -1,18 +1,17 @@
 package com.pacificbytestudios.projectciviccore.village.core.spawner;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.block.BlockEntity;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.utils.PrefabManager;
 import com.pacificbytestudios.projectciviccore.utils.StructurePlacementUtils;
 import com.pacificbytestudios.projectciviccore.utils.Utils;
@@ -21,7 +20,6 @@ import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureCon
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig.Road.RoadType;
 
 import io.sentry.util.Pair;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
 
 public class RoadSpawner {
   public static boolean spawn(
@@ -138,8 +136,7 @@ public class RoadSpawner {
   }
 
   private static Holder<ChunkStore> createAnchorHolder(WorldChunk chunk, Vec3i position) {
-    int index = ChunkUtil.indexBlockInColumn(position.x, position.y, position.z);
-    Holder<ChunkStore> holder = chunk.getBlockComponentChunk().getEntityHolder(index);
+    Holder<ChunkStore> holder = chunk.getBlockComponentHolder(position.x, position.y, position.z);
     return holder != null ? holder.clone() : ChunkStore.REGISTRY.newHolder();
   }
 

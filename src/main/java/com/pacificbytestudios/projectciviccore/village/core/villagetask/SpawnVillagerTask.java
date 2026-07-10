@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
-import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
-
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -17,11 +13,11 @@ import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.math.vector.Rotation3fc;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.entity.Dirty;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.Interactable;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -30,7 +26,13 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.pacificbytestudio.codecbutler.annotations.SerialName;
+import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudios.projectciviccore.codecs.EntityRef;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3d;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3f;
+import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Logger;
 import com.pacificbytestudios.projectciviccore.village.components.heart.VillageHeartComponent;
 import com.pacificbytestudios.projectciviccore.village.components.house.VillageBedComponent;
 import com.pacificbytestudios.projectciviccore.village.core.spawner.StructureConfig;
@@ -38,9 +40,6 @@ import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComp
 import com.pacificbytestudios.projectciviccore.villagers.enums.VillagerRole;
 
 import it.unimi.dsi.fastutil.Pair;
-import com.pacificbytestudios.projectciviccore.utils.Logger;
-import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
-import com.pacificbytestudio.codecbutler.annotations.SerialName;
 
 @SerializableClass
 public class SpawnVillagerTask extends AVillageTask {
@@ -159,11 +158,11 @@ public class SpawnVillagerTask extends AVillageTask {
     InventoryComponent.Hotbar hotbar = entityStore.getComponent(npcRef, InventoryComponent.Hotbar.getComponentType());
     InventoryComponent.Utility utility = entityStore.getComponent(npcRef,
         InventoryComponent.Utility.getComponentType());
-    TransformComponent transform = entityStore.getComponent(npcRef, TransformComponent.getComponentType());
+    Dirty dirty = entityStore.getComponent(npcRef, Dirty.getComponentType());
 
-    if (storage == null || hotbar == null || utility == null || transform == null) {
+    if (storage == null || hotbar == null || utility == null || dirty == null) {
       Logger.logWarning(
-          "Missing inventory components for spawned villager. npcRef=" + npcRef);
+          "Missing components for npc: " + npcRef);
       return;
     }
 
@@ -194,7 +193,7 @@ public class SpawnVillagerTask extends AVillageTask {
     }
 
     if (changed) {
-      transform.markChunkDirty(entityStore);
+      dirty.markDirty();
     }
   }
 }
