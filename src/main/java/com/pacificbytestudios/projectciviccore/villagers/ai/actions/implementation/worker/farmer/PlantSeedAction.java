@@ -2,10 +2,9 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
@@ -13,6 +12,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
@@ -52,10 +52,10 @@ public class PlantSeedAction extends VillagerActionBase {
       return false;
     }
 
-    WorldChunk chunk = store.getExternalData().getWorld()
-        .getChunk(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
-
-    boolean blockSpawned = chunk.setBlock(blockPos.x, blockPos.y, blockPos.z,
+    World world = store.getExternalData().getWorld();
+    boolean blockSpawned = Utils.setBlock(
+        world,
+        blockPos,
         BlockType.getAssetMap().getAsset(plantBlockId));
 
     if (blockSpawned) {

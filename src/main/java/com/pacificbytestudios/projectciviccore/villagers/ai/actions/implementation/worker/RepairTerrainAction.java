@@ -96,7 +96,7 @@ public class RepairTerrainAction extends VillagerActionBase {
       return false;
     }
 
-    boolean repaired = chunk.setBlock(blockPos.x, blockPos.y, blockPos.z, repairBlock);
+    boolean repaired = Utils.setBlock(world, blockPos, repairBlock);
     if (!repaired) {
       Logger.logWarning("Failed to place " + blockId + " at " + blockPos);
     }

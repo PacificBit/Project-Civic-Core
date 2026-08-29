@@ -2,14 +2,12 @@ package com.pacificbytestudios.projectciviccore.villagers.ai.actions.implementat
 
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -48,8 +46,7 @@ public class TillSoilAction extends VillagerActionBase {
     Vec3i blockPos = workplaceSnapshot.pollNextSnapshotTargetBlockFrom(FarmerScan.TILLABLE_TERRAIN);
     World world = store.getExternalData().getWorld();
 
-    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
-    boolean soilTilled = chunk.setBlock(blockPos.x, blockPos.y, blockPos.z, TILL_BLOCK_TYPE);
+    boolean soilTilled = Utils.setBlock(world, blockPos, TILL_BLOCK_TYPE);
 
     if (soilTilled) {
       NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());

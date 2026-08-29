@@ -14,6 +14,7 @@ import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.ai.actions.builders.worker.woodcutter.BuilderPlantTreeAction;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.inventory.VillagerInventoryAccess;
@@ -67,7 +68,9 @@ public class PlantTreeAction extends VillagerActionBase {
       return false;
     }
 
-    boolean blockSpawned = chunk.setBlock(blockPos.x, blockPos.y, blockPos.z,
+    boolean blockSpawned = Utils.setBlock(
+        world,
+        blockPos,
         BlockType.getAssetMap().getAsset(sapling.getItemId()));
 
     if (blockSpawned) {

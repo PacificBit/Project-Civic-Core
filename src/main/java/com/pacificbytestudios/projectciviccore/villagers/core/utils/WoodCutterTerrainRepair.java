@@ -45,7 +45,7 @@ public class WoodCutterTerrainRepair {
 
           BlockType repairBlock = this.getRandomTerrainRepairBlock();
           if (repairBlock != null) {
-            chunk.setBlock(x, y, z, repairBlock);
+            Utils.setBlock(world, terrainPosition, repairBlock);
           }
         }
       }

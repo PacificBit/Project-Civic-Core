@@ -97,8 +97,7 @@ public class TownHeartSpawner {
         heartBlockPosition,
         StructureConfig.TownHeart.HEART_BLOCK);
 
-    Ref<ChunkStore> heartRef = heartBlockChunk.getBlockComponentEntity(position.x, position.y + 1,
-        position.z);
+    Ref<ChunkStore> heartRef = Utils.getBlockComponentEntity(world, heartBlockPosition);
     if (heartRef == null || !heartRef.isValid()) {
       Utils.breakBlockChunkAware(heartBlockChunk, heartBlockPosition);
       PrefabManager.restoreTrackedPrefab(world, trackedPlacement);

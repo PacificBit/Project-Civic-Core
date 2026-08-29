@@ -431,10 +431,9 @@ public class TownHallSpawner {
         workplaceBlockPosition,
         StructureConfig.TownHall.WORKPLACE_BLOCK,
         blockRotation);
-    Ref<ChunkStore> workplaceRef = workplaceChunk.getBlockComponentEntity(
-        workplaceBlockPosition.x,
-        workplaceBlockPosition.y,
-        workplaceBlockPosition.z);
+    Ref<ChunkStore> workplaceRef = Utils.getBlockComponentEntity(
+        workplaceChunk.getWorld(),
+        workplaceBlockPosition);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
       Logger.logWarning("Workplace ref is invalid");

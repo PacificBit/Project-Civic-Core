@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.block.BlockEntity;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.prefab.TrackedPrefabPlacementComponent;
@@ -62,12 +63,29 @@ public class RoadSpawner {
         TrackedPrefabPlacementComponent.getComponentType(),
         trackedPlacement);
 
-    BlockType anchorBlockType = anchorChunk.getBlockType(anchorBlockPosition);
+    BlockType anchorBlockType = world.getBlockType(
+        anchorBlockPosition.x,
+        anchorBlockPosition.y,
+        anchorBlockPosition.z);
     int anchorRotation = StructurePlacementUtils.toBlockRotationIndex(structureRotation);
+    ChunkStore worldChunkStore = anchorChunk.getWorld().getChunkStore();
+    Store<ChunkStore> chunkStore = worldChunkStore.getStore();
+    Ref<ChunkStore> sectionRef = worldChunkStore.getChunkSectionReferenceAtBlock(
+        anchorBlockPosition.x,
+        anchorBlockPosition.y,
+        anchorBlockPosition.z);
+    BlockComponentSection blockComponentSection = sectionRef == null
+        ? null
+        : chunkStore.getComponent(sectionRef, BlockComponentSection.getComponentType());
+    if (sectionRef == null || !sectionRef.isValid() || blockComponentSection == null) {
+      Logger.logWarning("Could not resolve anchor block section at %s".formatted(anchorBlockPosition));
+      return rollbackFailedSpawn(world, trackedPlacement);
+    }
+
     BlockEntity.setBlockEntity(
-        anchorChunk.getWorld().getChunkStore().getStore(),
-        anchorChunk.getReference(),
-        anchorChunk.getBlockComponentChunk(),
+        chunkStore,
+        sectionRef,
+        blockComponentSection,
         anchorBlockPosition.x,
         anchorBlockPosition.y,
         anchorBlockPosition.z,
@@ -75,10 +93,7 @@ public class RoadSpawner {
         anchorRotation,
         anchorHolder);
 
-    Ref<ChunkStore> anchorRef = anchorChunk.getBlockComponentEntity(
-        anchorBlockPosition.x,
-        anchorBlockPosition.y,
-        anchorBlockPosition.z);
+    Ref<ChunkStore> anchorRef = Utils.getBlockComponentEntity(world, anchorBlockPosition);
 
     if (anchorRef == null || !anchorRef.isValid()) {
       Logger.logWarning(
@@ -86,7 +101,6 @@ public class RoadSpawner {
       return rollbackFailedSpawn(world, trackedPlacement);
     }
 
-    Store<ChunkStore> chunkStore = anchorRef.getStore();
     chunkStore.putComponent(
         anchorRef,
         TrackedPrefabPlacementComponent.getComponentType(),
@@ -98,10 +112,7 @@ public class RoadSpawner {
 
   public static boolean despawn(WorldChunk chunk, Vec3i position) {
     WorldChunk anchorChunk = chunk;
-    Ref<ChunkStore> anchorRef = anchorChunk.getBlockComponentEntity(
-        position.x,
-        position.y,
-        position.z);
+    Ref<ChunkStore> anchorRef = Utils.getBlockComponentEntity(anchorChunk.getWorld(), position);
     if (anchorRef == null || !anchorRef.isValid()) {
       Logger.logWarning("Invalid anchor ref");
       return false;
@@ -136,7 +147,10 @@ public class RoadSpawner {
   }
 
   private static Holder<ChunkStore> createAnchorHolder(WorldChunk chunk, Vec3i position) {
-    Holder<ChunkStore> holder = chunk.getBlockComponentHolder(position.x, position.y, position.z);
+    Holder<ChunkStore> holder = chunk.getWorld().getBlockComponentHolder(
+        position.x,
+        position.y,
+        position.z);
     return holder != null ? holder.clone() : ChunkStore.REGISTRY.newHolder();
   }
 

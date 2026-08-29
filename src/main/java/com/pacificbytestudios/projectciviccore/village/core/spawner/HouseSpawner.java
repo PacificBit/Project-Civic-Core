@@ -432,10 +432,9 @@ public class HouseSpawner {
         chunk,
         houseCoreBlockPosition,
         StructureConfig.House.CORE_BLOCK, blockRotation);
-    Ref<ChunkStore> houseCoreRef = houseChunk.getBlockComponentEntity(
-        houseCoreBlockPosition.x,
-        houseCoreBlockPosition.y,
-        houseCoreBlockPosition.z);
+    Ref<ChunkStore> houseCoreRef = Utils.getBlockComponentEntity(
+        houseChunk.getWorld(),
+        houseCoreBlockPosition);
 
     if (houseCoreRef == null || !houseCoreRef.isValid()) {
       Logger.logWarning("House ref is invalid");

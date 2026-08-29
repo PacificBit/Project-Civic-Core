@@ -432,10 +432,9 @@ public class SawmillSpawner {
         workplaceBlockPosition,
         StructureConfig.Sawmill.WORKPLACE_BLOCK,
         blockRotation);
-    Ref<ChunkStore> workplaceRef = workplaceChunk.getBlockComponentEntity(
-        workplaceBlockPosition.x,
-        workplaceBlockPosition.y,
-        workplaceBlockPosition.z);
+    Ref<ChunkStore> workplaceRef = Utils.getBlockComponentEntity(
+        workplaceChunk.getWorld(),
+        workplaceBlockPosition);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
       Logger.logWarning("Workplace ref is invalid");
@@ -474,8 +473,9 @@ public class SawmillSpawner {
         containerPosition,
         StructureConfig.Sawmill.SINGLE_STORAGE_BLOCK,
         containerRotation);
-    Ref<ChunkStore> containerRef = containerChunk.getBlockComponentEntity(containerPosition.x,
-        containerPosition.y, containerPosition.z);
+    Ref<ChunkStore> containerRef = Utils.getBlockComponentEntity(
+        containerChunk.getWorld(),
+        containerPosition);
 
     if (containerRef == null || !containerRef.isValid()) {
       Logger.logWarning("Container ref is invalid");

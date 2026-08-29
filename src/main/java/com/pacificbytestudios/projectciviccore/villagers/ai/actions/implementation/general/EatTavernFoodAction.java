@@ -71,7 +71,9 @@ public class EatTavernFoodAction extends VillagerActionBase {
     World world = store.getExternalData().getWorld();
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(foodPosition.x, foodPosition.z));
 
-    BlockType foodBlock = require(chunk.getBlockType(foodPosition), "food block");
+    BlockType foodBlock = require(
+        world.getBlockType(foodPosition.x, foodPosition.y, foodPosition.z),
+        "food block");
     if (foodBlock == null || foodBlock.getId() == null || !foodBlock.getId().startsWith(FOOD_BLOCK_PREFIX)) {
       return false;
     }

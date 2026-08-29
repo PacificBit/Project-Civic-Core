@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import com.hypixel.hytale.builtin.triggervolumes.TriggerVolumesPlugin;
 import com.hypixel.hytale.builtin.triggervolumes.manager.TriggerVolumeManager;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -18,6 +19,8 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockComponentSection;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
@@ -58,11 +61,10 @@ public class Utils {
       return null;
     }
 
-    WorldChunk worldChunk = commandBuffer.getComponent(
-        info.getChunkRef(),
-        WorldChunk.getComponentType());
-
-    return buildWorldBlockContext(info, worldChunk);
+    return buildWorldBlockContext(
+        info,
+        commandBuffer,
+        commandBuffer.getExternalData().getWorld());
   }
 
   public static WorldChunk getWorldChunk(BlockContext context) {
@@ -91,32 +93,29 @@ public class Utils {
       return null;
     }
 
-    WorldChunk worldChunk = chunkStore.getComponent(
-        info.getChunkRef(),
-        WorldChunk.getComponentType());
-
-    return buildWorldBlockContext(info, worldChunk);
+    return buildWorldBlockContext(
+        info,
+        chunkStore,
+        chunkStore.getExternalData().getWorld());
   }
 
   private static BlockContext buildWorldBlockContext(
       BlockModule.BlockStateInfo info,
-      WorldChunk worldChunk) {
-    if (worldChunk == null) {
+      ComponentAccessor<ChunkStore> chunkStore,
+      World world) {
+    if (world == null) {
       return null;
     }
 
-    int localX = ChunkUtil.xFromBlockInColumn(info.getIndex());
-    int localY = ChunkUtil.yFromBlockInColumn(info.getIndex());
-    int localZ = ChunkUtil.zFromBlockInColumn(info.getIndex());
-
-    int worldX = ChunkUtil.worldCoordFromLocalCoord(worldChunk.getX(), localX);
-    int worldY = localY;
-    int worldZ = ChunkUtil.worldCoordFromLocalCoord(worldChunk.getZ(), localZ);
+    org.joml.Vector3i worldPosition = new org.joml.Vector3i();
+    if (!info.fillWorldPos(chunkStore, worldPosition)) {
+      return null;
+    }
 
     return new BlockContext(
-        worldChunk.getWorld().getName(),
-        worldChunk.getIndex(),
-        new Vec3i(worldX, worldY, worldZ));
+        world.getName(),
+        ChunkUtil.indexChunkFromBlock(worldPosition.x, worldPosition.z),
+        new Vec3i(worldPosition.x, worldPosition.y, worldPosition.z));
   }
 
   public static AreaFootprint calculateAreaFootprint(Vec3i origin, int radius) {
@@ -135,86 +134,81 @@ public class Utils {
 
   public static BeginNewConstruction getBeginNewConstructionFunction(StructureType structureType) {
     return switch (structureType) {
-      case TOWN_HALL -> TownHallSpawner::beginNewConstruction;
-      case MINE -> MineSpawner::beginNewConstruction;
-      case FARM -> FarmSpawner::beginNewConstruction;
-      case TAVERN -> TavernSpawner::beginNewConstruction;
-      case SAWMILL -> SawmillSpawner::beginNewConstruction;
-      case STORAGE -> StorageSpawner::beginNewConstruction;
-      case HOUSE -> HouseSpawner::beginNewConstruction;
-      default -> throw new IllegalArgumentException("Unsupported structureType: "
-          + structureType);
+    case TOWN_HALL -> TownHallSpawner::beginNewConstruction;
+    case MINE -> MineSpawner::beginNewConstruction;
+    case FARM -> FarmSpawner::beginNewConstruction;
+    case TAVERN -> TavernSpawner::beginNewConstruction;
+    case SAWMILL -> SawmillSpawner::beginNewConstruction;
+    case STORAGE -> StorageSpawner::beginNewConstruction;
+    case HOUSE -> HouseSpawner::beginNewConstruction;
+    default -> throw new IllegalArgumentException("Unsupported structureType: " + structureType);
     };
   }
 
   public static BeginUpgradeConstruction getBeginUpgradeConstructionFunction(StructureType structureType) {
     return switch (structureType) {
-      case TOWN_HALL -> TownHallSpawner::beginUpgradeConstruction;
-      case MINE -> MineSpawner::beginUpgradeConstruction;
-      case FARM -> FarmSpawner::beginUpgradeConstruction;
-      case TAVERN -> TavernSpawner::beginUpgradeConstruction;
-      case SAWMILL -> SawmillSpawner::beginUpgradeConstruction;
-      case STORAGE -> StorageSpawner::beginUpgradeConstruction;
-      case HOUSE -> HouseSpawner::beginUpgradeConstruction;
-      default -> throw new IllegalArgumentException("Unsupported structureType: "
-          + structureType);
+    case TOWN_HALL -> TownHallSpawner::beginUpgradeConstruction;
+    case MINE -> MineSpawner::beginUpgradeConstruction;
+    case FARM -> FarmSpawner::beginUpgradeConstruction;
+    case TAVERN -> TavernSpawner::beginUpgradeConstruction;
+    case SAWMILL -> SawmillSpawner::beginUpgradeConstruction;
+    case STORAGE -> StorageSpawner::beginUpgradeConstruction;
+    case HOUSE -> HouseSpawner::beginUpgradeConstruction;
+    default -> throw new IllegalArgumentException("Unsupported structureType: " + structureType);
     };
   }
 
   public static AdvanceConstructionStage getAdvanceConstructionStageFunction(StructureType structureType) {
     return switch (structureType) {
-      case TOWN_HALL -> TownHallSpawner::advanceConstruction;
-      case MINE -> MineSpawner::advanceConstruction;
-      case FARM -> FarmSpawner::advanceConstruction;
-      case TAVERN -> TavernSpawner::advanceConstruction;
-      case SAWMILL -> SawmillSpawner::advanceConstruction;
-      case STORAGE -> StorageSpawner::advanceConstruction;
-      case HOUSE -> HouseSpawner::advanceConstruction;
-      default -> throw new IllegalArgumentException("Unsupported structureType: "
-          + structureType);
+    case TOWN_HALL -> TownHallSpawner::advanceConstruction;
+    case MINE -> MineSpawner::advanceConstruction;
+    case FARM -> FarmSpawner::advanceConstruction;
+    case TAVERN -> TavernSpawner::advanceConstruction;
+    case SAWMILL -> SawmillSpawner::advanceConstruction;
+    case STORAGE -> StorageSpawner::advanceConstruction;
+    case HOUSE -> HouseSpawner::advanceConstruction;
+    default -> throw new IllegalArgumentException("Unsupported structureType: " + structureType);
     };
   }
 
   public static DespawnFunction getDespawnFunction(StructureType structureType) {
     return switch (structureType) {
-      case TOWN_HALL -> TownHallSpawner::despawn;
-      case MINE -> MineSpawner::despawn;
-      case FARM -> FarmSpawner::despawn;
-      case TAVERN -> TavernSpawner::despawn;
-      case SAWMILL -> SawmillSpawner::despawn;
-      case STORAGE -> StorageSpawner::despawn;
-      case HOUSE -> HouseSpawner::despawn;
-      default -> throw new IllegalArgumentException("Unsupported structureType: "
-          + structureType);
+    case TOWN_HALL -> TownHallSpawner::despawn;
+    case MINE -> MineSpawner::despawn;
+    case FARM -> FarmSpawner::despawn;
+    case TAVERN -> TavernSpawner::despawn;
+    case SAWMILL -> SawmillSpawner::despawn;
+    case STORAGE -> StorageSpawner::despawn;
+    case HOUSE -> HouseSpawner::despawn;
+    default -> throw new IllegalArgumentException("Unsupported structureType: " + structureType);
     };
   }
 
   public static DespawnIncompleteConstructionFunction getDespawnIncompleteConstructionFunction(
       StructureType structureType) {
     return switch (structureType) {
-      case TOWN_HALL -> TownHallSpawner::despawnIncompleteBuilding;
-      case MINE -> MineSpawner::despawnIncompleteBuilding;
-      case FARM -> FarmSpawner::despawnIncompleteBuilding;
-      case TAVERN -> TavernSpawner::despawnIncompleteBuilding;
-      case SAWMILL -> SawmillSpawner::despawnIncompleteBuilding;
-      case STORAGE -> StorageSpawner::despawnIncompleteBuilding;
-      case HOUSE -> HouseSpawner::despawnIncompleteBuilding;
-      default -> throw new IllegalArgumentException("Unsupported structureType: "
-          + structureType);
+    case TOWN_HALL -> TownHallSpawner::despawnIncompleteBuilding;
+    case MINE -> MineSpawner::despawnIncompleteBuilding;
+    case FARM -> FarmSpawner::despawnIncompleteBuilding;
+    case TAVERN -> TavernSpawner::despawnIncompleteBuilding;
+    case SAWMILL -> SawmillSpawner::despawnIncompleteBuilding;
+    case STORAGE -> StorageSpawner::despawnIncompleteBuilding;
+    case HOUSE -> HouseSpawner::despawnIncompleteBuilding;
+    default -> throw new IllegalArgumentException("Unsupported structureType: " + structureType);
     };
   }
 
   public static Vec2i getSize2i(StructureType structureType) {
     return switch (structureType) {
-      case TOWN_HALL -> StructureConfig.TownHall.SIZE_2I;
-      case MINE -> StructureConfig.Mine.SIZE_2I;
-      case FARM -> StructureConfig.Farm.SIZE_2I;
-      case TAVERN -> StructureConfig.Tavern.SIZE_2I;
-      case SAWMILL -> StructureConfig.Sawmill.SIZE_2I;
-      case STORAGE -> StructureConfig.Storage.SIZE_2I;
-      case HOUSE -> StructureConfig.House.SIZE_2I;
-      default -> throw new IllegalArgumentException(
-          "Unsupported structure type: " + structureType);
+    case TOWN_HALL -> StructureConfig.TownHall.SIZE_2I;
+    case MINE -> StructureConfig.Mine.SIZE_2I;
+    case FARM -> StructureConfig.Farm.SIZE_2I;
+    case TAVERN -> StructureConfig.Tavern.SIZE_2I;
+    case SAWMILL -> StructureConfig.Sawmill.SIZE_2I;
+    case STORAGE -> StructureConfig.Storage.SIZE_2I;
+    case HOUSE -> StructureConfig.House.SIZE_2I;
+    default -> throw new IllegalArgumentException(
+        "Unsupported structure type: " + structureType);
     };
   }
 
@@ -224,15 +218,15 @@ public class Utils {
 
   public static Vec3i getSize3i(StructureType structureType) {
     return switch (structureType) {
-      case TOWN_HALL -> StructureConfig.TownHall.SIZE_3I;
-      case MINE -> StructureConfig.Mine.SIZE_3I;
-      case FARM -> StructureConfig.Farm.SIZE_3I;
-      case TAVERN -> StructureConfig.Tavern.SIZE_3I;
-      case SAWMILL -> StructureConfig.Sawmill.SIZE_3I;
-      case STORAGE -> StructureConfig.Storage.SIZE_3I;
-      case HOUSE -> StructureConfig.House.SIZE_3I;
-      default -> throw new IllegalArgumentException(
-          "Unsupported structure type: " + structureType);
+    case TOWN_HALL -> StructureConfig.TownHall.SIZE_3I;
+    case MINE -> StructureConfig.Mine.SIZE_3I;
+    case FARM -> StructureConfig.Farm.SIZE_3I;
+    case TAVERN -> StructureConfig.Tavern.SIZE_3I;
+    case SAWMILL -> StructureConfig.Sawmill.SIZE_3I;
+    case STORAGE -> StructureConfig.Storage.SIZE_3I;
+    case HOUSE -> StructureConfig.House.SIZE_3I;
+    default -> throw new IllegalArgumentException(
+        "Unsupported structure type: " + structureType);
     };
   }
 
@@ -241,56 +235,122 @@ public class Utils {
   }
 
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vec3i position, BlockType blockType) {
+    World world = chunk.getWorld();
     WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(),
         position.x, position.z)
             ? chunk
-            : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+            : world.getChunk(ChunkUtil.indexChunkFromBlock(position.x,
                 position.z));
 
-    targetChunk.setBlock(position.x, position.y, position.z, blockType);
+    world.setBlock(position.x, position.y, position.z, blockType.getId());
     return targetChunk;
   }
 
+  @SuppressWarnings("deprecation")
   public static WorldChunk setBlockChunkAware(WorldChunk chunk, Vec3i position, BlockType blockType, int rotation) {
+    World world = chunk.getWorld();
     int blockId = BlockType.getAssetMap().getIndex(blockType.getId());
-
     WorldChunk targetChunk = ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(),
         position.x, position.z)
             ? chunk
-            : chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+            : world.getChunk(ChunkUtil.indexChunkFromBlock(position.x,
                 position.z));
 
-    targetChunk.setBlock(position.x, position.y, position.z, blockId, blockType,
-        rotation, FillerBlockUtil.NO_FILLER, 0);
+    // The current World accessor's integer overload accepts block-update settings,
+    // not rotation. WorldChunk's full overload is currently the only API that can
+    // preserve rotation while also running block-entity replacement and physics.
+    targetChunk.setBlock(
+        position.x,
+        position.y,
+        position.z,
+        blockId,
+        blockType,
+        rotation,
+        FillerBlockUtil.NO_FILLER,
+        0);
 
     return targetChunk;
+  }
+
+  public static boolean setBlock(World world, Vec3i position, BlockType blockType) {
+    if (world == null || position == null || blockType == null || blockType.getId() == null) {
+      return false;
+    }
+
+    BlockType previousType = world.getBlockType(position.x, position.y, position.z);
+    world.setBlock(position.x, position.y, position.z, blockType.getId());
+    BlockType currentType = world.getBlockType(position.x, position.y, position.z);
+
+    return currentType != null
+        && blockType.getId().equals(currentType.getId())
+        && (previousType == null || !blockType.getId().equals(previousType.getId()));
   }
 
   public static WorldChunk breakBlockChunkAware(WorldChunk chunk, Vec3i position) {
+    World world = chunk.getWorld();
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x,
         position.z)) {
-      chunk.breakBlock(position.x, position.y, position.z);
+      world.breakBlock(position.x, position.y, position.z, 0);
       return chunk;
     }
 
-    WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+    WorldChunk correctChunk = world.getChunk(ChunkUtil.indexChunkFromBlock(position.x,
         position.z));
-    correctChunk.breakBlock(position.x, position.y, position.z);
+    world.breakBlock(position.x, position.y, position.z, 0);
     return correctChunk;
   }
 
   public static Pair<WorldChunk, Ref<ChunkStore>> getBlockComponentEntityChunkAware(WorldChunk chunk,
       Vec3i position) {
+    World world = chunk.getWorld();
     if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x,
         position.z)) {
-      return new Pair<>(chunk, chunk.getBlockComponentEntity(position.x,
-          position.y, position.z));
+      return new Pair<>(chunk, getBlockComponentEntity(world, position));
     }
 
-    WorldChunk correctChunk = chunk.getWorld().getChunk(ChunkUtil.indexChunkFromBlock(position.x,
+    WorldChunk correctChunk = world.getChunk(ChunkUtil.indexChunkFromBlock(position.x,
         position.z));
-    return new Pair<>(correctChunk,
-        correctChunk.getBlockComponentEntity(position.x, position.y, position.z));
+    return new Pair<>(correctChunk, getBlockComponentEntity(world, position));
+  }
+
+  public static Ref<ChunkStore> getBlockComponentEntity(World world, Vec3i position) {
+    if (world == null || position == null) {
+      return null;
+    }
+
+    Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(
+        position.x,
+        position.y,
+        position.z);
+    if (sectionRef == null || !sectionRef.isValid()) {
+      return null;
+    }
+
+    BlockComponentSection section = sectionRef.getStore().getComponent(
+        sectionRef,
+        BlockComponentSection.getComponentType());
+    return section != null
+        ? section.getBlockReference(ChunkUtil.indexBlock(position.x, position.y, position.z))
+        : null;
+  }
+
+  public static boolean setBlockTicking(World world, Vec3i position, boolean ticking) {
+    if (world == null || position == null) {
+      return false;
+    }
+
+    Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(
+        position.x,
+        position.y,
+        position.z);
+    if (sectionRef == null || !sectionRef.isValid()) {
+      return false;
+    }
+
+    BlockSection section = sectionRef.getStore().getComponent(
+        sectionRef,
+        BlockSection.getComponentType());
+    return section != null && section.setTicking(position.x, position.y, position.z, ticking);
   }
 
   public static void safeVillageTaskEnqueue(Ref<ChunkStore> villageRef,
@@ -416,16 +476,11 @@ public class Utils {
   }
 
   public static BlockType getBlockTypeChunkAware(World world, Vec3i position) {
-    WorldChunk chunk = getWorldChunk(world, position);
-    return chunk.getBlockType(position);
+    return world.getBlockType(position.x, position.y, position.z);
   }
 
   public static BlockType getBlockTypeChunkAware(World world, WorldChunk chunk, Vec3i position) {
-    if (ChunkUtil.isInsideChunk(chunk.getX(), chunk.getZ(), position.x, position.z)) {
-      return chunk.getBlockType(position);
-    }
-    WorldChunk correctChunk = getWorldChunk(world, position);
-    return correctChunk.getBlockType(position);
+    return world.getBlockType(position.x, position.y, position.z);
   }
 
   public static MayorComponent getMayorComponent(World world, VillageHeartComponent heart) {

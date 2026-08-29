@@ -2,12 +2,11 @@ package com.pacificbytestudios.projectciviccore.codecs;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudio.codecbutler.annotations.SerializableClass;
 import com.pacificbytestudio.codecbutler.annotations.SerialIgnore;
 import lombok.Getter;
@@ -37,12 +36,7 @@ public class EntityRef {
     if (this.entityRef == null || !this.entityRef.isValid()) {
       World world = Universe.get().getWorld(worldName);
       Vec3i villageHeartPos = position;
-      WorldChunk chunk = world.getChunk(
-          ChunkUtil.indexChunkFromBlock(villageHeartPos.x, villageHeartPos.z));
-
-      if (chunk != null) {
-        this.entityRef = chunk.getBlockComponentEntity(villageHeartPos.x, villageHeartPos.y, villageHeartPos.z);
-      }
+      this.entityRef = Utils.getBlockComponentEntity(world, villageHeartPos);
     }
     return this.entityRef;
   }

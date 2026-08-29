@@ -79,8 +79,9 @@ public class PlaceFoodOnPlateAction extends VillagerActionBase {
     World world = store.getExternalData().getWorld();
     WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(platePosition.x, platePosition.z));
 
-    boolean spawned = chunk.setBlock(
-        platePosition.x, platePosition.y, platePosition.z,
+    boolean spawned = Utils.setBlock(
+        world,
+        platePosition,
         BlockType.getAssetMap().getAsset(item.getItemId()));
 
     if (!spawned) {

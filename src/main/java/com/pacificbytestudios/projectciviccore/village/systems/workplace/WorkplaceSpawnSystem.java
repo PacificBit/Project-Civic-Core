@@ -64,6 +64,15 @@ public class WorkplaceSpawnSystem extends RefSystem<ChunkStore> {
     }
 
     world.execute(() -> {
+      if (!ref.isValid()) {
+        Logger.logFine("Workplace block entity was removed before spawn initialization at " + blockPos);
+        return;
+      }
+      if (!heartRef.isValid()) {
+        Logger.logWarning("Village heart ref became invalid before workplace spawn initialization");
+        return;
+      }
+
       WorkplaceComponent workplaceComponent = store.getComponent(ref,
           WorkplaceComponent.getComponentType());
       if (workplaceComponent == null) {

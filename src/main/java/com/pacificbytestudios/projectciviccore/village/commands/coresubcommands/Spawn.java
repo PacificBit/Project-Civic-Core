@@ -116,7 +116,7 @@ public class Spawn extends VillageCommand {
 
     for (int y = origin.y; y > 0; y--) {
       Vec3i probePosition = new Vec3i(origin.x, y, origin.z);
-      String blockId = chunk.getBlockType(probePosition).getId();
+      String blockId = world.getBlockType(probePosition.x, probePosition.y, probePosition.z).getId();
       if (blockId != null && !blockId.equals("Empty")) {
         return probePosition;
       }

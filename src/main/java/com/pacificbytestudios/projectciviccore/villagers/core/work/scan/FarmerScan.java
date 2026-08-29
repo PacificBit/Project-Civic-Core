@@ -20,6 +20,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.pacificbytestudios.projectciviccore.codecs.AreaFootprint;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.VillagerWorkerComponent;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
@@ -140,7 +141,10 @@ public class FarmerScan implements IWorkAreaScanner {
       WorldChunk soilChunk,
       Vec3i soilPosition) {
 
-    BlockType soilType = soilChunk.getBlockType(soilPosition);
+    BlockType soilType = this.contextWorld.getBlockType(
+        soilPosition.x,
+        soilPosition.y,
+        soilPosition.z);
     String soilBlockId = ScanUtils.getBlockId(soilType);
 
     Vec3i abovePosition = new Vec3i(
@@ -148,7 +152,9 @@ public class FarmerScan implements IWorkAreaScanner {
         soilPosition.y + 1,
         soilPosition.z);
 
-    BlockType aboveType = soilChunk != null ? soilChunk.getBlockType(abovePosition) : null;
+    BlockType aboveType = soilChunk != null
+        ? this.contextWorld.getBlockType(abovePosition.x, abovePosition.y, abovePosition.z)
+        : null;
 
     if (ScanUtils.matchesBaseId(soilBlockId, SOIL_GRASS_ID) || ScanUtils.matchesBaseId(soilBlockId, SOIL_MUD_DRY_ID)) {
       snapshotInProgress.addWorkplaceSnapshotTarget(TILLABLE_TERRAIN, soilPosition);
@@ -228,8 +234,7 @@ public class FarmerScan implements IWorkAreaScanner {
       return false;
     }
 
-    Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(
-        position.x, position.y, position.z);
+    Ref<ChunkStore> blockEntityRef = Utils.getBlockComponentEntity(this.contextWorld, position);
 
     if (blockEntityRef == null) {
       return false;

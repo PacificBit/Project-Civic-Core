@@ -6,10 +6,8 @@ import java.time.temporal.ChronoUnit;
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.corecomponents.builders.BuilderActionBase;
@@ -17,6 +15,7 @@ import com.hypixel.hytale.server.npc.instructions.ExecutionSupport;
 import com.hypixel.hytale.server.npc.sensorinfo.InfoProvider;
 import com.pacificbytestudios.projectciviccore.codecs.vectors.vector3D.Vec3i;
 import com.pacificbytestudios.projectciviccore.utils.Logger;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 import com.pacificbytestudios.projectciviccore.villagers.components.workplace.WorkplaceAreaSnapshot;
 import com.pacificbytestudios.projectciviccore.villagers.core.utils.VillagerActionBase;
 import com.pacificbytestudios.projectciviccore.villagers.core.work.scan.FarmerScan;
@@ -47,9 +46,7 @@ public class WaterSoilAction extends VillagerActionBase {
   }
 
   public static boolean waterTilledSoil(World world, Vec3i soilPos) {
-    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(soilPos.x, soilPos.z));
-
-    Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(soilPos.x, soilPos.y, soilPos.z);
+    Ref<ChunkStore> blockEntityRef = Utils.getBlockComponentEntity(world, soilPos);
     if (blockEntityRef == null) {
       Logger.logWarning("Could not fetch the soil block entityRef");
       return false;
@@ -68,8 +65,8 @@ public class WaterSoilAction extends VillagerActionBase {
     Instant wateredUntil = worldTimeResource.getGameTime().plus(WATERED_DURATION, ChronoUnit.SECONDS);
     tilledSoil.setWateredUntil(wateredUntil);
 
-    chunk.setTicking(soilPos.x, soilPos.y, soilPos.z, true);
-    chunk.setTicking(soilPos.x, soilPos.y + 1, soilPos.z, true);
+    Utils.setBlockTicking(world, soilPos, true);
+    Utils.setBlockTicking(world, soilPos.clone().add(new Vec3i(0, 1, 0)), true);
 
     return true;
   }

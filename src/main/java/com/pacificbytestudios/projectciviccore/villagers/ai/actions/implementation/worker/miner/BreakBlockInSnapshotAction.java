@@ -141,12 +141,19 @@ public class BreakBlockInSnapshotAction extends VillagerActionBase {
     }
 
     ChunkStore chunkStoreObj = world.getChunkStore();
-    long chunkIndex = ChunkUtil.indexChunkFromBlock(target.x, target.z);
-    Ref<ChunkStore> chunkRef = chunkStoreObj.getChunkReference(chunkIndex);
+    Ref<ChunkStore> sectionRef = chunkStoreObj.getChunkSectionReferenceAtBlock(
+        target.x,
+        target.y,
+        target.z);
+    if (sectionRef == null || !sectionRef.isValid()) {
+      Logger.logWarning("Could not resolve chunk section for " + target);
+      return false;
+    }
 
     VillagerToolAnimationHelper.playHeldToolAnimation(ref, npc, store, "Mine");
-    boolean didBreak = BlockHarvestUtils.performBlockDamage(ref, target, itemStackInHand, tool, null, false, 1, 0,
-        false, chunkRef, store, chunkStoreObj.getStore());
+    boolean didBreak = BlockHarvestUtils.performBlockDamage(
+        ref, null, target, itemStackInHand, tool, null, false, 1, 0,
+        false, sectionRef, store, chunkStoreObj.getStore());
 
     if (didBreak) {
       this.consumeToolDurability(ref, store);

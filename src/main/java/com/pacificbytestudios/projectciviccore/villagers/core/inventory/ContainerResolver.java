@@ -7,10 +7,10 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import com.pacificbytestudios.projectciviccore.utils.Utils;
 
 public class ContainerResolver {
 
@@ -61,12 +61,7 @@ public class ContainerResolver {
       return null;
     }
 
-    WorldChunk chunk = world.getChunk(ChunkUtil.indexChunkFromBlock(basePos.x, basePos.z));
-    if (chunk == null) {
-      return null;
-    }
-
-    Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(basePos.x, basePos.y, basePos.z);
+    Ref<ChunkStore> blockRef = Utils.getBlockComponentEntity(world, basePos);
     if (blockRef == null || !blockRef.isValid()) {
       return null;
     }

@@ -398,14 +398,13 @@ public final class VillageStorageRequestInvalidation {
     BlockModule.BlockStateInfo blockStateInfo = chunkStore.getComponent(
         ref,
         BlockModule.BlockStateInfo.getComponentType());
-    if (blockStateInfo == null || blockStateInfo.getChunkRef() == null) {
+    if (blockStateInfo == null
+        || blockStateInfo.getSectionRef() == null
+        || !blockStateInfo.getSectionRef().isValid()) {
       return null;
     }
 
-    WorldChunk worldChunk = chunkStore.getComponent(
-        blockStateInfo.getChunkRef(),
-        WorldChunk.getComponentType());
-    return worldChunk != null ? worldChunk.getWorld() : null;
+    return chunkStore.getExternalData().getWorld();
   }
 
   private static void markChunkComponentDirty(Store<ChunkStore> chunkStore, Ref<ChunkStore> ref) {

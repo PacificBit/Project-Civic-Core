@@ -428,10 +428,9 @@ public class FarmSpawner {
         workplaceBlockPosition,
         StructureConfig.Farm.WORKPLACE_BLOCK,
         getWorkplaceBlockRotationIndex(config, targetLevel, rotation));
-    Ref<ChunkStore> workplaceRef = workplaceChunk.getBlockComponentEntity(
-        workplaceBlockPosition.x,
-        workplaceBlockPosition.y,
-        workplaceBlockPosition.z);
+    Ref<ChunkStore> workplaceRef = Utils.getBlockComponentEntity(
+        workplaceChunk.getWorld(),
+        workplaceBlockPosition);
 
     if (workplaceRef == null || !workplaceRef.isValid()) {
       Logger.logWarning("Workplace ref is invalid");
@@ -470,8 +469,9 @@ public class FarmSpawner {
         containerPosition,
         StructureConfig.Farm.SINGLE_STORAGE_BLOCK,
         getContainerRotationIndex(config, targetLevel, rotation));
-    Ref<ChunkStore> containerRef = containerChunk.getBlockComponentEntity(containerPosition.x,
-        containerPosition.y, containerPosition.z);
+    Ref<ChunkStore> containerRef = Utils.getBlockComponentEntity(
+        containerChunk.getWorld(),
+        containerPosition);
 
     if (containerRef == null || !containerRef.isValid()) {
       Logger.logWarning("Container ref is invalid");

@@ -138,7 +138,10 @@ public class WoodCutterScan implements IWorkAreaScanner {
       WorldChunk chunk,
       Vec3i aboveTerrainPosition) {
 
-    BlockType aboveTerrainBlock = chunk.getBlockType(aboveTerrainPosition);
+    BlockType aboveTerrainBlock = this.contextWorld.getBlockType(
+        aboveTerrainPosition.x,
+        aboveTerrainPosition.y,
+        aboveTerrainPosition.z);
 
     if (ScanUtils.isEmptyBlock(aboveTerrainBlock) ||
         !isNotClutter(aboveTerrainBlock)) {
